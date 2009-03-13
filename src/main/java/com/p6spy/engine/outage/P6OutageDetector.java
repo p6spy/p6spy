@@ -66,9 +66,8 @@
 package com.p6spy.engine.outage;
 
 import com.p6spy.engine.common.*;
-import java.util.Hashtable;
-import java.util.Set;
-import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * This class is a singleton. Since P6Spy is normally loaded by the system
@@ -92,131 +91,127 @@ import java.util.Iterator;
  * okay.
  */
 public class P6OutageDetector implements Runnable {
-    // sychronized container
-    private Hashtable pendingMessages = null;
-    
+    private ConcurrentMap<Object, InvocationInfo> pendingMessages;
+
     // flag that indicates that the thread should stop running
-    private boolean haltThread = false;
-    
+    private boolean haltThread;
+
     // singleton contruct
-    private static P6OutageDetector instance = null;
-    
-    // flag to turn on debug output
-    private static final boolean debug = true;
-    
+    private static P6OutageDetector instance;
+
     /** Creates new P6OutageDetector */
     protected P6OutageDetector() {
-        pendingMessages = new Hashtable();
-        
+        pendingMessages = new ConcurrentHashMap<Object, InvocationInfo>();
+
         P6LogQuery.logDebug("P6Spy - P6OutageDetector has been invoked.");
-        P6LogQuery.logDebug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = "+
-        P6OutageOptions.getOutageDetectionIntervalMS());
+        P6LogQuery.logDebug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = " + P6OutageOptions.getOutageDetectionIntervalMS());
     }
-    
+
     /**
-     * Gets the instance of the detector. A side effect of the first call to
-     * this method is that the auxillary thread will be kicked off here.
+     * Gets the instance of the detector. A side effect of the first call to this method is that the
+     * auxillary thread will be kicked off here.
      *
-     * @return  the P6OutageDetector instance
+     * @return the P6OutageDetector instance
      */
     static public synchronized P6OutageDetector getInstance() {
         if (instance == null) {
             instance = new P6OutageDetector();
-            
+
             // create and run the auxilliary thread
             // make it a deamon thread so it won't prevent the server from
             // shutting down when it wants to.
             ThreadGroup group = new ThreadGroup("P6SpyThreadGroup");
             group.setDaemon(true);
-            Thread outageThread = new Thread(group,instance,"P6SpyOutageThread");
+            Thread outageThread = new Thread(group, instance, "P6SpyOutageThread");
             outageThread.start();
         }
         return instance;
     }
-    
+
     /**
      * Method for running the auxillary thread.
      */
     public void run() {
         while (!haltThread) {
             detectOutage();
-            
+
             try {
                 // sleep for the configured interval
                 // don't cache this value since the props file may be reloaded
                 // and this value might change
                 Thread.sleep(P6OutageOptions.getOutageDetectionIntervalMS());
+            } catch (Exception e) {
             }
-            catch (Exception e) {}
         }
     }
-    
+
     /**
-     * Tells the auxillary thread to stop executing. Thread will exit upon waking
-     * next.
+     * Tells the auxillary thread to stop executing. Thread will exit upon waking next.
      */
     public void shutdown() {
         haltThread = true;
     }
-    
+
     /**
-     * Registers the execution of a statement. This should be called just before
-     * the statement is passed to the real driver.
+     * Registers the execution of a statement. This should be called just before the statement is
+     * passed to the real driver.
      */
-    public void registerInvocation(Object jdbcObject, long startTime,
-    String category, String ps, String sql) {
-        pendingMessages.put(jdbcObject, new InvocationInfo(startTime, category,
-        ps, sql));
+    public void registerInvocation(Object jdbcObject, long startTime, String category, String ps, String sql) {
+        pendingMessages.put(jdbcObject, new InvocationInfo(startTime, category, ps, sql));
     }
-    
+
     /**
-     * Unregisters the execution of a statement. This should be called just after
-     * the statement is passed to the real driver.
+     * Unregisters the execution of a statement. This should be called just after the statement is
+     * passed to the real driver.
      */
     public void unregisterInvocation(Object jdbcObject) {
         pendingMessages.remove(jdbcObject);
     }
-    
+
     private void detectOutage() {
         int listSize = pendingMessages.size();
-        if (listSize == 0) return;
-        
-        P6LogQuery.logDebug("P6Spy - detectOutage.pendingMessage.size = "+listSize);
-        
+        if (listSize == 0) {
+            return;
+        }
+
+        P6LogQuery.logDebug("P6Spy - detectOutage.pendingMessage.size = " + listSize);
+
         long currentTime = System.currentTimeMillis();
         long threshold = P6OutageOptions.getOutageDetectionIntervalMS();
-        
-        Set keys = pendingMessages.keySet();
-        Iterator keyIter = keys.iterator();
-        
-        while (keyIter.hasNext()) {
+
+        for (Object jdbcObject : pendingMessages.keySet()) {
             // here is a thread hazard that we'll be lazy about. Another thread
             // might have already removed the entry from the messages map, so we
             // need to check if the result is null
-            InvocationInfo ii = (InvocationInfo)pendingMessages.get(keyIter.next());
-            if (ii == null) continue;
-            
+            InvocationInfo ii = pendingMessages.get(jdbcObject);
+            if (ii == null) {
+                continue;
+            }
+
             // has this statement exceeded the threshold?
-            if ((currentTime-ii.startTime) > threshold) {
+            if ((currentTime - ii.startTime) > threshold) {
                 P6LogQuery.logDebug("P6Spy - statement exceeded threshold - check log.");
                 logOutage(ii);
             }
         }
     }
-    
+
     private void logOutage(InvocationInfo ii) {
         P6LogQuery.logElapsed(-1, ii.startTime, "OUTAGE", ii.preparedStmt, ii.sql);
     }
-    
+
 }
 
-// inner class to hold the info about a specifc statement invocation
+// inner class to hold the info about a specific statement invocation
 class InvocationInfo {
-    public long startTime = 0;
-    public String category = null;
-    public String preparedStmt = null;
-    public String sql = null;
-    
+    public long startTime;
+
+    public String category;
+
+    public String preparedStmt;
+
+    public String sql;
+
     public InvocationInfo(long startTime, String category, String ps, String sql) {
         this.startTime = startTime;
         this.category = category;

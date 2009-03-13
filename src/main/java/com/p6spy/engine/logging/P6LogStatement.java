@@ -134,17 +134,18 @@ import java.sql.*;
 import com.p6spy.engine.spy.*;
 import com.p6spy.engine.common.*;
 
-public class P6LogStatement extends P6Statement implements Statement {
-    
-    
+public class P6LogStatement extends P6Statement {
+
+
     public P6LogStatement(P6Factory factory, Statement statement, P6Connection conn) {
         super(factory, statement, conn);
     }
-    
+
+    @Override
     public boolean execute(String p0) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return passthru.execute(p0);
         }
@@ -152,12 +153,13 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
     // Since JDK 1.4
+    @Override
     public boolean execute(String p0, int p1) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return passthru.execute(p0, p1);
         }
@@ -165,12 +167,13 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
     // Since JDK 1.4
+    @Override
     public boolean execute(String p0, int p1[]) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return passthru.execute(p0, p1);
         }
@@ -178,12 +181,13 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
     // Since JDK 1.4
+    @Override
     public boolean execute(String p0, String p1[]) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return passthru.execute(p0, p1);
         }
@@ -191,11 +195,12 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
+    @Override
     public ResultSet executeQuery(String p0) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return getP6Factory().getResultSet(passthru.executeQuery(p0), this, "", p0);
         }
@@ -203,11 +208,12 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
+    @Override
     public int executeUpdate(String p0) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return(passthru.executeUpdate(p0));
         }
@@ -215,12 +221,13 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
     // Since JDK 1.4
+    @Override
     public int executeUpdate(String p0, int p1) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return(passthru.executeUpdate(p0, p1));
         }
@@ -228,12 +235,13 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
     // Since JDK 1.4
+    @Override
     public int executeUpdate(String p0, int p1[]) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return(passthru.executeUpdate(p0, p1));
         }
@@ -241,12 +249,13 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
     // Since JDK 1.4
+    @Override
     public int executeUpdate(String p0, String p1[]) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return(passthru.executeUpdate(p0, p1));
         }
@@ -254,11 +263,12 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "statement", "", p0);
         }
     }
-    
+
+    @Override
     public void addBatch(String p0) throws java.sql.SQLException {
         statementQuery = p0;
         long startTime = System.currentTimeMillis();
-        
+
         try {
             passthru.addBatch(p0);
         }
@@ -266,10 +276,11 @@ public class P6LogStatement extends P6Statement implements Statement {
 	    P6LogQuery.logElapsed(this.connection.getId(), startTime, "batch", "", p0);
         }
     }
-    
+
+    @Override
     public int[] executeBatch() throws java.sql.SQLException {
         long startTime = System.currentTimeMillis();
-        
+
         try {
             return(passthru.executeBatch());
         }
