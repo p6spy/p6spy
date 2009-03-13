@@ -1,0 +1,287 @@
+<!--
+
+* ====================================================================
+* 
+* The P6Spy Software License, Version 1.1
+*
+* This license is derived and fully compatible with the Apache Software
+* license, see http://www.apache.org/LICENSE.txt
+*
+* Copyright (c) 2001-2002 Andy Martin, Ph.D. and Jeff Goke
+* All rights reserved. 
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions
+* are met:
+*
+* 1. Redistributions of source code must retain the above copyright
+* notice, this list of conditions and the following disclaimer. 
+*
+* 2. Redistributions in binary form must reproduce the above copyright
+* notice, this list of conditions and the following disclaimer in
+* the documentation and/or other materials provided with the
+* distribution.
+*
+* 3. The end-user documentation included with the redistribution, if
+* any, must include the following acknowlegement: 
+* "The original concept and code base for P6Spy was conceived
+* and developed by Andy Martin, Ph.D. who generously contribued
+* the first complete release to the public under this license.
+* This product was due to the pioneering work of Andy
+* that began in December of 1995 developing applications that could
+* seamlessly be deployed with minimal effort but with dramatic results.
+* This code is maintained and extended by Jeff Goke and with the ideas
+* and contributions of other P6Spy contributors.
+* (http://www.p6spy.com)"
+* Alternately, this acknowlegement may appear in the software itself,
+* if and wherever such third-party acknowlegements normally appear.
+*
+* 4. The names "P6Spy", "Jeff Goke", and "Andy Martin" must not be used
+* to endorse or promote products derived from this software without
+* prior written permission. For written permission, please contact
+* license@p6spy.com.
+*
+* 5. Products derived from this software may not be called "P6Spy"
+* nor may "P6Spy" appear in their names without prior written
+* permission of Jeff Goke and Andy Martin.
+*
+* THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+* DISCLAIMED. IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+* ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+* USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+* OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+* SUCH DAMAGE.
+
+-->
+
+<project name="p6spy" default="jar" basedir=".">
+
+	<property environment="env"/>
+
+	<property file="build.properties"/>
+
+	<target name="init">
+		<echo message="--------- Preparing to Build P6Spy ---------"/>
+		<echo message=""/>
+		<echo message="java.class.path = ${java.class.path}"/>
+		<echo message=""/>
+		<echo message="java.home = ${java.home}"/>
+		<echo message="user.home = ${user.home}"/>
+		<echo message="Creating build directory ${build}"/>
+		<mkdir dir="${build}"/>		
+		<echo message="Creating dist directory ${dist}"/>
+		<mkdir dir="${dist}"/>			
+		<echo message="Creating javadoc directory ${javadocs}"/>
+		<mkdir dir="${javadocs}"/>			
+		<echo>
+
+  --------- Required jar files ---------
+
+  The p6spy build requires several jars in the lib 
+  directory.  Below is a list of these jar files and 
+  their corresponding URL's as of December 2002:
+
+  JUnit                     http://www.junit.org/
+  Jakarta Regexp            http://jakarta.apache.org/regexp/ 
+  Gnu Regexp                http://www.cacas.org/java/gnu/regexp/
+  Log4j                     http://jakarta.apache.org/log4j/
+
+  Additionally, you will need your database driver jar in the lib
+  directory to have a complete build.
+  
+		</echo>
+
+		<path id="classpath">
+		    <fileset dir="${lib}">
+			<include name="**/*.jar" />
+		    </fileset>
+		</path>
+
+	    <property name="earfile" value="${dist}\p6spy.ear"/>
+	    <property name="mergedir" value="merge"/>
+	    <property name="ejbjar" value="${dist}/p6spy-ejb.jar"/>
+	    <property name="ejbconf" value="${src}/com/p6spy/engine/test/ejb/conf"/>
+
+	    <path id="jbosscp">
+		<path refid="classpath"/>
+		<fileset dir="C:\java\jboss-3.0.4\client">
+		    <include name="*.jar"/>
+		</fileset>
+	    </path>
+	</target>
+		
+	<target name="compile" depends="init">
+		<echo message="--------- Compiling P6Spy ---------"/>
+		<echo message=""/>
+		<javac srcdir="${src}" destdir="${build}" debug="${debug}" deprecation="{$depreciation}" optimize="${optimize}" fork="${forkjavac}">
+		    <classpath refid="classpath"/>
+		    <exclude name="**/test/**" />
+		    <include name="com/**"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar jarfile="${dist}/p6spy.jar" basedir="${build}">
+		    <exclude name="**/test/**" />
+		    <include name="com/**"/>
+		</jar>
+	</target>
+
+	<target name="docs" depends="jar">
+		<echo message="--------- Creating Javadocs ---------"/>
+		<echo message=""/>
+		<javadoc packagenames="com.p6spy.engine.spy.*,com.p6spy.engine.common.*,com.p6spy.engine.logging.*,com.p6spy.engine.outage.*" sourcepath="${src}" destdir="${javadocs}" />
+	</target>
+
+	<target name="webapp" depends="docs">
+		<war warfile="${dist}/p6spy.war" webxml="${webapp}/WEB-INF/web.xml">
+			<fileset dir="${webapp}" includes="**/*.jsp" />
+		</war>
+	</target>
+
+	<target name="release" depends="webapp">
+		<echo message="--------- Creating Release Packages ---------"/>
+		<echo message=""/>
+		<zip zipfile="${dist}/p6spy-install.zip">
+			<fileset dir="${dist}" includes="p6spy.jar" />
+			<fileset dir="${dist}" includes="p6spy.war" />
+			<fileset dir="${docs}" />
+			<fileset dir="." includes="license.txt" />
+			<fileset dir="." includes="spy.properties" />
+			<fileset dir="." includes="spy.forms" />
+		</zip>
+		<jar jarfile="${dist}/p6spy-install.jar">
+			<fileset dir="${dist}" includes="p6spy.jar" />
+			<fileset dir="${dist}" includes="p6spy.war" />
+			<fileset dir="." includes="license.txt" />
+			<fileset dir="." includes="spy.properties" />
+			<fileset dir="." includes="spy.forms" />
+			<fileset dir="${docs}" />
+		</jar>
+		<zip zipfile="${dist}/p6spy-src.zip">
+			<zipfileset dir="${src}" includes="**/*.java,**/*.xml,**/*.txt,**/*.jsp,**/*.properties" />
+			<zipfileset dir="${javadocs}" prefix="javadocs" />
+			<zipfileset dir="${docs}" prefix="documentation" />
+		</zip>
+		<jar jarfile="${dist}/p6spy-src.jar">
+			<zipfileset dir="${src}" includes="**/*.java,**/*.xml,**/*.txt,**/*.jsp,**/*.properties" />
+			<zipfileset dir="${javadocs}" prefix="javadocs" />
+			<zipfileset dir="${docs}" prefix="documentation" excludes="**/*.xml" />
+		</jar>
+	</target>
+
+
+	
+
+	<target name="jbcompile" depends="init">
+
+	    <!-- compile it all -->
+	    <javac destdir="${build}" debug="true" deprecation="${depreciation}" optimize="${optimize}" fork="${forkjavac}">
+		<classpath refid="jbosscp"/>
+		<src path="${src}"/>
+		<include name="com/**"/>
+	    </javac>
+	</target>
+
+	<target name="jbjar" depends="init">
+	    <!-- wrap the jar file up -->
+	    <jar jarfile="${ejbjar}" basedir="${build}" update="false">
+		<include name="**/*.class"/>
+		<metainf dir="${ejbconf}/jar"/>
+	    </jar>
+
+	    <!-- now make the ear file -->
+	    <ear destfile="${earfile}" appxml="${ejbconf}\ear\application.xml">
+		<fileset dir="${ejbconf}\ear">
+		    <include name="*.properties"/>
+		</fileset>
+		<fileset dir="${dist}">
+		    <include name="*ejb*.jar"/>
+		</fileset>
+	    </ear>
+
+	    <!-- whack it over to jboss and pause a few seconds -->
+	    <copy file="${earfile}" todir="\java\jboss-3.0.4\server\default\deploy"/>
+	    <sleep seconds="2"/>
+	</target>
+
+	<target name="jbtest" depends="init">
+	    <java classname="junit.textui.TestRunner" fork="yes">
+		<arg value="-noloading" />
+		<arg value="com.p6spy.engine.test.ejb.client.TestJBoss" />
+		<classpath>
+		    <pathelement path="${build}"/>
+		    <path refid="jbosscp"/>
+		</classpath>
+	    </java>
+	</target>
+
+	<target name="jboss" depends="jbcompile,jbjar,jbtest"/>
+
+
+	<target name="test" depends="compile">
+		<javac srcdir="${src}" destdir="${build}" debug="${debug}" deprecation="{$depreciation}" optimize="${optimize}" fork="${forkjavac}">
+		    <classpath refid="classpath"/>
+		    <include name="P6Test*.*" />
+		</javac>
+		<java classname="junit.textui.TestRunner" fork="yes">
+		    <arg value="-noloading" />
+		    <arg value="${testclass}" />
+		    <classpath>
+			<pathelement path="${build}"/>
+			<path refid="classpath"/>
+		    </classpath>
+		</java>
+	</target>
+
+	<target name="perform" depends="compile">
+		<javac srcdir="${src}" destdir="${build}" debug="${debug}" deprecation="{$depreciation}" optimize="${optimize}" fork="${forkjavac}">
+		    <classpath refid="classpath"/>
+		    <include name="P6Test*.*" />
+		</javac>
+		<java classname="junit.textui.TestRunner" fork="yes">
+		    <arg value="-noloading" />
+		    <arg value="com.p6spy.engine.spy.P6TestPerform" />
+		    <classpath>
+			<pathelement path="${build}"/>
+			<path refid="classpath"/>
+		    </classpath>
+		</java>
+	</target>
+
+	<target name="clean">
+		<echo message="--------- Removing build files ---------"/>
+		<echo message=""/>
+		<delete includeEmptyDirs="true"   failonerror="${quitonfail}">
+			<fileset dir="${build}"/>
+		</delete>
+		<echo message=""/>
+		<echo message="--------- Removing javadocs ---------"/>
+		<echo message=""/>
+		<delete includeEmptyDirs="true"   failonerror="${quitonfail}">
+			<fileset dir="${javadocs}"/>
+		</delete>
+		<echo message=""/>
+		<echo message="--------- Removing distribution files ---------"/>
+		<echo message=""/>
+		<delete includeEmptyDirs="true"   failonerror="${quitonfail}">
+			<fileset dir="${dist}"/>
+		</delete>
+		<echo message=""/>
+		<echo message="--------- Removing tool generated backup files ---------"/>
+		<echo message=""/>
+		<delete failonerror="${quitonfail}">
+			<fileset dir="${src}" includes="**/*~" defaultexcludes="no"/>
+			<fileset dir="${src}" includes="**/*.nbattrs" defaultexcludes="no"/>
+			<fileset dir="${src}" includes="**/*.bak" defaultexcludes="no"/>
+			<fileset dir="${src}" includes="**/*.swp" defaultexcludes="no"/>
+		</delete>
+	</target>
+	
+</project>

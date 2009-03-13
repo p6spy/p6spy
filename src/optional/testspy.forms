@@ -1,0 +1,2 @@
+5 seconds; select count(*) from cache_test
+5 seconds; select col2 from cache_test where col1 != ? and col1 != ? and col1 like ?

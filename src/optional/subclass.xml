@@ -1,0 +1,84 @@
+<project name="subclass" basedir="." default="test">
+
+  <!-- override this on the command line -->
+  <property
+    name="search.dir"
+    value="build"/>
+
+  <property
+    name="output.dir"
+    value="scratch"/>
+
+
+  <property
+    name="jar.file.name"
+    value="p6ds.jar"/>
+
+  <property
+    name="jar.file"
+    value="dist/${jar.file.name}"/>
+
+  <fileset id="search.fileset" dir="${search.dir}">
+    <include name="**\*.jar"/>
+    <include name="**\*.class"/>
+  </fileset>
+
+  <path id="cp">
+    <fileset id="lib.fileset" dir="lib">
+      <include name="**\*.jar"/>
+    </fileset>
+
+    <fileset id="dist.fileset" dir="dist">
+      <include name="**\*.jar"/>
+    </fileset>
+  </path>
+  
+  <taskdef 
+    name="p6subclass" 
+    classname="com.p6spy.engine.common.SubclassTask"
+    >
+    <classpath refid="cp"/>
+  </taskdef>
+
+  <target name="init">
+  </target>
+
+  <target name="clean">
+    <delete dir="${output.dir}"/>
+  </target>
+
+  <target name="create" depends="init">
+
+
+    <p6subclass outputdir="${output.dir}">
+      <classpath refid="cp"/>
+      <classpath>
+	<fileset refid="search.fileset"/>
+      </classpath>
+
+      <fileset refid="search.fileset"/>
+  
+    </p6subclass> 
+
+  </target>
+
+  <target name="compile" depends="create">
+    <javac srcdir="${output.dir}">
+      <classpath refid="cp"/>
+      <classpath>
+	<fileset refid="search.fileset"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar destfile="${jar.file}">
+      <fileset dir="${output.dir}">
+	<include name="**\*.class"/>
+      </fileset>
+    </jar>    
+  </target>
+
+  <target name="test" depends="create"/>
+
+</project>

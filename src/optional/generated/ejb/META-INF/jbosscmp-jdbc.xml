@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.0//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_0.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+     <datasource>java:/DefaultDS</datasource>
+     <datasource-mapping>Hypersonic SQL</datasource-mapping>
+     <preferred-relation-mapping>relation-table</preferred-relation-mapping>
+   </defaults>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jbosscmp-jdbc-beans.xml
+       that contains the <entity></entity> markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>State</ejb-name>
+         <create-table>false</create-table>
+         <remove-table>false</remove-table>
+         <table-name>STATE</table-name>
+
+         <cmp-field>
+            <field-name>countryId</field-name>
+            <column-name>COUNTRY_ID</column-name>
+
+         </cmp-field>
+         <cmp-field>
+            <field-name>stateId</field-name>
+            <column-name>STATE_ID</column-name>
+
+         </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+            <column-name>NAME</column-name>
+
+         </cmp-field>
+
+	  <!-- merge point: jbosscmp-jdbc-load-{0}.xml -->
+
+      </entity>
+
+   </enterprise-beans>
+
+</jbosscmp-jdbc>
+
