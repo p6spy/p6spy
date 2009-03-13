@@ -58,7 +58,7 @@ public class P6Array extends P6Base implements java.sql.Array {
     protected String preparedQuery;
 
     public P6Array(P6Factory factory, Array array, P6Statement statement, String preparedQuery, String query) {
-        setP6Factory(factory);
+        super(factory);
         this.passthru = array;
         this.statement = statement;
         this.query = query;

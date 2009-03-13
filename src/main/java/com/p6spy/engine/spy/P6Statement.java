@@ -138,7 +138,7 @@ public class P6Statement extends P6Base implements Statement {
     protected String statementQuery;
 
     public P6Statement(P6Factory factory, Statement statement, P6Connection conn) {
-	setP6Factory(factory);
+        super(factory);
         this.passthru = statement;
         this.connection = conn;
         this.statementQuery = "";
@@ -312,11 +312,9 @@ public class P6Statement extends P6Base implements Statement {
      * @return the wrapped JDBC object
      */
     public Statement getJDBC() {
-	Statement wrapped = (passthru instanceof P6Statement) ?
-	    ((P6Statement) passthru).getJDBC() :
-	    passthru;
+        Statement wrapped = (passthru instanceof P6Statement) ? ((P6Statement) passthru).getJDBC() : passthru;
 
-	return wrapped;
+        return wrapped;
     }
 
     /**

@@ -96,7 +96,7 @@ public class P6ResultSetMetaData extends P6Base implements java.sql.ResultSetMet
     protected ResultSetMetaData passthru;
 
     public P6ResultSetMetaData(P6Factory factory, ResultSetMetaData resultSetMetaData) {
-	setP6Factory(factory);
+        super(factory);
         this.passthru = resultSetMetaData;
     }
 

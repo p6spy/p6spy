@@ -129,43 +129,42 @@ import com.p6spy.engine.spy.*;
 import com.p6spy.engine.common.*;
 import java.sql.*;
 
-public class P6LogConnection extends P6Connection implements java.sql.Connection {
-    
-    
+public class P6LogConnection extends P6Connection {
+
     public P6LogConnection(P6Factory factory, Connection conn) throws SQLException {
         super(factory, conn);
     }
-    
+
+    @Override
     public void commit() throws SQLException {
         long startTime = System.currentTimeMillis();
-        
+
         try {
             passthru.commit();
-        }
-        finally {
-	    P6LogQuery.logElapsed(this.getId(), startTime, "commit", "", "");
+        } finally {
+            P6LogQuery.logElapsed(this.getId(), startTime, "commit", "", "");
         }
     }
-    
+
+    @Override
     public void rollback() throws SQLException {
         long startTime = System.currentTimeMillis();
-        
+
         try {
             passthru.rollback();
-        }
-        finally {
-	    P6LogQuery.logElapsed(this.getId(), startTime, "rollback", "", "");
+        } finally {
+            P6LogQuery.logElapsed(this.getId(), startTime, "rollback", "", "");
         }
     }
-    
+
+    @Override
     public void rollback(Savepoint p0) throws SQLException {
         long startTime = System.currentTimeMillis();
-        
+
         try {
             passthru.rollback(p0);
-        }
-        finally {
-	    P6LogQuery.logElapsed(this.getId(), startTime, "rollback", "", "");
+        } finally {
+            P6LogQuery.logElapsed(this.getId(), startTime, "rollback", "", "");
         }
     }
 }

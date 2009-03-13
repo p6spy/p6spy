@@ -126,7 +126,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
     private int currRow = -1;
 
     public P6ResultSet(P6Factory factory, ResultSet resultSet, P6Statement statement, String preparedQuery, String query) {
-	setP6Factory(factory);
+        super(factory);
         this.passthru = resultSet;
         this.statement = statement;
         this.query = query;

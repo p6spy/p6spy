@@ -76,12 +76,10 @@ public class P6SpyOptions extends P6Options {
      * and have reload properties = true, the expected overhead is minimal
      */
 
-    protected static Thread reloadThread = null;
+    protected static Thread reloadThread;
 
-    protected static OptionReloader reloader = null;
+    protected static OptionReloader reloader;
 
-    public P6SpyOptions() {
-    }
 
     public static final String DRIVER_PREFIX = "realdriver";
 
@@ -89,9 +87,9 @@ public class P6SpyOptions extends P6Options {
 
     public static final String DEFAULT_DB_DATEFORMAT = "dd-MMM-yy";
 
-    private static ArrayList modules;
+    private static List modules;
 
-    private static ArrayList driverNames;
+    private static List<String> driverNames;
 
     private static boolean usePrefix;
 
@@ -116,8 +114,6 @@ public class P6SpyOptions extends P6Options {
     private static String spydriver;
 
     private static boolean append;
-
-    private static String properties;
 
     private static boolean deregister;
 
@@ -161,6 +157,8 @@ public class P6SpyOptions extends P6Options {
 
     private static String databaseDialectDateFormat;
 
+    public P6SpyOptions() {
+    }
     public static void setExecutionThreshold(String _executionThreshold) {
         executionThreshold = P6Util.parseLong(_executionThreshold, 0);
     }
@@ -470,11 +468,11 @@ public class P6SpyOptions extends P6Options {
 
     // this should actually be getAllModules but to make it easier for others to add
     // methods we'll just use allMethods
-    public static ArrayList allModules() {
+    public static List allModules() {
         return modules;
     }
 
-    public static ArrayList allDriverNames() {
+    public static List<String> allDriverNames() {
         return driverNames;
     }
 

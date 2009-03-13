@@ -132,7 +132,7 @@ public class P6Connection extends P6Base implements java.sql.Connection {
     protected Connection passthru;
 
     public P6Connection(P6Factory factory, Connection conn) throws SQLException {
-	setP6Factory(factory);
+        super(factory);
         this.passthru = conn;
     }
 

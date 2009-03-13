@@ -119,8 +119,8 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
     protected String rdsName;
 
     static {
-	// Normal use of a datastore means that the core has not
-	// been initialized.
+        // Normal use of a datastore means that the core has not
+        // been initialized.
         initMethod();
     }
 
@@ -129,244 +129,225 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
      */
 
     public P6DataSource() {
+        super(null);
     }
 
     public P6DataSource(DataSource source) {
-      rds = source;
+        super(null);
+        rds = source;
     }
-
 
     public static void initMethod() {
         P6SpyDriverCore.initMethod(P6SpyDriver.class.getName());
     }
 
     public String getRealDataSource() {
-	return rdsName;
+        return rdsName;
     }
 
     public void setRealDataSource(String inVar) {
-	rdsName = inVar;
+        rdsName = inVar;
     }
+
     protected void bindDataSource() throws SQLException {
-	// can be set when object is bound to JDNI, or
-	// can be loaded from spy.properties
-	if (rdsName == null) {
-	    rdsName = P6SpyOptions.getRealDataSource();
-	}
-	if (rdsName == null) {
+        // can be set when object is bound to JDNI, or
+        // can be loaded from spy.properties
+        if (rdsName == null) {
+            rdsName = P6SpyOptions.getRealDataSource();
+        }
+        if (rdsName == null) {
 
-	    throw new SQLException("P6DataSource: no value for Real Data Source Name, cannot perform jndi lookup");
-	}
-	try {
-	    Hashtable env = null;
-	    String factory;
-	    if ((factory = P6SpyOptions.getJNDIContextFactory()) != null) {
-		env = new Hashtable();
-		env.put(Context.INITIAL_CONTEXT_FACTORY, factory);
-		String url = P6SpyOptions.getJNDIContextProviderURL();
-		if (url != null) {
-		    env.put(Context.PROVIDER_URL, url);
-		}
-		String custom = P6SpyOptions.getJNDIContextCustom();
-		if(custom != null) {
-		    StringTokenizer st = new StringTokenizer(custom, ",", false);
-		    while (st.hasMoreElements()) {
-			String pair = st.nextToken();
-			StringTokenizer pst = new StringTokenizer(pair, ";", false);
-			if (pst.hasMoreElements()) {
-			    String name = pst.nextToken();
-			    if (pst.hasMoreElements()) {
-				String value = pst.nextToken();
-				env.put(name, value);
-			    }
-			}
-		    }
-		}
-	    }
-	    InitialContext ctx;
-	    if (env != null) {
-		 ctx = new InitialContext(env);
-	    } else {
-		ctx = new InitialContext();
-	    }
-	    rds = (DataSource) ctx.lookup(rdsName);
+            throw new SQLException("P6DataSource: no value for Real Data Source Name, cannot perform jndi lookup");
+        }
+        try {
+            Hashtable env = null;
+            String factory;
+            if ((factory = P6SpyOptions.getJNDIContextFactory()) != null) {
+                env = new Hashtable();
+                env.put(Context.INITIAL_CONTEXT_FACTORY, factory);
+                String url = P6SpyOptions.getJNDIContextProviderURL();
+                if (url != null) {
+                    env.put(Context.PROVIDER_URL, url);
+                }
+                String custom = P6SpyOptions.getJNDIContextCustom();
+                if (custom != null) {
+                    StringTokenizer st = new StringTokenizer(custom, ",", false);
+                    while (st.hasMoreElements()) {
+                        String pair = st.nextToken();
+                        StringTokenizer pst = new StringTokenizer(pair, ";", false);
+                        if (pst.hasMoreElements()) {
+                            String name = pst.nextToken();
+                            if (pst.hasMoreElements()) {
+                                String value = pst.nextToken();
+                                env.put(name, value);
+                            }
+                        }
+                    }
+                }
+            }
+            InitialContext ctx;
+            if (env != null) {
+                ctx = new InitialContext(env);
+            } else {
+                ctx = new InitialContext();
+            }
+            rds = (DataSource) ctx.lookup(rdsName);
 
-	    // Set any properties that the spy.properties file contains
-	    // that are supported by set methods in this class
+            // Set any properties that the spy.properties file contains
+            // that are supported by set methods in this class
 
-	    String dsProps = P6SpyOptions.getRealDataSourceProperties();
+            String dsProps = P6SpyOptions.getRealDataSourceProperties();
 
+            if (dsProps != null) {
+                Hashtable props = null;
 
-	    if (dsProps != null) {
-		Hashtable props = null;
+                StringTokenizer st = new StringTokenizer(dsProps, ",", false);
+                while (st.hasMoreElements()) {
+                    String pair = st.nextToken();
+                    StringTokenizer pst = new StringTokenizer(pair, ";", false);
+                    if (pst.hasMoreElements()) {
+                        String name = pst.nextToken();
+                        if (pst.hasMoreElements()) {
+                            String value = pst.nextToken();
+                            if (props == null) {
+                                props = new Hashtable();
+                            }
+                            props.put(name, value);
+                        }
+                    }
+                }
+                Hashtable matchedProps = new Hashtable();
+                if (props != null) {
+                    Class klass = rds.getClass();
 
-		StringTokenizer st = new StringTokenizer(dsProps, ",", false);
-		while (st.hasMoreElements()) {
-		    String pair = st.nextToken();
-		    StringTokenizer pst = new StringTokenizer(pair, ";", false);
-		    if (pst.hasMoreElements()) {
-			String name = pst.nextToken();
-			if (pst.hasMoreElements()) {
-			    String value = pst.nextToken();
-			    if (props == null) {
-				props = new Hashtable();
-			    }
-			    props.put(name, value);
-			}
-		    }
-		}
-		Hashtable matchedProps = new Hashtable();
-		if (props != null) {
-		    Class klass = rds.getClass();
+                    // find the setter methods in the class, and
+                    // see if the datasource properties collected
+                    // from the spy.properties file contains any matching
+                    // name
+                    Method[] methods = klass.getMethods();
+                    for (int i = 0; methods != null && i < methods.length; i++) {
+                        Method method = methods[i];
+                        String methodName = method.getName();
+                        // see if the method is a setXXX
+                        if (methodName.startsWith("set")) {
+                            String propertyname = methodName.substring(3).toLowerCase();
+                            // found a setXXX method, so see if there is an XXX
+                            // property in the list read in from spy.properties.
+                            Enumeration keys = props.keys();
+                            while (keys.hasMoreElements()) {
+                                String key = (String) keys.nextElement();
+                                // all checks are all lower case
+                                if (key.toLowerCase().equals(propertyname)) {
+                                    try {
+                                        // this is a parameter for the current method,
+                                        // so find out which supported type the method
+                                        // expects
+                                        String value = (String) props.get(key);
+                                        Class[] types = method.getParameterTypes();
+                                        if (types[0].getName().equals(value.getClass().getName())) {
+                                            // the method expects a string
+                                            String[] args = new String[1];
+                                            args[0] = value;
+                                            P6LogQuery.logDebug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
+                                            method.invoke(rds, args);
+                                            matchedProps.put(key, value);
+                                        } else if (types[0].isPrimitive() && types[0].getName().equals("int")) {
+                                            // the method expects an int, so we pass an Integer
+                                            Integer[] args = new Integer[1];
+                                            args[0] = Integer.valueOf(value);
+                                            P6LogQuery.logDebug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
+                                            method.invoke(rds, args);
+                                            matchedProps.put(key, value);
+                                        } else {
+                                            P6LogQuery.logDebug("method " + methodName + " on DataSource " + rdsName + " matches property "
+                                                + propertyname + " but expects unsupported type " + types[0].getName());
+                                            matchedProps.put(key, value);
+                                        }
+                                    } catch (java.lang.IllegalAccessException e) {
+                                        throw (new SQLException("spy.properties file includes" + " datasource property " + key + " for datasource "
+                                            + rdsName + " but access is denied to method " + methodName));
+                                    } catch (java.lang.reflect.InvocationTargetException e2) {
+                                        throw (new SQLException("spy.properties file includes" + " datasource property " + key + " for datasource "
+                                            + rdsName + " but call method " + methodName + " fails"));
+                                    }
+                                }
+                            }
+                        }
+                    }
 
-		    // find the setter methods in the class, and
-		    // see if the datasource properties collected
-		    // from the spy.properties file contains any matching
-		    // name
-		    Method [] methods = klass.getMethods();
-		    for(int i=0; methods != null && i < methods.length; i++) {
-			Method method = methods[i];
-			String methodName = method.getName();
-			// see if the method is a setXXX
-			if(methodName.startsWith("set")) {
-			    String propertyname = methodName.substring(3).toLowerCase();
-			    // found a setXXX method, so see if there is an XXX
-			    // property in the list read in from spy.properties.
-			    Enumeration keys = props.keys();
-			    while(keys.hasMoreElements()) {
-				String key = (String)keys.nextElement();
-				// all checks are all lower case
-				if (key.toLowerCase().equals(propertyname)) {
-				    try {
-					// this is a parameter for the current method,
-					// so find out which supported type the method
-					// expects
-					String value = (String)props.get(key);
-					Class [] types = method.getParameterTypes();
-					if (types[0].getName().equals(value.getClass().getName())) {
-					    // the method expects a string
-					    String [] args = new String [1];
-					    args[0] = value;
-					    P6LogQuery.logDebug("calling " + methodName +
-								" on DataSource " + rdsName +
-								" with " + value);
-					    method.invoke(rds, args);
-					    matchedProps.put(key, value);
-					} else if (types[0].isPrimitive() &&
-						  types[0].getName().equals("int")) {
-					    // the method expects an int, so we pass an Integer
-					    Integer [] args = new Integer[1];
-					    args[0] = Integer.valueOf(value);
-					    P6LogQuery.logDebug("calling " + methodName +
-								" on DataSource " + rdsName +
-								" with " + value);
-					    method.invoke(rds, args);
-					    matchedProps.put(key, value);
-					} else {
-					    P6LogQuery.logDebug("method " + methodName +
-								" on DataSource " + rdsName +
-								" matches property " + propertyname +
-								" but expects unsupported type " + types[0].getName());
-					    matchedProps.put(key, value);
-					}
-				    } catch (java.lang.IllegalAccessException e) {
-					throw (new
-					       SQLException("spy.properties file includes" +
-							    " datasource property " + key +
-							    " for datasource " + rdsName +
-							    " but access is denied to method " +
-							    methodName));
-				    } catch (java.lang.reflect.InvocationTargetException e2) {
-					throw (new
-					       SQLException("spy.properties file includes" +
-							    " datasource property " + key +
-							    " for datasource " + rdsName +
-							    " but call method " +
-							    methodName + " fails"));
-				    }
-				}
-			    }
-			}
-		    }
+                    Enumeration keys = props.keys();
+                    while (keys.hasMoreElements()) {
 
-		    Enumeration keys = props.keys();
-		    while(keys.hasMoreElements()) {
+                        String key = (String) keys.nextElement();
 
-			String key = (String)keys.nextElement();
+                        if (!matchedProps.containsKey(key)) {
+                            P6LogQuery.logDebug("spy.properties file includes" + " datasource property " + key + " for datasource " + rdsName
+                                + " but class " + klass.getName() + " has no method" + " by that name");
+                        }
+                    }
+                }
+            }
 
-			if (!matchedProps.containsKey(key)) {
-			    P6LogQuery.logDebug("spy.properties file includes" +
-						" datasource property " + key +
-						" for datasource " + rdsName +
-						" but class " + klass.getName() + " has no method" +
-						" by that name");
-			}
-		    }
-		}
-	    }
+        } catch (NamingException e) {
+            throw new SQLException("P6DataSource: naming exception during jndi lookup of Real Data Source Name of '" + rdsName + "'. "
+                + e.getMessage());
+        }
 
-
-	} catch (NamingException e) {
-	    throw new SQLException("P6DataSource: naming exception during jndi lookup of Real Data Source Name of '" + rdsName + "'. " + e.getMessage());
-	}
-
-	if (rds == null) {
-	    throw new SQLException("P6DataSource: jndi lookup for Real Data Source Name of '" + rdsName + "' failed, cannot bind named data source.");
-	}
+        if (rds == null) {
+            throw new SQLException("P6DataSource: jndi lookup for Real Data Source Name of '" + rdsName + "' failed, cannot bind named data source.");
+        }
     }
 
     /**
      * Required method to support this class as a <CODE>Referenceable</CODE>.
      */
 
-    public Reference getReference() throws NamingException
-    {
-	String FactoryName = "com.p6spy.engine.spy.P6DataSourceFactory";
+    public Reference getReference() throws NamingException {
+        String FactoryName = "com.p6spy.engine.spy.P6DataSourceFactory";
 
-	Reference Ref = new Reference(getClass().getName(), FactoryName, null);
+        Reference Ref = new Reference(getClass().getName(), FactoryName, null);
 
-	Ref.add(new StringRefAddr("dataSourceName", getRealDataSource()));
-	return Ref;
+        Ref.add(new StringRefAddr("dataSourceName", getRealDataSource()));
+        return Ref;
     }
 
-
     public int getLoginTimeout() throws SQLException {
-	if (rds == null) {
-	    bindDataSource();
-	}
-	return rds.getLoginTimeout();
+        if (rds == null) {
+            bindDataSource();
+        }
+        return rds.getLoginTimeout();
     }
 
     public void setLoginTimeout(int inVar) throws SQLException {
-	if (rds == null) {
-	    bindDataSource();
-	}
-	rds.setLoginTimeout(inVar);
+        if (rds == null) {
+            bindDataSource();
+        }
+        rds.setLoginTimeout(inVar);
     }
 
     public PrintWriter getLogWriter() throws SQLException {
-	if (rds == null) {
-	    bindDataSource();
-	}
-	return rds.getLogWriter();
+        if (rds == null) {
+            bindDataSource();
+        }
+        return rds.getLogWriter();
     }
 
     public void setLogWriter(PrintWriter inVar) throws SQLException {
-	rds.setLogWriter(inVar);
+        rds.setLogWriter(inVar);
     }
 
     public Connection getConnection() throws SQLException {
-	if (rds == null) {
-	    bindDataSource();
-	}
-	return P6SpyDriverCore.wrapConnection(rds.getConnection());
+        if (rds == null) {
+            bindDataSource();
+        }
+        return P6SpyDriverCore.wrapConnection(rds.getConnection());
     }
 
     public Connection getConnection(String username, String password) throws SQLException {
-	if (rds == null) {
-	    bindDataSource();
-	}
-	return P6SpyDriverCore.wrapConnection(rds.getConnection(username, password));
+        if (rds == null) {
+            bindDataSource();
+        }
+        return P6SpyDriverCore.wrapConnection(rds.getConnection(username, password));
     }
 
     /**

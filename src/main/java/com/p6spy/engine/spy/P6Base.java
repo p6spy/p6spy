@@ -1,14 +1,14 @@
 package com.p6spy.engine.spy;
 
 public abstract class P6Base {
-    protected P6Factory factory;
+    private P6Factory factory;
 
-    public void setP6Factory(P6Factory inVar) {
-	factory = inVar;
-    }	
+    public P6Base(P6Factory factory) {
+        this.factory = factory;
+    }
 
     public P6Factory getP6Factory() {
-	return factory;
+        return factory;
     }
 }
 

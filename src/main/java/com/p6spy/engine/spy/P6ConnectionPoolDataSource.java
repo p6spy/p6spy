@@ -60,7 +60,7 @@
  */
 
 /**
- *  Support for PooledConnection interface requires 
+ *  Support for PooledConnection interface requires
  *  an aware DataSource to produce the PooledConnection
  *  ojects. This is it.
  *
@@ -111,33 +111,32 @@ import javax.sql.*;
 public class P6ConnectionPoolDataSource extends P6DataSource implements ConnectionPoolDataSource {
 
     public P6ConnectionPoolDataSource() {
-      super();
+        super();
     }
 
     public P6ConnectionPoolDataSource(DataSource ds) {
-      super(ds);
+        super(ds);
     }
 
     public PooledConnection getPooledConnection() throws SQLException {
-      if (rds == null) {
-	bindDataSource();
-      }
+        if (rds == null) {
+            bindDataSource();
+        }
 
-      PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection();
-      P6PooledConnection pooledConnection = new P6PooledConnection(pc);
-      return pooledConnection;
+        PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection();
+        P6PooledConnection pooledConnection = new P6PooledConnection(pc);
+        return pooledConnection;
     }
-    
-    
+
     public PooledConnection getPooledConnection(String s, String s1) throws SQLException {
 
-      if (rds == null) {
-	bindDataSource();
-      }
+        if (rds == null) {
+            bindDataSource();
+        }
 
-      PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection(s, s1);
-      P6PooledConnection pooledConnection = new P6PooledConnection(pc);
-      return pooledConnection;
+        PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection(s, s1);
+        P6PooledConnection pooledConnection = new P6PooledConnection(pc);
+        return pooledConnection;
     }
 
 }

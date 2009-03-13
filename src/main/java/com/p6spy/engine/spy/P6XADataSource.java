@@ -78,33 +78,32 @@ import javax.sql.*;
 public class P6XADataSource extends P6DataSource implements XADataSource {
 
     public P6XADataSource() {
-      super();
+        super();
     }
 
     public P6XADataSource(DataSource ds) {
-      super(ds);
+        super(ds);
     }
 
     public XAConnection getXAConnection() throws SQLException {
-      if (rds == null) {
-	bindDataSource();
-      }
+        if (rds == null) {
+            bindDataSource();
+        }
 
-      XAConnection xac = ((XADataSource) rds).getXAConnection();
-      P6XAConnection p6xac = new P6XAConnection(xac);
-      return p6xac;
+        XAConnection xac = ((XADataSource) rds).getXAConnection();
+        P6XAConnection p6xac = new P6XAConnection(xac);
+        return p6xac;
     }
-    
-    
+
     public XAConnection getXAConnection(String s, String s1) throws SQLException {
 
-      if (rds == null) {
-	bindDataSource();
-      }
+        if (rds == null) {
+            bindDataSource();
+        }
 
-      XAConnection xac = ((XADataSource) rds).getXAConnection(s, s1);
-      P6XAConnection p6xac = new P6XAConnection(xac);
-      return p6xac;
+        XAConnection xac = ((XADataSource) rds).getXAConnection(s, s1);
+        P6XAConnection p6xac = new P6XAConnection(xac);
+        return p6xac;
     }
 
 }

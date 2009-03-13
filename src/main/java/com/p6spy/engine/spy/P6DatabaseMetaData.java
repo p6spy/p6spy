@@ -100,7 +100,7 @@ public class P6DatabaseMetaData extends P6Base implements java.sql.DatabaseMetaD
     protected P6Connection connection;
 
     public P6DatabaseMetaData(P6Factory factory, DatabaseMetaData metadata, P6Connection connection) {
-	setP6Factory(factory);
+        super(factory);
         this.passthru = metadata;
         this.connection = connection;
     }
