@@ -7,12 +7,6 @@
     <description>P6Spy is an open source framework for applications that intercept and optionally modify database statements.
     </description>
     <url>http://www.p6spy.com/</url>
-    <parent>
-        <groupId>org.amplafi</groupId>
-        <artifactId>amplafi-opensource-parent</artifactId>
-        <version>0.9-SNAPSHOT</version>
-        <relativePath>../amplafi-opensource-parent/pom.xml</relativePath>
-    </parent>
     <developers>
         <developer>
             <id>aarvesen</id>
@@ -57,6 +51,60 @@
         </connection>
         <url>http://p6spy.svn.sourceforge.net/viewvc/p6spy/</url>
     </scm>
+    <properties>
+        <svn-base>https://svn1.hosted-projects.com/transparentpolitics/amplafi-flow</svn-base>
+
+        <tapestry-build>4.1.6</tapestry-build>
+        <tapestry-test-build>4.1.4</tapestry-test-build>
+        
+        <tacos-build>4.1.2-SNAPSHOT</tacos-build>
+        <hivemind-build>1.1.1</hivemind-build>
+        <commons-logging-build>1.1</commons-logging-build>
+        <log4j-build>1.2.14</log4j-build>
+        <slf4j-build>1.5.6</slf4j-build>
+        <spring-build>2.0.5</spring-build>
+        <json-lib-build>2.2.3</json-lib-build>
+        <selenium-server-build>1.0-beta-1</selenium-server-build>
+        <selenium-java-client-driver-build>1.0-beta-1</selenium-java-client-driver-build>
+        <easymock-class-build>2.3</easymock-class-build>
+        <easymock-build>2.3</easymock-build>
+        <testng-build>5.5</testng-build>
+        <commons-lang-build>2.4</commons-lang-build>
+        <maven-antrun-plugin-build>1.2</maven-antrun-plugin-build>
+        <maven-assembly-plugin-build>2.2-beta-3</maven-assembly-plugin-build>
+        <maven-checkstyle-plugin-build>2.2</maven-checkstyle-plugin-build>
+        <maven-clean-plugin-build>2.3</maven-clean-plugin-build>
+        <maven-compiler-plugin-build>2.0.2</maven-compiler-plugin-build>
+        <cobertura-maven-plugin-build>2.0</cobertura-maven-plugin-build>
+        <maven-dependency-plugin-build>2.0</maven-dependency-plugin-build>
+        <maven-deploy-plugin-build>2.4</maven-deploy-plugin-build>
+        <maven-eclipse-plugin-build>2.5.1</maven-eclipse-plugin-build>
+        <maven-javadoc-plugin-build>2.3</maven-javadoc-plugin-build>
+        <maven-jar-plugin-build>2.2</maven-jar-plugin-build>
+        <maven-jetty-plugin-build>6.1.15</maven-jetty-plugin-build>
+        <!-- jetty-build>6.1.4</jetty-build -->
+        <!-- 17 jul 2007 selenium requires this version -->
+        <jetty-build>5.1.10</jetty-build>
+        <buildnumber-maven-plugin-build>1.0-beta-1</buildnumber-maven-plugin-build>
+        <maven-project-info-reports-plugin-build>2.1</maven-project-info-reports-plugin-build>
+        <maven-release-plugin-build>2.0-beta-8</maven-release-plugin-build>
+        <maven-repository-plugin-build>2.1</maven-repository-plugin-build>
+        <maven-resources-plugin-build>2.3</maven-resources-plugin-build>
+        <maven-source-plugin-build>2.0.4</maven-source-plugin-build>
+        <maven-site-plugin-build>2.0-beta-7</maven-site-plugin-build>
+        <!--
+            We need http://jira.codehaus.org/browse/SUREFIRE-446 and http://jira.codehaus.org/browse/SUREFIRE-463 to move to more
+            recent versions (>2.4.2)
+        -->
+        <!-- maven-surefire-plugin-build>2.4.3</maven-surefire-plugin-build-->
+        <maven-surefire-plugin-build>2.4-collab-amplafi-20070602</maven-surefire-plugin-build>
+        <maven-war-plugin-build>2.1-alpha-2</maven-war-plugin-build>
+        <ognl-build>2.7.3</ognl-build>
+        <ehcache-build>1.6.0-beta3</ehcache-build>
+        <jericho-htmlparser-build>2.6.1</jericho-htmlparser-build>
+        <commons-digester-build>1.8.1</commons-digester-build>
+        <pmd-build>4.2.5</pmd-build>
+    </properties>
     <build>
         <pluginManagement>
             <plugins>
@@ -87,6 +135,194 @@
                         <excludedGroups>browser</excludedGroups>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-idea-plugin</artifactId>
+                    <version>2.0</version>
+                    <configuration>
+                        <downloadSources>true</downloadSources>
+                        <downloadJavadocs>true</downloadJavadocs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin-build}</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin-build}</version>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>sources</id>
+                            <phase>site</phase>
+                            <goals>
+                                <goal>sources</goal>
+                            </goals>
+                            <configuration>
+                                <classifier>sources</classifier>
+                                <classifier>javadoc</classifier>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <version>${maven-eclipse-plugin-build}</version>
+                    <configuration>
+                      <!-- 
+                      <workspaceCodeStylesURL></workspaceCodeStylesURL>
+                       -->
+                        <buildOutputDirectory>bin</buildOutputDirectory>
+                       
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>jar</goal>
+                                <goal>test-jar</goal>
+                            </goals>
+                            <configuration>
+                                <attach>true</attach>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin-build}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin-build}</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>                     
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin-build}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin-build}</version>
+                    <configuration>
+                        <tagBase>${svn-base}/${artifactId}/tags/</tagBase>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-repository-plugin</artifactId>
+                    <version>${maven-repository-plugin-build}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven-assembly-plugin-build}</version>
+                    <!--
+                        <inherited>true</inherited> <configuration> <descriptor>src/main/assembly/dep.xml</descriptor>
+                        </configuration>
+                    -->
+                </plugin>
+                <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>maven-jetty-plugin</artifactId>
+                    <version>${maven-jetty-plugin-build}</version>
+                    <configuration>
+                        <webAppSourceDirectory>src/main/webapp</webAppSourceDirectory>
+                        <contextPath>/</contextPath>
+                        <!--scanIntervalSeconds>10</scanIntervalSeconds-->
+                        <systemProperties>
+                            <systemProperty>
+                                <name>org.apache.tapestry.enable-reset-service</name>
+                                <value>true</value>
+                            </systemProperty>
+                        </systemProperties>
+                    </configuration>
+                    <!--
+                        selenium is causing problems! it uses old version of jetty 5.1.10 <dependencies> <dependency>
+                        <groupId>org.mortbay.jetty</groupId> <artifactId>jetty</artifactId> <version>${jetty-build}</version>
+                        <scope>runtime</scope> </dependency> </dependencies>
+                    -->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin-build}</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                                <goal>test-jar</goal>
+                            </goals>
+                            <configuration>
+                                <attach>true</attach>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <inherited>true</inherited>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${maven-site-plugin-build}</version>
+                    <executions>
+                       <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <siteDirectory>${pom.artifactId}/src/site</siteDirectory>
+                                <attach>true</attach>
+                            </configuration>
+                        </execution>
+                            <!-- 11 feb 2009: (PAT) Is this necessary?
+                       <execution>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>attach-descriptor</goal>
+                            </goals>
+                            <configuration>
+                                <attach>true</attach>
+                            </configuration>
+                        </execution>    
+-->
+                    </executions>      
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
