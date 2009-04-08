@@ -62,9 +62,9 @@
 package com.p6spy.engine.common;
 
 public abstract class P6Options {
-    
+
     public P6Options() { }
-    
+
     /* to implement options for a module:
      *  (1) extend this class
      *  (2) add static get and set methods for the options you want to make available
@@ -72,8 +72,8 @@ public abstract class P6Options {
      *  (4) return an instance of your options class in your factory via the getOptions() function
      */
     public void reload(P6SpyProperties properties) {
-        P6LogQuery.logDebug(this.getClass().getName()+" reloading properties");
+        P6LogQuery.debug(this.getClass().getName()+" reloading properties");
         properties.setClassValues(this.getClass());
     }
-        
+
 }

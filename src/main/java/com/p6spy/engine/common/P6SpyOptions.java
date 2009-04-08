@@ -318,13 +318,13 @@ public class P6SpyOptions extends P6Options {
         try {
             stringMatcherEngine = (StringMatcher) P6Util.forName(stringmatcher).newInstance();
         } catch (InstantiationException e) {
-            P6LogQuery.logError("Could not instantiate string matcher class: " + stringmatcher);
+            P6LogQuery.error("Could not instantiate string matcher class: " + stringmatcher);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            P6LogQuery.logError("Could not instantiate string matcher class: " + stringmatcher);
+            P6LogQuery.error("Could not instantiate string matcher class: " + stringmatcher);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            P6LogQuery.logError("Could not instantiate string matcher class: " + stringmatcher);
+            P6LogQuery.error("Could not instantiate string matcher class: " + stringmatcher);
             e.printStackTrace();
         }
     }
@@ -428,18 +428,24 @@ public class P6SpyOptions extends P6Options {
     public static String getRealDataSourceProperties() {
         return realdatasourceproperties;
     }
-
+    private List getReverseOrderedList(List arraylist) {
+        List newlist = new ArrayList(arraylist.size());
+        for (int i = arraylist.size()-1;i >= 0; i--) {
+            newlist.add(arraylist.get(i));
+        }
+        return newlist;
+    }
     @Override
     public void reload(P6SpyProperties properties) {
         // first set the values on this class
-        P6LogQuery.logDebug(this.getClass().getName() + " reloading properties");
+        P6LogQuery.debug(this.getClass().getName() + " reloading properties");
 
-        modules = properties.getReverseOrderedList(MODULE_PREFIX);
-        driverNames = properties.getReverseOrderedList(DRIVER_PREFIX);
+        modules = getReverseOrderedList(properties.getOrderedList(MODULE_PREFIX));
+        driverNames = getReverseOrderedList(properties.getOrderedList(DRIVER_PREFIX));
         properties.setClassValues(P6SpyOptions.class);
         configureReloadingThread();
         P6LogQuery.initMethod();
-        P6LogQuery.logInfo("reloadProperties() successful");
+        P6LogQuery.info("reloadProperties() successful");
     }
 
     protected static void configureReloadingThread() {

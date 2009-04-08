@@ -254,7 +254,7 @@ public abstract class P6SpyDriverCore implements Driver {
                     realDrivers.add(realDriver);
                 }
 
-                P6LogQuery.logDebug("Registered driver: " + className + ", realdriver: " + realDriver);
+                P6LogQuery.debug("Registered driver: " + className + ", realdriver: " + realDriver);
             }
 
             // instantiate the factories, if nec.
@@ -272,19 +272,19 @@ public abstract class P6SpyDriverCore implements Driver {
                         OptionReloader.add(options, properties);
                     }
 
-                    P6LogQuery.logDebug("Registered factory: " + className + " with options: " + options);
+                    P6LogQuery.debug("Registered factory: " + className + " with options: " + options);
                 }
             }
 
             initialized = true;
 
             for (Enumeration<Driver> e = DriverManager.getDrivers(); e.hasMoreElements();) {
-                P6LogQuery.logDebug("Driver manager reporting driver registered: " + e.nextElement());
+                P6LogQuery.debug("Driver manager reporting driver registered: " + e.nextElement());
             }
 
         } catch (Exception e) {
             String err = "Error registering " + classType + "  [" + className + "]\nCaused By: " + e.toString();
-            P6LogQuery.logError(err);
+            P6LogQuery.error(err);
             throw new P6DriverNotFoundError(err);
         }
 
@@ -314,11 +314,11 @@ public abstract class P6SpyDriverCore implements Driver {
             for (int i = 0; i < size; i++) {
                 Driver driver = dereg.get(i);
                 if (P6SpyOptions.getDeregisterDrivers()) {
-                    P6LogQuery.logInfo("deregistering driver " + driver.getClass().getName());
+                    P6LogQuery.info("deregistering driver " + driver.getClass().getName());
                     DriverManager.deregisterDriver(driver);
                 } else {
                     P6LogQuery
-                        .logError("driver "
+                        .error("driver "
                             + driver.getClass().getName()
                             + " is a real driver in spy.properties, but it has been loaded before p6spy.  p6spy will not wrap these connections.  Either prevent the driver from loading, or try setting 'deregisterdrivers' to true in spy.properties");
                 }
@@ -378,7 +378,7 @@ public abstract class P6SpyDriverCore implements Driver {
             throw new SQLException("Unable to find a driver that accepts " + realUrl);
         }
 
-        P6LogQuery.logDebug("this is " + this + " and passthru is " + passthru);
+        P6LogQuery.debug("this is " + this + " and passthru is " + passthru);
         if (passthru == null) {
             findPassthru(realUrl);
         }
@@ -396,7 +396,7 @@ public abstract class P6SpyDriverCore implements Driver {
             try {
                 if (driver.acceptsURL(url)) {
                     passthru = driver;
-                    P6LogQuery.logDebug("found new driver " + driver);
+                    P6LogQuery.debug("found new driver " + driver);
                     break;
                 }
             } catch (SQLException e) {

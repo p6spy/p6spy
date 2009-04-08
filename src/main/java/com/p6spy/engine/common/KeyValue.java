@@ -78,21 +78,21 @@
 package com.p6spy.engine.common;
 
 public class KeyValue {
-    
-    protected Object key;
-    protected Object value;
-    
-    public KeyValue(Object _key, Object _value) {
+
+    private String key;
+    private String value;
+
+    public KeyValue(String _key, String _value) {
         key = _key;
         value = _value;
     }
-    
-    public Object getValue() {
+
+    public String getValue() {
         return value;
     }
-    
-    public Object getKey() {
+
+    public String getKey() {
         return key;
     }
-    
+
 }

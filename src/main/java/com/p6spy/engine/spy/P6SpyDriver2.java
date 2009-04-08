@@ -85,7 +85,7 @@ public class P6SpyDriver2 extends P6SpyDriverCore {
 	Throwable t = new Throwable();
 	StringWriter sw = new StringWriter();
 	t.printStackTrace(new PrintWriter(sw));
-	P6LogQuery.logDebug("new spy driver: " + sw.toString());
+	P6LogQuery.debug("new spy driver: " + sw.toString());
     }
     
 }

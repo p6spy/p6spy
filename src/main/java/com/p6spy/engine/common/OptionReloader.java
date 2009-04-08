@@ -67,30 +67,34 @@ package com.p6spy.engine.common;
 import java.util.*;
 
 public class OptionReloader implements Runnable {
-    
-    /* this is our list of option classes we need to call,
-     * we use a set because we only want to call each class
-     * once */
-    protected static HashSet options = new HashSet();
-    
-    protected long sleepTime = 0;
-    protected boolean running = false;
-    
+
+    /*
+     * this is our list of option classes we need to call, we use a set because we only want to call
+     * each class once
+     */
+    protected static Set<P6Options> options = new HashSet<P6Options>();
+
+    protected long sleepTime;
+
+    protected boolean running;
+
     public OptionReloader(long sleep) {
         setSleep(sleep);
         setRunning(true);
     }
-    
+
     public void setSleep(long sleep) {
         sleepTime = sleep;
     }
+
     public void setRunning(boolean run) {
         running = run;
     }
+
     public boolean getRunning() {
         return running;
     }
-    
+
     public void run() {
         while (running) {
             // this will always run its own thread,
@@ -104,7 +108,7 @@ public class OptionReloader implements Runnable {
             reload();
         }
     }
-    
+
     public static void add(P6Options p6options, P6SpyProperties properties) {
         options.add(p6options);
         // when added make sure to deal with this
@@ -113,22 +117,20 @@ public class OptionReloader implements Runnable {
         }
         p6options.reload(properties);
     }
-    
+
     public static void reload() {
         P6SpyProperties properties = new P6SpyProperties();
         // if nothing to reload, don't call the reload function
         if (properties.isNewProperties() == false) {
             return;
         }
-        Iterator i = options.iterator();
-        while (i.hasNext()) {
-            P6Options options = (P6Options)i.next();
-            options.reload(properties);
+        for(P6Options option: options) {
+            option.reload(properties);
         }
     }
 
     public static Iterator iterator() {
-	return options.iterator();
+        return options.iterator();
     }
-    
+
 }

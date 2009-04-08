@@ -248,18 +248,18 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
                                             // the method expects a string
                                             String[] args = new String[1];
                                             args[0] = value;
-                                            P6LogQuery.logDebug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
+                                            P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
                                             method.invoke(rds, args);
                                             matchedProps.put(key, value);
                                         } else if (types[0].isPrimitive() && types[0].getName().equals("int")) {
                                             // the method expects an int, so we pass an Integer
                                             Integer[] args = new Integer[1];
                                             args[0] = Integer.valueOf(value);
-                                            P6LogQuery.logDebug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
+                                            P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
                                             method.invoke(rds, args);
                                             matchedProps.put(key, value);
                                         } else {
-                                            P6LogQuery.logDebug("method " + methodName + " on DataSource " + rdsName + " matches property "
+                                            P6LogQuery.debug("method " + methodName + " on DataSource " + rdsName + " matches property "
                                                 + propertyname + " but expects unsupported type " + types[0].getName());
                                             matchedProps.put(key, value);
                                         }
@@ -281,7 +281,7 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
                         String key = (String) keys.nextElement();
 
                         if (!matchedProps.containsKey(key)) {
-                            P6LogQuery.logDebug("spy.properties file includes" + " datasource property " + key + " for datasource " + rdsName
+                            P6LogQuery.debug("spy.properties file includes" + " datasource property " + key + " for datasource " + rdsName
                                 + " but class " + klass.getName() + " has no method" + " by that name");
                         }
                     }

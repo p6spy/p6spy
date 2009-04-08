@@ -235,7 +235,7 @@ public class P6LogQuery {
             file = (path == null) ? file : path;
             ps = P6Util.getPrintStream(file, P6SpyOptions.getAppend());
         } catch (IOException io) {
-            P6LogQuery.logError("Error opening " + file + ", " + io.getMessage());
+            P6LogQuery.error("Error opening " + file + ", " + io.getMessage());
             ps = null;
         }
         
@@ -383,7 +383,7 @@ public class P6LogQuery {
             return P6SpyOptions.getStringMatcherEngine().match(sqlexpression, sql);
         }
         catch (MatchException e) {
-            P6LogQuery.logError("Exception during matching sqlexpression [" + sqlexpression + "] to sql [" + sql + "]: ");
+            P6LogQuery.error("Exception during matching sqlexpression [" + sqlexpression + "] to sql [" + sql + "]: ");
             return false;
         }
         
@@ -406,7 +406,7 @@ public class P6LogQuery {
             return P6SpyOptions.getStringMatcherEngine().match(table, sql);
         }
         catch (MatchException e) {
-            P6LogQuery.logError("Exception during matching expression [" + table + "] to sql [" + sql + "]: ");
+            P6LogQuery.error("Exception during matching expression [" + table + "] to sql [" + sql + "]: ");
             return false;
         }
     }
@@ -474,7 +474,7 @@ public class P6LogQuery {
     	if (logger != null && meetsThresholdRequirement(endTime-startTime) && isLoggable(sql) && isCategoryOk(category)) {
 		doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
 	} else if (isDebugOn()) {
-		logDebug("P6Spy intentionally did not log category: "+category+", statement: "+sql+"  Reason: logger="+logger+", isLoggable="+isLoggable(sql)+", isCategoryOk="+isCategoryOk(category));
+		debug("P6Spy intentionally did not log category: "+category+", statement: "+sql+"  Reason: logger="+logger+", isLoggable="+isLoggable(sql)+", isCategoryOk="+isCategoryOk(category));
 	}
     }
 
@@ -495,7 +495,7 @@ public class P6LogQuery {
     }
     //<-JAW
         
-    static public void logInfo(String sql) {
+    static public void info(String sql) {
         if (logger != null && isCategoryOk("info")) {
             doLog(-1, "info", "", sql);
         }
@@ -504,7 +504,7 @@ public class P6LogQuery {
     static public boolean isDebugOn() {
 	return isCategoryOk("debug");
     }
-    static public void logDebug(String sql) {
+    static public void debug(String sql) {
         if (isDebugOn()) {
             if (logger != null) {
                 doLog(-1, "debug", "", sql);
@@ -514,7 +514,7 @@ public class P6LogQuery {
         }
     }
 
-    static public void logError(String sql) {
+    static public void error(String sql) {
         System.err.println ("Warning: "+sql);
         if (logger != null) {
             doLog(-1, "error", "", sql);

@@ -78,16 +78,14 @@ import java.sql.*;
 import javax.sql.*;
 import javax.transaction.xa.XAResource;
 
-
 public class P6XAConnection extends P6PooledConnection implements XAConnection {
-    
+
     public P6XAConnection(XAConnection connection) {
-      super((PooledConnection) connection);
+        super(connection);
     }
 
-
     public XAResource getXAResource() throws SQLException {
-      return ((XAConnection) passthru).getXAResource();
+        return ((XAConnection) passthru).getXAResource();
     }
 
 }

@@ -103,8 +103,8 @@ public class P6OutageDetector implements Runnable {
     protected P6OutageDetector() {
         pendingMessages = new ConcurrentHashMap<Object, InvocationInfo>();
 
-        P6LogQuery.logDebug("P6Spy - P6OutageDetector has been invoked.");
-        P6LogQuery.logDebug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = " + P6OutageOptions.getOutageDetectionIntervalMS());
+        P6LogQuery.debug("P6Spy - P6OutageDetector has been invoked.");
+        P6LogQuery.debug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = " + P6OutageOptions.getOutageDetectionIntervalMS());
     }
 
     /**
@@ -174,7 +174,7 @@ public class P6OutageDetector implements Runnable {
             return;
         }
 
-        P6LogQuery.logDebug("P6Spy - detectOutage.pendingMessage.size = " + listSize);
+        P6LogQuery.debug("P6Spy - detectOutage.pendingMessage.size = " + listSize);
 
         long currentTime = System.currentTimeMillis();
         long threshold = P6OutageOptions.getOutageDetectionIntervalMS();
@@ -190,7 +190,7 @@ public class P6OutageDetector implements Runnable {
 
             // has this statement exceeded the threshold?
             if ((currentTime - ii.startTime) > threshold) {
-                P6LogQuery.logDebug("P6Spy - statement exceeded threshold - check log.");
+                P6LogQuery.debug("P6Spy - statement exceeded threshold - check log.");
                 logOutage(ii);
             }
         }
