@@ -52,13 +52,6 @@
         <url>http://p6spy.svn.sourceforge.net/viewvc/p6spy/</url>
     </scm>
     <properties>
-        <svn-base>https://svn1.hosted-projects.com/transparentpolitics/amplafi-flow</svn-base>
-
-        <tapestry-build>4.1.6</tapestry-build>
-        <tapestry-test-build>4.1.4</tapestry-test-build>
-        
-        <tacos-build>4.1.2-SNAPSHOT</tacos-build>
-        <hivemind-build>1.1.1</hivemind-build>
         <commons-logging-build>1.1</commons-logging-build>
         <log4j-build>1.2.14</log4j-build>
         <slf4j-build>1.5.6</slf4j-build>
@@ -81,10 +74,6 @@
         <maven-eclipse-plugin-build>2.5.1</maven-eclipse-plugin-build>
         <maven-javadoc-plugin-build>2.3</maven-javadoc-plugin-build>
         <maven-jar-plugin-build>2.2</maven-jar-plugin-build>
-        <maven-jetty-plugin-build>6.1.15</maven-jetty-plugin-build>
-        <!-- jetty-build>6.1.4</jetty-build -->
-        <!-- 17 jul 2007 selenium requires this version -->
-        <jetty-build>5.1.10</jetty-build>
         <buildnumber-maven-plugin-build>1.0-beta-1</buildnumber-maven-plugin-build>
         <maven-project-info-reports-plugin-build>2.1</maven-project-info-reports-plugin-build>
         <maven-release-plugin-build>2.0-beta-8</maven-release-plugin-build>
@@ -101,7 +90,6 @@
         <maven-war-plugin-build>2.1-alpha-2</maven-war-plugin-build>
         <ognl-build>2.7.3</ognl-build>
         <ehcache-build>1.6.0-beta3</ehcache-build>
-        <jericho-htmlparser-build>2.6.1</jericho-htmlparser-build>
         <commons-digester-build>1.8.1</commons-digester-build>
         <pmd-build>4.2.5</pmd-build>
     </properties>
@@ -240,27 +228,6 @@
                     <!--
                         <inherited>true</inherited> <configuration> <descriptor>src/main/assembly/dep.xml</descriptor>
                         </configuration>
-                    -->
-                </plugin>
-                <plugin>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>maven-jetty-plugin</artifactId>
-                    <version>${maven-jetty-plugin-build}</version>
-                    <configuration>
-                        <webAppSourceDirectory>src/main/webapp</webAppSourceDirectory>
-                        <contextPath>/</contextPath>
-                        <!--scanIntervalSeconds>10</scanIntervalSeconds-->
-                        <systemProperties>
-                            <systemProperty>
-                                <name>org.apache.tapestry.enable-reset-service</name>
-                                <value>true</value>
-                            </systemProperty>
-                        </systemProperties>
-                    </configuration>
-                    <!--
-                        selenium is causing problems! it uses old version of jetty 5.1.10 <dependencies> <dependency>
-                        <groupId>org.mortbay.jetty</groupId> <artifactId>jetty</artifactId> <version>${jetty-build}</version>
-                        <scope>runtime</scope> </dependency> </dependencies>
                     -->
                 </plugin>
                 <plugin>
