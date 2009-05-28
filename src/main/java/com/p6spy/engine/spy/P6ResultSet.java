@@ -112,8 +112,10 @@ package com.p6spy.engine.spy;
 import com.p6spy.engine.common.P6LogQuery;
 import java.io.*;
 import java.sql.*;
+import java.util.Calendar;
+import java.util.Map;
+import java.util.TreeMap;
 import java.math.*;
-import java.util.*;
 
 public class P6ResultSet extends P6Base implements ResultSet {
 
@@ -122,7 +124,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
     protected P6Statement statement;
     protected String query;
     protected String preparedQuery;
-    private Map resultMap = new TreeMap();
+    private Map<String, String> resultMap = new TreeMap<String, String>();
     private int currRow = -1;
 
     public P6ResultSet(P6Factory factory, ResultSet resultSet, P6Statement statement, String preparedQuery, String query) {
@@ -138,16 +140,15 @@ public class P6ResultSet extends P6Base implements ResultSet {
      */
     public boolean next() throws SQLException {
         // only dump the data on subsequent calls to next
-        if (currRow > -1){
+        if (currRow > -1) {
             StringBuffer buffer = new StringBuffer();
-	    String comma = "";
-            for (Iterator itr = resultMap.keySet().iterator(); itr.hasNext();){
-               String index = (String)itr.next();
-               buffer.append(comma);
-               buffer.append(index);
-               buffer.append(" = ");
-               buffer.append((String)resultMap.get(index));
-	       comma = ", ";
+            String comma = "";
+            for (Map.Entry<String, String> entry : resultMap.entrySet()) {
+                buffer.append(comma);
+                buffer.append(entry.getKey());
+                buffer.append(" = ");
+                buffer.append(entry.getValue());
+                comma = ", ";
             }
             P6LogQuery.log("resultset", query, buffer.toString());
             resultMap.clear();
@@ -196,7 +197,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
         passthru.close();
     }
 
-    public Object getObject(String p0, java.util.Map p1) throws SQLException {
+    public Object getObject(String p0, Map<String,Class<?>> p1) throws SQLException {
         return passthru.getObject(p0,p1);
     }
 
@@ -208,7 +209,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
         return passthru.getObject(p0);
     }
 
-    public Object getObject(int p0, java.util.Map p1) throws SQLException {
+    public Object getObject(int p0, Map<String,Class<?>> p1) throws SQLException {
         return passthru.getObject(p0,p1);
     }
 
@@ -220,11 +221,11 @@ public class P6ResultSet extends P6Base implements ResultSet {
         return getRef(passthru.getMetaData().getColumnName(p0));
     }
 
-    public Time getTime(int p0, java.util.Calendar p1) throws SQLException {
+    public Time getTime(int p0, Calendar p1) throws SQLException {
         return passthru.getTime(p0,p1);
     }
 
-    public Time getTime(String p0, java.util.Calendar p1) throws SQLException {
+    public Time getTime(String p0, Calendar p1) throws SQLException {
         return passthru.getTime(p0,p1);
     }
 
@@ -240,15 +241,15 @@ public class P6ResultSet extends P6Base implements ResultSet {
         return getDate(passthru.getMetaData().getColumnName(p0));
     }
 
-    public java.sql.Date getDate(String p0, java.util.Calendar p1) throws SQLException {
-        return passthru.getDate(p0);
+    public java.sql.Date getDate(String p0, Calendar p1) throws SQLException {
+        return passthru.getDate(p0, p1);
     }
 
     public java.sql.Date getDate(String p0) throws SQLException {
         return passthru.getDate(p0);
     }
 
-    public java.sql.Date getDate(int p0, java.util.Calendar p1) throws SQLException {
+    public java.sql.Date getDate(int p0, Calendar p1) throws SQLException {
         return passthru.getDate(p0,p1);
     }
 
@@ -318,10 +319,12 @@ public class P6ResultSet extends P6Base implements ResultSet {
         return getBigDecimal(passthru.getMetaData().getColumnName(p0));
     }
 
+    @SuppressWarnings("deprecation")
     public BigDecimal getBigDecimal(int p0, int p1) throws SQLException {
         return passthru.getBigDecimal(p0,p1);
     }
 
+    @SuppressWarnings("deprecation")
     public BigDecimal getBigDecimal(String p0, int p1) throws SQLException {
         return passthru.getBigDecimal(p0,p1);
     }
@@ -330,7 +333,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
         return passthru.getTimestamp(p0);
     }
 
-    public Timestamp getTimestamp(String p0, java.util.Calendar p1) throws SQLException {
+    public Timestamp getTimestamp(String p0, Calendar p1) throws SQLException {
         return passthru.getTimestamp(p0,p1);
     }
 
@@ -338,7 +341,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
         return getTimestamp(passthru.getMetaData().getColumnName(p0));
     }
 
-    public Timestamp getTimestamp(int p0, java.util.Calendar p1) throws SQLException {
+    public Timestamp getTimestamp(int p0, Calendar p1) throws SQLException {
         return passthru.getTimestamp(p0,p1);
     }
 
@@ -350,10 +353,12 @@ public class P6ResultSet extends P6Base implements ResultSet {
         return getAsciiStream(passthru.getMetaData().getColumnName(p0));
     }
 
+    @SuppressWarnings("deprecation")
     public InputStream getUnicodeStream(int p0) throws SQLException {
         return passthru.getUnicodeStream(p0);
     }
 
+    @SuppressWarnings("deprecation")
     public InputStream getUnicodeStream(String p0) throws SQLException {
         return passthru.getUnicodeStream(p0);
     }
@@ -738,8 +743,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getHoldability()
      */
     public int getHoldability() throws SQLException {
@@ -747,9 +750,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnIndex
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getNCharacterStream(int)
      */
     public Reader getNCharacterStream(int columnIndex) throws SQLException {
@@ -757,9 +757,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getNCharacterStream(java.lang.String)
      */
     public Reader getNCharacterStream(String columnLabel) throws SQLException {
@@ -767,9 +764,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnIndex
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getNClob(int)
      */
     public NClob getNClob(int columnIndex) throws SQLException {
@@ -777,9 +771,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getNClob(java.lang.String)
      */
     public NClob getNClob(String columnLabel) throws SQLException {
@@ -787,9 +778,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnIndex
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getNString(int)
      */
     public String getNString(int columnIndex) throws SQLException {
@@ -797,9 +785,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getNString(java.lang.String)
      */
     public String getNString(String columnLabel) throws SQLException {
@@ -807,9 +792,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnIndex
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getRowId(int)
      */
     public RowId getRowId(int columnIndex) throws SQLException {
@@ -817,9 +799,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getRowId(java.lang.String)
      */
     public RowId getRowId(String columnLabel) throws SQLException {
@@ -827,9 +806,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnIndex
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getSQLXML(int)
      */
     public SQLXML getSQLXML(int columnIndex) throws SQLException {
@@ -837,9 +813,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#getSQLXML(java.lang.String)
      */
     public SQLXML getSQLXML(String columnLabel) throws SQLException {
@@ -847,8 +820,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @return
-     * @throws SQLException
      * @see java.sql.ResultSet#isClosed()
      */
     public boolean isClosed() throws SQLException {
@@ -856,9 +827,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param iface
-     * @return
-     * @throws SQLException
      * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
      */
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
@@ -866,10 +834,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param <T>
-     * @param iface
-     * @return
-     * @throws SQLException
      * @see java.sql.Wrapper#unwrap(java.lang.Class)
      */
     public <T> T unwrap(Class<T> iface) throws SQLException {
