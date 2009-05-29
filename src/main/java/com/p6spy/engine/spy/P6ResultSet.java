@@ -119,12 +119,11 @@ import java.math.*;
 
 public class P6ResultSet extends P6Base implements ResultSet {
 
-
     protected ResultSet passthru;
     protected P6Statement statement;
     protected String query;
     protected String preparedQuery;
-    private Map<String, String> resultMap = new TreeMap<String, String>();
+    private Map<String, Object> resultMap = new TreeMap<String, Object>();
     private int currRow = -1;
 
     public P6ResultSet(P6Factory factory, ResultSet resultSet, P6Statement statement, String preparedQuery, String query) {
@@ -141,9 +140,9 @@ public class P6ResultSet extends P6Base implements ResultSet {
     public boolean next() throws SQLException {
         // only dump the data on subsequent calls to next
         if (currRow > -1) {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             String comma = "";
-            for (Map.Entry<String, String> entry : resultMap.entrySet()) {
+            for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
                 buffer.append(comma);
                 buffer.append(entry.getKey());
                 buffer.append(" = ");
@@ -166,15 +165,19 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     public byte[] getBytes(int p0) throws SQLException {
-        return getBytes(passthru.getMetaData().getColumnName(p0));
+		return passthru.getBytes(p0);
     }
 
     public boolean getBoolean(int p0) throws SQLException {
-        return getBoolean(passthru.getMetaData().getColumnName(p0));
+		boolean result = passthru.getBoolean(p0);
+		resultMap.put(String.valueOf(p0), Boolean.valueOf(result));
+		return result;
     }
 
     public boolean getBoolean(String p0) throws SQLException {
-        return passthru.getBoolean(p0);
+		boolean result = passthru.getBoolean(p0);
+		resultMap.put(String.valueOf(p0), Boolean.valueOf(result));
+		return result;
     }
 
     public int getType() throws SQLException {
@@ -182,11 +185,15 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     public long getLong(int p0) throws SQLException {
-        return getLong(passthru.getMetaData().getColumnName(p0));
+		long result = passthru.getLong(p0);
+		resultMap.put(String.valueOf(p0), new Long(result));
+		return result;
     }
 
     public long getLong(String p0) throws SQLException {
-        return passthru.getLong(p0);
+		long result = passthru.getLong(p0);
+		resultMap.put(String.valueOf(p0), new Long(result));
+		return result;
     }
 
     public boolean previous() throws SQLException {
@@ -264,7 +271,9 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     public String getString(int p0) throws SQLException {
-        return getString(passthru.getMetaData().getColumnName(p0));
+		String result = passthru.getString(p0);
+		resultMap.put(String.valueOf(p0), result);
+		return result;
     }
 
     public byte getByte(String p0) throws SQLException {
@@ -364,7 +373,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     public InputStream getBinaryStream(int p0) throws SQLException {
-        return getBinaryStream(passthru.getMetaData().getColumnName(p0));
+		return passthru.getBinaryStream(p0);
     }
 
     public InputStream getBinaryStream(String p0) throws SQLException {
@@ -396,7 +405,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     public Reader getCharacterStream(int p0) throws SQLException {
-        return getCharacterStream(passthru.getMetaData().getColumnName(p0));
+		return passthru.getCharacterStream(p0);
     }
 
     public boolean isBeforeFirst() throws SQLException {
@@ -480,147 +489,153 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     public void updateBoolean(int p0, boolean p1) throws SQLException {
-        passthru.updateBoolean(p0,p1);
+        passthru.updateBoolean(p0, p1);
     }
 
     public void updateBoolean(String p0, boolean p1) throws SQLException {
-        passthru.updateBoolean(p0,p1);
+        passthru.updateBoolean(p0, p1);
     }
 
     public void updateByte(String p0, byte p1) throws SQLException {
-        passthru.updateByte(p0,p1);
+        passthru.updateByte(p0, p1);
     }
 
     public void updateByte(int p0, byte p1) throws SQLException {
-        passthru.updateByte(p0,p1);
+        passthru.updateByte(p0, p1);
     }
 
     public void updateShort(int p0, short p1) throws SQLException {
-        passthru.updateShort(p0,p1);
+        passthru.updateShort(p0, p1);
     }
 
     public void updateShort(String p0, short p1) throws SQLException {
-        passthru.updateShort(p0,p1);
+        passthru.updateShort(p0, p1);
     }
 
     public void updateInt(int p0, int p1) throws SQLException {
-        passthru.updateInt(p0,p1);
+        passthru.updateInt(p0, p1);
     }
 
     public void updateInt(String p0, int p1) throws SQLException {
-        passthru.updateInt(p0,p1);
+        passthru.updateInt(p0, p1);
     }
 
     public void updateLong(int p0, long p1) throws SQLException {
-        passthru.updateLong(p0,p1);
+        passthru.updateLong(p0, p1);
     }
 
     public void updateLong(String p0, long p1) throws SQLException {
-        passthru.updateLong(p0,p1);
+        passthru.updateLong(p0, p1);
     }
 
     public void updateFloat(String p0, float p1) throws SQLException {
-        passthru.updateFloat(p0,p1);
+        passthru.updateFloat(p0, p1);
     }
 
     public void updateFloat(int p0, float p1) throws SQLException {
-        passthru.updateFloat(p0,p1);
+        passthru.updateFloat(p0, p1);
     }
 
     public void updateDouble(int p0, double p1) throws SQLException {
-        passthru.updateDouble(p0,p1);
+        passthru.updateDouble(p0, p1);
     }
 
     public void updateDouble(String p0, double p1) throws SQLException {
-        passthru.updateDouble(p0,p1);
+        passthru.updateDouble(p0, p1);
     }
 
     public void updateBigDecimal(String p0, BigDecimal p1) throws SQLException {
-        passthru.updateBigDecimal(p0,p1);
+        passthru.updateBigDecimal(p0, p1);
     }
 
     public void updateBigDecimal(int p0, BigDecimal p1) throws SQLException {
-        passthru.updateBigDecimal(p0,p1);
+        passthru.updateBigDecimal(p0, p1);
     }
 
     public void updateString(String p0, String p1) throws SQLException {
-        passthru.updateString(p0,p1);
+        passthru.updateString(p0, p1);
     }
 
     public void updateString(int p0, String p1) throws SQLException {
-        passthru.updateString(p0,p1);
+        passthru.updateString(p0, p1);
     }
 
     public void updateBytes(int p0, byte[] p1) throws SQLException {
-        passthru.updateBytes(p0,p1);
+        passthru.updateBytes(p0, p1);
     }
 
     public void updateBytes(String p0, byte[] p1) throws SQLException {
-        passthru.updateBytes(p0,p1);
+        passthru.updateBytes(p0, p1);
     }
 
     public void updateDate(int p0, java.sql.Date p1) throws SQLException {
-        passthru.updateDate(p0,p1);
+        passthru.updateDate(p0, p1);
     }
 
     public void updateDate(String p0, java.sql.Date p1) throws SQLException {
-        passthru.updateDate(p0,p1);
+        passthru.updateDate(p0, p1);
     }
 
     public void updateTime(String p0, Time p1) throws SQLException {
-        passthru.updateTime(p0,p1);
+        passthru.updateTime(p0, p1);
     }
 
     public void updateTime(int p0, Time p1) throws SQLException {
-        passthru.updateTime(p0,p1);
+        passthru.updateTime(p0, p1);
     }
 
     public void updateTimestamp(int p0, Timestamp p1) throws SQLException {
-        passthru.updateTimestamp(p0,p1);
+        passthru.updateTimestamp(p0, p1);
     }
 
     public void updateTimestamp(String p0, Timestamp p1) throws SQLException {
-        passthru.updateTimestamp(p0,p1);
+        passthru.updateTimestamp(p0, p1);
     }
 
-    public void updateAsciiStream(int p0, InputStream p1, int p2) throws SQLException {
-        passthru.updateAsciiStream(p0,p1,p2);
+    public void updateAsciiStream(int p0, InputStream p1, int p2)
+            throws SQLException {
+        passthru.updateAsciiStream(p0, p1, p2);
     }
 
-    public void updateAsciiStream(String p0, InputStream p1, int p2) throws SQLException {
-        passthru.updateAsciiStream(p0,p1,p2);
+    public void updateAsciiStream(String p0, InputStream p1, int p2)
+            throws SQLException {
+        passthru.updateAsciiStream(p0, p1, p2);
     }
 
-    public void updateBinaryStream(int p0, InputStream p1, int p2) throws SQLException {
-        passthru.updateBinaryStream(p0,p1,p2);
+    public void updateBinaryStream(int p0, InputStream p1, int p2)
+            throws SQLException {
+        passthru.updateBinaryStream(p0, p1, p2);
     }
 
-    public void updateBinaryStream(String p0, InputStream p1, int p2) throws SQLException {
-        passthru.updateBinaryStream(p0,p1,p2);
+    public void updateBinaryStream(String p0, InputStream p1, int p2)
+            throws SQLException {
+        passthru.updateBinaryStream(p0, p1, p2);
     }
 
-    public void updateCharacterStream(int p0, Reader p1, int p2) throws SQLException {
-        passthru.updateCharacterStream(p0,p1,p2);
+    public void updateCharacterStream(int p0, Reader p1, int p2)
+            throws SQLException {
+        passthru.updateCharacterStream(p0, p1, p2);
     }
 
-    public void updateCharacterStream(String p0, Reader p1, int p2) throws SQLException {
-        passthru.updateCharacterStream(p0,p1,p2);
+    public void updateCharacterStream(String p0, Reader p1, int p2)
+            throws SQLException {
+        passthru.updateCharacterStream(p0, p1, p2);
     }
 
     public void updateObject(int p0, Object p1) throws SQLException {
-        passthru.updateObject(p0,p1);
+        passthru.updateObject(p0, p1);
     }
 
     public void updateObject(int p0, Object p1, int p2) throws SQLException {
-        passthru.updateObject(p0,p1,p2);
+        passthru.updateObject(p0, p1, p2);
     }
 
     public void updateObject(String p0, Object p1) throws SQLException {
-        passthru.updateObject(p0,p1);
+        passthru.updateObject(p0, p1);
     }
 
     public void updateObject(String p0, Object p1, int p2) throws SQLException {
-        passthru.updateObject(p0,p1,p2);
+        passthru.updateObject(p0, p1, p2);
     }
 
     public void insertRow() throws SQLException {
@@ -656,7 +671,7 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     public Blob getBlob(int p0) throws SQLException {
-        return getBlob(passthru.getMetaData().getColumnName(p0));
+		return passthru.getBlob(p0);
     }
 
     public Blob getBlob(String p0) throws SQLException {
@@ -668,15 +683,17 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     public Clob getClob(int p0) throws SQLException {
-        return getClob(passthru.getMetaData().getColumnName(p0));
+		return passthru.getClob(p0);
     }
 
     public Array getArray(int p0) throws SQLException {
-        return getP6Factory().getArray(passthru.getArray(p0),statement,preparedQuery,query);
+        return getP6Factory().getArray(passthru.getArray(p0), statement,
+                preparedQuery, query);
     }
 
     public Array getArray(String p0) throws SQLException {
-        return getP6Factory().getArray(passthru.getArray(p0),statement,preparedQuery,query);
+        return getP6Factory().getArray(passthru.getArray(p0), statement,
+                preparedQuery, query);
     }
 
     // Since JDK 1.4
@@ -730,16 +747,16 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * Returns the underlying JDBC object (in this case, a
-     * java.sql.ResultSet)
+     * Returns the underlying JDBC object (in this case, a java.sql.ResultSet)
+     *
      * @return the wrapped JDBC object
      */
     public ResultSet getJDBC() {
-	ResultSet wrapped = (passthru instanceof P6ResultSet) ?
-	    ((P6ResultSet) passthru).getJDBC() :
-	    passthru;
+        ResultSet wrapped = (passthru instanceof P6ResultSet) ? ((P6ResultSet) passthru)
+                .getJDBC()
+                : passthru;
 
-	return wrapped;
+        return wrapped;
     }
 
     /**
@@ -841,97 +858,79 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @param length
-     * @throws SQLException
      * @see java.sql.ResultSet#updateAsciiStream(int, java.io.InputStream, long)
      */
-    public void updateAsciiStream(int columnIndex, InputStream x, long length) throws SQLException {
+    public void updateAsciiStream(int columnIndex, InputStream x, long length)
+            throws SQLException {
         passthru.updateAsciiStream(columnIndex, x, length);
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @throws SQLException
      * @see java.sql.ResultSet#updateAsciiStream(int, java.io.InputStream)
      */
-    public void updateAsciiStream(int columnIndex, InputStream x) throws SQLException {
+    public void updateAsciiStream(int columnIndex, InputStream x)
+            throws SQLException {
         passthru.updateAsciiStream(columnIndex, x);
     }
 
     /**
-     * @param columnLabel
-     * @param x
-     * @param length
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateAsciiStream(java.lang.String, java.io.InputStream, long)
+     * @see java.sql.ResultSet#updateAsciiStream(java.lang.String,
+     *      java.io.InputStream, long)
      */
-    public void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
+    public void updateAsciiStream(String columnLabel, InputStream x, long length)
+            throws SQLException {
         passthru.updateAsciiStream(columnLabel, x, length);
     }
 
     /**
-     * @param columnLabel
-     * @param x
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateAsciiStream(java.lang.String, java.io.InputStream)
+     * @see java.sql.ResultSet#updateAsciiStream(java.lang.String,
+     *      java.io.InputStream)
      */
-    public void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
+    public void updateAsciiStream(String columnLabel, InputStream x)
+            throws SQLException {
         passthru.updateAsciiStream(columnLabel, x);
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @param length
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateBinaryStream(int, java.io.InputStream, long)
+     * @see java.sql.ResultSet#updateBinaryStream(int, java.io.InputStream,
+     *      long)
      */
-    public void updateBinaryStream(int columnIndex, InputStream x, long length) throws SQLException {
+    public void updateBinaryStream(int columnIndex, InputStream x, long length)
+            throws SQLException {
         passthru.updateBinaryStream(columnIndex, x, length);
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @throws SQLException
      * @see java.sql.ResultSet#updateBinaryStream(int, java.io.InputStream)
      */
-    public void updateBinaryStream(int columnIndex, InputStream x) throws SQLException {
+    public void updateBinaryStream(int columnIndex, InputStream x)
+            throws SQLException {
         passthru.updateBinaryStream(columnIndex, x);
     }
 
     /**
-     * @param columnLabel
-     * @param x
-     * @param length
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateBinaryStream(java.lang.String, java.io.InputStream, long)
+     * @see java.sql.ResultSet#updateBinaryStream(java.lang.String,
+     *      java.io.InputStream, long)
      */
-    public void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
+    public void updateBinaryStream(String columnLabel, InputStream x, long length)
+            throws SQLException {
         passthru.updateBinaryStream(columnLabel, x, length);
     }
 
     /**
-     * @param columnLabel
-     * @param x
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateBinaryStream(java.lang.String, java.io.InputStream)
+     * @see java.sql.ResultSet#updateBinaryStream(java.lang.String,
+     *      java.io.InputStream)
      */
-    public void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
+    public void updateBinaryStream(String columnLabel, InputStream x)
+            throws SQLException {
         passthru.updateBinaryStream(columnLabel, x);
     }
 
     /**
-     * @param columnIndex
-     * @param inputStream
-     * @param length
-     * @throws SQLException
      * @see java.sql.ResultSet#updateBlob(int, java.io.InputStream, long)
      */
-    public void updateBlob(int columnIndex, InputStream inputStream, long length) throws SQLException {
+    public void updateBlob(int columnIndex, InputStream inputStream, long length)
+            throws SQLException {
         passthru.updateBlob(columnIndex, inputStream, length);
     }
 
@@ -941,88 +940,71 @@ public class P6ResultSet extends P6Base implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateBlob(int, java.io.InputStream)
      */
-    public void updateBlob(int columnIndex, InputStream inputStream) throws SQLException {
+    public void updateBlob(int columnIndex, InputStream inputStream)
+            throws SQLException {
         passthru.updateBlob(columnIndex, inputStream);
     }
 
     /**
-     * @param columnLabel
-     * @param inputStream
-     * @param length
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateBlob(java.lang.String, java.io.InputStream, long)
+     * @see java.sql.ResultSet#updateBlob(java.lang.String, java.io.InputStream,
+     *      long)
      */
-    public void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
+    public void updateBlob(String columnLabel, InputStream inputStream, long length)
+            throws SQLException {
         passthru.updateBlob(columnLabel, inputStream, length);
     }
 
     /**
-     * @param columnLabel
-     * @param inputStream
-     * @throws SQLException
      * @see java.sql.ResultSet#updateBlob(java.lang.String, java.io.InputStream)
      */
-    public void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
+    public void updateBlob(String columnLabel, InputStream inputStream)
+            throws SQLException {
         passthru.updateBlob(columnLabel, inputStream);
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @param length
-     * @throws SQLException
      * @see java.sql.ResultSet#updateCharacterStream(int, java.io.Reader, long)
      */
-    public void updateCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
+    public void updateCharacterStream(int columnIndex, Reader x, long length)
+            throws SQLException {
         passthru.updateCharacterStream(columnIndex, x, length);
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @throws SQLException
      * @see java.sql.ResultSet#updateCharacterStream(int, java.io.Reader)
      */
-    public void updateCharacterStream(int columnIndex, Reader x) throws SQLException {
+    public void updateCharacterStream(int columnIndex, Reader x)
+            throws SQLException {
         passthru.updateCharacterStream(columnIndex, x);
     }
 
     /**
-     * @param columnLabel
-     * @param reader
-     * @param length
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateCharacterStream(java.lang.String, java.io.Reader, long)
+     * @see java.sql.ResultSet#updateCharacterStream(java.lang.String,
+     *      java.io.Reader, long)
      */
-    public void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+    public void updateCharacterStream(String columnLabel, Reader reader, long length)
+            throws SQLException {
         passthru.updateCharacterStream(columnLabel, reader, length);
     }
 
     /**
-     * @param columnLabel
-     * @param reader
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateCharacterStream(java.lang.String, java.io.Reader)
+     * @see java.sql.ResultSet#updateCharacterStream(java.lang.String,
+     *      java.io.Reader)
      */
-    public void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
+    public void updateCharacterStream(String columnLabel, Reader reader)
+            throws SQLException {
         passthru.updateCharacterStream(columnLabel, reader);
     }
 
     /**
-     * @param columnIndex
-     * @param reader
-     * @param length
-     * @throws SQLException
      * @see java.sql.ResultSet#updateClob(int, java.io.Reader, long)
      */
-    public void updateClob(int columnIndex, Reader reader, long length) throws SQLException {
+    public void updateClob(int columnIndex, Reader reader, long length)
+            throws SQLException {
         passthru.updateClob(columnIndex, reader, length);
     }
 
     /**
-     * @param columnIndex
-     * @param reader
-     * @throws SQLException
      * @see java.sql.ResultSet#updateClob(int, java.io.Reader)
      */
     public void updateClob(int columnIndex, Reader reader) throws SQLException {
@@ -1030,72 +1012,57 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @param reader
-     * @param length
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateClob(java.lang.String, java.io.Reader, long)
+     * @see java.sql.ResultSet#updateClob(java.lang.String, java.io.Reader,
+     *      long)
      */
-    public void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
+    public void updateClob(String columnLabel, Reader reader, long length)
+            throws SQLException {
         passthru.updateClob(columnLabel, reader, length);
     }
 
     /**
-     * @param columnLabel
-     * @param reader
-     * @throws SQLException
      * @see java.sql.ResultSet#updateClob(java.lang.String, java.io.Reader)
      */
-    public void updateClob(String columnLabel, Reader reader) throws SQLException {
+    public void updateClob(String columnLabel, Reader reader)
+            throws SQLException {
         passthru.updateClob(columnLabel, reader);
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @param length
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNCharacterStream(int, java.io.Reader, long)
      */
-    public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
+    public void updateNCharacterStream(int columnIndex, Reader x, long length)
+            throws SQLException {
         passthru.updateNCharacterStream(columnIndex, x, length);
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNCharacterStream(int, java.io.Reader)
      */
-    public void updateNCharacterStream(int columnIndex, Reader x) throws SQLException {
+    public void updateNCharacterStream(int columnIndex, Reader x)
+            throws SQLException {
         passthru.updateNCharacterStream(columnIndex, x);
     }
 
     /**
-     * @param columnLabel
-     * @param reader
-     * @param length
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateNCharacterStream(java.lang.String, java.io.Reader, long)
+     * @see java.sql.ResultSet#updateNCharacterStream(java.lang.String,
+     *      java.io.Reader, long)
      */
-    public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+    public void updateNCharacterStream(String columnLabel, Reader reader, long length)
+            throws SQLException {
         passthru.updateNCharacterStream(columnLabel, reader, length);
     }
 
     /**
-     * @param columnLabel
-     * @param reader
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateNCharacterStream(java.lang.String, java.io.Reader)
+     * @see java.sql.ResultSet#updateNCharacterStream(java.lang.String,
+     *      java.io.Reader)
      */
-    public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
+    public void updateNCharacterStream(String columnLabel, Reader reader)
+            throws SQLException {
         passthru.updateNCharacterStream(columnLabel, reader);
     }
 
     /**
-     * @param columnIndex
-     * @param clob
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(int, java.sql.NClob)
      */
     public void updateNClob(int columnIndex, NClob clob) throws SQLException {
@@ -1103,20 +1070,14 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnIndex
-     * @param reader
-     * @param length
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(int, java.io.Reader, long)
      */
-    public void updateNClob(int columnIndex, Reader reader, long length) throws SQLException {
+    public void updateNClob(int columnIndex, Reader reader, long length)
+            throws SQLException {
         passthru.updateNClob(columnIndex, reader, length);
     }
 
     /**
-     * @param columnIndex
-     * @param reader
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(int, java.io.Reader)
      */
     public void updateNClob(int columnIndex, Reader reader) throws SQLException {
@@ -1124,9 +1085,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @param clob
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(java.lang.String, java.sql.NClob)
      */
     public void updateNClob(String columnLabel, NClob clob) throws SQLException {
@@ -1134,50 +1092,39 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @param reader
-     * @param length
-     * @throws SQLException
-     * @see java.sql.ResultSet#updateNClob(java.lang.String, java.io.Reader, long)
+     * @see java.sql.ResultSet#updateNClob(java.lang.String, java.io.Reader,
+     *      long)
      */
-    public void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
+    public void updateNClob(String columnLabel, Reader reader, long length)
+            throws SQLException {
         passthru.updateNClob(columnLabel, reader, length);
     }
 
     /**
-     * @param columnLabel
-     * @param reader
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(java.lang.String, java.io.Reader)
      */
-    public void updateNClob(String columnLabel, Reader reader) throws SQLException {
+    public void updateNClob(String columnLabel, Reader reader)
+            throws SQLException {
         passthru.updateNClob(columnLabel, reader);
     }
 
     /**
-     * @param columnIndex
-     * @param string
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNString(int, java.lang.String)
      */
-    public void updateNString(int columnIndex, String string) throws SQLException {
+    public void updateNString(int columnIndex, String string)
+            throws SQLException {
         passthru.updateNString(columnIndex, string);
     }
 
     /**
-     * @param columnLabel
-     * @param string
-     * @throws SQLException
      * @see java.sql.ResultSet#updateNString(java.lang.String, java.lang.String)
      */
-    public void updateNString(String columnLabel, String string) throws SQLException {
+    public void updateNString(String columnLabel, String string)
+            throws SQLException {
         passthru.updateNString(columnLabel, string);
     }
 
     /**
-     * @param columnIndex
-     * @param x
-     * @throws SQLException
      * @see java.sql.ResultSet#updateRowId(int, java.sql.RowId)
      */
     public void updateRowId(int columnIndex, RowId x) throws SQLException {
@@ -1185,9 +1132,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnLabel
-     * @param x
-     * @throws SQLException
      * @see java.sql.ResultSet#updateRowId(java.lang.String, java.sql.RowId)
      */
     public void updateRowId(String columnLabel, RowId x) throws SQLException {
@@ -1195,23 +1139,18 @@ public class P6ResultSet extends P6Base implements ResultSet {
     }
 
     /**
-     * @param columnIndex
-     * @param xmlObject
-     * @throws SQLException
      * @see java.sql.ResultSet#updateSQLXML(int, java.sql.SQLXML)
      */
-    public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+    public void updateSQLXML(int columnIndex, SQLXML xmlObject)
+            throws SQLException {
         passthru.updateSQLXML(columnIndex, xmlObject);
     }
 
     /**
-     * @param columnLabel
-     * @param xmlObject
-     * @throws SQLException
      * @see java.sql.ResultSet#updateSQLXML(java.lang.String, java.sql.SQLXML)
      */
-    public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+    public void updateSQLXML(String columnLabel, SQLXML xmlObject)
+            throws SQLException {
         passthru.updateSQLXML(columnLabel, xmlObject);
     }
 }
-
