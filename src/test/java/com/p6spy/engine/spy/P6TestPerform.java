@@ -94,92 +94,95 @@
 package com.p6spy.engine.spy;
 
 import junit.framework.*;
+
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
 public class P6TestPerform extends P6TestFramework {
-    
+
     public static int rowsToCreate = 100000;
-    
+
     public P6TestPerform(java.lang.String testName) {
         super(testName);
     }
-    
+
     public static void main(java.lang.String[] args) {
         junit.textui.TestRunner.run(suite());
     }
-    
+
     public static Test suite() {
         TestSuite suite = new TestSuite(P6TestPerform.class);
         return suite;
     }
-    
+
+    @Override
     protected void setUp() {
         super.setUp();
     }
-    
+
     public void testBeginSlowMonitor() {
         try {
-            HashMap tp = getDefaultPropertyFile();
+            Map tp = getDefaultPropertyFile();
             reloadProperty(tp);
-            
+
             // we are going to fill up a large table for the following tests
             Statement statement = connection.createStatement();
             drop(statement);
             statement.execute("create table big_table_test (col1 number(10), col2 varchar2(255))");
             statement.execute("create table little_table_test (col1 number(10), col2 varchar2(255))");
             statement.close();
-            
+
             String sql = "insert into big_table_test (col1, col2) values (?, ?)";
             PreparedStatement ps = connection.prepareStatement(sql);
-            
+
             String trunk = createTrunk();
-            
+
             for (int i = 0; i < rowsToCreate; i++) {
                 ps.setInt(1, i);
                 ps.setString(2, trunk+"_"+i);
                 ps.addBatch();
-                
+
                 if (i % 1000 == 0) {
                     ps.executeBatch();
                 }
             }
             ps.executeBatch();
-            
+
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
-    
+
     public void testSlowMonitor() {
         try {
             Statement statement = connection.createStatement();
-            
-            HashMap tp = getDefaultPropertyFile();
+
+            Map tp = getDefaultPropertyFile();
             tp.put("trace","false");
             reloadProperty(tp);
-            
+
             String trunk = createTrunk();
-            
+
             String query;
             ResultSet rs;
-            
+
             // now the monitor should not be active
             //String query = "select 'b' from little_table_test";
             //ResultSet rs = statement.executeQuery(query);
             //assertIsLastQuery(query);
-            
+
             // activate
             //tp.put("outagedetection", "true");
             //tp.put("outagedetectioninterval", "1");
             //reloadProperty(tp);
-            
+
             // now the monitor should be active but this should be fast enough to be okay
             query = "select 'zzee' from little_table_test";
             rs = statement.executeQuery(query);
             assertIsNotLastQuery("OUTAGE");
             //assertIsNotLastQuery(query);
-            
+
             // this should not - it should log an outage
             query = "select col1 from big_table_test where col2 like '%"+trunk+"_"+(rowsToCreate+1)+"%'";
             rs = statement.executeQuery(query);
@@ -189,7 +192,7 @@ public class P6TestPerform extends P6TestFramework {
             fail(e.getMessage()+getStackTrace(e));
         }
     }
-    
+
     public void testCleanSlowMonitor() {
         try {
             Statement statement = connection.createStatement();
@@ -198,14 +201,15 @@ public class P6TestPerform extends P6TestFramework {
         } catch (Exception e) {
         }
     }
-    
+
+    @Override
     protected void tearDown() {
         try {
             super.tearDown();
         } catch (Exception e) {
         }
     }
-        
+
     protected String createTrunk() {
         StringBuffer trunc = new StringBuffer(150);
         for (int i = 0; i < 150; i++) {
@@ -214,12 +218,12 @@ public class P6TestPerform extends P6TestFramework {
         String trunk = trunc.toString();
         return trunk;
     }
-    
+
     protected void drop(Statement statement) {
         dropStatement("drop table big_table_test", statement);
         dropStatement("drop table little_table_test", statement);
     }
-    
+
     protected void dropStatement(String sql, Statement statement) {
         try {
             statement.execute(sql);
@@ -227,16 +231,17 @@ public class P6TestPerform extends P6TestFramework {
             // we don't really care about cleanup failing
         }
     }
-    
+
     // we do not want the log active
-    protected HashMap getDefaultPropertyFile() {
-        
+    @Override
+    protected Map getDefaultPropertyFile() throws IOException {
+
         Properties props = loadProperties("P6Test.properties");
         String realdrivername = props.getProperty("p6realdriver");
-        
+
         Properties props2 = loadProperties("P6Test.properties");
         String realdrivername2 = props2.getProperty("p6realdriver2");
-        
+
         HashMap tp = new HashMap();
         tp.put("module.log","com.p6spy.engine.logging.P6LogFactory");
         tp.put("module.outage","com.p6spy.engine.outage.P6OutageFactory");

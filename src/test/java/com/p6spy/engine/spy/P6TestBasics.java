@@ -93,22 +93,23 @@ import java.util.*;
 
 
 public class P6TestBasics extends TestCase {
-    
+
     public P6TestBasics(java.lang.String testName) {
         super(testName);
     }
-    
+
     public static void main(java.lang.String[] args) {
         junit.textui.TestRunner.run(suite());
     }
-    
+
     public static Test suite() {
         TestSuite suite = new TestSuite(P6TestBasics.class);
         return suite;
     }
-    
+
     protected Connection connection = null;
-    
+
+    @Override
     protected void setUp() {
         try {
             super.setUp();
@@ -117,11 +118,11 @@ public class P6TestBasics extends TestCase {
             fail(e.getMessage()+" due to error: "+P6TestUtil.getStackTrace(e));
         }
     }
-    
+
     public void testNative() {
         // load the oracle native driver
         try {
-            HashMap properties = P6TestUtil.getDefaultPropertyFile();
+            Map properties = P6TestUtil.getDefaultPropertyFile();
             P6TestUtil.reloadProperty(properties);
             connection = P6TestUtil.loadDrivers("p6realdriver");
             sqltests();
@@ -130,20 +131,20 @@ public class P6TestBasics extends TestCase {
             fail(e.getMessage()+" due to error: "+P6TestUtil.getStackTrace(e));
         }
     }
-    
+
     public void testSpy() {
         try {
             // load the p6log driver
-            HashMap properties = P6TestUtil.getDefaultPropertyFile();
+            Map properties = P6TestUtil.getDefaultPropertyFile();
             P6TestUtil.reloadProperty(properties);
-            
+
             connection = P6TestUtil.loadDrivers("p6driver");
             sqltests();
         } catch (Exception e) {
             fail(e.getMessage()+" due to error: "+P6TestUtil.getStackTrace(e));
         }
     }
-    
+
     protected void preparesql() {
         try {
             Statement statement = connection.createStatement();
@@ -153,26 +154,26 @@ public class P6TestBasics extends TestCase {
             fail(e.getMessage()+" due to error: "+P6TestUtil.getStackTrace(e));
         }
     }
-    
+
     protected void sqltests() {
         try {
             preparesql();
-            
+
             // insert test
             String insert = "insert into stmt_test values (\'bob\', 5)";
             Statement statement = connection.createStatement();
             statement.executeUpdate(insert);
-            
+
             // update test
             String update = "update stmt_test set col1 = \'bill\' where col2 = 5";
             statement.executeUpdate(update);
-            
+
             // query test
             String query = "select col1 from stmt_test where col2 = 5";
             ResultSet rs = statement.executeQuery(query);
             rs.next();
             assertEquals(rs.getString(1), "bill");
-            
+
             // prepared test
             PreparedStatement ps = connection.prepareStatement("insert into stmt_test values (?, ?)");
             ps.setString(1,"joe");
@@ -181,7 +182,7 @@ public class P6TestBasics extends TestCase {
             ps.setString(1,"andy");
             ps.setInt(2,7);
             ps.execute();
-            
+
             ps = connection.prepareStatement("update stmt_test set col1 = ? where col2 = ?");
             ps.setString(1,"charles");
             ps.setInt(2,6);
@@ -189,24 +190,24 @@ public class P6TestBasics extends TestCase {
             ps.setString(1,"bobby");
             ps.setInt(2,7);
             ps.execute();
-            
+
             ps = connection.prepareStatement("select col1 from stmt_test where col1 = ? and col2 = ?");
             ps.setString(1,"charles");
             ps.setInt(2,6);
             rs = ps.executeQuery();
             rs.next();
             assertEquals("charles", rs.getString(1));
-            
+
         } catch (Exception e) {
             fail(e.getMessage()+" with stack: "+P6TestUtil.getStackTrace(e));
         }
     }
-    
+
     protected void drop(Statement statement) {
         if (statement == null) { return; }
         dropStatement("drop table stmt_test", statement);
     }
-    
+
     protected void dropStatement(String sql, Statement statement) {
         try {
             statement.execute(sql);
@@ -214,5 +215,5 @@ public class P6TestBasics extends TestCase {
             // we don't really care about cleanup failing
         }
     }
-    
+
 }

@@ -125,10 +125,6 @@ public class P6SpyOptions extends P6Options {
 
     private static String excludecategories;
 
-    private static String stringmatcher;
-
-    private static StringMatcher stringMatcherEngine;
-
     private static String sqlExpression;
 
     private static boolean stackTrace;
@@ -308,33 +304,6 @@ public class P6SpyOptions extends P6Options {
 
     public static SimpleDateFormat getDateformatter() {
         return dateformatter;
-    }
-
-    public static void setStringmatcher(String _stringmatcher) {
-        stringmatcher = _stringmatcher;
-        if (stringmatcher == null || stringmatcher.equals("")) {
-            stringmatcher = "com.p6spy.engine.common.SubstringMatcher";
-        }
-        try {
-            stringMatcherEngine = (StringMatcher) P6Util.forName(stringmatcher).newInstance();
-        } catch (InstantiationException e) {
-            P6LogQuery.error("Could not instantiate string matcher class: " + stringmatcher);
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            P6LogQuery.error("Could not instantiate string matcher class: " + stringmatcher);
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            P6LogQuery.error("Could not instantiate string matcher class: " + stringmatcher);
-            e.printStackTrace();
-        }
-    }
-
-    public static String getStringmatcher() {
-        return stringmatcher;
-    }
-
-    public static StringMatcher getStringMatcherEngine() {
-        return stringMatcherEngine;
     }
 
     public static boolean getStackTrace() {

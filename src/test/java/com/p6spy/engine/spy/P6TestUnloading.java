@@ -87,7 +87,7 @@ public class P6TestUnloading extends P6TestFramework {
             String password = props.getProperty("password");
 
             unloadAll();
-            HashMap properties = P6TestUtil.getDefaultPropertyFile();
+            Map properties = P6TestUtil.getDefaultPropertyFile();
             P6TestUtil.reloadProperty(properties);
 //            registerDriver(oracleDriver);
             //P6Util.forName(oracleDriver);

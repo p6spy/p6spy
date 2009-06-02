@@ -132,153 +132,150 @@ import com.p6spy.engine.common.*;
 
 public abstract class P6TestFramework extends TestCase {
     public static final String PROPERTY_FILE = "reloadtest.properties";
-    
+
     public P6TestFramework(java.lang.String testName) {
         super(testName);
     }
-    
+
     protected Connection connection = null;
-    
+
+    @Override
     protected void setUp() {
         try {
             // we are going to use a testspy.forms file for these tests
-            ArrayList forms = getDefaultSpyForms();
+            List forms = getDefaultSpyForms();
             writeFile("testspy.forms", forms);
-            
+
             // we are going to use the reloadtest.properties file for all tests
             // this is a scratch file that won't hurt spy.properties
-            HashMap tp = getDefaultPropertyFile();
+            Map tp = getDefaultPropertyFile();
             reloadProperty(tp);
             Properties props = loadProperties("P6Test.properties");
             String drivername = props.getProperty("p6driver");
             String user = props.getProperty("user");
             String password = props.getProperty("password");
             String url = props.getProperty("url");
-            
-	    P6Util.forName(drivername);
+
+            P6Util.forName(drivername);
             Driver driver = DriverManager.getDriver(url);
-            System.err.println("FRAMEWORK USING DRIVER == "+driver.getClass().getName()+" FOR URL "+url);
+            System.err.println("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
             connection = DriverManager.getConnection(url, user, password);
-            
+
             printAllDrivers();
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
-    
-    protected Properties loadProperties(String filename) {
+
+    protected Properties loadProperties(String filename) throws IOException {
         if (filename == null) {
-            System.err.println("No "+filename+" properties file specified.");
-            System.exit(1);
+            throw new IllegalArgumentException("No properties file specified.");
         }
-        
+
         Properties props = new Properties();
-        
-        try {
-            FileInputStream fis = new FileInputStream(filename);
-            if (fis == null) {
-                System.err.println("Unable to find properties file: "+filename);
-                System.exit(1);
-            }
-            props.load(fis);
-            fis.close();
+
+        InputStream inputStream = this.getClass().getResourceAsStream(filename);
+        if ( inputStream == null ) {
+            inputStream = new FileInputStream(filename);
         }
-        catch (IOException e) {
-            System.err.println("Unable to read properties from properties file: "+filename+".  Exception: "+e.toString());
-            System.exit(1);
+        try {
+            props.load(inputStream);
+        } finally {
+            try {
+                inputStream.close();
+            } catch(Exception e) {
+                // so earlier exception is not shadowed.
+            }
         }
         return props;
     }
-    
-    protected void writeProperty(String filename, HashMap props) {
+
+    protected void writeProperty(String filename, Map<String,String> props) {
         try {
             File reload = new File(filename);
             reload.delete();
-            
+
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(reload)));
-            
-            Iterator i = props.keySet().iterator();
-            while (i.hasNext()) {
-                String key = (String)i.next();
-                String value = (String)props.get(key);
-                out.println(key+"="+value);
+
+            for(Map.Entry<String, String>entry: props.entrySet()) {
+                out.println(entry.getKey()+"="+entry.getValue());
             }
-            
+
             out.close();
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
-    
-    protected void writeFile(String filename, ArrayList entries) {
+
+    protected void writeFile(String filename, List<String> entries) {
         try {
             File file = new File(filename);
             file.delete();
-            
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));            
-            
+
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+
             for (int i = 0; i < entries.size(); i++) {
-                String entry = (String)entries.get(i);
+                String entry = entries.get(i);
                 out.println(entry);
             }
-            
+
             out.close();
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
-    
+
     protected ArrayList getDefaultSpyForms() {
         ArrayList formsLog = new ArrayList();
         formsLog.add("5 seconds; select count(*) from cache_test");
         formsLog.add("5 seconds; select col2 from cache_test where col1 != ? and col1 != ? and col1 like ?");
         return formsLog;
     }
-    
-    protected HashMap getDefaultPropertyFile() {
-        
+
+    protected Map getDefaultPropertyFile() throws IOException {
+
         Properties props = loadProperties("P6Test.properties");
         String realdrivername = props.getProperty("p6realdriver");
-        
+
         Properties props2 = loadProperties("P6Test.properties");
         String realdrivername2 = props2.getProperty("p6realdriver2");
-        
-        HashMap tp = new HashMap();
-        tp.put("module.outage","com.p6spy.engine.outage.P6OutageFactory");
-        tp.put("module.log","com.p6spy.engine.logging.P6LogFactory");
-        tp.put("realdriver",realdrivername);
-        tp.put("realdriver2",realdrivername2);
-        tp.put("filter","false");
-        tp.put("executionthreshold","");
-	tp.put("include","");
-        tp.put("exclude","");
-        tp.put("trace","true");
-        tp.put("autoflush","true");
-        tp.put("logfile","spy.log");
-        tp.put("append","true");
-        tp.put("dateformat","");
-        tp.put("includecategories","");
-        tp.put("excludecategories","debug,result,batch");
-        tp.put("stringmatcher","");
-        tp.put("stacktrace","false");
-        tp.put("stacktraceclass","");
-        tp.put("reloadproperties","false");
-        tp.put("reloadpropertiesinterval","1");
-        tp.put("useprefix","false");
+
+        Map tp = new HashMap();
+        tp.put("module.outage", "com.p6spy.engine.outage.P6OutageFactory");
+        tp.put("module.log", "com.p6spy.engine.logging.P6LogFactory");
+        tp.put("realdriver", realdrivername);
+        tp.put("realdriver2", realdrivername2);
+        tp.put("filter", "false");
+        tp.put("executionthreshold", "");
+        tp.put("include", "");
+        tp.put("exclude", "");
+        tp.put("trace", "true");
+        tp.put("autoflush", "true");
+        tp.put("logfile", "spy.log");
+        tp.put("append", "true");
+        tp.put("dateformat", "");
+        tp.put("includecategories", "");
+        tp.put("excludecategories", "debug,result,batch");
+        tp.put("stringmatcher", "");
+        tp.put("stacktrace", "false");
+        tp.put("stacktraceclass", "");
+        tp.put("reloadproperties", "false");
+        tp.put("reloadpropertiesinterval", "1");
+        tp.put("useprefix", "false");
         tp.put("outagedetection", "false");
         tp.put("outagedetectioninterval", "");
-        tp.put("cache","true");
-        tp.put("cachetrace","false");
-        tp.put("clearcache","");
-        tp.put("entries","");
-        tp.put("forms","");
-        tp.put("formsfile","testspy.forms");
-        tp.put("formslog","testforms.log");
-        tp.put("formstrace","true");
+        tp.put("cache", "true");
+        tp.put("cachetrace", "false");
+        tp.put("clearcache", "");
+        tp.put("entries", "");
+        tp.put("forms", "");
+        tp.put("formsfile", "testspy.forms");
+        tp.put("formslog", "testforms.log");
+        tp.put("formstrace", "true");
         return tp;
     }
-    
-    protected void reloadProperty(HashMap props) {
+
+    protected void reloadProperty(Map props) {
         try {
             writeProperty(PROPERTY_FILE, props);
             P6SpyProperties properties = new P6SpyProperties();
@@ -288,7 +285,7 @@ public abstract class P6TestFramework extends TestCase {
             fail(e.getMessage());
         }
     }
-    
+
     protected void assertIsLastQuery(String query) {
         boolean isTrue = P6LogQuery.getLastEntry().indexOf(query) != -1;
         if (!isTrue) {
@@ -296,7 +293,7 @@ public abstract class P6TestFramework extends TestCase {
         }
         assertTrue(isTrue);
     }
-    
+
     protected void assertIsNotLastQuery(String query) {
         boolean isFalse = P6LogQuery.getLastEntry().indexOf(query) == -1;
         if (!isFalse) {
@@ -304,13 +301,13 @@ public abstract class P6TestFramework extends TestCase {
         }
         assertTrue(isFalse);
     }
-    
+
     protected static String getStackTrace(Exception e) {
         CharArrayWriter c = new CharArrayWriter();
         e.printStackTrace(new PrintWriter(c));
         return c.toString();
     }
-    
+
     protected static void printAllDrivers() {
         for (Enumeration e = DriverManager.getDrivers() ; e.hasMoreElements() ;) {
             System.err.println("1 DRIVER FOUND == "+e.nextElement());

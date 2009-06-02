@@ -116,36 +116,36 @@ import java.util.*;
 
 import com.p6spy.engine.common.*;
 
+@Deprecated // T6TestFramework has most if not all of this.
 public class P6TestUtil  {
 
     protected P6TestUtil() {
     }
 
-    public static Properties loadProperties(String filename) {
+    protected static Properties loadProperties(String filename) throws IOException {
         if (filename == null) {
-            System.err.println("No "+filename+" properties file specified.");
-            System.exit(1);
+            throw new IllegalArgumentException("No properties file specified.");
         }
 
         Properties props = new Properties();
 
-        try {
-            InputStream fis = P6TestUtil.class.getClassLoader().getResourceAsStream(filename);
-            if (fis == null) {
-                System.err.println("Unable to find properties file: "+filename);
-                System.exit(1);
-            }
-            props.load(fis);
-            fis.close();
+        InputStream inputStream = P6TestUtil.class.getResourceAsStream(filename);
+        if ( inputStream == null ) {
+            inputStream = new FileInputStream(filename);
         }
-        catch (IOException e) {
-            System.err.println("Unable to read properties from properties file: "+filename+".  Exception: "+e.toString());
-            System.exit(1);
+        try {
+            props.load(inputStream);
+        } finally {
+            try {
+                inputStream.close();
+            } catch(Exception e) {
+                // so earlier exception is not shadowed.
+            }
         }
         return props;
     }
 
-    protected static void writeProperty(String filename, HashMap props) throws IOException {
+    protected static void writeProperty(String filename, Map props) throws IOException {
         File reload = new File(filename);
         reload.delete();
 
@@ -175,7 +175,7 @@ public class P6TestUtil  {
         out.close();
     }
 
-    protected static HashMap getDefaultPropertyFile() {
+    protected static Map getDefaultPropertyFile() throws IOException {
 
         Properties props = loadProperties("P6Test.properties");
         String realdrivername = props.getProperty("p6realdriver");
@@ -215,7 +215,7 @@ public class P6TestUtil  {
         return tp;
     }
 
-    protected static void reloadProperty(HashMap props) throws IOException {
+    protected static void reloadProperty(Map props) throws IOException {
         writeProperty(P6TestFramework.PROPERTY_FILE, props);
 
         P6SpyProperties properties = new P6SpyProperties();
@@ -251,7 +251,7 @@ public class P6TestUtil  {
         }
     }
 
-    protected static void unloadDrivers() throws SQLException {
+    protected static void unloadDrivers() throws Exception {
         Properties props = loadProperties("P6Test.properties");
         String drivername = props.getProperty("p6driver");
         String user = props.getProperty("user");

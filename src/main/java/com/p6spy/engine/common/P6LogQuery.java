@@ -176,50 +176,57 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class P6LogQuery {
     protected static PrintStream qlog;
+
     protected static String[] includeTables;
+
     protected static String[] excludeTables;
+
     protected static String[] includeCategories;
+
     protected static String[] excludeCategories;
+
     //protected static String lastEntry;
     protected static String lastStack;
+
     protected static P6Logger logger;
-    
+
     static {
         initMethod();
     }
-    
+
     public synchronized static void initMethod() {
-	String appender = P6SpyOptions.getAppender();
+        String appender = P6SpyOptions.getAppender();
 
-	if (appender == null) {
-	    appender = "com.p6spy.engine.logging.appender.FileLogger";
-	}
+        if (appender == null) {
+            appender = "com.p6spy.engine.logging.appender.FileLogger";
+        }
 
-	try {
-	    logger = (P6Logger) P6Util.forName(appender).newInstance();
-	} catch (Exception e1) {
-	    // try one more hack to load the thing
-	    try {
-		ClassLoader loader = ClassLoader.getSystemClassLoader();
-		logger = (P6Logger) loader.loadClass(appender).newInstance();
-	    
-	    } catch (Exception e) {
-		System.err.println("Cannot instantiate " + appender + ", even on second attempt.  Logging to file log4jaux.log: " + e);
-	    }
-	}
+        try {
+            logger = (P6Logger) P6Util.forName(appender).newInstance();
+        } catch (Exception e1) {
+            // try one more hack to load the thing
+            try {
+                ClassLoader loader = ClassLoader.getSystemClassLoader();
+                logger = (P6Logger) loader.loadClass(appender).newInstance();
 
-	if (logger != null) {
-	    if (logger instanceof FileLogger) {
-		String logfile = P6SpyOptions.getLogfile();
-		logfile = (logfile == null) ? "spy.log" : logfile;
+            } catch (Exception e) {
+                System.err.println("Cannot instantiate " + appender + ", even on second attempt.  Logging to file log4jaux.log: " + e);
+            }
+        }
 
-		((FileLogger) logger).setLogfile(logfile);
-	    }
-	}
-	
+        if (logger != null) {
+            if (logger instanceof FileLogger) {
+                String logfile = P6SpyOptions.getLogfile();
+                logfile = (logfile == null) ? "spy.log" : logfile;
+
+                ((FileLogger) logger).setLogfile(logfile);
+            }
+        }
+
         if (P6SpyOptions.getFilter()) {
             includeTables = parseCSVList(P6SpyOptions.getInclude());
             excludeTables = parseCSVList(P6SpyOptions.getExclude());
@@ -227,7 +234,7 @@ public class P6LogQuery {
         includeCategories = parseCSVList(P6SpyOptions.getIncludecategories());
         excludeCategories = parseCSVList(P6SpyOptions.getExcludecategories());
     }
-    
+
     static public PrintStream logPrintStream(String file) {
         PrintStream ps = null;
         try {
@@ -238,10 +245,10 @@ public class P6LogQuery {
             P6LogQuery.error("Error opening " + file + ", " + io.getMessage());
             ps = null;
         }
-        
+
         return ps;
     }
-    
+
     static String[] parseCSVList(String csvList) {
         String array[] = null;
         if (csvList != null) {
@@ -254,7 +261,7 @@ public class P6LogQuery {
                     list.add(item.toLowerCase().trim());
                 }
             }
-            
+
             int max = list.size();
             Iterator it = list.iterator();
             array = new String[max];
@@ -263,58 +270,57 @@ public class P6LogQuery {
                 array[i] = (String) it.next();
             }
         }
-        
+
         return array;
     }
-    
+
     static protected void doLog(long elapsed, String category, String prepared, String sql) {
         doLog(-1, elapsed, category, prepared, sql);
     }
-    
+
     // this is an internal method called by logElapsed
     static protected void doLogElapsed(int connectionId, long startTime, long endTime, String category, String prepared, String sql) {
         doLog(connectionId, (endTime - startTime), category, prepared, sql);
     }
-    
+
     // this is an internal procedure used to actually write the log information
     static protected synchronized void doLog(int connectionId, long elapsed, String category, String prepared, String sql) {
-	if (logger != null) {
-	    java.util.Date now = P6Util.timeNow();
-	    SimpleDateFormat sdf = P6SpyOptions.getDateformatter();
-	    String stringNow;
-	    if (sdf == null) {
-		stringNow = Long.toString(now.getTime());
-	    } else {
-		stringNow = sdf.format(new java.util.Date(now.getTime())).trim();
-	    }
+        if (logger != null) {
+            java.util.Date now = P6Util.timeNow();
+            SimpleDateFormat sdf = P6SpyOptions.getDateformatter();
+            String stringNow;
+            if (sdf == null) {
+                stringNow = Long.toString(now.getTime());
+            } else {
+                stringNow = sdf.format(new java.util.Date(now.getTime())).trim();
+            }
 
-	    logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);
+            logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);
 
+            boolean stackTrace = P6SpyOptions.getStackTrace();
+            String stackTraceClass = P6SpyOptions.getStackTraceClass();
+            if (stackTrace) {
+                Exception e = new Exception();
+                if (stackTraceClass != null) {
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw);
+                    e.printStackTrace(pw);
+                    String stack = sw.toString();
+                    if (stack.indexOf(stackTraceClass) != -1) {
+                        lastStack = stack;
+                    } else {
+                        e = null;
+                    }
+                }
+                if (e != null) {
+                    logger.logException(e);
+                }
+            }
 
-	    boolean stackTrace = P6SpyOptions.getStackTrace();
-	    String stackTraceClass = P6SpyOptions.getStackTraceClass();
-	    if(stackTrace) {
-		Exception e = new Exception();
-		if(stackTraceClass != null) {
-		    StringWriter sw = new StringWriter();
-		    PrintWriter pw  = new PrintWriter(sw);
-		    e.printStackTrace(pw);
-		    String stack = sw.toString();
-		    if(stack.indexOf(stackTraceClass) != -1) {
-			lastStack = stack;
-		    } else {
-			e = null;
-		    }
-		}
-		if (e != null) {
-		    logger.logException(e);
-		}
-	    }
-        
-	    //lastEntry = logEntry;
-	}
+            //lastEntry = logEntry;
+        }
 
-	/*
+        /*
 	java.util.Date now = P6Util.timeNow();
 	SimpleDateFormat sdf = P6SpyOptions.getDateformatter();
 	String logEntry;
@@ -345,165 +351,149 @@ public class P6LogQuery {
                 }
             }
         }
-        
+
         lastEntry = logEntry;
-	*/
+         */
     }
-    
+
     static boolean isLoggable(String sql) {
-        return(P6SpyOptions.getFilter() == false || queryOk(sql));
+        return (P6SpyOptions.getFilter() == false || queryOk(sql));
     }
-    
+
     static boolean isCategoryOk(String category) {
-        return (includeCategories == null || includeCategories.length == 0 || foundCategory(category,includeCategories)) && !foundCategory(category,excludeCategories);
+        return (includeCategories == null || includeCategories.length == 0 || foundCategory(category, includeCategories))
+            && !foundCategory(category, excludeCategories);
     }
-    
+
     static boolean foundCategory(String category, String categories[]) {
         if (categories != null) {
-            for (int i = 0; i < categories.length; i++) {
-                if (category.equals(categories[i])) {
+            for (String categorie : categories) {
+                if (category.equals(categorie)) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
+
     static boolean queryOk(String sql) {
-        if(P6SpyOptions.getStringMatcherEngine() != null && P6SpyOptions.getSQLExpression() != null) {
+        if ( P6SpyOptions.getSQLExpression() != null) {
             return sqlOk(sql);
-        }
-        else
+        } else {
             return ((includeTables == null || includeTables.length == 0 || foundTable(sql, includeTables))) && !foundTable(sql, excludeTables);
+        }
     }
-    
+
     static boolean sqlOk(String sql) {
         String sqlexpression = P6SpyOptions.getSQLExpression();
-        try {
-            return P6SpyOptions.getStringMatcherEngine().match(sqlexpression, sql);
-        }
-        catch (MatchException e) {
-            P6LogQuery.error("Exception during matching sqlexpression [" + sqlexpression + "] to sql [" + sql + "]: ");
-            return false;
-        }
-        
+        return Pattern.matches(sqlexpression, sql);
     }
+
     static boolean foundTable(String sql, String tables[]) {
         sql = sql.toLowerCase();
         boolean ok = false;
         int i;
         if (tables != null) {
             for (i = 0; !ok && i < tables.length; i++) {
-                ok = tableOk(sql, tables[i]);
+                ok = Pattern.matches(tables[i], sql);
             }
         }
-        
+
         return ok;
     }
-    
-    static boolean tableOk(String sql, String table) {
-        try {
-            return P6SpyOptions.getStringMatcherEngine().match(table, sql);
-        }
-        catch (MatchException e) {
-            P6LogQuery.error("Exception during matching expression [" + table + "] to sql [" + sql + "]: ");
-            return false;
-        }
-    }
-    
+
     // ----------------------------------------------------------------------------------------------------------
     // public accessor methods for logging and viewing query data
     // ----------------------------------------------------------------------------------------------------------
-    
+
     static public void clearLastStack() {
         lastStack = null;
     }
-    
+
     static public String getLastEntry() {
         //return lastEntry;
-	return logger.getLastEntry();
+        return logger.getLastEntry();
     }
-    
+
     static public String getLastStack() {
         return lastStack;
     }
-    
+
     static public String[] getIncludeTables() {
         return includeTables;
     }
-    
+
     static public String[] getExcludeTables() {
         return excludeTables;
     }
-    
+
     static public void setIncludeTables(String _includeTables) {
         P6LogQuery.includeTables = P6LogQuery.parseCSVList(_includeTables);
     }
-    
+
     static public void setExcludeTables(String _excludeTables) {
         P6LogQuery.excludeTables = P6LogQuery.parseCSVList(_excludeTables);
     }
-    
+
     static public void setIncludeCategories(String _includeCategories) {
         P6LogQuery.includeCategories = P6LogQuery.parseCSVList(_includeCategories);
     }
-    
+
     static public void setExcludeCategories(String _excludeCategories) {
         P6LogQuery.excludeCategories = P6LogQuery.parseCSVList(_excludeCategories);
     }
-    
+
     // this a way for an external to dump an unrestricted line of text into the log
     // useful for the JSP demarcation tool
     static public void logText(String text) {
-	logger.logText(text);
+        logger.logText(text);
         //qlog.println(text);
     }
-    
+
     static public void log(String category, String prepared, String sql) {
         //if (qlog != null) {
         if (logger != null && isCategoryOk(category)) {
             doLog(-1, category, prepared, sql);
         }
     }
-    
+
     static public void logElapsed(int connectionId, long startTime, String category, String prepared, String sql) {
-	logElapsed(connectionId, startTime, System.currentTimeMillis(), category, prepared, sql);
+        logElapsed(connectionId, startTime, System.currentTimeMillis(), category, prepared, sql);
     }
-    
+
     static public void logElapsed(int connectionId, long startTime, long endTime, String category, String prepared, String sql) {
-    	if (logger != null && meetsThresholdRequirement(endTime-startTime) && isLoggable(sql) && isCategoryOk(category)) {
-		doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
-	} else if (isDebugOn()) {
-		debug("P6Spy intentionally did not log category: "+category+", statement: "+sql+"  Reason: logger="+logger+", isLoggable="+isLoggable(sql)+", isCategoryOk="+isCategoryOk(category));
-	}
+        if (logger != null && meetsThresholdRequirement(endTime - startTime) && isLoggable(sql) && isCategoryOk(category)) {
+            doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
+        } else if (isDebugOn()) {
+            debug("P6Spy intentionally did not log category: " + category + ", statement: " + sql + "  Reason: logger=" + logger + ", isLoggable="
+                + isLoggable(sql) + ", isCategoryOk=" + isCategoryOk(category));
+        }
     }
 
     //->JAW: new method that checks to see if this statement should be logged based
     //on whether on not it has taken greater than x amount of time.
     static private boolean meetsThresholdRequirement(long timeTaken) {
-	    long executionThreshold = P6SpyOptions.getExecutionThreshold();
+        long executionThreshold = P6SpyOptions.getExecutionThreshold();
 
-        if(executionThreshold <= 0) {
+        if (executionThreshold <= 0) {
             return true;
-        }
-        else if(timeTaken > executionThreshold) {
+        } else if (timeTaken > executionThreshold) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
-    //<-JAW
-        
+
     static public void info(String sql) {
         if (logger != null && isCategoryOk("info")) {
             doLog(-1, "info", "", sql);
         }
     }
-    
+
     static public boolean isDebugOn() {
-	return isCategoryOk("debug");
+        return isCategoryOk("debug");
     }
+
     static public void debug(String sql) {
         if (isDebugOn()) {
             if (logger != null) {
@@ -515,12 +505,12 @@ public class P6LogQuery {
     }
 
     static public void error(String sql) {
-        System.err.println ("Warning: "+sql);
+        System.err.println("Warning: " + sql);
         if (logger != null) {
             doLog(-1, "error", "", sql);
         }
     }
-    
+
 }
 
- 	  	 
+
