@@ -61,48 +61,6 @@
 
 /**
  * Description: JDBC Driver Extension implementing PreparedStatement.
- *
- * $Author: cheechq $
- * $Revision: 1.6 $
- * $Date: 2003/06/03 19:20:22 $
- *
- * $Id: P6LogResultSet.java,v 1.6 2003/06/03 19:20:22 cheechq Exp $
- * $Source: /cvsroot/p6spy/p6spy/com/p6spy/engine/logging/P6LogResultSet.java,v $
- * $Log: P6LogResultSet.java,v $
- * Revision 1.6  2003/06/03 19:20:22  cheechq
- * removed unused imports
- *
- * Revision 1.5  2002/12/19 17:00:12  aarvesen
- * remove getTrace from the driver level
- *
- * Revision 1.4  2002/12/19 16:31:43  aarvesen
- * Removed the checkReload call
- *
- * Revision 1.3  2002/12/06 22:27:31  aarvesen
- * new factory registration in the constructor
- *
- * Revision 1.2  2002/10/06 18:22:12  jeffgoke
- * no message
- *
- * Revision 1.1  2002/05/24 07:31:45  jeffgoke
- * version 1 rewrite
- *
- * Revision 1.3  2002/05/16 04:58:40  jeffgoke
- * Viktor Szathmary added multi-driver support.
- * Rewrote P6SpyOptions to be easier to manage.
- * Fixed several bugs.
- *
- * Revision 1.2  2002/04/15 05:13:32  jeffgoke
- * Simon Sadedin added timing support.  Fixed bug where batch execute was not
- * getting logged.  Added result set timing.  Updated the log format to include
- * categories, and updated options to control the categories.  Updated
- * documentation.
- *
- * Revision 1.1  2002/04/10 04:24:26  jeffgoke
- * added support for callable statements and fixed numerous bugs that allowed the real class to be returned
- *
- *
- *
  */
 
 package com.p6spy.engine.logging;
@@ -112,22 +70,26 @@ import com.p6spy.engine.common.*;
 import java.sql.*;
 
 public class P6LogResultSet extends P6ResultSet implements ResultSet {
-    
-    
+
     public P6LogResultSet(P6Factory factory, ResultSet resultSet, P6Statement statement, String preparedQuery, String query) {
         super(factory, resultSet, statement, preparedQuery, query);
     }
-    
+
+    @Override
     public boolean next() throws SQLException {
         long startTime = System.currentTimeMillis();
         try {
             return super.next();
-        }
-        finally {
-	    P6Connection p6connection = (P6Connection)this.statement.getConnection();
-	    P6LogQuery.logElapsed(p6connection.getId(), startTime, "result", preparedQuery, query);
+        } finally {
+            Connection connection = this.statement.getConnection();
+            int id = -999;
+            if (connection instanceof P6Connection) {
+                P6Connection p6connection = (P6Connection) this.statement.getConnection();
+                id = p6connection.getId();
+            }
+            P6LogQuery.logElapsed(id, startTime, "result", preparedQuery, query);
         }
     }
-    
+
 }
 
