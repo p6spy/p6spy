@@ -428,20 +428,14 @@ public class P6SpyOptions extends P6Options {
     public static String getRealDataSourceProperties() {
         return realdatasourceproperties;
     }
-    private List getReverseOrderedList(List arraylist) {
-        List newlist = new ArrayList(arraylist.size());
-        for (int i = arraylist.size()-1;i >= 0; i--) {
-            newlist.add(arraylist.get(i));
-        }
-        return newlist;
-    }
+
     @Override
     public void reload(P6SpyProperties properties) {
         // first set the values on this class
         P6LogQuery.debug(this.getClass().getName() + " reloading properties");
 
-        modules = getReverseOrderedList(properties.getOrderedList(MODULE_PREFIX));
-        driverNames = getReverseOrderedList(properties.getOrderedList(DRIVER_PREFIX));
+        Collections.reverse(modules = properties.getOrderedList(MODULE_PREFIX));
+        Collections.reverse(driverNames = properties.getOrderedList(DRIVER_PREFIX));
         properties.setClassValues(P6SpyOptions.class);
         configureReloadingThread();
         P6LogQuery.initMethod();
