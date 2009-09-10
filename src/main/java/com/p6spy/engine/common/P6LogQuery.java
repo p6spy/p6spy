@@ -466,7 +466,7 @@ public class P6LogQuery {
             doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
         } else if (isDebugOn()) {
             debug("P6Spy intentionally did not log category: " + category + ", statement: " + sql + "  Reason: logger=" + logger + ", isLoggable="
-                + isLoggable(sql) + ", isCategoryOk=" + isCategoryOk(category));
+                + isLoggable(sql) + ", isCategoryOk=" + isCategoryOk(category) + ", meetsTreshold=" + meetsThresholdRequirement(endTime - startTime) );
         }
     }
 

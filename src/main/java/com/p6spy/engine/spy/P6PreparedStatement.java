@@ -73,6 +73,7 @@ public class P6PreparedStatement extends P6Statement implements PreparedStatemen
 
     public static int P6_GROW_MAX = 32;
 
+
     protected PreparedStatement prepStmtPassthru;
 
     protected String preparedQuery;
@@ -80,6 +81,8 @@ public class P6PreparedStatement extends P6Statement implements PreparedStatemen
     protected Object values[];
 
     protected boolean isString[];
+
+    private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
     public P6PreparedStatement(P6Factory factory, PreparedStatement statement, P6Connection conn, String query) {
         super(factory, statement, conn);
@@ -330,12 +333,26 @@ public class P6PreparedStatement extends P6Statement implements PreparedStatemen
                 }
                 if (o instanceof java.util.Date) {
                     values[i] = new SimpleDateFormat(P6SpyOptions.getDatabaseDialectDateFormat()).format(o);
-                } else {
+                }
+                else if ( o instanceof byte[] ) {
+                    values[i] = toHexString( (byte[])o );
+                }
+                else {
                     values[i] = (o == null) ? "" : o.toString();
                 }
                 isString[i] = true;
             }
         }
+    }
+
+    private static final String toHexString( byte[] bytes ) {
+        String value = "";
+        for ( byte b : bytes ) {
+            int temp = (int)b & 0xFF;
+            value += HEX_CHARS[ temp/16 ];
+            value += HEX_CHARS[ temp%16 ];
+        }
+        return value;
     }
 
     protected void setObjectAsInt(int i, Object o) {
