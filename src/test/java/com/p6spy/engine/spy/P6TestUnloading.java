@@ -78,32 +78,27 @@ public class P6TestUnloading extends P6TestFramework {
          */
     }
 
-    public void testDriverUnloading() {
-        try {
-            String p6Driver = "com.p6spy.engine.spy.P6SpyDriver";
-            Properties props = P6TestUtil.loadProperties("P6Test.properties");
-            String url = props.getProperty("url");
-            String user = props.getProperty("user");
-            String password = props.getProperty("password");
+    public void testDriverUnloading() throws Exception {
+        Properties props = P6TestUtil.loadProperties("P6Test.properties");
+        String url = props.getProperty("url");
+        String user = props.getProperty("user");
+        String password = props.getProperty("password");
+        String p6Driver = props.getProperty("p6driver");
 
-            unloadAll();
-            Map properties = P6TestUtil.getDefaultPropertyFile();
-            P6TestUtil.reloadProperty(properties);
+        unloadAll();
+        Map properties = P6TestUtil.getDefaultPropertyFile();
+        P6TestUtil.reloadProperty(properties);
 //            registerDriver(oracleDriver);
-            //P6Util.forName(oracleDriver);
-            Connection con = DriverManager.getConnection(url, user, password);
+        //P6Util.forName(oracleDriver);
+        Connection con = DriverManager.getConnection(url, user, password);
 
-            chkInstanceOf(con, "oracle");
+        chkInstanceOf(con, "oracle");
 
-            registerDriver(p6Driver);
-            con = DriverManager.getConnection(url, user, password);
-            chkInstanceOf(con, "p6spy");
+        registerDriver(p6Driver);
+        con = DriverManager.getConnection(url, user, password);
+        chkInstanceOf(con, "p6spy");
 
-            unloadAll();
-        } catch (Exception e) {
-            fail(e.getMessage() + " due to error: " + P6TestUtil.getStackTrace(e));
-        }
-
+        unloadAll();
     }
 
     protected void chkInstanceOf(Connection con, String packageName) {

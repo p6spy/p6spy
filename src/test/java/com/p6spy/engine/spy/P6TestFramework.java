@@ -131,6 +131,10 @@ import java.util.*;
 import com.p6spy.engine.common.*;
 
 public abstract class P6TestFramework extends TestCase {
+    /**
+     * 
+     */
+    private static final String P6_TEST_PROPERTIES = "P6Test.properties";
     public static final String PROPERTY_FILE = "reloadtest.properties";
 
     public P6TestFramework(java.lang.String testName) {
@@ -150,7 +154,7 @@ public abstract class P6TestFramework extends TestCase {
             // this is a scratch file that won't hurt spy.properties
             Map tp = getDefaultPropertyFile();
             reloadProperty(tp);
-            Properties props = loadProperties("P6Test.properties");
+            Properties props = loadProperties(P6_TEST_PROPERTIES);
             String drivername = props.getProperty("p6driver");
             String user = props.getProperty("user");
             String password = props.getProperty("password");
@@ -163,7 +167,7 @@ public abstract class P6TestFramework extends TestCase {
 
             printAllDrivers();
         } catch (Exception e) {
-            fail(e.getMessage());
+            fail(e.getMessage()+" check the properties in "+ P6_TEST_PROPERTIES);
         }
     }
 
@@ -234,10 +238,10 @@ public abstract class P6TestFramework extends TestCase {
 
     protected Map getDefaultPropertyFile() throws IOException {
 
-        Properties props = loadProperties("P6Test.properties");
+        Properties props = loadProperties(P6_TEST_PROPERTIES);
         String realdrivername = props.getProperty("p6realdriver");
 
-        Properties props2 = loadProperties("P6Test.properties");
+        Properties props2 = loadProperties(P6_TEST_PROPERTIES);
         String realdrivername2 = props2.getProperty("p6realdriver2");
 
         Map tp = new HashMap();

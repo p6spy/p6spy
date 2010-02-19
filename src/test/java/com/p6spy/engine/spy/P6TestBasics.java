@@ -110,97 +110,76 @@ public class P6TestBasics extends TestCase {
     protected Connection connection = null;
 
     @Override
-    protected void setUp() {
-        try {
-            super.setUp();
-            P6TestUtil.unloadDrivers();
-        } catch (Exception e) {
-            fail(e.getMessage()+" due to error: "+P6TestUtil.getStackTrace(e));
-        }
+    protected void setUp() throws Exception {
+        super.setUp();
+        P6TestUtil.unloadDrivers();
     }
 
-    public void testNative() {
-        // load the oracle native driver
-        try {
-            Map properties = P6TestUtil.getDefaultPropertyFile();
-            P6TestUtil.reloadProperty(properties);
-            connection = P6TestUtil.loadDrivers("p6realdriver");
-            sqltests();
-            P6TestUtil.unloadDrivers();
-        } catch (Exception e) {
-            fail(e.getMessage()+" due to error: "+P6TestUtil.getStackTrace(e));
-        }
+    public void testNative() throws Exception {
+        // load the native driver
+        Map properties = P6TestUtil.getDefaultPropertyFile();
+        P6TestUtil.reloadProperty(properties);
+        connection = P6TestUtil.loadDrivers("p6realdriver");
+        sqltests();
+        P6TestUtil.unloadDrivers();
     }
 
-    public void testSpy() {
-        try {
-            // load the p6log driver
-            Map properties = P6TestUtil.getDefaultPropertyFile();
-            P6TestUtil.reloadProperty(properties);
+    public void testSpy() throws Exception {
+        // load the p6log driver
+        Map properties = P6TestUtil.getDefaultPropertyFile();
+        P6TestUtil.reloadProperty(properties);
 
-            connection = P6TestUtil.loadDrivers("p6driver");
-            sqltests();
-        } catch (Exception e) {
-            fail(e.getMessage()+" due to error: "+P6TestUtil.getStackTrace(e));
-        }
+        connection = P6TestUtil.loadDrivers("p6driver");
+        sqltests();
     }
 
-    protected void preparesql() {
-        try {
-            Statement statement = connection.createStatement();
-            drop(statement);
-            statement.execute("create table stmt_test (col1 varchar2(255), col2 number(5))");
-        } catch (Exception e) {
-            fail(e.getMessage()+" due to error: "+P6TestUtil.getStackTrace(e));
-        }
+    protected void preparesql() throws SQLException {
+        Statement statement = connection.createStatement();
+        drop(statement);
+        statement.execute("create table stmt_test (col1 varchar(255), col2 integer(5))");
     }
 
-    protected void sqltests() {
-        try {
-            preparesql();
+    protected void sqltests() throws SQLException {
+        preparesql();
 
-            // insert test
-            String insert = "insert into stmt_test values (\'bob\', 5)";
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(insert);
+        // insert test
+        String insert = "insert into stmt_test values (\'bob\', 5)";
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(insert);
 
-            // update test
-            String update = "update stmt_test set col1 = \'bill\' where col2 = 5";
-            statement.executeUpdate(update);
+        // update test
+        String update = "update stmt_test set col1 = \'bill\' where col2 = 5";
+        statement.executeUpdate(update);
 
-            // query test
-            String query = "select col1 from stmt_test where col2 = 5";
-            ResultSet rs = statement.executeQuery(query);
-            rs.next();
-            assertEquals(rs.getString(1), "bill");
+        // query test
+        String query = "select col1 from stmt_test where col2 = 5";
+        ResultSet rs = statement.executeQuery(query);
+        rs.next();
+        assertEquals(rs.getString(1), "bill");
 
-            // prepared test
-            PreparedStatement ps = connection.prepareStatement("insert into stmt_test values (?, ?)");
-            ps.setString(1,"joe");
-            ps.setInt(2,6);
-            ps.executeUpdate();
-            ps.setString(1,"andy");
-            ps.setInt(2,7);
-            ps.execute();
+        // prepared test
+        PreparedStatement ps = connection.prepareStatement("insert into stmt_test values (?, ?)");
+        ps.setString(1,"joe");
+        ps.setInt(2,6);
+        ps.executeUpdate();
+        ps.setString(1,"andy");
+        ps.setInt(2,7);
+        ps.execute();
 
-            ps = connection.prepareStatement("update stmt_test set col1 = ? where col2 = ?");
-            ps.setString(1,"charles");
-            ps.setInt(2,6);
-            ps.executeUpdate();
-            ps.setString(1,"bobby");
-            ps.setInt(2,7);
-            ps.execute();
+        ps = connection.prepareStatement("update stmt_test set col1 = ? where col2 = ?");
+        ps.setString(1,"charles");
+        ps.setInt(2,6);
+        ps.executeUpdate();
+        ps.setString(1,"bobby");
+        ps.setInt(2,7);
+        ps.execute();
 
-            ps = connection.prepareStatement("select col1 from stmt_test where col1 = ? and col2 = ?");
-            ps.setString(1,"charles");
-            ps.setInt(2,6);
-            rs = ps.executeQuery();
-            rs.next();
-            assertEquals("charles", rs.getString(1));
-
-        } catch (Exception e) {
-            fail(e.getMessage()+" with stack: "+P6TestUtil.getStackTrace(e));
-        }
+        ps = connection.prepareStatement("select col1 from stmt_test where col1 = ? and col2 = ?");
+        ps.setString(1,"charles");
+        ps.setInt(2,6);
+        rs = ps.executeQuery();
+        rs.next();
+        assertEquals("charles", rs.getString(1));
     }
 
     protected void drop(Statement statement) {

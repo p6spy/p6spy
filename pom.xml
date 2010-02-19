@@ -56,12 +56,12 @@
     </scm>
     <properties>
         <commons-logging-build>1.1</commons-logging-build>
-        <log4j-build>1.2.14</log4j-build>
-        <slf4j-build>1.5.6</slf4j-build>
-        <json-lib-build>2.2.3</json-lib-build>
-        <easymock-class-build>2.3</easymock-class-build>
-        <easymock-build>2.3</easymock-build>
-        <testng-build>5.5</testng-build>
+        <ant-build>1.8.0</ant-build>
+        <log4j-build>1.2.15</log4j-build>
+        <slf4j-build>1.5.8</slf4j-build>
+        <mysql-connector-java-build>5.1.10</mysql-connector-java-build>
+        <easymock-class-build>2.5.2</easymock-class-build>
+        <easymock-build>2.5.2</easymock-build>
         <commons-lang-build>2.4</commons-lang-build>
         <maven-antrun-plugin-build>1.2</maven-antrun-plugin-build>
         <maven-assembly-plugin-build>2.2-beta-3</maven-assembly-plugin-build>
@@ -81,15 +81,11 @@
         <maven-resources-plugin-build>2.3</maven-resources-plugin-build>
         <maven-source-plugin-build>2.0.4</maven-source-plugin-build>
         <maven-site-plugin-build>2.0-beta-7</maven-site-plugin-build>
-        <!--
-            We need http://jira.codehaus.org/browse/SUREFIRE-446 and http://jira.codehaus.org/browse/SUREFIRE-463 to move to more
-            recent versions (>2.4.2)
-        -->
-        <!-- maven-surefire-plugin-build>2.4.3</maven-surefire-plugin-build-->
-        <maven-surefire-plugin-build>2.4-collab-amplafi-20070602</maven-surefire-plugin-build>
+        <maven-surefire-plugin-build>2.5</maven-surefire-plugin-build>
         <maven-war-plugin-build>2.1-alpha-2</maven-war-plugin-build>
         <commons-digester-build>1.8.1</commons-digester-build>
         <pmd-build>4.2.5</pmd-build>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <build>
         <pluginManagement>
@@ -97,7 +93,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.4.3</version>
+                    <version>${maven-surefire-plugin-build}</version>
                     <configuration>
                     <!-- 
                         <forkMode>pertest</forkMode>
@@ -124,7 +120,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-idea-plugin</artifactId>
-                    <version>2.0</version>
                     <configuration>
                         <downloadSources>true</downloadSources>
                         <downloadJavadocs>true</downloadJavadocs>
@@ -203,13 +198,7 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>${maven-clean-plugin-build}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>${maven-release-plugin-build}</version>
                     <configuration>
                         <tagBase>${svn-base}/${artifactId}/tags/</tagBase>
                     </configuration>
@@ -217,12 +206,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-repository-plugin</artifactId>
-                    <version>${maven-repository-plugin-build}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>${maven-assembly-plugin-build}</version>
                     <!--
                         <inherited>true</inherited> <configuration> <descriptor>src/main/assembly/dep.xml</descriptor>
                         </configuration>
@@ -231,7 +218,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>${maven-jar-plugin-build}</version>
                     <executions>
                         <execution>
                             <phase>package</phase>
@@ -262,7 +248,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>${maven-site-plugin-build}</version>
                     <executions>
                        <execution>
                             <phase>package</phase>
@@ -295,24 +280,44 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
+            <version>${mysql-connector-java-build}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
+            <version>${log4j-build}</version>
             <optional>true</optional>
+            <exclusions>
+                <!-- dependencies show up in 1.2.15 -->
+                <exclusion>
+                    <groupId>com.sun.jmx</groupId>
+                    <artifactId>jmxri</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.jdmk</groupId>
+                    <artifactId>jmxtools</artifactId>
+                </exclusion>      
+                <exclusion>
+                    <groupId>javax.jms</groupId>
+                    <artifactId>jms</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                </exclusion>                          
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant</artifactId>
-            <version>1.7.1</version>
+            <version>${ant-build}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
             <version>3.8.2</version>
             <optional>true</optional>
         </dependency>

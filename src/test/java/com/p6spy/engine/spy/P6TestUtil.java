@@ -239,12 +239,6 @@ public class P6TestUtil  {
         Assert.assertTrue(isFalse);
     }
 
-    protected static String getStackTrace(Exception e) {
-        CharArrayWriter c = new CharArrayWriter();
-        e.printStackTrace(new PrintWriter(c));
-        return c.toString();
-    }
-
     protected static void printAllDrivers() {
         for (Enumeration e = DriverManager.getDrivers() ; e.hasMoreElements() ;) {
             System.err.println("2 DRIVER FOUND == "+e.nextElement());
