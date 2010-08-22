@@ -391,15 +391,15 @@ public class P6LogQuery {
 
     static boolean foundTable(String sql, String tables[]) {
         sql = sql.toLowerCase();
-        boolean ok = false;
-        int i;
+        boolean found = false;
+
         if (tables != null) {
-            for (i = 0; !ok && i < tables.length; i++) {
-                ok = Pattern.matches(tables[i], sql);
+            for (int i = 0; !found && i < tables.length; i++) {
+                found = Pattern.matches("select.*from(.*"+tables[i]+".*)(where|;|$)", sql);
             }
         }
 
-        return ok;
+        return found;
     }
 
     // ----------------------------------------------------------------------------------------------------------
