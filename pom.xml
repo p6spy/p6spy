@@ -50,28 +50,33 @@
         </license>
     </licenses>
     <scm>
+        <connection>scm:git:git@github.com:patmoore/p6spy.git</connection>
+    </scm>
+    <!--
+    <scm>
         <connection>scm:svn:p6spy.svn.sourceforge.net:/svnroot/p6spy
         </connection>
         <url>http://p6spy.svn.sourceforge.net/viewvc/p6spy/</url>
     </scm>
+    -->
     <properties>
         <commons-logging-build>1.1</commons-logging-build>
-        <ant-build>1.8.0</ant-build>
+        <ant-build>1.8.1</ant-build>
         <log4j-build>1.2.15</log4j-build>
         <slf4j-build>1.5.8</slf4j-build>
-        <mysql-connector-java-build>5.1.10</mysql-connector-java-build>
+        <mysql-connector-java-build>5.1.13</mysql-connector-java-build>
         <easymock-class-build>2.5.2</easymock-class-build>
         <easymock-build>2.5.2</easymock-build>
         <commons-lang-build>2.4</commons-lang-build>
         <maven-antrun-plugin-build>1.2</maven-antrun-plugin-build>
         <maven-assembly-plugin-build>2.2-beta-3</maven-assembly-plugin-build>
         <maven-checkstyle-plugin-build>2.2</maven-checkstyle-plugin-build>
-        <maven-clean-plugin-build>2.3</maven-clean-plugin-build>
-        <maven-compiler-plugin-build>2.0.2</maven-compiler-plugin-build>
+        <maven-clean-plugin-build>2.4.1</maven-clean-plugin-build>
+        <maven-compiler-plugin-build>2.1</maven-compiler-plugin-build>
         <cobertura-maven-plugin-build>2.0</cobertura-maven-plugin-build>
-        <maven-dependency-plugin-build>2.0</maven-dependency-plugin-build>
+        <maven-dependency-plugin-build>2.1</maven-dependency-plugin-build>
         <maven-deploy-plugin-build>2.4</maven-deploy-plugin-build>
-        <maven-eclipse-plugin-build>2.5.1</maven-eclipse-plugin-build>
+        <maven-eclipse-plugin-build>2.8</maven-eclipse-plugin-build>
         <maven-javadoc-plugin-build>2.3</maven-javadoc-plugin-build>
         <maven-jar-plugin-build>2.2</maven-jar-plugin-build>
         <buildnumber-maven-plugin-build>1.0-beta-1</buildnumber-maven-plugin-build>
@@ -81,8 +86,8 @@
         <maven-resources-plugin-build>2.3</maven-resources-plugin-build>
         <maven-source-plugin-build>2.0.4</maven-source-plugin-build>
         <maven-site-plugin-build>2.0-beta-7</maven-site-plugin-build>
-        <maven-surefire-plugin-build>2.5</maven-surefire-plugin-build>
-        <maven-war-plugin-build>2.1-alpha-2</maven-war-plugin-build>
+        <maven-surefire-plugin-build>2.6</maven-surefire-plugin-build>
+        <maven-war-plugin-build>2.1</maven-war-plugin-build>
         <commons-digester-build>1.8.1</commons-digester-build>
         <pmd-build>4.2.5</pmd-build>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -318,7 +323,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>3.8.2</version>
+            <version>4.8.1</version>
             <optional>true</optional>
         </dependency>
         <!--
