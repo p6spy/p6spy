@@ -68,26 +68,12 @@
         <easymock-class-build>2.5.2</easymock-class-build>
         <easymock-build>2.5.2</easymock-build>
         <commons-lang-build>2.4</commons-lang-build>
-        <maven-antrun-plugin-build>1.2</maven-antrun-plugin-build>
-        <maven-assembly-plugin-build>2.2-beta-3</maven-assembly-plugin-build>
-        <maven-checkstyle-plugin-build>2.2</maven-checkstyle-plugin-build>
-        <maven-clean-plugin-build>2.4.1</maven-clean-plugin-build>
-        <maven-compiler-plugin-build>2.1</maven-compiler-plugin-build>
         <cobertura-maven-plugin-build>2.0</cobertura-maven-plugin-build>
-        <maven-dependency-plugin-build>2.1</maven-dependency-plugin-build>
-        <maven-deploy-plugin-build>2.4</maven-deploy-plugin-build>
         <maven-eclipse-plugin-build>2.8</maven-eclipse-plugin-build>
-        <maven-javadoc-plugin-build>2.3</maven-javadoc-plugin-build>
-        <maven-jar-plugin-build>2.2</maven-jar-plugin-build>
         <buildnumber-maven-plugin-build>1.0-beta-1</buildnumber-maven-plugin-build>
         <maven-project-info-reports-plugin-build>2.1</maven-project-info-reports-plugin-build>
-        <maven-release-plugin-build>2.0-beta-8</maven-release-plugin-build>
-        <maven-repository-plugin-build>2.1</maven-repository-plugin-build>
-        <maven-resources-plugin-build>2.3</maven-resources-plugin-build>
-        <maven-source-plugin-build>2.0.4</maven-source-plugin-build>
-        <maven-site-plugin-build>2.0-beta-7</maven-site-plugin-build>
+        <maven-site-plugin-build>2.2</maven-site-plugin-build>
         <maven-surefire-plugin-build>2.6</maven-surefire-plugin-build>
-        <maven-war-plugin-build>2.1</maven-war-plugin-build>
         <commons-digester-build>1.8.1</commons-digester-build>
         <pmd-build>4.2.5</pmd-build>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -133,7 +119,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin-build}</version>
                     <configuration>
                         <source>1.6</source>
                         <target>1.6</target>
@@ -142,7 +127,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>${maven-dependency-plugin-build}</version>
                     <inherited>true</inherited>
                     <executions>
                         <execution>
@@ -191,12 +175,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>${maven-deploy-plugin-build}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>${maven-resources-plugin-build}</version>
                     <configuration>
                         <encoding>UTF-8</encoding>
                     </configuration>                     
@@ -253,6 +235,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
+                    <version>${maven-site-plugin-build}</version>
                     <executions>
                        <execution>
                             <phase>package</phase>
@@ -323,7 +306,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>4.8.1</version>
+            <version>4.8.2</version>
             <optional>true</optional>
         </dependency>
         <!--
