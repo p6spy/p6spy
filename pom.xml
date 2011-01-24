@@ -62,7 +62,7 @@
     <properties>
         <commons-logging-build>1.1</commons-logging-build>
         <ant-build>1.8.2</ant-build>
-        <log4j-build>1.2.15</log4j-build>
+        <log4j-build>1.2.16</log4j-build>
         <slf4j-build>1.5.8</slf4j-build>
         <mysql-connector-java-build>5.1.14</mysql-connector-java-build>
         <easymock-class-build>2.5.2</easymock-class-build>
