@@ -285,7 +285,7 @@ public class P6Util {
             }
 
             try {
-                i = new Integer(n).intValue();
+                i = Integer.valueOf(n).intValue();
             } catch (NumberFormatException e) {
                 i = 0;
             }

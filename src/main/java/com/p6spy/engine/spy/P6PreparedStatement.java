@@ -187,7 +187,7 @@ public class P6PreparedStatement extends P6Statement implements PreparedStatemen
     }
 
     public void setDouble(int p0, double p1) throws SQLException {
-        setObjectAsInt(p0, new Double(p1));
+        setObjectAsInt(p0, Double.valueOf(p1));
         prepStmtPassthru.setDouble(p0, p1);
     }
 
@@ -197,12 +197,12 @@ public class P6PreparedStatement extends P6Statement implements PreparedStatemen
     }
 
     public void setInt(int p0, int p1) throws SQLException {
-        setObjectAsInt(p0, new Integer(p1));
+        setObjectAsInt(p0, Integer.valueOf(p1));
         prepStmtPassthru.setInt(p0, p1);
     }
 
     public void setLong(int p0, long p1) throws SQLException {
-        setObjectAsInt(p0, new Long(p1));
+        setObjectAsInt(p0, Long.valueOf(p1));
         prepStmtPassthru.setLong(p0, p1);
     }
 

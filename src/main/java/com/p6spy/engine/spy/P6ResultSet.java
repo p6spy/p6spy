@@ -186,13 +186,13 @@ public class P6ResultSet extends P6Base implements ResultSet {
 
     public long getLong(int p0) throws SQLException {
 		long result = passthru.getLong(p0);
-		resultMap.put(String.valueOf(p0), new Long(result));
+		resultMap.put(String.valueOf(p0), Long.valueOf(result));
 		return result;
     }
 
     public long getLong(String p0) throws SQLException {
 		long result = passthru.getLong(p0);
-		resultMap.put(String.valueOf(p0), new Long(result));
+		resultMap.put(String.valueOf(p0), Long.valueOf(result));
 		return result;
     }
 
