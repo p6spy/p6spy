@@ -72,7 +72,7 @@
         <maven-eclipse-plugin-build>2.8</maven-eclipse-plugin-build>
         <buildnumber-maven-plugin-build>1.0-beta-1</buildnumber-maven-plugin-build>
         <maven-project-info-reports-plugin-build>2.1</maven-project-info-reports-plugin-build>
-        <maven-site-plugin-build>2.2</maven-site-plugin-build>
+        <maven-site-plugin-build>2.1.1</maven-site-plugin-build>
         <maven-surefire-plugin-build>2.6</maven-surefire-plugin-build>
         <commons-digester-build>1.8.1</commons-digester-build>
         <pmd-build>4.2.5</pmd-build>
