@@ -4,3 +4,7 @@
 /.classpath
 /.project
 /test-output
+/reloadtest.properties
+/scratch/
+/spy.log
+/testspy.forms
