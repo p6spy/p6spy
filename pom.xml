@@ -60,17 +60,17 @@
     </scm>
     -->
     <properties>
+        <java-build>1.7</java-build>
         <commons-logging-build>1.1</commons-logging-build>
-        <ant-build>1.8.2</ant-build>
+        <ant-build>1.8.3</ant-build>
         <log4j-build>1.2.16</log4j-build>
         <slf4j-build>1.5.8</slf4j-build>
-        <mysql-connector-java-build>5.1.14</mysql-connector-java-build>
-        <easymock-class-build>2.5.2</easymock-class-build>
-        <easymock-build>2.5.2</easymock-build>
-        <commons-lang-build>2.4</commons-lang-build>
+        <mysql-connector-java-build>5.1.20</mysql-connector-java-build>
+        <easymock-class-build>3.1</easymock-class-build>
+        <easymock-build>3.1</easymock-build>
+        <commons-lang-build>2.6</commons-lang-build>
         <cobertura-maven-plugin-build>2.0</cobertura-maven-plugin-build>
         <maven-eclipse-plugin-build>2.8</maven-eclipse-plugin-build>
-        <buildnumber-maven-plugin-build>1.0-beta-1</buildnumber-maven-plugin-build>
         <maven-project-info-reports-plugin-build>2.1</maven-project-info-reports-plugin-build>
         <maven-site-plugin-build>2.1.1</maven-site-plugin-build>
         <maven-surefire-plugin-build>2.6</maven-surefire-plugin-build>
@@ -120,8 +120,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+                        <source>${java-build}</source>
+                        <target>${java-build}</target>
                     </configuration>
                 </plugin>
                 <plugin>
