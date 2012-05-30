@@ -101,17 +101,26 @@
 
 package com.p6spy.engine.spy;
 
-import java.util.*;
-import java.sql.*;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyOptions;
 
-import javax.sql.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.naming.Reference;
+import javax.naming.Referenceable;
+import javax.naming.StringRefAddr;
+import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import javax.naming.*;
-import java.lang.reflect.*;
-import com.p6spy.engine.common.P6SpyOptions;
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.spy.P6SpyDriverCore;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 public class P6DataSource extends P6Base implements DataSource, Referenceable, Serializable {
 
@@ -371,4 +380,9 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
         return rds.unwrap(iface);
     }
 
+    // since 1.7
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return rds.getParentLogger();
+    }
 }
