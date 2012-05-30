@@ -60,7 +60,7 @@
     </scm>
     -->
     <properties>
-        <java-build>1.6</java-build>
+        <java-build>1.7</java-build>
         <commons-logging-build>1.1</commons-logging-build>
         <ant-build>1.8.3</ant-build>
         <log4j-build>1.2.16</log4j-build>

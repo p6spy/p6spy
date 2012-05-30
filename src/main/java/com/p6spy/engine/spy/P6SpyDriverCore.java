@@ -157,11 +157,25 @@
 
 package com.p6spy.engine.spy;
 
-import java.sql.*;
-import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
+import com.p6spy.engine.common.OptionReloader;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Options;
+import com.p6spy.engine.common.P6SpyOptions;
+import com.p6spy.engine.common.P6SpyProperties;
+import com.p6spy.engine.common.P6Util;
 
-import com.p6spy.engine.common.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.DriverPropertyInfo;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 public abstract class P6SpyDriverCore implements Driver {
 
@@ -449,4 +463,9 @@ public abstract class P6SpyDriverCore implements Driver {
         return (passthru.jdbcCompliant());
     }
 
+    // since 1.7
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return passthru.getParentLogger();
+    }
 }
