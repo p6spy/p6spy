@@ -887,4 +887,17 @@ public class P6DatabaseMetaData extends P6Base implements java.sql.DatabaseMetaD
 
 	return wrapped;
     }
+
+    // since 1.7
+    @Override
+    public boolean generatedKeyAlwaysReturned() throws SQLException {
+        return passthru.generatedKeyAlwaysReturned();
+    }
+
+    // since 1.7
+    @Override
+    public ResultSet getPseudoColumns(final String catalog, final String schemaPattern, final String tableNamePattern, final String columnNamePattern)
+        throws SQLException {
+        return passthru.getPseudoColumns(catalog, schemaPattern, tableNamePattern, columnNamePattern);
+    }
 }

@@ -1886,5 +1886,15 @@ public class P6CallableStatement extends P6PreparedStatement implements java.sql
         return callStmtPassthru.unwrap(iface);
     }
 
+    // since 1.7
+    @Override
+    public <T> T getObject(final int parameterIndex, final Class<T> type) throws SQLException {
+        return callStmtPassthru.getObject(parameterIndex, type);
+    }
 
+    // since 1.7
+    @Override
+    public <T> T getObject(final String parameterName, final Class<T> type) throws SQLException {
+        return callStmtPassthru.getObject(parameterName, type);
+    }
 }
