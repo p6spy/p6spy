@@ -1,10 +1,22 @@
-/bin
+# maven output directory
 /target
+
+# Eclipse files
+/bin
 /.settings
 /.classpath
 /.project
+
+# IntelliJ files
+/.idea
+*.iml
+/atlassian-ide-plugin.xml
+
+# Log files
+/spy.log
+
+# Other files
 /test-output
 /reloadtest.properties
 /scratch/
-/spy.log
 /testspy.forms
