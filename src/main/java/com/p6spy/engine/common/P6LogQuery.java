@@ -284,7 +284,7 @@ public class P6LogQuery {
     }
 
     // this is an internal procedure used to actually write the log information
-    static protected synchronized void doLog(int connectionId, long elapsed, String category, String prepared, String sql) {
+    static protected void doLog(int connectionId, long elapsed, String category, String prepared, String sql) {
         if (logger != null) {
             java.util.Date now = P6Util.timeNow();
             SimpleDateFormat sdf = P6SpyOptions.getDateformatter();
@@ -320,40 +320,7 @@ public class P6LogQuery {
             //lastEntry = logEntry;
         }
 
-        /*
-	java.util.Date now = P6Util.timeNow();
-	SimpleDateFormat sdf = P6SpyOptions.getDateformatter();
-	String logEntry;
-	if (sdf == null) {
-	    logEntry = Long.toString(now.getTime());
-	} else {
-	    logEntry = sdf.format(new java.util.Date(now.getTime())).trim();
-	}
 
-        logEntry += "|"+elapsed+"|"+(connectionId==-1 ? "" : String.valueOf(connectionId))+"|"+category+"|"+prepared+"|"+sql;
-        qlog.println(logEntry);
-        boolean stackTrace = P6SpyOptions.getStackTrace();
-        String stackTraceClass = P6SpyOptions.getStackTraceClass();
-        if(stackTrace) {
-            if(stackTraceClass == null) {
-                Exception e = new Exception();
-                e.printStackTrace(qlog);
-            }
-            else {
-                ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-                PrintStream printStream = new PrintStream(byteStream);
-                Exception e = new Exception("P6Spy Stack Trace Log");
-                e.printStackTrace(printStream);
-                String stack = byteStream.toString();
-                if(stack.indexOf(stackTraceClass) != -1) {
-                    lastStack = stack;
-                    e.printStackTrace(qlog);
-                }
-            }
-        }
-
-        lastEntry = logEntry;
-         */
     }
 
     static boolean isLoggable(String sql) {
