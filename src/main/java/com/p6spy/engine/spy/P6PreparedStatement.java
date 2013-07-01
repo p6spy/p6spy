@@ -294,13 +294,14 @@ public class P6PreparedStatement extends P6Statement implements PreparedStatemen
             int i = 1, limit = 0, base = 0;
 
             while ((limit = preparedQuery.indexOf('?', limit)) != -1) {
-                if (isString[i]) {
-                    t.append(preparedQuery.substring(base, limit));
+                t.append(preparedQuery.substring(base, limit));
+                if (values[i] == null) {
+                    t.append("NULL");
+                } else if (isString[i]) {
                     t.append("'");
                     t.append(values[i]);
                     t.append("'");
                 } else {
-                    t.append(preparedQuery.substring(base, limit));
                     t.append(values[i]);
                 }
                 i++;
@@ -338,7 +339,7 @@ public class P6PreparedStatement extends P6Statement implements PreparedStatemen
                     values[i] = toHexString( (byte[])o );
                 }
                 else {
-                    values[i] = (o == null) ? "" : o.toString();
+                    values[i] = (o == null) ? null : o.toString();
                 }
                 isString[i] = true;
             }
@@ -361,7 +362,7 @@ public class P6PreparedStatement extends P6Statement implements PreparedStatemen
                 if (i >= values.length) {
                     growValues(i);
                 }
-                values[i] = (o == null) ? "" : o.toString();
+                values[i] = (o == null) ? null : o.toString();
                 isString[i] = false;
             }
         }
