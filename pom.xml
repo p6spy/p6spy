@@ -62,17 +62,17 @@
     <properties>
         <java-build>1.7</java-build>
         <commons-logging-build>1.1</commons-logging-build>
-        <ant-build>1.8.3</ant-build>
-        <log4j-build>1.2.16</log4j-build>
+        <ant-build>1.8.4</ant-build>
+        <log4j-build>1.2.17</log4j-build>
         <slf4j-build>1.5.8</slf4j-build>
-        <mysql-connector-java-build>5.1.20</mysql-connector-java-build>
+        <mysql-connector-java-build>5.1.21</mysql-connector-java-build>
         <easymock-class-build>3.1</easymock-class-build>
         <easymock-build>3.1</easymock-build>
         <commons-lang-build>2.6</commons-lang-build>
         <cobertura-maven-plugin-build>2.0</cobertura-maven-plugin-build>
-        <maven-eclipse-plugin-build>2.8</maven-eclipse-plugin-build>
+        <maven-eclipse-plugin-build>2.9</maven-eclipse-plugin-build>
         <maven-project-info-reports-plugin-build>2.1</maven-project-info-reports-plugin-build>
-        <maven-site-plugin-build>2.1.1</maven-site-plugin-build>
+        <maven-site-plugin-build>3.2</maven-site-plugin-build>
         <maven-surefire-plugin-build>2.6</maven-surefire-plugin-build>
         <commons-digester-build>1.8.1</commons-digester-build>
         <pmd-build>4.2.5</pmd-build>
@@ -104,8 +104,8 @@
                         </systemProperties>
                         <!--
                             <parallel>false</parallel> <threadCount>4</threadCount>
-                        -->
                         <excludedGroups>browser</excludedGroups>
+                        -->
                     </configuration>
                 </plugin>
                 <plugin>
@@ -306,7 +306,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>4.8.2</version>
+            <version>4.11-beta-1</version>
             <optional>true</optional>
         </dependency>
         <!--

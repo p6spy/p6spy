@@ -8,3 +8,6 @@
 /scratch/
 /spy.log
 /testspy.forms
+*.swp
+.DS_Store
+/pom.xml.versionsBackup
