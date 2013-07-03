@@ -68,9 +68,17 @@
  */
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import com.p6spy.engine.common.*;
-import java.io.*;
+import static com.p6spy.engine.common.Subclasser.DELIMITER;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import junit.framework.Protectable;
+import junit.framework.TestCase;
+
+import com.p6spy.engine.common.Subclasser;
 
 public class P6TestSubclasser extends TestCase {
 
@@ -92,20 +100,7 @@ public class P6TestSubclasser extends TestCase {
         // this one's a little trickier... since it could fail
         // depending on your architecture.  So put in this terrible
         // switchlike hack here
-        String expectedPath = null;
-
-        if (sub.DELIMITER.equals("/")) {
-            expectedPath = "com/p6spy/engine/test";
-        } else if (sub.DELIMITER.equals("\\")) {
-            expectedPath = "com\\p6spy\\engine\\test";
-        } else if (sub.DELIMITER.equals(":")) {
-            expectedPath = "com:p6spy:engine:test";
-        }
-
-        if (expectedPath == null) {
-            fail("Unexpected file separator: " + sub.DELIMITER + ". Please expand the test class to test for this file separator.");
-        }
-
+        String expectedPath = "com" + DELIMITER + "p6spy" + DELIMITER + "engine" +  DELIMITER + "spy";
         assertEquals(expectedPath, sub.packToDir(packageName));
 
         // now check the default file
@@ -115,8 +110,7 @@ public class P6TestSubclasser extends TestCase {
         sub.setOutputName(newName);
 
         File actualFile = sub.getOutputFile();
-        File expectedFile = new File("scratch" + sub.DELIMITER + expectedPath, newName + ".java");
-
+        File expectedFile = new File("scratch" + DELIMITER + expectedPath, newName + ".java");
         assertEquals(expectedFile, actualFile);
     }
 
