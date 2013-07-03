@@ -68,7 +68,7 @@ import java.util.Properties;
 
 public class P6TestDriver extends P6TestFramework {
     public P6TestDriver(String name) {
-	super(name);
+        super(name);
     }
 
     public void testMajorVersion() throws Exception {
