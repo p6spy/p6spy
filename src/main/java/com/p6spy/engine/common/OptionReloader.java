@@ -129,8 +129,4 @@ public class OptionReloader implements Runnable {
         }
     }
 
-    public static Iterator iterator() {
-        return options.iterator();
-    }
-
 }
