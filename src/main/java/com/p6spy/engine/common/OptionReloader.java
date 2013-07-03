@@ -112,7 +112,7 @@ public class OptionReloader implements Runnable {
     public static void add(P6Options p6options, P6SpyProperties properties) {
         options.add(p6options);
         // when added make sure to deal with this
-        if (properties.isNewProperties() == false) {
+        if (!properties.isNewProperties()) {
             properties.forceReadProperties();
         }
         p6options.reload(properties);
@@ -121,7 +121,7 @@ public class OptionReloader implements Runnable {
     public static void reload() {
         P6SpyProperties properties = new P6SpyProperties();
         // if nothing to reload, don't call the reload function
-        if (properties.isNewProperties() == false) {
+        if (!properties.isNewProperties()) {
             return;
         }
         for(P6Options option: options) {
