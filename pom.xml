@@ -41,16 +41,20 @@
             <name>patmoore</name>
             <email>patmoore@users.sourceforge.net</email>
         </developer>
+        <developer>
+            <id>Quinton McCombs</id>
+            <name>quintonm</name>
+            <email>quinton.mccombs@gmail.com</email>
+        </developer>
     </developers>
     <licenses>
         <license>
-            <name>The P6Spy Software License, Version 1.1</name>
-            <url>http://p6spy.svn.sourceforge.net/viewvc/p6spy/trunk/src/main/site/license.txt?view=markup
-            </url>
+            <name>Apache Software License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git@github.com:patmoore/p6spy.git</connection>
+        <connection>scm:git:https://github.com/p6spy/p6spy.git</connection>
     </scm>
     <!--
     <scm>
