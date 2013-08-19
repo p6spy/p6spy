@@ -1,5 +1,8 @@
 # maven output directory
 /target
+/build
+/dist
+javadocs
 
 # Eclipse files
 /bin

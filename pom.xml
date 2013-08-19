@@ -43,14 +43,15 @@
         </developer>
         <developer>
             <id>Quinton McCombs</id>
-            <name>quintonm</name>
+            <name>qmccombs</name>
             <email>quinton.mccombs@gmail.com</email>
         </developer>
     </developers>
     <licenses>
         <license>
-            <name>Apache Software License 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <name>The P6Spy Software License, Version 1.1</name>
+            <url>http://p6spy.svn.sourceforge.net/viewvc/p6spy/trunk/src/main/site/license.txt?view=markup
+            </url>
         </license>
     </licenses>
     <scm>
