@@ -119,7 +119,6 @@ public class P6SpyOptions extends P6Options {
 
     private static String dateformat;
 
-    private static SimpleDateFormat dateformatter;
 
     private static String includecategories;
 
@@ -291,11 +290,6 @@ public class P6SpyOptions extends P6Options {
 
     public static void setDateformat(String _dateformat) {
         dateformat = _dateformat;
-        if (_dateformat == null || _dateformat.equals("")) {
-            dateformatter = null;
-        } else {
-            dateformatter = new SimpleDateFormat(_dateformat);
-        }
     }
 
     public static String getDateformat() {
@@ -303,7 +297,11 @@ public class P6SpyOptions extends P6Options {
     }
 
     public static SimpleDateFormat getDateformatter() {
-        return dateformatter;
+        if (dateformat == null || dateformat.equals("")) {
+            return null;
+        } else {
+            return new SimpleDateFormat(dateformat);
+        }
     }
 
     public static boolean getStackTrace() {

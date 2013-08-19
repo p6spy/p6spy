@@ -150,14 +150,16 @@ public class P6SpyProperties {
                     continue;
                 }
                 String propertyName = m.getName().substring(3).toLowerCase();
-                try {
-                    Object rv = m.invoke(opts);
-                    props.setProperty(propertyName, rv.toString());
-                    P6LogQuery.info("added property '" + propertyName + "' with value of '" + rv.toString() + "'");
-                } catch (Exception e) {
-                    P6LogQuery.error("Could not get property value " + propertyName + " in class " + opts.getClass().getName() + " because of error "
-                        + e);
-                }
+                    Object rv;
+                    try {
+                        rv = m.invoke(opts);
+                        if (rv != null) {
+                            props.setProperty(propertyName, rv.toString());
+                            P6LogQuery.info("added property '" + propertyName + "' with value of '" + rv + "'");
+                        }
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                        throw new IllegalStateException(e);
+                    }
             }
         }
 

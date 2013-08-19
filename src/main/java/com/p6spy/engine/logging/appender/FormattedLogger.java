@@ -69,8 +69,8 @@ public abstract class FormattedLogger {
     protected String lastEntry;
 
     public void logSQL(int connectionId, String now, long elapsed, String category, String prepared, String sql) {
-	String logEntry = now + "|"+ elapsed + "|"+(connectionId==-1 ? "" : String.valueOf(connectionId))+"|"+category+"|"+prepared+"|"+sql;
-	logText(logEntry);
+    	String logEntry = "#" + now + " | took " + elapsed + "ms | " + category + " | connection " + connectionId + "|" + prepared + "\n" + sql +";";
+    	logText(logEntry);
     }
 
     public abstract void logText(String text);

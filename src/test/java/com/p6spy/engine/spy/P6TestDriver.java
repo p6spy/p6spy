@@ -61,41 +61,34 @@
 
 package com.p6spy.engine.spy;
 
-import java.util.*;
-import java.sql.*;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 
 public class P6TestDriver extends P6TestFramework {
     public P6TestDriver(String name) {
-	super(name);
+        super(name);
     }
 
-    public void testMajorVersion() {
-	try {
-	    Properties props = P6TestUtil.loadProperties("P6Test.properties");
+    public void testMajorVersion() throws Exception {
+	    Properties props = loadProperties("P6Test.properties");
 	    String url = props.getProperty("url");
 
 	    Driver driver = DriverManager.getDriver(url);
 
 	    // make sure you have a p6 driver
 	    if (! (driver instanceof P6SpyDriverCore)) {
-		fail("Expected to get back a p6spy driver, got back a " + driver);
+	        fail("Expected to get back a p6spy driver, got back a " + driver);
 	    }
-
 	    // but make sure it's bound to something
 	    // these numbers will likely change over time :)
-	    assertEquals(1, driver.getMajorVersion());
-	    assertEquals(0, driver.getMinorVersion());
-
-	} catch (Exception e) {
-	    e.printStackTrace(System.out);
-	    fail("unexpected exception: " + e);
-	} finally {
-	}
+	    assertEquals(2, driver.getMajorVersion());
+	    assertEquals(2, driver.getMinorVersion());
     }
 
 
-    public void testGetJDBC() {
-	try {
+    public void testGetJDBC() throws SQLException {
 	    P6Connection p6con = (P6Connection) connection;
 	    chkGetJDBC(p6con, p6con.getJDBC());
 
@@ -105,10 +98,10 @@ public class P6TestDriver extends P6TestFramework {
 	    P6Statement p6stmt = (P6Statement) connection.createStatement();
 	    chkGetJDBC(p6stmt, p6stmt.getJDBC());
 
-	    P6CallableStatement p6cs = (P6CallableStatement) connection.prepareCall("select sysdate from dual");
+	    P6CallableStatement p6cs = (P6CallableStatement) connection.prepareCall("select current_timestamp from (values(0))");
 	    chkGetJDBC(p6cs, p6cs.getJDBC());
 
-	    P6PreparedStatement p6ps = (P6PreparedStatement) connection.prepareStatement("select 1 + 1 from dual");
+	    P6PreparedStatement p6ps = (P6PreparedStatement) connection.prepareStatement("select 1 + 1 from (values(0))");
 	    chkGetJDBC(p6ps, p6ps.getJDBC());
 
 	    P6ResultSet p6rs = (P6ResultSet) p6ps.executeQuery();
@@ -123,58 +116,14 @@ public class P6TestDriver extends P6TestFramework {
 	    p6rs.close();
 	    p6stmt.close();
 	    p6con.close();
-
-	} catch (Exception e) {
-	    e.printStackTrace(System.out);
-	    fail("unexpected exception: " + e);
-	}
-
     }
 
     protected void chkGetJDBC(P6Base p6object, Object jdbcObject) {
-	String p6class = p6object.getClass().getName();
-	String jdbcClass = jdbcObject.getClass().getName();
-
-	/*
-	System.out.println(p6class);
-	System.out.println(jdbcClass);
-	*/
-
-	assertTrue("Class " + p6class + " is supposed to be a p6 class, but it is not", (p6class.indexOf("p6spy") != -1));
-	assertTrue("Class " + jdbcClass + " is supposed to be a jdbc class, but it is not", (jdbcClass.indexOf("p6spy") == -1));
-    }
-
-    public void t1estDataSource() {
-	Connection con = null;
-	Statement st   = null;
-	try {
-            P6TestUtil.unloadDrivers();
-
-	    // try to do a simple test using the datasourcey stuff
-	    Properties props = P6TestUtil.loadProperties("P6Test.properties");
-	    String user      = props.getProperty("user");
-	    String password  = props.getProperty("password");
-	    String url       = props.getProperty("url");
-
-	    P6DriverManagerDataSource ds =
-		new P6DriverManagerDataSource();
-
-	    ds.setUrl(url);
-
-	    con = ds.getConnection(user, password);
-	    st  = con.createStatement();
-	    st.execute("create table foo (col1 varchar2(255))");
-	    st.execute("insert into table foo values ('1')");
-
-	    ResultSet rs   = st.executeQuery("select count(*) from foo");
-	    //assertTrue(rs.
-
-	} catch (Exception e) {
-	    e.printStackTrace(System.out);
-	    fail("unexpected exception: " + e);
-	} finally {
-
-	}
+    	String p6class = p6object.getClass().getName();
+    	String jdbcClass = jdbcObject.getClass().getName();
+    
+    	assertTrue("Class " + p6class + " is supposed to be a p6 class, but it is not", (p6class.indexOf("p6spy") != -1));
+    	assertTrue("Class " + jdbcClass + " is supposed to be a jdbc class, but it is not", (jdbcClass.indexOf("p6spy") == -1));
     }
 
 }

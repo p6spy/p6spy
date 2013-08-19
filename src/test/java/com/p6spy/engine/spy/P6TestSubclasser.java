@@ -68,9 +68,14 @@
  */
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import com.p6spy.engine.common.*;
-import java.io.*;
+import static com.p6spy.engine.common.Subclasser.DELIMITER;
+
+import java.io.File;
+
+import junit.framework.Protectable;
+import junit.framework.TestCase;
+
+import com.p6spy.engine.common.Subclasser;
 
 public class P6TestSubclasser extends TestCase {
 
@@ -92,20 +97,7 @@ public class P6TestSubclasser extends TestCase {
         // this one's a little trickier... since it could fail
         // depending on your architecture.  So put in this terrible
         // switchlike hack here
-        String expectedPath = null;
-
-        if (sub.DELIMITER.equals("/")) {
-            expectedPath = "com/p6spy/engine/test";
-        } else if (sub.DELIMITER.equals("\\")) {
-            expectedPath = "com\\p6spy\\engine\\test";
-        } else if (sub.DELIMITER.equals(":")) {
-            expectedPath = "com:p6spy:engine:test";
-        }
-
-        if (expectedPath == null) {
-            fail("Unexpected file separator: " + sub.DELIMITER + ". Please expand the test class to test for this file separator.");
-        }
-
+        String expectedPath = "com" + DELIMITER + "p6spy" + DELIMITER + "engine" +  DELIMITER + "spy";
         assertEquals(expectedPath, sub.packToDir(packageName));
 
         // now check the default file
@@ -115,8 +107,7 @@ public class P6TestSubclasser extends TestCase {
         sub.setOutputName(newName);
 
         File actualFile = sub.getOutputFile();
-        File expectedFile = new File("scratch" + sub.DELIMITER + expectedPath, newName + ".java");
-
+        File expectedFile = new File("scratch" + DELIMITER + expectedPath, newName + ".java");
         assertEquals(expectedFile, actualFile);
     }
 
@@ -215,67 +206,4 @@ public class P6TestSubclasser extends TestCase {
         }
     }
 
-    public void testClassCreation() throws Exception {
-        Subclasser sub = null;
-
-        createSubclasser(com.p6spy.engine.spy.P6DataSource.class);
-        //    createSubclasser(oracle.jdbc.pool.OracleDataSource.class);
-
-        createSubclasser("com.p6spy.engine.spy.P6DataSource");
-        //    createSubclasser("oracle.jdbc.pool.OracleDataSource");
-    }
-
-    protected void createSubclasser(String name) throws Exception {
-        compareFiles(new Subclasser(name));
-    }
-
-    protected void createSubclasser(Class pc) throws Exception {
-        compareFiles(new Subclasser(pc));
-    }
-
-    protected void compareFiles(Subclasser sub) throws Exception {
-        sub.createSubClass();
-        String name = sub.getOutputName();
-
-        File expected = new File("etc", name + ".java");
-        File actual = sub.getOutputFile();
-
-        compareFiles(expected, actual);
-    }
-
-    protected void compareFiles(File expected, File actual) throws IOException {
-        if (!expected.exists()) {
-            fail("Expected file " + expected + " does not exist.");
-        }
-        if (!actual.exists()) {
-            fail("Output file " + actual + " does not exist.");
-        }
-
-        BufferedReader ebr = new BufferedReader(new FileReader(expected));
-        BufferedReader abr = new BufferedReader(new FileReader(actual));
-        String eline = null;
-        String aline = null;
-        int count = 0;
-        try {
-            while ((eline = ebr.readLine()) != null) {
-                count++;
-                aline = abr.readLine();
-
-                if (aline == null) {
-                    fail(expected.getName() + " " + count + ": No more lines in the output file " + actual.getName());
-                }
-
-                assertEquals("Lines from " + expected.getName() + " and " + actual.getName() + " are not the same", eline, aline);
-            }
-
-            if ((aline = abr.readLine()) != null) {
-                fail(actual.getName() + " " + (count + 1) + ": No more lines in the expected file " + expected.getName());
-            }
-
-        } finally {
-            ebr.close();
-            abr.close();
-        }
-
-    }
 }
