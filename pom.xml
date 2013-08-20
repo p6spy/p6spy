@@ -9,7 +9,19 @@
     <version>2.0-SNAPSHOT</version>
     <description>P6Spy is an open source framework for applications that intercept and optionally modify database statements.
     </description>
-    <url>http://www.p6spy.com/</url>
+    <url>https://github.com/p6spy/p6spy</url>
+    <mailingLists>
+      <mailingList>
+        <name>Developer List</name>
+        <post>p6spy-developers@googlegroups.com</post>
+        <archive>https://groups.google.com/forum/#!forum/p6spy-developers</archive>
+      </mailingList>
+      <mailingList>
+        <name>User's List</name>
+        <post>p6spy-users@googlegroups.com</post>
+        <archive>https://groups.google.com/forum/#!forum/p6spy-users</archive>
+      </mailingList>
+    </mailingLists>
     <developers>
         <developer>
             <id>aarvesen</id>
