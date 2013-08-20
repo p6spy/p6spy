@@ -9,8 +9,10 @@ P6Spy is a framework that enables database data to be seamlessly intercepted and
 
 ### User's mailing list
 Archive: https://groups.google.com/forum/#!forum/p6spy-users
+
 Post: p6spy-users@googlegroups.com
   
 ### Developer's mailing list
 Archive: https://groups.google.com/forum/#!forum/p6spy-developers
+
 Post: p6spy-developers@googlegroups.com
