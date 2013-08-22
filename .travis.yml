@@ -2,15 +2,15 @@ language: java
 
 jdk:
   - oraclejdk7
-  
+
 env:
   matrix:
     - DB=MySQL
     - DB=PostgresSQL
-    
+
 before_script:
  - "./script/travis/pre_${DB}.sh"
-	
+
 script: "mvn clean test"
 
 #notifications:
