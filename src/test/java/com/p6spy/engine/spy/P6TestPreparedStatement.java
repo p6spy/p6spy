@@ -141,7 +141,10 @@ public class P6TestPreparedStatement extends P6TestFramework {
             StringBuffer bigSelect = new StringBuffer(MaxFields);
             bigSelect.append("select count(*) from prepstmt_test where");
             for (int i = 0; i < MaxFields; i++) {
-                bigSelect.append(" or col2=?");
+                if (i > 0) {
+                  bigSelect.append(" or ");
+                }
+                bigSelect.append(" col2=?");
             }
             prep = getPreparedStatement(bigSelect.toString());
             for (int i = 1; i <= MaxFields; i++) {

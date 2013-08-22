@@ -7,6 +7,10 @@ env:
   matrix:
     - DB=MySQL
     - DB=PostgresSQL
+    - DB=HSQLDB
+    - DB=H2
+    - # Derby has quite some troubles with current tests, skipped for now:
+    - # DB=Derby
 
 before_script:
  - "./script/travis/pre_${DB}.sh"
