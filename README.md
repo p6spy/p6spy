@@ -1,5 +1,6 @@
 p6spy
 =====
+[![Build Status](https://secure.travis-ci.org/typekpb/p6spy.png?branch=master)](http://travis-ci.org/typekpb/p6spy)
 
 p6spy from the original sourceforge project. The build is currently unstable.
 
