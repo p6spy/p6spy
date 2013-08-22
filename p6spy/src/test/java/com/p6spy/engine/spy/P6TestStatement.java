@@ -115,9 +115,14 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
-import com.p6spy.engine.common.*;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyOptions;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class P6TestStatement extends P6TestFramework {
     
@@ -139,7 +144,7 @@ public class P6TestStatement extends P6TestFramework {
         try {
             Statement statement = getStatement("drop table stmt_test");
             drop(statement);
-            statement.execute("create table stmt_test (col1 varchar2(255), col2 number(5))");
+            connection.createStatement().execute("create table stmt_test (col1 varchar2(255), col2 number(5))");
         } catch (Exception e) {
             fail(e.getMessage()+" due to error: "+getStackTrace(e));
         }

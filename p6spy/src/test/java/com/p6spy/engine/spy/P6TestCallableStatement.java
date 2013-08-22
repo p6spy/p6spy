@@ -88,9 +88,13 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
-import com.p6spy.engine.spy.P6CallableStatement;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class P6TestCallableStatement extends P6TestPreparedStatement {
 
@@ -113,9 +117,17 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
        int valuesLen;
        int setterMax = 32;
        StringBuffer testproc = new StringBuffer(bigParam);
+      String storedProcCode = "CREATE ALIAS TESTCALLABLE_PROC AS $$\n" +
+          "@CODE\n" +
+          "String testcallableProc(String... params) throws Exception {\n" +
+          "    return params[0];\n" +
+          "}\n" +
+          "$$;";
+      connection.createStatement().execute(storedProcCode);
+
 
        // set
-       testproc.append("CALL TEST.METHOD (");
+       testproc.append("CALL TESTCALLABLE_PROC (");
        for (int i = 0; i < bigParam; i++) {
          testproc.append("?");
        }

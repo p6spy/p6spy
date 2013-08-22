@@ -109,15 +109,34 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
-import java.io.*;
-import java.util.*;
+import com.p6spy.engine.common.OptionReloader;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyProperties;
+import com.p6spy.engine.common.P6Util;
+import junit.framework.Assert;
+import org.apache.log4j.Logger;
 
-import com.p6spy.engine.common.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 @Deprecated // T6TestFramework has most if not all of this.
 public class P6TestUtil  {
+  private static final Logger LOG = Logger.getLogger(P6TestUtil.class);
 
     protected P6TestUtil() {
     }
@@ -226,7 +245,7 @@ public class P6TestUtil  {
     protected static void assertIsLastQuery(String query) {
         boolean isTrue = P6LogQuery.getLastEntry().indexOf(query) != -1;
         if (!isTrue) {
-            System.err.println(query+" was not the last query, this was: "+P6LogQuery.getLastEntry());
+          LOG.error(query+" was not the last query, this was: "+P6LogQuery.getLastEntry());
         }
         Assert.assertTrue(isTrue);
     }
@@ -234,14 +253,14 @@ public class P6TestUtil  {
     protected static void assertIsNotLastQuery(String query) {
         boolean isFalse = P6LogQuery.getLastEntry().indexOf(query) == -1;
         if (!isFalse) {
-            System.err.println(query+" was the last query and should not have been");
+            LOG.error(query+" was the last query and should not have been");
         }
         Assert.assertTrue(isFalse);
     }
 
     protected static void printAllDrivers() {
         for (Enumeration e = DriverManager.getDrivers() ; e.hasMoreElements() ;) {
-            System.err.println("2 DRIVER FOUND == "+e.nextElement());
+            LOG.info("2 DRIVER FOUND == "+e.nextElement());
         }
     }
 
@@ -256,7 +275,7 @@ public class P6TestUtil  {
             Driver driver;
             if ( url != null && url.length() > 0) {
                 while ((driver = DriverManager.getDriver(url)) != null) {
-                    System.err.println("Deregistering driver: "+driver.getClass().getName());
+                    LOG.info("Deregistering driver: "+driver.getClass().getName());
                     DriverManager.deregisterDriver(driver);
                 }
             }
@@ -264,17 +283,21 @@ public class P6TestUtil  {
         }
     }
 
-    public static Connection loadDrivers(String drivernameProperty) throws SQLException, IOException, ClassNotFoundException {
+    public static Connection loadDrivers(String drivernameProperty)
+        throws SQLException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         Properties props = loadProperties("P6Test.properties");
         String drivername = props.getProperty(drivernameProperty);
         String user = props.getProperty("user");
         String password = props.getProperty("password");
         String url = props.getProperty("url");
 
-        System.err.println("UTIL REGISTERING DRIVER PROPERTY == "+drivernameProperty+" TO REGISTER DRIVER == "+drivername);
-        P6Util.forName(drivername);
+        LOG.info("UTIL REGISTERING DRIVER PROPERTY == "+drivernameProperty+" TO REGISTER DRIVER == "+drivername);
+        Class<Driver> driverClass = P6Util.forName(drivername);
+        DriverManager.setLogWriter(new PrintWriter(System.out, true));
+        // if a type 4 JDBC driver is unregistered, you must register it before using it!
+        DriverManager.registerDriver(driverClass.newInstance());
         Driver driver = DriverManager.getDriver(url);
-        System.err.println("UTIL USING DRIVER == "+driver.getClass().getName()+" FOR URL "+url);
+        LOG.info("UTIL USING DRIVER == "+driver.getClass().getName()+" FOR URL "+url);
         Connection connection = DriverManager.getConnection(url, user, password);
         printAllDrivers();
         return connection;
