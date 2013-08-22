@@ -1,0 +1,20 @@
+<style type="text/css">
+<!--
+.style1 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+<h1 class="style1">JDBC Leak Detecter</h1>
+
+<p class="style1">This patch to p6spy enables you to detect any JDBC resources that have not been properly closed (i.e. Connections, Statements, and ResultSets). </p>
+<p class="style1"><strong>Steps</strong>:
+</p>
+<ol class="style1">
+  <li>Configure P6SPY as your Data Source (see <a href="http://www.p6spy.com">http://www.p6spy.com</a>) </li>
+  <li>Make sure that commons-lang.jar, p6spy.jar, and p6spy_leak.jar are in your class path.</li>
+  <li>Configure spy.properties to use the following module: module.log=com.p6spy.engine.leak.P6LeakFactory </li>
+  <li>Place JDBCLeak.jsp in the root of your web application. </li>
+  <li>Start your application and exercise it thoroughly for a while.           </li>
+  <li> Run JDBCLeak.jsp to view a stack trace for any JDBC leaks. </li>
+  <li>Halt the application and remove the leaks.</li>
+  <li>Repeat steps 5-7 until all leaks are removed. </li>
+</ol>

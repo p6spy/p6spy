@@ -1,0 +1,148 @@
+<html><!-- #BeginTemplate "/Templates/spydocs.dwt" -->
+<head>
+<!-- #BeginEditable "doctitle" --> 
+<title>P6Spy Documentation</title>
+<!-- #EndEditable -->
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF">
+<table width="100%" border="0" bgcolor="black">
+<tr>
+<td>
+<img src="http://www.p6spy.com/documentation/images/header.gif" width="580" height="80"> 
+<br> 
+<table width="580" border="0">
+  <tr> 
+    <td width="11%"><a href="http://www.p6spy.com"><img src="http://www.p6spy.com/documentation/images/p6spy_com.gif" width="110" height="20" border="0"></a></td>
+    <td width="11%"><a href="http://www.p6spy.com/documentation/index.htm"><img src="http://www.p6spy.com/documentation/images/index.gif" width="110" height="20" border="0"></a></td>
+    <td width="11%"><a href="http://www.p6spy.com/documentation/install.htm"><img src="http://www.p6spy.com/documentation/images/install.gif" width="110" height="20" border="0"></a></td>
+    <td width="11%"><a href="http://www.p6spy.com/documentation/p6modules.htm#p6log"><img src="http://www.p6spy.com/documentation/images/p6log.gif" width="110" height="20" border="0"></a></td>
+    <td width="11%"><a href="http://www.p6spy.com/documentation/p6modules.htm#p6outage"><img src="http://www.p6spy.com/documentation/images/p6outage.gif" width="110" height="20" border="0"></a></td>
+    <td width="38%">&nbsp;</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<br>
+<!-- #BeginEditable "body" --> 
+<div align="center"> 
+  <p><a name="modules"></a><font face="Verdana, Arial, Helvetica, sans-serif" size="4"><b>P6Spy 
+    Modules</b></font></p>
+</div>
+<p><font face="Verdana, Arial, Helvetica, sans-serif" size="2">P6Spy consists 
+  of two modules that provide various types of functionality which can be modified 
+  to suit your needs.</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif" color="#000000"> 
+  These modules, P6Log and P6Outage, are explained in this section of the documentation. 
+  Though they have distinct functions, they share some common property file settings 
+  that allow you to specify which tables to log, the log file name, the log file 
+  location, whether to show the stacktrace (where the JDBC statement is being 
+  executed), and more.</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif" color="#CC0000"> 
+  </font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Refer to 
+  the <a href="other.htm#common">Common Property File Settings</a> documentation 
+  for details. </font></p>
+<p><font face="Verdana, Arial, Helvetica, sans-serif" size="4"><a name="p6log"></a><font face="Verdana, Arial, Helvetica, sans-serif" size="4"><b>P6Log</b></font></font></p>
+<p><font face="Verdana, Arial, Helvetica, sans-serif" size="2">P6Log is an open-source 
+  application included in the P6Spy distribution that intercepts and logs the 
+  database statements of any application that uses JDBC. This application monitors 
+  the SQL statements produced by EJB servers, enabling developers to write code 
+  that achieves maximum efficiency on the server. The P6Log module is enabled 
+  by default. Disable or enable the P6Log module by editing the <b>spy.properties</b> 
+  configuration file. If the module is commented out, it is not loaded, and the 
+  functionality is not available. If the module is not commented out, the functionality 
+  is available. The applicable portion of the <b>spy.properties</b> file follows:</font></p>
+<blockquote> 
+  <pre><font face="Courier New, Courier, mono" size="2">#################################################################<br>
+    # MODULES #<br>
+    # #<br>
+    # Modules provide the P6Spy functionality. If a module, such #<br>
+    # as module_log is commented out, that functionality will not #<br>
+    # be available. If it is not commented out (if it is active), #<br>
+    # the functionality will be active. #<br>
+    # #<br>
+    # Values set in Modules cannot be reloaded using the #<br>
+    # reloadproperties variable. Once they are loaded, they remain #<br>
+    # in memory until the application is restarted. #<br>
+    # #<br>
+    #################################################################</font></pre>
+  <pre><font face="Courier New, Courier, mono" size="2">module.log=com.p6spy.engine.logging.P6LogSpyDriver<br>
+#module.outage=com.p6spy.engine.outage.P6OutageSpyDriver</font></pre>
+</blockquote>
+<p><font size="2" face="Verdana, Arial, Helvetica, sans-serif">The following are 
+  P6Log-specific properties:</font></p>
+<ul>
+  <li><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>executionthreshold</b></font> 
+    <p><font face="Verdana, Arial, Helvetica, sans-serif" size="2"></font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif">This 
+      feature only logs queries that take longer than a specified threshold to 
+      execute.</font></p>
+  </li>
+</ul>
+<p><a name="p6outage"></a><font face="Verdana, Arial, Helvetica, sans-serif" size="4"><b>P6Outage</b></font></p>
+<p><font face="Verdana, Arial, Helvetica, sans-serif" size="2">P6Outage is an 
+  open-source application included in the P6Spy distribution that detects long-running 
+  statements that may be indicative of a database outage problem. The product 
+  logs any statement that surpasses the configurable time boundary during its 
+  execution. P6Outage minimizes any logging performance overhead by logging only 
+  long-running statements. The P6Outage module is disabled by default. Disable 
+  or enable the P6Outage module by editing the <b>spy.properties</b> configuration 
+  file. If the module is commented out, it is not loaded, and the functionality 
+  is not available. If the module is not commented out, the functionality is available.</font></p>
+<p><font face="Verdana, Arial, Helvetica, sans-serif" size="2">The applicable 
+  portion of the <b>spy.properties</b> file follows:</font></p>
+<blockquote> 
+  <pre><font face="Courier New, Courier, mono" size="2">#################################################################<br>
+    # MODULES #<br>
+    # #<br>
+    # Modules provide the P6Spy functionality. If a module, such #<br>
+    # as module_log is commented out, that functionality will not #<br>
+    # be available. If it is not commented out (if it is active), #<br>
+    # the functionality will be active. #<br>
+    # #<br>
+    # Values set in Modules cannot be reloaded using the #<br>
+    # reloadproperties variable. Once they are loaded, they remain #<br>
+    # in memory until the application is restarted. #<br>
+    # #<br>
+    #################################################################</font></pre>
+  <pre><font face="Courier New, Courier, mono" size="2">#module.log=com.p6spy.engine.logging.P6LogSpyDriver<br>
+module.outage=com.p6spy.engine.outage.P6OutageSpyDriver</font></pre>
+</blockquote>
+<p>&nbsp;</p>
+<p><font size="2" face="Verdana, Arial, Helvetica, sans-serif">The following are 
+  P6Outage-specific properties:</font></p>
+<ul>
+  <li><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>outagedetection</b></font> 
+    <p><font face="Verdana, Arial, Helvetica, sans-serif" size="2"></font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif">This 
+      feature detects long-running statements that may be indicative of a database 
+      outage problem. When enabled, it logs any statement that surpasses the configurable 
+      time boundary during its execution. No other statements are logged except 
+      the long-running statements.</font></p>
+  </li>
+  <li><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>outagedetectioninterval</strong></font> 
+    <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif">The interval 
+      property is the boundary time set in seconds. For example, if set to 2, 
+      any statement requiring at least 2 seconds is logged. The same statement 
+      will continue to be logged for as long as it executes. So, if the interval 
+      is set to 2 and a query takes 11 seconds, it is logged 5 times (at the 2, 
+      4, 6, 8, 10-second intervals).</font> </p>
+  </li>
+</ul>
+<!-- #EndEditable --> <br>
+<table width="100%" border="0" bgcolor="black">
+<tr>
+<td>
+<table width="580" border="0">
+  <tr> 
+    <td width="11%"><a href="http://www.p6spy.com"><img src="http://www.p6spy.com/documentation/images/p6spy_com.gif" width="110" height="20" border="0"></a></td>
+    <td width="11%"><a href="http://www.p6spy.com/documentation/index.htm"><img src="http://www.p6spy.com/documentation/images/index.gif" width="110" height="20" border="0"></a></td>
+    <td width="11%"><a href="http://www.p6spy.com/documentation/install.htm"><img src="http://www.p6spy.com/documentation/images/install.gif" width="110" height="20" border="0"></a></td>
+    <td width="11%"><a href="http://www.p6spy.com/documentation/p6log.htm"><img src="http://www.p6spy.com/documentation/images/p6log.gif" width="110" height="20" border="0"></a></td>
+    <td width="11%"><a href="http://www.p6spy.com/documentation/p6outage.htm"><img src="http://www.p6spy.com/documentation/images/p6outage.gif" width="110" height="20" border="0"></a></td>
+    <td width="38%">&nbsp;</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+<!-- #EndTemplate --></html>

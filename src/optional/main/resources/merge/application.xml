@@ -1,7 +1,0 @@
-<application>
-    <display-name>P6Spy</display-name>
-    <description>P6Spy Ear File</description>
-    <module>
-	<ejb>p6spy-ejb.jar</ejb>
-    </module>
-</application>

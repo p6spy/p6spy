@@ -1,0 +1,21 @@
+New features in beta1
+
+Appender Architecture:
+
+The "magic filename" code (e.g. if your output file was named "stdout" or "log4j" then a unique set of code was executed) has been replaced with an architecture inspired by log4j.  Log messages are now treated as events which are passed down into a Command type object that does the actual logging.  This means that the three appenders that ship with p6 (file logging, stdout logging, and log4j) all implement the same P6Logging interface, but each one does something different.  FileLogger sends the log information to a file, StdoutLogger sends it to stdout, and the Log4jLogger sends it off to the Category "p6spy".
+    My idea was twofold:  a) to remove the hacks associated with the "magic filename" code and b) to provide an easy way to write mini-modules by extending logging.  For instance, say you simply want to count the number of times the category "statement" is executed.  Instead of writing a new module, you can simply write a new appender that might look something like this:
+
+import com.p6spy.engine.logging.appender.*;
+
+public class CounterAppender extends FileLogger {
+    protected int count = 0;
+    public void logSQL(int connectionId, String now, long elapsed, String category, String prepared, String sql) {
+	if (category != null && category.equals("statement")) {
+	    logText ("category count now is " + (++count));
+	}
+    }
+}
+
+then add the "appender" variable in the configuration file, and you're ready to go.
+    Obviously this is a trivial class, but you should see the basic idea of writing an appender.
+
