@@ -89,36 +89,32 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-public class P6TestPreparedStatement extends P6TestStatement {
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-    public P6TestPreparedStatement(java.lang.String testName) {
-        super(testName);
-    }
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-    public static void main(java.lang.String[] args) {
-        junit.textui.TestRunner.run(suite());
-    }
+public class P6TestPreparedStatement extends P6TestFramework {
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite(P6TestPreparedStatement.class);
-        return suite;
-    }
-
-    @Override
-    protected void setUp() {
-        super.setUp();
+    @Before
+    public void setUpPreparedStatement() {
         try {
             Statement statement = connection.createStatement();
             dropPrepared(statement);
-            statement.execute("create table prepstmt_test (col1 varchar2(255), col2 number(5))");
+            statement.execute("create table prepstmt_test (col1 varchar(255), col2 integer)");
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
+    @Test
     public void testPreparedQueryUpdate() {
         try {
             // test a basic insert
@@ -180,16 +176,14 @@ public class P6TestPreparedStatement extends P6TestStatement {
         }
     }
 
-    @Override
-    protected void tearDown() {
+    @After
+    public void tearDownPreparedStatement() {
         try {
-            super.tearDown();
             Statement statement = connection.createStatement();
             dropPrepared(statement);
         }  catch (Exception e) {
             fail(e.getMessage());
         }
-        super.tearDown();
     }
 
     protected void dropPrepared(Statement statement) {
@@ -208,8 +202,4 @@ public class P6TestPreparedStatement extends P6TestStatement {
         return (connection.prepareStatement(query));
     }
 
-    @Override
-    protected Statement getStatement(String query) throws SQLException {
-        return (connection.prepareStatement(query));
-    }
 }

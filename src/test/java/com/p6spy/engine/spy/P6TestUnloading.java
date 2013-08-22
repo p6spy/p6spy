@@ -60,26 +60,37 @@
 
 package com.p6spy.engine.spy;
 
-import java.util.*;
-import java.sql.*;
+import static org.junit.Assert.assertTrue;
 
-import com.p6spy.engine.common.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
+
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.p6spy.engine.common.P6Util;
 
 public class P6TestUnloading extends P6TestFramework {
-    public P6TestUnloading(String name) {
-        super(name);
-    }
 
-    @Override
-    public void setUp() {
+    @Before
+    public void setUpUnloading() {
         /*
          * try { //P6TestUtil.unloadDrivers(); } catch (SQLException e)
          * {com.p6spy.engine.spy.P6SpyDriver fail("could not init"); }
          */
     }
 
+    @Ignore
+    @Test
     public void testDriverUnloading() throws Exception {
-        Properties props = P6TestUtil.loadProperties("P6Test.properties");
+        Properties props = P6TestUtil.loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
         String url = props.getProperty("url");
         String user = props.getProperty("user");
         String password = props.getProperty("password");

@@ -90,7 +90,7 @@
         <maven-eclipse-plugin-build>2.9</maven-eclipse-plugin-build>
         <maven-project-info-reports-plugin-build>2.1</maven-project-info-reports-plugin-build>
         <maven-site-plugin-build>3.2</maven-site-plugin-build>
-        <maven-surefire-plugin-build>2.6</maven-surefire-plugin-build>
+        <maven-surefire-plugin-build>2.16</maven-surefire-plugin-build>
         <commons-digester-build>1.8.1</commons-digester-build>
         <pmd-build>4.2.5</pmd-build>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -113,12 +113,20 @@
                             child first class loading like web apps do, seems like a good idea since this is a web app!
                         -->
                         <childDelegation>true</childDelegation>
-                        <systemProperties>
-                            <property>
-                                <name>user.language</name>
-                                <value>en_US</value>
-                            </property>
-                        </systemProperties>
+                        <systemPropertyVariables>
+                            <user.language>en_US</user.language>
+		                    <DB>${env.DB}</DB>
+                        </systemPropertyVariables>
+                        <dependencies>
+					      <dependency>
+					        <groupId>org.apache.maven.surefire</groupId>
+					        <artifactId>surefire-junit47</artifactId>
+					        <version>2.16</version>
+					      </dependency>
+					    </dependencies>
+					    <includes>
+							<include>**/P6Test*.java</include> 
+				          </includes>
                         <!--
                             <parallel>false</parallel> <threadCount>4</threadCount>
                         <excludedGroups>browser</excludedGroups>
@@ -281,13 +289,30 @@
             </plugins>
         </pluginManagement>
     </build>
+     <dependencyManagement>
+    	<dependencies>
+	    	<dependency>
+	            <groupId>mysql</groupId>
+	            <artifactId>mysql-connector-java</artifactId>
+	            <version>${mysql-connector-java-build}</version>
+	            <scope>test</scope>
+            </dependency>
+            <dependency>
+				<groupId>postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>9.1-901.jdbc4</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+	            <groupId>junit</groupId>
+	            <artifactId>junit</artifactId>
+	            <scope>test</scope>
+	            <version>4.11</version>
+	        </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
     <dependencies>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java-build}</version>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -322,14 +347,72 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <version>4.11-beta-1</version>
-            <optional>true</optional>
         </dependency>
         <!--
             <dependency> <groupId>oracle</groupId> <artifactId>classes12</artifactId> <version>9.2.0.5</version>
             <optional>true</optional> </dependency> <dependency> <groupId>jboss</groupId> <artifactId>jboss</artifactId>
             <version>2.4.6</version> <optional>true</optional> </dependency>
         -->
+        
+        
+        <!-- to have tests running in eclipse, uncomment specific driver -->
+<!--          <dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+				</dependency> 
+				<dependency>
+					<groupId>postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+				</dependency>
+				-->
     </dependencies>
+
+	<profiles>
+		<profile>
+			<id>MySQL</id>
+			<activation>
+				<property>
+					<name>DB</name>
+					<value>MySQL</value>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>PostgresSQL</id>
+			<activation>
+				<property>
+					<name>DB</name>
+					<value>PostgresSQL</value>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+				</dependency>
+			</dependencies>
+			<!-- sample, how to exclude specific tests for specific DBS -->
+			<!-- 
+			<build>
+			<plugins>
+				<plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+				          <excludes>
+							<exclude>**/P6TestCommon*.java</exclude> 
+				          </excludes>
+                    </configuration>
+                </plugin>
+                </plugins>
+			</build>
+			 -->
+		</profile>
+	</profiles>
 </project>
