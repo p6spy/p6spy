@@ -11,7 +11,7 @@ env:
 before_script:
  - "./script/travis/pre_${DB}.sh"
 
-script: "mvn clean test"
+script: "mvn clean test -DDB=${DB}"
 
 #notifications:
 #  email:
