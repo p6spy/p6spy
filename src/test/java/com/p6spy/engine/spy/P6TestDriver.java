@@ -108,8 +108,19 @@ public class P6TestDriver extends P6TestFramework {
 	    P6Statement p6stmt = (P6Statement) connection.createStatement();
 	    chkGetJDBC(p6stmt, p6stmt.getJDBC());
 
-	    P6CallableStatement p6cs = (P6CallableStatement) connection.prepareCall("select current_timestamp from (values(0))");
-	    chkGetJDBC(p6cs, p6cs.getJDBC());
+	    
+	    P6CallableStatement p6cs = null;
+	    
+	    try {
+		    p6cs = (P6CallableStatement) connection.prepareCall("select current_timestamp from (values(0))");
+		    chkGetJDBC(p6cs, p6cs.getJDBC());
+	    } catch (SQLException e) {
+	    	// it's OK, not all the DBs support stored procedures, for example SQLite doesn't
+	    } finally {
+	    	if (null != p6cs) {
+	    		p6cs.close();
+	    	}
+	    }
 	    
 	    P6PreparedStatement p6ps = null;
 	    P6ResultSet p6rs = null;
@@ -136,7 +147,6 @@ public class P6TestDriver extends P6TestFramework {
 	    
 	
 	    // try to release everything
-	    p6cs.close();
 	    p6ps.close();
 	    p6rs.close();
 	    p6stmt.close();

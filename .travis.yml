@@ -10,6 +10,7 @@ env:
     - DB=PostgresSQL
     - DB=HSQLDB
     - DB=H2
+    - DB=SQLite
 # Derby has quite some troubles with current tests =? skipped for now
 #    - DB=Derby
 
