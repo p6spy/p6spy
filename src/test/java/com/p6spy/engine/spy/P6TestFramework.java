@@ -152,8 +152,9 @@ import com.p6spy.engine.common.P6SpyProperties;
 import com.p6spy.engine.common.P6Util;
 
 public abstract class P6TestFramework {
-    
-    private static final String ENV_DB = System.getProperty("DB");
+
+    // default to using H2 if system property is not set
+    private static final String ENV_DB = (System.getProperty("DB") == null ? "H2": System.getProperty("DB"));
     public static final String P6_TEST_PROPERTIES = "P6Test" + (ENV_DB != null ? "_" + ENV_DB : "") + ".properties";
     public static final String PROPERTY_FILE = "reloadtest.properties";
 
