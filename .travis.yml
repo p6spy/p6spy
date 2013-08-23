@@ -17,6 +17,6 @@ before_script:
 
 script: "mvn clean test -DDB=${DB}"
 
-#notifications:
-#  email:
-#    - p6spy-developers@googlegroups.com
+notifications:
+  email:
+    - p6spy-developers@googlegroups.com
