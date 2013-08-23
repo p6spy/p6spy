@@ -123,28 +123,45 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
-import java.io.*;
-import java.util.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import com.p6spy.engine.common.*;
+import java.io.BufferedWriter;
+import java.io.CharArrayWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
-public abstract class P6TestFramework extends TestCase {
-    /**
-     * 
-     */
-    private static final String P6_TEST_PROPERTIES = "P6Test.properties";
+import org.junit.Before;
+
+import com.p6spy.engine.common.OptionReloader;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyProperties;
+import com.p6spy.engine.common.P6Util;
+
+public abstract class P6TestFramework {
+    
+    private static final String ENV_DB = System.getProperty("DB");
+    public static final String P6_TEST_PROPERTIES = "P6Test" + (ENV_DB != null ? "_" + ENV_DB : "") + ".properties";
     public static final String PROPERTY_FILE = "reloadtest.properties";
-
-    public P6TestFramework(java.lang.String testName) {
-        super(testName);
-    }
 
     protected Connection connection = null;
 
-    @Override
-    protected void setUp() {
+    @Before
+    public void setUpFramework() {
+    	new File(PROPERTY_FILE).delete();
         try {
             // we are going to use a testspy.forms file for these tests
             List forms = getDefaultSpyForms();
@@ -276,6 +293,7 @@ public abstract class P6TestFramework extends TestCase {
         tp.put("formsfile", "testspy.forms");
         tp.put("formslog", "testforms.log");
         tp.put("formstrace", "true");
+        tp.put("deregisterdrivers", "true");
         return tp;
     }
 

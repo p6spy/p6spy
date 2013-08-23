@@ -61,7 +61,7 @@
 
 package com.p6spy.engine.spy;
 
-import java.sql.*;
+import java.sql.SQLException;
 
 public class ReinitSpyDriver extends P6SpyDriverCore {
 

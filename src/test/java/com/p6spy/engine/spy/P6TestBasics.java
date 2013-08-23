@@ -87,32 +87,24 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
-import java.util.*;
+import static org.junit.Assert.assertEquals;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Map;
 
-public class P6TestBasics extends TestCase {
+import org.junit.Before;
 
-    public P6TestBasics(java.lang.String testName) {
-        super(testName);
-    }
-
-    public static void main(java.lang.String[] args) {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        TestSuite suite = new TestSuite(P6TestBasics.class);
-        return suite;
-    }
+public class P6TestBasics {
 
     protected Connection connection = null;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        P6TestUtil.unloadDrivers();
+    @Before
+    public void setUpBasics() throws Exception {
+      P6TestUtil.unloadDrivers();
     }
 
     public void testNative() throws Exception {
@@ -123,12 +115,12 @@ public class P6TestBasics extends TestCase {
         sqltests();
         P6TestUtil.unloadDrivers();
     }
-
+        
     public void testSpy() throws Exception {
         // load the p6log driver
         Map properties = P6TestUtil.getDefaultPropertyFile();
         P6TestUtil.reloadProperty(properties);
-
+        
         connection = P6TestUtil.loadDrivers("p6driver");
         sqltests();
     }
@@ -136,29 +128,29 @@ public class P6TestBasics extends TestCase {
     protected void preparesql() throws SQLException {
         Statement statement = connection.createStatement();
         drop(statement);
-        statement.execute("create table stmt_test (col1 varchar(255), col2 integer(5))");
+        statement.execute("create table basic_test (col1 varchar(255), col2 integer(5))");
     }
 
     protected void sqltests() throws SQLException {
         preparesql();
 
         // insert test
-        String insert = "insert into stmt_test values (\'bob\', 5)";
+        String insert = "insert into basic_test values (\'bob\', 5)";
         Statement statement = connection.createStatement();
         statement.executeUpdate(insert);
 
         // update test
-        String update = "update stmt_test set col1 = \'bill\' where col2 = 5";
+        String update = "update basic_test set col1 = \'bill\' where col2 = 5";
         statement.executeUpdate(update);
 
         // query test
-        String query = "select col1 from stmt_test where col2 = 5";
+        String query = "select col1 from basic_test where col2 = 5";
         ResultSet rs = statement.executeQuery(query);
         rs.next();
         assertEquals(rs.getString(1), "bill");
 
         // prepared test
-        PreparedStatement ps = connection.prepareStatement("insert into stmt_test values (?, ?)");
+        PreparedStatement ps = connection.prepareStatement("insert into basic_test values (?, ?)");
         ps.setString(1,"joe");
         ps.setInt(2,6);
         ps.executeUpdate();
@@ -166,7 +158,7 @@ public class P6TestBasics extends TestCase {
         ps.setInt(2,7);
         ps.execute();
 
-        ps = connection.prepareStatement("update stmt_test set col1 = ? where col2 = ?");
+        ps = connection.prepareStatement("update basic_test set col1 = ? where col2 = ?");
         ps.setString(1,"charles");
         ps.setInt(2,6);
         ps.executeUpdate();
@@ -174,7 +166,7 @@ public class P6TestBasics extends TestCase {
         ps.setInt(2,7);
         ps.execute();
 
-        ps = connection.prepareStatement("select col1 from stmt_test where col1 = ? and col2 = ?");
+        ps = connection.prepareStatement("select col1 from basic_test where col1 = ? and col2 = ?");
         ps.setString(1,"charles");
         ps.setInt(2,6);
         rs = ps.executeQuery();
@@ -184,7 +176,7 @@ public class P6TestBasics extends TestCase {
 
     protected void drop(Statement statement) {
         if (statement == null) { return; }
-        dropStatement("drop table stmt_test", statement);
+        dropStatement("drop table basic_test", statement);
     }
 
     protected void dropStatement(String sql, Statement statement) {
@@ -194,5 +186,6 @@ public class P6TestBasics extends TestCase {
             // we don't really care about cleanup failing
         }
     }
+    
+                }
 
-}

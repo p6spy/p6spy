@@ -88,26 +88,18 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
-import com.p6spy.engine.spy.P6CallableStatement;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.sql.CallableStatement;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class P6TestCallableStatement extends P6TestPreparedStatement {
 
-    public P6TestCallableStatement(java.lang.String testName) {
-        super(testName);
-    }
-
-    public static void main(java.lang.String[] args) {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        TestSuite suite = new TestSuite(P6TestCallableStatement.class);
-        return suite;
-    }
-
-
+	@Ignore
+    @Test
     public void testCallable () throws Exception {
        int bigParam = 1024;
        int valuesLen;
@@ -127,9 +119,9 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
         String tmpstring = ("String" +x);
         call.setString(x, tmpstring);
         }
-
+       
        setterMax++;
-
+       
        try {
        call.registerOutParameter(setterMax,java.sql.Types.INTEGER);
        // values should be grown after this call since
@@ -158,16 +150,6 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
        valuesLen = ((P6CallableStatement)call).getValuesLength();
        assertEquals(bigParam+P6CallableStatement.P6_GROW_MAX, valuesLen);
        call.close();
-    }
-
-    @Override
-    protected PreparedStatement getPreparedStatement(String query) throws SQLException {
-        return (connection.prepareCall(query));
-    }
-
-    @Override
-    protected Statement getStatement(String query) throws SQLException {
-        return (connection.prepareCall(query));
     }
 
 }
