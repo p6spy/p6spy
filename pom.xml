@@ -58,6 +58,11 @@
             <name>qmccombs</name>
             <email>quinton.mccombs@gmail.com</email>
         </developer>
+        <developer>
+            <id>typekpb</id>
+            <name>Peter Butkovic</name>
+            <email>butkovic@gmail.com</email>
+        </developer>
     </developers>
     <licenses>
         <license>
