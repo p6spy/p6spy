@@ -61,18 +61,22 @@
 
 package com.p6spy.engine.spy;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class P6TestDriver extends P6TestFramework {
-    public P6TestDriver(String name) {
-        super(name);
-    }
+import org.junit.Test;
 
+public class P6TestDriver extends P6TestFramework {
+
+    @Test
     public void testMajorVersion() throws Exception {
-	    Properties props = loadProperties("P6Test.properties");
+	    Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
 	    String url = props.getProperty("url");
 
 	    Driver driver = DriverManager.getDriver(url);
@@ -81,13 +85,19 @@ public class P6TestDriver extends P6TestFramework {
 	    if (! (driver instanceof P6SpyDriverCore)) {
 	        fail("Expected to get back a p6spy driver, got back a " + driver);
 	    }
+	    
 	    // but make sure it's bound to something
 	    // these numbers will likely change over time :)
-	    assertEquals(2, driver.getMajorVersion());
-	    assertEquals(2, driver.getMinorVersion());
+	    
+	    Class<? extends Driver> clazz = driver.getClass();
+	    
+	    if (clazz.getName().equals("com.mysql.jdbc.Driver")) {
+	    	assertEquals(5, driver.getMajorVersion());
+		    assertEquals(1, driver.getMinorVersion());
+	    }
     }
 
-
+    @Test
     public void testGetJDBC() throws SQLException {
 	    P6Connection p6con = (P6Connection) connection;
 	    chkGetJDBC(p6con, p6con.getJDBC());
@@ -100,16 +110,31 @@ public class P6TestDriver extends P6TestFramework {
 
 	    P6CallableStatement p6cs = (P6CallableStatement) connection.prepareCall("select current_timestamp from (values(0))");
 	    chkGetJDBC(p6cs, p6cs.getJDBC());
+	    
+	    P6PreparedStatement p6ps = null;
+	    P6ResultSet p6rs = null;
+	    // some drivers just don't like the syntax, so let's go for the fallback one in case
+	    try {
+	      p6ps = (P6PreparedStatement) connection.prepareStatement("select 1 + 1 from (values(0))");
+	      chkGetJDBC(p6ps, p6ps.getJDBC());
 
-	    P6PreparedStatement p6ps = (P6PreparedStatement) connection.prepareStatement("select 1 + 1 from (values(0))");
-	    chkGetJDBC(p6ps, p6ps.getJDBC());
+	      p6rs = (P6ResultSet) p6ps.executeQuery();
+	      chkGetJDBC(p6rs, p6rs.getJDBC());
 
-	    P6ResultSet p6rs = (P6ResultSet) p6ps.executeQuery();
-	    chkGetJDBC(p6rs, p6rs.getJDBC());
+	      P6ResultSetMetaData p6rsmd = (P6ResultSetMetaData) p6rs.getMetaData();
+	      chkGetJDBC(p6rsmd, p6rsmd.getJDBC());
+	    } catch (SQLException e) {
+	      p6ps = (P6PreparedStatement) connection.prepareStatement("select 1 + 1");
+	      chkGetJDBC(p6ps, p6ps.getJDBC());
+	      
+	      p6rs = (P6ResultSet) p6ps.executeQuery();
+        chkGetJDBC(p6rs, p6rs.getJDBC());
 
-	    P6ResultSetMetaData p6rsmd = (P6ResultSetMetaData) p6rs.getMetaData();
-	    chkGetJDBC(p6rsmd, p6rsmd.getJDBC());
-
+        P6ResultSetMetaData p6rsmd = (P6ResultSetMetaData) p6rs.getMetaData();
+        chkGetJDBC(p6rsmd, p6rsmd.getJDBC());
+	    }
+	    
+	
 	    // try to release everything
 	    p6cs.close();
 	    p6ps.close();

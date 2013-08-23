@@ -62,14 +62,19 @@
 package com.p6spy.engine.spy;
 
 
-import com.p6spy.engine.common.*;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.p6spy.engine.common.OptionReloader;
+import com.p6spy.engine.common.P6SpyOptions;
+import com.p6spy.engine.common.P6SpyProperties;
 
 public class P6TestOptions extends P6TestFramework {
 
-    public P6TestOptions(String name) {
-	super(name);
-    }
-    
+	@Ignore
+    @Test
     public void testSavingOptions() {
 	// should go back and refactor all that
 	// kludgy nonsense we do with all the "reloadProperties"

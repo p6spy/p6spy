@@ -115,43 +115,41 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
-import com.p6spy.engine.common.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyOptions;
 
 public class P6TestStatement extends P6TestFramework {
-    
-    public P6TestStatement(java.lang.String testName) {
-        super(testName);
-    }
-    
-    public static void main(java.lang.String[] args) {
-        junit.textui.TestRunner.run(suite());
-    }
-    
-    public static Test suite() {
-        TestSuite suite = new TestSuite(P6TestStatement.class);
-        return suite;
-    }
-    
-    protected void setUp() {
-        super.setUp();
+
+    @Before
+    public void setUpStatement() {
         try {
-            Statement statement = getStatement("drop table stmt_test");
+            Statement statement = connection.createStatement();
             drop(statement);
-            statement.execute("create table stmt_test (col1 varchar2(255), col2 number(5))");
+            statement.execute("create table stmt_test (col1 varchar(255), col2 integer)");
+            statement.close();
         } catch (Exception e) {
             fail(e.getMessage()+" due to error: "+getStackTrace(e));
         }
     }
-    
+    @Test
     public void testQueryUpdate() {
         try {
 	    ResultSet rs = null;
 
             // test a basic insert
             String update = "insert into stmt_test values (\'bob\', 5)";
-            Statement statement = getStatement(update);
+            Statement statement = connection.createStatement();
             statement.executeUpdate(update);
             assertTrue(P6LogQuery.getLastEntry().indexOf(update) != -1);
 
@@ -193,11 +191,12 @@ public class P6TestStatement extends P6TestFramework {
         }
     }
     
+    @Test
     public void testExecutionThreshold() {
         try {
             // Add some data into the table
             String update = "insert into stmt_test values (\'bob\', 5)";
-            Statement statement = getStatement(update);
+            Statement statement = connection.createStatement();
             statement.executeUpdate(update);
             assertTrue(P6LogQuery.getLastEntry().indexOf(update) != -1);
             
@@ -241,12 +240,13 @@ public class P6TestStatement extends P6TestFramework {
             fail(e.getMessage()+" due to error: "+getStackTrace(e));
         }
     }
-    
-    protected void tearDown() {
+
+    @After
+    public void tearDownStatement() {
         try {
-            super.tearDown();
-            Statement statement = getStatement("drop table stmt_test");
+            Statement statement = connection.createStatement();
             drop(statement);
+            statement.close();
         }  catch (Exception e) {
             fail(e.getMessage());
         }
@@ -263,9 +263,5 @@ public class P6TestStatement extends P6TestFramework {
         } catch (Exception e) {
             // we don't really care about cleanup failing
         }
-    }
-    
-    protected Statement getStatement(String query) throws SQLException {
-        return (connection.createStatement());
     }
 }

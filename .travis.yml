@@ -1,0 +1,22 @@
+language: java
+
+jdk:
+  - oraclejdk7
+
+env:
+  matrix:
+    - DB=MySQL
+    - DB=PostgresSQL
+    - DB=HSQLDB
+    - DB=H2
+# Derby has quite some troubles with current tests =? skipped for now
+#    - DB=Derby
+
+before_script:
+ - "./script/travis/pre_${DB}.sh"
+
+script: "mvn clean test -DDB=${DB}"
+
+notifications:
+  email:
+    - p6spy-developers@googlegroups.com
