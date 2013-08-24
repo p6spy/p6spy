@@ -11,7 +11,9 @@
   <description>P6Spy is an open source framework for applications that intercept and optionally modify database
     statements.
   </description>
+
   <url>https://github.com/p6spy/p6spy</url>
+
   <mailingLists>
     <mailingList>
       <name>Developer List</name>
@@ -24,6 +26,7 @@
       <archive>https://groups.google.com/forum/#!forum/p6spy-users</archive>
     </mailingList>
   </mailingLists>
+
   <developers>
     <developer>
       <id>aarvesen</id>
@@ -66,6 +69,7 @@
       <email>butkovic@gmail.com</email>
     </developer>
   </developers>
+
   <licenses>
     <license>
       <name>The P6Spy Software License, Version 1.1</name>
@@ -73,6 +77,7 @@
       </url>
     </license>
   </licenses>
+
   <scm>
     <connection>scm:git:https://github.com/p6spy/p6spy.git</connection>
   </scm>
