@@ -10,7 +10,8 @@ env:
     - DB=PostgresSQL
     - DB=HSQLDB
     - DB=H2
-# Derby has quite some troubles with current tests =? skipped for now
+    - DB=SQLite
+# Derby has quite some troubles with current tests => skipped for now
 #    - DB=Derby
 
 before_script:
