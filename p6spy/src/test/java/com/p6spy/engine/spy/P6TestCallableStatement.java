@@ -88,46 +88,26 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class P6TestCallableStatement extends P6TestPreparedStatement {
 
-    public P6TestCallableStatement(java.lang.String testName) {
-        super(testName);
-    }
-
-    public static void main(java.lang.String[] args) {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        TestSuite suite = new TestSuite(P6TestCallableStatement.class);
-        return suite;
-    }
-
-
+	@Ignore
+    @Test
     public void testCallable () throws Exception {
        int bigParam = 1024;
        int valuesLen;
        int setterMax = 32;
        StringBuffer testproc = new StringBuffer(bigParam);
-      String storedProcCode = "CREATE ALIAS TESTCALLABLE_PROC AS $$\n" +
-          "@CODE\n" +
-          "String testcallableProc(String... params) throws Exception {\n" +
-          "    return params[0];\n" +
-          "}\n" +
-          "$$;";
-      connection.createStatement().execute(storedProcCode);
-
 
        // set
-       testproc.append("CALL TESTCALLABLE_PROC (");
+       testproc.append("CALL TEST.METHOD (");
        for (int i = 0; i < bigParam; i++) {
          testproc.append("?");
        }
@@ -139,9 +119,9 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
         String tmpstring = ("String" +x);
         call.setString(x, tmpstring);
         }
-
+       
        setterMax++;
-
+       
        try {
        call.registerOutParameter(setterMax,java.sql.Types.INTEGER);
        // values should be grown after this call since
@@ -170,16 +150,6 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
        valuesLen = ((P6CallableStatement)call).getValuesLength();
        assertEquals(bigParam+P6CallableStatement.P6_GROW_MAX, valuesLen);
        call.close();
-    }
-
-    @Override
-    protected PreparedStatement getPreparedStatement(String query) throws SQLException {
-        return (connection.prepareCall(query));
-    }
-
-    @Override
-    protected Statement getStatement(String query) throws SQLException {
-        return (connection.prepareCall(query));
     }
 
 }

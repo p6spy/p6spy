@@ -118,40 +118,44 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-import java.sql.*;
-import java.util.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import com.p6spy.engine.common.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.util.Map;
+import java.util.Properties;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.p6spy.engine.common.OptionReloader;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyOptions;
+import com.p6spy.engine.common.P6SpyProperties;
+import com.p6spy.engine.common.P6Util;
 
 public class P6TestCommon extends P6TestFramework {
 
-    public P6TestCommon(java.lang.String testName) {
-        super(testName);
-    }
-
-    public static void main(java.lang.String[] args) {
-        junit.textui.TestRunner.run(suite());
-    }
-
-    public static Test suite() {
-        TestSuite suite = new TestSuite(P6TestStatement.class);
-        return suite;
-    }
-
-    @Override
-    protected void setUp() {
-        super.setUp();
+    @Before
+    public void setUpCommon() {
         try {
-            Statement statement = connection.createStatement();
+        	Statement statement = connection.createStatement();
             drop(statement);
-            statement.execute("create table stmt_test (col1 varchar2(255), col2 number(5))");
+            statement.execute("create table common_test (col1 varchar(255), col2 integer)");
             statement.close();
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
+    @Test
     public void testMatcher() {
         try {
 
@@ -160,7 +164,7 @@ public class P6TestCommon extends P6TestFramework {
             P6LogQuery.setExcludeTables("");
             P6LogQuery.setIncludeTables("");
             Statement statement = connection.createStatement();
-            String query = "select count(*) from stmt_test";
+            String query = "select count(*) from common_test";
             statement.executeQuery(query);
             assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
 
@@ -168,15 +172,15 @@ public class P6TestCommon extends P6TestFramework {
             P6SpyOptions.setFilter("false");
             P6LogQuery.setExcludeTables("");
             P6LogQuery.setIncludeTables("");
-            query = "select 'w' from stmt_test";
+            query = "select 'w' from common_test";
             statement.executeQuery(query);
             assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
 
             // now match should still fail because table is excluded
             P6SpyOptions.setFilter("true");
-            P6LogQuery.setExcludeTables("stmt_test");
+            P6LogQuery.setExcludeTables("common_test");
             P6LogQuery.setIncludeTables("");
-            query = "select 'x' from stmt_test";
+            query = "select 'x' from common_test";
             statement.executeQuery(query);
             assertTrue(P6LogQuery.getLastEntry().indexOf(query) == -1);
 
@@ -193,15 +197,15 @@ public class P6TestCommon extends P6TestFramework {
         P6SpyOptions.setFilter("true");
         P6LogQuery.setExcludeTables("");
         P6LogQuery.setIncludeTables("");
-        String query = "select 'y' from stmt_test";
+        String query = "select 'y' from common_test";
         statement.executeQuery(query);
         assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
 
         // now match should match (test regex)
         P6SpyOptions.setFilter("true");
-        P6LogQuery.setExcludeTables("[a-z]tmt_test");
+        P6LogQuery.setExcludeTables("[a-z]ommon_test");
         P6LogQuery.setIncludeTables("");
-        query = "select 'x' from stmt_test";
+        query = "select 'x' from common_test";
         statement.executeQuery(query);
         assertTrue(P6LogQuery.getLastEntry().indexOf(query) == -1);
 
@@ -209,22 +213,25 @@ public class P6TestCommon extends P6TestFramework {
         P6SpyOptions.setFilter("true");
         P6LogQuery.setExcludeTables("[0-9]tmt_test");
         P6LogQuery.setIncludeTables("");
-        query = "select 'z' from stmt_test";
+        query = "select 'z' from common_test";
         statement.executeQuery(query);
         assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
     }
 
+    @Test
     public void testCategories() throws Exception {
+    	// we would like to see transactions in action here => prevent autocommit
+    	connection.setAutoCommit(false);
 
-        Statement statement = connection.createStatement();
-
+    	Statement statement = connection.createStatement();
+        
         // test rollback logging
         P6SpyOptions.setFilter("true");
         P6LogQuery.setExcludeTables("");
         P6LogQuery.setIncludeTables("");
         P6LogQuery.setExcludeCategories("");
         P6LogQuery.setIncludeCategories("");
-        String query = "select 'y' from stmt_test";
+        String query = "select 'y' from common_test";
         statement.executeQuery(query);
         assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
         connection.rollback();
@@ -236,7 +243,7 @@ public class P6TestCommon extends P6TestFramework {
         P6LogQuery.setIncludeTables("");
         P6LogQuery.setExcludeCategories("");
         P6LogQuery.setIncludeCategories("");
-        query = "select 'y' from stmt_test";
+        query = "select 'y' from common_test";
         statement.executeQuery(query);
         assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
         connection.commit();
@@ -244,16 +251,20 @@ public class P6TestCommon extends P6TestFramework {
 
         // test debug logging
         P6SpyOptions.setFilter("true");
-        P6LogQuery.setExcludeTables("stmt_test");
+        P6LogQuery.setExcludeTables("common_test");
         P6LogQuery.setIncludeTables("");
         P6LogQuery.setExcludeCategories("");
         P6LogQuery.setIncludeCategories("debug,info");
-        query = "select 'y' from stmt_test";
+        query = "select 'y' from common_test";
         statement.executeQuery(query);
         assertTrue(P6LogQuery.getLastEntry().indexOf("intentionally") != -1);
 
+        // set back, otherwise we have problems in PostgresSQL, statement exec
+        // waits for commit
+        connection.setAutoCommit(true);
     }
 
+    @Test
     public void testStacktrace() {
         try {
             // get a statement
@@ -264,7 +275,7 @@ public class P6TestCommon extends P6TestFramework {
             P6SpyOptions.setFilter("true");
             P6LogQuery.setExcludeTables("");
             P6LogQuery.setIncludeTables("");
-            String query = "select 'y' from stmt_test";
+            String query = "select 'y' from common_test";
             statement.executeQuery(query);
             assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
             assertTrue(P6LogQuery.getLastStack().indexOf("Stack") != -1);
@@ -275,7 +286,7 @@ public class P6TestCommon extends P6TestFramework {
             P6SpyOptions.setFilter("true");
             P6LogQuery.setExcludeTables("");
             P6LogQuery.setIncludeTables("");
-            query = "select 'a' from stmt_test";
+            query = "select 'a' from common_test";
             statement.executeQuery(query);
             // this will actually match - just the stack trace wont fire
             assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
@@ -286,7 +297,7 @@ public class P6TestCommon extends P6TestFramework {
             P6SpyOptions.setFilter("true");
             P6LogQuery.setExcludeTables("");
             P6LogQuery.setIncludeTables("");
-            query = "select 'b' from stmt_test";
+            query = "select 'b' from common_test";
             statement.executeQuery(query);
             assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
             assertTrue(P6LogQuery.getLastStack().indexOf("Stack") != -1);
@@ -296,13 +307,14 @@ public class P6TestCommon extends P6TestFramework {
         }
     }
 
+    @Test
     public void testReload() throws Exception {
         Statement statement = connection.createStatement();
 
         Map tp = getDefaultPropertyFile();
         reloadProperty(tp);
 
-        String query = "select 'b' from stmt_test";
+        String query = "select 'b' from common_test";
         statement.executeQuery(query);
 
         assertEquals(P6SpyOptions.getFilter(), false);
@@ -330,7 +342,7 @@ public class P6TestCommon extends P6TestFramework {
         OptionReloader.reload();
 
         Thread.sleep(2000);
-        query = "select 'c' from stmt_test";
+        query = "select 'c' from common_test";
         statement.executeQuery(query);
         assertEquals(P6SpyOptions.getFilter(), true);
         assertEquals(P6SpyOptions.getInclude(), "bob");
@@ -347,16 +359,18 @@ public class P6TestCommon extends P6TestFramework {
         assertEquals(P6SpyOptions.getReloadPropertiesInterval(), 1);
     }
 
+    @Ignore
+    @Test
     public void testMultiDriver() {
-        Statement statement2 = null;
+    	Statement statement2 = null;
 
         try {
-            // rebuild the properties so it can find the second connection
+        	// rebuild the properties so it can find the second connection
             Map tp = getDefaultPropertyFile();
             reloadProperty(tp);
 
             // rebuild a second connection for the multi-driver test
-            Properties props = loadProperties("P6Test.properties");
+            Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
             String drivername = props.getProperty("p6driver2");
             String user = props.getProperty("user2");
             String password = props.getProperty("password2");
@@ -373,30 +387,30 @@ public class P6TestCommon extends P6TestFramework {
             Statement statement = connection.createStatement();
 
             // rebuild the tables
-            dropStatement("drop table stmt_test2", statement2);
-            statement2.execute("create table stmt_test2 (col1 varchar(255), col2 int(5))");
+            dropStatement("drop table common_test2", statement2);
+            statement2.execute("create table common_test2 (col1 varchar(255), col2 int(5))");
 
             // this should be fine
-            String query = "select 'q1' from stmt_test";
+            String query = "select 'q1' from common_test";
             statement.executeQuery(query);
             assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
 
             // this table should not exist
             try {
-                query = "select 'q2' from stmt_test2";
+                query = "select 'q2' from common_test2";
                 statement.executeQuery(query);
                 fail("Exception should have occured");
             } catch (Exception e) {
             }
 
             // this should be fine for the second connection
-            query = "select 'b' from stmt_test2";
+            query = "select 'b' from common_test2";
             statement2.executeQuery(query);
             assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
 
             // this table should not exist
             try {
-                query = "select 'q3' from stmt_test";
+                query = "select 'q3' from common_test";
                 statement2.executeQuery(query);
                 fail("Exception should have occured");
             } catch (Exception e) {
@@ -407,19 +421,18 @@ public class P6TestCommon extends P6TestFramework {
             fail(e.getMessage()+getStackTrace(e));
         } finally {
             try {
-                dropStatement("drop table stmt_test2", statement2);
+                dropStatement("drop table common_test2", statement2);
                 statement2.close();
             } catch (Exception e) { }
         }
     }
 
-    @Override
-    protected void tearDown() {
+    @After
+    public void tearDownCommon() {
         try {
             Statement statement = connection.createStatement();
             drop(statement);
             statement.close();
-            super.tearDown();
         }  catch (Exception e) {
             fail(e.getMessage());
         }
@@ -427,7 +440,7 @@ public class P6TestCommon extends P6TestFramework {
 
     protected void drop(Statement statement) {
         if (statement == null) { return; }
-        dropStatement("drop table stmt_test", statement);
+        dropStatement("drop table common_test", statement);
     }
 
     protected void dropStatement(String sql, Statement statement) {

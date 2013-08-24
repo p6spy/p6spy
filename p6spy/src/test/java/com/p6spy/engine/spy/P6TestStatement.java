@@ -115,55 +115,57 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6SpyOptions;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyOptions;
+
 public class P6TestStatement extends P6TestFramework {
-    
-    public P6TestStatement(java.lang.String testName) {
-        super(testName);
-    }
-    
-    public static void main(java.lang.String[] args) {
-        junit.textui.TestRunner.run(suite());
-    }
-    
-    public static Test suite() {
-        TestSuite suite = new TestSuite(P6TestStatement.class);
-        return suite;
-    }
-    
-    protected void setUp() {
-        super.setUp();
+
+    @Before
+    public void setUpStatement() {
         try {
-            Statement statement = getStatement("drop table stmt_test");
+            Statement statement = connection.createStatement();
             drop(statement);
-            connection.createStatement().execute("create table stmt_test (col1 varchar2(255), col2 number(5))");
+            statement.execute("create table stmt_test (col1 varchar(255), col2 integer)");
+            statement.close();
         } catch (Exception e) {
             fail(e.getMessage()+" due to error: "+getStackTrace(e));
         }
     }
-    
+    @Test
     public void testQueryUpdate() {
         try {
 	    ResultSet rs = null;
 
             // test a basic insert
             String update = "insert into stmt_test values (\'bob\', 5)";
-            Statement statement = getStatement(update);
-            statement.executeUpdate(update);
+            Statement statement = connection.createStatement();
+            
+            // as executeUpdate Javadocs say:
+            // Returns either 
+            // (1) the row count for SQL Data Manipulation Language (DML) statements or 
+            // (2) 0 for SQL statements that return nothing
+            //
+            // most of the drivers return != 0, except SQLite, that returns == 0
+            // for the SQLite calling: rs = statement.getResultSet() fails with:
+            // SQLException statement is not executing getResultset on insert
+            // 
+            // => let's check for the result and handle correctly
+            boolean noResult = 0 != statement.executeUpdate(update);
             assertTrue(P6LogQuery.getLastEntry().indexOf(update) != -1);
 
-	    // inserts should return a null result set
-	    rs = statement.getResultSet();
-	    assertTrue("result set from insert statement is not null", rs == null);
-
+		    // most of drivers
+		    assertTrue("neither no result indicated, nor statement is not null", noResult || statement.getResultSet() == null);
             
             // test a basic select
             String query = "select count(*) from stmt_test";
@@ -198,11 +200,12 @@ public class P6TestStatement extends P6TestFramework {
         }
     }
     
+    @Test
     public void testExecutionThreshold() {
         try {
             // Add some data into the table
             String update = "insert into stmt_test values (\'bob\', 5)";
-            Statement statement = getStatement(update);
+            Statement statement = connection.createStatement();
             statement.executeUpdate(update);
             assertTrue(P6LogQuery.getLastEntry().indexOf(update) != -1);
             
@@ -246,12 +249,13 @@ public class P6TestStatement extends P6TestFramework {
             fail(e.getMessage()+" due to error: "+getStackTrace(e));
         }
     }
-    
-    protected void tearDown() {
+
+    @After
+    public void tearDownStatement() {
         try {
-            super.tearDown();
-            Statement statement = getStatement("drop table stmt_test");
+            Statement statement = connection.createStatement();
             drop(statement);
+            statement.close();
         }  catch (Exception e) {
             fail(e.getMessage());
         }
@@ -268,9 +272,5 @@ public class P6TestStatement extends P6TestFramework {
         } catch (Exception e) {
             // we don't really care about cleanup failing
         }
-    }
-    
-    protected Statement getStatement(String query) throws SQLException {
-        return (connection.createStatement());
     }
 }

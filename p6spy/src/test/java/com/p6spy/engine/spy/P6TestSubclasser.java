@@ -69,20 +69,21 @@
 package com.p6spy.engine.spy;
 
 import static com.p6spy.engine.common.Subclasser.DELIMITER;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 
 import junit.framework.Protectable;
-import junit.framework.TestCase;
+
+import org.junit.Test;
 
 import com.p6spy.engine.common.Subclasser;
 
-public class P6TestSubclasser extends TestCase {
+public class P6TestSubclasser {
 
-    public P6TestSubclasser(String name) {
-        super(name);
-    }
-
+    @Test
     public void testString() throws Exception {
         Subclasser sub = new Subclasser();
         Class clazz = this.getClass();
@@ -111,6 +112,7 @@ public class P6TestSubclasser extends TestCase {
         assertEquals(expectedFile, actualFile);
     }
 
+    @Test
     public void testBadClass() throws Exception {
         final Subclasser sub = new Subclasser();
         // Protectable is JUnit class
@@ -126,6 +128,7 @@ public class P6TestSubclasser extends TestCase {
         chkException(p, "instanceof javax.sql.DataSource");
     }
 
+    @Test
     public void testWriteHeader() throws Exception {
         final Subclasser sub = new Subclasser();
         // Protectable is JUnit class
@@ -150,6 +153,7 @@ public class P6TestSubclasser extends TestCase {
         assertEquals(sub.NEWLINE + expected, sub.NEWLINE + actual);
     }
 
+    @Test
     public void testWriteConstructors() throws Exception {
         final Subclasser sub = new Subclasser();
         Protectable p = new Protectable() {
@@ -164,18 +168,25 @@ public class P6TestSubclasser extends TestCase {
         chkException(p, "interface");
 
         sub.setParentClass(com.p6spy.engine.spy.P6DataSource.class);
-        String expected = "" + sub.NEWLINE + sub.INDENT + "public P6P6DataSource (javax.sql.DataSource p0) {" + sub.NEWLINE + sub.INDENT + sub.INDENT
+        
+        final String expected = "" + sub.NEWLINE + sub.INDENT + "public P6P6DataSource (javax.sql.DataSource p0) {" + sub.NEWLINE + sub.INDENT + sub.INDENT
             + "super( p0);" + sub.NEWLINE + sub.INDENT + "}" + sub.NEWLINE + sub.INDENT + "public P6P6DataSource () {" + sub.NEWLINE + sub.INDENT
             + sub.INDENT + "super();" + sub.NEWLINE + sub.INDENT + "}" + "";
+        
+        final String expectedAlternateOrder = "" + sub.NEWLINE + sub.INDENT + "public P6P6DataSource () {" + sub.NEWLINE + sub.INDENT + sub.INDENT
+                + "super();" + sub.NEWLINE + sub.INDENT + "}" + sub.NEWLINE + sub.INDENT + "public P6P6DataSource (javax.sql.DataSource p0) {" + sub.NEWLINE + sub.INDENT
+                + sub.INDENT + "super( p0);" + sub.NEWLINE + sub.INDENT + "}" + "";
+        
         String actual = sub.writeConstructors();
 
-        assertEquals(expected, actual);
+        assertTrue(expected.equals(actual) || expectedAlternateOrder.equals(actual));
         // sometimes JUnit truncs the strings... if that's the case with your
         // version, then you can uncomment this line to get out own
         // full listing of the strings in their variance
         //assertEquals("Expected constructor like: " + sub.NEWLINE + expected + sub.NEWLINE + " but found " + sub.NEWLINE + actual + sub.NEWLINE, expected, actual);
     }
 
+    @Test
     public void testOverride() throws Exception {
         Subclasser sub = new Subclasser();
         String actual = sub.overrideConnection();

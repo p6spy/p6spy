@@ -109,30 +109,12 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.OptionReloader;
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6SpyProperties;
-import com.p6spy.engine.common.P6Util;
-import junit.framework.Assert;
-import org.apache.log4j.Logger;
+import junit.framework.*;
+import java.sql.*;
+import java.io.*;
+import java.util.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
+import com.p6spy.engine.common.*;
 
 @Deprecated // T6TestFramework has most if not all of this.
 public class P6TestUtil  {
@@ -196,11 +178,9 @@ public class P6TestUtil  {
 
     protected static Map getDefaultPropertyFile() throws IOException {
 
-        Properties props = loadProperties("P6Test.properties");
+        Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
         String realdrivername = props.getProperty("p6realdriver");
-
-        Properties props2 = loadProperties("P6Test.properties");
-        String realdrivername2 = props2.getProperty("p6realdriver2");
+        String realdrivername2 = props.getProperty("p6realdriver2");
 
         HashMap tp = new HashMap();
         tp.put("module.outage","com.p6spy.engine.outage.P6OutageFactory");
@@ -235,7 +215,7 @@ public class P6TestUtil  {
     }
 
     protected static void reloadProperty(Map props) throws IOException {
-        writeProperty(P6TestFramework.PROPERTY_FILE, props);
+        writeProperty(/*"target/test-classes/com/p6spy/engine/spy/" + */P6TestFramework.PROPERTY_FILE, props);
 
         P6SpyProperties properties = new P6SpyProperties();
         properties.setSpyProperties(P6TestFramework.PROPERTY_FILE);
@@ -247,7 +227,7 @@ public class P6TestUtil  {
         if (!isTrue) {
           LOG.error(query+" was not the last query, this was: "+P6LogQuery.getLastEntry());
         }
-        Assert.assertTrue(isTrue);
+        assertTrue(isTrue);
     }
 
     protected static void assertIsNotLastQuery(String query) {
@@ -255,7 +235,7 @@ public class P6TestUtil  {
         if (!isFalse) {
             LOG.error(query+" was the last query and should not have been");
         }
-        Assert.assertTrue(isFalse);
+        assertTrue(isFalse);
     }
 
     protected static void printAllDrivers() {
@@ -283,9 +263,8 @@ public class P6TestUtil  {
         }
     }
 
-    public static Connection loadDrivers(String drivernameProperty)
-        throws SQLException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Properties props = loadProperties("P6Test.properties");
+    public static Connection loadDrivers(String drivernameProperty) throws SQLException, IOException, ClassNotFoundException {
+        Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
         String drivername = props.getProperty(drivernameProperty);
         String user = props.getProperty("user");
         String password = props.getProperty("password");
@@ -302,4 +281,5 @@ public class P6TestUtil  {
         printAllDrivers();
         return connection;
     }
+
 }
