@@ -115,6 +115,9 @@ import java.io.*;
 import java.util.*;
 
 import com.p6spy.engine.common.*;
+import org.apache.log4j.Logger;
+
+import static org.junit.Assert.assertTrue;
 
 @Deprecated // T6TestFramework has most if not all of this.
 public class P6TestUtil  {
@@ -263,7 +266,7 @@ public class P6TestUtil  {
         }
     }
 
-    public static Connection loadDrivers(String drivernameProperty) throws SQLException, IOException, ClassNotFoundException {
+    public static Connection loadDrivers(String drivernameProperty) throws SQLException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
         String drivername = props.getProperty(drivernameProperty);
         String user = props.getProperty("user");
