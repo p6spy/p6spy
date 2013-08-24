@@ -168,7 +168,6 @@
               <phase>install</phase>
               <goals>
                 <goal>jar</goal>
-                <goal>test-jar</goal>
               </goals>
               <configuration>
                 <attach>true</attach>
@@ -191,11 +190,7 @@
               <phase>package</phase>
               <goals>
                 <goal>jar</goal>
-                <goal>test-jar</goal>
               </goals>
-              <configuration>
-                <attach>true</attach>
-              </configuration>
             </execution>
           </executions>
         </plugin>
