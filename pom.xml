@@ -368,7 +368,6 @@
         <version>2.4.6</version> <optional>true</optional> </dependency>
     -->
 
-
     <!--
          to have tests running in eclipse or intellij, uncomment specific driver or activate the correct
          maven profile
@@ -384,7 +383,13 @@
       <groupId>postgresql</groupId>
       <artifactId>postgresql</artifactId>
     </dependency>
+    
+    <dependency>
+		<groupId>org.xerial</groupId>
+		<artifactId>sqlite-jdbc</artifactId>
+	</dependency>
      -->
+
   </dependencies>
 
   <profiles>

@@ -65,6 +65,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -73,32 +74,21 @@ import java.util.Properties;
 import org.junit.Test;
 
 public class P6TestDriver extends P6TestFramework {
+	
+	private static final String JDBC_DRIVER_CLASS_NAME_SQLITE = "org.sqlite.JDBC";
+	private static final String JDBC_DRIVER_CLASS_NAME_MYSQL = "com.mysql.jdbc.Driver";
 
-    @Test
+	@Test
     public void testMajorVersion() throws Exception {
-	    Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
-	    String url = props.getProperty("url");
-
-	    Driver driver = DriverManager.getDriver(url);
-
-	    // make sure you have a p6 driver
-	    if (! (driver instanceof P6SpyDriverCore)) {
-	        fail("Expected to get back a p6spy driver, got back a " + driver);
-	    }
-	    
-	    // but make sure it's bound to something
-	    // these numbers will likely change over time :)
-	    
-	    Class<? extends Driver> clazz = driver.getClass();
-	    
-	    if (clazz.getName().equals("com.mysql.jdbc.Driver")) {
+		Driver driver = getWrappedDriver();
+	    if (driver.getClass().getName().equals(JDBC_DRIVER_CLASS_NAME_MYSQL)) {
 	    	assertEquals(5, driver.getMajorVersion());
 		    assertEquals(1, driver.getMinorVersion());
 	    }
     }
 
     @Test
-    public void testGetJDBC() throws SQLException {
+    public void testGetJDBC() throws SQLException, IOException {
 	    P6Connection p6con = (P6Connection) connection;
 	    chkGetJDBC(p6con, p6con.getJDBC());
 
@@ -108,19 +98,18 @@ public class P6TestDriver extends P6TestFramework {
 	    P6Statement p6stmt = (P6Statement) connection.createStatement();
 	    chkGetJDBC(p6stmt, p6stmt.getJDBC());
 
-	    
-	    P6CallableStatement p6cs = null;
-	    
-	    try {
-		    p6cs = (P6CallableStatement) connection.prepareCall("select current_timestamp from (values(0))");
-		    chkGetJDBC(p6cs, p6cs.getJDBC());
-	    } catch (SQLException e) {
-	    	// it's OK, not all the DBs support stored procedures, for example SQLite doesn't
-	    } finally {
-	    	if (null != p6cs) {
-	    		p6cs.close();
-	    	}
-	    }
+		if (!getWrappedDriver().getClass().getName().equals(JDBC_DRIVER_CLASS_NAME_SQLITE)) {
+			P6CallableStatement p6cs = null;
+			try {
+				p6cs = (P6CallableStatement) connection
+						.prepareCall("select current_timestamp from (values(0))");
+				chkGetJDBC(p6cs, p6cs.getJDBC());
+			} finally {
+				if (null != p6cs) {
+					p6cs.close();
+				}
+			}
+		}
 	    
 	    P6PreparedStatement p6ps = null;
 	    P6ResultSet p6rs = null;
@@ -161,4 +150,22 @@ public class P6TestDriver extends P6TestFramework {
     	assertTrue("Class " + jdbcClass + " is supposed to be a jdbc class, but it is not", (jdbcClass.indexOf("p6spy") == -1));
     }
 
+    /**
+     * Gets the wrapped {@link Driver} registered for the jdbc url test currently run for.
+     *
+     * @return the driver registered for the current run.
+     * @throws IOException 
+     * @throws SQLException
+     */
+    private Driver getWrappedDriver() throws IOException, SQLException {
+    	Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
+    	String url = props.getProperty("url");
+    	Driver driver = DriverManager.getDriver(url);
+
+	    // make sure you have a p6 driver
+	    if (! (driver instanceof P6SpyDriverCore)) {
+	        fail("Expected to get back a p6spy driver, got back a " + driver);
+	    }
+	    return ((P6SpyDriverCore) driver).getPassthru();
+    }
 }
