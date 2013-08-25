@@ -8,7 +8,9 @@
   <packaging>pom</packaging>
   <name>${project.artifactId}</name>
   <version>2.0-SNAPSHOT</version>
-  <description>P6Spy is an open source framework for applications that intercept and optionally modify database
+
+  <description>
+    P6Spy is an open source framework for applications that intercept and optionally modify database
     statements.
   </description>
 
@@ -79,7 +81,9 @@
   </licenses>
 
   <scm>
+    <url>https://github.com/p6spy/p6spy</url>
     <connection>scm:git:https://github.com/p6spy/p6spy.git</connection>
+    <developerConnection>scm:git:https://github.com/p6spy/p6spy.git</developerConnection>
   </scm>
 
   <properties>
@@ -336,7 +340,7 @@
 
   <modules>
     <module>p6spy</module>
-    <module>p6spy-dist</module>
+    <!-- <module>p6spy-dist</module> -->
   </modules>
 
 </project>
