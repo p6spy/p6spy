@@ -75,8 +75,7 @@
   <licenses>
     <license>
       <name>The P6Spy Software License, Version 1.1</name>
-      <url>http://p6spy.svn.sourceforge.net/viewvc/p6spy/trunk/src/main/site/license.txt?view=markup
-      </url>
+      <url>https://raw.github.com/p6spy/p6spy/master/license.txt</url>
     </license>
   </licenses>
 
