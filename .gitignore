@@ -1,5 +1,5 @@
 # maven output directory
-/target
+target
 /build
 /dist
 javadocs
