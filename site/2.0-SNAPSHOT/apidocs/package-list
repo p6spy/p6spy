@@ -1,6 +1,0 @@
-com.p6spy.engine.common
-com.p6spy.engine.leak
-com.p6spy.engine.logging
-com.p6spy.engine.logging.appender
-com.p6spy.engine.outage
-com.p6spy.engine.spy
