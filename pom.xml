@@ -14,14 +14,7 @@
     statements.
   </description>
 
-  <url>http://github.com/p6spy/p6spy/</url>
-
-  <distributionManagement>
-    <site>
-      <id>github-pages</id>
-      <url>http://p6spy.github.io/p6spy/</url>
-    </site>
-  </distributionManagement>
+  <url>http://p6spy.github.io/p6spy/</url>
 
   <mailingLists>
     <mailingList>
@@ -40,10 +33,23 @@
     </mailingList>
   </mailingLists>
 
+  <distributionManagement>
+    <site>
+      <id>github-pages-site</id>
+      <name>Deployment through GitHub's site deployment plugin</name>
+      <url>http://p6spy.github.io/p6spy/</url>
+    </site>
+  </distributionManagement>
+
   <issueManagement>
     <system>github</system>
     <url>http://github.com/p6spy/p6spy/issues#issue/</url>
   </issueManagement>
+
+  <ciManagement>
+    <url>https://travis-ci.org/p6spy/p6spy</url>
+    <system>Travis CI</system>
+  </ciManagement>
 
   <developers>
     <developer>
@@ -100,11 +106,6 @@
     <connection>scm:git:https://github.com/p6spy/p6spy.git</connection>
     <developerConnection>scm:git:https://github.com/p6spy/p6spy.git</developerConnection>
   </scm>
-
-  <ciManagement>
-    <url>https://travis-ci.org/p6spy/p6spy</url>
-    <system>Travis CI</system>
-  </ciManagement>
 
   <properties>
     <java-build>1.7</java-build>
@@ -279,6 +280,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${maven-site-plugin-build}</version>
+          <configuration>
+            <skipDeploy>true</skipDeploy>
+          </configuration>
           <dependencies>
             <dependency>
               <groupId>org.apache.maven.doxia</groupId>
@@ -316,15 +320,8 @@
           <message>Creating site for ${project.name} v${project.version}</message>
           <oauth2Token>3644419c9515fff26a97516a565594a5b4b58c89</oauth2Token>
           <outputDirectory>${project.build.directory}/staging</outputDirectory>
+          <merge>false</merge>
         </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>site</goal>
-            </goals>
-            <phase>site</phase>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
