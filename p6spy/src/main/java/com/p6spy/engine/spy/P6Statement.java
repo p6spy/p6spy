@@ -340,7 +340,6 @@ public class P6Statement extends P6Base implements Statement {
         return passthru.unwrap(iface);
     }
 
-/*
     // since 1.7
     @Override
     public void closeOnCompletion() throws SQLException {
@@ -352,5 +351,4 @@ public class P6Statement extends P6Base implements Statement {
     public boolean isCloseOnCompletion() throws SQLException {
         return passthru.isCloseOnCompletion();
     }
-*/
 }

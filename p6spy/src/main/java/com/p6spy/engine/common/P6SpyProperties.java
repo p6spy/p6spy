@@ -61,15 +61,9 @@
 
 package com.p6spy.engine.common;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * this class contains a properties file and utility functions that enable this property file to be
@@ -163,12 +157,8 @@ public class P6SpyProperties {
                             props.setProperty(propertyName, rv.toString());
                             P6LogQuery.info("added property '" + propertyName + "' with value of '" + rv + "'");
                         }
-                    } catch (IllegalAccessException e ) {
-                      throw new IllegalStateException(e);
-                    } catch(IllegalArgumentException e ) {
-                      throw new IllegalStateException(e);
-                    } catch( InvocationTargetException e) {
-                      throw new IllegalStateException(e);
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                        throw new IllegalStateException(e);
                     }
             }
         }

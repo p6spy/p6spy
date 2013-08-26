@@ -1154,7 +1154,6 @@ public class P6ResultSet extends P6Base implements ResultSet {
         passthru.updateSQLXML(columnLabel, xmlObject);
     }
 
-/*
     // since 1.7
     @Override
     public <T> T getObject(final int columnIndex, final Class<T> type) throws SQLException {
@@ -1166,5 +1165,4 @@ public class P6ResultSet extends P6Base implements ResultSet {
     public <T> T getObject(final String columnLabel, final Class<T> type) throws SQLException {
         return passthru.getObject(columnLabel, type);
     }
-*/
 }
