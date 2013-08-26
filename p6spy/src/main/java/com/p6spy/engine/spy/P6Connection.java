@@ -121,9 +121,22 @@
 
 package com.p6spy.engine.spy;
 
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Savepoint;
+import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Properties;
-import java.util.concurrent.Executor;
 
 public class P6Connection extends P6Base implements java.sql.Connection {
 
@@ -440,32 +453,42 @@ public class P6Connection extends P6Base implements java.sql.Connection {
     }
 
     // since 1.7
+/*
     @Override
     public void abort(final Executor executor) throws SQLException {
         passthru.abort(executor);
     }
+*/
 
     // since 1.7
+/*
     @Override
     public void setSchema(final String schema) throws SQLException {
         passthru.setSchema(schema);
     }
+*/
 
     // since 1.7
+/*
     @Override
     public String getSchema() throws SQLException {
         return passthru.getSchema();
     }
+*/
 
     // since 1.7
+/*
     @Override
     public void setNetworkTimeout(final Executor executor, final int milliseconds) throws SQLException {
         passthru.setNetworkTimeout(executor, milliseconds);
     }
+*/
 
     // since 1.7
+/*
     @Override
     public int getNetworkTimeout() throws SQLException {
         return passthru.getNetworkTimeout();
     }
+*/
 }

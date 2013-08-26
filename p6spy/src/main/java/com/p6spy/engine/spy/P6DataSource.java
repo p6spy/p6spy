@@ -116,11 +116,9 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 public class P6DataSource extends P6Base implements DataSource, Referenceable, Serializable {
 
@@ -380,9 +378,11 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
         return rds.unwrap(iface);
     }
 
+/*
     // since 1.7
     @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return rds.getParentLogger();
     }
+*/
 }

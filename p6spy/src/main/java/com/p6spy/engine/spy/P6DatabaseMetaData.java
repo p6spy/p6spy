@@ -888,6 +888,7 @@ public class P6DatabaseMetaData extends P6Base implements java.sql.DatabaseMetaD
 	return wrapped;
     }
 
+/*
     // since 1.7
     @Override
     public boolean generatedKeyAlwaysReturned() throws SQLException {
@@ -900,4 +901,5 @@ public class P6DatabaseMetaData extends P6Base implements java.sql.DatabaseMetaD
         throws SQLException {
         return passthru.getPseudoColumns(catalog, schemaPattern, tableNamePattern, columnNamePattern);
     }
+*/
 }

@@ -463,9 +463,11 @@ public abstract class P6SpyDriverCore implements Driver {
         return (passthru.jdbcCompliant());
     }
 
+/*
     // since 1.7
     @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return passthru.getParentLogger();
     }
+*/
 }
