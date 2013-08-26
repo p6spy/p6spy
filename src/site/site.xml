@@ -6,13 +6,11 @@
   <body>
     <menu name="Overview">
       <item name="Installation" href="install.html"/>
-      <!--
-            <item name="Configuration and Usage" href="other.html"/>
-            <item name="Release Notes" href="usage.html"/>
-            <item name="Known Issues" href="faq.html"/>
-            <item name="Troubleshooting" href="faq.html"/>
-            <item name="FAQ" href="faq.html"/>
-      -->
+      <item name="Configuration and Usage" href="configandusage.html"/>
+      <item name="Release Notes" href="releasenotes.html"/>
+      <item name="Known Issues" href="knownissues.html"/>
+      <item name="FAQ" href="faq.html"/>
+      <item name="Troubleshooting" href="troubleshooting.html"/>
     </menu>
     <menu ref="reports"/>
   </body>
