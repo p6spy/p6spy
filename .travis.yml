@@ -19,6 +19,9 @@ before_script:
 
 script: "mvn clean test -DDB=${DB}"
 
+after_success:
+ - "mvn site -DDB=H2"
+
 notifications:
   email:
     - p6spy-developers@googlegroups.com
