@@ -41,12 +41,18 @@
       <div id="navcolumn">
              
             
-                                <h5>Project Documentation</h5>
+                                <h5>Overview</h5>
                   <ul>
-                                                                                                                                                                                                                                                                                                                                <li class="collapsed">
+                  <li class="none">
+            <strong>Installation</strong>
+          </li>
+          </ul>
+                       <h5>Project Documentation</h5>
+                  <ul>
+                                                                                                                                                                                                                                                                                                                                                  <li class="collapsed">
                           <a href="project-info.html" title="Project Information">Project Information</a>
                   </li>
-                                                                    <li class="collapsed">
+                                                                                                                                            <li class="collapsed">
                           <a href="project-reports.html" title="Project Reports">Project Reports</a>
                   </li>
           </ul>
@@ -259,24 +265,27 @@ datasource.classname com.p6spy.engine.spy.P6SpyDriver
 1. Click Apply Changes, if the connection is successful.
 1. Restart ATG Dynamo by navigating to to `http://localhost:8830` and clicking Restart Dynamo.
 </pre></div></li>
-</ol><p>Installation is complete. When you run your application, a log file (spy.log) is generated in the C:\ATG\Dynamo5.1\home directory. The log file contains a list of all of the database statements executed. You can change both the destination of spy.log and what it logs by editing the spy.properties file (see Common Property File Settings).</p></div><div class="section"><h2>Sun iPlanet<a name="Sun_iPlanet"></a></h2><p>(Contributed by Michael Sgroi)</p><p>The following instructions were tested with Sun iPlanet 6.0 Service Pack 3 and should work for any release of iPlanet 6.0. To install P6Spy on iPlanet, complete the following steps:</p><p>1.Extract the p6spy-install.jar file into a directory named spy-home, where spy-home is the name of the P6Spy directory. The p6spy-install.jar file contains p6spy.jar and spy.properties. 1.Add p6spy.jar to your classpath by running the command line executable kregedit. Under Software\iPlanet -&gt; 6.0 -&gt; Java -&gt; ClassPath, modify the entry adding spy-home to the end of the classpath. 1.Modify your application server to use the P6Spy database driver by running the command line executable jdbcsetup. Add a new 3rd Party JDBC Configuration as shown in the following example:  Driver Identifier: spy  Driver Classname: com.p6spy.engine.spy.P6SpyDriver  Driver Classpath: spy-home\p6spy.jar 1. To tell P6Spy about the wrapped database driver, register your DataSource by running the following command line executable:  iasdeploy regdatasource -user iPlanet_admin_username -password iPlanet_admin_password -host localhost -port iPlanet_admin _port config_filename</p>
-<div class="source"><pre>where iPlanet_admin_username is your iPlanet admin username, iPlanet_admin_password is your iPlanet admin password, iPlanet_admin_port is the iPlanet admin port number, and config_filename is the full path to the file containing your DataSource configuration. An example follows:
-
-    &lt;ias-resource&gt;
-    &lt;resource&gt;
-    &lt;jndi-name&gt;jdbc/yourapp/ora-type4-spy&lt;/jndi-name&gt;
-    &lt;jdbc&gt;
-    &lt;driver-type&gt;spy&lt;/driver-type&gt;
-    &lt;database-url&gt;jdbc:oracle:thin:@localhost:1521:orcl&lt;/database-url&gt;
-    &lt;username&gt;user&lt;/username&gt;
-    &lt;password&gt;password&lt;/password&gt;
-    &lt;/jdbc&gt;
-    &lt;/resource&gt;
-    &lt;/ias-resource&gt;
-
-(For more details on parameters passed to iasdeploy and the format of config_filename, refer to the iPlanet documentation.)
-Installation is complete. When you run your application, a spy.log file is generated. The log file contains a list of all of the database statements executed. You can change both the destination of spy.log and what it logs by editing the spy.properties file (see Common Property File Settings).
-</pre></div></div><div class="section"><h2>IBM&#xfffd; WebSphere?<a name="IBM_WebSphere"></a></h2><p>The following instructions were tested with IBM WebSphere 4.0.</p><p>Note: Before installing, make sure your JDBC driver is configured in your target application server as a DataSource.</p><p>To install P6Spy on IBM WebSphere, complete the following steps:</p>
+</ol><p>Installation is complete. When you run your application, a log file (spy.log) is generated in the C:\ATG\Dynamo5.1\home directory. The log file contains a list of all of the database statements executed. You can change both the destination of spy.log and what it logs by editing the spy.properties file (see Common Property File Settings).</p></div><div class="section"><h2>Sun iPlanet<a name="Sun_iPlanet"></a></h2><p>(Contributed by Michael Sgroi)</p><p>The following instructions were tested with Sun iPlanet 6.0 Service Pack 3 and should work for any release of iPlanet 6.0. To install P6Spy on iPlanet, complete the following steps:</p>
+<ol style="list-style-type: decimal">
+  <li>Extract the p6spy-install.jar file into a directory named spy-home, where spy-home is the name of the P6Spy directory. The p6spy-install.jar file contains p6spy.jar and spy.properties.</li>
+  <li>Add p6spy.jar to your classpath by running the command line executable kregedit. Under Software\iPlanet -&gt; 6.0 -&gt; Java -&gt; ClassPath, modify the entry adding spy-home to the end of the classpath.</li>
+  <li>Modify your application server to use the P6Spy database driver by running the command line executable jdbcsetup. Add a new 3rd Party JDBC Configuration as shown in the following example:  Driver Identifier: spy  Driver Classname: com.p6spy.engine.spy.P6SpyDriver  Driver Classpath: spy-home\p6spy.jar</li>
+  <li><p>To tell P6Spy about the wrapped database driver, register your DataSource by running the following command line executable:</p>
+  <div class="source"><pre>iasdeploy regdatasource -user iPlanet_admin_username -password iPlanet_admin_password -host localhost -port iPlanet_admin _port config_filename
+</pre></div><p>where iPlanet_admin_username is your iPlanet admin username, iPlanet_admin_password is your iPlanet admin password, iPlanet_admin_port is the iPlanet admin port number, and config_filename is the full path to the file containing your DataSource configuration. An example follows:</p>
+  <div class="source"><pre>&lt;ias-resource&gt;
+&lt;resource&gt;
+&lt;jndi-name&gt;jdbc/yourapp/ora-type4-spy&lt;/jndi-name&gt;
+&lt;jdbc&gt;
+&lt;driver-type&gt;spy&lt;/driver-type&gt;
+&lt;database-url&gt;jdbc:oracle:thin:@localhost:1521:orcl&lt;/database-url&gt;
+&lt;username&gt;user&lt;/username&gt;
+&lt;password&gt;password&lt;/password&gt;
+&lt;/jdbc&gt;
+&lt;/resource&gt;
+&lt;/ias-resource&gt;
+</pre></div><p>(For more details on parameters passed to iasdeploy and the format of config_filename, refer to the iPlanet documentation.) Installation is complete. When you run your application, a spy.log file is generated. The log file contains a list of all of the database statements executed. You can change both the destination of spy.log and what it logs by editing the spy.properties file (see Common Property File Settings).</p></li>
+</ol></div><div class="section"><h2>IBM&#xfffd; WebSphere?<a name="IBM_WebSphere"></a></h2><p>The following instructions were tested with IBM WebSphere 4.0.</p><p>Note: Before installing, make sure your JDBC driver is configured in your target application server as a DataSource.</p><p>To install P6Spy on IBM WebSphere, complete the following steps:</p>
 <ol style="list-style-type: decimal">
   <li>Extract the p6spy-install.jar file. The installation file contains p6spy.jar and spy.properties.</li>
   <li>Run the WebSphere Administration tool by logging in to <tt>http://localhost/9090/admin</tt>.</li>
@@ -318,7 +327,7 @@ Installation is complete. When you run your application, a spy.log file is gener
   <li>Move spy.properties into a directory listed in your classpath. For example, if your classpath is C:\p6spy\p6spy.jar;c:\java, copy it to the java directory. Unlike JAR files, you do not directly reference your property file in the classpath.</li>
   <li>Modify your application server or application to use the P6Spy database driver.</li>
   <li>Modify the realdriver line in the spy.properties file to reflect the wrapped database driver. An example of a modified realdriver line follows:  realdriver = oracle.jdbc.driver.OracleDriver Installation is complete. When you run your application, a spy.log file is generated. The log file contains a list of all of the database statements executed. You can change both the destination of spy.log and what it logs by editing the spy.properties file (see Common Property File Settings).</li>
-</ol><p>Extract the p6spy-install.jar file. The p6spy-install.jar file contains p6spy.jar and spy.properties. Put the p6spy.jar file in your classpath by copying the p6spy.jar file into your ext directory. If you are using an EJB server it probably has its own ext directory. If you are not using an EJB server, then use the JDK ext directory, which is JDK_HOME/jre/lib/ext, or add p6spy.jar to your classpath. Remember that if you are adding p6spy.jar to your classpath, you must reference the JAR filename directly. An example of the path in Microsoft Windows follows:  CLASSPATH=c:\p6spy\p6spy.jar Note: If you are using an EJB server, adding the p6spy.jar file to your classpath may not work. Some EJB servers ignore the classpath, setting their own on startup. Move spy.properties into a directory listed in your classpath. For example, if your classpath is C:\p6spy\p6spy.jar;c:\java, copy it to the java directory. Unlike JAR files, you do not directly reference your property file in the classpath. Modify your application server or application to use the P6Spy database driver. Modify the realdriver line in the spy.properties file to reflect the wrapped database driver. An example of a modified realdriver line follows:  realdriver = oracle.jdbc.driver.OracleDriver Installation is complete. When you run your application, a spy.log file is generated. The log file contains a list of all of the database statements executed. You can change both the destination of spy.log and what it logs by editing the spy.properties file (see Common Property File Settings).</p></div>
+</ol></div>
       </div>
     </div>
     <div class="clear">
