@@ -50,12 +50,19 @@
 
   </dependencies>
 
+  <!-- each module needs to have this for the scm information to be correct in maven site -->
+  <scm>
+    <url>https://github.com/p6spy/p6spy/</url>
+    <connection>scm:git:https://github.com/p6spy/p6spy.git</connection>
+    <developerConnection>scm:git:https://github.com/p6spy/p6spy.git</developerConnection>
+  </scm>
+
+
   <build>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>${maven-surefire-plugin-build}</version>
           <configuration>
             <systemPropertyVariables>
               <user.language>en_US</user.language>
@@ -66,84 +73,6 @@
             </includes>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>${java-build}</source>
-            <target>${java-build}</target>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <inherited>true</inherited>
-          <executions>
-            <execution>
-              <id>attach-sources</id>
-              <phase>install</phase>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-              <configuration>
-                <attach>true</attach>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <configuration>
-            <encoding>UTF-8</encoding>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-repository-plugin</artifactId>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <inherited>true</inherited>
-          <executions>
-            <execution>
-              <id>attach-javadocs</id>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>${maven-site-plugin-build}</version>
-          <executions>
-            <execution>
-              <phase>package</phase>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-              <configuration>
-                <attach>true</attach>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-
       </plugins>
   </build>
 

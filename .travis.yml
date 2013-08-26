@@ -20,7 +20,7 @@ before_script:
 script: "mvn clean test -DDB=${DB}"
 
 after_success:
- - "mvn site -DDB=H2"
+ - "[[ $TRAVIS_BRANCH == \"master\" ]] && {mvn site:site site:stage; mvn ghSite:site}"
 
 notifications:
   email:

@@ -20,9 +20,9 @@ javadocs
 
 # Other files
 /test-output
-/reloadtest.properties
+reloadtest.properties
 /scratch/
-/testspy.forms
+testspy.forms
 *.swp
 .DS_Store
 /pom.xml.versionsBackup

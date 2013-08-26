@@ -14,20 +14,36 @@
     statements.
   </description>
 
-  <url>https://github.com/p6spy/p6spy</url>
+  <url>http://github.com/p6spy/p6spy/</url>
+
+  <distributionManagement>
+    <site>
+      <id>github-pages</id>
+      <url>http://p6spy.github.io/p6spy/</url>
+    </site>
+  </distributionManagement>
 
   <mailingLists>
     <mailingList>
       <name>Developer List</name>
       <post>p6spy-developers@googlegroups.com</post>
-      <archive>https://groups.google.com/forum/#!forum/p6spy-developers</archive>
+      <subscribe>http://groups.google.com/group/p6spy-developers</subscribe>
+      <unsubscribe>http://groups.google.com/group/p6spy-developers</unsubscribe>
+      <archive>http://groups.google.com/group/p6spy-developers</archive>
     </mailingList>
     <mailingList>
       <name>User's List</name>
       <post>p6spy-users@googlegroups.com</post>
-      <archive>https://groups.google.com/forum/#!forum/p6spy-users</archive>
+      <subscribe>http://groups.google.com/group/p6spy-users</subscribe>
+      <unsubscribe>http://groups.google.com/group/p6spy-users</unsubscribe>
+      <archive>http://groups.google.com/group/p6spy-users</archive>
     </mailingList>
   </mailingLists>
+
+  <issueManagement>
+    <system>github</system>
+    <url>http://github.com/p6spy/p6spy/issues#issue/</url>
+  </issueManagement>
 
   <developers>
     <developer>
@@ -80,10 +96,15 @@
   </licenses>
 
   <scm>
-    <url>https://github.com/p6spy/p6spy</url>
+    <url>https://github.com/p6spy/p6spy/</url>
     <connection>scm:git:https://github.com/p6spy/p6spy.git</connection>
     <developerConnection>scm:git:https://github.com/p6spy/p6spy.git</developerConnection>
   </scm>
+
+  <ciManagement>
+    <url>https://travis-ci.org/p6spy/p6spy</url>
+    <system>Travis CI</system>
+  </ciManagement>
 
   <properties>
     <java-build>1.7</java-build>
@@ -102,13 +123,19 @@
     <commons-lang-build>2.6</commons-lang-build>
     <cobertura-maven-plugin-build>2.0</cobertura-maven-plugin-build>
     <maven-eclipse-plugin-build>2.9</maven-eclipse-plugin-build>
-    <maven-project-info-reports-plugin-build>2.1</maven-project-info-reports-plugin-build>
+    <maven-project-info-reports-plugin-build>2.7</maven-project-info-reports-plugin-build>
     <maven-site-plugin-build>3.2</maven-site-plugin-build>
     <maven-surefire-plugin-build>2.16</maven-surefire-plugin-build>
     <commons-digester-build>1.8.1</commons-digester-build>
     <pmd-build>4.2.5</pmd-build>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.version>3.0.4</maven.version>
   </properties>
+
+  <prerequisites>
+    <maven>${maven.version}</maven>
+  </prerequisites>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -127,6 +154,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-idea-plugin</artifactId>
+          <version>2.2</version>
           <configuration>
             <downloadSources>true</downloadSources>
             <downloadJavadocs>true</downloadJavadocs>
@@ -135,6 +163,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
           <configuration>
             <source>${java-build}</source>
             <target>${java-build}</target>
@@ -143,6 +172,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.8</version>
           <inherited>true</inherited>
           <executions>
             <execution>
@@ -169,6 +199,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
           <inherited>true</inherited>
           <executions>
             <execution>
@@ -186,13 +217,25 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
+          <version>2.6</version>
           <configuration>
             <encoding>UTF-8</encoding>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jxr-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-report-plugin</artifactId>
+          <version>2.16</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
           <executions>
             <execution>
               <phase>package</phase>
@@ -206,6 +249,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9</version>
           <inherited>true</inherited>
           <executions>
             <execution>
@@ -214,56 +258,48 @@
                 <goal>jar</goal>
               </goals>
             </execution>
+            <execution>
+              <id>site-aggregate</id>
+              <goals><goal>aggregate</goal></goals>
+              <phase>site</phase>
+            </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-repository-plugin</artifactId>
+          <version>2.3.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${maven-site-plugin-build}</version>
-          <executions>
-            <execution>
-              <phase>package</phase>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-              <configuration>
-                <siteDirectory>${project.artifactId}/src/site</siteDirectory>
-                <attach>true</attach>
-              </configuration>
-            </execution>
-            <!-- 11 feb 2009: (PAT) Is this necessary?
-       <execution>
-            <phase>deploy</phase>
-            <goals>
-                <goal>attach-descriptor</goal>
-            </goals>
-            <configuration>
-                <attach>true</attach>
-            </configuration>
-        </execution>
--->
-          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-module-markdown</artifactId>
+              <version>1.4</version>
+            </dependency>
+          </dependencies>
         </plugin>
-          <plugin>
-              <groupId>com.github.github</groupId>
-              <artifactId>site-maven-plugin</artifactId>
-              <version>0.8</version>
-              <configuration>
-                  <message>Creating site for ${project.name} v${project.version}</message>
-                  <oauth2Token>3644419c9515fff26a97516a565594a5b4b58c89</oauth2Token>
-              </configuration>
-              <executions>
-                  <execution>
-                      <goals>
-                          <goal>site</goal>
-                      </goals>
-                      <phase>site</phase>
-                  </execution>
-              </executions>
-          </plugin>
-
+        <plugin>
+          <groupId>com.github.github</groupId>
+          <artifactId>site-maven-plugin</artifactId>
+          <version>0.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-changelog-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -276,6 +312,52 @@
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
+        <configuration>
+          <message>Creating site for ${project.name} v${project.version}</message>
+          <oauth2Token>3644419c9515fff26a97516a565594a5b4b58c89</oauth2Token>
+          <outputDirectory>${project.build.directory}/staging</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>site</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <inherited>true</inherited>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>install</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <attach>true</attach>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${maven-project-info-reports-plugin-build}</version>
       </plugin>
     </plugins>
   </build>
@@ -358,9 +440,47 @@
     </dependencies>
   </dependencyManagement>
 
+  <reporting>
+    <plugins>
+<!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+-->
+<!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.2</version>
+      </plugin>
+-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+      </plugin>
+<!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+      </plugin>
+-->
+    </plugins>
+  </reporting>
+
   <modules>
     <module>p6spy</module>
-    <!-- <module>p6spy-dist</module> -->
+    <!--
+        <module>p6spy-dist</module>
+    -->
   </modules>
 
 </project>
