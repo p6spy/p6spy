@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 
+import groovy.util.logging.Log
 import groovy.xml.MarkupBuilder
 
 // get environment variables
@@ -16,6 +17,10 @@ if( passwordValue == null ) {
 
 // load existing settings.xml file
 def originalSettingsFile = new File(System.getProperty("user.home"), ".m2/settings.xml")
+if( !originalSettingsFile.exists() ) {
+  System.out.println("Could not load settings from ${originalSettingsFile.absolutePath}")
+  System.exit(-1)
+}
 def settings = new XmlParser().parse(originalSettingsFile);
 
 def servers = settings.servers
