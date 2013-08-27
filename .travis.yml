@@ -5,6 +5,9 @@ jdk:
   - openjdk7
 
 env:
+  global:
+    - SONATYPE_USERNAME=p6spy
+    - secure: "Eaot/cONtJUyLb0Gw8b75hzSEQEK3gl34mMe6hH+fQBOm7x6YcCx+6Cx3hmQvFVwpb1Q5+VHj9xE3Vk3wMrcaj0R6g4xHVMSSS7CZKbKIqgQlyIDgGTSuil94GGmwpJ9lGu71Re4b6p45K1RUIeW7VPZS+MpY3wNgmSBbozkH40="
   matrix:
     - DB=MySQL
     - DB=PostgresSQL
@@ -14,13 +17,18 @@ env:
 # Derby has quite some troubles with current tests => skipped for now
 #    - DB=Derby
 
+before_install:
+ - sudo apt-get install -qq pgp
+
 before_script:
  - "./script/travis/pre_${DB}.sh"
 
 script: "mvn clean test -DDB=${DB}"
 
-after_success:
- - "[[ $TRAVIS_BRANCH == \"master\" ]] && {mvn site:site site:stage; mvn ghSite:site}"
+after_script:
+ - "[[ $TRAVIS_BRANCH == \"master\" ]] && { mvn site:site site:stage; mvn ghSite:site }"
+ - "groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy --settings ~/.m2/deploySettings.xml"
+ #- "[[ $TRAVIS_BRANCH == \"master\" ]] && { groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy --settings ~/.m2/deploySettings.xml }"
 
 notifications:
   email:
