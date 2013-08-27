@@ -17,8 +17,8 @@ env:
 # Derby has quite some troubles with current tests => skipped for now
 #    - DB=Derby
 
-before_install:
- - sudo apt-get install -qq pgp
+#before_install:
+# - sudo apt-get install -qq pgp
 
 before_script:
  - "./script/travis/pre_${DB}.sh"
@@ -27,6 +27,8 @@ script: "mvn clean test -DDB=${DB}"
 
 after_script:
  - "[[ $TRAVIS_BRANCH == \"master\" ]] && { mvn site:site site:stage; mvn ghSite:site }"
+
+
 # - "groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy --settings ~/.m2/deploySettings.xml"
 # - "[[ $TRAVIS_BRANCH == \"master\" ]] && { groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy --settings ~/.m2/deploySettings.xml }"
 
