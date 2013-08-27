@@ -1,6 +1,6 @@
 # Configuration and Usage
 
-## Common Property File Settings
+## <a name="settings">Common Property File Settings</a>
 
 An example spy.properties file follows:
 
@@ -252,15 +252,18 @@ An example spy.properties file follows:
 
 ### module.xxx
 
-module.xxx is a particular module loaded at system startup. A module contains a group of functionality. If a module line is not commented out, it is loaded into memory, and will remain in memory until the application is restarted. Modules can not be changed by using the reloadproperties function. If all modules are commented out, then nothing except the wrapped database driver is loaded.
+module.xxx is a particular module loaded at system startup. A module contains a group of functionality. If a
+module line is not commented out, it is loaded into memory, and will remain in memory until the application is
+restarted. Modules can not be changed by using the reloadproperties function. If all modules are commented out,
+then nothing except the wrapped database driver is loaded.
 
 Currently the following modules are supported:
 
     module.log=com.p6spy.engine.logging.P6LogSpyDriver
     module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
 
-module.log is required for the logging functionality, see P6Log.
-module.outage is required for the outage functionality, see P6Outage.
+module.log is required for the logging functionality, see [P6Log](#p6log).
+module.outage is required for the outage functionality, see [P6Outage](#p6outage).
 
 ### realdriver
 
@@ -328,7 +331,9 @@ If you want to apply more intelligence to what is logged or not logged by P6Spy,
 
 ### autoflush
 
-For standard development, set the autoflush value to true. When set to true, every time a statement is intercepted, it is immediately written to the log file. In some cases, however, instant feedback on every statement is not a requirement. In those cases, the system performs slightly faster with autoflush set to false.
+For standard development, set the autoflush value to true. When set to true, every time a statement is intercepted, it
+is immediately written to the log file. In some cases, however, instant feedback on every statement is not a
+requirement. In those cases, the system performs slightly faster with autoflush set to false.
 
 An example follows:
 
@@ -336,9 +341,13 @@ An example follows:
 
 ### appender
 
-Appenders allow you to specify where and how log information is output. Appenders are a flexible architecture allowing anyone to write their own output class for P6Spy. To use an appender, specify the classname of the appender to use. The current release comes with three options which are log4j, stdout, and logging to a CSV text file (default).
+Appenders allow you to specify where and how log information is output. Appenders are a flexible architecture
+allowing anyone to write their own output class for P6Spy. To use an appender, specify the classname of the
+appender to use. The current release comes with three options which are log4j, stdout, and logging to a CSV
+text file (default).
 
-* Using a CSV File—To output to a file, uncomment the FileLogger appender and specify a logfile and whether or not to append to the file or to clear the file each time:
+* Using a CSV File—To output to a file, uncomment the FileLogger appender and specify a logfile and
+  whether or not to append to the file or to clear the file each time:
 
         #appender=com.p6spy.engine.logging.appender.Log4jLogger
         #appender=com.p6spy.engine.logging.appender.StdoutLogger
@@ -394,11 +403,14 @@ Enter a comma-delimited list of categories to exclude from your log file. See fi
 
 ### includecategories
 
-includecategories includes category information that describes the type of statement. This property is a comma-delimited list of categories to include. See excludecategories for a valid list of categories.
+includecategories includes category information that describes the type of statement. This property is a
+comma-delimited list of categories to include. See excludecategories for a valid list of categories.
 
 ### dateformat
 
-Setting a value for dateformat changes the date format value printed in the log file. No value prints the current time in milliseconds, a useful feature for parsing the log. The date format engine is Java's SimpleDateFormat class. Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
+Setting a value for dateformat changes the date format value printed in the log file. No value prints the current time
+in milliseconds, a useful feature for parsing the log. The date format engine is Java's SimpleDateFormat class.
+Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
 
     dateformat=MM-dd-yy HH:mm:ss:SS
 
@@ -440,9 +452,9 @@ The log file format of spy.log follows:
 
     current time|execution time|category|statement SQL String|effective SQL string
 
-* current time—The current time is obtained through System.getCurrentTimeMillis() and represents the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT. (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().) To change the format, use the dateformat property described in Common Property File Settings.
+* current time—The current time is obtained through System.getCurrentTimeMillis() and represents the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT. (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().) To change the format, use the dateformat property described in [Common Property File Settings](#settings).
 * execution time—The time it takes for a particular method to execute. (This is not the total cost for the SQL statement.) For example, a statement SELECT * FROM MYTABLE WHERE THISCOL = ? might be executed as a prepared statement, in which the .execute() function will be measured. This is recorded as the statement category. Further, as you call .next() on the ResultSet, each .next() call is recorded in the result category.
-* category—You can manage your log by including and excluding categories, which is described in Common Property File Settings.
+* category—You can manage your log by including and excluding categories, which is described in [Common Property File Settings](#settings).
 * statement SQL string—This is the SQL string passed to the statement object. If it is a prepared statement, it is the prepared statement that existed prior to the parameters being set. To see the complete statement, refer to effective SQL string.
 * effective SQL string—If you are not using a prepared statement, this contains no value. Otherwise, it fills in the values of the Prepared Statement so you can see the effective SQL statement that is passed to the database. Of course, the database still sees the prepared statement, but this string is a convenient way to see the actual values being sent to the database.
 
@@ -490,9 +502,9 @@ To run the JUnit tests, complete the following steps:
 
 ## P6Spy Modules
 
-P6Spy consists of two modules that provide various types of functionality which can be modified to suit your needs. These modules, P6Log and P6Outage, are explained in this section of the documentation. Though they have distinct functions, they share some common property file settings that allow you to specify which tables to log, the log file name, the log file location, whether to show the stacktrace (where the JDBC statement is being executed), and more. Refer to the Common Property File Settings documentation for details.
+P6Spy consists of two modules that provide various types of functionality which can be modified to suit your needs. These modules, P6Log and P6Outage, are explained in this section of the documentation. Though they have distinct functions, they share some [Common Property File Settings](#settings) that allow you to specify which tables to log, the log file name, the log file location, whether to show the stacktrace (where the JDBC statement is being executed), and more. Refer to the [Common Property File Settings](#settings) documentation for details.
 
-### P6Log
+### <a name="p6log">P6Log</a>
 
 P6Log is an open-source application included in the P6Spy distribution that intercepts and logs the database statements of any application that uses JDBC. This application monitors the SQL statements produced by EJB servers, enabling developers to write code that achieves maximum efficiency on the server. The P6Log module is enabled by default. Disable or enable the P6Log module by editing the spy.properties configuration file. If the module is commented out, it is not loaded, and the functionality is not available. If the module is not commented out, the functionality is available. The applicable portion of the spy.properties file follows:
 
@@ -514,7 +526,7 @@ P6Log is an open-source application included in the P6Spy distribution that inte
     #module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
 
 
-### P6Outage
+### <a name="p6outage">P6Outage</a>
 
 P6Outage is an open-source application included in the P6Spy distribution. P6Outage minimizes any logging performance overhead by logging only long-running statements. The P6Outage module is disabled by default. Disable or enable the P6Outage module by editing the spy.properties configuration file. If the module is commented out, it is not loaded, and the functionality is not available. If the module is not commented out, the functionality is available.
 
