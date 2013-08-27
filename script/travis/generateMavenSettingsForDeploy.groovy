@@ -19,16 +19,20 @@ if( !originalSettingsFile.exists() ) {
   System.exit(-1)
 }
 def settings = new XmlParser().parse(originalSettingsFile);
+System.out.println("Loaded settings.xml")
 
 def servers = settings.servers
 if( servers == null ) {
   // create the node if it did not exist
+  System.out.println("No servers configured in settings.xml - adding node")
   servers = settings.append(new NodeBuilder().createNode("servers"))
 } else {
   // if it existed, it will be a NodeList...
+  System.out.println("Servers configured in settings.xml - appending additional server nodes")
   servers = servers[0]
 }
 
+System.out.println("Appending server node for snapshots")
 // append server node for snapshots
 servers.append(NodeBuilder.newInstance().server {
   username(usernameValue)
@@ -36,6 +40,7 @@ servers.append(NodeBuilder.newInstance().server {
   id('sonatype-nexus-snapshots')
 })
 
+System.out.println("Appending server node for staging")
 // append server node for staging
 servers.append(NodeBuilder.newInstance().server {
   username(usernameValue)
@@ -43,7 +48,9 @@ servers.append(NodeBuilder.newInstance().server {
   id('sonatype-nexus-staging')
 })
 
+def targetFile = new File(originalSettingsFile.parentFile, 'deploySettings.xml')
+System.out.println("Writing ${targetFile.absolutePath}")
 // write out new settings.xml file
-def writer = new FileWriter(new File(originalSettingsFile.parentFile, 'deploySettings.xml'))
+def writer = new FileWriter(targetFile)
 new XmlNodePrinter(new PrintWriter(writer)).print(settings)
 writer.close()
