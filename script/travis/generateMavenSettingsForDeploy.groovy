@@ -19,38 +19,34 @@ if( !originalSettingsFile.exists() ) {
   System.exit(-1)
 }
 def settings = new XmlParser().parse(originalSettingsFile);
-println "Loaded settings.xml"
+println "Maven settings loaded from ${originalSettingsFile.absolutePath}"
 
 def servers = settings.servers
-if( servers == null ) {
+if( servers.size() == 0 ) {
   // create the node if it did not exist
-  println "No servers configured in settings.xml - adding node"
-  servers = settings.append(new NodeBuilder().createNode("servers"))
-} else {
-  // if it existed, it will be a NodeList...
-  println "Servers configured in settings.xml - appending additional server nodes"
-  servers = servers[0]
+  settings.append(new NodeBuilder().createNode("servers"))
+  servers = settings.servers
 }
 
-println "Appending server node for snapshots"
 // append server node for snapshots
-servers.append(NodeBuilder.newInstance().server {
+println "Appending server node for snapshots"
+servers[0].append(NodeBuilder.newInstance().server {
   username(usernameValue)
   password(passwordValue)
   id('sonatype-nexus-snapshots')
 })
 
-println "Appending server node for staging"
 // append server node for staging
-servers.append(NodeBuilder.newInstance().server {
+println "Appending server node for staging"
+servers[0].append(NodeBuilder.newInstance().server {
   username(usernameValue)
   password(passwordValue)
   id('sonatype-nexus-staging')
 })
 
+// write out new settings.xml file
 def targetFile = new File(originalSettingsFile.parentFile, 'deploySettings.xml')
 println "Writing ${targetFile.absolutePath}"
-// write out new settings.xml file
 def writer = new FileWriter(targetFile)
 new XmlNodePrinter(new PrintWriter(writer)).print(settings)
 writer.close()
