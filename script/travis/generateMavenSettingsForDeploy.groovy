@@ -1,8 +1,5 @@
 #!/usr/bin/env groovy
 
-import groovy.util.logging.Log
-import groovy.xml.MarkupBuilder
-
 // get environment variables
 def usernameValue = System.getenv("SONATYPE_USERNAME")
 def passwordValue = System.getenv("SONATYPE_PASSWORD")
