@@ -34,4 +34,5 @@ after_script:
 
 notifications:
   email:
-    - p6spy-developers@googlegroups.com
+    - quinton.mccombs@gmail.com
+#    - p6spy-developers@googlegroups.com
