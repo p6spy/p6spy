@@ -26,7 +26,7 @@ before_script:
 script: "mvn clean test -DDB=${DB}"
 
 after_script:
- - "[[ $TRAVIS_BRANCH == \"master\" ]] && { mvn site:site site:stage; mvn ghSite:site }"
+ - if [[ $TRAVIS_BRANCH == "master" ]]; then mvn site:site site:stage; mvn ghSite:site; fi
 
 
 # - "groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy --settings ~/.m2/deploySettings.xml"
