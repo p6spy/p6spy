@@ -29,11 +29,6 @@ after_script:
  - if [[ $TRAVIS_BRANCH == "master" ]]; then mvn site:site site:stage; mvn ghSite:site; fi
  - if [[ $TRAVIS_BRANCH == "master" ]]; then groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy -DskipTests --settings ~/.m2/deploySettings.xml; fi
 
-
-# - "groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy --settings ~/.m2/deploySettings.xml"
-# - "[[ $TRAVIS_BRANCH == \"master\" ]] && { groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy --settings ~/.m2/deploySettings.xml }"
-
 notifications:
   email:
-    - quinton.mccombs@gmail.com
-#    - p6spy-developers@googlegroups.com
+    - p6spy-developers@googlegroups.com
