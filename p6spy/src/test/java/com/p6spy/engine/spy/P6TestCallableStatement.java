@@ -91,14 +91,23 @@ package com.p6spy.engine.spy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.sql.CallableStatement;
+import java.sql.SQLException;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+@RunWith(Parameterized.class)
 public class P6TestCallableStatement extends P6TestPreparedStatement {
 
-	@Ignore
+	public P6TestCallableStatement(String db) throws SQLException, IOException {
+    super(db);
+  }
+
+  @Ignore
     @Test
     public void testCallable () throws Exception {
        int bigParam = 1024;

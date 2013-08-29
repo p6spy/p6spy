@@ -108,10 +108,17 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+@RunWith(Parameterized.class)
 public class P6TestPerform extends P6TestFramework {
 
     public static int rowsToCreate = 10000;
+
+    public P6TestPerform(String db) throws SQLException, IOException {
+      super(db);
+    }
 
     @Before
     public void setupPerform() throws SQLException {
@@ -219,10 +226,10 @@ public class P6TestPerform extends P6TestFramework {
     @Override
     protected Map getDefaultPropertyFile() throws IOException {
 
-        Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
+        Properties props = loadProperties(p6TestProperties);
         String realdrivername = props.getProperty("p6realdriver");
 
-        Properties props2 = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
+        Properties props2 = loadProperties(p6TestProperties);
         String realdrivername2 = props2.getProperty("p6realdriver2");
 
         HashMap tp = new HashMap();

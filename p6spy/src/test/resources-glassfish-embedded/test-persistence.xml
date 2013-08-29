@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+   
+   <persistence-unit name="a">
+      <provider>org.hibernate.ejb.HibernatePersistence</provider>
+      <jta-data-source>jdbc/aP6Spy</jta-data-source>
+      <class>com.p6spy.engine.spy.ds.Book</class>
+      <exclude-unlisted-classes>true</exclude-unlisted-classes>
+      <properties>
+         <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+         <property name="eclipselink.logging.level" value="FINE"/>
+         <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+         <property name="hibernate.show_sql" value="true"/>
+      </properties>
+   </persistence-unit>
+   
+   
+   <!-- Two phase commit using two different JPA providers -->
+   <persistence-unit name="c">
+      <provider>org.hibernate.ejb.HibernatePersistence</provider>
+      <jta-data-source>jdbc/c</jta-data-source>
+      <class>com.p6spy.engine.spy.ds.Game</class>
+      <exclude-unlisted-classes>true</exclude-unlisted-classes>
+      <properties>
+         <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+         <property name="eclipselink.logging.level" value="FINE"/>
+         <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+         <property name="hibernate.show_sql" value="true"/>
+      </properties>
+   </persistence-unit>
+   
+   <persistence-unit name="d">
+      <!--
+      <provider>org.hibernate.ejb.HibernatePersistence</provider>
+      -->
+      <!-- TODO: whenever we'll support multiple (XA) DataSources we should enable this -->
+      <!-- <jta-data-source>jdbc/bP6Spy</jta-data-source> -->
+      <jta-data-source>jdbc/d</jta-data-source>
+      
+      <class>com.p6spy.engine.spy.ds.Invoice</class>
+      <exclude-unlisted-classes>true</exclude-unlisted-classes>
+      <properties>
+         <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+         <property name="eclipselink.logging.level" value="FINE"/>
+         <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+         <property name="hibernate.show_sql" value="true"/>
+      </properties>
+   </persistence-unit>
+</persistence>

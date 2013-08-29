@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 9.0 Resource Definitions //EN"
+   "http://www.sun.com/software/appserver/dtds/sun-resources_1_4.dtd">
+<resources>
+  <!-- <jdbc-resource pool-name="EmbeddedDerbyPoolAP6Spy"
+      jndi-name="jdbc/aP6Spy"/>
+   <jdbc-connection-pool name="EmbeddedDerbyPoolAP6Spy"
+      res-type="javax.sql.XADataSource"
+      datasource-classname="com.p6spy.engine.spy.P6XADataSource"
+      is-isolation-level-guaranteed="false">
+      <property name="databaseName" value="target/databases/derby-a"/>
+      <property name="createDatabase" value="create"/>
+   </jdbc-connection-pool> -->
+   
+   <jdbc-resource pool-name="EmbeddedDerbyPoolA"
+      jndi-name="jdbc/a"/>
+   <jdbc-connection-pool name="EmbeddedDerbyPoolA"
+      res-type="javax.sql.XADataSource"
+      datasource-classname="org.apache.derby.jdbc.EmbeddedXADataSource"
+      is-isolation-level-guaranteed="false">
+      <property name="databaseName" value="target/databases/derby-a"/>
+      <property name="createDatabase" value="create"/>
+   </jdbc-connection-pool>
+   
+   <!-- whenever we'll support multiple XA DataSources we should enable this -->
+   <!-- <jdbc-resource pool-name="EmbeddedDerbyPoolBP6Spy"
+      jndi-name="jdbc/bP6Spy"/>
+   <jdbc-connection-pool name="EmbeddedDerbyPoolBP6Spy"
+      res-type="javax.sql.XADataSource"
+      datasource-classname="org.apache.derby.jdbc.EmbeddedDataSource"
+      is-isolation-level-guaranteed="false">
+      <property name="databaseName" value="target/databases/derby-b"/>
+      <property name="createDatabase" value="create"/>
+   </jdbc-connection-pool> -->
+   
+   <jdbc-resource pool-name="EmbeddedDerbyPoolB"
+      jndi-name="jdbc/b"/>
+   <jdbc-connection-pool name="EmbeddedDerbyPoolB"
+      res-type="javax.sql.XADataSource"
+      datasource-classname="org.apache.derby.jdbc.EmbeddedXADataSource"
+      is-isolation-level-guaranteed="false">
+      <property name="databaseName" value="target/databases/derby-b"/>
+      <property name="createDatabase" value="create"/>
+   </jdbc-connection-pool>
+</resources>

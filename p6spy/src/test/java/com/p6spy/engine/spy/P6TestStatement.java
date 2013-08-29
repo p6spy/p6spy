@@ -119,18 +119,27 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6SpyOptions;
 
+@RunWith(Parameterized.class)
 public class P6TestStatement extends P6TestFramework {
 
+    public P6TestStatement(String db) throws SQLException, IOException {
+      super(db);
+    }
+    
     @Before
     public void setUpStatement() {
         try {

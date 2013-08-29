@@ -4,24 +4,15 @@ jdk:
   - oraclejdk7
   - openjdk7
 
-env:
-  matrix:
-    - DB=MySQL
-    - DB=PostgresSQL
-    - DB=HSQLDB
-    - DB=H2
-    - DB=SQLite
-# Derby has quite some troubles with current tests => skipped for now
-#    - DB=Derby
-
 before_script:
- - "./script/travis/pre_${DB}.sh"
+ - "psql -c 'create database p6spy;' -U postgres" # test DB creation for PostgresSQL
+ - "mysql -e 'create database p6spy;'" # test DB creation for MySQL
+  
+script: "mvn clean test -P travis"
 
-script: "mvn clean test -DDB=${DB}"
-
-after_success:
- - "[[ $TRAVIS_BRANCH == \"master\" ]] && {mvn site:site site:stage; mvn ghSite:site}"
-
-notifications:
-  email:
-    - p6spy-developers@googlegroups.com
+#after_success:
+# - "[[ $TRAVIS_BRANCH == \"master\" ]] && {mvn site:site site:stage; mvn ghSite:site}"
+#
+#notifications:
+#  email:
+#    - p6spy-developers@googlegroups.com

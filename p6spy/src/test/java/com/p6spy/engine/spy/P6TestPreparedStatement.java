@@ -92,6 +92,7 @@ package com.p6spy.engine.spy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -100,8 +101,15 @@ import java.sql.Statement;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+@RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
+
+    public P6TestPreparedStatement(String db) throws SQLException, IOException {
+      super(db);
+    }
 
     @Before
     public void setUpPreparedStatement() {
