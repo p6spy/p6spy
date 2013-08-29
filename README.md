@@ -1,9 +1,8 @@
 p6spy
 =====
-Build Status: [![Build Status](https://secure.travis-ci.org/p6spy/p6spy.png?branch=master)](http://travis-ci.org/p6spy/p6spy)
+[![Build Status](https://secure.travis-ci.org/p6spy/p6spy.png?branch=master)](http://travis-ci.org/p6spy/p6spy)
 
 P6Spy is a framework that enables database data to be seamlessly intercepted and manipulated with no code changes to existing application. The P6Spy distribution includes P6Log, an application which logs all JDBC transactions for any Java application.
-
 
 **Documentation:**    
 [Installation](http://p6spy.github.io/p6spy/install.html)    
