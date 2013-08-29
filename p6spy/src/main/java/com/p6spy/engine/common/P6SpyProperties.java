@@ -157,7 +157,11 @@ public class P6SpyProperties {
                             props.setProperty(propertyName, rv.toString());
                             P6LogQuery.info("added property '" + propertyName + "' with value of '" + rv + "'");
                         }
-                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                    } catch (IllegalAccessException e ) {
+                      throw new IllegalStateException(e);
+                    } catch(IllegalArgumentException e ) {
+                      throw new IllegalStateException(e);
+                    } catch( InvocationTargetException e) {
                         throw new IllegalStateException(e);
                     }
             }

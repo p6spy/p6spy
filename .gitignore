@@ -16,7 +16,7 @@ javadocs
 /atlassian-ide-plugin.xml
 
 # Log files
-/spy.log
+spy.log
 
 # Other files
 /test-output
