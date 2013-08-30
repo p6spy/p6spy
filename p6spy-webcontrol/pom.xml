@@ -23,6 +23,26 @@
     <developerConnection>scm:git:https://github.com/p6spy/p6spy.git</developerConnection>
   </scm>
 
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+              <report>dependency-info</report>
+<!--
+              This module is causing a failure during the build trying to find something in WEB-INF/classes
+              <report>dependencies</report>
+-->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 
 
   <dependencies>
