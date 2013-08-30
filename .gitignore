@@ -6,9 +6,9 @@ javadocs
 
 # Eclipse files
 /bin
-/.settings
-/.classpath
-/.project
+.settings
+.classpath
+.project
 
 # IntelliJ files
 /.idea

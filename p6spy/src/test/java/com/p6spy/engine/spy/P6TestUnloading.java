@@ -62,6 +62,7 @@ package com.p6spy.engine.spy;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -74,10 +75,17 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.p6spy.engine.common.P6Util;
 
+@RunWith(Parameterized.class)
 public class P6TestUnloading extends P6TestFramework {
+
+    public P6TestUnloading(String db) throws SQLException, IOException {
+      super(db);
+    }
 
     @Before
     public void setUpUnloading() {
@@ -90,14 +98,14 @@ public class P6TestUnloading extends P6TestFramework {
     @Ignore
     @Test
     public void testDriverUnloading() throws Exception {
-        Properties props = P6TestUtil.loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
+        Properties props = P6TestUtil.loadProperties(p6TestProperties);
         String url = props.getProperty("url");
         String user = props.getProperty("user");
         String password = props.getProperty("password");
         String p6Driver = props.getProperty("p6driver");
 
         unloadAll();
-        Map properties = P6TestUtil.getDefaultPropertyFile();
+        Map properties = P6TestUtil.getDefaultPropertyFile(p6TestProperties);
         P6TestUtil.reloadProperty(properties);
 //            registerDriver(oracleDriver);
         //P6Util.forName(oracleDriver);

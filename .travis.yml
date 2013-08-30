@@ -8,22 +8,15 @@ env:
   global:
     - SONATYPE_USERNAME=p6spy
     - secure: "Eaot/cONtJUyLb0Gw8b75hzSEQEK3gl34mMe6hH+fQBOm7x6YcCx+6Cx3hmQvFVwpb1Q5+VHj9xE3Vk3wMrcaj0R6g4xHVMSSS7CZKbKIqgQlyIDgGTSuil94GGmwpJ9lGu71Re4b6p45K1RUIeW7VPZS+MpY3wNgmSBbozkH40="
-  matrix:
-    - DB=MySQL
-    - DB=PostgresSQL
-    - DB=HSQLDB
-    - DB=H2
-    - DB=SQLite
-# Derby has quite some troubles with current tests => skipped for now
-#    - DB=Derby
 
 #before_install:
 # - sudo apt-get install -qq pgp
 
 before_script:
- - "./script/travis/pre_${DB}.sh"
-
-script: "mvn clean test -DDB=${DB}"
+ - "psql -c 'create database p6spy;' -U postgres" # test DB creation for PostgresSQL
+ - "mysql -e 'create database p6spy;'" # test DB creation for MySQL
+  
+script: "mvn clean test -P travis"
 
 after_script:
  - if [[ $TRAVIS_BRANCH == "master" ]]; then mvn -DDB=H2 clean verify site:site site:stage; mvn ghSite:site; fi

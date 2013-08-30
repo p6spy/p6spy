@@ -137,7 +137,10 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -145,6 +148,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.junit.Before;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.p6spy.engine.common.OptionReloader;
 import com.p6spy.engine.common.P6LogQuery;
@@ -153,13 +157,84 @@ import com.p6spy.engine.common.P6Util;
 
 public abstract class P6TestFramework {
 
-    // default to using H2 if system property is not set
-    private static final String ENV_DB = (System.getProperty("DB") == null ? "H2": System.getProperty("DB"));
-    public static final String P6_TEST_PROPERTIES = "P6Test" + (ENV_DB != null ? "_" + ENV_DB : "") + ".properties";
-    public static final String PROPERTY_FILE = "reloadtest.properties";
+  /**
+   * Environment variable enabling control over the DB to be used for testing. <br/>
+   * <br/>
+   * Comma separated values are allowed here, like:
+   * <p>
+   * MySQL,PostgresSQL,H2,HSQLDB,SQLite
+   * </p>
+   * However if none is specified, default is:
+   * <p>
+   * H2
+   * </p>
+   */
+  private static final String ENV_DB = (System.getProperty("DB") == null ? "H2" : System
+      .getProperty("DB"));
 
-    protected Connection connection = null;
+  public static final Collection<Object[]> DBS_IN_TEST;
 
+  static {
+    if (ENV_DB.contains(",")) {
+      Object[] dbs = ENV_DB.split(",");
+      Object[][] params = new Object[dbs.length][1];
+      for (int i = 0; i < dbs.length; i++) {
+        params[i] = new Object[] { dbs[i] };
+      }
+      DBS_IN_TEST = Arrays.asList(params);
+    } else {
+      DBS_IN_TEST = Arrays.asList(new Object[][] { { ENV_DB } });
+    }
+  }
+
+  public static final String PROPERTY_FILE = "reloadtest.properties";
+
+  /**
+   * P6Spy properties file relevant for current run.
+   */
+  protected final String p6TestProperties;
+
+  protected Connection connection = null;
+
+  public P6TestFramework(String db) throws SQLException, IOException {
+    p6TestProperties = "P6Test_" + db + ".properties";
+
+    resetLoadedDrivers();
+  }
+
+  public void resetLoadedDrivers() throws SQLException, IOException {
+    List<Driver> dereg = new ArrayList<Driver>();
+    for (Enumeration<Driver> e = DriverManager.getDrivers(); e.hasMoreElements();) {
+      Driver driver = e.nextElement();
+
+      // get rid of all driver stuff to start with the clean table
+      // except derby ones, as those we'll need for the datasource (arquilian) testing
+      // not sure how they should be reloaded afterwards
+      if (!driver.getClass().getName().contains("org.apache.derby")) {
+        dereg.add(driver);
+      }
+    }
+
+    // if you found any drivers let's dereg them now
+    for (Driver driver : dereg) {
+      DriverManager.deregisterDriver(driver);
+    }
+
+    // make sure to reinit with the db file related to current run
+    Map tp = getDefaultPropertyFile();
+    reloadProperty(tp);
+
+    // make sure to reinit for each Driver run as we run parametrized builds
+    // and need to have fresh stuff for every specific driver
+    P6SpyDriverCore.initialized = false;
+    P6SpyDriver.initMethod();
+  }
+
+  @Parameters
+  public static Collection<Object[]> dbs() {
+    return DBS_IN_TEST;
+  }
+    
     @Before
     public void setUpFramework() {
     	new File(PROPERTY_FILE).delete();
@@ -172,7 +247,7 @@ public abstract class P6TestFramework {
             // this is a scratch file that won't hurt spy.properties
             Map tp = getDefaultPropertyFile();
             reloadProperty(tp);
-            Properties props = loadProperties(P6_TEST_PROPERTIES);
+            Properties props = loadProperties(p6TestProperties);
             String drivername = props.getProperty("p6driver");
             String user = props.getProperty("user");
             String password = props.getProperty("password");
@@ -185,7 +260,7 @@ public abstract class P6TestFramework {
 
             printAllDrivers();
         } catch (Exception e) {
-            fail(e.getMessage()+" check the properties in "+ P6_TEST_PROPERTIES);
+            fail(e.getMessage()+" check the properties in "+ p6TestProperties);
         }
     }
 
@@ -256,17 +331,27 @@ public abstract class P6TestFramework {
 
     protected Map getDefaultPropertyFile() throws IOException {
 
-        Properties props = loadProperties(P6_TEST_PROPERTIES);
+        Properties props = loadProperties(p6TestProperties);
         String realdrivername = props.getProperty("p6realdriver");
-
-        Properties props2 = loadProperties(P6_TEST_PROPERTIES);
-        String realdrivername2 = props2.getProperty("p6realdriver2");
+        String realdrivername2 = props.getProperty("p6realdriver2");
+        
+        String realdatasource = props.getProperty("realdatasource");
+        String realdatasourceclass = props.getProperty("realdatasourceclass");
 
         Map tp = new HashMap();
         tp.put("module.outage", "com.p6spy.engine.outage.P6OutageFactory");
         tp.put("module.log", "com.p6spy.engine.logging.P6LogFactory");
         tp.put("realdriver", realdrivername);
-        tp.put("realdriver2", realdrivername2);
+        // realdriver2 is optional
+        if (null != realdrivername2) {
+          tp.put("realdriver2", realdrivername2);          
+        }
+        if (null != realdatasource) {
+          tp.put("realdatasource", realdatasource);
+        }
+        if (null != realdatasourceclass) {
+          tp.put("realdatasourceclass", realdatasourceclass);
+        }
         tp.put("filter", "false");
         tp.put("executionthreshold", "");
         tp.put("include", "");
