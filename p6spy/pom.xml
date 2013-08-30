@@ -27,32 +27,36 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
     </dependency>
 
-    <!--
-         to have tests running in eclipse or intellij, uncomment specific driver or activate the correct
-         maven profile
--->
-    <!--
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-    </dependency>
-    -->
-    <!--
-    <dependency>
-      <groupId>postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-    </dependency>
-
-    <dependency>
+	<!-- all the JDBC drivers tested -->
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>postgresql</groupId>
+		<artifactId>postgresql</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.hsqldb</groupId>
+		<artifactId>hsqldb</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+	</dependency>
+	<dependency>
 		<groupId>org.xerial</groupId>
 		<artifactId>sqlite-jdbc</artifactId>
 	</dependency>
-     -->
+	<dependency>
+		<groupId>org.apache.derby</groupId>
+		<artifactId>derby</artifactId>
+	</dependency>
 
-  </dependencies>
+
+	  </dependencies>
 
   <!-- each module needs to have this for the scm information to be correct in maven site -->
   <scm>
@@ -61,154 +65,73 @@
     <developerConnection>scm:git:https://github.com/p6spy/p6spy.git</developerConnection>
   </scm>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables>
+						<user.language>en_US</user.language>
+					</systemPropertyVariables>
+					<includes>
+						<include>**/P6Test*.java</include>
+					</includes>
+					<systemProperties>
+						<property>
+							<name>derby.stream.error.file</name>
+							<value>target/derby.log</value>
+						</property>
+					</systemProperties>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
-  <build>
+  <profiles>
+
+    <profile>
+      <id>defaultDB</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
             <systemPropertyVariables>
-              <user.language>en_US</user.language>
+              <!-- can be started with any DBs to test for, like: "-DDB=H2,HSQLDB" however if none specified, default is H2 
+              however keep in mind that some tests run with preconfigured drivers (i.e. multidriver, ...)-->
               <DB>${env.DB}</DB>
             </systemPropertyVariables>
-            <includes>
-              <include>**/P6Test*.java</include>
-            </includes>
-          </configuration>
-        </plugin>
-      </plugins>
-  </build>
-
-  <profiles>
-
-    <profile>
-      <!-- Default database profile which is activated when the "DB" system property is not set -->
-      <id>dbDefault</id>
-      <activation>
-        <property>
-          <name>!DB</name>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.h2database</groupId>
-          <artifactId>h2</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>MySQL</id>
-      <activation>
-        <property>
-          <name>DB</name>
-          <value>MySQL</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>mysql</groupId>
-          <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>PostgresSQL</id>
-      <activation>
-        <property>
-          <name>DB</name>
-          <value>PostgresSQL</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>postgresql</groupId>
-          <artifactId>postgresql</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>HSQLDB</id>
-      <activation>
-        <property>
-          <name>DB</name>
-          <value>HSQLDB</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.hsqldb</groupId>
-          <artifactId>hsqldb</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>H2</id>
-      <activation>
-        <property>
-          <name>DB</name>
-          <value>H2</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.h2database</groupId>
-          <artifactId>h2</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>SQLite</id>
-      <activation>
-        <property>
-          <name>DB</name>
-          <value>SQLite</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.xerial</groupId>
-          <artifactId>sqlite-jdbc</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>Derby</id>
-      <activation>
-        <property>
-          <name>DB</name>
-          <value>Derby</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.derby</groupId>
-          <artifactId>derby</artifactId>
-        </dependency>
-      </dependencies>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <excludes>
-                <exclude>**/P6TestCommon*.java</exclude>
-              </excludes>
             </configuration>
-          </plugin>
-        </plugins>
-      </build>
+            </plugin>
+            </plugins>
+            </build>
     </profile>
-  </profiles>
 
+	<profile>
+		<id>travis</id>
+		<build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <systemPropertyVariables>
+              <!-- all the DBs we want to test with
+               please note: Derby is not in list yet -->
+              <DB>PostgresSQL,MySQL,H2,HSQLDB,SQLite</DB>
+            </systemPropertyVariables>
+            </configuration>
+            </plugin>
+            </plugins>
+            </build>
+	</profile>
+  </profiles>
+  
   <reporting>
     <plugins>
       <plugin>
@@ -226,5 +149,5 @@
       </plugin>
     </plugins>
   </reporting>
-
+    
 </project>

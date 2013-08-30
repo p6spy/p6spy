@@ -71,9 +71,9 @@ import com.p6spy.engine.common.OptionReloader;
 import com.p6spy.engine.common.P6SpyOptions;
 import com.p6spy.engine.common.P6SpyProperties;
 
-public class P6TestOptions extends P6TestFramework {
+public class P6TestOptions /*extends P6TestFramework*/ {
 
-	@Ignore
+  @Ignore
     @Test
     public void testSavingOptions() {
 	// should go back and refactor all that

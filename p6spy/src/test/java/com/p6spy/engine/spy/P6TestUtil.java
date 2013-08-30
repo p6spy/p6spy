@@ -110,11 +110,13 @@
 package com.p6spy.engine.spy;
 
 import junit.framework.*;
+
 import java.sql.*;
 import java.io.*;
 import java.util.*;
 
 import com.p6spy.engine.common.*;
+
 import org.apache.log4j.Logger;
 
 import static org.junit.Assert.assertTrue;
@@ -179,9 +181,9 @@ public class P6TestUtil  {
         out.close();
     }
 
-    protected static Map getDefaultPropertyFile() throws IOException {
+    protected static Map getDefaultPropertyFile(String p6TestProperties) throws IOException {
 
-        Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
+        Properties props = loadProperties(p6TestProperties);
         String realdrivername = props.getProperty("p6realdriver");
         String realdrivername2 = props.getProperty("p6realdriver2");
 
@@ -266,8 +268,8 @@ public class P6TestUtil  {
         }
     }
 
-    public static Connection loadDrivers(String drivernameProperty) throws SQLException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
+    public static Connection loadDrivers(String drivernameProperty, String p6TestProperties) throws SQLException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        Properties props = loadProperties(p6TestProperties);
         String drivername = props.getProperty(drivernameProperty);
         String user = props.getProperty("user");
         String password = props.getProperty("password");

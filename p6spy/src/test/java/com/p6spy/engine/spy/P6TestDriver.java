@@ -72,10 +72,17 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+@RunWith(Parameterized.class)
 public class P6TestDriver extends P6TestFramework {
 	
-	private static final String JDBC_DRIVER_CLASS_NAME_SQLITE = "org.sqlite.JDBC";
+	public P6TestDriver(String db) throws SQLException, IOException {
+    super(db);
+  }
+
+  private static final String JDBC_DRIVER_CLASS_NAME_SQLITE = "org.sqlite.JDBC";
 	private static final String JDBC_DRIVER_CLASS_NAME_MYSQL = "com.mysql.jdbc.Driver";
 
 	@Test
@@ -158,7 +165,7 @@ public class P6TestDriver extends P6TestFramework {
      * @throws SQLException
      */
     private Driver getWrappedDriver() throws IOException, SQLException {
-    	Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
+    	Properties props = loadProperties(p6TestProperties);
     	String url = props.getProperty("url");
     	Driver driver = DriverManager.getDriver(url);
 

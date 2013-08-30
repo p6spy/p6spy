@@ -123,25 +123,28 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.p6spy.engine.common.OptionReloader;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6SpyOptions;
 import com.p6spy.engine.common.P6SpyProperties;
-import com.p6spy.engine.common.P6Util;
 
+@RunWith(Parameterized.class)
 public class P6TestCommon extends P6TestFramework {
+
+    public P6TestCommon(String db) throws SQLException, IOException {
+      super(db);
+    }
 
     @Before
     public void setUpCommon() {
@@ -357,74 +360,6 @@ public class P6TestCommon extends P6TestFramework {
         assertEquals(P6SpyOptions.getStackTraceClass(), "dummy");
         assertEquals(P6SpyOptions.getReloadProperties(), true);
         assertEquals(P6SpyOptions.getReloadPropertiesInterval(), 1);
-    }
-
-    @Ignore
-    @Test
-    public void testMultiDriver() {
-    	Statement statement2 = null;
-
-        try {
-        	// rebuild the properties so it can find the second connection
-            Map tp = getDefaultPropertyFile();
-            reloadProperty(tp);
-
-            // rebuild a second connection for the multi-driver test
-            Properties props = loadProperties(P6TestFramework.P6_TEST_PROPERTIES);
-            String drivername = props.getProperty("p6driver2");
-            String user = props.getProperty("user2");
-            String password = props.getProperty("password2");
-            String url = props.getProperty("url2");
-
-            P6Util.forName(drivername);
-            System.err.println("REGISTERED: "+drivername);
-            printAllDrivers();
-            Driver driver = DriverManager.getDriver(url);
-            Connection conn2 = DriverManager.getConnection(url, user, password);
-            statement2 = conn2.createStatement();
-
-            // the original
-            Statement statement = connection.createStatement();
-
-            // rebuild the tables
-            dropStatement("drop table common_test2", statement2);
-            statement2.execute("create table common_test2 (col1 varchar(255), col2 int(5))");
-
-            // this should be fine
-            String query = "select 'q1' from common_test";
-            statement.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
-
-            // this table should not exist
-            try {
-                query = "select 'q2' from common_test2";
-                statement.executeQuery(query);
-                fail("Exception should have occured");
-            } catch (Exception e) {
-            }
-
-            // this should be fine for the second connection
-            query = "select 'b' from common_test2";
-            statement2.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
-
-            // this table should not exist
-            try {
-                query = "select 'q3' from common_test";
-                statement2.executeQuery(query);
-                fail("Exception should have occured");
-            } catch (Exception e) {
-            }
-
-        } catch (Exception e) {
-            printAllDrivers();
-            fail(e.getMessage()+getStackTrace(e));
-        } finally {
-            try {
-                dropStatement("drop table common_test2", statement2);
-                statement2.close();
-            } catch (Exception e) { }
-        }
     }
 
     @After
