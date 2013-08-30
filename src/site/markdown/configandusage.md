@@ -452,18 +452,39 @@ The log file format of spy.log follows:
 
     current time|execution time|category|statement SQL String|effective SQL string
 
-* current time—The current time is obtained through System.getCurrentTimeMillis() and represents the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT. (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().) To change the format, use the dateformat property described in [Common Property File Settings](#settings).
-* execution time—The time it takes for a particular method to execute. (This is not the total cost for the SQL statement.) For example, a statement SELECT * FROM MYTABLE WHERE THISCOL = ? might be executed as a prepared statement, in which the .execute() function will be measured. This is recorded as the statement category. Further, as you call .next() on the ResultSet, each .next() call is recorded in the result category.
-* category—You can manage your log by including and excluding categories, which is described in [Common Property File Settings](#settings).
-* statement SQL string—This is the SQL string passed to the statement object. If it is a prepared statement, it is the prepared statement that existed prior to the parameters being set. To see the complete statement, refer to effective SQL string.
-* effective SQL string—If you are not using a prepared statement, this contains no value. Otherwise, it fills in the values of the Prepared Statement so you can see the effective SQL statement that is passed to the database. Of course, the database still sees the prepared statement, but this string is a convenient way to see the actual values being sent to the database.
+* current time—The current time is obtained through System.getCurrentTimeMillis() and represents
+  the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT.
+  (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().)
+  To change the format, use the dateformat property described in
+  [Common Property File Settings](#settings).
+* execution time—The time it takes for a particular method to execute. (This is
+  not the total cost for the SQL statement.) For example, a statement
+  `SELECT * FROM MYTABLE WHERE THISCOL = ?` might be executed as a prepared
+  statement, in which the .execute() function will be measured. This is recorded as
+  the statement category. Further, as you call .next() on the ResultSet, each .next()
+  call is recorded in the result category.
+* category—You can manage your log by including and excluding categories,
+  which is described in [Common Property File Settings](#settings).
+* statement SQL string—This is the SQL string passed to the statement object.
+  If it is a prepared statement, it is the prepared statement that existed prior to
+  the parameters being set. To see the complete statement, refer to effective SQL string.
+* effective SQL string—If you are not using a prepared statement, this contains no
+  value. Otherwise, it fills in the values of the Prepared Statement so you can see
+  the effective SQL statement that is passed to the database. Of course, the database
+  still sees the prepared statement, but this string is a convenient way to see the
+  actual values being sent to the database.
 
 ## The JSP Application
 
-P6Spy includes a JSP application. Use this application to view P6Spy configuration information and to create a demarcation in the log file. To use the JSP application, complete the following steps:
+P6Spy includes a JSP application. Use this application to view P6Spy configuration information and
+to create a demarcation in the log file. To use the JSP application, complete the following steps:
 
-1. Copy p6spy.war into the deployment directory of your application server. In JBoss, for example, the directory might be C:\JBoss-2.4.4_Tomcat-4.0.1\jboss\deploy.
-1. Once p6spy.war is deployed, access the application by navigating to http://machine:port/p6spy. For example, if you are running the application on your own machine, and using Tomcat as the servlet engine, navigate to http://localhost:8080/p6spy.
+1. Copy **p6spy-webcontrol.war** into the deployment directory of your
+  application server. In JBoss, for example, the directory might be `C:\JBoss\server\web\deploy`.
+1. Once **p6spy.war** is deployed, access the application by navigating
+  to `http://machine:port/p6spy-webcontrol`.  For example, if you are running the application on your
+  own machine, and using Tomcat as the servlet engine, navigate to
+  `http://localhost:8080/p6spy-webcontrol`.
 
 ## The JBoss JMX Application
 
