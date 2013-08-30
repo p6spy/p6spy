@@ -33,10 +33,7 @@
             <reports>
               <report>index</report>
               <report>dependency-info</report>
-<!--
-              This module is causing a failure during the build trying to find something in WEB-INF/classes
               <report>dependencies</report>
--->
             </reports>
           </reportSet>
         </reportSets>
