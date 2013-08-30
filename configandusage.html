@@ -65,6 +65,12 @@
                   <li class="none">
                           <a href="p6spy/index.html" title="P6Spy">P6Spy</a>
             </li>
+                  <li class="none">
+                          <a href="p6spy-webcontrol/index.html" title="P6Spy WebControl">P6Spy WebControl</a>
+            </li>
+                  <li class="none">
+                          <a href="p6spy-dist/index.html" title="P6Spy Distribution">P6Spy Distribution</a>
+            </li>
           </ul>
                        <h5>Project Documentation</h5>
                   <ul>
@@ -541,15 +547,15 @@ log4j.logger.p6spy=INFO,STDOUT
 
 <ul>
   
-<li>current time&#x2014;The current time is obtained through System.getCurrentTimeMillis() and represents the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT. (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().) To change the format, use the dateformat property described in <a href="#settings">Common Property File Settings</a>.</li>
+<li>current time&#x2014;The current time is obtained through System.getCurrentTimeMillis() and represents  the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT.  (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().)  To change the format, use the dateformat property described in  <a href="#settings">Common Property File Settings</a>.</li>
   
-<li>execution time&#x2014;The time it takes for a particular method to execute. (This is not the total cost for the SQL statement.) For example, a statement SELECT * FROM MYTABLE WHERE THISCOL = ? might be executed as a prepared statement, in which the .execute() function will be measured. This is recorded as the statement category. Further, as you call .next() on the ResultSet, each .next() call is recorded in the result category.</li>
+<li>execution time&#x2014;The time it takes for a particular method to execute. (This is  not the total cost for the SQL statement.) For example, a statement  <tt>SELECT * FROM MYTABLE WHERE THISCOL = ?</tt> might be executed as a prepared  statement, in which the .execute() function will be measured. This is recorded as  the statement category. Further, as you call .next() on the ResultSet, each .next()  call is recorded in the result category.</li>
   
-<li>category&#x2014;You can manage your log by including and excluding categories, which is described in <a href="#settings">Common Property File Settings</a>.</li>
+<li>category&#x2014;You can manage your log by including and excluding categories,  which is described in <a href="#settings">Common Property File Settings</a>.</li>
   
-<li>statement SQL string&#x2014;This is the SQL string passed to the statement object. If it is a prepared statement, it is the prepared statement that existed prior to the parameters being set. To see the complete statement, refer to effective SQL string.</li>
+<li>statement SQL string&#x2014;This is the SQL string passed to the statement object.  If it is a prepared statement, it is the prepared statement that existed prior to  the parameters being set. To see the complete statement, refer to effective SQL string.</li>
   
-<li>effective SQL string&#x2014;If you are not using a prepared statement, this contains no value. Otherwise, it fills in the values of the Prepared Statement so you can see the effective SQL statement that is passed to the database. Of course, the database still sees the prepared statement, but this string is a convenient way to see the actual values being sent to the database.</li>
+<li>effective SQL string&#x2014;If you are not using a prepared statement, this contains no  value. Otherwise, it fills in the values of the Prepared Statement so you can see  the effective SQL statement that is passed to the database. Of course, the database  still sees the prepared statement, but this string is a convenient way to see the  actual values being sent to the database.</li>
 </ul></div>
 <div class="section">
 <h2>The JSP Application<a name="The_JSP_Application"></a></h2>
@@ -557,9 +563,9 @@ log4j.logger.p6spy=INFO,STDOUT
 
 <ol style="list-style-type: decimal">
   
-<li>Copy p6spy.war into the deployment directory of your application server. In JBoss, for example, the directory might be C:\JBoss-2.4.4_Tomcat-4.0.1\jboss\deploy.</li>
+<li>Copy <b>p6spy-webcontrol.war</b> into the deployment directory of your  application server. In JBoss, for example, the directory might be <tt>C:\JBoss\server\web\deploy</tt>.</li>
   
-<li>Once p6spy.war is deployed, access the application by navigating to <a class="externalLink" href="http://machine:port/p6spy">http://machine:port/p6spy</a>. For example, if you are running the application on your own machine, and using Tomcat as the servlet engine, navigate to <a class="externalLink" href="http://localhost:8080/p6spy">http://localhost:8080/p6spy</a>.</li>
+<li>Once <b>p6spy.war</b> is deployed, access the application by navigating  to <tt>http://machine:port/p6spy-webcontrol</tt>. For example, if you are running the application on your  own machine, and using Tomcat as the servlet engine, navigate to  <tt>http://localhost:8080/p6spy-webcontrol</tt>.</li>
 </ol></div>
 <div class="section">
 <h2>The JBoss JMX Application<a name="The_JBoss_JMX_Application"></a></h2>

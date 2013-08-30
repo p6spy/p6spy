@@ -102,128 +102,120 @@
 <a class="jxr_linenumber" name="92" href="#92">92</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
 <a class="jxr_linenumber" name="93" href="#93">93</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.fail;
 <a class="jxr_linenumber" name="94" href="#94">94</a>  
-<a class="jxr_linenumber" name="95" href="#95">95</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="96" href="#96">96</a>  <strong class="jxr_keyword">import</strong> java.sql.PreparedStatement;
-<a class="jxr_linenumber" name="97" href="#97">97</a>  <strong class="jxr_keyword">import</strong> java.sql.ResultSet;
-<a class="jxr_linenumber" name="98" href="#98">98</a>  <strong class="jxr_keyword">import</strong> java.sql.SQLException;
-<a class="jxr_linenumber" name="99" href="#99">99</a>  <strong class="jxr_keyword">import</strong> java.sql.Statement;
-<a class="jxr_linenumber" name="100" href="#100">100</a> 
-<a class="jxr_linenumber" name="101" href="#101">101</a> <strong class="jxr_keyword">import</strong> org.junit.After;
-<a class="jxr_linenumber" name="102" href="#102">102</a> <strong class="jxr_keyword">import</strong> org.junit.Before;
-<a class="jxr_linenumber" name="103" href="#103">103</a> <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="104" href="#104">104</a> <strong class="jxr_keyword">import</strong> org.junit.runner.RunWith;
-<a class="jxr_linenumber" name="105" href="#105">105</a> <strong class="jxr_keyword">import</strong> org.junit.runners.Parameterized;
-<a class="jxr_linenumber" name="106" href="#106">106</a> 
-<a class="jxr_linenumber" name="107" href="#107">107</a> @RunWith(Parameterized.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="108" href="#108">108</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/spy/P6TestPreparedStatement.html">P6TestPreparedStatement</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../com/p6spy/engine/spy/P6TestFramework.html">P6TestFramework</a> {
-<a class="jxr_linenumber" name="109" href="#109">109</a> 
-<a class="jxr_linenumber" name="110" href="#110">110</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/P6TestPreparedStatement.html">P6TestPreparedStatement</a>(String db) <strong class="jxr_keyword">throws</strong> SQLException, IOException {
-<a class="jxr_linenumber" name="111" href="#111">111</a>       <strong class="jxr_keyword">super</strong>(db);
-<a class="jxr_linenumber" name="112" href="#112">112</a>     }
-<a class="jxr_linenumber" name="113" href="#113">113</a> 
-<a class="jxr_linenumber" name="114" href="#114">114</a>     @Before
-<a class="jxr_linenumber" name="115" href="#115">115</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setUpPreparedStatement() {
-<a class="jxr_linenumber" name="116" href="#116">116</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="117" href="#117">117</a>             Statement statement = connection.createStatement();
-<a class="jxr_linenumber" name="118" href="#118">118</a>             dropPrepared(statement);
-<a class="jxr_linenumber" name="119" href="#119">119</a>             statement.execute(<span class="jxr_string">"create table prepstmt_test (col1 varchar(255), col2 integer)"</span>);
-<a class="jxr_linenumber" name="120" href="#120">120</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="121" href="#121">121</a>             fail(e.getMessage());
-<a class="jxr_linenumber" name="122" href="#122">122</a>         }
-<a class="jxr_linenumber" name="123" href="#123">123</a>     }
-<a class="jxr_linenumber" name="124" href="#124">124</a> 
-<a class="jxr_linenumber" name="125" href="#125">125</a>     @Test
-<a class="jxr_linenumber" name="126" href="#126">126</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testPreparedQueryUpdate() {
-<a class="jxr_linenumber" name="127" href="#127">127</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="128" href="#128">128</a>             <em class="jxr_comment">// test a basic insert</em>
-<a class="jxr_linenumber" name="129" href="#129">129</a>             String update = <span class="jxr_string">"insert into prepstmt_test values (?, ?)"</span>;
-<a class="jxr_linenumber" name="130" href="#130">130</a>             PreparedStatement prep = getPreparedStatement(update);
-<a class="jxr_linenumber" name="131" href="#131">131</a>             prep.setString(1, <span class="jxr_string">"miller"</span>);
-<a class="jxr_linenumber" name="132" href="#132">132</a>             prep.setInt(2,1);
-<a class="jxr_linenumber" name="133" href="#133">133</a>             prep.executeUpdate();
-<a class="jxr_linenumber" name="134" href="#134">134</a>             assertIsLastQuery(update);
-<a class="jxr_linenumber" name="135" href="#135">135</a>             assertIsLastQuery(<span class="jxr_string">"miller"</span>);
-<a class="jxr_linenumber" name="136" href="#136">136</a>             assertIsLastQuery(<span class="jxr_string">"1"</span>);
-<a class="jxr_linenumber" name="137" href="#137">137</a> 
-<a class="jxr_linenumber" name="138" href="#138">138</a>             <em class="jxr_comment">// test a basic select</em>
-<a class="jxr_linenumber" name="139" href="#139">139</a>             String query = <span class="jxr_string">"select count(*) from prepstmt_test where col2 = ?"</span>;
-<a class="jxr_linenumber" name="140" href="#140">140</a>             prep = getPreparedStatement(query);
-<a class="jxr_linenumber" name="141" href="#141">141</a>             prep.setInt(1,1);
-<a class="jxr_linenumber" name="142" href="#142">142</a>             ResultSet rs = prep.executeQuery();
-<a class="jxr_linenumber" name="143" href="#143">143</a>             assertIsLastQuery(query);
-<a class="jxr_linenumber" name="144" href="#144">144</a>             rs.next();
-<a class="jxr_linenumber" name="145" href="#145">145</a>             assertEquals(1, rs.getInt(1));
-<a class="jxr_linenumber" name="146" href="#146">146</a> 
-<a class="jxr_linenumber" name="147" href="#147">147</a>             <em class="jxr_comment">// test dynamic allocation of P6_MAX_FIELDS</em>
-<a class="jxr_linenumber" name="148" href="#148">148</a>             <strong class="jxr_keyword">int</strong> MaxFields = P6PreparedStatement.P6_MAX_FIELDS + 3;
-<a class="jxr_linenumber" name="149" href="#149">149</a>             StringBuffer bigSelect = <strong class="jxr_keyword">new</strong> StringBuffer(MaxFields);
-<a class="jxr_linenumber" name="150" href="#150">150</a>             bigSelect.append(<span class="jxr_string">"select count(*) from prepstmt_test where"</span>);
-<a class="jxr_linenumber" name="151" href="#151">151</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; MaxFields; i++) {
-<a class="jxr_linenumber" name="152" href="#152">152</a>                 <strong class="jxr_keyword">if</strong> (i &gt; 0) {
-<a class="jxr_linenumber" name="153" href="#153">153</a>                   bigSelect.append(<span class="jxr_string">" or "</span>);
-<a class="jxr_linenumber" name="154" href="#154">154</a>                 }
-<a class="jxr_linenumber" name="155" href="#155">155</a>                 bigSelect.append(<span class="jxr_string">" col2=?"</span>);
-<a class="jxr_linenumber" name="156" href="#156">156</a>             }
-<a class="jxr_linenumber" name="157" href="#157">157</a>             prep = getPreparedStatement(bigSelect.toString());
-<a class="jxr_linenumber" name="158" href="#158">158</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt;= MaxFields; i++) {
-<a class="jxr_linenumber" name="159" href="#159">159</a>                  prep.setInt(i, i);
-<a class="jxr_linenumber" name="160" href="#160">160</a> 	    }
-<a class="jxr_linenumber" name="161" href="#161">161</a>             <em class="jxr_comment">//rs = prep.executeQuery();</em>
-<a class="jxr_linenumber" name="162" href="#162">162</a> 
-<a class="jxr_linenumber" name="163" href="#163">163</a>             <em class="jxr_comment">// test batch inserts</em>
-<a class="jxr_linenumber" name="164" href="#164">164</a>             update = <span class="jxr_string">"insert into prepstmt_test values (?,?)"</span>;
-<a class="jxr_linenumber" name="165" href="#165">165</a>             prep = getPreparedStatement(update);
-<a class="jxr_linenumber" name="166" href="#166">166</a>             prep.setString(1,<span class="jxr_string">"danny"</span>);
-<a class="jxr_linenumber" name="167" href="#167">167</a>             prep.setInt(2,2);
-<a class="jxr_linenumber" name="168" href="#168">168</a>             prep.addBatch();
-<a class="jxr_linenumber" name="169" href="#169">169</a>             prep.setString(1,<span class="jxr_string">"denver"</span>);
-<a class="jxr_linenumber" name="170" href="#170">170</a>             prep.setInt(2,3);
-<a class="jxr_linenumber" name="171" href="#171">171</a>             prep.addBatch();
-<a class="jxr_linenumber" name="172" href="#172">172</a>             prep.setString(1,<span class="jxr_string">"aspen"</span>);
-<a class="jxr_linenumber" name="173" href="#173">173</a>             prep.setInt(2,4);
-<a class="jxr_linenumber" name="174" href="#174">174</a>             prep.addBatch();
-<a class="jxr_linenumber" name="175" href="#175">175</a>             prep.executeBatch();
-<a class="jxr_linenumber" name="176" href="#176">176</a>             assertIsLastQuery(update);
-<a class="jxr_linenumber" name="177" href="#177">177</a>             assertIsLastQuery(<span class="jxr_string">"aspen"</span>);
-<a class="jxr_linenumber" name="178" href="#178">178</a>             assertIsLastQuery(<span class="jxr_string">"4"</span>);
-<a class="jxr_linenumber" name="179" href="#179">179</a> 
-<a class="jxr_linenumber" name="180" href="#180">180</a>             query = <span class="jxr_string">"select count(*) from prepstmt_test"</span>;
-<a class="jxr_linenumber" name="181" href="#181">181</a>             prep = getPreparedStatement(query);
-<a class="jxr_linenumber" name="182" href="#182">182</a>             rs = prep.executeQuery();
-<a class="jxr_linenumber" name="183" href="#183">183</a>             rs.next();
-<a class="jxr_linenumber" name="184" href="#184">184</a>             assertEquals(4, rs.getInt(1));
-<a class="jxr_linenumber" name="185" href="#185">185</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="186" href="#186">186</a>             fail(e.getMessage()+<span class="jxr_string">" due to error: "</span>+getStackTrace(e));
-<a class="jxr_linenumber" name="187" href="#187">187</a>         }
-<a class="jxr_linenumber" name="188" href="#188">188</a>     }
-<a class="jxr_linenumber" name="189" href="#189">189</a> 
-<a class="jxr_linenumber" name="190" href="#190">190</a>     @After
-<a class="jxr_linenumber" name="191" href="#191">191</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> tearDownPreparedStatement() {
-<a class="jxr_linenumber" name="192" href="#192">192</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="193" href="#193">193</a>             Statement statement = connection.createStatement();
-<a class="jxr_linenumber" name="194" href="#194">194</a>             dropPrepared(statement);
-<a class="jxr_linenumber" name="195" href="#195">195</a>         }  <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="196" href="#196">196</a>             fail(e.getMessage());
-<a class="jxr_linenumber" name="197" href="#197">197</a>         }
-<a class="jxr_linenumber" name="198" href="#198">198</a>     }
-<a class="jxr_linenumber" name="199" href="#199">199</a> 
-<a class="jxr_linenumber" name="200" href="#200">200</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> dropPrepared(Statement statement) {
-<a class="jxr_linenumber" name="201" href="#201">201</a>         dropPreparedStatement(<span class="jxr_string">"drop table prepstmt_test"</span>, statement);
+<a class="jxr_linenumber" name="95" href="#95">95</a>  <strong class="jxr_keyword">import</strong> java.sql.PreparedStatement;
+<a class="jxr_linenumber" name="96" href="#96">96</a>  <strong class="jxr_keyword">import</strong> java.sql.ResultSet;
+<a class="jxr_linenumber" name="97" href="#97">97</a>  <strong class="jxr_keyword">import</strong> java.sql.SQLException;
+<a class="jxr_linenumber" name="98" href="#98">98</a>  <strong class="jxr_keyword">import</strong> java.sql.Statement;
+<a class="jxr_linenumber" name="99" href="#99">99</a>  
+<a class="jxr_linenumber" name="100" href="#100">100</a> <strong class="jxr_keyword">import</strong> org.junit.After;
+<a class="jxr_linenumber" name="101" href="#101">101</a> <strong class="jxr_keyword">import</strong> org.junit.Before;
+<a class="jxr_linenumber" name="102" href="#102">102</a> <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="103" href="#103">103</a> 
+<a class="jxr_linenumber" name="104" href="#104">104</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/spy/P6TestPreparedStatement.html">P6TestPreparedStatement</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../com/p6spy/engine/spy/P6TestFramework.html">P6TestFramework</a> {
+<a class="jxr_linenumber" name="105" href="#105">105</a> 
+<a class="jxr_linenumber" name="106" href="#106">106</a>     @Before
+<a class="jxr_linenumber" name="107" href="#107">107</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setUpPreparedStatement() {
+<a class="jxr_linenumber" name="108" href="#108">108</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="109" href="#109">109</a>             Statement statement = connection.createStatement();
+<a class="jxr_linenumber" name="110" href="#110">110</a>             dropPrepared(statement);
+<a class="jxr_linenumber" name="111" href="#111">111</a>             statement.execute(<span class="jxr_string">"create table prepstmt_test (col1 varchar(255), col2 integer)"</span>);
+<a class="jxr_linenumber" name="112" href="#112">112</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="113" href="#113">113</a>             fail(e.getMessage());
+<a class="jxr_linenumber" name="114" href="#114">114</a>         }
+<a class="jxr_linenumber" name="115" href="#115">115</a>     }
+<a class="jxr_linenumber" name="116" href="#116">116</a> 
+<a class="jxr_linenumber" name="117" href="#117">117</a>     @Test
+<a class="jxr_linenumber" name="118" href="#118">118</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testPreparedQueryUpdate() {
+<a class="jxr_linenumber" name="119" href="#119">119</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="120" href="#120">120</a>             <em class="jxr_comment">// test a basic insert</em>
+<a class="jxr_linenumber" name="121" href="#121">121</a>             String update = <span class="jxr_string">"insert into prepstmt_test values (?, ?)"</span>;
+<a class="jxr_linenumber" name="122" href="#122">122</a>             PreparedStatement prep = getPreparedStatement(update);
+<a class="jxr_linenumber" name="123" href="#123">123</a>             prep.setString(1, <span class="jxr_string">"miller"</span>);
+<a class="jxr_linenumber" name="124" href="#124">124</a>             prep.setInt(2,1);
+<a class="jxr_linenumber" name="125" href="#125">125</a>             prep.executeUpdate();
+<a class="jxr_linenumber" name="126" href="#126">126</a>             assertIsLastQuery(update);
+<a class="jxr_linenumber" name="127" href="#127">127</a>             assertIsLastQuery(<span class="jxr_string">"miller"</span>);
+<a class="jxr_linenumber" name="128" href="#128">128</a>             assertIsLastQuery(<span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="129" href="#129">129</a> 
+<a class="jxr_linenumber" name="130" href="#130">130</a>             <em class="jxr_comment">// test a basic select</em>
+<a class="jxr_linenumber" name="131" href="#131">131</a>             String query = <span class="jxr_string">"select count(*) from prepstmt_test where col2 = ?"</span>;
+<a class="jxr_linenumber" name="132" href="#132">132</a>             prep = getPreparedStatement(query);
+<a class="jxr_linenumber" name="133" href="#133">133</a>             prep.setInt(1,1);
+<a class="jxr_linenumber" name="134" href="#134">134</a>             ResultSet rs = prep.executeQuery();
+<a class="jxr_linenumber" name="135" href="#135">135</a>             assertIsLastQuery(query);
+<a class="jxr_linenumber" name="136" href="#136">136</a>             rs.next();
+<a class="jxr_linenumber" name="137" href="#137">137</a>             assertEquals(1, rs.getInt(1));
+<a class="jxr_linenumber" name="138" href="#138">138</a> 
+<a class="jxr_linenumber" name="139" href="#139">139</a>             <em class="jxr_comment">// test dynamic allocation of P6_MAX_FIELDS</em>
+<a class="jxr_linenumber" name="140" href="#140">140</a>             <strong class="jxr_keyword">int</strong> MaxFields = P6PreparedStatement.P6_MAX_FIELDS + 3;
+<a class="jxr_linenumber" name="141" href="#141">141</a>             StringBuffer bigSelect = <strong class="jxr_keyword">new</strong> StringBuffer(MaxFields);
+<a class="jxr_linenumber" name="142" href="#142">142</a>             bigSelect.append(<span class="jxr_string">"select count(*) from prepstmt_test where"</span>);
+<a class="jxr_linenumber" name="143" href="#143">143</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; MaxFields; i++) {
+<a class="jxr_linenumber" name="144" href="#144">144</a>                 <strong class="jxr_keyword">if</strong> (i &gt; 0) {
+<a class="jxr_linenumber" name="145" href="#145">145</a>                   bigSelect.append(<span class="jxr_string">" or "</span>);
+<a class="jxr_linenumber" name="146" href="#146">146</a>                 }
+<a class="jxr_linenumber" name="147" href="#147">147</a>                 bigSelect.append(<span class="jxr_string">" col2=?"</span>);
+<a class="jxr_linenumber" name="148" href="#148">148</a>             }
+<a class="jxr_linenumber" name="149" href="#149">149</a>             prep = getPreparedStatement(bigSelect.toString());
+<a class="jxr_linenumber" name="150" href="#150">150</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt;= MaxFields; i++) {
+<a class="jxr_linenumber" name="151" href="#151">151</a>                  prep.setInt(i, i);
+<a class="jxr_linenumber" name="152" href="#152">152</a> 	    }
+<a class="jxr_linenumber" name="153" href="#153">153</a>             <em class="jxr_comment">//rs = prep.executeQuery();</em>
+<a class="jxr_linenumber" name="154" href="#154">154</a> 
+<a class="jxr_linenumber" name="155" href="#155">155</a>             <em class="jxr_comment">// test batch inserts</em>
+<a class="jxr_linenumber" name="156" href="#156">156</a>             update = <span class="jxr_string">"insert into prepstmt_test values (?,?)"</span>;
+<a class="jxr_linenumber" name="157" href="#157">157</a>             prep = getPreparedStatement(update);
+<a class="jxr_linenumber" name="158" href="#158">158</a>             prep.setString(1,<span class="jxr_string">"danny"</span>);
+<a class="jxr_linenumber" name="159" href="#159">159</a>             prep.setInt(2,2);
+<a class="jxr_linenumber" name="160" href="#160">160</a>             prep.addBatch();
+<a class="jxr_linenumber" name="161" href="#161">161</a>             prep.setString(1,<span class="jxr_string">"denver"</span>);
+<a class="jxr_linenumber" name="162" href="#162">162</a>             prep.setInt(2,3);
+<a class="jxr_linenumber" name="163" href="#163">163</a>             prep.addBatch();
+<a class="jxr_linenumber" name="164" href="#164">164</a>             prep.setString(1,<span class="jxr_string">"aspen"</span>);
+<a class="jxr_linenumber" name="165" href="#165">165</a>             prep.setInt(2,4);
+<a class="jxr_linenumber" name="166" href="#166">166</a>             prep.addBatch();
+<a class="jxr_linenumber" name="167" href="#167">167</a>             prep.executeBatch();
+<a class="jxr_linenumber" name="168" href="#168">168</a>             assertIsLastQuery(update);
+<a class="jxr_linenumber" name="169" href="#169">169</a>             assertIsLastQuery(<span class="jxr_string">"aspen"</span>);
+<a class="jxr_linenumber" name="170" href="#170">170</a>             assertIsLastQuery(<span class="jxr_string">"4"</span>);
+<a class="jxr_linenumber" name="171" href="#171">171</a> 
+<a class="jxr_linenumber" name="172" href="#172">172</a>             query = <span class="jxr_string">"select count(*) from prepstmt_test"</span>;
+<a class="jxr_linenumber" name="173" href="#173">173</a>             prep = getPreparedStatement(query);
+<a class="jxr_linenumber" name="174" href="#174">174</a>             rs = prep.executeQuery();
+<a class="jxr_linenumber" name="175" href="#175">175</a>             rs.next();
+<a class="jxr_linenumber" name="176" href="#176">176</a>             assertEquals(4, rs.getInt(1));
+<a class="jxr_linenumber" name="177" href="#177">177</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="178" href="#178">178</a>             fail(e.getMessage()+<span class="jxr_string">" due to error: "</span>+getStackTrace(e));
+<a class="jxr_linenumber" name="179" href="#179">179</a>         }
+<a class="jxr_linenumber" name="180" href="#180">180</a>     }
+<a class="jxr_linenumber" name="181" href="#181">181</a> 
+<a class="jxr_linenumber" name="182" href="#182">182</a>     @After
+<a class="jxr_linenumber" name="183" href="#183">183</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> tearDownPreparedStatement() {
+<a class="jxr_linenumber" name="184" href="#184">184</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="185" href="#185">185</a>             Statement statement = connection.createStatement();
+<a class="jxr_linenumber" name="186" href="#186">186</a>             dropPrepared(statement);
+<a class="jxr_linenumber" name="187" href="#187">187</a>         }  <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="188" href="#188">188</a>             fail(e.getMessage());
+<a class="jxr_linenumber" name="189" href="#189">189</a>         }
+<a class="jxr_linenumber" name="190" href="#190">190</a>     }
+<a class="jxr_linenumber" name="191" href="#191">191</a> 
+<a class="jxr_linenumber" name="192" href="#192">192</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> dropPrepared(Statement statement) {
+<a class="jxr_linenumber" name="193" href="#193">193</a>         dropPreparedStatement(<span class="jxr_string">"drop table prepstmt_test"</span>, statement);
+<a class="jxr_linenumber" name="194" href="#194">194</a>     }
+<a class="jxr_linenumber" name="195" href="#195">195</a> 
+<a class="jxr_linenumber" name="196" href="#196">196</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> dropPreparedStatement(String sql, Statement statement) {
+<a class="jxr_linenumber" name="197" href="#197">197</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="198" href="#198">198</a>             statement.execute(sql);
+<a class="jxr_linenumber" name="199" href="#199">199</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="200" href="#200">200</a>             <em class="jxr_comment">// we don't really care about cleanup failing</em>
+<a class="jxr_linenumber" name="201" href="#201">201</a>         }
 <a class="jxr_linenumber" name="202" href="#202">202</a>     }
 <a class="jxr_linenumber" name="203" href="#203">203</a> 
-<a class="jxr_linenumber" name="204" href="#204">204</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> dropPreparedStatement(String sql, Statement statement) {
-<a class="jxr_linenumber" name="205" href="#205">205</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="206" href="#206">206</a>             statement.execute(sql);
-<a class="jxr_linenumber" name="207" href="#207">207</a>         } <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="208" href="#208">208</a>             <em class="jxr_comment">// we don't really care about cleanup failing</em>
-<a class="jxr_linenumber" name="209" href="#209">209</a>         }
-<a class="jxr_linenumber" name="210" href="#210">210</a>     }
-<a class="jxr_linenumber" name="211" href="#211">211</a> 
-<a class="jxr_linenumber" name="212" href="#212">212</a>     <strong class="jxr_keyword">protected</strong> PreparedStatement getPreparedStatement(String query) <strong class="jxr_keyword">throws</strong> SQLException {
-<a class="jxr_linenumber" name="213" href="#213">213</a>         <strong class="jxr_keyword">return</strong> (connection.prepareStatement(query));
-<a class="jxr_linenumber" name="214" href="#214">214</a>     }
-<a class="jxr_linenumber" name="215" href="#215">215</a> 
-<a class="jxr_linenumber" name="216" href="#216">216</a> }
+<a class="jxr_linenumber" name="204" href="#204">204</a>     <strong class="jxr_keyword">protected</strong> PreparedStatement getPreparedStatement(String query) <strong class="jxr_keyword">throws</strong> SQLException {
+<a class="jxr_linenumber" name="205" href="#205">205</a>         <strong class="jxr_keyword">return</strong> (connection.prepareStatement(query));
+<a class="jxr_linenumber" name="206" href="#206">206</a>     }
+<a class="jxr_linenumber" name="207" href="#207">207</a> 
+<a class="jxr_linenumber" name="208" href="#208">208</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
