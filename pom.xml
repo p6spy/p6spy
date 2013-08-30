@@ -308,6 +308,11 @@
           <artifactId>maven-changelog-plugin</artifactId>
           <version>2.2</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -555,9 +560,8 @@
 
   <modules>
     <module>p6spy</module>
-    <!--
-        <module>p6spy-dist</module>
-    -->
+    <module>p6spy-webcontrol</module>
+    <module>p6spy-dist</module>
   </modules>
 
 </project>
