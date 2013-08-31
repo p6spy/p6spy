@@ -100,15 +100,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-@RunWith(Parameterized.class)
+//@RunWith(Parameterized.class)
 public class P6TestCallableStatement extends P6TestPreparedStatement {
 
 	public P6TestCallableStatement(String db) throws SQLException, IOException {
     super(db);
   }
 
-  @Ignore
-    @Test
+//  @Ignore
+//    @Test
     public void testCallable () throws Exception {
        int bigParam = 1024;
        int valuesLen;
