@@ -208,11 +208,7 @@ public abstract class P6TestFramework {
       Driver driver = e.nextElement();
 
       // get rid of all driver stuff to start with the clean table
-      // except derby ones, as those we'll need for the datasource (arquilian) testing
-      // not sure how they should be reloaded afterwards
-      if (!driver.getClass().getName().contains("org.apache.derby")) {
-        dereg.add(driver);
-      }
+      dereg.add(driver);
     }
 
     // if you found any drivers let's dereg them now
