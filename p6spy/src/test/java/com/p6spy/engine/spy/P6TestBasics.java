@@ -209,6 +209,8 @@ public class P6TestBasics extends P6TestFramework {
         rs = ps.executeQuery();
         rs.next();
         assertEquals("charles", rs.getString(1));
+        
+        ps.close();
     }
 
     protected void drop(Statement statement) {
