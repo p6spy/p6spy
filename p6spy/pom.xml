@@ -132,8 +132,9 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
             <systemPropertyVariables>
-              <!-- all the DBs we want to test with -->
-              <DB>Derby,PostgresSQL,MySQL,H2,HSQLDB,SQLite</DB>
+              <!-- all the DBs we want to test with 
+               except Derby that is causing random jvm crashes -->
+              <DB>PostgresSQL,MySQL,H2,HSQLDB,SQLite</DB>
             </systemPropertyVariables>
             </configuration>
             </plugin>
