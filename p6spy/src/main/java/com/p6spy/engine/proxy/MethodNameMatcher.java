@@ -3,7 +3,7 @@ package com.p6spy.engine.proxy;
 import java.lang.reflect.Method;
 
 /**
- * @author Quinton McCombs (dt77102)
+ * @author Quinton McCombs
  * @since 09/2013
  */
 public class MethodNameMatcher implements MethodMatcher {

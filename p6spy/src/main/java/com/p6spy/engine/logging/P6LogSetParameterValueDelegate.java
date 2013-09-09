@@ -8,10 +8,10 @@ import java.text.SimpleDateFormat;
 
 public class P6LogSetParameterValueDelegate implements Delegate {
   private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-  private final P6LogPreparedStatementInvocationHandler invocationHandler;
+  private final PreparedStatementInformation preparedStatementInformation;
 
-  public P6LogSetParameterValueDelegate(P6LogPreparedStatementInvocationHandler invocationHandler) {
-    this.invocationHandler = invocationHandler;
+  public P6LogSetParameterValueDelegate(PreparedStatementInformation preparedStatementInformation) {
+    this.preparedStatementInformation = preparedStatementInformation;
   }
 
   @Override
@@ -21,7 +21,7 @@ public class P6LogSetParameterValueDelegate implements Delegate {
     if( !method.getName().equals("setNull")) {
       value = args[1];
     }
-    invocationHandler.setParameterValue(position, convertToString(value));
+    preparedStatementInformation.setParameterValue(position, convertToString(value));
     return method.invoke(target, args);
   }
 

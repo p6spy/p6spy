@@ -7,23 +7,23 @@ import java.lang.reflect.Proxy;
 import java.sql.Statement;
 
 public class P6LogCreateStatementDelegate implements Delegate {
-  private final P6LogConnectionInvocationHandler invocationHandler;
+  private final ConnectionInformation connectionInformation;
 
-  public P6LogCreateStatementDelegate(P6LogConnectionInvocationHandler invocationHandler) {
-    this.invocationHandler = invocationHandler;
-  }
-
-  protected P6LogConnectionInvocationHandler getInvocationHandler() {
-    return invocationHandler;
+  public P6LogCreateStatementDelegate(final ConnectionInformation connectionInformation) {
+    this.connectionInformation = connectionInformation;
   }
 
   @Override
   public Object invoke(Object target, Method method, Object[] args) throws Throwable {
     Statement statement = (Statement) method.invoke(target, args);
-    P6LogStatementInvocationHandler statementProxy = new P6LogStatementInvocationHandler(statement, invocationHandler);
+    P6LogStatementInvocationHandler invocationHandler = new P6LogStatementInvocationHandler(statement, connectionInformation);
     return Proxy.newProxyInstance(
         statement.getClass().getClassLoader(),
         new Class[]{Statement.class},
-        statementProxy);
+        invocationHandler);
+  }
+
+  protected ConnectionInformation getConnectionInformation() {
+    return connectionInformation;
   }
 }

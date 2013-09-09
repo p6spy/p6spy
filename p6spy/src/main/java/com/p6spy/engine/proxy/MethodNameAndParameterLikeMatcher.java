@@ -7,10 +7,10 @@ import java.util.Arrays;
  * @author Quinton McCombs
  * @since 09/2013
  */
-public class MethodNameAndParameterMatcher extends MethodNameMatcher {
+public class MethodNameAndParameterLikeMatcher extends MethodNameMatcher {
   private final Class[] methodParameters;
 
-  public MethodNameAndParameterMatcher(final String methodName, final Class... methodParameters) {
+  public MethodNameAndParameterLikeMatcher(final String methodName, final Class... methodParameters) {
     super(methodName);
     this.methodParameters = methodParameters;
   }
@@ -22,7 +22,7 @@ public class MethodNameAndParameterMatcher extends MethodNameMatcher {
       return false;
     }
 
-    if (methodParameters.length != method.getParameterTypes().length) {
+    if (methodParameters.length > method.getParameterTypes().length) {
       return false;
     }
 
@@ -41,7 +41,7 @@ public class MethodNameAndParameterMatcher extends MethodNameMatcher {
     if (o == null || getClass() != o.getClass()) return false;
     if (!super.equals(o)) return false;
 
-    MethodNameAndParameterMatcher that = (MethodNameAndParameterMatcher) o;
+    MethodNameAndParameterLikeMatcher that = (MethodNameAndParameterLikeMatcher) o;
 
     return Arrays.equals(methodParameters, that.methodParameters);
 

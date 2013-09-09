@@ -6,10 +6,10 @@ import com.p6spy.engine.proxy.Delegate;
 import java.lang.reflect.Method;
 
 public class P6LogPreparedStatementAddBatchDelegate implements Delegate {
-  private final P6LogPreparedStatementInvocationHandler invocationHandler;
+  private final PreparedStatementInformation preparedStatementInformation;
 
-  public P6LogPreparedStatementAddBatchDelegate(final P6LogPreparedStatementInvocationHandler invocationHandler) {
-    this.invocationHandler = invocationHandler;
+  public P6LogPreparedStatementAddBatchDelegate(final PreparedStatementInformation preparedStatementInformation) {
+    this.preparedStatementInformation = preparedStatementInformation;
   }
 
   @Override
@@ -20,8 +20,8 @@ public class P6LogPreparedStatementAddBatchDelegate implements Delegate {
       return method.invoke(target, args);
     }
     finally {
-      P6LogQuery.logElapsed(invocationHandler.getConnectionId(), startTime, "batch",
-          invocationHandler.getStatementQuery(), invocationHandler.getPreparedStatementQuery());
+      P6LogQuery.logElapsed(preparedStatementInformation.getConnectionId(), startTime, "batch",
+          preparedStatementInformation.getStatementQuery(), preparedStatementInformation.getPreparedStatementQuery());
     }
   }
 }

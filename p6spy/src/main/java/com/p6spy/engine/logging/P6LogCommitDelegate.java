@@ -8,10 +8,10 @@ import java.lang.reflect.Method;
 /**
  */
 public class P6LogCommitDelegate implements Delegate {
-  private final P6LogConnectionInvocationHandler invocationHandler;
+  private final ConnectionInformation connectionInformation;
 
-  public P6LogCommitDelegate(P6LogConnectionInvocationHandler invocationHandler) {
-    this.invocationHandler = invocationHandler;
+  public P6LogCommitDelegate(ConnectionInformation connectionInformation) {
+    this.connectionInformation = connectionInformation;
   }
 
   @Override
@@ -21,7 +21,7 @@ public class P6LogCommitDelegate implements Delegate {
     try {
       return method.invoke(target, args);
     } finally {
-      P6LogQuery.logElapsed(invocationHandler.getConnectionId(), startTime, "commit", "", "");
+      P6LogQuery.logElapsed(connectionInformation.getConnectionId(), startTime, "commit", "", "");
     }
   }
 }

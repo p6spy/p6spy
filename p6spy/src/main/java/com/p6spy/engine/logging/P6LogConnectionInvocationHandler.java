@@ -10,40 +10,39 @@ import java.sql.Connection;
  */
 public class P6LogConnectionInvocationHandler extends GenericInvocationHandler<Connection> {
 
-  private static int counter = 0;
-  private final int connectionId = counter++;
-
   public P6LogConnectionInvocationHandler(Connection underlying) {
     super(underlying);
+    ConnectionInformation connectionInformation = new ConnectionInformation();
+
     // add delegates to perform logging on connection methods
     addDelegate(
         new MethodNameMatcher("commit"),
-        new P6LogCommitDelegate(this)
+        new P6LogCommitDelegate(connectionInformation)
     );
     addDelegate(
         new MethodNameMatcher("rollback"),
-        new P6LogRollbackDelegate(this)
+        new P6LogRollbackDelegate(connectionInformation)
     );
 
     // add delegates to return proxies for other methods
     addDelegate(
         new MethodNameMatcher("prepareStatement"),
-        new P6LogPrepareStatementDelegate(this)
+        new P6LogPrepareStatementDelegate(connectionInformation)
     );
 
     addDelegate(
         new MethodNameMatcher("createStatement"),
-        new P6LogCreateStatementDelegate(this)
+        new P6LogCreateStatementDelegate(connectionInformation)
     );
 
+    // TODO should be a callable statement
     addDelegate(
         new MethodNameMatcher("prepareCall"),
-        new P6LogCreateStatementDelegate(this)
+        new P6LogCreateStatementDelegate(connectionInformation)
     );
 
+    // TODO add proxy for getDatabaseMetaData - but not used for logging module?
+
   }
 
-  public int getConnectionId() {
-    return connectionId;
-  }
 }

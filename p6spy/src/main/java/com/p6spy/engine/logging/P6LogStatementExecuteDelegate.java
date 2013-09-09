@@ -4,25 +4,35 @@ import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.proxy.Delegate;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.ResultSet;
 
 public class P6LogStatementExecuteDelegate implements Delegate {
-  private final P6LogStatementInvocationHandler statementInvocationHandler;
+  private final StatementInformation statementInformation;
 
-  public P6LogStatementExecuteDelegate(P6LogStatementInvocationHandler statementInvocationHandler) {
-    this.statementInvocationHandler = statementInvocationHandler;
+  public P6LogStatementExecuteDelegate(final StatementInformation statementInformation) {
+    this.statementInformation = statementInformation;
   }
 
   @Override
   public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-    statementInvocationHandler.setStatementQuery((String) args[0]);
+    statementInformation.setStatementQuery((String) args[0]);
     long startTime = System.currentTimeMillis();
 
     try {
-      return method.invoke(target, args);
+      Object result = method.invoke(target, args);
+      if( result != null && result instanceof ResultSet) {
+        P6LogResultSetInvocationHandler resultSetInvocationHandler = new P6LogResultSetInvocationHandler((ResultSet)result, statementInformation);
+        result = Proxy.newProxyInstance(
+            result.getClass().getClassLoader(),
+            new Class[]{ResultSet.class},
+            resultSetInvocationHandler);
+      }
+      return result;
     }
     finally {
-      P6LogQuery.logElapsed(statementInvocationHandler.getConnectionId(), startTime, "statement", "",
-          statementInvocationHandler.getStatementQuery());
+      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, "statement", "",
+          statementInformation.getStatementQuery());
     }
   }
 }

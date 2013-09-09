@@ -8,10 +8,12 @@ import java.lang.reflect.Method;
 /**
  */
 public class P6LogRollbackDelegate implements Delegate {
-  private final P6LogConnectionInvocationHandler invocationHandler;
 
-  public P6LogRollbackDelegate(P6LogConnectionInvocationHandler invocationHandler) {
-    this.invocationHandler = invocationHandler;
+
+  private final ConnectionInformation connectionInformation;
+
+  public P6LogRollbackDelegate(final ConnectionInformation connectionInformation) {
+    this.connectionInformation = connectionInformation;
   }
 
   @Override
@@ -21,7 +23,7 @@ public class P6LogRollbackDelegate implements Delegate {
     try {
       return method.invoke(target, args);
     } finally {
-      P6LogQuery.logElapsed(invocationHandler.getConnectionId(), startTime, "rollback", "", "");
+      P6LogQuery.logElapsed(connectionInformation.getConnectionId(), startTime, "rollback", "", "");
     }
   }
 }

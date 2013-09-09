@@ -6,22 +6,23 @@ import com.p6spy.engine.proxy.Delegate;
 import java.lang.reflect.Method;
 
 public class P6LogStatementAddBatchDelegate implements Delegate {
-  private final P6LogStatementInvocationHandler statementProxy;
 
-  public P6LogStatementAddBatchDelegate(P6LogStatementInvocationHandler statementProxy) {
-    this.statementProxy = statementProxy;
+  private final StatementInformation statementInformation;
+
+  public P6LogStatementAddBatchDelegate(final StatementInformation statementInformation) {
+    this.statementInformation = statementInformation;
   }
 
   @Override
   public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-    statementProxy.setStatementQuery((String) args[0]);
+    statementInformation.setStatementQuery((String) args[0]);
     long startTime = System.currentTimeMillis();
 
     try {
       return method.invoke(target, args);
     }
     finally {
-      P6LogQuery.logElapsed(statementProxy.getConnectionId(), startTime, "batch", "", statementProxy.getStatementQuery());
+      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, "batch", "", statementInformation.getStatementQuery());
     }
   }
 }

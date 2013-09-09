@@ -6,7 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author Quinton McCombs (dt77102)
+ * @author Quinton McCombs
  * @since 09/2013
  */
 public class MethodNameAndParameterMatcherTest extends MethodNameMatcherTest {
