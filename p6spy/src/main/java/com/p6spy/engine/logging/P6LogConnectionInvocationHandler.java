@@ -1,5 +1,6 @@
 package com.p6spy.engine.logging;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameMatcher;
 
@@ -14,31 +15,36 @@ public class P6LogConnectionInvocationHandler extends GenericInvocationHandler<C
     super(underlying);
     ConnectionInformation connectionInformation = new ConnectionInformation();
 
+    P6LogConnectionCommitDelegate commitDelegate = new P6LogConnectionCommitDelegate(connectionInformation);
+    P6LogConnectionRollbackDelegate rollbackDelegate = new P6LogConnectionRollbackDelegate(connectionInformation);
+    P6LogConnectionPrepareStatementDelegate prepareStatementDelegate = new P6LogConnectionPrepareStatementDelegate(connectionInformation);
+    P6LogConnectionCreateStatementDelegate createStatementDelegate = new P6LogConnectionCreateStatementDelegate(connectionInformation);
+    P6LogConnectionPrepareCallDelegate prepareCallDelegate = new P6LogConnectionPrepareCallDelegate(connectionInformation);
+
     // add delegates to perform logging on connection methods
     addDelegate(
         new MethodNameMatcher("commit"),
-        new P6LogCommitDelegate(connectionInformation)
+        commitDelegate
     );
     addDelegate(
         new MethodNameMatcher("rollback"),
-        new P6LogRollbackDelegate(connectionInformation)
+        rollbackDelegate
     );
 
     // add delegates to return proxies for other methods
     addDelegate(
         new MethodNameMatcher("prepareStatement"),
-        new P6LogPrepareStatementDelegate(connectionInformation)
+        prepareStatementDelegate
     );
 
     addDelegate(
         new MethodNameMatcher("createStatement"),
-        new P6LogCreateStatementDelegate(connectionInformation)
+        createStatementDelegate
     );
 
-    // TODO should be a callable statement
     addDelegate(
         new MethodNameMatcher("prepareCall"),
-        new P6LogCreateStatementDelegate(connectionInformation)
+        prepareCallDelegate
     );
 
     // TODO add proxy for getDatabaseMetaData - but not used for logging module?

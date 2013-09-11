@@ -1,16 +1,17 @@
 package com.p6spy.engine.logging;
 
 import com.p6spy.engine.common.P6SpyOptions;
+import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.proxy.Delegate;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 
-public class P6LogSetParameterValueDelegate implements Delegate {
+class P6LogPreparedStatementSetParameterValueDelegate implements Delegate {
   private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
   private final PreparedStatementInformation preparedStatementInformation;
 
-  public P6LogSetParameterValueDelegate(PreparedStatementInformation preparedStatementInformation) {
+  public P6LogPreparedStatementSetParameterValueDelegate(PreparedStatementInformation preparedStatementInformation) {
     this.preparedStatementInformation = preparedStatementInformation;
   }
 

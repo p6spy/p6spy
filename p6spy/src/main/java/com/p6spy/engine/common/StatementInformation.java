@@ -1,4 +1,4 @@
-package com.p6spy.engine.logging;
+package com.p6spy.engine.common;
 
 import java.sql.SQLException;
 

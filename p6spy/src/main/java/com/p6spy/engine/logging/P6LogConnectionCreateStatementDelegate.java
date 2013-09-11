@@ -1,15 +1,16 @@
 package com.p6spy.engine.logging;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.proxy.Delegate;
+import com.p6spy.engine.proxy.ProxyFactory;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.sql.Statement;
 
-public class P6LogCreateStatementDelegate implements Delegate {
+class P6LogConnectionCreateStatementDelegate implements Delegate {
   private final ConnectionInformation connectionInformation;
 
-  public P6LogCreateStatementDelegate(final ConnectionInformation connectionInformation) {
+  public P6LogConnectionCreateStatementDelegate(final ConnectionInformation connectionInformation) {
     this.connectionInformation = connectionInformation;
   }
 
@@ -17,13 +18,10 @@ public class P6LogCreateStatementDelegate implements Delegate {
   public Object invoke(Object target, Method method, Object[] args) throws Throwable {
     Statement statement = (Statement) method.invoke(target, args);
     P6LogStatementInvocationHandler invocationHandler = new P6LogStatementInvocationHandler(statement, connectionInformation);
-    return Proxy.newProxyInstance(
-        statement.getClass().getClassLoader(),
-        new Class[]{Statement.class},
-        invocationHandler);
+    return ProxyFactory.createProxy(statement, Statement.class, invocationHandler);
   }
 
-  protected ConnectionInformation getConnectionInformation() {
+  ConnectionInformation getConnectionInformation() {
     return connectionInformation;
   }
 }

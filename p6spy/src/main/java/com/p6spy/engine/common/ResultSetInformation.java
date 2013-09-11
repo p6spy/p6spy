@@ -1,6 +1,4 @@
-package com.p6spy.engine.logging;
-
-import com.p6spy.engine.common.P6LogQuery;
+package com.p6spy.engine.common;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -10,21 +8,21 @@ import java.util.TreeMap;
  * @author Quinton McCombs
  * @since 09/2013
  */
-public class P6LogResultSetInformation {
+public class ResultSetInformation {
 
   private final StatementInformation statementInformation;
   private String query;
   private String preparedQuery;
-  private Map<String, Object> resultMap= new TreeMap<String, Object>();
+  private final Map<String, Object> resultMap= new TreeMap<String, Object>();
   private int currRow = -1;
 
-  public P6LogResultSetInformation(final StatementInformation statementInformation) throws SQLException {
+  public ResultSetInformation(final StatementInformation statementInformation) throws SQLException {
     this.statementInformation = statementInformation;
     this.preparedQuery = statementInformation.getPreparedStatementQuery();
     this.query = statementInformation.getStatementQuery();
   }
 
-  public String generateLogMessage() {
+  public void generateLogMessage() {
     StringBuilder sb = new StringBuilder();
     for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
       if (sb.length() > 0) {
@@ -36,7 +34,6 @@ public class P6LogResultSetInformation {
     }
     P6LogQuery.log("resultset", query, sb.toString());
     resultMap.clear();
-    return sb.toString();
   }
 
   public String getPreparedQuery() {

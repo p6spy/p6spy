@@ -5,16 +5,16 @@ import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameMatcher;
 
+import java.sql.CallableStatement;
 import java.sql.ParameterMetaData;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
  * Invocation handler for {@link java.sql.PreparedStatement}
  */
-class P6LogPreparedStatementInvocationHandler extends GenericInvocationHandler<PreparedStatement>{
+class P6LogCallableStatementInvocationHandler extends GenericInvocationHandler<CallableStatement>{
 
-  public P6LogPreparedStatementInvocationHandler(PreparedStatement underlying,
+  public P6LogCallableStatementInvocationHandler(CallableStatement underlying,
                                                  ConnectionInformation connectionInformation,
                                                  String query,
                                                  final ParameterMetaData parameterMetaData)

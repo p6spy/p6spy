@@ -1,6 +1,7 @@
 package com.p6spy.engine.logging;
 
 import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.proxy.Delegate;
 
 import java.lang.reflect.Method;
@@ -9,12 +10,12 @@ import java.lang.reflect.Method;
  * @author Quinton McCombs
  * @since 09/2013
  */
-public class P6LogResultSetNextDelegate implements Delegate {
+class P6LogResultSetNextDelegate implements Delegate {
 
 
-  private final P6LogResultSetInformation resultSetInformation;
+  private final ResultSetInformation resultSetInformation;
 
-  public P6LogResultSetNextDelegate(final P6LogResultSetInformation resultSetInformation) {
+  public P6LogResultSetNextDelegate(final ResultSetInformation resultSetInformation) {
     this.resultSetInformation = resultSetInformation;
   }
 

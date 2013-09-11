@@ -1,4 +1,4 @@
-package com.p6spy.engine.logging;
+package com.p6spy.engine.common;
 
 import java.sql.ParameterMetaData;
 import java.sql.SQLException;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Quinton McCombs (dt77102)
+ * @author Quinton McCombs
  * @since 09/2013
  */
 public class PreparedStatementInformation extends StatementInformation {
@@ -29,12 +29,8 @@ public class PreparedStatementInformation extends StatementInformation {
 
   }
 
-  public int getParameterCount() {
+  int getParameterCount() {
     return parameterCount;
-  }
-
-  public List<String> getParameterValues() {
-    return parameterValues;
   }
 
   /**
@@ -83,6 +79,7 @@ public class PreparedStatementInformation extends StatementInformation {
             sb.append("'");
           }
         }
+        currentParameter++;
       } else {
         sb.append(character);
       }
@@ -96,7 +93,7 @@ public class PreparedStatementInformation extends StatementInformation {
    * @param position the position of the parameter (starts with 1 not 0)
    * @param value the value of the parameter
    */
-  void setParameterValue(final int position, final String value) {
+  public void setParameterValue(final int position, final String value) {
     parameterValues.set(position-1,value);
   }
 

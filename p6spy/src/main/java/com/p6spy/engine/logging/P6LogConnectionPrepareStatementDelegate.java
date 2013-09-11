@@ -1,14 +1,16 @@
 package com.p6spy.engine.logging;
 
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.proxy.ProxyFactory;
+
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.sql.PreparedStatement;
 
 /**
  */
-public class P6LogPrepareStatementDelegate extends P6LogCreateStatementDelegate {
+public class P6LogConnectionPrepareStatementDelegate extends P6LogConnectionCreateStatementDelegate {
 
-  public P6LogPrepareStatementDelegate(final ConnectionInformation connectionInformation) {
+  public P6LogConnectionPrepareStatementDelegate(final ConnectionInformation connectionInformation) {
     super(connectionInformation);
   }
 
@@ -18,12 +20,7 @@ public class P6LogPrepareStatementDelegate extends P6LogCreateStatementDelegate 
     String query = (String) args[0];
     P6LogPreparedStatementInvocationHandler invocationHandler = new P6LogPreparedStatementInvocationHandler(statement,
         getConnectionInformation(), query, statement.getParameterMetaData());
-    return Proxy.newProxyInstance(
-        statement.getClass().getClassLoader(),
-        new Class[]{PreparedStatement.class},
-        invocationHandler);
-
-
+    return ProxyFactory.createProxy(statement, PreparedStatement.class, invocationHandler);
   }
 
 }

@@ -1,13 +1,14 @@
 package com.p6spy.engine.logging;
 
 import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.Delegate;
+import com.p6spy.engine.proxy.ProxyFactory;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.sql.ResultSet;
 
-public class P6LogStatementExecuteDelegate implements Delegate {
+class P6LogStatementExecuteDelegate implements Delegate {
   private final StatementInformation statementInformation;
 
   public P6LogStatementExecuteDelegate(final StatementInformation statementInformation) {
@@ -23,10 +24,7 @@ public class P6LogStatementExecuteDelegate implements Delegate {
       Object result = method.invoke(target, args);
       if( result != null && result instanceof ResultSet) {
         P6LogResultSetInvocationHandler resultSetInvocationHandler = new P6LogResultSetInvocationHandler((ResultSet)result, statementInformation);
-        result = Proxy.newProxyInstance(
-            result.getClass().getClassLoader(),
-            new Class[]{ResultSet.class},
-            resultSetInvocationHandler);
+        result = ProxyFactory.createProxy((ResultSet)result, ResultSet.class, resultSetInvocationHandler);
       }
       return result;
     }

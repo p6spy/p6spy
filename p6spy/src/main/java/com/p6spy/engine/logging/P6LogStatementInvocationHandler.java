@@ -1,7 +1,8 @@
 package com.p6spy.engine.logging;
 
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
-import com.p6spy.engine.proxy.MethodNameAndParameterMatcher;
 import com.p6spy.engine.proxy.MethodNameMatcher;
 
 import java.sql.Statement;
@@ -21,41 +22,24 @@ class P6LogStatementInvocationHandler extends GenericInvocationHandler<Statement
     P6LogStatementAddBatchDelegate addBatchDelegate = new P6LogStatementAddBatchDelegate(statementInformation);
 
 
-    // These methods do not exist in the PreparedStatement interface.
-    // It is safe to match by name only.
     addDelegate(
         new MethodNameMatcher("executeBatch"),
         executeBatchDelegate
     );
-
-    // These methods exist in the PreparedStatement interface.
-    // Match should be performed by name and parameters to avoid conflicts.
     addDelegate(
-        new MethodNameAndParameterMatcher("addBatch", String.class),
+        new MethodNameMatcher("addBatch"),
         addBatchDelegate
     );
     addDelegate(
-        new MethodNameAndParameterMatcher("execute", String.class),
+        new MethodNameMatcher("execute"),
         executeDelegate
     );
     addDelegate(
-        new MethodNameAndParameterMatcher("executeQuery", String.class),
+        new MethodNameMatcher("executeQuery"),
         executeDelegate
     );
     addDelegate(
-        new MethodNameAndParameterMatcher("executeUpdate", String.class),
-        executeDelegate
-    );
-    addDelegate(
-        new MethodNameAndParameterMatcher("executeUpdate", String.class, int.class),
-        executeDelegate
-    );
-    addDelegate(
-        new MethodNameAndParameterMatcher("executeUpdate", String.class, int[].class),
-        executeDelegate
-    );
-    addDelegate(
-        new MethodNameAndParameterMatcher("executeUpdate", String.class, String[].class),
+        new MethodNameMatcher("executeUpdate"),
         executeDelegate
     );
 

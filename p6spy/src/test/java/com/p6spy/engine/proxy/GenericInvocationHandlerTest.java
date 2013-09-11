@@ -3,7 +3,6 @@ package com.p6spy.engine.proxy;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,11 +21,7 @@ public class GenericInvocationHandlerTest {
     invocationHandler.addDelegate(new MethodNameMatcher("size"), delegate);
     invocationHandler.addDelegate(new MethodNameMatcher("clear"), delegate);
 
-    Set proxy = (Set) Proxy.newProxyInstance(
-        set.getClass().getClassLoader(),
-        new Class[]{Set.class},
-        invocationHandler);
-
+    Set proxy = ProxyFactory.createProxy(set, Set.class, invocationHandler);
 
     proxy.add("a");
     assertFalse("interceptor should not have been invoked", delegate.isInvoked());

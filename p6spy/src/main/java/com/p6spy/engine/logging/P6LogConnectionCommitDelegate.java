@@ -1,5 +1,6 @@
 package com.p6spy.engine.logging;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.proxy.Delegate;
 
@@ -7,10 +8,10 @@ import java.lang.reflect.Method;
 
 /**
  */
-public class P6LogCommitDelegate implements Delegate {
+class P6LogConnectionCommitDelegate implements Delegate {
   private final ConnectionInformation connectionInformation;
 
-  public P6LogCommitDelegate(ConnectionInformation connectionInformation) {
+  public P6LogConnectionCommitDelegate(ConnectionInformation connectionInformation) {
     this.connectionInformation = connectionInformation;
   }
 

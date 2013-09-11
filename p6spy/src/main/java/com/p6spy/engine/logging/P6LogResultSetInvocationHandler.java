@@ -1,5 +1,7 @@
 package com.p6spy.engine.logging;
 
+import com.p6spy.engine.common.ResultSetInformation;
+import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameAndParameterLikeMatcher;
 import com.p6spy.engine.proxy.MethodNameMatcher;
@@ -11,7 +13,7 @@ import java.sql.SQLException;
  * @author Quinton McCombs
  * @since 09/2013
  */
-public class P6LogResultSetInvocationHandler extends GenericInvocationHandler<ResultSet> {
+class P6LogResultSetInvocationHandler extends GenericInvocationHandler<ResultSet> {
 
   /**
    * Creates a new invocation handler for the given object.
@@ -22,7 +24,7 @@ public class P6LogResultSetInvocationHandler extends GenericInvocationHandler<Re
       throws SQLException {
     super(underlying);
 
-    P6LogResultSetInformation resultSetInformation = new P6LogResultSetInformation(statementInformation);
+    ResultSetInformation resultSetInformation = new ResultSetInformation(statementInformation);
     P6LogResultSetNextDelegate nextDelegate = new P6LogResultSetNextDelegate(resultSetInformation);
     P6LogResultSetGetColumnValueDelegate getColumnValueDelegate = new P6LogResultSetGetColumnValueDelegate(resultSetInformation);
 
@@ -30,6 +32,8 @@ public class P6LogResultSetInvocationHandler extends GenericInvocationHandler<Re
         new MethodNameMatcher("next"),
         nextDelegate
     );
+
+    // TODO: create proxy for Array object returned from getArray()?
 
     // add delegates for the basic getXXXX(int) and getXXXX(String) methods
     addDelegate(

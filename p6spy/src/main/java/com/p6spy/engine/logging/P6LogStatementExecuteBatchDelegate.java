@@ -1,11 +1,12 @@
 package com.p6spy.engine.logging;
 
 import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.Delegate;
 
 import java.lang.reflect.Method;
 
-public class P6LogStatementExecuteBatchDelegate implements Delegate {
+class P6LogStatementExecuteBatchDelegate implements Delegate {
 
   private final StatementInformation statementInformation;
 
