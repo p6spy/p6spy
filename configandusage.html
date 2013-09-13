@@ -268,6 +268,9 @@ logfile = spy.log
 # log file is truncated every time. (file logger only)
 append=true
 
+# class to use for formatting log messages - defaults to SingleLineFormat if not set
+#logMessageFormat=com.p6spy.engine.logging.appender.SingleLineFormat
+
 #The following are for log4j logging only
 log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender
 log4j.appender.STDOUT.layout=org.apache.log4j.PatternLayout
@@ -523,7 +526,14 @@ log4j.logger.p6spy=INFO,STDOUT
 <p>reloadproperties will not reload any driver information (such as realdriver, realdriver2, and realdriver3) and will not change the modules that are in memory.</p></div>
 <div class="section">
 <h3>useprefix<a name="useprefix"></a></h3>
-<p>Setting useprefix to true requires you to prefix your URLs with p6spy:. The default setting is false.</p></div></div>
+<p>Setting useprefix to true requires you to prefix your URLs with p6spy:. The default setting is false.</p></div>
+<div class="section">
+<h3>logMessageFormat<a name="logMessageFormat"></a></h3>
+<p>The log message format is selected by specifying the class to use to format the log messages. The following classes are available with P6Spy.</p>
+<p><tt>com.p6spy.engine.logging.appender.SingleLineFormat</tt></p>
+<p><tt>com.p6spy.engine.logging.appender.MultiLineFormat</tt></p>
+<p>The MultiLineFormat might be better from a readability perspective. Because it will place the effective SQL statement on a separate line. However, the SingleLineFormat might be better if you have a need to parse the log messages. The default is SingleLineFormat for backward compatibility.</p>
+<p>You can also supply your own log message formatter to customize the format. Simply create a class which implements the <tt>com.p6spy.engine.logging.appender.MessageFormattingStrategy</tt> interface and place it on the classpath.</p></div></div>
 <div class="section">
 <h2>Command Line Options<a name="Command_Line_Options"></a></h2>
 <p>Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag.</p>
@@ -540,9 +550,16 @@ log4j.logger.p6spy=INFO,STDOUT
 <div class="section">
 <h2>Log File Format<a name="Log_File_Format"></a></h2>
 <p>The log file format of spy.log follows:</p>
+<p>SingleLineFormat -</p>
 
 <div class="source">
 <pre>current time|execution time|category|statement SQL String|effective SQL string
+</pre></div>
+<p>MultiLineFormat -</p>
+
+<div class="source">
+<pre>current time|execution time|category|statement SQL String
+effective SQL string
 </pre></div>
 
 <ul>
