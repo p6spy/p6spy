@@ -61,9 +61,9 @@
 
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.Driver;
@@ -71,9 +71,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
 public class P6TestDriver extends P6TestFramework {
@@ -82,10 +81,7 @@ public class P6TestDriver extends P6TestFramework {
     super(db);
   }
 
-  private static final String JDBC_DRIVER_CLASS_NAME_SQLITE = "org.sqlite.JDBC";
 	private static final String JDBC_DRIVER_CLASS_NAME_MYSQL = "com.mysql.jdbc.Driver";
-  private static final Object JDBC_DRIVER_CLASS_NAME_DERBY = "org.apache.derby.jdbc.EmbeddedDriver";
-  private static final Object JDBC_DRIVER_CLASS_NAME_HSQLDB = "org.hsqldb.jdbc.JDBCDriver";
 
 	@Test
     public void testMajorVersion() throws Exception {
@@ -94,69 +90,6 @@ public class P6TestDriver extends P6TestFramework {
 	    	assertEquals(5, driver.getMajorVersion());
 		    assertEquals(1, driver.getMinorVersion());
 	    }
-    }
-
-    @Test
-    public void testGetJDBC() throws SQLException, IOException {
-	    P6Connection p6con = (P6Connection) connection;
-	    chkGetJDBC(p6con, p6con.getJDBC());
-
-	    P6DatabaseMetaData p6md = (P6DatabaseMetaData) connection.getMetaData();
-	    chkGetJDBC(p6md, p6md.getJDBC());
-
-	    P6Statement p6stmt = (P6Statement) connection.createStatement();
-	    chkGetJDBC(p6stmt, p6stmt.getJDBC());
-
-	    P6CallableStatement p6cs = null;
-      try {
-  	    // derby way, see: http://mail-archives.apache.org/mod_mbox/db-derby-user/200606.mbox/%3C20060609201316.3973.qmail@web30604.mail.mud.yahoo.com%3E
-  	    if (getWrappedDriver().getClass().getName().equals(JDBC_DRIVER_CLASS_NAME_DERBY)) {
-  	        p6cs = (P6CallableStatement) connection
-  	            .prepareCall("SELECT CURRENT_TIMESTAMP FROM SYSIBM.SYSDUMMY1");
-  	        chkGetJDBC(p6cs, p6cs.getJDBC());
-  	    } else if (!getWrappedDriver().getClass().getName().equals(JDBC_DRIVER_CLASS_NAME_SQLITE)) {
-  				p6cs = (P6CallableStatement) connection
-  						.prepareCall("select current_timestamp from (values(0))");
-  				chkGetJDBC(p6cs, p6cs.getJDBC());
-  	    } 
-      } finally {
-        if (null != p6cs) {
-          p6cs.close();
-        }
-      }
-      
-	    P6PreparedStatement p6ps = null;
-	    P6ResultSet p6rs = null;
-	    
-	    if (!getWrappedDriver().getClass().getName().equals(JDBC_DRIVER_CLASS_NAME_DERBY)
-	        && !getWrappedDriver().getClass().getName().equals(JDBC_DRIVER_CLASS_NAME_HSQLDB)) {
-	      p6ps = (P6PreparedStatement) connection.prepareStatement("select 1 + 1");
-        chkGetJDBC(p6ps, p6ps.getJDBC());
-        
-        p6rs = (P6ResultSet) p6ps.executeQuery();
-        chkGetJDBC(p6rs, p6rs.getJDBC());
-
-        P6ResultSetMetaData p6rsmd = (P6ResultSetMetaData) p6rs.getMetaData();
-        chkGetJDBC(p6rsmd, p6rsmd.getJDBC());
-	    }
-	
-	    // try to release everything
-	    if (null != p6ps) {
-	      p6ps.close();
-	    }
-	    if (null != p6rs) {
-	      p6rs.close();
-	    }
-	    p6stmt.close();
-	    p6con.close();
-    }
-
-    protected void chkGetJDBC(P6Base p6object, Object jdbcObject) {
-    	String p6class = p6object.getClass().getName();
-    	String jdbcClass = jdbcObject.getClass().getName();
-    
-    	assertTrue("Class " + p6class + " is supposed to be a p6 class, but it is not", (p6class.indexOf("p6spy") != -1));
-    	assertTrue("Class " + jdbcClass + " is supposed to be a jdbc class, but it is not", (jdbcClass.indexOf("p6spy") == -1));
     }
 
     /**

@@ -90,33 +90,41 @@
 
 package com.p6spy.engine.outage;
 
-import java.sql.*;
-import com.p6spy.engine.spy.*;
-import com.p6spy.engine.common.*;
+import com.p6spy.engine.common.P6Options;
+import com.p6spy.engine.proxy.ProxyFactory;
+import com.p6spy.engine.spy.P6Connection;
+import com.p6spy.engine.spy.P6CoreFactory;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class P6OutageFactory extends P6CoreFactory {
-    
-    public P6OutageFactory() {
-    }
-    
-    public Connection getConnection(Connection conn) throws SQLException {
-        return (new P6OutageConnection(this, conn));
-    }
-    
-    public PreparedStatement getPreparedStatement(PreparedStatement real, P6Connection conn, String p0) throws SQLException {
-        return (new P6OutagePreparedStatement(this, real, conn, p0));
-    }
-    
-    public Statement getStatement(Statement statement, P6Connection conn) throws SQLException {
-        return (new P6OutageStatement(this, statement, conn));
-    }
-    
-    public CallableStatement getCallableStatement(CallableStatement real, P6Connection conn, String p0) throws SQLException {
-        return (new P6OutageCallableStatement(this, real, conn, p0));
-    }
-    
-    public P6Options getOptions() throws SQLException {
-        return (new P6OutageOptions());
-    }
-    
+
+  public Connection getConnection(Connection conn) throws SQLException {
+    P6OutageConnectionInvocationHandler invocationHandler = new P6OutageConnectionInvocationHandler(conn);
+    return ProxyFactory.createProxy(conn, Connection.class, invocationHandler);
+    //return (new P6OutageConnection(this, conn));
+  }
+
+  public PreparedStatement getPreparedStatement(PreparedStatement real, P6Connection conn, String p0)
+      throws SQLException {
+    return (new P6OutagePreparedStatement(this, real, conn, p0));
+  }
+
+  public Statement getStatement(Statement statement, P6Connection conn) throws SQLException {
+    return (new P6OutageStatement(this, statement, conn));
+  }
+
+  public CallableStatement getCallableStatement(CallableStatement real, P6Connection conn, String p0)
+      throws SQLException {
+    return (new P6OutageCallableStatement(this, real, conn, p0));
+  }
+
+  public P6Options getOptions() throws SQLException {
+    return (new P6OutageOptions());
+  }
+
 }

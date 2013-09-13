@@ -123,8 +123,12 @@
 
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import com.p6spy.engine.common.OptionReloader;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyProperties;
+import com.p6spy.engine.common.P6Util;
+import org.junit.Before;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.io.BufferedWriter;
 import java.io.CharArrayWriter;
@@ -147,13 +151,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Before;
-import org.junit.runners.Parameterized.Parameters;
-
-import com.p6spy.engine.common.OptionReloader;
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6SpyProperties;
-import com.p6spy.engine.common.P6Util;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public abstract class P6TestFramework {
 
@@ -307,10 +306,9 @@ public abstract class P6TestFramework {
 
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 
-            for (int i = 0; i < entries.size(); i++) {
-                String entry = entries.get(i);
-                out.println(entry);
-            }
+          for (String entry : entries) {
+            out.println(entry);
+          }
 
             out.close();
         } catch (Exception e) {
@@ -318,8 +316,8 @@ public abstract class P6TestFramework {
         }
     }
 
-    protected ArrayList getDefaultSpyForms() {
-        ArrayList formsLog = new ArrayList();
+    protected List<String> getDefaultSpyForms() {
+        ArrayList<String> formsLog = new ArrayList<String>();
         formsLog.add("5 seconds; select count(*) from cache_test");
         formsLog.add("5 seconds; select col2 from cache_test where col1 != ? and col1 != ? and col1 like ?");
         return formsLog;
@@ -391,7 +389,7 @@ public abstract class P6TestFramework {
     }
 
     protected void assertIsLastQuery(String query) {
-        boolean isTrue = P6LogQuery.getLastEntry().indexOf(query) != -1;
+        boolean isTrue = P6LogQuery.getLastEntry().contains(query);
         if (!isTrue) {
             System.err.println(query+" was not the last query, this was: "+P6LogQuery.getLastEntry());
         }
@@ -399,7 +397,7 @@ public abstract class P6TestFramework {
     }
 
     protected void assertIsNotLastQuery(String query) {
-        boolean isFalse = P6LogQuery.getLastEntry().indexOf(query) == -1;
+        boolean isFalse = !P6LogQuery.getLastEntry().contains(query);
         if (!isFalse) {
             System.err.println(query+" was the last query and should not have been");
         }
