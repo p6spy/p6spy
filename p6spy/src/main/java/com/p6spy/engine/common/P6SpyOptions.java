@@ -115,6 +115,8 @@ public class P6SpyOptions extends P6Options {
 
     private static boolean append;
 
+    private static String logMessageFormatter;
+
     private static boolean deregister;
 
     private static String dateformat;
@@ -464,4 +466,11 @@ public class P6SpyOptions extends P6Options {
         }
     }
 
+  public static String getLogMessageFormatter() {
+    return logMessageFormatter;
+  }
+
+  public static void setLogMessageFormatter(final String logMessageFormatter) {
+    P6SpyOptions.logMessageFormatter = logMessageFormatter;
+  }
 }

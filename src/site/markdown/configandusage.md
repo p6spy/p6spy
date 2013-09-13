@@ -176,6 +176,9 @@ An example spy.properties file follows:
     # log file is truncated every time. (file logger only)
     append=true
 
+    # class to use for formatting log messages - defaults to SingleLineFormat if not set
+    #logMessageFormat=com.p6spy.engine.logging.appender.SingleLineFormat
+
     #The following are for log4j logging only
     log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender
     log4j.appender.STDOUT.layout=org.apache.log4j.PatternLayout
@@ -434,6 +437,22 @@ reloadproperties will not reload any driver information (such as realdriver, rea
 
 Setting useprefix to true requires you to prefix your URLs with p6spy:. The default setting is false.
 
+### logMessageFormat
+
+The log message format is selected by specifying the class to use to format the log messages.  The following
+classes are available with P6Spy.
+
+`com.p6spy.engine.logging.appender.SingleLineFormat`
+
+`com.p6spy.engine.logging.appender.MultiLineFormat`
+
+The MultiLineFormat might be better from a readability perspective.  Because it will place the effective SQL statement
+on a separate line.  However, the SingleLineFormat might be better if you have a need to parse the log messages.
+The default is SingleLineFormat for backward compatibility.
+
+You can also supply your own log message formatter to customize the format.  Simply create a class which implements
+the `com.p6spy.engine.logging.appender.MessageFormattingStrategy` interface and place it on the classpath.
+
 ## Command Line Options
 
 Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag.
@@ -450,7 +469,14 @@ In addition, you can set the default directory to look for spy.properties, as sh
 
 The log file format of spy.log follows:
 
+  SingleLineFormat -
+
     current time|execution time|category|statement SQL String|effective SQL string
+
+  MultiLineFormat -
+
+    current time|execution time|category|statement SQL String
+    effective SQL string
 
 * current time—The current time is obtained through System.getCurrentTimeMillis() and represents
   the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT.

@@ -66,22 +66,34 @@ package com.p6spy.engine.logging.appender;
 // also, they all have to do the get and setLastEntry stuff
 // so we go ahead and do the work here.
 public abstract class FormattedLogger {
-    protected String lastEntry;
+  protected String lastEntry;
+  private MessageFormattingStrategy strategy;
 
-    public void logSQL(int connectionId, String now, long elapsed, String category, String prepared, String sql) {
-    	String logEntry = "#" + now + " | took " + elapsed + "ms | " + category + " | connection " + connectionId + "|" + prepared + "\n" + sql +";";
-    	logText(logEntry);
-    }
+  protected FormattedLogger() {
+    strategy = new SingleLineFormat();
+  }
 
-    public abstract void logText(String text);
+  public void logSQL(int connectionId, String now, long elapsed, String category, String prepared, String sql) {
+    String logEntry = "#" + now + " | took " + elapsed + "ms | " + category + " | connection " + connectionId + "|" + prepared + "\n" + sql + ";";
+    logText(logEntry);
+  }
 
-    // they also all need to have the last entry thing
-    public void setLastEntry(String inVar) {
-	lastEntry = inVar;
-    }
+  public abstract void logText(String text);
 
-    public String getLastEntry() {
-	return lastEntry;
-    }
+  // they also all need to have the last entry thing
+  public void setLastEntry(String inVar) {
+    lastEntry = inVar;
+  }
+
+  public String getLastEntry() {
+    return lastEntry;
+  }
+
+  /**
+   * Sets the strategy implementation to use for formatting log message.  If not set, this will default to {@link SingleLineFormat}
+   */
+  public void setStrategy(final MessageFormattingStrategy strategy) {
+    this.strategy = strategy;
+  }
 }
 
