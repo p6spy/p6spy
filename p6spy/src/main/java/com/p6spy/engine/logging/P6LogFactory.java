@@ -87,11 +87,11 @@
 
 package com.p6spy.engine.logging;
 
+import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.spy.P6Connection;
 import com.p6spy.engine.spy.P6CoreFactory;
 import com.p6spy.engine.spy.P6Statement;
 
-import java.lang.reflect.Proxy;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -106,11 +106,8 @@ public class P6LogFactory extends P6CoreFactory {
 
   @Override
   public Connection getConnection(Connection conn) throws SQLException {
-    P6LogConnectionInvocationHandler connectionInvocationHandler = new P6LogConnectionInvocationHandler(conn);
-    return (Connection) Proxy.newProxyInstance(
-        conn.getClass().getClassLoader(),
-        new Class[]{Connection.class},
-        connectionInvocationHandler);
+    P6LogConnectionInvocationHandler invocationHandler = new P6LogConnectionInvocationHandler(conn);
+    return ProxyFactory.createProxy(conn, Connection.class, invocationHandler);
 
     //return new P6LogConnection(this, conn);
   }
