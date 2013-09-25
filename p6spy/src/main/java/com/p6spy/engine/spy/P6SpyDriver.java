@@ -66,20 +66,12 @@
 
 package com.p6spy.engine.spy;
 
-import java.sql.*;
+import java.sql.SQLException;
 
 public class P6SpyDriver extends P6SpyDriverCore {
     
-    static {
-        initMethod();
-    }
-    
-    public static void initMethod() {
-        P6SpyDriverCore.initMethod(P6SpyDriver.class.getName());
-    }
-    
     public P6SpyDriver() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-        super(P6SpyDriver.class.getName(), new P6CoreFactory());
+        super();
 /*
         if (P6LogQuery.isDebugOn()) {
 	    Throwable t = new Throwable("class instantiated at: (this is not a real error, just a debug statement)");

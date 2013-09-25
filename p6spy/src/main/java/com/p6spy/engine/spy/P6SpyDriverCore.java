@@ -202,7 +202,7 @@ public abstract class P6SpyDriverCore implements Driver {
      *
      */
 
-    public synchronized static void initMethod(String spydriver) {
+    public synchronized static void initMethod() {
         // this is the *only* p6 driver
         // we need to build two lists here:
         // one of the modules that are loaded, and one of the
@@ -341,7 +341,7 @@ public abstract class P6SpyDriverCore implements Driver {
 
     }
 
-    public P6SpyDriverCore(String _spydriver, P6Factory _p6factory) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
+    public P6SpyDriverCore() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
             SQLException {
         // if we couldn't find the spy.properties file, complain here
         if (!foundSpyProperties) {

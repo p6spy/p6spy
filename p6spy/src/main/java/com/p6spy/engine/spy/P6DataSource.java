@@ -147,7 +147,7 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
     }
 
     public static void initMethod() {
-        P6SpyDriverCore.initMethod(P6SpyDriver.class.getName());
+        P6SpyDriverCore.initMethod();
     }
 
     public String getRealDataSource() {

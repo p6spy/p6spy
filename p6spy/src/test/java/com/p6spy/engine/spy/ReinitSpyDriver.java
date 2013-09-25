@@ -67,7 +67,7 @@ public class ReinitSpyDriver extends P6SpyDriverCore {
 
     // don't instantiate this... it's just for P6TestUnloading
     public ReinitSpyDriver(String _spydriver, P6Factory _p6factory) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-	super(_spydriver, _p6factory);
+	super();
     }
     public static void setInitialized(boolean trueOrFalse) {
 	initialized = trueOrFalse;

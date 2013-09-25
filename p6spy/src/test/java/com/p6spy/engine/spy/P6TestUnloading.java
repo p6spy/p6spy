@@ -132,7 +132,7 @@ public class P6TestUnloading extends P6TestFramework {
 
         if (driver instanceof P6SpyDriver) {
             ReinitSpyDriver.setInitialized(false);
-            ((P6SpyDriver) driver).initMethod("");
+            ((P6SpyDriver) driver).initMethod();
         }
     }
 
