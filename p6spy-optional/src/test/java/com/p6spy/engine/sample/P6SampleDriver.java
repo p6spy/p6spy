@@ -71,18 +71,8 @@ import java.sql.*;
 
 public class P6SampleDriver extends P6SpyDriverCore {
     
-    // implement an interface for modules
-    
-    static {
-        initMethod();
-    }
-    
-    public static void initMethod() {
-        P6SpyDriverCore.initMethod(P6SampleDriver.class.getName());
-    }
-    
     public P6SampleDriver() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
-        super(P6SampleDriver.class.getName(),new P6SampleFactory());
+        super();
     }
     
 }
