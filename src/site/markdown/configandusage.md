@@ -525,27 +525,61 @@ P6Spy includes a JMX application, tested with JBoss 2.4.x, that allows the P6Spy
 
 ## Building the Source
 
-To build the source, complete the following steps:
+1. Make sure to have Java installed.
+1. Download and install [Apache Maven](http://maven.apache.org).
 
-1. Download Jakarta Ant.
-1. Install Jakarta Ant.
-1, You must also download some required libraries. Running Ant the first time will display a message listing all required libraries and locations where they can be downloaded.
-1, Copy these libraries into the lib directory, which is a subdirectory of your main directory (the directory with the source code).
+The following are useful Maven commands:
 
-The following are useful Ant targets:
+to build binaries:
 
-* ant creates a p6spy.jar file in the dist directory.
-* ant clean cleans the directory of build files and tool-generated backup files.
-* ant release creates the Javadocs, the .war file, and all distribution .zip and .jar files.
-* ant test runs the standard JUnit tests. Refer to the JUnit test instructions below.
-* ant perform runs the performance specific JUnit tests.
+	mvn clean install
 
-To run the JUnit tests, complete the following steps:
+ to build site:
 
-1. Download JUnit.
-1. Install JUnit
-1. Edit the P6Test.properties file and specify two databases. The configuration is set up for Oracle and MySQL. You must change the Oracle URL, at minimum.
-1. Copy the vendor database JDBC drivers' JAR files (of the two databases) into the lib directory.
+    mvn site
+
+ to run the JUnit tests Refer to the [Running the tests](#tests) section
+
+ to run the performance specific JUnit tests:
+
+	TODO (tests + maven setup)
+
+ to do the snapshot/version release version
+ 	
+	TODO (describe the setup once it's clear)
+ 
+## <a name="tests">Running the tests</a>
+
+To run the JUnit tests against specific database(s):
+
+1. Make sure to have Java installed.
+1. Download and install [Apache Maven](http://maven.apache.org).
+1. Please note, that PostgresSQL and MySQL specific tests require to have the detabase servers running with the specific databases and users and permissions setup.   
+
+By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:
+
+  * PostgresSQL
+  * MySQL
+  * H2 
+  * HSQLDB
+  * SQLite
+  * or comma separated list of these
+
+### Running the tests in the command line
+
+use the following maven command:
+
+	mvn clean test -DDB=<DB_NAMES>
+
+where &lt;DB_NAMES&gt; would hold the value of `DB` environment variable described before.
+
+### Running the tests in the Eclipse
+
+1. Make sure to have [m2e plugin](http://eclipse.org/m2e/) installed 
+1. Import all the p6spy projects to eclipse (as Maven projects)
+1. Right click the Class holding the test to run and choose: Run As -> JUnit Test
+
+The `DB` environment variable can be set using Arguments tab -&gt; VM Argument of the JUnit Run Configuration.
 
 ## P6Spy Modules
 
