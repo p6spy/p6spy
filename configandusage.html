@@ -604,40 +604,83 @@ effective SQL string
 </ol></div>
 <div class="section">
 <h2>Building the Source<a name="Building_the_Source"></a></h2>
-<p>To build the source, complete the following steps:</p>
 
 <ol style="list-style-type: decimal">
   
-<li>Download Jakarta Ant.</li>
+<li>Make sure to have Java installed.</li>
   
-<li>Install Jakarta Ant. 1, You must also download some required libraries. Running Ant the first time will display a message listing all required libraries and locations where they can be downloaded. 1, Copy these libraries into the lib directory, which is a subdirectory of your main directory (the directory with the source code).</li>
+<li>Download and install <a class="externalLink" href="http://maven.apache.org">Apache Maven</a>.</li>
 </ol>
-<p>The following are useful Ant targets:</p>
+<p>The following are useful Maven commands:</p>
+<p>to build binaries:</p>
+
+<div class="source">
+<pre>mvn clean install
+</pre></div>
+<p>to build site:</p>
+
+<div class="source">
+<pre>mvn site
+</pre></div>
+<p>to run the JUnit tests Refer to the <a href="#tests">Running the tests</a> section</p>
+<p>to run the performance specific JUnit tests:</p>
+
+<div class="source">
+<pre>TODO (tests + maven setup)
+</pre></div>
+<p>to do the snapshot/version release:</p>
+
+<div class="source">
+<pre>TODO (describe the setup once it's clear)
+</pre></div></div>
+<div class="section">
+<h2><a name="tests">Running the tests</a><a name="Running_the_tests"></a></h2>
+<p>To run the JUnit tests against specific database(s):</p>
+
+<ol style="list-style-type: decimal">
+  
+<li>Make sure to have Java installed.</li>
+  
+<li>Download and install <a class="externalLink" href="http://maven.apache.org">Apache Maven</a>.</li>
+  
+<li>Please note, that PostgresSQL and MySQL specific tests require to have the detabase servers running with the specific databases and users and permissions setup.</li>
+</ol>
+<p>By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:</p>
 
 <ul>
   
-<li>ant creates a p6spy.jar file in the dist directory.</li>
+<li>PostgresSQL</li>
   
-<li>ant clean cleans the directory of build files and tool-generated backup files.</li>
+<li>MySQL</li>
   
-<li>ant release creates the Javadocs, the .war file, and all distribution .zip and .jar files.</li>
+<li>H2</li>
   
-<li>ant test runs the standard JUnit tests. Refer to the JUnit test instructions below.</li>
+<li>HSQLDB</li>
   
-<li>ant perform runs the performance specific JUnit tests.</li>
+<li>SQLite</li>
+  
+<li>or comma separated list of these</li>
 </ul>
-<p>To run the JUnit tests, complete the following steps:</p>
+<div class="section">
+<h3>Running the tests in the command line<a name="Running_the_tests_in_the_command_line"></a></h3>
+<p>use the following maven command:</p>
+
+<div class="source">
+<pre>mvn clean test -DDB=&lt;DB_NAMES&gt;
+</pre></div>
+<p>where &lt;DB_NAMES&gt; would hold the value of <tt>DB</tt> environment variable described before.</p></div>
+<div class="section">
+<h3>Running the tests in the Eclipse<a name="Running_the_tests_in_the_Eclipse"></a></h3>
 
 <ol style="list-style-type: decimal">
   
-<li>Download JUnit.</li>
+<li>Make sure to have <a class="externalLink" href="http://eclipse.org/m2e/">m2e plugin</a> installed</li>
   
-<li>Install JUnit</li>
+<li>Import all the p6spy projects to eclipse (as Maven projects)</li>
   
-<li>Edit the P6Test.properties file and specify two databases. The configuration is set up for Oracle and MySQL. You must change the Oracle URL, at minimum.</li>
-  
-<li>Copy the vendor database JDBC drivers&#x2019; JAR files (of the two databases) into the lib directory.</li>
-</ol></div>
+<li>Right click the Class holding the test to run and choose: Run As -&gt; JUnit Test</li>
+</ol>
+<p>The <tt>DB</tt> environment variable can be set using Arguments tab -&gt; VM Argument of the JUnit Run Configuration.</p></div></div>
 <div class="section">
 <h2>P6Spy Modules<a name="P6Spy_Modules"></a></h2>
 <p>P6Spy consists of two modules that provide various types of functionality which can be modified to suit your needs. These modules, P6Log and P6Outage, are explained in this section of the documentation. Though they have distinct functions, they share some <a href="#settings">Common Property File Settings</a> that allow you to specify which tables to log, the log file name, the log file location, whether to show the stacktrace (where the JDBC statement is being executed), and more. Refer to the <a href="#settings">Common Property File Settings</a> documentation for details.</p>

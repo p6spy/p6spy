@@ -212,7 +212,7 @@
 <a class="jxr_linenumber" name="202" href="#202">202</a> <em class="jxr_comment">     *</em>
 <a class="jxr_linenumber" name="203" href="#203">203</a> <em class="jxr_comment">     */</em>
 <a class="jxr_linenumber" name="204" href="#204">204</a> 
-<a class="jxr_linenumber" name="205" href="#205">205</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> initMethod(String spydriver) {
+<a class="jxr_linenumber" name="205" href="#205">205</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> initMethod() {
 <a class="jxr_linenumber" name="206" href="#206">206</a>         <em class="jxr_comment">// this is the *only* p6 driver</em>
 <a class="jxr_linenumber" name="207" href="#207">207</a>         <em class="jxr_comment">// we need to build two lists here:</em>
 <a class="jxr_linenumber" name="208" href="#208">208</a>         <em class="jxr_comment">// one of the modules that are loaded, and one of the</em>
@@ -351,7 +351,7 @@
 <a class="jxr_linenumber" name="341" href="#341">341</a> 
 <a class="jxr_linenumber" name="342" href="#342">342</a>     }
 <a class="jxr_linenumber" name="343" href="#343">343</a> 
-<a class="jxr_linenumber" name="344" href="#344">344</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyDriverCore.html">P6SpyDriverCore</a>(String _spydriver, <a href="../../../../com/p6spy/engine/spy/P6Factory.html">P6Factory</a> _p6factory) <strong class="jxr_keyword">throws</strong> ClassNotFoundException, InstantiationException, IllegalAccessException,
+<a class="jxr_linenumber" name="344" href="#344">344</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyDriverCore.html">P6SpyDriverCore</a>() <strong class="jxr_keyword">throws</strong> ClassNotFoundException, InstantiationException, IllegalAccessException,
 <a class="jxr_linenumber" name="345" href="#345">345</a>             SQLException {
 <a class="jxr_linenumber" name="346" href="#346">346</a>         <em class="jxr_comment">// if we couldn't find the spy.properties file, complain here</em>
 <a class="jxr_linenumber" name="347" href="#347">347</a>         <strong class="jxr_keyword">if</strong> (!foundSpyProperties) {
