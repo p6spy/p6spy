@@ -544,7 +544,7 @@ to build binaries:
 
 	TODO (tests + maven setup)
 
- to do the snapshot/version release version
+ to do the snapshot/version release:
  	
 	TODO (describe the setup once it's clear)
  
