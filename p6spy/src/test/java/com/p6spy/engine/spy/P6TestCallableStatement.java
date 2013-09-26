@@ -118,8 +118,6 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
    * The thing is that not all the DBs support stored procedures. Morever syntax might differ. 
    * We want just to prove that callable statements are correctly prxied.
    * So let's test just with H2 (default DB).
-   * <br/><br/>
-   * For the H2 stored procs docs, see: http://www.h2database.com/html/features.html#user_defined_functions
    * 
    * @return {@link DBS_IN_TEST}
    */
