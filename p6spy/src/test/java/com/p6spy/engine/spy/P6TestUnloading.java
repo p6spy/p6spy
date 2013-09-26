@@ -69,11 +69,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Map;
 import java.util.Properties;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -95,27 +93,31 @@ public class P6TestUnloading extends P6TestFramework {
          */
     }
 
-    @Ignore
     @Test
     public void testDriverUnloading() throws Exception {
         Properties props = P6TestUtil.loadProperties(p6TestProperties);
         String url = props.getProperty("url");
         String user = props.getProperty("user");
         String password = props.getProperty("password");
-        String p6Driver = props.getProperty("p6driver");
-
+//        String p6Driver = props.getProperty("p6driver");
+        String realDriver = props.getProperty("p6realdriver");
+        
+        // make sure to unregister all drivers
         unloadAll();
-        Map properties = P6TestUtil.getDefaultPropertyFile(p6TestProperties);
-        P6TestUtil.reloadProperty(properties);
-//            registerDriver(oracleDriver);
-        //P6Util.forName(oracleDriver);
+
+        // register real driver only
+        registerDriver(realDriver);
         Connection con = DriverManager.getConnection(url, user, password);
+        // check that real one was retrieved
+        chkInstanceOf(con, db.toLowerCase());
 
-        chkInstanceOf(con, "oracle");
-
-        registerDriver(p6Driver);
+        // register p6spy drivers
+        resetLoadedDrivers();
+        setUpFramework();
+        
         con = DriverManager.getConnection(url, user, password);
-        chkInstanceOf(con, "p6spy");
+        // check that p6spy one was retrieved
+        chkInstanceOf(con, /*"p6spy"*/ "proxy");
 
         unloadAll();
     }
@@ -126,14 +128,15 @@ public class P6TestUnloading extends P6TestFramework {
     }
 
     protected void registerDriver(String driverClass) throws Exception {
-        Class clazz = P6Util.forName(driverClass);
-        Driver driver = (Driver) clazz.newInstance();
-        DriverManager.registerDriver(driver);
-
-        if (driver instanceof P6SpyDriver) {
-            ReinitSpyDriver.setInitialized(false);
-            ((P6SpyDriver) driver).initMethod();
-        }
+      Class clazz = P6Util.forName(driverClass);
+      Driver driver = (Driver) clazz.newInstance();
+      DriverManager.registerDriver(driver);
+//      if (driver instanceof P6SpyDriver) {
+//        // make sure to reinit for each Driver run as we run parametrized builds
+//        // and need to have fresh stuff for every specific driver
+//        P6SpyDriverCore.initialized = false;
+//        P6SpyDriver.initMethod();
+//      }
     }
 
     protected void unloadAll() throws SQLException {

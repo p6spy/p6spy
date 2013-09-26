@@ -193,11 +193,13 @@ public abstract class P6TestFramework {
    */
   protected final String p6TestProperties;
 
+  protected final String db;
+  
   protected Connection connection = null;
 
   public P6TestFramework(String db) throws SQLException, IOException {
+    this.db = db;
     p6TestProperties = "P6Test_" + db + ".properties";
-
     resetLoadedDrivers();
   }
 
