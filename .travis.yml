@@ -16,10 +16,10 @@ before_script:
  - "psql -c 'create database p6spy;' -U postgres" # test DB creation for PostgresSQL
  - "mysql -e 'create database p6spy;'" # test DB creation for MySQL
   
-script: if [[ $TRAVIS_BRANCH == "master" ]]; then mvn clean test -P travis site:site site:stage; mvn -N ghSite:site; else mvn clean test -P travis; fi;
+script: if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn clean test -P travis site:site site:stage; mvn -N ghSite:site; else mvn clean test -P travis; fi;
 
 after_script:
- - if [[ $TRAVIS_BRANCH == "master" ]]; then groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy -DskipTests --settings ~/.m2/deploySettings.xml; fi
+ - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy -DskipTests --settings ~/.m2/deploySettings.xml; fi
 
 notifications:
   email:
