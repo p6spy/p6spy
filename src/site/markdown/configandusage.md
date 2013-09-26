@@ -547,11 +547,11 @@ To run the JUnit tests against specific database(s):
 
 1. Make sure to have Java installed.
 1. Download and install [Apache Maven](http://maven.apache.org).
-1. Please note, that PostgresSQL and MySQL specific tests require to have the detabase servers running with the specific databases, users and permissions setup.
+1. Please note, that PostgreSQL and MySQL specific tests require to have the detabase servers running with the specific databases, users and permissions setup.
 
 By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:
 
-  * PostgresSQL
+  * PostgreSQL
   * MySQL
   * H2 
   * HSQLDB

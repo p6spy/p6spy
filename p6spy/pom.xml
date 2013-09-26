@@ -134,7 +134,7 @@
             <systemPropertyVariables>
               <!-- all the DBs we want to test with 
                except Derby that is causing random jvm crashes -->
-              <DB>PostgresSQL,MySQL,H2,HSQLDB,SQLite</DB>
+              <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite</DB>
             </systemPropertyVariables>
             </configuration>
             </plugin>
