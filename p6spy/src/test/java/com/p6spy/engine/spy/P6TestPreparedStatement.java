@@ -89,8 +89,7 @@
 
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -131,16 +130,16 @@ public class P6TestPreparedStatement extends P6TestFramework {
             prep.setString(1, "miller");
             prep.setInt(2,1);
             prep.executeUpdate();
-            assertIsLastQuery(update);
-            assertIsLastQuery("miller");
-            assertIsLastQuery("1");
+            assertTrue(super.getLastLogEntry().contains(update));
+            assertTrue(super.getLastLogEntry().contains("miller"));
+            assertTrue(super.getLastLogEntry().contains("1"));
 
             // test a basic select
             String query = "select count(*) from prepstmt_test where col2 = ?";
             prep = getPreparedStatement(query);
             prep.setInt(1,1);
             ResultSet rs = prep.executeQuery();
-            assertIsLastQuery(query);
+            assertTrue(super.getLastLogEntry().contains(query));
             rs.next();
             assertEquals(1, rs.getInt(1));
 
@@ -157,9 +156,8 @@ public class P6TestPreparedStatement extends P6TestFramework {
             prep = getPreparedStatement(bigSelect.toString());
             for (int i = 1; i <= MaxFields; i++) {
                  prep.setInt(i, i);
-	    }
-            //rs = prep.executeQuery();
-
+            }
+            
             // test batch inserts
             update = "insert into prepstmt_test values (?,?)";
             prep = getPreparedStatement(update);
@@ -173,9 +171,9 @@ public class P6TestPreparedStatement extends P6TestFramework {
             prep.setInt(2,4);
             prep.addBatch();
             prep.executeBatch();
-            assertIsLastQuery(update);
-            assertIsLastQuery("aspen");
-            assertIsLastQuery("4");
+            assertTrue(super.getLastLogEntry().contains(update));
+            assertTrue(super.getLastLogEntry().contains("aspen"));
+            assertTrue(super.getLastLogEntry().contains("4"));
 
             query = "select count(*) from prepstmt_test";
             prep = getPreparedStatement(query);

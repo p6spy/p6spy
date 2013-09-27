@@ -68,6 +68,7 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -75,6 +76,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.p6spy.engine.common.P6Util;
 
@@ -84,7 +86,18 @@ public class P6TestUnloading extends P6TestFramework {
     public P6TestUnloading(String db) throws SQLException, IOException {
       super(db);
     }
-
+    
+    /**
+     * Always returns {@link P6TestOptions#dbs()} as we don't
+     * need to rerun for each DB here, rather we run for the specific config only.
+     * 
+     * @return 
+     */
+    @Parameters
+    public static Collection<Object[]> dbs() {
+      return P6TestOptions.dbs();
+    }
+    
     @Before
     public void setUpUnloading() {
         /*
@@ -99,7 +112,6 @@ public class P6TestUnloading extends P6TestFramework {
         String url = props.getProperty("url");
         String user = props.getProperty("user");
         String password = props.getProperty("password");
-//        String p6Driver = props.getProperty("p6driver");
         String realDriver = props.getProperty("p6realdriver");
         
         // make sure to unregister all drivers

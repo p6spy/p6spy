@@ -84,7 +84,6 @@ public class Log4jLogger extends FormattedLogger implements P6Logger {
         log.setAdditivity(false);
     }
     
-    
     public void logException(Exception e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw  = new PrintWriter(sw);
@@ -94,7 +93,6 @@ public class Log4jLogger extends FormattedLogger implements P6Logger {
     
     public void logText(String text) {
         log.log(this.level, text);
-        setLastEntry(text);
     }
     
     public Level getLevel() {
@@ -105,4 +103,3 @@ public class Log4jLogger extends FormattedLogger implements P6Logger {
         this.level = inVar;
     }   
 }
-

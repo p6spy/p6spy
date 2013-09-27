@@ -116,6 +116,7 @@
 package com.p6spy.engine.spy;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -130,7 +131,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6SpyOptions;
 
 @RunWith(Parameterized.class)
@@ -171,15 +171,15 @@ public class P6TestStatement extends P6TestFramework {
             // 
             // => let's check for the result and handle correctly
             boolean noResult = 0 != statement.executeUpdate(update);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(update) != -1);
+            assertTrue(super.getLastLogEntry().contains(update));
 
-		    // most of drivers
-		    assertTrue("neither no result indicated, nor statement is not null", noResult || statement.getResultSet() == null);
+    		    // most of drivers
+    		    assertTrue("neither no result indicated, nor statement is not null", noResult || statement.getResultSet() == null);
             
             // test a basic select
             String query = "select count(*) from stmt_test";
             rs = statement.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+            assertTrue(super.getLastLogEntry().contains(query));
             rs.next();
             assertEquals(1, rs.getInt(1));
             
@@ -192,7 +192,7 @@ public class P6TestStatement extends P6TestFramework {
                 update = "insert into stmt_test values (\'bambi\', 8)";
                 statement.addBatch(update);
                 statement.executeBatch();
-                assertTrue(P6LogQuery.getLastEntry().indexOf(update) != -1);
+                assertTrue(super.getLastLogEntry().contains(update));
                 
                 query = "select count(*) from stmt_test";
                 rs = statement.executeQuery(query);
@@ -216,7 +216,7 @@ public class P6TestStatement extends P6TestFramework {
             String update = "insert into stmt_test values (\'bob\', 5)";
             Statement statement = connection.createStatement();
             statement.executeUpdate(update);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(update) != -1);
+            assertTrue(super.getLastLogEntry().contains(update));
             
             // set the execution threshold very low
             P6SpyOptions.setExecutionThreshold("0");
@@ -224,7 +224,7 @@ public class P6TestStatement extends P6TestFramework {
             // test a basic select
             String query = "select count(*) from stmt_test";
             ResultSet rs = statement.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+            assertTrue(super.getLastLogEntry().contains(query));
             // finally just make sure the query executed!
             rs.next();
             assertTrue(rs.getInt(1) > 0);
@@ -237,9 +237,9 @@ public class P6TestStatement extends P6TestFramework {
             String nextQuery = "select count(1) from stmt_test where 1 = 2";
             rs = statement.executeQuery(nextQuery);
             // make sure the previous query is still the last query
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+            assertTrue(super.getLastLogEntry().contains(query));
             // and of course that the new query isn't
-            assertTrue(P6LogQuery.getLastEntry().indexOf(nextQuery) == -1);
+            assertFalse(super.getLastLogEntry().contains(nextQuery));
             // finally just make sure the query executed!
             rs.next();
             assertEquals(0, rs.getInt(1));
@@ -249,7 +249,7 @@ public class P6TestStatement extends P6TestFramework {
             
             // finally, just make sure it now works as expected
             rs = statement.executeQuery(nextQuery);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(nextQuery) != -1);
+            assertTrue(super.getLastLogEntry().contains(nextQuery));
             rs.next();
             assertEquals(0, rs.getInt(1));
             rs.close();
