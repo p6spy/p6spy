@@ -61,9 +61,15 @@
 
 package com.p6spy.engine.common;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * this class contains a properties file and utility functions that enable this property file to be
@@ -71,6 +77,9 @@ import java.util.*;
  * properties file is in a jar, it is not read. It is because P6SpyProperties.java looks for
  * properties in a classpath directory. I suggest to use Class.getResourceAsStream() instead which
  * works even if the file is in a jar o zip.
+ * </br></br>
+ * <b>Please note</b>: {@link File#lastModifed()} is not super accurate and in my tests (on Fedora) it always ended with: "000".
+ * This however means that we can reload (save in a way we'd recognize change) changed props up to once per second. 
  * 
  * @author jeff
  */
@@ -100,7 +109,7 @@ public class P6SpyProperties {
         File propertiesFile = new File(propertiesPath);
         if(propertiesFile.exists()) {
             long lastModified = propertiesFile.lastModified();
-            if(lastModified != propertiesLastModified) {
+            if (lastModified != propertiesLastModified) {
                 propertiesLastModified = lastModified;
                 properties = P6Util.loadProperties(SPY_PROPERTIES_FILE);
             } else {
@@ -177,6 +186,8 @@ public class P6SpyProperties {
         //Also then changed the offending constructor and placed close into finally
         //block where it belongs.  Also fixed wording of error message.
 
+//        File outFile = new File(propertiesPath);
+//        System.err.println("==================\nPRE  timestamp: " + outFile.lastModified() + "[current timestamp is: " + System.currentTimeMillis() + "]");        
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(propertiesPath, false);
@@ -195,6 +206,7 @@ public class P6SpyProperties {
                 P6LogQuery.error("Could not close property file " + propertiesPath + " because of error " + ioe);
             }
         }
+//        System.err.println("POST timestamp: " + outFile.lastModified() + "[current timestamp is: " + System.currentTimeMillis() + "]" + "\n==================");        
         //->JAW
     }
 
