@@ -109,17 +109,29 @@
 
 package com.p6spy.engine.spy;
 
-import junit.framework.*;
-
-import java.sql.*;
-import java.io.*;
-import java.util.*;
-
-import com.p6spy.engine.common.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import static org.junit.Assert.assertTrue;
+import com.p6spy.engine.common.OptionReloader;
+import com.p6spy.engine.common.P6SpyProperties;
+import com.p6spy.engine.common.P6Util;
 
 @Deprecated // T6TestFramework has most if not all of this.
 public class P6TestUtil  {
@@ -225,22 +237,6 @@ public class P6TestUtil  {
         P6SpyProperties properties = new P6SpyProperties();
         properties.setSpyProperties(P6TestFramework.PROPERTY_FILE);
         OptionReloader.reload();
-    }
-
-    protected static void assertIsLastQuery(String query) {
-        boolean isTrue = P6LogQuery.getLastEntry().indexOf(query) != -1;
-        if (!isTrue) {
-          LOG.error(query+" was not the last query, this was: "+P6LogQuery.getLastEntry());
-        }
-        assertTrue(isTrue);
-    }
-
-    protected static void assertIsNotLastQuery(String query) {
-        boolean isFalse = P6LogQuery.getLastEntry().indexOf(query) == -1;
-        if (!isFalse) {
-            LOG.error(query+" was the last query and should not have been");
-        }
-        assertTrue(isFalse);
     }
 
     protected static void printAllDrivers() {
