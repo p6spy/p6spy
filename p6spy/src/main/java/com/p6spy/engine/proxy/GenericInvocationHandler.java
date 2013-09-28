@@ -48,22 +48,13 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   }
 
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    boolean intercepted = false;
-    Object methodResult = null;
-
     for (MethodMatcher methodMatcher : delegateMap.keySet()) {
       if (methodMatcher.matches(method)) {
-        methodResult = delegateMap.get(methodMatcher).invoke(underlying, method, args);
-        intercepted = true;
-        break;
+        return delegateMap.get(methodMatcher).invoke(underlying, method, args);
       }
     }
-
-    if (!intercepted) {
-      methodResult = method.invoke(underlying, args);
-    }
-
-    return methodResult;
+    
+    return method.invoke(underlying, args);
   }
 
   protected T getUnderlying() {
