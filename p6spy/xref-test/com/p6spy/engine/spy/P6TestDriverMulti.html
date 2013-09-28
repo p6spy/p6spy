@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="71" href="#71">71</a>            <em class="jxr_comment">// this should be fine</em>
 <a class="jxr_linenumber" name="72" href="#72">72</a>            String query = <span class="jxr_string">"select 'q1' from multidriver_test2"</span>;
 <a class="jxr_linenumber" name="73" href="#73">73</a>            statement2.executeQuery(query);
-<a class="jxr_linenumber" name="74" href="#74">74</a>            assertTrue(<strong class="jxr_keyword">super</strong>.getLastLogEntry().contains(query));
+<a class="jxr_linenumber" name="74" href="#74">74</a>            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
 <a class="jxr_linenumber" name="75" href="#75">75</a>  
 <a class="jxr_linenumber" name="76" href="#76">76</a>            <em class="jxr_comment">// this table should not exist</em>
 <a class="jxr_linenumber" name="77" href="#77">77</a>            <strong class="jxr_keyword">try</strong> {
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="84" href="#84">84</a>            <em class="jxr_comment">// this should be fine for the second connection</em>
 <a class="jxr_linenumber" name="85" href="#85">85</a>            query = <span class="jxr_string">"select 'b' from multidriver_test2"</span>;
 <a class="jxr_linenumber" name="86" href="#86">86</a>            statement2.executeQuery(query);
-<a class="jxr_linenumber" name="87" href="#87">87</a>            assertTrue(<strong class="jxr_keyword">super</strong>.getLastLogEntry().contains(query));
+<a class="jxr_linenumber" name="87" href="#87">87</a>            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
 <a class="jxr_linenumber" name="88" href="#88">88</a>  
 <a class="jxr_linenumber" name="89" href="#89">89</a>            <em class="jxr_comment">// this table should not exist</em>
 <a class="jxr_linenumber" name="90" href="#90">90</a>            <strong class="jxr_keyword">try</strong> {
