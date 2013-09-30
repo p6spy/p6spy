@@ -274,8 +274,8 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">     */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;134</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">public</span> <span class="keyword">void</span> run() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;135</td>  <td class="nbHitsUncovered"><a title="Line 135: Conditional coverage 50% (1/2).">&nbsp;287620</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 135: Conditional coverage 50% (1/2).">        <span class="keyword">while</span> (!haltThread) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;136</td>  <td class="nbHitsCovered">&nbsp;287636</td>  <td class="src"><pre class="src">&nbsp;            detectOutage();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;135</td>  <td class="nbHitsUncovered"><a title="Line 135: Conditional coverage 50% (1/2).">&nbsp;635085</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 135: Conditional coverage 50% (1/2).">        <span class="keyword">while</span> (!haltThread) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;136</td>  <td class="nbHitsCovered">&nbsp;635100</td>  <td class="src"><pre class="src">&nbsp;            detectOutage();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;137</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;138</td>  <td class="nbHits">&nbsp;</td>
@@ -286,9 +286,9 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// don't cache this value since the props file may be reloaded</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;141</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// and this value might change</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;142</td>  <td class="nbHitsCovered">&nbsp;287641</td>  <td class="src"><pre class="src">&nbsp;                Thread.sleep(P6OutageOptions.getOutageDetectionIntervalMS());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsCovered">&nbsp;287641</td>  <td class="src"><pre class="src">&nbsp;            } <span class="keyword">catch</span> (Exception e) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;144</td>  <td class="nbHitsCovered">&nbsp;287654</td>  <td class="src"><pre class="src">&nbsp;            }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;142</td>  <td class="nbHitsCovered">&nbsp;635104</td>  <td class="src"><pre class="src">&nbsp;                Thread.sleep(P6OutageOptions.getOutageDetectionIntervalMS());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsCovered">&nbsp;635104</td>  <td class="src"><pre class="src">&nbsp;            } <span class="keyword">catch</span> (Exception e) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;144</td>  <td class="nbHitsCovered">&nbsp;635115</td>  <td class="src"><pre class="src">&nbsp;            }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;145</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;146</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;    }</span></pre></td></tr>
@@ -336,9 +336,9 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;171</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">private</span> <span class="keyword">void</span> detectOutage() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;172</td>  <td class="nbHitsCovered">&nbsp;287695</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">int</span> listSize = pendingMessages.size();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;173</td>  <td class="nbHitsCovered"><a title="Line 173: Conditional coverage 100% (2/2).">&nbsp;287700</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 173: Conditional coverage 100% (2/2).">        <span class="keyword">if</span> (listSize == 0) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;174</td>  <td class="nbHitsCovered">&nbsp;287714</td>  <td class="src"><pre class="src">&nbsp;            <span class="keyword">return</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;172</td>  <td class="nbHitsCovered">&nbsp;635151</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">int</span> listSize = pendingMessages.size();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;173</td>  <td class="nbHitsCovered"><a title="Line 173: Conditional coverage 100% (2/2).">&nbsp;635155</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 173: Conditional coverage 100% (2/2).">        <span class="keyword">if</span> (listSize == 0) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;174</td>  <td class="nbHitsCovered">&nbsp;635167</td>  <td class="src"><pre class="src">&nbsp;            <span class="keyword">return</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;175</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;176</td>  <td class="nbHits">&nbsp;</td>
@@ -415,6 +415,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 9/30/13 6:51 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 9/30/13 6:53 PM.</div>
 </body>
 </html>

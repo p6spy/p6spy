@@ -100,26 +100,27 @@
 
 <div class="source">
 <pre>#################################################################
-# P6Spy Options File #
-# See documentation for detailed instructions #
+# P6Spy Options File                                            #
+# See documentation for detailed instructions                   #
 #################################################################
 
 #################################################################
-# MODULES #
-# #
-# Modules provide the P6Spy functionality. If a module, such #
-# as module_log is commented out, that functionality will not #
-# be available. If it is not commented out (if it is active), #
-# the functionality will be active. #
-# #
-# Values set in Modules cannot be reloaded using the #
-# reloadproperties variable. Once they are loaded, they remain #
-# in memory until the application is restarted. #
-# #
+# MODULES                                                       #
+#                                                               #
+# Modules provide the P6Spy functionality. If a module, such    #
+# as module_log is commented out, that functionality will not   #
+# be available. If it is not commented out (if it is active),   #
+# the functionality will be active.                             #
+#                                                               #
+# Values set in Modules cannot be reloaded using the            #
+# reloadproperties variable. Once they are loaded, they remain  #
+# in memory until the application is restarted.                 #
+#                                                               #
 #################################################################
 
 module.log=com.p6spy.engine.logging.P6LogFactory
 #module.outage=com.p6spy.engine.outage.P6OutageFactory
+#module.leak=com.p6spy.engine.leak.P6LeakFactory
 
 #################################################################
 # REALDRIVER(s) #
@@ -169,6 +170,11 @@ deregisterdrivers=false
 
 ################################################################
 # P6LOG SPECIFIC PROPERTIES #
+################################################################
+# no properties currently available
+
+################################################################
+# P6LEAK SPECIFIC PROPERTIES #
 ################################################################
 # no properties currently available
 
@@ -355,8 +361,9 @@ realdatasourceproperties=port;3306,serverName;myhost,databaseName;jbossdb,foo;ba
 <div class="source">
 <pre>module.log=com.p6spy.engine.logging.P6LogSpyDriver
 module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
+module.leak=com.p6spy.engine.leak.P6LeakFactory
 </pre></div>
-<p>module.log is required for the logging functionality, see <a href="#p6log">P6Log</a>. module.outage is required for the outage functionality, see <a href="#p6outage">P6Outage</a>.</p></div>
+<p>module.log is required for the logging functionality, see <a href="#p6log">P6Log</a>. module.outage is required for the outage functionality, see <a href="#p6outage">P6Outage</a>. module.leak is required for the leak functionality, see <a href="#p6leak">P6Leak</a>.</p></div>
 <div class="section">
 <h3>realdriver<a name="realdriver"></a></h3>
 <p>realdriver is where you specify the wrapped database driver. P6Spy wraps around your existing driver, intercepts the incoming database requests, and outputs them to a log file. To achieve this without requiring any code changes, the P6Spy driver is listed with your application as the primary driver. P6Spy then intercepts and logs the requests, and passes the requests to realdriver, where it is processed as usual. An example follows:</p>
@@ -732,7 +739,34 @@ module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
 <ul>
   
 <li>outagedetectioninterval - The interval property is the boundary time set in seconds. For example, if set to 2, any statement requiring at least 2 seconds is logged. The same statement will continue to be logged for as long as it executes. So, if the interval is set to 2 and a query takes 11 seconds, it is logged 5 times (at the 2, 4, 6, 8, 10-second intervals).</li>
-</ul></div></div>
+</ul></div>
+<div class="section">
+<h3><a name="p6leak">P6Leak</a><a name="P6Leak"></a></h3>
+<p>P6Leak helps you to detect any JDBC resources which have not been properly closed. This includes connections, statements, and result sets.</p>
+<p>Usage:</p>
+
+<ol style="list-style-type: decimal">
+  
+<li>Uncomment the leak module in spy.properties.</li>
+  
+<li>Ensure that P6Spy is configured as per the <a href="install.html">installation instructions</a></li>
+  
+<li>Copy JDBCLeak.jsp (from distribution) to the root of your web application.</li>
+  
+<li>Start application and exercise it thoroughly for a while.</li>
+  
+<li>View JDBCLeak.jsp to view a stack trace for any JDBC leaks.</li>
+  
+<li>Halt the application and remove the leaks.</li>
+  
+<li>Repeat until no more leaks are detected.</li>
+</ol>
+<p>The P6Leak module is disabled by default. Disable or enable the P6Outage module by editing the spy.properties configuration file. If the module is commented out, it is not loaded, and the functionality is not available. If the module is not commented out, the functionality is available.</p>
+<p>The applicable portion of the spy.properties file follows:</p>
+
+<div class="source">
+<pre>module.leak=com.p6spy.engine.leak.P6LeakFactory
+</pre></div></div></div>
       </div>
     </div>
     <div class="clear">
