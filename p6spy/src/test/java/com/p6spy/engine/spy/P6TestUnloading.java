@@ -60,9 +60,15 @@
 
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertTrue;
+import com.p6spy.engine.common.P6Util;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
+import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -72,13 +78,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
-import com.p6spy.engine.common.P6Util;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestUnloading extends P6TestFramework {
@@ -128,8 +128,8 @@ public class P6TestUnloading extends P6TestFramework {
         setUpFramework();
         
         con = DriverManager.getConnection(url, user, password);
-        // check that p6spy one was retrieved
-        chkInstanceOf(con, /*"p6spy"*/ "proxy");
+        // verify that a proxy was returned
+        assertTrue("Connection class is not a proxy", Proxy.isProxyClass(con.getClass()));
 
         unloadAll();
     }

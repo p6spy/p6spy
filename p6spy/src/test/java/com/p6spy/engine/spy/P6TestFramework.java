@@ -123,33 +123,6 @@
 
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.BufferedWriter;
-import java.io.CharArrayWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.junit.Before;
-import org.junit.runners.Parameterized.Parameters;
-
 import com.p6spy.engine.common.OptionReloader;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6SpyProperties;
@@ -157,6 +130,17 @@ import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.logging.appender.P6TestLogger;
 import com.p6spy.engine.outage.P6OutageFactory;
+import org.junit.Before;
+import org.junit.runners.Parameterized.Parameters;
+
+import java.io.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.*;
+
+import static org.junit.Assert.fail;
 
 public abstract class P6TestFramework {
 
