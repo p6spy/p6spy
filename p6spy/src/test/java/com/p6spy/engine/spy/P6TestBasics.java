@@ -87,7 +87,10 @@
 
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -96,10 +99,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class P6TestBasics extends P6TestFramework {
@@ -118,7 +118,6 @@ public class P6TestBasics extends P6TestFramework {
     
     @Before
     public void setUpBasics() throws Exception {
-      P6TestUtil.unloadDrivers();
     }
 
     @Test
@@ -128,7 +127,6 @@ public class P6TestBasics extends P6TestFramework {
         P6TestUtil.reloadProperty(properties);
         connection = P6TestUtil.loadDrivers("p6realdriver", p6TestProperties);
         sqltests();
-        P6TestUtil.unloadDrivers();
     }
        
     @Test

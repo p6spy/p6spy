@@ -147,7 +147,7 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
     }
 
     public static void initMethod() {
-        P6SpyDriverCore.initMethod();
+        P6Core.initialize();
     }
 
     public String getRealDataSource() {
@@ -349,14 +349,14 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
         if (rds == null) {
             bindDataSource();
         }
-        return P6SpyDriverCore.wrapConnection(rds.getConnection());
+        return P6Core.wrapConnection(rds.getConnection());
     }
 
     public Connection getConnection(String username, String password) throws SQLException {
         if (rds == null) {
             bindDataSource();
         }
-        return P6SpyDriverCore.wrapConnection(rds.getConnection(username, password));
+        return P6Core.wrapConnection(rds.getConnection(username, password));
     }
 
     /**

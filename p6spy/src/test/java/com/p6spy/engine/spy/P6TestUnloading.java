@@ -73,12 +73,10 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class P6TestUnloading extends P6TestFramework {
@@ -114,9 +112,6 @@ public class P6TestUnloading extends P6TestFramework {
         String password = props.getProperty("password");
         String realDriver = props.getProperty("p6realdriver");
         
-        // make sure to unregister all drivers
-        unloadAll();
-
         // register real driver only
         registerDriver(realDriver);
         Connection con = DriverManager.getConnection(url, user, password);
@@ -131,7 +126,6 @@ public class P6TestUnloading extends P6TestFramework {
         // verify that a proxy was returned
         assertTrue("Connection class is not a proxy", Proxy.isProxyClass(con.getClass()));
 
-        unloadAll();
     }
 
     protected void chkInstanceOf(Connection con, String packageName) {
@@ -143,30 +137,6 @@ public class P6TestUnloading extends P6TestFramework {
       Class clazz = P6Util.forName(driverClass);
       Driver driver = (Driver) clazz.newInstance();
       DriverManager.registerDriver(driver);
-//      if (driver instanceof P6SpyDriver) {
-//        // make sure to reinit for each Driver run as we run parametrized builds
-//        // and need to have fresh stuff for every specific driver
-//        P6SpyDriverCore.initialized = false;
-//        P6SpyDriver.initMethod();
-//      }
-    }
-
-    protected void unloadAll() throws SQLException {
-        ArrayList dereg = new ArrayList();
-        for (Enumeration e = DriverManager.getDrivers(); e.hasMoreElements();) {
-            dereg.add(e.nextElement());
-        }
-
-        // if you found any drivers let's dereg them now
-        int size = dereg.size();
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                Driver driver = (Driver) dereg.get(i);
-                System.err.println("Deregistering driver " + driver);
-                DriverManager.deregisterDriver(driver);
-            }
-        }
-
     }
 
 }

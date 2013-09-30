@@ -67,47 +67,22 @@ import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
 public class P6TestDriver extends P6TestFramework {
-	
-	public P6TestDriver(String db) throws SQLException, IOException {
+
+  public P6TestDriver(String db) throws SQLException, IOException {
     super(db);
   }
 
-	private static final String JDBC_DRIVER_CLASS_NAME_MYSQL = "com.mysql.jdbc.Driver";
+  @Test
+  public void testVersion() throws Exception {
+    Driver driver = new P6SpyDriver();
+    assertEquals(2, driver.getMajorVersion());
+    assertEquals(0, driver.getMinorVersion());
+  }
 
-	@Test
-    public void testMajorVersion() throws Exception {
-		Driver driver = getWrappedDriver();
-	    if (driver.getClass().getName().equals(JDBC_DRIVER_CLASS_NAME_MYSQL)) {
-	    	assertEquals(5, driver.getMajorVersion());
-		    assertEquals(1, driver.getMinorVersion());
-	    }
-    }
-
-    /**
-     * Gets the wrapped {@link Driver} registered for the jdbc url test currently run for.
-     *
-     * @return the driver registered for the current run.
-     * @throws IOException 
-     * @throws SQLException
-     */
-    private Driver getWrappedDriver() throws IOException, SQLException {
-    	Properties props = loadProperties(p6TestProperties);
-    	String url = props.getProperty("url");
-    	Driver driver = DriverManager.getDriver(url);
-
-	    // make sure you have a p6 driver
-	    if (! (driver instanceof P6SpyDriverCore)) {
-	        fail("Expected to get back a p6spy driver, got back a " + driver);
-	    }
-	    return ((P6SpyDriverCore) driver).getPassthru();
-    }
 }
