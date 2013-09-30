@@ -89,7 +89,11 @@
 
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -97,11 +101,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
@@ -144,7 +144,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
             assertEquals(1, rs.getInt(1));
 
             // test dynamic allocation of P6_MAX_FIELDS
-            int MaxFields = P6PreparedStatement.P6_MAX_FIELDS + 3;
+            int MaxFields = 10;
             StringBuffer bigSelect = new StringBuffer(MaxFields);
             bigSelect.append("select count(*) from prepstmt_test where");
             for (int i = 0; i < MaxFields; i++) {
