@@ -414,10 +414,10 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;200</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> initMethod() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;201</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;    String appender = P6SpyOptions.getAppender();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;201</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;    String appender = P6SpyOptions.getAppender();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;202</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;203</td>  <td class="nbHitsCovered"><a title="Line 203: Conditional coverage 100% (2/2).">&nbsp;3594</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 203: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (appender == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;203</td>  <td class="nbHitsCovered"><a title="Line 203: Conditional coverage 100% (2/2).">&nbsp;3757</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 203: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (appender == <span class="keyword">null</span>) {</a></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;204</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;      appender = <span class="string">"com.p6spy.engine.logging.appender.FileLogger"</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;205</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
@@ -427,7 +427,7 @@
   <td class="src"><pre class="src">&nbsp;    <span class="comment">// create the logger</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;208</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;209</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;      logger = (P6Logger) P6Util.forName(appender).newInstance();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;209</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;      logger = (P6Logger) P6Util.forName(appender).newInstance();</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;210</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;    } <span class="keyword">catch</span> (Exception e1) {</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;211</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      <span class="comment">// try one more hack to load the thing</span></pre></td></tr>
@@ -440,21 +440,21 @@
 <tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;      } <span class="keyword">catch</span> (Exception e) {</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        System.err.println(<span class="string">"Cannot instantiate "</span> + appender + <span class="string">", even on second attempt.  Logging to file log4jaux.log: "</span> + e);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;218</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;      }</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;219</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;219</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;220</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;221</td>  <td class="nbHitsUncovered"><a title="Line 221: Conditional coverage 50% (1/2).">&nbsp;3594</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 221: Conditional coverage 50% (1/2).">    <span class="keyword">if</span> (logger != <span class="keyword">null</span>) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsUncovered"><a title="Line 222: Conditional coverage 50% (1/2).">&nbsp;3594</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 222: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (logger <span class="keyword">instanceof</span> FileLogger) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;223</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;        String logfile = P6SpyOptions.getLogfile();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;224</td>  <td class="nbHitsCovered"><a title="Line 224: Conditional coverage 100% (2/2).">&nbsp;3594</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 224: Conditional coverage 100% (2/2).">        logfile = (logfile == <span class="keyword">null</span>) ? <span class="string">"spy.log"</span> : logfile;</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;221</td>  <td class="nbHitsUncovered"><a title="Line 221: Conditional coverage 50% (1/2).">&nbsp;3757</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 221: Conditional coverage 50% (1/2).">    <span class="keyword">if</span> (logger != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsUncovered"><a title="Line 222: Conditional coverage 50% (1/2).">&nbsp;3757</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 222: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (logger <span class="keyword">instanceof</span> FileLogger) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;223</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;        String logfile = P6SpyOptions.getLogfile();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;224</td>  <td class="nbHitsCovered"><a title="Line 224: Conditional coverage 100% (2/2).">&nbsp;3757</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 224: Conditional coverage 100% (2/2).">        logfile = (logfile == <span class="keyword">null</span>) ? <span class="string">"spy.log"</span> : logfile;</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;225</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;226</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;        ((FileLogger) logger).setLogfile(logfile);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;226</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;        ((FileLogger) logger).setLogfile(logfile);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;227</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsUncovered"><a title="Line 228: Conditional coverage 50% (1/2).">&nbsp;3594</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 228: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (logger <span class="keyword">instanceof</span> FormattedLogger) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;229</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;        String logMessageFormatter = P6SpyOptions.getLogMessageFormatter();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;230</td>  <td class="nbHitsUncovered"><a title="Line 230: Conditional coverage 50% (1/2).">&nbsp;3594</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 230: Conditional coverage 50% (1/2).">        <span class="keyword">if</span> (logMessageFormatter != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsUncovered"><a title="Line 228: Conditional coverage 50% (1/2).">&nbsp;3757</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 228: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (logger <span class="keyword">instanceof</span> FormattedLogger) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;229</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;        String logMessageFormatter = P6SpyOptions.getLogMessageFormatter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;230</td>  <td class="nbHitsUncovered"><a title="Line 230: Conditional coverage 50% (1/2).">&nbsp;3757</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 230: Conditional coverage 50% (1/2).">        <span class="keyword">if</span> (logMessageFormatter != <span class="keyword">null</span>) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;231</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;          MessageFormattingStrategy strategy = <span class="keyword">null</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;232</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;          <span class="keyword">try</span> {</pre></td></tr>
@@ -484,14 +484,14 @@
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;250</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;251</td>  <td class="nbHitsCovered"><a title="Line 251: Conditional coverage 100% (2/2).">&nbsp;3594</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 251: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (P6SpyOptions.getFilter()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;252</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;      includeTables = parseCSVList(P6SpyOptions.getInclude());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;253</td>  <td class="nbHitsCovered">&nbsp;60</td>  <td class="src"><pre class="src">&nbsp;      excludeTables = parseCSVList(P6SpyOptions.getExclude());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;251</td>  <td class="nbHitsCovered"><a title="Line 251: Conditional coverage 100% (2/2).">&nbsp;3757</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 251: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (P6SpyOptions.getFilter()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;252</td>  <td class="nbHitsCovered">&nbsp;145</td>  <td class="src"><pre class="src">&nbsp;      includeTables = parseCSVList(P6SpyOptions.getInclude());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;253</td>  <td class="nbHitsCovered">&nbsp;145</td>  <td class="src"><pre class="src">&nbsp;      excludeTables = parseCSVList(P6SpyOptions.getExclude());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;254</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;255</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;    includeCategories = parseCSVList(P6SpyOptions.getIncludecategories());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;256</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;    excludeCategories = parseCSVList(P6SpyOptions.getExcludecategories());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;257</td>  <td class="nbHitsCovered">&nbsp;3594</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;255</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;    includeCategories = parseCSVList(P6SpyOptions.getIncludecategories());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;256</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;    excludeCategories = parseCSVList(P6SpyOptions.getExcludecategories());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;257</td>  <td class="nbHitsCovered">&nbsp;3757</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;258</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;259</td>  <td class="nbHits">&nbsp;</td>
@@ -515,44 +515,44 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;273</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">static</span> String[] parseCSVList(String csvList) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;274</td>  <td class="nbHitsCovered">&nbsp;7458</td>  <td class="src"><pre class="src">&nbsp;    String array[] = <span class="keyword">null</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;275</td>  <td class="nbHitsCovered"><a title="Line 275: Conditional coverage 100% (2/2).">&nbsp;7458</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 275: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (csvList != <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;276</td>  <td class="nbHitsCovered">&nbsp;7456</td>  <td class="src"><pre class="src">&nbsp;      StringTokenizer tok = <span class="keyword">new</span> StringTokenizer(csvList, <span class="string">","</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;274</td>  <td class="nbHitsCovered">&nbsp;7954</td>  <td class="src"><pre class="src">&nbsp;    String array[] = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;275</td>  <td class="nbHitsCovered"><a title="Line 275: Conditional coverage 100% (2/2).">&nbsp;7954</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 275: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (csvList != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;276</td>  <td class="nbHitsCovered">&nbsp;7952</td>  <td class="src"><pre class="src">&nbsp;      StringTokenizer tok = <span class="keyword">new</span> StringTokenizer(csvList, <span class="string">","</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;277</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      String item;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;278</td>  <td class="nbHitsCovered">&nbsp;7456</td>  <td class="src"><pre class="src">&nbsp;      ArrayList list = <span class="keyword">new</span> ArrayList();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;279</td>  <td class="nbHitsCovered"><a title="Line 279: Conditional coverage 100% (2/2).">&nbsp;18385</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 279: Conditional coverage 100% (2/2).">      <span class="keyword">while</span> (tok.hasMoreTokens()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;280</td>  <td class="nbHitsCovered">&nbsp;10929</td>  <td class="src"><pre class="src">&nbsp;        item = tok.nextToken().toLowerCase().trim();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsUncovered"><a title="Line 281: Conditional coverage 50% (1/2).">&nbsp;10929</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 281: Conditional coverage 50% (1/2).">        <span class="keyword">if</span> (item != <span class="string">""</span>) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;282</td>  <td class="nbHitsCovered">&nbsp;10929</td>  <td class="src"><pre class="src">&nbsp;          list.add(item.toLowerCase().trim());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;278</td>  <td class="nbHitsCovered">&nbsp;7952</td>  <td class="src"><pre class="src">&nbsp;      ArrayList list = <span class="keyword">new</span> ArrayList();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;279</td>  <td class="nbHitsCovered"><a title="Line 279: Conditional coverage 100% (2/2).">&nbsp;19540</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 279: Conditional coverage 100% (2/2).">      <span class="keyword">while</span> (tok.hasMoreTokens()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;280</td>  <td class="nbHitsCovered">&nbsp;11588</td>  <td class="src"><pre class="src">&nbsp;        item = tok.nextToken().toLowerCase().trim();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsUncovered"><a title="Line 281: Conditional coverage 50% (1/2).">&nbsp;11588</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 281: Conditional coverage 50% (1/2).">        <span class="keyword">if</span> (item != <span class="string">""</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;282</td>  <td class="nbHitsCovered">&nbsp;11588</td>  <td class="src"><pre class="src">&nbsp;          list.add(item.toLowerCase().trim());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;283</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;284</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;285</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;286</td>  <td class="nbHitsCovered">&nbsp;7456</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">int</span> max = list.size();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;287</td>  <td class="nbHitsCovered">&nbsp;7456</td>  <td class="src"><pre class="src">&nbsp;      Iterator it = list.iterator();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;288</td>  <td class="nbHitsCovered">&nbsp;7456</td>  <td class="src"><pre class="src">&nbsp;      array = <span class="keyword">new</span> String[max];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;286</td>  <td class="nbHitsCovered">&nbsp;7952</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">int</span> max = list.size();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;287</td>  <td class="nbHitsCovered">&nbsp;7952</td>  <td class="src"><pre class="src">&nbsp;      Iterator it = list.iterator();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;288</td>  <td class="nbHitsCovered">&nbsp;7952</td>  <td class="src"><pre class="src">&nbsp;      array = <span class="keyword">new</span> String[max];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;289</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      <span class="keyword">int</span> i;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;290</td>  <td class="nbHitsCovered"><a title="Line 290: Conditional coverage 100% (2/2).">&nbsp;18385</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 290: Conditional coverage 100% (2/2).">      <span class="keyword">for</span> (i = 0; i &lt; max; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsCovered">&nbsp;10929</td>  <td class="src"><pre class="src">&nbsp;        array[i] = (String) it.next();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;290</td>  <td class="nbHitsCovered"><a title="Line 290: Conditional coverage 100% (2/2).">&nbsp;19540</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 290: Conditional coverage 100% (2/2).">      <span class="keyword">for</span> (i = 0; i &lt; max; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;291</td>  <td class="nbHitsCovered">&nbsp;11588</td>  <td class="src"><pre class="src">&nbsp;        array[i] = (String) it.next();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;292</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;293</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;294</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered">&nbsp;7458</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> array;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;295</td>  <td class="nbHitsCovered">&nbsp;7954</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> array;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;296</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;297</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;298</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">static</span> <span class="keyword">protected</span> <span class="keyword">void</span> doLog(<span class="keyword">long</span> elapsed, String category, String prepared, String sql) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;299</td>  <td class="nbHitsCovered">&nbsp;133215</td>  <td class="src"><pre class="src">&nbsp;    doLog(-1, elapsed, category, prepared, sql);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;300</td>  <td class="nbHitsCovered">&nbsp;133215</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;299</td>  <td class="nbHitsCovered">&nbsp;135950</td>  <td class="src"><pre class="src">&nbsp;    doLog(-1, elapsed, category, prepared, sql);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;300</td>  <td class="nbHitsCovered">&nbsp;135950</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;301</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;302</td>  <td class="nbHits">&nbsp;</td>
@@ -567,40 +567,40 @@
   <td class="src"><pre class="src">&nbsp;  <span class="comment">// this is an internal procedure used to actually write the log information</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;308</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">static</span> <span class="keyword">protected</span> <span class="keyword">void</span> doLog(<span class="keyword">int</span> connectionId, <span class="keyword">long</span> elapsed, String category, String prepared, String sql) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;309</td>  <td class="nbHitsUncovered"><a title="Line 309: Conditional coverage 50% (1/2).">&nbsp;133547</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 309: Conditional coverage 50% (1/2).">    <span class="keyword">if</span> (logger != <span class="keyword">null</span>) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;310</td>  <td class="nbHitsCovered">&nbsp;133547</td>  <td class="src"><pre class="src">&nbsp;      java.util.Date now = P6Util.timeNow();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;311</td>  <td class="nbHitsCovered">&nbsp;133547</td>  <td class="src"><pre class="src">&nbsp;      SimpleDateFormat sdf = P6SpyOptions.getDateformatter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;309</td>  <td class="nbHitsUncovered"><a title="Line 309: Conditional coverage 50% (1/2).">&nbsp;136282</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 309: Conditional coverage 50% (1/2).">    <span class="keyword">if</span> (logger != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;310</td>  <td class="nbHitsCovered">&nbsp;136282</td>  <td class="src"><pre class="src">&nbsp;      java.util.Date now = P6Util.timeNow();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;311</td>  <td class="nbHitsCovered">&nbsp;136282</td>  <td class="src"><pre class="src">&nbsp;      SimpleDateFormat sdf = P6SpyOptions.getDateformatter();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;312</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      String stringNow;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;313</td>  <td class="nbHitsCovered"><a title="Line 313: Conditional coverage 100% (2/2).">&nbsp;133547</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 313: Conditional coverage 100% (2/2).">      <span class="keyword">if</span> (sdf == <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;314</td>  <td class="nbHitsCovered">&nbsp;133257</td>  <td class="src"><pre class="src">&nbsp;        stringNow = Long.toString(now.getTime());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;313</td>  <td class="nbHitsCovered"><a title="Line 313: Conditional coverage 100% (2/2).">&nbsp;136282</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 313: Conditional coverage 100% (2/2).">      <span class="keyword">if</span> (sdf == <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;314</td>  <td class="nbHitsCovered">&nbsp;135822</td>  <td class="src"><pre class="src">&nbsp;        stringNow = Long.toString(now.getTime());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;315</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      } <span class="keyword">else</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;316</td>  <td class="nbHitsCovered">&nbsp;290</td>  <td class="src"><pre class="src">&nbsp;        stringNow = sdf.format(<span class="keyword">new</span> java.util.Date(now.getTime())).trim();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;316</td>  <td class="nbHitsCovered">&nbsp;460</td>  <td class="src"><pre class="src">&nbsp;        stringNow = sdf.format(<span class="keyword">new</span> java.util.Date(now.getTime())).trim();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;317</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;318</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;319</td>  <td class="nbHitsCovered">&nbsp;133547</td>  <td class="src"><pre class="src">&nbsp;      logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;319</td>  <td class="nbHitsCovered">&nbsp;136282</td>  <td class="src"><pre class="src">&nbsp;      logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;320</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;321</td>  <td class="nbHitsCovered">&nbsp;133547</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">boolean</span> stackTrace = P6SpyOptions.getStackTrace();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;322</td>  <td class="nbHitsCovered">&nbsp;133547</td>  <td class="src"><pre class="src">&nbsp;      String stackTraceClass = P6SpyOptions.getStackTraceClass();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;323</td>  <td class="nbHitsCovered"><a title="Line 323: Conditional coverage 100% (2/2).">&nbsp;133547</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 323: Conditional coverage 100% (2/2).">      <span class="keyword">if</span> (stackTrace) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;324</td>  <td class="nbHitsCovered">&nbsp;310</td>  <td class="src"><pre class="src">&nbsp;        Exception e = <span class="keyword">new</span> Exception();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;325</td>  <td class="nbHitsUncovered"><a title="Line 325: Conditional coverage 50% (1/2).">&nbsp;310</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 325: Conditional coverage 50% (1/2).">        <span class="keyword">if</span> (stackTraceClass != <span class="keyword">null</span>) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;326</td>  <td class="nbHitsCovered">&nbsp;310</td>  <td class="src"><pre class="src">&nbsp;          StringWriter sw = <span class="keyword">new</span> StringWriter();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsCovered">&nbsp;310</td>  <td class="src"><pre class="src">&nbsp;          PrintWriter pw = <span class="keyword">new</span> PrintWriter(sw);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;328</td>  <td class="nbHitsCovered">&nbsp;310</td>  <td class="src"><pre class="src">&nbsp;          e.printStackTrace(pw);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;329</td>  <td class="nbHitsCovered">&nbsp;310</td>  <td class="src"><pre class="src">&nbsp;          String stack = sw.toString();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;330</td>  <td class="nbHitsCovered"><a title="Line 330: Conditional coverage 100% (2/2).">&nbsp;310</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 330: Conditional coverage 100% (2/2).">          <span class="keyword">if</span> (stack.indexOf(stackTraceClass) == -1) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered">&nbsp;295</td>  <td class="src"><pre class="src">&nbsp;            e = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;321</td>  <td class="nbHitsCovered">&nbsp;136282</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">boolean</span> stackTrace = P6SpyOptions.getStackTrace();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;322</td>  <td class="nbHitsCovered">&nbsp;136282</td>  <td class="src"><pre class="src">&nbsp;      String stackTraceClass = P6SpyOptions.getStackTraceClass();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;323</td>  <td class="nbHitsCovered"><a title="Line 323: Conditional coverage 100% (2/2).">&nbsp;136282</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 323: Conditional coverage 100% (2/2).">      <span class="keyword">if</span> (stackTrace) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;324</td>  <td class="nbHitsCovered">&nbsp;484</td>  <td class="src"><pre class="src">&nbsp;        Exception e = <span class="keyword">new</span> Exception();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;325</td>  <td class="nbHitsUncovered"><a title="Line 325: Conditional coverage 50% (1/2).">&nbsp;484</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 325: Conditional coverage 50% (1/2).">        <span class="keyword">if</span> (stackTraceClass != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;326</td>  <td class="nbHitsCovered">&nbsp;484</td>  <td class="src"><pre class="src">&nbsp;          StringWriter sw = <span class="keyword">new</span> StringWriter();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsCovered">&nbsp;484</td>  <td class="src"><pre class="src">&nbsp;          PrintWriter pw = <span class="keyword">new</span> PrintWriter(sw);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;328</td>  <td class="nbHitsCovered">&nbsp;484</td>  <td class="src"><pre class="src">&nbsp;          e.printStackTrace(pw);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;329</td>  <td class="nbHitsCovered">&nbsp;484</td>  <td class="src"><pre class="src">&nbsp;          String stack = sw.toString();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;330</td>  <td class="nbHitsCovered"><a title="Line 330: Conditional coverage 100% (2/2).">&nbsp;484</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 330: Conditional coverage 100% (2/2).">          <span class="keyword">if</span> (stack.indexOf(stackTraceClass) == -1) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered">&nbsp;465</td>  <td class="src"><pre class="src">&nbsp;            e = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;332</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;          }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;333</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;334</td>  <td class="nbHitsCovered"><a title="Line 334: Conditional coverage 100% (2/2).">&nbsp;310</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 334: Conditional coverage 100% (2/2).">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsCovered">&nbsp;15</td>  <td class="src"><pre class="src">&nbsp;          logger.logException(e);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;334</td>  <td class="nbHitsCovered"><a title="Line 334: Conditional coverage 100% (2/2).">&nbsp;484</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 334: Conditional coverage 100% (2/2).">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsCovered">&nbsp;19</td>  <td class="src"><pre class="src">&nbsp;          logger.logException(e);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;336</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;337</td>  <td class="nbHits">&nbsp;</td>
@@ -611,7 +611,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;340</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;133547</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;341</td>  <td class="nbHitsCovered">&nbsp;136282</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;342</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;343</td>  <td class="nbHits">&nbsp;</td>
@@ -623,7 +623,7 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;347</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">static</span> <span class="keyword">boolean</span> isCategoryOk(String category) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;348</td>  <td class="nbHitsCovered"><a title="Line 348: Conditional coverage 100% (8/8) [each condition: 100%, 100%, 100%, 100%].">&nbsp;143502</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 348: Conditional coverage 100% (8/8) [each condition: 100%, 100%, 100%, 100%].">    <span class="keyword">return</span> (includeCategories == <span class="keyword">null</span> || includeCategories.length == 0 || foundCategory(category, includeCategories))</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;348</td>  <td class="nbHitsCovered"><a title="Line 348: Conditional coverage 100% (8/8) [each condition: 100%, 100%, 100%, 100%].">&nbsp;149537</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 348: Conditional coverage 100% (8/8) [each condition: 100%, 100%, 100%, 100%].">    <span class="keyword">return</span> (includeCategories == <span class="keyword">null</span> || includeCategories.length == 0 || foundCategory(category, includeCategories))</a></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;349</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        &amp;&amp; !foundCategory(category, excludeCategories);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;350</td>  <td class="nbHits">&nbsp;</td>
@@ -632,17 +632,17 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;352</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">static</span> <span class="keyword">boolean</span> foundCategory(String category, String categories[]) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;353</td>  <td class="nbHitsCovered"><a title="Line 353: Conditional coverage 100% (2/2).">&nbsp;143827</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 353: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (categories != <span class="keyword">null</span>) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;354</td>  <td class="nbHitsCovered"><a title="Line 354: Conditional coverage 100% (2/2).">&nbsp;546185</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 354: Conditional coverage 100% (2/2).">      <span class="keyword">for</span> (String categorie : categories) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;355</td>  <td class="nbHitsCovered"><a title="Line 355: Conditional coverage 100% (2/2).">&nbsp;410406</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 355: Conditional coverage 100% (2/2).">        <span class="keyword">if</span> (category.equals(categorie)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;356</td>  <td class="nbHitsCovered">&nbsp;8015</td>  <td class="src"><pre class="src">&nbsp;          <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;353</td>  <td class="nbHitsCovered"><a title="Line 353: Conditional coverage 100% (2/2).">&nbsp;150037</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 353: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (categories != <span class="keyword">null</span>) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;354</td>  <td class="nbHitsCovered"><a title="Line 354: Conditional coverage 100% (2/2).">&nbsp;563564</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 354: Conditional coverage 100% (2/2).">      <span class="keyword">for</span> (String categorie : categories) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;355</td>  <td class="nbHitsCovered"><a title="Line 355: Conditional coverage 100% (2/2).">&nbsp;421905</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 355: Conditional coverage 100% (2/2).">        <span class="keyword">if</span> (category.equals(categorie)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;356</td>  <td class="nbHitsCovered">&nbsp;8345</td>  <td class="src"><pre class="src">&nbsp;          <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;357</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;358</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;359</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;360</td>  <td class="nbHitsCovered">&nbsp;135812</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;360</td>  <td class="nbHitsCovered">&nbsp;141692</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;361</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;362</td>  <td class="nbHits">&nbsp;</td>
@@ -800,25 +800,25 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;458</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">void</span> info(String sql) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;459</td>  <td class="nbHitsUncovered"><a title="Line 459: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;135289</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 459: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">    <span class="keyword">if</span> (logger != <span class="keyword">null</span> &amp;&amp; isCategoryOk(<span class="string">"info"</span>)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;460</td>  <td class="nbHitsCovered">&nbsp;133069</td>  <td class="src"><pre class="src">&nbsp;      doLog(-1, <span class="string">"info"</span>, <span class="string">""</span>, sql);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;459</td>  <td class="nbHitsUncovered"><a title="Line 459: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;140998</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 459: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">    <span class="keyword">if</span> (logger != <span class="keyword">null</span> &amp;&amp; isCategoryOk(<span class="string">"info"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;460</td>  <td class="nbHitsCovered">&nbsp;135633</td>  <td class="src"><pre class="src">&nbsp;      doLog(-1, <span class="string">"info"</span>, <span class="string">""</span>, sql);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;461</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;462</td>  <td class="nbHitsCovered">&nbsp;135289</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;462</td>  <td class="nbHitsCovered">&nbsp;140998</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;463</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;464</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">boolean</span> isDebugOn() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;465</td>  <td class="nbHitsCovered">&nbsp;7765</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> isCategoryOk(<span class="string">"debug"</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;465</td>  <td class="nbHitsCovered">&nbsp;8091</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> isCategoryOk(<span class="string">"debug"</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;466</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;467</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;468</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">static</span> <span class="keyword">public</span> <span class="keyword">void</span> debug(String sql) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;469</td>  <td class="nbHitsCovered"><a title="Line 469: Conditional coverage 100% (2/2).">&nbsp;7629</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 469: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (isDebugOn()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;470</td>  <td class="nbHitsUncovered"><a title="Line 470: Conditional coverage 50% (1/2).">&nbsp;146</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 470: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (logger != <span class="keyword">null</span>) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;471</td>  <td class="nbHitsCovered">&nbsp;146</td>  <td class="src"><pre class="src">&nbsp;        doLog(-1, <span class="string">"debug"</span>, <span class="string">""</span>, sql);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;469</td>  <td class="nbHitsCovered"><a title="Line 469: Conditional coverage 100% (2/2).">&nbsp;7955</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 469: Conditional coverage 100% (2/2).">    <span class="keyword">if</span> (isDebugOn()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;470</td>  <td class="nbHitsUncovered"><a title="Line 470: Conditional coverage 50% (1/2).">&nbsp;317</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 470: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (logger != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;471</td>  <td class="nbHitsCovered">&nbsp;317</td>  <td class="src"><pre class="src">&nbsp;        doLog(-1, <span class="string">"debug"</span>, <span class="string">""</span>, sql);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;472</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      } <span class="keyword">else</span> {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;473</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        System.err.println(sql);</span></pre></td></tr>
@@ -826,7 +826,7 @@
   <td class="src"><pre class="src">&nbsp;      }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;475</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;476</td>  <td class="nbHitsCovered">&nbsp;7629</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;476</td>  <td class="nbHitsCovered">&nbsp;7955</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;477</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;478</td>  <td class="nbHits">&nbsp;</td>
@@ -850,6 +850,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 9/30/13 6:55 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 9/30/13 7:13 PM.</div>
 </body>
 </html>

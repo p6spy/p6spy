@@ -94,32 +94,27 @@
 <a class="jxr_linenumber" name="84" href="#84">84</a>  
 <a class="jxr_linenumber" name="85" href="#85">85</a>  <strong class="jxr_keyword">package</strong> com.p6spy.engine.spy;
 <a class="jxr_linenumber" name="86" href="#86">86</a>  
-<a class="jxr_linenumber" name="87" href="#87">87</a>  <strong class="jxr_keyword">import</strong> java.sql.*;
-<a class="jxr_linenumber" name="88" href="#88">88</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6Options;
-<a class="jxr_linenumber" name="89" href="#89">89</a>  
-<a class="jxr_linenumber" name="90" href="#90">90</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="91" href="#91">91</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="92" href="#92">92</a>  <em class="jxr_javadoccomment"> * p6factory exists to make extending the spy core easier when making</em>
-<a class="jxr_linenumber" name="93" href="#93">93</a>  <em class="jxr_javadoccomment"> * a new module.  Since there are so many methods that</em>
-<a class="jxr_linenumber" name="94" href="#94">94</a>  <em class="jxr_javadoccomment"> * return a NEW object of some type (connection, etc)</em>
-<a class="jxr_linenumber" name="95" href="#95">95</a>  <em class="jxr_javadoccomment"> * either you would be forced to overload them all, or we could use this</em>
-<a class="jxr_linenumber" name="96" href="#96">96</a>  <em class="jxr_javadoccomment"> * factory method to handle that situation.  not perfect, but should make</em>
-<a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment"> * extending and maintaining the code far easier.</em>
-<a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="99" href="#99">99</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="100" href="#100">100</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../com/p6spy/engine/spy/P6Factory.html">P6Factory</a> {
-<a class="jxr_linenumber" name="101" href="#101">101</a>     
-<a class="jxr_linenumber" name="102" href="#102">102</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/common/P6Options.html">P6Options</a> getOptions() <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="103" href="#103">103</a>     <strong class="jxr_keyword">public</strong> Connection getConnection(Connection conn) <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="104" href="#104">104</a>     <strong class="jxr_keyword">public</strong> PreparedStatement getPreparedStatement(PreparedStatement real, <a href="../../../../com/p6spy/engine/spy/P6Connection.html">P6Connection</a> conn, String p0) <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="105" href="#105">105</a>     <strong class="jxr_keyword">public</strong> Statement getStatement(Statement real, <a href="../../../../com/p6spy/engine/spy/P6Connection.html">P6Connection</a> conn) <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="106" href="#106">106</a>     <strong class="jxr_keyword">public</strong> CallableStatement getCallableStatement(CallableStatement real, <a href="../../../../com/p6spy/engine/spy/P6Connection.html">P6Connection</a> conn, String p0) <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="107" href="#107">107</a>     <strong class="jxr_keyword">public</strong> DatabaseMetaData getDatabaseMetaData(DatabaseMetaData real, <a href="../../../../com/p6spy/engine/spy/P6Connection.html">P6Connection</a> conn) <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="108" href="#108">108</a>     <strong class="jxr_keyword">public</strong> ResultSet getResultSet(ResultSet real, <a href="../../../../com/p6spy/engine/spy/P6Statement.html">P6Statement</a> statement, String preparedQuery, String query) <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="109" href="#109">109</a>     <strong class="jxr_keyword">public</strong> Array getArray(Array real, <a href="../../../../com/p6spy/engine/spy/P6Statement.html">P6Statement</a> statement, String preparedQuery, String query) <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="110" href="#110">110</a>     <strong class="jxr_keyword">public</strong> ResultSetMetaData getResultSetMetaData(ResultSetMetaData real) <strong class="jxr_keyword">throws</strong> SQLException;
-<a class="jxr_linenumber" name="111" href="#111">111</a>     
-<a class="jxr_linenumber" name="112" href="#112">112</a> }
+<a class="jxr_linenumber" name="87" href="#87">87</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6Options;
+<a class="jxr_linenumber" name="88" href="#88">88</a>  
+<a class="jxr_linenumber" name="89" href="#89">89</a>  <strong class="jxr_keyword">import</strong> java.sql.Connection;
+<a class="jxr_linenumber" name="90" href="#90">90</a>  <strong class="jxr_keyword">import</strong> java.sql.SQLException;
+<a class="jxr_linenumber" name="91" href="#91">91</a>  
+<a class="jxr_linenumber" name="92" href="#92">92</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="93" href="#93">93</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="94" href="#94">94</a>  <em class="jxr_javadoccomment"> * p6factory exists to make extending the spy core easier when making</em>
+<a class="jxr_linenumber" name="95" href="#95">95</a>  <em class="jxr_javadoccomment"> * a new module.  Since there are so many methods that</em>
+<a class="jxr_linenumber" name="96" href="#96">96</a>  <em class="jxr_javadoccomment"> * return a NEW object of some type (connection, etc)</em>
+<a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment"> * either you would be forced to overload them all, or we could use this</em>
+<a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment"> * factory method to handle that situation.  not perfect, but should make</em>
+<a class="jxr_linenumber" name="99" href="#99">99</a>  <em class="jxr_javadoccomment"> * extending and maintaining the code far easier.</em>
+<a class="jxr_linenumber" name="100" href="#100">100</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="101" href="#101">101</a> <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="102" href="#102">102</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../com/p6spy/engine/spy/P6Factory.html">P6Factory</a> {
+<a class="jxr_linenumber" name="103" href="#103">103</a>     
+<a class="jxr_linenumber" name="104" href="#104">104</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/common/P6Options.html">P6Options</a> getOptions() <strong class="jxr_keyword">throws</strong> SQLException;
+<a class="jxr_linenumber" name="105" href="#105">105</a>     <strong class="jxr_keyword">public</strong> Connection getConnection(Connection conn) <strong class="jxr_keyword">throws</strong> SQLException;
+<a class="jxr_linenumber" name="106" href="#106">106</a> 
+<a class="jxr_linenumber" name="107" href="#107">107</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
