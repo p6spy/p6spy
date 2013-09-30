@@ -84,8 +84,10 @@
 
 package com.p6spy.engine.spy;
 
-import java.sql.*;
 import com.p6spy.engine.common.P6Options;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
@@ -101,12 +103,5 @@ public interface P6Factory {
     
     public P6Options getOptions() throws SQLException;
     public Connection getConnection(Connection conn) throws SQLException;
-    public PreparedStatement getPreparedStatement(PreparedStatement real, P6Connection conn, String p0) throws SQLException;
-    public Statement getStatement(Statement real, P6Connection conn) throws SQLException;
-    public CallableStatement getCallableStatement(CallableStatement real, P6Connection conn, String p0) throws SQLException;
-    public DatabaseMetaData getDatabaseMetaData(DatabaseMetaData real, P6Connection conn) throws SQLException;
-    public ResultSet getResultSet(ResultSet real, P6Statement statement, String preparedQuery, String query) throws SQLException;
-    public Array getArray(Array real, P6Statement statement, String preparedQuery, String query) throws SQLException;
-    public ResultSetMetaData getResultSetMetaData(ResultSetMetaData real) throws SQLException;
-    
+
 }
