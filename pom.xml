@@ -138,6 +138,7 @@
     <pmd-build>4.2.5</pmd-build>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.version>3.0.4</maven.version>
+    <sonar.host.url>http://nemo.sonarqube.org/</sonar.host.url>
   </properties>
 
   <prerequisites>
@@ -525,6 +526,11 @@
         <artifactId>maven-changelog-plugin</artifactId>
       </plugin>
 -->
+		<plugin>
+	      <groupId>org.codehaus.sonar-plugins</groupId>
+	      <artifactId>maven-report</artifactId>
+	      <version>0.1</version>
+	    </plugin>
     </plugins>
   </reporting>
 
