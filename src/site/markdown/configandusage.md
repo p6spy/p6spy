@@ -5,26 +5,27 @@
 An example spy.properties file follows:
 
     #################################################################
-    # P6Spy Options File #
-    # See documentation for detailed instructions #
+    # P6Spy Options File                                            #
+    # See documentation for detailed instructions                   #
     #################################################################
 
     #################################################################
-    # MODULES #
-    # #
-    # Modules provide the P6Spy functionality. If a module, such #
-    # as module_log is commented out, that functionality will not #
-    # be available. If it is not commented out (if it is active), #
-    # the functionality will be active. #
-    # #
-    # Values set in Modules cannot be reloaded using the #
-    # reloadproperties variable. Once they are loaded, they remain #
-    # in memory until the application is restarted. #
-    # #
+    # MODULES                                                       #
+    #                                                               #
+    # Modules provide the P6Spy functionality. If a module, such    #
+    # as module_log is commented out, that functionality will not   #
+    # be available. If it is not commented out (if it is active),   #
+    # the functionality will be active.                             #
+    #                                                               #
+    # Values set in Modules cannot be reloaded using the            #
+    # reloadproperties variable. Once they are loaded, they remain  #
+    # in memory until the application is restarted.                 #
+    #                                                               #
     #################################################################
 
     module.log=com.p6spy.engine.logging.P6LogFactory
     #module.outage=com.p6spy.engine.outage.P6OutageFactory
+    #module.leak=com.p6spy.engine.leak.P6LeakFactory
 
     #################################################################
     # REALDRIVER(s) #
@@ -74,6 +75,11 @@ An example spy.properties file follows:
 
     ################################################################
     # P6LOG SPECIFIC PROPERTIES #
+    ################################################################
+    # no properties currently available
+
+    ################################################################
+    # P6LEAK SPECIFIC PROPERTIES #
     ################################################################
     # no properties currently available
 
@@ -264,9 +270,11 @@ Currently the following modules are supported:
 
     module.log=com.p6spy.engine.logging.P6LogSpyDriver
     module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
+    module.leak=com.p6spy.engine.leak.P6LeakFactory
 
 module.log is required for the logging functionality, see [P6Log](#p6log).
 module.outage is required for the outage functionality, see [P6Outage](#p6outage).
+module.leak is required for the leak functionality, see [P6Leak](#p6leak).
 
 ### realdriver
 
@@ -626,12 +634,39 @@ The applicable portion of the spy.properties file follows:
 
 The following are P6Outage-specific properties:
 
-* outagedetection - This feature detects long-running statements that may be indicative of a database outage problem. When enabled, it logs any statement that surpasses the configurable time boundary during its execution. No other statements are logged except the long-running statements.
+* outagedetection - This feature detects long-running statements that may be indicative of a database outage
+problem. When enabled, it logs any statement that surpasses the configurable time boundary during its execution.
+No other statements are logged except the long-running statements.
 
 
-* outagedetectioninterval - The interval property is the boundary time set in seconds. For example, if set to 2, any statement requiring at least 2 seconds is logged. The same statement will continue to be logged for as long as it executes. So, if the interval is set to 2 and a query takes 11 seconds, it is logged 5 times (at the 2, 4, 6, 8, 10-second intervals).
+* outagedetectioninterval - The interval property is the boundary time set in seconds. For example, if set to
+2, any statement requiring at least 2 seconds is logged. The same statement will continue to be logged for as
+long as it executes. So, if the interval is set to 2 and a query takes 11 seconds, it is logged 5 times (at
+the 2, 4, 6, 8, 10-second intervals).
 
 
+### <a name="p6leak">P6Leak</a>
+
+P6Leak helps you to detect any JDBC resources which have not been properly closed.  This includes connections,
+statements, and result sets.
+
+Usage:
+
+1. Uncomment the leak module in spy.properties.
+1. Ensure that P6Spy is configured as per the [installation instructions](install.html)
+1. Copy JDBCLeak.jsp (from distribution) to the root of your web application.
+1. Start application and exercise it thoroughly for a while.
+1. View JDBCLeak.jsp to view a stack trace for any JDBC leaks.
+1. Halt the application and remove the leaks.
+1. Repeat until no more leaks are detected.
+
+The P6Leak module is disabled by default. Disable or enable the P6Outage module by editing the spy.properties
+configuration file. If the module is commented out, it is not loaded, and the functionality is not available. If
+the module is not commented out, the functionality is available.
+
+The applicable portion of the spy.properties file follows:
+
+    module.leak=com.p6spy.engine.leak.P6LeakFactory
 
 
 
