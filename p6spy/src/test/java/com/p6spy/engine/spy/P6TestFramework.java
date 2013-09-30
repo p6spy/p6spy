@@ -123,12 +123,8 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.OptionReloader;
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6SpyProperties;
-import com.p6spy.engine.common.P6Util;
-import org.junit.Before;
-import org.junit.runners.Parameterized.Parameters;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedWriter;
 import java.io.CharArrayWriter;
@@ -151,8 +147,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.runners.Parameterized.Parameters;
+
+import com.p6spy.engine.common.OptionReloader;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6SpyProperties;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.logging.P6LogFactory;
+import com.p6spy.engine.logging.appender.P6TestLogger;
+import com.p6spy.engine.outage.P6OutageFactory;
 
 public abstract class P6TestFramework {
 
@@ -327,16 +331,20 @@ public abstract class P6TestFramework {
 
     protected Map getDefaultPropertyFile() throws IOException {
 
-        Properties props = loadProperties(p6TestProperties);
-        String realdrivername = props.getProperty("p6realdriver");
-        String realdrivername2 = props.getProperty("p6realdriver2");
+        final Properties props = loadProperties(p6TestProperties);
+        final String realdrivername = props.getProperty("p6realdriver");
+        final String realdrivername2 = props.getProperty("p6realdriver2");
         
-        String realdatasource = props.getProperty("realdatasource");
-        String realdatasourceclass = props.getProperty("realdatasourceclass");
-
+        final String realdatasource = props.getProperty("realdatasource");
+        final String realdatasourceclass = props.getProperty("realdatasourceclass");
+        final String outageDetection = props.getProperty("outagedetection");
+        final String outageInterval = props.getProperty("outagedetectioninterval");
+          
         Map tp = new HashMap();
-        tp.put("module.outage", "com.p6spy.engine.outage.P6OutageFactory");
-        tp.put("module.log", "com.p6spy.engine.logging.P6LogFactory");
+        tp.put("module.outage", P6OutageFactory.class.getName());
+//        tp.put("module.outage", "com.p6spy.engine.outage.P6OutageFactory");
+        tp.put("module.log", P6LogFactory.class.getName());
+//        tp.put("module.log", "com.p6spy.engine.logging.P6LogFactory");
         tp.put("realdriver", realdrivername);
         // realdriver2 is optional
         if (null != realdrivername2) {
@@ -365,8 +373,8 @@ public abstract class P6TestFramework {
         tp.put("reloadproperties", "false");
         tp.put("reloadpropertiesinterval", "1");
         tp.put("useprefix", "false");
-        tp.put("outagedetection", "false");
-        tp.put("outagedetectioninterval", "");
+        tp.put("outagedetection", null != outageDetection ? outageDetection : "false");
+        tp.put("outagedetectioninterval", null != outageInterval ? outageInterval : "");
         tp.put("cache", "true");
         tp.put("cachetrace", "false");
         tp.put("clearcache", "");
@@ -376,6 +384,8 @@ public abstract class P6TestFramework {
         tp.put("formslog", "testforms.log");
         tp.put("formstrace", "true");
         tp.put("deregisterdrivers", "true");
+        // make sure to use test specific appender
+        tp.put("appender", P6TestLogger.class.getName());
         return tp;
     }
 
@@ -390,22 +400,6 @@ public abstract class P6TestFramework {
         }
     }
 
-    protected void assertIsLastQuery(String query) {
-        boolean isTrue = P6LogQuery.getLastEntry().contains(query);
-        if (!isTrue) {
-            System.err.println(query+" was not the last query, this was: "+P6LogQuery.getLastEntry());
-        }
-        assertTrue(isTrue);
-    }
-
-    protected void assertIsNotLastQuery(String query) {
-        boolean isFalse = !P6LogQuery.getLastEntry().contains(query);
-        if (!isFalse) {
-            System.err.println(query+" was the last query and should not have been");
-        }
-        assertTrue(isFalse);
-    }
-
     protected static String getStackTrace(Exception e) {
         CharArrayWriter c = new CharArrayWriter();
         e.printStackTrace(new PrintWriter(c));
@@ -416,5 +410,36 @@ public abstract class P6TestFramework {
         for (Enumeration e = DriverManager.getDrivers() ; e.hasMoreElements() ;) {
             System.err.println("1 DRIVER FOUND == "+e.nextElement());
         }
+    }
+    
+    
+    //
+    // log entries retrieval 
+    //
+    
+    private void failOnNonP6TestLoggerUsage() {
+      if (!(P6LogQuery.getLogger() instanceof P6TestLogger)) {
+        throw new IllegalStateException();
+      }
+    }
+    
+    protected String getLastLogEntry() {
+      failOnNonP6TestLoggerUsage();
+      return ((P6TestLogger) P6LogQuery.getLogger()).getLastEntry();
+    }
+    
+    protected String getLastButOneLogEntry() {
+      failOnNonP6TestLoggerUsage();
+      return ((P6TestLogger) P6LogQuery.getLogger()).getLastButOneEntry();
+    }
+    
+    protected String getLastLogStackTrace() {
+      failOnNonP6TestLoggerUsage();
+      return ((P6TestLogger) P6LogQuery.getLogger()).getLastStacktrace();
+    }
+    
+    protected void clearLastLogStackTrace() {
+      failOnNonP6TestLoggerUsage();
+      ((P6TestLogger) P6LogQuery.getLogger()).clearLastStacktrace();
     }
 }

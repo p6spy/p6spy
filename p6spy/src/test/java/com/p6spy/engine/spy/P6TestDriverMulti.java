@@ -71,7 +71,7 @@ public class P6TestDriverMulti extends P6TestFramework {
           // this should be fine
           String query = "select 'q1' from multidriver_test2";
           statement2.executeQuery(query);
-          assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+          assertTrue(super.getLastLogEntry().contains(query));
 
           // this table should not exist
           try {
@@ -84,7 +84,7 @@ public class P6TestDriverMulti extends P6TestFramework {
           // this should be fine for the second connection
           query = "select 'b' from multidriver_test2";
           statement2.executeQuery(query);
-          assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+          assertTrue(super.getLastLogEntry().contains(query));
 
           // this table should not exist
           try {

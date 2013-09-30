@@ -104,26 +104,9 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class P6TestBasics extends P6TestFramework {
 
-//    protected Connection connection = null;
-
-    /**
-     * P6Spy properties file relevant for current run.
-     * @throws IOException 
-     */
-//    protected final String p6TestProperties;
-    
     public P6TestBasics(String db) throws SQLException, IOException {
       super(db);
     }
-    
-//    public P6TestBasics(String db) {
-//        p6TestProperties = "P6Test_" + db + ".properties";
-//    }
-    
-//    @Parameters
-//    public static Collection<Object[]> dbs() {
-//      return P6TestFramework.DBS_IN_TEST;
-//    }
     
     /* (non-Javadoc)
      * @see com.p6spy.engine.spy.P6TestFramework#setUpFramework()
@@ -138,11 +121,9 @@ public class P6TestBasics extends P6TestFramework {
       P6TestUtil.unloadDrivers();
     }
 
-//    @Ignore
     @Test
     public void testNative() throws Exception {
         // load the native driver
-//        Map properties = P6TestUtil.getDefaultPropertyFile(p6TestProperties);
         Map properties = super.getDefaultPropertyFile();  
         P6TestUtil.reloadProperty(properties);
         connection = P6TestUtil.loadDrivers("p6realdriver", p6TestProperties);
@@ -152,9 +133,7 @@ public class P6TestBasics extends P6TestFramework {
        
     @Test
     public void testSpy() throws Exception {
-      
         // load the p6log driver
-//        Map properties = P6TestUtil.getDefaultPropertyFile(p6TestProperties);
         Map properties = super.getDefaultPropertyFile();
         P6TestUtil.reloadProperty(properties);
         
@@ -227,4 +206,3 @@ public class P6TestBasics extends P6TestFramework {
     }
 
 }
-

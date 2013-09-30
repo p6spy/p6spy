@@ -80,15 +80,6 @@ public abstract class FormattedLogger {
 
   public abstract void logText(String text);
 
-  // they also all need to have the last entry thing
-  public void setLastEntry(String inVar) {
-    lastEntry = inVar;
-  }
-
-  public String getLastEntry() {
-    return lastEntry;
-  }
-
   /**
    * Sets the strategy implementation to use for formatting log message.  If not set, this will default to {@link SingleLineFormat}
    */

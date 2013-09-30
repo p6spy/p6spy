@@ -106,6 +106,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.logging.appender.P6TestLogger;
 
 @RunWith(Parameterized.class)
 public class P6TestCallableStatement extends P6TestPreparedStatement {
@@ -143,7 +144,7 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
         call.setString(2, "Hello");
         call.execute();
       
-        assertTrue(P6LogQuery.getLastEntry().indexOf("INSERT INTO TEST VALUES") != -1);
+        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("INSERT INTO TEST VALUES") != -1);
       }
      
       {
@@ -154,7 +155,7 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
         assertEquals("Hello", rs.getString(2));
         assertFalse(rs.next());
         
-        assertTrue(P6LogQuery.getLastEntry().indexOf("SELECT * FROM TEST") != -1);
+        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
       }
       
       {
@@ -164,8 +165,8 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
         assertEquals(1, rs.getInt(1));
         assertEquals("Hello", rs.getString(2));
         assertFalse(rs.next());
-        
-        assertTrue(P6LogQuery.getLastEntry().indexOf("SELECT * FROM TEST") != -1);
+
+        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
       }
       
   }

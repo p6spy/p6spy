@@ -165,11 +165,6 @@
 
 package com.p6spy.engine.common;
 
-import com.p6spy.engine.logging.appender.FileLogger;
-import com.p6spy.engine.logging.appender.FormattedLogger;
-import com.p6spy.engine.logging.appender.MessageFormattingStrategy;
-import com.p6spy.engine.logging.appender.P6Logger;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -179,6 +174,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
+
+import com.p6spy.engine.logging.appender.FileLogger;
+import com.p6spy.engine.logging.appender.FormattedLogger;
+import com.p6spy.engine.logging.appender.MessageFormattingStrategy;
+import com.p6spy.engine.logging.appender.P6Logger;
 
 public class P6LogQuery {
   protected static PrintStream qlog;
@@ -190,9 +190,6 @@ public class P6LogQuery {
   protected static String[] includeCategories;
 
   protected static String[] excludeCategories;
-
-  //protected static String lastEntry;
-  protected static String lastStack;
 
   protected static P6Logger logger;
 
@@ -330,9 +327,7 @@ public class P6LogQuery {
           PrintWriter pw = new PrintWriter(sw);
           e.printStackTrace(pw);
           String stack = sw.toString();
-          if (stack.indexOf(stackTraceClass) != -1) {
-            lastStack = stack;
-          } else {
+          if (stack.indexOf(stackTraceClass) == -1) {
             e = null;
           }
         }
@@ -340,8 +335,6 @@ public class P6LogQuery {
           logger.logException(e);
         }
       }
-
-      //lastEntry = logEntry;
     }
 
 
@@ -396,19 +389,6 @@ public class P6LogQuery {
   // ----------------------------------------------------------------------------------------------------------
   // public accessor methods for logging and viewing query data
   // ----------------------------------------------------------------------------------------------------------
-
-  static public void clearLastStack() {
-    lastStack = null;
-  }
-
-  static public String getLastEntry() {
-    //return lastEntry;
-    return logger.getLastEntry();
-  }
-
-  static public String getLastStack() {
-    return lastStack;
-  }
 
   static public String[] getIncludeTables() {
     return includeTables;
@@ -502,6 +482,8 @@ public class P6LogQuery {
     }
   }
 
+  public static P6Logger getLogger() {
+    return logger;
+  }
+
 }
-
-

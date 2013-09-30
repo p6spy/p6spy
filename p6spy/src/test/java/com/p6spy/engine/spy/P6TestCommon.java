@@ -121,6 +121,7 @@ package com.p6spy.engine.spy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -169,7 +170,7 @@ public class P6TestCommon extends P6TestFramework {
             Statement statement = connection.createStatement();
             String query = "select count(*) from common_test";
             statement.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+            assertTrue(super.getLastLogEntry().contains(query));
 
             // now it should fail due to filter = false
             P6SpyOptions.setFilter("false");
@@ -177,7 +178,7 @@ public class P6TestCommon extends P6TestFramework {
             P6LogQuery.setIncludeTables("");
             query = "select 'w' from common_test";
             statement.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+            assertTrue(super.getLastLogEntry().contains(query));
 
             // now match should still fail because table is excluded
             P6SpyOptions.setFilter("true");
@@ -185,7 +186,7 @@ public class P6TestCommon extends P6TestFramework {
             P6LogQuery.setIncludeTables("");
             query = "select 'x' from common_test";
             statement.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) == -1);
+            assertFalse(super.getLastLogEntry().contains(query));
 
             tryRegEx();
         } catch (Exception e) {
@@ -202,7 +203,7 @@ public class P6TestCommon extends P6TestFramework {
         P6LogQuery.setIncludeTables("");
         String query = "select 'y' from common_test";
         statement.executeQuery(query);
-        assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+        assertTrue(super.getLastLogEntry().contains(query));
 
         // now match should match (test regex)
         P6SpyOptions.setFilter("true");
@@ -210,7 +211,7 @@ public class P6TestCommon extends P6TestFramework {
         P6LogQuery.setIncludeTables("");
         query = "select 'x' from common_test";
         statement.executeQuery(query);
-        assertTrue(P6LogQuery.getLastEntry().indexOf(query) == -1);
+        assertFalse(super.getLastLogEntry().contains(query));
 
         // now match should fail (test regex again)
         P6SpyOptions.setFilter("true");
@@ -218,7 +219,7 @@ public class P6TestCommon extends P6TestFramework {
         P6LogQuery.setIncludeTables("");
         query = "select 'z' from common_test";
         statement.executeQuery(query);
-        assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+        assertTrue(super.getLastLogEntry().contains(query));
     }
 
     @Test
@@ -236,9 +237,9 @@ public class P6TestCommon extends P6TestFramework {
         P6LogQuery.setIncludeCategories("");
         String query = "select 'y' from common_test";
         statement.executeQuery(query);
-        assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+        assertTrue(super.getLastLogEntry().contains(query));
         connection.rollback();
-        assertTrue(P6LogQuery.getLastEntry().indexOf("rollback") != -1);
+        assertTrue(super.getLastLogEntry().contains("rollback"));
 
         // test commit logging
         P6SpyOptions.setFilter("true");
@@ -248,9 +249,9 @@ public class P6TestCommon extends P6TestFramework {
         P6LogQuery.setIncludeCategories("");
         query = "select 'y' from common_test";
         statement.executeQuery(query);
-        assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
+        assertTrue(super.getLastLogEntry().contains(query));
         connection.commit();
-        assertTrue(P6LogQuery.getLastEntry().indexOf("commit") != -1);
+        assertTrue(super.getLastLogEntry().contains("commit"));
 
         // test debug logging
         P6SpyOptions.setFilter("true");
@@ -260,7 +261,7 @@ public class P6TestCommon extends P6TestFramework {
         P6LogQuery.setIncludeCategories("debug,info");
         query = "select 'y' from common_test";
         statement.executeQuery(query);
-        assertTrue(P6LogQuery.getLastEntry().indexOf("intentionally") != -1);
+        assertTrue(super.getLastLogEntry().contains("intentionally"));
 
         // set back, otherwise we have problems in PostgresSQL, statement exec
         // waits for commit
@@ -280,11 +281,11 @@ public class P6TestCommon extends P6TestFramework {
             P6LogQuery.setIncludeTables("");
             String query = "select 'y' from common_test";
             statement.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
-            assertTrue(P6LogQuery.getLastStack().indexOf("Stack") != -1);
+            assertTrue(super.getLastLogEntry().contains(query));
+            assertTrue(super.getLastLogStackTrace().contains("Stack"));
 
             // filter on stack trace that will not match
-            P6LogQuery.clearLastStack();
+            super.clearLastLogStackTrace();
             P6SpyOptions.setStackTraceClass("com.dont.match");
             P6SpyOptions.setFilter("true");
             P6LogQuery.setExcludeTables("");
@@ -292,18 +293,18 @@ public class P6TestCommon extends P6TestFramework {
             query = "select 'a' from common_test";
             statement.executeQuery(query);
             // this will actually match - just the stack trace wont fire
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
-            assertNull(P6LogQuery.getLastStack());
+            assertTrue(super.getLastLogEntry().contains(query));
+            assertNull(super.getLastLogStackTrace());
 
-            P6LogQuery.clearLastStack();
+            super.clearLastLogStackTrace();
             P6SpyOptions.setStackTraceClass("com.p6spy");
             P6SpyOptions.setFilter("true");
             P6LogQuery.setExcludeTables("");
             P6LogQuery.setIncludeTables("");
             query = "select 'b' from common_test";
             statement.executeQuery(query);
-            assertTrue(P6LogQuery.getLastEntry().indexOf(query) != -1);
-            assertTrue(P6LogQuery.getLastStack().indexOf("Stack") != -1);
+            assertTrue(super.getLastLogEntry().contains(query));
+            assertTrue(super.getLastLogStackTrace().contains("Stack"));
 
         } catch (Exception e) {
             fail(e.getMessage()+getStackTrace(e));

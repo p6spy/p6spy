@@ -67,17 +67,15 @@ public class StdoutLogger extends FormattedLogger implements P6Logger {
     protected PrintStream qlog;
 
     public StdoutLogger() {
-	qlog = System.out;
+      qlog = System.out;
     }
     
     public void logException(Exception e) {
-	e.printStackTrace(qlog);
+      e.printStackTrace(qlog);
     }
 
     public void logText(String text) {
-	qlog.println(text);
-	setLastEntry(text);
+      qlog.println(text);
     }
-
 }
 
