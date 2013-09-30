@@ -1,13 +1,11 @@
 <%@ page language="java" %>
 <%@ page import = "java.util.*" %>
-<%@ page import = "org.apache.commons.lang.*" %>
 <%@ page import = "com.p6spy.engine.leak.*" %>
 
 <html>
 
 <head>
   <title>JDBC Leak Detecter</title>
-  <meta name="robots" content="none" />
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 </head>
 
@@ -33,7 +31,7 @@
       out.println(clazz);
       out.println("</td>");
       out.println("<td nowrap>");
-      out.println(StringUtils.replace(stackTrace,"\n", "<br />"));
+      out.println(stackTrace.replaceAll("\n", "<br />"));
       out.println("</td>");
       out.println("</tr>");
     }
