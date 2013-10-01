@@ -1,5 +1,13 @@
 # Release Notes
 
+## Version 2.0
+
+TBD
+
+## Version 1.3
+
+?????
+
 ## Version 1.2
 
 * Driver initialization bug fix and package import cleanup contributed by Joe Fisher (Joe Fisher)

@@ -27,52 +27,6 @@ An example spy.properties file follows:
     #module.outage=com.p6spy.engine.outage.P6OutageFactory
     #module.leak=com.p6spy.engine.leak.P6LeakFactory
 
-    #################################################################
-    # REALDRIVER(s) #
-    # #
-    # In your application server configuration file you replace the #
-    # "real driver" name with com.p6spy.engine.P6SpyDriver. This is #
-    # where you put the name of your real driver P6Spy can find and #
-    # register your real driver to do the database work. #
-    # #
-    # If your application uses several drivers specify them in #
-    # realdriver2, realdriver3. See the documentation for more #
-    # details. #
-    # #
-    # Values set in REALDRIVER(s) cannot be reloaded using the #
-    # reloadproperties variable. Once they are loaded, they remain #
-    # in memory until the application is restarted. #
-    # #
-    #################################################################
-
-    # oracle driver
-    # realdriver=oracle.jdbc.driver.OracleDriver
-
-    # mysql Connector/J driver
-    realdriver=com.mysql.jdbc.Driver
-
-    # informix driver
-    # realdriver=com.informix.jdbc.IfxDriver
-
-    # ibm db2 driver
-    # realdriver=COM.ibm.db2.jdbc.net.DB2Driver
-
-    # the mysql open source driver
-    # realdriver=org.gjt.mm.mysql.Driver
-
-    #specifies another driver to use
-    realdriver2=
-    #specifies a third driver to use
-    realdriver3=
-
-    #the DriverManager class sequentially tries every driver that is
-    #registered to find the right driver. In some instances, it's possible to
-    #load up the realdriver before the p6spy driver, in which case your connections
-    #will not get wrapped as the realdriver will "steal" the connection before
-    #p6spy sees it. Set the following property to "true" to cause p6spy to
-    #explicitily deregister the realdrivers
-    deregisterdrivers=false
-
     ################################################################
     # P6LOG SPECIFIC PROPERTIES #
     ################################################################
@@ -123,6 +77,11 @@ An example spy.properties file follows:
     ################################################################
     # COMMON PROPERTIES #
     ################################################################
+
+    # A comma separated list of JDBC drivers to load and register.
+    # This is rarely needed!  Only use this when you the driver is not
+    # getting loaded automatically.
+    driverlist=
 
     # comma separated list of tables to include
     include =
@@ -276,19 +235,10 @@ module.log is required for the logging functionality, see [P6Log](#p6log).
 module.outage is required for the outage functionality, see [P6Outage](#p6outage).
 module.leak is required for the leak functionality, see [P6Leak](#p6leak).
 
-### realdriver
+### driverlist
 
-realdriver is where you specify the wrapped database driver. P6Spy wraps around your existing driver, intercepts the incoming database requests, and outputs them to a log file. To achieve this without requiring any code changes, the P6Spy driver is listed with your application as the primary driver. P6Spy then intercepts and logs the requests, and passes the requests to realdriver, where it is processed as usual. An example follows:
-
-    realdriver = oracle.jdbc.driver.OracleDriver
-
-### realdriver2, realdriver3
-
-If you have multiple database drivers, you need a way to specify these drivers. If you are using the same database driver with multiple connection strings, you only need to specify the driver once. For example, if you have two MySQL databases, mydb and testdb, you want to connect to both databases and log their activity. Specify com.p6spy.engine.spy.P6SpyDriver as the database driver for both of these and set realdriver to the real MySQL JDBC driver name. realdriver2, realdriver3 are only intended for use when you are connecting with two different drivers, for example Oracle versus MySQL.
-
-### deregisterdrivers
-
-The DriverManager class sequentially tries every driver that is registered to find the right driver. In some instances, it's possible to load up the realdriver before the p6spy driver, in which case your connections will not get wrapped as the realdriver will "steal" the connection before p6spy sees it. Set the following property to "true" to cause p6spy to explicitily deregister the realdrivers
+This is a comma separated list of JDBC driver classes to load and register with the DriverManager.  This is rarely used
+since type 4 drivers are automatically loaded and registered.  Only use this option when needed.
 
 ### filter, include, exclude
 
