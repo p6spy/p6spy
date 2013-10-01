@@ -105,19 +105,13 @@ public class P6SpyOptions extends P6Options {
 
     private static String appender;
 
-    private static String realdriver;
-
-    private static String realdriver2;
-
-    private static String realdriver3;
+    private static String driverlist;
 
     private static String spydriver;
 
     private static boolean append;
 
     private static String logMessageFormatter;
-
-    private static boolean deregister;
 
     private static String dateformat;
 
@@ -220,14 +214,6 @@ public class P6SpyOptions extends P6Options {
         return includecategories;
     }
 
-    public static boolean getDeregisterDrivers() {
-        return deregister;
-    }
-
-    public static void setDeregisterDrivers(String trueOrFalse) {
-        deregister = P6Util.isTrue(trueOrFalse, false);
-    }
-
     public static void setLogfile(String _logfile) {
         logfile = _logfile;
         if (logfile == null) {
@@ -247,28 +233,12 @@ public class P6SpyOptions extends P6Options {
         appender = className;
     }
 
-    public static void setRealdriver(String _realdriver) {
-        realdriver = _realdriver;
+    public static String getDriverlist() {
+      return driverlist;
     }
 
-    public static String getRealdriver() {
-        return realdriver;
-    }
-
-    public static void setRealdriver2(String _realdriver2) {
-        realdriver2 = _realdriver2;
-    }
-
-    public static String getRealdriver2() {
-        return realdriver2;
-    }
-
-    public static void setRealdriver3(String _realdriver3) {
-        realdriver3 = _realdriver3;
-    }
-
-    public static String getRealdriver3() {
-        return realdriver3;
+    public static void setDriverlist(final String driverlist) {
+      P6SpyOptions.driverlist = driverlist;
     }
 
     public static void setAppend(String _append) {
@@ -404,7 +374,10 @@ public class P6SpyOptions extends P6Options {
         P6LogQuery.debug(this.getClass().getName() + " reloading properties");
 
         Collections.reverse(modules = properties.getOrderedList(MODULE_PREFIX));
-        Collections.reverse(driverNames = properties.getOrderedList(DRIVER_PREFIX));
+        driverNames = new ArrayList<String>();
+        if( driverlist != null && driverlist.length() > 0 ) {
+            driverNames = Arrays.asList(driverlist.split(","));
+        }
         properties.setClassValues(P6SpyOptions.class);
         configureReloadingThread();
         P6LogQuery.initMethod();

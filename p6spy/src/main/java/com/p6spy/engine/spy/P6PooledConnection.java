@@ -109,7 +109,7 @@ public class P6PooledConnection implements PooledConnection {
 
 
     public Connection getConnection() throws SQLException {
-      return P6SpyDriverCore.wrapConnection(passthru.getConnection());
+      return P6Core.wrapConnection(passthru.getConnection());
     }
 
     public void close() throws SQLException  {
