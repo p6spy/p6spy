@@ -102,7 +102,7 @@
 
   <licenses>
     <license>
-      <name>The P6Spy Software License, Version 1.1</name>
+      <name>Apache License, Version 2.0</name>
       <url>https://raw.github.com/p6spy/p6spy/master/license.txt</url>
     </license>
   </licenses>

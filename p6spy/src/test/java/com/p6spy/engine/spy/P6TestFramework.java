@@ -192,27 +192,13 @@ public abstract class P6TestFramework {
   }
 
   public void resetLoadedDrivers() throws SQLException, IOException {
-    List<Driver> dereg = new ArrayList<Driver>();
-    for (Enumeration<Driver> e = DriverManager.getDrivers(); e.hasMoreElements();) {
-      Driver driver = e.nextElement();
-
-      // get rid of all driver stuff to start with the clean table
-      dereg.add(driver);
-    }
-
-    // if you found any drivers let's dereg them now
-    for (Driver driver : dereg) {
-      DriverManager.deregisterDriver(driver);
-    }
-
     // make sure to reinit with the db file related to current run
     Map tp = getDefaultPropertyFile();
     reloadProperty(tp);
 
     // make sure to reinit for each Driver run as we run parametrized builds
     // and need to have fresh stuff for every specific driver
-    P6SpyDriverCore.initialized = false;
-    P6SpyDriver.initMethod();
+    P6Core.reinit();
   }
 
   @Parameters
@@ -238,7 +224,9 @@ public abstract class P6TestFramework {
             String password = props.getProperty("password");
             String url = props.getProperty("url");
 
-            P6Util.forName(drivername);
+            if( drivername != null ) {
+                P6Util.forName(drivername);
+            }
             Driver driver = DriverManager.getDriver(url);
             System.err.println("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
             connection = DriverManager.getConnection(url, user, password);

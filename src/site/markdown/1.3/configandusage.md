@@ -25,7 +25,6 @@ An example spy.properties file follows:
 
     module.log=com.p6spy.engine.logging.P6LogFactory
     #module.outage=com.p6spy.engine.outage.P6OutageFactory
-    #module.leak=com.p6spy.engine.leak.P6LeakFactory
 
     #################################################################
     # REALDRIVER(s) #
@@ -75,11 +74,6 @@ An example spy.properties file follows:
 
     ################################################################
     # P6LOG SPECIFIC PROPERTIES #
-    ################################################################
-    # no properties currently available
-
-    ################################################################
-    # P6LEAK SPECIFIC PROPERTIES #
     ################################################################
     # no properties currently available
 
@@ -182,9 +176,6 @@ An example spy.properties file follows:
     # log file is truncated every time. (file logger only)
     append=true
 
-    # class to use for formatting log messages - defaults to SingleLineFormat if not set
-    #logMessageFormat=com.p6spy.engine.logging.appender.SingleLineFormat
-
     #The following are for log4j logging only
     log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender
     log4j.appender.STDOUT.layout=org.apache.log4j.PatternLayout
@@ -270,11 +261,9 @@ Currently the following modules are supported:
 
     module.log=com.p6spy.engine.logging.P6LogSpyDriver
     module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
-    module.leak=com.p6spy.engine.leak.P6LeakFactory
 
 module.log is required for the logging functionality, see [P6Log](#p6log).
 module.outage is required for the outage functionality, see [P6Outage](#p6outage).
-module.leak is required for the leak functionality, see [P6Leak](#p6leak).
 
 ### realdriver
 
@@ -445,22 +434,6 @@ reloadproperties will not reload any driver information (such as realdriver, rea
 
 Setting useprefix to true requires you to prefix your URLs with p6spy:. The default setting is false.
 
-### logMessageFormat
-
-The log message format is selected by specifying the class to use to format the log messages.  The following
-classes are available with P6Spy.
-
-`com.p6spy.engine.logging.appender.SingleLineFormat`
-
-`com.p6spy.engine.logging.appender.MultiLineFormat`
-
-The MultiLineFormat might be better from a readability perspective.  Because it will place the effective SQL statement
-on a separate line.  However, the SingleLineFormat might be better if you have a need to parse the log messages.
-The default is SingleLineFormat for backward compatibility.
-
-You can also supply your own log message formatter to customize the format.  Simply create a class which implements
-the `com.p6spy.engine.logging.appender.MessageFormattingStrategy` interface and place it on the classpath.
-
 ## Command Line Options
 
 Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag.
@@ -477,48 +450,21 @@ In addition, you can set the default directory to look for spy.properties, as sh
 
 The log file format of spy.log follows:
 
-  SingleLineFormat -
-
     current time|execution time|category|statement SQL String|effective SQL string
 
-  MultiLineFormat -
-
-    current time|execution time|category|statement SQL String
-    effective SQL string
-
-* current time—The current time is obtained through System.getCurrentTimeMillis() and represents
-  the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT.
-  (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().)
-  To change the format, use the dateformat property described in
-  [Common Property File Settings](#settings).
-* execution time—The time it takes for a particular method to execute. (This is
-  not the total cost for the SQL statement.) For example, a statement
-  `SELECT * FROM MYTABLE WHERE THISCOL = ?` might be executed as a prepared
-  statement, in which the .execute() function will be measured. This is recorded as
-  the statement category. Further, as you call .next() on the ResultSet, each .next()
-  call is recorded in the result category.
-* category—You can manage your log by including and excluding categories,
-  which is described in [Common Property File Settings](#settings).
-* statement SQL string—This is the SQL string passed to the statement object.
-  If it is a prepared statement, it is the prepared statement that existed prior to
-  the parameters being set. To see the complete statement, refer to effective SQL string.
-* effective SQL string—If you are not using a prepared statement, this contains no
-  value. Otherwise, it fills in the values of the Prepared Statement so you can see
-  the effective SQL statement that is passed to the database. Of course, the database
-  still sees the prepared statement, but this string is a convenient way to see the
-  actual values being sent to the database.
+* current time—The current time is obtained through System.getCurrentTimeMillis() and represents the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT. (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().) To change the format, use the dateformat property described in [Common Property File Settings](#settings).
+* execution time—The time it takes for a particular method to execute. (This is not the total cost for the SQL statement.) For example, a statement SELECT * FROM MYTABLE WHERE THISCOL = ? might be executed as a prepared statement, in which the .execute() function will be measured. This is recorded as the statement category. Further, as you call .next() on the ResultSet, each .next() call is recorded in the result category.
+* category—You can manage your log by including and excluding categories, which is described in [Common Property File Settings](#settings).
+* statement SQL string—This is the SQL string passed to the statement object. If it is a prepared statement, it is the prepared statement that existed prior to the parameters being set. To see the complete statement, refer to effective SQL string.
+* effective SQL string—If you are not using a prepared statement, this contains no value. Otherwise, it fills in the values of the Prepared Statement so you can see the effective SQL statement that is passed to the database. Of course, the database still sees the prepared statement, but this string is a convenient way to see the actual values being sent to the database.
 
 ## The JSP Application
 
 P6Spy includes a JSP application. Use this application to view P6Spy configuration information and
 to create a demarcation in the log file. To use the JSP application, complete the following steps:
 
-1. Copy **p6spy-webcontrol.war** into the deployment directory of your
-  application server. In JBoss, for example, the directory might be `C:\JBoss\server\web\deploy`.
-1. Once **p6spy.war** is deployed, access the application by navigating
-  to `http://machine:port/p6spy-webcontrol`.  For example, if you are running the application on your
-  own machine, and using Tomcat as the servlet engine, navigate to
-  `http://localhost:8080/p6spy-webcontrol`.
+1. Copy p6spy.war into the deployment directory of your application server. In JBoss, for example, the directory might be C:\JBoss-2.4.4_Tomcat-4.0.1\jboss\deploy.
+1. Once p6spy.war is deployed, access the application by navigating to http://machine:port/p6spy. For example, if you are running the application on your own machine, and using Tomcat as the servlet engine, navigate to http://localhost:8080/p6spy.
 
 ## The JBoss JMX Application
 
@@ -533,54 +479,27 @@ P6Spy includes a JMX application, tested with JBoss 2.4.x, that allows the P6Spy
 
 ## Building the Source
 
-1. Make sure to have Java installed.
-1. Download and install [Apache Maven](http://maven.apache.org).
+To build the source, complete the following steps:
 
-The following are useful Maven commands:
+1. Download Jakarta Ant.
+1. Install Jakarta Ant.
+1, You must also download some required libraries. Running Ant the first time will display a message listing all required libraries and locations where they can be downloaded.
+1, Copy these libraries into the lib directory, which is a subdirectory of your main directory (the directory with the source code).
 
-to build binaries:
+The following are useful Ant targets:
 
-	mvn clean install
+* ant creates a p6spy.jar file in the dist directory.
+* ant clean cleans the directory of build files and tool-generated backup files.
+* ant release creates the Javadocs, the .war file, and all distribution .zip and .jar files.
+* ant test runs the standard JUnit tests. Refer to the JUnit test instructions below.
+* ant perform runs the performance specific JUnit tests.
 
- to build the site:
+To run the JUnit tests, complete the following steps:
 
-    mvn site
-
- to run the JUnit tests Refer to the [Running the tests](#tests) section
-
- 
-## <a name="tests">Running the tests</a>
-
-To run the JUnit tests against specific database(s):
-
-1. Make sure to have Java installed.
-1. Download and install [Apache Maven](http://maven.apache.org).
-1. Please note, that PostgreSQL and MySQL specific tests require to have the detabase servers running with the specific databases, users and permissions setup.
-
-By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:
-
-  * PostgreSQL
-  * MySQL
-  * H2 
-  * HSQLDB
-  * SQLite
-  * or comma separated list of these
-
-### Running the tests in the command line
-
-use the following maven command:
-
-	mvn clean test -DDB=<DB_NAMES>
-
-where &lt;DB_NAMES&gt; would hold the value of `DB` environment variable described before.
-
-### Running the tests in the Eclipse
-
-1. Make sure to have [m2e plugin](http://eclipse.org/m2e/) installed 
-1. Import all the p6spy projects to eclipse (as Maven projects)
-1. Right click the Class holding the test to run and choose: Run As -> JUnit Test
-
-The `DB` environment variable can be set using Arguments tab -&gt; VM Argument of the JUnit Run Configuration.
+1. Download JUnit.
+1. Install JUnit
+1. Edit the P6Test.properties file and specify two databases. The configuration is set up for Oracle and MySQL. You must change the Oracle URL, at minimum.
+1. Copy the vendor database JDBC drivers' JAR files (of the two databases) into the lib directory.
 
 ## P6Spy Modules
 
@@ -645,28 +564,6 @@ long as it executes. So, if the interval is set to 2 and a query takes 11 second
 the 2, 4, 6, 8, 10-second intervals).
 
 
-### <a name="p6leak">P6Leak</a>
-
-P6Leak helps you to detect any JDBC resources which have not been properly closed.  This includes connections,
-statements, and result sets.
-
-Usage:
-
-1. Uncomment the leak module in spy.properties.
-1. Ensure that P6Spy is configured as per the [installation instructions](install.html)
-1. Copy JDBCLeak.jsp (from distribution) to the root of your web application.
-1. Start application and exercise it thoroughly for a while.
-1. View JDBCLeak.jsp to view a stack trace for any JDBC leaks.
-1. Halt the application and remove the leaks.
-1. Repeat until no more leaks are detected.
-
-The P6Leak module is disabled by default. Disable or enable the P6Outage module by editing the spy.properties
-configuration file. If the module is commented out, it is not loaded, and the functionality is not available. If
-the module is not commented out, the functionality is available.
-
-The applicable portion of the spy.properties file follows:
-
-    module.leak=com.p6spy.engine.leak.P6LeakFactory
 
 
 

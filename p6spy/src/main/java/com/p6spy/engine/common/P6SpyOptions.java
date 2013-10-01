@@ -1,64 +1,18 @@
 /*
- * ====================================================================
- *
- * The P6Spy Software License, Version 1.1
- *
- * This license is derived and fully compatible with the Apache Software
- * license, see http://www.apache.org/LICENSE.txt
- *
- * Copyright (c) 2001-2002 Andy Martin, Ph.D. and Jeff Goke
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in
- * the documentation and/or other materials provided with the
- * distribution.
- *
- * 3. The end-user documentation included with the redistribution, if
- * any, must include the following acknowlegement:
- * "The original concept and code base for P6Spy was conceived
- * and developed by Andy Martin, Ph.D. who generously contribued
- * the first complete release to the public under this license.
- * This product was due to the pioneering work of Andy
- * that began in December of 1995 developing applications that could
- * seamlessly be deployed with minimal effort but with dramatic results.
- * This code is maintained and extended by Jeff Goke and with the ideas
- * and contributions of other P6Spy contributors.
- * (http://www.p6spy.com)"
- * Alternately, this acknowlegement may appear in the software itself,
- * if and wherever such third-party acknowlegements normally appear.
- *
- * 4. The names "P6Spy", "Jeff Goke", and "Andy Martin" must not be used
- * to endorse or promote products derived from this software without
- * prior written permission. For written permission, please contact
- * license@p6spy.com.
- *
- * 5. Products derived from this software may not be called "P6Spy"
- * nor may "P6Spy" appear in their names without prior written
- * permission of Jeff Goke and Andy Martin.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- */
+Copyright 2013 P6Spy
 
-// Description: Class file for options
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.p6spy.engine.common;
 
 import java.util.*;
@@ -105,19 +59,13 @@ public class P6SpyOptions extends P6Options {
 
     private static String appender;
 
-    private static String realdriver;
-
-    private static String realdriver2;
-
-    private static String realdriver3;
+    private static String driverlist;
 
     private static String spydriver;
 
     private static boolean append;
 
     private static String logMessageFormatter;
-
-    private static boolean deregister;
 
     private static String dateformat;
 
@@ -220,14 +168,6 @@ public class P6SpyOptions extends P6Options {
         return includecategories;
     }
 
-    public static boolean getDeregisterDrivers() {
-        return deregister;
-    }
-
-    public static void setDeregisterDrivers(String trueOrFalse) {
-        deregister = P6Util.isTrue(trueOrFalse, false);
-    }
-
     public static void setLogfile(String _logfile) {
         logfile = _logfile;
         if (logfile == null) {
@@ -247,28 +187,12 @@ public class P6SpyOptions extends P6Options {
         appender = className;
     }
 
-    public static void setRealdriver(String _realdriver) {
-        realdriver = _realdriver;
+    public static String getDriverlist() {
+      return driverlist;
     }
 
-    public static String getRealdriver() {
-        return realdriver;
-    }
-
-    public static void setRealdriver2(String _realdriver2) {
-        realdriver2 = _realdriver2;
-    }
-
-    public static String getRealdriver2() {
-        return realdriver2;
-    }
-
-    public static void setRealdriver3(String _realdriver3) {
-        realdriver3 = _realdriver3;
-    }
-
-    public static String getRealdriver3() {
-        return realdriver3;
+    public static void setDriverlist(final String driverlist) {
+      P6SpyOptions.driverlist = driverlist;
     }
 
     public static void setAppend(String _append) {
@@ -404,7 +328,10 @@ public class P6SpyOptions extends P6Options {
         P6LogQuery.debug(this.getClass().getName() + " reloading properties");
 
         Collections.reverse(modules = properties.getOrderedList(MODULE_PREFIX));
-        Collections.reverse(driverNames = properties.getOrderedList(DRIVER_PREFIX));
+        driverNames = new ArrayList<String>();
+        if( driverlist != null && driverlist.length() > 0 ) {
+            driverNames = Arrays.asList(driverlist.split(","));
+        }
         properties.setClassValues(P6SpyOptions.class);
         configureReloadingThread();
         P6LogQuery.initMethod();
