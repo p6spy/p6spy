@@ -53,8 +53,10 @@ public class P6TestDriverMulti extends P6TestFramework {
           String password = props.getProperty("password2");
           String url = props.getProperty("url2");
 
-          P6Util.forName(drivername);
-          System.err.println("REGISTERED: "+drivername);
+          if( drivername != null ) {
+            P6Util.forName(drivername);
+            System.err.println("REGISTERED: "+drivername);
+          }
           printAllDrivers();
           Driver driver = DriverManager.getDriver(url);
           System.err.println("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
