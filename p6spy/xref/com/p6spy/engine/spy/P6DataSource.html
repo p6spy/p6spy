@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="147" href="#147">147</a>     }
 <a class="jxr_linenumber" name="148" href="#148">148</a> 
 <a class="jxr_linenumber" name="149" href="#149">149</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> initMethod() {
-<a class="jxr_linenumber" name="150" href="#150">150</a>         P6SpyDriverCore.initMethod();
+<a class="jxr_linenumber" name="150" href="#150">150</a>         P6Core.initialize();
 <a class="jxr_linenumber" name="151" href="#151">151</a>     }
 <a class="jxr_linenumber" name="152" href="#152">152</a> 
 <a class="jxr_linenumber" name="153" href="#153">153</a>     <strong class="jxr_keyword">public</strong> String getRealDataSource() {
@@ -359,14 +359,14 @@
 <a class="jxr_linenumber" name="349" href="#349">349</a>         <strong class="jxr_keyword">if</strong> (rds == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="350" href="#350">350</a>             bindDataSource();
 <a class="jxr_linenumber" name="351" href="#351">351</a>         }
-<a class="jxr_linenumber" name="352" href="#352">352</a>         <strong class="jxr_keyword">return</strong> P6SpyDriverCore.wrapConnection(rds.getConnection());
+<a class="jxr_linenumber" name="352" href="#352">352</a>         <strong class="jxr_keyword">return</strong> P6Core.wrapConnection(rds.getConnection());
 <a class="jxr_linenumber" name="353" href="#353">353</a>     }
 <a class="jxr_linenumber" name="354" href="#354">354</a> 
 <a class="jxr_linenumber" name="355" href="#355">355</a>     <strong class="jxr_keyword">public</strong> Connection getConnection(String username, String password) <strong class="jxr_keyword">throws</strong> SQLException {
 <a class="jxr_linenumber" name="356" href="#356">356</a>         <strong class="jxr_keyword">if</strong> (rds == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="357" href="#357">357</a>             bindDataSource();
 <a class="jxr_linenumber" name="358" href="#358">358</a>         }
-<a class="jxr_linenumber" name="359" href="#359">359</a>         <strong class="jxr_keyword">return</strong> P6SpyDriverCore.wrapConnection(rds.getConnection(username, password));
+<a class="jxr_linenumber" name="359" href="#359">359</a>         <strong class="jxr_keyword">return</strong> P6Core.wrapConnection(rds.getConnection(username, password));
 <a class="jxr_linenumber" name="360" href="#360">360</a>     }
 <a class="jxr_linenumber" name="361" href="#361">361</a> 
 <a class="jxr_linenumber" name="362" href="#362">362</a>     <em class="jxr_javadoccomment">/**</em>

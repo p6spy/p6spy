@@ -43,33 +43,33 @@
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">private</span> <span class="keyword">final</span> StatementInformation statementInformation;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;13</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;14</td>  <td class="nbHitsCovered">&nbsp;135</td>  <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> P6LogStatementExecuteDelegate(<span class="keyword">final</span> StatementInformation statementInformation) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;15</td>  <td class="nbHitsCovered">&nbsp;135</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">this</span>.statementInformation = statementInformation;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;16</td>  <td class="nbHitsCovered">&nbsp;135</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;14</td>  <td class="nbHitsCovered">&nbsp;137</td>  <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> P6LogStatementExecuteDelegate(<span class="keyword">final</span> StatementInformation statementInformation) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;15</td>  <td class="nbHitsCovered">&nbsp;137</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">this</span>.statementInformation = statementInformation;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;16</td>  <td class="nbHitsCovered">&nbsp;137</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;17</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;18</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  @Override</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;19</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> Object invoke(Object target, Method method, Object[] args) <span class="keyword">throws</span> Throwable {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;20</td>  <td class="nbHitsCovered">&nbsp;279</td>  <td class="src"><pre class="src">&nbsp;    statementInformation.setStatementQuery((String) args[0]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;21</td>  <td class="nbHitsCovered">&nbsp;279</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">long</span> startTime = System.currentTimeMillis();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;20</td>  <td class="nbHitsCovered">&nbsp;284</td>  <td class="src"><pre class="src">&nbsp;    statementInformation.setStatementQuery((String) args[0]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;21</td>  <td class="nbHitsCovered">&nbsp;284</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">long</span> startTime = System.currentTimeMillis();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;22</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;23</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;24</td>  <td class="nbHitsCovered">&nbsp;279</td>  <td class="src"><pre class="src">&nbsp;      Object result = method.invoke(target, args);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;25</td>  <td class="nbHitsUncovered"><a title="Line 25: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;232</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 25: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">      <span class="keyword">if</span>( result != <span class="keyword">null</span> &amp;&amp; result <span class="keyword">instanceof</span> ResultSet) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;26</td>  <td class="nbHitsCovered">&nbsp;110</td>  <td class="src"><pre class="src">&nbsp;        P6LogResultSetInvocationHandler resultSetInvocationHandler = <span class="keyword">new</span> P6LogResultSetInvocationHandler((ResultSet)result, statementInformation);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;27</td>  <td class="nbHitsCovered">&nbsp;110</td>  <td class="src"><pre class="src">&nbsp;        result = ProxyFactory.createProxy((ResultSet)result, ResultSet.<span class="keyword">class</span>, resultSetInvocationHandler);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;24</td>  <td class="nbHitsCovered">&nbsp;284</td>  <td class="src"><pre class="src">&nbsp;      Object result = method.invoke(target, args);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;25</td>  <td class="nbHitsUncovered"><a title="Line 25: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;237</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 25: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">      <span class="keyword">if</span>( result != <span class="keyword">null</span> &amp;&amp; result <span class="keyword">instanceof</span> ResultSet) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;26</td>  <td class="nbHitsCovered">&nbsp;111</td>  <td class="src"><pre class="src">&nbsp;        P6LogResultSetInvocationHandler resultSetInvocationHandler = <span class="keyword">new</span> P6LogResultSetInvocationHandler((ResultSet)result, statementInformation);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;27</td>  <td class="nbHitsCovered">&nbsp;111</td>  <td class="src"><pre class="src">&nbsp;        result = ProxyFactory.createProxy((ResultSet)result, ResultSet.<span class="keyword">class</span>, resultSetInvocationHandler);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;28</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;29</td>  <td class="nbHitsCovered">&nbsp;232</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">return</span> result;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;29</td>  <td class="nbHitsCovered">&nbsp;237</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">return</span> result;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;30</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;31</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="keyword">finally</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;32</td>  <td class="nbHitsCovered">&nbsp;232</td>  <td class="src"><pre class="src">&nbsp;      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, <span class="string">"statement"</span>, <span class="string">""</span>,</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;32</td>  <td class="nbHitsCovered">&nbsp;237</td>  <td class="src"><pre class="src">&nbsp;      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, <span class="string">"statement"</span>, <span class="string">""</span>,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;33</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;          statementInformation.getStatementQuery());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;34</td>  <td class="nbHits">&nbsp;</td>
@@ -80,6 +80,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 9/30/13 7:13 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 10/1/13 3:55 PM.</div>
 </body>
 </html>
