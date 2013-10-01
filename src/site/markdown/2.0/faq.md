@@ -15,6 +15,3 @@
     Yes. See the Common Property File Settings documentation and refer to the reloadproperties section.
 
 
-* Can I use multiple database drivers?
-
-    Yes. See the Common Property File Settings documentation for more information. Refer specifically to sections regarding realdriver2 and realdriver3.
