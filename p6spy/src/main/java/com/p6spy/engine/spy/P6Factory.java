@@ -84,10 +84,10 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6Options;
-
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import com.p6spy.engine.common.P6LoadableOptions;
 
 /**
  *
@@ -100,8 +100,10 @@ import java.sql.SQLException;
  *
  */
 public interface P6Factory {
-    
-    public P6Options getOptions() throws SQLException;
+ 
+    // OK this is not a typical factory, but to keep P6Factory an interface
+    // getOptions can't be static, we'll live with it I guess
+    public P6LoadableOptions getOptions();
     public Connection getConnection(Connection conn) throws SQLException;
 
 }

@@ -61,11 +61,15 @@
 
 package com.p6spy.engine.logging.appender;
 
-import org.apache.log4j.*;
-import java.io.StringWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 
-import com.p6spy.engine.common.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
+import com.p6spy.engine.common.P6ModuleManager;
+import com.p6spy.engine.logging.P6LogLoadableOptions;
 
 // adapted from Rafael Alvarez's LoggingStream class
 public class Log4jLogger extends FormattedLogger implements P6Logger {
@@ -78,8 +82,9 @@ public class Log4jLogger extends FormattedLogger implements P6Logger {
     // using the same configuration file as p6spy, and any other attempt
     // to configure log4j will add to this configuration.
     public Log4jLogger() {
-        P6SpyProperties properties = new P6SpyProperties();
-        PropertyConfigurator.configure(properties.forceReadProperties());
+//        P6SpyProperties properties = new P6SpyProperties();
+        P6LogLoadableOptions options = (P6LogLoadableOptions) P6ModuleManager.getInstance().getOptions(P6LogLoadableOptions.class);
+        PropertyConfigurator.configure(options.getLog4JProperties());
         log = Logger.getLogger("p6spy");
         log.setAdditivity(false);
     }
