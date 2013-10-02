@@ -12,8 +12,8 @@ The installation instructions for each app server assume that you are using a My
 being used as an example for the purposes of this documentation.  You simply need to use the correct connection URL
 and driver class as appropriate for your database.
 
-All instructions also assume *nix operating system.  Again, this is just for the purposes of the documentation.  For
-installation on Windows platforms, just substitute p6spy-dist.zip for p6spy-dist.tar.gz.
+All instructions also assume \*nix operating system.  Again, this is just for the purposes of the documentation.  For
+installation on Windows platforms, just substitute **p6spy-dist.zip** for **p6spy-dist.tar.gz**.
 
 The installed P6Spy software offers many configuration options. See
 [Common Property File Settings](configandusage.html#settings) for additional information.
@@ -30,7 +30,7 @@ applications that do not use application servers. To install P6Spy, complete the
    server will have one as well.
 1. Modify the JDBC connection URL in your database connection configuration to add p6spy.
 
-       jdbc:p6spy:mysql://<hostname>:<port>/<database>
+         jdbc:p6spy:mysql://<hostname>:<port>/<database>
 
 Installation is complete. When you run your application, a **spy.log** file is generated. The log file contains a
 list of all of the database statements executed. You can change both the destination of **spy.log** and what it
@@ -52,9 +52,9 @@ is the directory in which JBoss is installed. To install P6Spy on JBoss 5.x, com
 1. Update the data source in `$JBOSS_DIST\server\default\deploy`.  This file is normally called `?????-ds.xml'.
    An example of the pertinent portions (not the complete XML file) follows:
 
-      <jndi-name>MySqlDS</jndi-name>
-      <connection-url>jdbc:p6spy:mysql://mysql-hostname:3306/jbossdb</connection-url>
-      <driver-class>com.mysql.jdbc.Driver</driver-class>
+        <jndi-name>MySqlDS</jndi-name>
+        <connection-url>jdbc:p6spy:mysql://mysql-hostname:3306/jbossdb</connection-url>
+        <driver-class>com.mysql.jdbc.Driver</driver-class>
 
 Installation is complete. When you run your application, a log file ( **spy.log** ) is generated in the bin
 directory of the JBoss server. The log file contains a list of all of the database statements executed. You can
