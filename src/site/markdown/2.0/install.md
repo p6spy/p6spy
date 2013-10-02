@@ -18,7 +18,7 @@ installation on Windows platforms, just substitute p6spy-dist.zip for p6spy-dist
 The installed P6Spy software offers many configuration options. See
 [Common Property File Settings](configandusage.html#settings) for additional information.
 
-## <a name="unspec"Generic Instructions</a>
+## <a name="unspec">Generic Instructions</a>
 
 The following installation instructions are intended for use with application servers not listed below and
 applications that do not use application servers. To install P6Spy, complete the following steps:
