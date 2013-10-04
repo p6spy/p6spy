@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="123" href="#123">123</a>     @Test
 <a class="jxr_linenumber" name="124" href="#124">124</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testNative() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="125" href="#125">125</a>         <em class="jxr_comment">// load the native driver</em>
-<a class="jxr_linenumber" name="126" href="#126">126</a>         Map properties = <strong class="jxr_keyword">super</strong>.getDefaultPropertyFile();  
+<a class="jxr_linenumber" name="126" href="#126">126</a>         Map properties = <strong class="jxr_keyword">super</strong>.getTestSettings();
 <a class="jxr_linenumber" name="127" href="#127">127</a>         P6TestUtil.reloadProperty(properties);
 <a class="jxr_linenumber" name="128" href="#128">128</a>         connection = P6TestUtil.loadDrivers(<span class="jxr_string">"p6realdriver"</span>, p6TestProperties);
 <a class="jxr_linenumber" name="129" href="#129">129</a>         sqltests();
@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="132" href="#132">132</a>     @Test
 <a class="jxr_linenumber" name="133" href="#133">133</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSpy() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="134" href="#134">134</a>         <em class="jxr_comment">// load the p6log driver</em>
-<a class="jxr_linenumber" name="135" href="#135">135</a>         Map properties = <strong class="jxr_keyword">super</strong>.getDefaultPropertyFile();
+<a class="jxr_linenumber" name="135" href="#135">135</a>         Map properties = <strong class="jxr_keyword">super</strong>.getTestSettings();
 <a class="jxr_linenumber" name="136" href="#136">136</a>         P6TestUtil.reloadProperty(properties);
 <a class="jxr_linenumber" name="137" href="#137">137</a>         
 <a class="jxr_linenumber" name="138" href="#138">138</a>         connection = P6TestUtil.loadDrivers(<span class="jxr_string">"p6driver"</span>, p6TestProperties);
