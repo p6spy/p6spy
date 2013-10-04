@@ -21,18 +21,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- *
  * p6factory exists to make extending the spy core easier when making
  * a new module.  Since there are so many methods that
  * return a NEW object of some type (connection, etc)
  * either you would be forced to overload them all, or we could use this
  * factory method to handle that situation.  not perfect, but should make
  * extending and maintaining the code far easier.
- *
  */
 public interface P6Factory {
-    
-    public P6Options getOptions() throws SQLException;
-    public Connection getConnection(Connection conn) throws SQLException;
+
+  public P6Options getOptions() throws SQLException;
+
+  public Connection getConnection(Connection conn) throws SQLException;
 
 }
