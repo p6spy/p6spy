@@ -51,9 +51,9 @@ public class P6Core {
    * Initializes the P6Spy framework
    */
   public static void initialize() {
-    if( !initialized ) {
+    if (!initialized) {
       synchronized (P6Core.class) {
-        if( !initialized) {
+        if (!initialized) {
           initMethod();
         }
       }
@@ -112,7 +112,7 @@ public class P6Core {
 
       initialized = true;
 
-      for (Driver driver : P6SpyDriver.registeredDrivers() ) {
+      for (Driver driver : P6SpyDriver.registeredDrivers()) {
         P6LogQuery.debug("Driver manager reporting driver registered: " + driver);
       }
 

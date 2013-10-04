@@ -24,45 +24,43 @@ import java.sql.SQLException;
 
 public class P6PooledConnection implements PooledConnection {
 
-    protected PooledConnection passthru;
+  protected PooledConnection passthru;
 
-    public P6PooledConnection(PooledConnection connection) {
-      passthru = connection;
-    }
-
-
-    public Connection getConnection() throws SQLException {
-      return P6Core.wrapConnection(passthru.getConnection());
-    }
-
-    public void close() throws SQLException  {
-      passthru.close();
-    }
-
-    public void addConnectionEventListener(ConnectionEventListener eventTarget) {
-      passthru.addConnectionEventListener(eventTarget);
-    }
+  public P6PooledConnection(PooledConnection connection) {
+    passthru = connection;
+  }
 
 
-    public void removeConnectionEventListener(ConnectionEventListener eventTarget) {
-      passthru.removeConnectionEventListener(eventTarget);
-    }
+  @Override
+  public Connection getConnection() throws SQLException {
+    return P6Core.wrapConnection(passthru.getConnection());
+  }
 
-    /**
-     * @param listener
-     * @see javax.sql.PooledConnection#addStatementEventListener(javax.sql.StatementEventListener)
-     */
-    public void addStatementEventListener(StatementEventListener listener) {
-        passthru.addStatementEventListener(listener);
-    }
+  @Override
+  public void close() throws SQLException {
+    passthru.close();
+  }
+
+  @Override
+  public void addConnectionEventListener(ConnectionEventListener eventTarget) {
+    passthru.addConnectionEventListener(eventTarget);
+  }
 
 
-    /**
-     * @param listener
-     * @see javax.sql.PooledConnection#removeStatementEventListener(javax.sql.StatementEventListener)
-     */
-    public void removeStatementEventListener(StatementEventListener listener) {
-        passthru.removeStatementEventListener(listener);
-    }
+  @Override
+  public void removeConnectionEventListener(ConnectionEventListener eventTarget) {
+    passthru.removeConnectionEventListener(eventTarget);
+  }
+
+  @Override
+  public void addStatementEventListener(StatementEventListener listener) {
+    passthru.addStatementEventListener(listener);
+  }
+
+
+  @Override
+  public void removeStatementEventListener(StatementEventListener listener) {
+    passthru.removeStatementEventListener(listener);
+  }
 
 }

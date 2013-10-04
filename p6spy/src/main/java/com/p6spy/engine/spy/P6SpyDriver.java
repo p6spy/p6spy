@@ -35,23 +35,11 @@ import java.util.logging.Logger;
 public class P6SpyDriver implements Driver {
   private static Driver INSTANCE = new P6SpyDriver();
 
-  /*
-
-     TODO - Replace this class with proxies
-
-     There is really no reason for this class to exist.  Proxies could be created for each driver registered with the
-     driver manager.  The only issue is when this would happen...
-
-     Using proxies would solve the problem exposed by getMajorVersion() and other driver methods which do not accept
-     a URL as a parameter.
-   */
-
-
   static {
     try {
       DriverManager.registerDriver(INSTANCE);
     } catch (SQLException e) {
-      // TODO log this somewhere?
+      throw new IllegalStateException("Could not register P6SpyDriver with DriverManager", e);
     }
   }
 
@@ -62,8 +50,6 @@ public class P6SpyDriver implements Driver {
   @Override
   public boolean acceptsURL(final String url) throws SQLException {
     if (url != null && url.startsWith("jdbc:p6spy:")) {
-      // yes, we accept this URL but only is there is another driver which accepts the real URL.
-
       return true;
     } else {
       return false;

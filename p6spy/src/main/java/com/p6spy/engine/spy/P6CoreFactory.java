@@ -20,11 +20,11 @@ import com.p6spy.engine.common.P6Options;
 import java.sql.SQLException;
 
 public abstract class P6CoreFactory implements P6Factory {
-    
-    public P6Options getOptions() throws SQLException {
-        // the core options are managed in P6SpyOptions, which is a special case since it must deal with the
-        // driver, module, and reload issues as well
-        return null;
-    }
-    
+
+  public P6Options getOptions() throws SQLException {
+    // the core options are managed in P6SpyOptions, which is a special case since it must deal with the
+    // driver, module, and reload issues as well
+    return null;
+  }
+
 }
