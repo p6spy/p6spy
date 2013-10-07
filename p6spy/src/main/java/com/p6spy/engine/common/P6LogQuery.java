@@ -20,11 +20,10 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.util.List;
 import java.util.regex.Pattern;
 
+import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.logging.appender.FileLogger;
 import com.p6spy.engine.logging.appender.FormattedLogger;
 import com.p6spy.engine.logging.appender.MessageFormattingStrategy;
@@ -33,14 +32,6 @@ import com.p6spy.engine.logging.appender.P6Logger;
 public class P6LogQuery {
   protected static PrintStream qlog;
 
-  protected static String[] includeTables;
-
-  protected static String[] excludeTables;
-
-  protected static String[] includeCategories;
-
-  protected static String[] excludeCategories;
-
   protected static P6Logger logger;
 
   static {
@@ -48,11 +39,7 @@ public class P6LogQuery {
   }
 
   public synchronized static void initMethod() {
-    String appender = P6SpyOptions.getAppender();
-
-    if (appender == null) {
-      appender = "com.p6spy.engine.logging.appender.FileLogger";
-    }
+    String appender = P6LogOptions.getActiveInstance().getAppender();
 
     // create the logger
     try {
@@ -70,13 +57,13 @@ public class P6LogQuery {
 
     if (logger != null) {
       if (logger instanceof FileLogger) {
-        String logfile = P6SpyOptions.getLogfile();
+        String logfile = P6LogOptions.getActiveInstance().getLogfile();
         logfile = (logfile == null) ? "spy.log" : logfile;
 
         ((FileLogger) logger).setLogfile(logfile);
       }
       if (logger instanceof FormattedLogger) {
-        String logMessageFormatter = P6SpyOptions.getLogMessageFormatter();
+        String logMessageFormatter = P6LogOptions.getActiveInstance().getLogMessageFormatter();
         if (logMessageFormatter != null) {
           MessageFormattingStrategy strategy = null;
           try {
@@ -97,13 +84,6 @@ public class P6LogQuery {
         }
       }
     }
-
-    if (P6SpyOptions.getFilter()) {
-      includeTables = parseCSVList(P6SpyOptions.getInclude());
-      excludeTables = parseCSVList(P6SpyOptions.getExclude());
-    }
-    includeCategories = parseCSVList(P6SpyOptions.getIncludecategories());
-    excludeCategories = parseCSVList(P6SpyOptions.getExcludecategories());
   }
 
   static public PrintStream logPrintStream(String file) {
@@ -111,38 +91,13 @@ public class P6LogQuery {
     try {
       String path = P6Util.classPathFile(file);
       file = (path == null) ? file : path;
-      ps = P6Util.getPrintStream(file, P6SpyOptions.getAppend());
+      ps = P6Util.getPrintStream(file, P6LogOptions.getActiveInstance().getAppend());
     } catch (IOException io) {
       P6LogQuery.error("Error opening " + file + ", " + io.getMessage());
       ps = null;
     }
 
     return ps;
-  }
-
-  static String[] parseCSVList(String csvList) {
-    String array[] = null;
-    if (csvList != null) {
-      StringTokenizer tok = new StringTokenizer(csvList, ",");
-      String item;
-      ArrayList list = new ArrayList();
-      while (tok.hasMoreTokens()) {
-        item = tok.nextToken().toLowerCase().trim();
-        if (item != "") {
-          list.add(item.toLowerCase().trim());
-        }
-      }
-
-      int max = list.size();
-      Iterator it = list.iterator();
-      array = new String[max];
-      int i;
-      for (i = 0; i < max; i++) {
-        array[i] = (String) it.next();
-      }
-    }
-
-    return array;
   }
 
   static protected void doLog(long elapsed, String category, String prepared, String sql) {
@@ -158,7 +113,7 @@ public class P6LogQuery {
   static protected void doLog(int connectionId, long elapsed, String category, String prepared, String sql) {
     if (logger != null) {
       java.util.Date now = P6Util.timeNow();
-      SimpleDateFormat sdf = P6SpyOptions.getDateformatter();
+      SimpleDateFormat sdf = P6LogOptions.getActiveInstance().getDateformatter();
       String stringNow;
       if (sdf == null) {
         stringNow = Long.toString(now.getTime());
@@ -168,8 +123,8 @@ public class P6LogQuery {
 
       logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);
 
-      boolean stackTrace = P6SpyOptions.getStackTrace();
-      String stackTraceClass = P6SpyOptions.getStackTraceClass();
+      boolean stackTrace = P6LogOptions.getActiveInstance().getStackTrace();
+      String stackTraceClass = P6LogOptions.getActiveInstance().getStackTraceClass();
       if (stackTrace) {
         Exception e = new Exception();
         if (stackTraceClass != null) {
@@ -191,15 +146,18 @@ public class P6LogQuery {
   }
 
   static boolean isLoggable(String sql) {
-    return (P6SpyOptions.getFilter() == false || queryOk(sql));
+    return !P6LogOptions.getActiveInstance().getFilter() || isQueryOk(sql);
   }
 
   static boolean isCategoryOk(String category) {
-    return (includeCategories == null || includeCategories.length == 0 || foundCategory(category, includeCategories))
+    List<String> includeCategories = P6LogOptions.getActiveInstance().getIncludeCategoriesList();
+    List<String> excludeCategories = P6LogOptions.getActiveInstance().getExcludeCategoriesList();
+    
+    return (includeCategories == null || includeCategories.isEmpty() || foundCategory(category, includeCategories))
         && !foundCategory(category, excludeCategories);
   }
 
-  static boolean foundCategory(String category, String categories[]) {
+  static boolean foundCategory(String category, List<String> categories) {
     if (categories != null) {
       for (String categorie : categories) {
         if (category.equals(categorie)) {
@@ -210,59 +168,40 @@ public class P6LogQuery {
     return false;
   }
 
-  static boolean queryOk(String sql) {
-    if (P6SpyOptions.getSQLExpression() != null) {
-      return sqlOk(sql);
-    } else {
-      return ((includeTables == null || includeTables.length == 0 || foundTable(sql, includeTables))) && !foundTable(sql, excludeTables);
-    }
+  static boolean isQueryOk(final String sql) {
+    if (P6LogOptions.getActiveInstance().getSQLExpression() != null) {
+      return isSqlOk(sql);
+    } 
+    
+    List<String> includeTables = P6LogOptions.getActiveInstance().getIncludeTableList();
+    List<String> excludeTables = P6LogOptions.getActiveInstance().getExcludeTableList();
+    
+    return ((includeTables == null || includeTables.isEmpty() || isTableFound(sql, includeTables))) && !isTableFound(sql, excludeTables);
   }
 
-  static boolean sqlOk(String sql) {
-    String sqlexpression = P6SpyOptions.getSQLExpression();
+  static boolean isSqlOk(final String sql) {
+    String sqlexpression = P6LogOptions.getActiveInstance().getSQLExpression();
     return Pattern.matches(sqlexpression, sql);
   }
 
-  static boolean foundTable(String sql, String tables[]) {
-    sql = sql.toLowerCase();
-    boolean found = false;
+  static boolean isTableFound(final String sql, final List<String> tables) {
+    final String sqlLowercased = sql.toLowerCase();
 
     if (tables != null) {
-      for (int i = 0; !found && i < tables.length; i++) {
-        found = Pattern.matches("select.*from(.*" + tables[i] + ".*)(where|;|$)", sql);
+      for (String table : tables) {
+        // TODO [Peter Butkovic] improve performance by precompiling + caching the patterns
+        if (Pattern.matches("select.*from(.*" + table + ".*)(where|;|$)", sqlLowercased)) {
+          return true;
+        }
       }
     }
 
-    return found;
+    return false;
   }
 
   // ----------------------------------------------------------------------------------------------------------
   // public accessor methods for logging and viewing query data
   // ----------------------------------------------------------------------------------------------------------
-
-  static public String[] getIncludeTables() {
-    return includeTables;
-  }
-
-  static public String[] getExcludeTables() {
-    return excludeTables;
-  }
-
-  static public void setIncludeTables(String _includeTables) {
-    P6LogQuery.includeTables = P6LogQuery.parseCSVList(_includeTables);
-  }
-
-  static public void setExcludeTables(String _excludeTables) {
-    P6LogQuery.excludeTables = P6LogQuery.parseCSVList(_excludeTables);
-  }
-
-  static public void setIncludeCategories(String _includeCategories) {
-    P6LogQuery.includeCategories = P6LogQuery.parseCSVList(_includeCategories);
-  }
-
-  static public void setExcludeCategories(String _excludeCategories) {
-    P6LogQuery.excludeCategories = P6LogQuery.parseCSVList(_excludeCategories);
-  }
 
   // this a way for an external to dump an unrestricted line of text into the log
   // useful for the JSP demarcation tool
@@ -285,7 +224,7 @@ public class P6LogQuery {
   static public void logElapsed(int connectionId, long startTime, long endTime, String category, String prepared, String sql) {
     if (logger != null && meetsThresholdRequirement(endTime - startTime) && isLoggable(sql) && isCategoryOk(category)) {
       doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
-    } else if (isDebugOn()) {
+    } else if (isDebugEnabled()) {
       debug("P6Spy intentionally did not log category: " + category + ", statement: " + sql + "  Reason: logger=" + logger + ", isLoggable="
           + isLoggable(sql) + ", isCategoryOk=" + isCategoryOk(category) + ", meetsTreshold=" + meetsThresholdRequirement(endTime - startTime));
     }
@@ -294,7 +233,7 @@ public class P6LogQuery {
   //->JAW: new method that checks to see if this statement should be logged based
   //on whether on not it has taken greater than x amount of time.
   static private boolean meetsThresholdRequirement(long timeTaken) {
-    long executionThreshold = P6SpyOptions.getExecutionThreshold();
+    long executionThreshold = P6LogOptions.getActiveInstance().getExecutionThreshold();
 
     if (executionThreshold <= 0) {
       return true;
@@ -311,12 +250,12 @@ public class P6LogQuery {
     }
   }
 
-  static public boolean isDebugOn() {
+  static public boolean isDebugEnabled() {
     return isCategoryOk("debug");
   }
 
   static public void debug(String sql) {
-    if (isDebugOn()) {
+    if (isDebugEnabled()) {
       if (logger != null) {
         doLog(-1, "debug", "", sql);
       } else {

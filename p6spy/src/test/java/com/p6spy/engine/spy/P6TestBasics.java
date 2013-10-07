@@ -87,19 +87,19 @@
 
 package com.p6spy.engine.spy;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
 public class P6TestBasics extends P6TestFramework {
@@ -113,7 +113,7 @@ public class P6TestBasics extends P6TestFramework {
      */
     @Override
     // just prevent inherited stuff
-    public void setUpFramework() {
+    public void createConnection() {
     }
     
     @Before
@@ -122,21 +122,17 @@ public class P6TestBasics extends P6TestFramework {
 
     @Test
     public void testNative() throws Exception {
-        // load the native driver
-        Map properties = super.getDefaultPropertyFile();  
-        P6TestUtil.reloadProperty(properties);
-        connection = P6TestUtil.loadDrivers("p6realdriver", p6TestProperties);
+        connection = P6TestUtil.loadDrivers(null);
         sqltests();
     }
-       
+    
     @Test
     public void testSpy() throws Exception {
-        // load the p6log driver
-        Map properties = super.getDefaultPropertyFile();
-        P6TestUtil.reloadProperty(properties);
-        
-        connection = P6TestUtil.loadDrivers("p6driver", p6TestProperties);
-        sqltests();
+        List<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
+        if (null != driverNames && !driverNames.isEmpty()) {
+          connection = P6TestUtil.loadDrivers(driverNames.get(0));
+          sqltests();
+        } 
     }
 
     protected void preparesql() throws SQLException {

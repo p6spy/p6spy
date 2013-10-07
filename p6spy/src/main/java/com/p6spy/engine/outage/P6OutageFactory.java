@@ -24,13 +24,14 @@ import com.p6spy.engine.spy.P6Factory;
 
 public class P6OutageFactory implements P6Factory {
 
+  @Override
   public Connection getConnection(Connection conn) throws SQLException {
     P6OutageConnectionInvocationHandler invocationHandler = new P6OutageConnectionInvocationHandler(conn);
     return ProxyFactory.createProxy(conn, Connection.class, invocationHandler);
   }
 
-  public P6LoadableOptions getOptions() throws SQLException {
-    return new P6OutageOptionsImpl();
+  @Override
+  public P6LoadableOptions getOptions() {
+    return new P6OutageOptions();
   }
-
 }

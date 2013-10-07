@@ -61,9 +61,9 @@
 
 package com.p6spy.management.jboss;
 
-import com.p6spy.engine.common.P6SpyOptions;
 import com.p6spy.engine.common.OptionReloader;
 import com.p6spy.engine.outage.P6OutageOptions;
+import com.p6spy.engine.spy.P6SpyOptions;
 
 public class P6SpyManager extends org.jboss.util.ServiceMBeanSupport implements P6SpyManagerMBean {
     

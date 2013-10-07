@@ -12,24 +12,15 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/package com.p6spy.engine.spy;
+ */
+package com.p6spy.engine.outage;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+public interface P6OutageOptionsMBean {
+  public boolean getOutageDetection();
 
-import com.p6spy.engine.common.P6LoadableOptions;
+  public void setOutageDetection(String outagedetection);
 
-public class P6SpyFactory implements P6Factory {
+  public long getOutageDetectionInterval();
 
-  @Override
-  public P6LoadableOptions getOptions() {
-    return new P6SpyOptions();
-  }
-
-  @Override
-  public Connection getConnection(Connection conn) throws SQLException {
-    // no wrapping required here
-    return conn;
-  }
-
+  public void setOutageDetectionInterval(String outagedetectioninterval);
 }

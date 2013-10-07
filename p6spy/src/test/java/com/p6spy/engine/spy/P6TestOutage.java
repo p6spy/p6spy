@@ -48,10 +48,10 @@ public class P6TestOutage extends P6TestFramework {
   @Before
   public void activateOutage() throws SQLException {
     // disable outage, as procedure creation takes already quite a while
-    P6OutageOptions.setOutageDetection("false");
+    P6OutageOptions.getActiveInstance().setOutageDetection("false");
     Statement statement = connection.createStatement();
     statement.execute(SLEEP_ALIAS);
-    P6OutageOptions.setOutageDetection("true");
+    P6OutageOptions.getActiveInstance().setOutageDetection("true");
   }
 
   @Test

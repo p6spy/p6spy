@@ -32,14 +32,15 @@ class P6OutageConnectionCommitDelegate implements Delegate {
   @Override
   public Object invoke(Object target, Method method, Object[] args) throws Throwable {
     long startTime = System.currentTimeMillis();
-    if (P6OutageOptions.getOutageDetection()) {
+    
+    if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().registerInvocation(this, startTime, "commit", "", "");
     }
 
     try {
       return method.invoke(target, args);
     } finally {
-      if (P6OutageOptions.getOutageDetection()) {
+      if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
           P6OutageDetector.getInstance().unregisterInvocation(this);
       }
     }

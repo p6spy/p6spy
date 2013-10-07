@@ -15,16 +15,6 @@ limitations under the License.
 */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6SpyOptions;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.naming.Reference;
-import javax.naming.Referenceable;
-import javax.naming.StringRefAddr;
-import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -35,6 +25,16 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.naming.Reference;
+import javax.naming.Referenceable;
+import javax.naming.StringRefAddr;
+import javax.sql.DataSource;
+
+import com.p6spy.engine.common.P6LogQuery;
 
 public class P6DataSource extends P6Base implements DataSource, Referenceable, Serializable {
 
@@ -73,10 +73,13 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
     }
 
     protected void bindDataSource() throws SQLException {
+      
+        final P6SpyLoadableOptions options = P6SpyOptions.getActiveInstance();
+        
         // can be set when object is bound to JDNI, or
         // can be loaded from spy.properties
         if (rdsName == null) {
-            rdsName = P6SpyOptions.getRealDataSource();
+            rdsName = options.getRealDataSource();
         }
         if (rdsName == null) {
 
@@ -85,14 +88,14 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
         try {
             Hashtable env = null;
             String factory;
-            if ((factory = P6SpyOptions.getJNDIContextFactory()) != null) {
+            if ((factory = options.getJNDIContextFactory()) != null) {
                 env = new Hashtable();
                 env.put(Context.INITIAL_CONTEXT_FACTORY, factory);
-                String url = P6SpyOptions.getJNDIContextProviderURL();
+                String url = options.getJNDIContextProviderURL();
                 if (url != null) {
                     env.put(Context.PROVIDER_URL, url);
                 }
-                String custom = P6SpyOptions.getJNDIContextCustom();
+                String custom = options.getJNDIContextCustom();
                 if (custom != null) {
                     StringTokenizer st = new StringTokenizer(custom, ",", false);
                     while (st.hasMoreElements()) {
@@ -119,7 +122,7 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
             // Set any properties that the spy.properties file contains
             // that are supported by set methods in this class
 
-            String dsProps = P6SpyOptions.getRealDataSourceProperties();
+            String dsProps = options.getRealDataSourceProperties();
 
             if (dsProps != null) {
                 Hashtable props = null;

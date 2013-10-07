@@ -15,24 +15,19 @@ limitations under the License.
 */
 package com.p6spy.engine.leak;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.Map;
+import java.util.Properties;
 
-import com.p6spy.engine.common.P6LoadableOptions;
-import com.p6spy.engine.proxy.ProxyFactory;
-import com.p6spy.engine.spy.P6Factory;
-
-public class P6LeakFactory implements P6Factory {
+public class P6LeakOptions implements P6LeakLoadableOptions {
 
   @Override
-  public Connection getConnection(Connection conn) throws SQLException {
-    P6LeakConnectionInvocationHandler invocationHandler = new P6LeakConnectionInvocationHandler(conn);
-    return ProxyFactory.createProxy(conn, Connection.class, invocationHandler);
+  public Map getOpenObjects() {
+    return P6Objects.getOpenObjects();
   }
 
   @Override
-  public P6LoadableOptions getOptions() {
-    return new P6LeakOptions();
+  public void load(Properties props) {
+    // no options in the module => nothing to reload here
   }
 
 }
