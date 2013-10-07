@@ -315,7 +315,7 @@ public class P6TestCommon extends P6TestFramework {
     public void testReload() throws Exception {
         Statement statement = connection.createStatement();
 
-        Map tp = getDefaultPropertyFile();
+        Map tp = getTestSettings();
         reloadProperty(tp);
 
         String query = "select 'b' from common_test";

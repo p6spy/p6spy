@@ -415,6 +415,7 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <!-- Note: This is a type 3 driver! -->
         <groupId>org.xerial</groupId>
         <artifactId>sqlite-jdbc</artifactId>
         <version>${sqlite-build}</version>
@@ -425,6 +426,30 @@
         <artifactId>junit</artifactId>
         <scope>test</scope>
         <version>4.11</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-plus</artifactId>
+        <version>8.1.7.v20120910</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>commons-dbcp</groupId>
+        <artifactId>commons-dbcp</artifactId>
+        <version>1.4</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>3.2.4.RELEASE</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>3.2.4.RELEASE</version>
+        <scope>test></scope>
       </dependency>
       <dependency>
         <groupId>log4j</groupId>

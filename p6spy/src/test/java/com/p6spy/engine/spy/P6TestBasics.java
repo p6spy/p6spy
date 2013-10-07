@@ -123,7 +123,7 @@ public class P6TestBasics extends P6TestFramework {
     @Test
     public void testNative() throws Exception {
         // load the native driver
-        Map properties = super.getDefaultPropertyFile();  
+        Map properties = super.getTestSettings();
         P6TestUtil.reloadProperty(properties);
         connection = P6TestUtil.loadDrivers("p6realdriver", p6TestProperties);
         sqltests();
@@ -132,7 +132,7 @@ public class P6TestBasics extends P6TestFramework {
     @Test
     public void testSpy() throws Exception {
         // load the p6log driver
-        Map properties = super.getDefaultPropertyFile();
+        Map properties = super.getTestSettings();
         P6TestUtil.reloadProperty(properties);
         
         connection = P6TestUtil.loadDrivers("p6driver", p6TestProperties);
