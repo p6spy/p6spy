@@ -18,4 +18,14 @@ package com.p6spy.engine.logging;
 import com.p6spy.engine.common.P6LoadableOptions;
 
 public interface P6LogLoadableOptions extends P6LoadableOptions, P6LogOptionsMBean {
+
+  // these we don't need to be exposed via JMX
+  
+  void setStackTrace(String stacktrace);
+
+  void setAppend(String append);
+
+  void setFilter(String filter);
+
+  void setExecutionThreshold(String executionThreshold);
 }

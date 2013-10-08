@@ -28,6 +28,27 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-plus</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+	<!-- jmx testing -->
+	<dependency>
+		<groupId>com.j256.simplejmx</groupId>
+		<artifactId>simplejmx</artifactId>
+	</dependency>
 
     <!-- all the JDBC drivers tested -->
     <dependency>
@@ -54,8 +75,6 @@
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
     </dependency>
-
-
   </dependencies>
 
   <!-- each module needs to have this for the scm information to be correct in maven site -->
@@ -73,7 +92,15 @@
         <configuration>
           <systemPropertyVariables>
             <user.language>en_US</user.language>
-          </systemPropertyVariables>
+            
+            <!-- to enable remote JMX testing, 
+            	see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
+<!--             <com.sun.management.jmxremote/>
+            <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+            <com.sun.management.jmxremote.port>1234</com.sun.management.jmxremote.port>
+            <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
+ -->          </systemPropertyVariables>
+         <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false</argLine>
           <includes>
             <include>**/P6Test*.java</include>
           </includes>
@@ -117,6 +144,7 @@
                 however keep in mind that some tests run with preconfigured drivers (i.e. multidriver, ...)-->
                 <DB>${env.DB}</DB>
               </systemPropertyVariables>
+              <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false</argLine>
             </configuration>
           </plugin>
         </plugins>

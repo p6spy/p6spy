@@ -16,18 +16,18 @@ limitations under the License.
 
 import java.util.List;
 
-public interface P6SpyOptionsImplMBean {
+public interface P6SpyOptionsMBean {
 
   /**
    * Reloads the whole configuration. 
    */
   void reload();
   
-  void setUsePrefix(String usePrefix);
+  void setUsePrefix(boolean usePrefix);
 
   boolean getUsePrefix();
 
-  void setAutoflush(String autoflush);
+  void setAutoflush(boolean autoflush);
 
   boolean getAutoflush();
 
@@ -39,11 +39,11 @@ public interface P6SpyOptionsImplMBean {
 
   boolean getReloadProperties();
 
-  void setReloadProperties(String reloadproperties);
+  void setReloadProperties(boolean reloadproperties);
 
   long getReloadPropertiesInterval();
 
-  void setReloadPropertiesInterval(String reloadpropertiesinterval);
+  void setReloadPropertiesInterval(long reloadpropertiesinterval);
 
   void setJNDIContextFactory(String jndicontextfactory);
 
@@ -78,5 +78,6 @@ public interface P6SpyOptionsImplMBean {
   String getDatabaseDialectDateFormat();
 
   void setDatabaseDialectDateFormat(String databaseDialectDateFormat);
+
 
 }

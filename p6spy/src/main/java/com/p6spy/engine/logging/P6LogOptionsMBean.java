@@ -28,7 +28,7 @@ public interface P6LogOptionsMBean {
 
   String getExcludecategories();
 
-  void setFilter(String filter);
+  void setFilter(boolean filter);
 
   boolean getFilter();
 
@@ -56,8 +56,8 @@ public interface P6LogOptionsMBean {
 
   boolean getStackTrace();
 
-  void setStackTrace(String stacktrace);
-
+  void setStackTrace(boolean stacktrace);
+  
   String getStackTraceClass();
 
   void setStackTraceClass(String stacktraceclass);
@@ -66,7 +66,7 @@ public interface P6LogOptionsMBean {
 
   void setSQLExpression(String sqlexpression);
 
-  void setAppend(String append);
+  void setAppend(boolean append);
 
   boolean getAppend();
 
@@ -74,7 +74,7 @@ public interface P6LogOptionsMBean {
 
   void setLogMessageFormatter(String logMessageFormatter);
 
-  void setExecutionThreshold(String executionThreshold);
+  void setExecutionThreshold(long executionThreshold);
 
   long getExecutionThreshold();
 

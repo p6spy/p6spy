@@ -16,11 +16,13 @@ limitations under the License.
 package com.p6spy.engine.outage;
 
 public interface P6OutageOptionsMBean {
+
   public boolean getOutageDetection();
 
-  public void setOutageDetection(String outagedetection);
+  void setOutageDetection(boolean outagedetection);
 
   public long getOutageDetectionInterval();
 
-  public void setOutageDetectionInterval(String outagedetectioninterval);
+  void setOutageDetectionInterval(long outagedetectioninterval);
+
 }

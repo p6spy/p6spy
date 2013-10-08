@@ -50,7 +50,12 @@ public class P6OutageOptions implements P6OutageLoadableOptions {
     
     @Override
     public void setOutageDetection(String outagedetection) {
-        outageDetection = P6Util.isTrue(outagedetection, false);
+        setOutageDetection(P6Util.isTrue(outagedetection, false));
+    }
+    
+    @Override
+    public void setOutageDetection(boolean outagedetection) {
+        outageDetection = outagedetection;
     }
     
     @Override
@@ -63,11 +68,14 @@ public class P6OutageOptions implements P6OutageLoadableOptions {
         return outageMs;
     }
 
-    // not JMX exposed API
+    @Override
+    public void setOutageDetectionInterval(String outagedetectioninterval) {
+        setOutageDetectionInterval(P6Util.parseLong(outagedetectioninterval, -1l));
+    }
     
     @Override
-    public void setOutageDetectionInterval(String _outagedetectioninterval) {
-        outageDetectionInterval = P6Util.parseLong(_outagedetectioninterval,-1l);
+    public void setOutageDetectionInterval(long outagedetectioninterval) {
+        outageDetectionInterval = outagedetectioninterval;
         outageMs = outageDetectionInterval * 1000l;
     }
 

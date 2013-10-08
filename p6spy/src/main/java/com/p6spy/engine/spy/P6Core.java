@@ -45,7 +45,7 @@ public class P6Core {
    * Initializes the P6Spy framework
    */
   public static void initialize() {
-    if( !initialized ) {
+    if (!initialized) {
       synchronized (P6Core.class) {
         if( !initialized) {
           // just make sure to cause module initialization (if not done yet)

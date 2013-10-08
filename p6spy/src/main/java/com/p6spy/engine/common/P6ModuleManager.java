@@ -16,16 +16,18 @@ limitations under the License.
 package com.p6spy.engine.common;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
 
 import com.p6spy.engine.spy.P6DriverNotFoundError;
 import com.p6spy.engine.spy.P6Factory;
@@ -35,13 +37,14 @@ import com.p6spy.engine.spy.P6SpyLoadableOptions;
 public class P6ModuleManager {
 
   // recreated on each reload
-  private final P6SpyLoadableOptions spyOptions = (P6SpyLoadableOptions) new P6SpyFactory()
-      .getOptions();
-  private final Map<Class<? extends P6LoadableOptions>, P6LoadableOptions> allOptions = new HashMap<Class<? extends P6LoadableOptions>, P6LoadableOptions>();
   private final SpyDotProperties spyDotProperties = new SpyDotProperties();
-  private final ScheduledExecutorService reloader;
+  private final SpyDotPropertiesReloader reloader;
+  private final P6SpyLoadableOptions spyOptions;
+  private final Map<Class<? extends P6LoadableOptions>, P6LoadableOptions> allOptions = new HashMap<Class<? extends P6LoadableOptions>, P6LoadableOptions>();
   private final List<P6Factory> factories = new CopyOnWriteArrayList<P6Factory>();
+  private final P6MBeansRegistry mBeansRegistry;
   
+  // singleton
   private static P6ModuleManager instance;
 
   static {
@@ -53,93 +56,107 @@ public class P6ModuleManager {
    * @param spyPropertiesJMX
    *          manually (via JMX) set properties to be kept across auto-reloads.
    */
-  /* package protected for testability */ synchronized static void initMe() {
+  private synchronized static void initMe() {
     try {
+      cleanUp();
+      
       instance = new P6ModuleManager();
     } catch (IOException e) {
+      handleInitEx(e);
+    } catch (MBeanRegistrationException e) {
+      handleInitEx(e);
+    } catch (InstanceNotFoundException e) {
+      handleInitEx(e);
+    } catch (MalformedObjectNameException e) {
+      handleInitEx(e);
+    } catch (InstanceAlreadyExistsException e) {
+      handleInitEx(e);
+    } catch (NotCompliantMBeanException e) {
       handleInitEx(e);
     }
   }
 
-  public static P6ModuleManager getInstance() {
-    return instance;
-  }
+  private static void cleanUp() throws MBeanRegistrationException, InstanceNotFoundException,
+      MalformedObjectNameException {
+    if (instance == null) {
+      return;
+    }
 
-  private static void handleInitEx(IOException e) {
-    // TODO report this problem the same as in the legacy impl
-    // as we're in serious trouble here
-    e.printStackTrace();
+    // unregister mbeans first (to prevent naming conflicts)
+    instance.mBeansRegistry.unregisterMBeans();
+
+    // kill reloader
+    if (instance.reloader != null) {
+      instance.reloader.kill(instance.spyOptions);
+    }
   }
 
   /**
    * Used on the class load only (only once!)
    * 
    * @throws IOException
+   * @throws NotCompliantMBeanException 
+   * @throws MBeanRegistrationException 
+   * @throws InstanceAlreadyExistsException 
+   * @throws MalformedObjectNameException 
    */
-  private P6ModuleManager() throws IOException {
+  private P6ModuleManager() throws IOException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException {
 //    P6LogQuery.debug(this.getClass().getName() + " re/initiating modules started");
-    
-    List<P6Factory> factoriesToRegister = new ArrayList<P6Factory>();
     
     // hard coded - core module init - as it holds initial config
     {
+      P6SpyFactory p6SpyFactory = new P6SpyFactory();
+      spyOptions = (P6SpyLoadableOptions) p6SpyFactory.getOptions();
+      
       // JMX ones have higher prio, make sure to load them later => overwrite
       spyOptions.load(spyDotProperties.getProperties());
+      allOptions.put(spyOptions.getClass(), spyOptions);
     }
 
     // configured modules init
     {
-      Set<P6Factory> toBeProcessedFactories = spyOptions.getModuleFactories();
-      if (null != toBeProcessedFactories) {
-        for (P6Factory factory : toBeProcessedFactories) {
-          P6LoadableOptions options = factory.getOptions();
-          // we initialized for core already => skip now
-          if (!(options instanceof P6SpyLoadableOptions)) {
-            options.load(spyDotProperties.getProperties());
-          }
+      Set<P6Factory> toProcessFactories = spyOptions.getModuleFactories();
+      for (P6Factory factory : toProcessFactories) {
+        P6LoadableOptions options = factory.getOptions();
 
-          allOptions.put(options.getClass(), options);
-          factoriesToRegister.add(factory);
+        // we initialized for core already => skip now
+        if (options instanceof P6SpyLoadableOptions) {
+          continue;
         }
+
+        options.load(spyDotProperties.getProperties());
+        allOptions.put(options.getClass(), options);
       }
     }
 
-    // reloader init
-    // TODO refactor to separate class?
-    {
-      if (spyOptions.getReloadProperties()) {
-        long reloadInterval = spyOptions.getReloadPropertiesInterval();
-        reloader = Executors.newSingleThreadScheduledExecutor();
-        final Runnable reader = new Runnable() {
-          @Override
-          public void run() {
-            if (spyDotProperties.isModified()) {
-              // correctly stop the old reloader first
-              reloader.shutdownNow();
-              initMe();
-            }
-          }
-        };
-
-        reloader.scheduleAtFixedRate(reader, reloadInterval, reloadInterval, TimeUnit.SECONDS);
-      } else {
-        reloader = null;
-      }
-    }
+    // init MBeans
+    mBeansRegistry = new P6MBeansRegistry(this.allOptions.values());
     
-    // factories init
-    initFactories(factoriesToRegister);
+    // reloader init
+    reloader = new SpyDotPropertiesReloader(spyDotProperties, spyOptions);
+    
+    // init factories
+    initFactories();
     
 //    P6LogQuery.debug(this.getClass().getName() + " re/initiating modules done");
   }
 
-  private void initFactories(List<P6Factory> factoriesToRegister) {
+  public static P6ModuleManager getInstance() {
+    return instance;
+  }
+
+  private static void handleInitEx(Exception e) {
+    // TODO report this problem the same as in the legacy impl
+    // as we're in serious trouble here
+    e.printStackTrace();
+  }
+
+  private void initFactories() {
     // register the core options file with the reloader
     String className = "no class";
     String classType = "driver";
     try {
       List<String> driverNames = spyOptions.getDriverNames();
-
 
       // register drivers and wrappers
       classType = "driver";
@@ -167,9 +184,7 @@ public class P6ModuleManager {
       P6LogQuery.error(err);
       throw new P6DriverNotFoundError(err);
     }
-
   }
-
   
   // API methods
   
@@ -181,7 +196,7 @@ public class P6ModuleManager {
   public <T extends P6LoadableOptions> T getOptions(Class<T> optionsClass) {
     return (T) allOptions.get(optionsClass);
   }
-
+  
   /**
    * Reloads the {@link P6ModuleManager}. <br/>
    * <br/>
@@ -195,4 +210,5 @@ public class P6ModuleManager {
   public List<P6Factory> getFactories() {
     return factories;
   }
+  
 }

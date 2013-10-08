@@ -121,7 +121,12 @@ public class P6LogOptions implements P6LogLoadableOptions {
 
   @Override
   public void setFilter(String filter) {
-    this.filter = P6Util.isTrue(filter, false);
+    setFilter(P6Util.isTrue(filter, false));
+  }
+  
+  @Override
+  public void setFilter(boolean filter) {
+    this.filter = filter;
   }
 
   @Override
@@ -206,8 +211,13 @@ public class P6LogOptions implements P6LogLoadableOptions {
   }
 
   @Override
+  public void setStackTrace(boolean stacktrace) {
+    this.stackTrace = stacktrace;
+  }
+  
+  @Override
   public void setStackTrace(String stacktrace) {
-    this.stackTrace = P6Util.isTrue(stacktrace, false);
+    setStackTrace(P6Util.isTrue(stacktrace, true));
   }
 
   @Override
@@ -232,7 +242,12 @@ public class P6LogOptions implements P6LogLoadableOptions {
 
   @Override
   public void setAppend(String append) {
-    this.append = P6Util.isTrue(append, true);
+    setAppend(P6Util.isTrue(append, true));
+  }
+  
+  @Override
+  public void setAppend(boolean append) {
+    this.append = append;
   }
 
   @Override
@@ -252,7 +267,12 @@ public class P6LogOptions implements P6LogLoadableOptions {
 
   @Override
   public void setExecutionThreshold(String executionThreshold) {
-    this.executionThreshold = P6Util.parseLong(executionThreshold, 0);
+    setExecutionThreshold(P6Util.parseLong(executionThreshold, 0));
+  }
+  
+  @Override
+  public void setExecutionThreshold(long executionThreshold) {
+    this.executionThreshold = executionThreshold;
   }
 
   @Override

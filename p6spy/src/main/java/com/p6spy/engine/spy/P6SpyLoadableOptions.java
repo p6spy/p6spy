@@ -18,9 +18,21 @@ package com.p6spy.engine.spy;
 import java.util.Set;
 
 import com.p6spy.engine.common.P6LoadableOptions;
+import com.p6spy.engine.common.SpyDotPropertiesReloadChangedListener;
 
-public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsImplMBean {
+public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsMBean {
   
   public Set<P6Factory> getModuleFactories();
+
+  void setUsePrefix(String usePrefix);
+
+  void setAutoflush(String autoflush);
+
+  void setReloadProperties(String reloadproperties);
+
+  void setReloadPropertiesInterval(String reloadpropertiesinterval);
   
+  void registerSpyDotPropertiesReloadChangedListener(SpyDotPropertiesReloadChangedListener reloadChangeListener);
+  
+  void unregisterSpyDotPropertiesReloadChangedListener(SpyDotPropertiesReloadChangedListener reloadChangeListener);
 }

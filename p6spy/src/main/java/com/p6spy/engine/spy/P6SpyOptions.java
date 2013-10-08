@@ -24,6 +24,7 @@ import java.util.Set;
 
 import com.p6spy.engine.common.P6ModuleManager;
 import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.common.SpyDotPropertiesReloadChangedListener;
 import com.p6spy.engine.logging.P6LogFactory;
 
 public class P6SpyOptions implements P6SpyLoadableOptions {
@@ -48,6 +49,9 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     private String realdatasourceclass;
     private String realdatasourceproperties;
     private String databaseDialectDateFormat;
+    
+    // reloadproperties propagation
+    List<SpyDotPropertiesReloadChangedListener> reloadChangeListeners = new ArrayList<SpyDotPropertiesReloadChangedListener>();
     
     @Override
     public void load(Properties properties) {
@@ -75,6 +79,36 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
       return P6ModuleManager.getInstance().getOptions(P6SpyOptions.class);
     }
 
+    // auto reload listeners
+    
+    @Override
+    public void registerSpyDotPropertiesReloadChangedListener(SpyDotPropertiesReloadChangedListener reloadChangeListener) {
+      if (null == reloadChangeListener) {
+        return;
+      }
+      this.reloadChangeListeners.add(reloadChangeListener);
+    }
+    
+    @Override
+    public void unregisterSpyDotPropertiesReloadChangedListener(SpyDotPropertiesReloadChangedListener reloadChangeListener) {
+      if (null == reloadChangeListener) {
+        return;
+      }
+      this.reloadChangeListeners.remove(reloadChangeListener);
+    }
+    
+    private void fireSpyDotPropertiesReloadChanged(boolean isEnabled) {
+      for (SpyDotPropertiesReloadChangedListener reloadChangeListener : reloadChangeListeners) {
+        reloadChangeListener.setAutoReload(isEnabled, this.getReloadPropertiesInterval());
+      }
+    }
+    
+    private void fireSpyDotPropertiesReloadInternalChanged(long secs) {
+      for (SpyDotPropertiesReloadChangedListener reloadChangeListener : reloadChangeListeners) {
+        reloadChangeListener.setAutoReload(this.getReloadProperties(), secs);
+      }
+    }
+    
     // JMX exporsed API
     
     @Override
@@ -89,7 +123,12 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     
     @Override
     public void setUsePrefix(String usePrefix) {
-        this.usePrefix = P6Util.isTrue(usePrefix, false);
+      setUsePrefix(P6Util.isTrue(usePrefix, false));
+    }
+    
+    @Override
+    public void setUsePrefix(boolean usePrefix) {
+        this.usePrefix = usePrefix;
     }
 
     @Override
@@ -99,7 +138,12 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
 
     @Override
     public void setAutoflush(String autoflush) {
-      this.autoflush = P6Util.isTrue(autoflush, false);
+      setAutoflush(P6Util.isTrue(autoflush, false));
+    }
+    
+    @Override
+    public void setAutoflush(boolean autoflush) {
+      this.autoflush = autoflush;
     }
 
     @Override
@@ -128,17 +172,31 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     }
     @Override
     public void setReloadProperties(String reloadproperties) {
-      this.reloadProperties = P6Util.isTrue(reloadproperties, false);
+      setReloadProperties(P6Util.isTrue(reloadproperties, false));
     }
+    
+    @Override
+    public void setReloadProperties(boolean reloadproperties) {
+      this.reloadProperties = reloadproperties;
+      fireSpyDotPropertiesReloadChanged(reloadproperties);
+    }
+    
     @Override
     public long getReloadPropertiesInterval() {
         return reloadPropertiesInterval;
     }
     @Override
     public void setReloadPropertiesInterval(String reloadpropertiesinterval) {
-      this.reloadPropertiesInterval = P6Util.parseLong(reloadpropertiesinterval, -1l);
-//      this.reloadMs = reloadPropertiesInterval * 1000l;
+      setReloadPropertiesInterval(P6Util.parseLong(reloadpropertiesinterval, -1l));
     }
+    
+    @Override
+    public void setReloadPropertiesInterval(long reloadpropertiesinterval) {
+      this.reloadPropertiesInterval = reloadpropertiesinterval;
+//      this.reloadMs = reloadPropertiesInterval * 1000l;
+      fireSpyDotPropertiesReloadInternalChanged(reloadpropertiesinterval);
+    }
+    
     @Override
     public void setJNDIContextFactory(String jndicontextfactory) {
       this.jndicontextfactory = jndicontextfactory;
@@ -249,7 +307,7 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
         moduleFactories = new HashSet<P6Factory>();
         for (String moduleName : moduleNames) {
           try {
-            if (null == moduleName || moduleName.trim().isEmpty() /*|| moduleName.equals(P6SpyFactory.class.getName())*/) {
+            if (null == moduleName || moduleName.trim().isEmpty()) {
               continue;
             }
             
@@ -269,4 +327,5 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     public List<String> getModuleNames() {
       return moduleNames;
     }
+
 }

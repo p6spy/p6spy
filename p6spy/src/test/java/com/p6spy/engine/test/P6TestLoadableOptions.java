@@ -2,7 +2,7 @@ package com.p6spy.engine.test;
 
 import com.p6spy.engine.common.P6LoadableOptions;
 
-public interface P6TestLoadableOptions extends P6LoadableOptions {
+public interface P6TestLoadableOptions extends P6LoadableOptions, P6TestOptionsMBean {
 
   // no need to expose these via MBean => keep them here
   String getUrl();
