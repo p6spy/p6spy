@@ -31,14 +31,14 @@ import static org.junit.Assert.*;
  * @since 10/2013
  */
 @RunWith(Parameterized.class)
-public class P6DataSourceTest extends P6TestFramework {
+public class DataSourceTest extends P6TestFramework {
 
   String user;
   String password;
   String url;
 
 
-  public P6DataSourceTest(final String db) throws SQLException, IOException {
+  public DataSourceTest(final String db) throws SQLException, IOException {
     super(db);
   }
 

@@ -32,6 +32,10 @@ public class P6TestLogger extends FileLogger implements P6Logger {
     return Collections.unmodifiableList(logs);
   }
 
+  public void clearLogs() {
+    logs.clear();
+  }
+
   public String getLastEntry() {
     return logs.isEmpty() ? null : logs.get(logs.size() - 1);
   }
