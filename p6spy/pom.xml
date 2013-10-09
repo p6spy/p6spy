@@ -50,6 +50,11 @@
 		<artifactId>simplejmx</artifactId>
 	</dependency>
 
+	<dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+	</dependency>
+
     <!-- all the JDBC drivers tested -->
     <dependency>
       <groupId>mysql</groupId>
@@ -95,11 +100,7 @@
             
             <!-- to enable remote JMX testing, 
             	see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
-<!--             <com.sun.management.jmxremote/>
-            <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
-            <com.sun.management.jmxremote.port>1234</com.sun.management.jmxremote.port>
-            <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
- -->          </systemPropertyVariables>
+          </systemPropertyVariables>
          <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false</argLine>
           <includes>
             <include>**/P6Test*.java</include>
