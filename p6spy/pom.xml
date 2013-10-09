@@ -146,7 +146,6 @@
                 however keep in mind that some tests run with preconfigured drivers (i.e. multidriver, ...)-->
                 <DB>${env.DB}</DB>
               </systemPropertyVariables>
-              <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false</argLine>
             </configuration>
           </plugin>
         </plugins>
