@@ -93,6 +93,7 @@
           </systemPropertyVariables>
           <includes>
             <include>**/P6Test*.java</include>
+            <include>**/*Test.java</include>
           </includes>
           <systemProperties>
             <property>
