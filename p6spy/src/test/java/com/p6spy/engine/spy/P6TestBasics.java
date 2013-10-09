@@ -113,13 +113,9 @@ public class P6TestBasics extends P6TestFramework {
      */
     @Override
     // just prevent inherited stuff
-    public void createConnection() {
+    public void setUpFramework() {
     }
     
-    @Before
-    public void setUpBasics() throws Exception {
-    }
-
     @Test
     public void testNative() throws Exception {
         connection = P6TestUtil.loadDrivers(null);

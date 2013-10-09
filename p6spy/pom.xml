@@ -104,6 +104,7 @@
          <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false</argLine>
           <includes>
             <include>**/P6Test*.java</include>
+            <include>**/*Test.java</include>
           </includes>
           <systemProperties>
             <property>

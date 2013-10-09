@@ -42,9 +42,8 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
   protected String rdsName;
 
   static {
-    // Normal use of a datastore means that the core has not
-    // been initialized.
-    initMethod();
+    // make sure that the core has been initialized
+    P6Core.initialize();
   }
 
   /**
@@ -57,10 +56,6 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
   public P6DataSource(DataSource source) {
     super(null);
     rds = source;
-  }
-
-  public static void initMethod() {
-    P6Core.initialize();
   }
 
   public String getRealDataSource() {

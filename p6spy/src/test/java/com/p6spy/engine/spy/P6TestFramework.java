@@ -136,17 +136,18 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6ModuleManager;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.common.SpyDotProperties;
 import com.p6spy.engine.logging.appender.P6TestLogger;
 import com.p6spy.engine.test.P6TestOptions;
 
 public abstract class P6TestFramework {
+  private static final Logger log = Logger.getLogger(P6TestFramework.class);
 
   /**
    * Environment variable enabling control over the DB to be used for testing. <br/>
@@ -188,25 +189,20 @@ public abstract class P6TestFramework {
     this.db = db;
     File p6TestProperties = new File (TEST_FILE_PATH, "P6Test_" + db + ".properties");
     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
-    resetLoadedDrivers();
-  }
-
-  public void resetLoadedDrivers() throws SQLException, IOException {
-    // make sure to reload config and correctly bootstrap
-    P6ModuleManager.getInstance();
+    log.info("Setting up test for "+db);
     
     // make sure to reinit for each Driver run as we run parametrized builds
     // and need to have fresh stuff for every specific driver
     P6Core.reinit();
   }
 
-  @Parameters
+  @Parameters(name = "{index}: {0}")
   public static Collection<Object[]> dbs() {
     return DBS_IN_TEST;
   }
     
   @Before
-  public void createConnection() throws ClassNotFoundException, SQLException {
+  public void setUpFramework() throws Exception {
       List<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
       String user = P6TestOptions.getActiveInstance().getUser();
       String password = P6TestOptions.getActiveInstance().getPassword();
