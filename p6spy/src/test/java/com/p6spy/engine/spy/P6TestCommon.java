@@ -306,58 +306,6 @@ public class P6TestCommon extends P6TestFramework {
         }
     }
 
-    @Test
-    public void testReload() throws Exception {
-        Statement statement = connection.createStatement();
-
-//        Map tp = getDefaultPropertyFile();
-//        reloadProperty(tp);
-//
-//        String query = "select 'b' from common_test";
-//        statement.executeQuery(query);
-//
-//        assertEquals(P6SpyOptions.getFilter(), false);
-//
-//        tp.put("filter","true");
-//        tp.put("include","bob");
-//        tp.put("exclude","barb");
-//        tp.put("trace","false");
-//        tp.put("autoflush","false");
-//        tp.put("logfile","reload.log");
-//        tp.put("append","false");
-//        tp.put("dateformat","dd-MM-yyyy");
-//        tp.put("includecategories","debug");
-//        tp.put("excludecategories","result,batch");
-//        tp.put("stringmatcher","com.p6spy.engine.common.JakartaRegexMatcher");
-//        tp.put("stacktrace","true");
-//        tp.put("stacktraceclass","dummy");
-//        tp.put("reloadproperties","true");
-//        tp.put("reloadpropertiesinterval","1");
-//        writeProperty(PROPERTY_FILE_PATH, tp);
-//
-//        P6SpyProperties properties = new P6SpyProperties();
-//        properties.setSpyProperties(PROPERTY_FILE_PATH);
-//        properties.forceReadProperties();
-//        OptionReloader.reload();
-//
-//        Thread.sleep(2000);
-//        query = "select 'c' from common_test";
-//        statement.executeQuery(query);
-//        assertEquals(P6SpyOptions.getFilter(), true);
-//        assertEquals(P6SpyOptions.getInclude(), "bob");
-//        assertEquals(P6SpyOptions.getExclude(), "barb");
-//        assertEquals(P6SpyOptions.getAutoflush(), false);
-//        assertEquals(P6SpyOptions.getLogfile(), "reload.log");
-//        assertEquals(P6SpyOptions.getAppend(), false);
-//        assertEquals(P6SpyOptions.getDateformat(), "dd-MM-yyyy");
-//        assertEquals(P6SpyOptions.getIncludecategories(), "debug");
-//        assertEquals(P6SpyOptions.getExcludecategories(), "result,batch");
-//        assertEquals(P6SpyOptions.getStackTrace(), true);
-//        assertEquals(P6SpyOptions.getStackTraceClass(), "dummy");
-//        assertEquals(P6SpyOptions.getReloadProperties(), true);
-//        assertEquals(P6SpyOptions.getReloadPropertiesInterval(), 1);
-    }
-
     @After
     public void tearDownCommon() {
         try {
