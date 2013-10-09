@@ -16,6 +16,7 @@ limitations under the License.
 package com.p6spy.engine.proxy;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   /**
    * Creates a new invocation handler for the given object.
    *
-   * @param underlying  The object being proxied
+   * @param underlying The object being proxied
    */
   public GenericInvocationHandler(T underlying) {
     this.underlying = underlying;
@@ -45,13 +46,13 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   /**
    * Adds a delegate which will be used when a method is invoked that meets the following criteria:
    * <p>
-   *   <code>methodMatcher.match(method) == true</code>
+   * <code>methodMatcher.match(method) == true</code>
    * </p>
    * Note: Adding a second delegate object with the same method matcher (according to {@link MethodMatcher#equals(Object)}
    * and {@link com.p6spy.engine.proxy.MethodMatcher#hashCode()} will replace the previous delegate!
    *
    * @param methodMatcher The method matcher
-   * @param delegate The delegate object
+   * @param delegate      The delegate object
    */
   public void addDelegate(MethodMatcher methodMatcher, Delegate delegate) {
     delegateMap.put(methodMatcher, delegate);
@@ -63,13 +64,17 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   }
 
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    for (MethodMatcher methodMatcher : delegateMap.keySet()) {
-      if (methodMatcher.matches(method)) {
-        return delegateMap.get(methodMatcher).invoke(underlying, method, args);
+    try {
+      for (MethodMatcher methodMatcher : delegateMap.keySet()) {
+        if (methodMatcher.matches(method)) {
+          return delegateMap.get(methodMatcher).invoke(underlying, method, args);
+        }
       }
+
+      return method.invoke(underlying, args);
+    } catch (InvocationTargetException e) {
+      throw e.getCause();
     }
-    
-    return method.invoke(underlying, args);
   }
 
   protected T getUnderlying() {
