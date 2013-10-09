@@ -1,11 +1,15 @@
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
+import com.p6spy.engine.logging.appender.P6TestLogger;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverConnectionFactory;
 import org.eclipse.jetty.plus.jndi.Resource;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -36,14 +40,21 @@ public class DataSourceTest extends P6TestFramework {
   String user;
   String password;
   String url;
+  Resource spyDsResource;
+  Resource realDsResource;
+  private Connection con;
+  private TestBasicDataSource realDs;
 
 
   public DataSourceTest(final String db) throws SQLException, IOException {
     super(db);
   }
 
+  @Before
   @Override
   public void setUpFramework() throws Exception {
+    P6Core.reinit();
+
     Map tp = getTestSettings();
     reloadProperty(tp);
     Properties props = loadProperties(p6TestProperties);
@@ -53,7 +64,29 @@ public class DataSourceTest extends P6TestFramework {
 
     P6DataSource spyDs = new P6DataSource();
     spyDs.setRealDataSource("jdbc/realDs");
-    new Resource("jdbc/spyDs", spyDs);
+    spyDsResource = new Resource("jdbc/spyDs", spyDs);
+
+    ((P6TestLogger) P6LogQuery.getLogger()).clearLogs();
+  }
+
+  @After
+  public void cleanup() throws SQLException {
+    try {
+      con.close();
+    } catch (Exception e) {
+    }
+    try {
+      realDs.close();
+    } catch (Exception e) {
+    }
+    try {
+      spyDsResource.release();
+    } catch (Exception e) {
+    }
+    try {
+      realDsResource.release();
+    } catch (Exception e) {
+    }
 
   }
 
@@ -61,13 +94,13 @@ public class DataSourceTest extends P6TestFramework {
   public void testGenericDataSourceWithDriverManager() throws SQLException, NamingException {
     // Create and bind the real data source
     // Note: This will get the driver from the DriverManager
-    TestBasicDataSource realDs = new TestBasicDataSource();
+    realDs = new TestBasicDataSource();
     realDs.setDriverClassName(P6SpyDriver.class.getName());
     realDs.setUrl(url);
     realDs.setUsername(user);
     realDs.setPassword(password);
     realDs.setUseDriverManager(true);
-    new Resource("jdbc/realDs", realDs);
+    realDsResource = new Resource("jdbc/realDs", realDs);
 
 
     // get the data source from JNDI
@@ -75,7 +108,7 @@ public class DataSourceTest extends P6TestFramework {
     assertNotNull("JNDI data source not found", ds);
 
     // get the connection
-    Connection con = ds.getConnection();
+    con = ds.getConnection();
 
     // first verify that the connection class is a proxy
     assertTrue("Connection is not a proxy", Proxy.isProxyClass(con.getClass()));
@@ -83,19 +116,25 @@ public class DataSourceTest extends P6TestFramework {
     // now verify that the proxy is OUR proxy!
     assertTrue("Wrong invocation handler!", Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler);
 
+    con.createStatement().execute("create table testtable (col1 integer)");
+    con.createStatement().execute("select 1 from testtable");
+    assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select 1") != -1);
+    assertEquals("Incorrect number of spy log messages", 2, ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size());
+
+
   }
 
   @Test
   public void testGenericDataSourceWithOutDriverManager() throws SQLException, NamingException {
     // Create and bind the real data source
     // Note: This will get the driver from the DriverManager
-    TestBasicDataSource realDs = new TestBasicDataSource();
+    realDs = new TestBasicDataSource();
     realDs.setDriverClassName(P6SpyDriver.class.getName());
     realDs.setUrl(url);
     realDs.setUsername(user);
     realDs.setPassword(password);
     realDs.setUseDriverManager(false);
-    new Resource("jdbc/realDs", realDs);
+    realDsResource = new Resource("jdbc/realDs", realDs);
 
 
     // get the data source from JNDI
@@ -103,7 +142,7 @@ public class DataSourceTest extends P6TestFramework {
     assertNotNull("JNDI data source not found", ds);
 
     // get the connection
-    Connection con = ds.getConnection();
+    con = ds.getConnection();
 
     // first verify that the connection class is a proxy
     assertTrue("Connection is not a proxy", Proxy.isProxyClass(con.getClass()));
@@ -126,7 +165,7 @@ public class DataSourceTest extends P6TestFramework {
      */
     @Override
     protected ConnectionFactory createConnectionFactory() throws SQLException {
-      if( useDriverManager ) {
+      if (useDriverManager) {
         return new ConnectionFactory() {
           @Override
           public Connection createConnection() throws SQLException {
