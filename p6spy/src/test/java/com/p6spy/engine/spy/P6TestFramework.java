@@ -130,6 +130,7 @@ import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.logging.appender.P6TestLogger;
 import com.p6spy.engine.outage.P6OutageFactory;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.runners.Parameterized.Parameters;
 
@@ -157,6 +158,7 @@ import java.util.Properties;
 import static org.junit.Assert.*;
 
 public abstract class P6TestFramework {
+  private static final Logger log = Logger.getLogger(P6TestFramework.class);
 
   /**
    * Environment variable enabling control over the DB to be used for testing. <br/>
@@ -202,6 +204,7 @@ public abstract class P6TestFramework {
   public P6TestFramework(String db) throws SQLException, IOException {
     this.db = db;
     p6TestProperties = "P6Test_" + db + ".properties";
+    log.info("Setting up test for "+db);
     resetLoadedDrivers();
   }
 
@@ -215,7 +218,7 @@ public abstract class P6TestFramework {
     P6Core.reinit();
   }
 
-  @Parameters
+  @Parameters(name = "{index}: {0}")
   public static Collection<Object[]> dbs() {
     return DBS_IN_TEST;
   }
