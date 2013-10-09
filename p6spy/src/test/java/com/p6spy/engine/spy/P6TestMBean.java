@@ -20,8 +20,8 @@ import com.p6spy.engine.outage.P6OutageOptions;
 
 public class P6TestMBean {
 
-  private static final String COM_SUN_MANAGEMENT_JMXREMOTE_PORT = "com.sun.management.jmxremote.port";
-  private static final int JMXREMOTE_PORT_DEFAULT = 1234;
+  public static final String COM_SUN_MANAGEMENT_JMXREMOTE_PORT = "com.sun.management.jmxremote.port";
+  public static final int JMXREMOTE_PORT_DEFAULT = 1234;
 
   private static JmxClient jmxClient = null;
       
@@ -32,12 +32,11 @@ public class P6TestMBean {
 
     String jmxPortProperty = System.getProperty(COM_SUN_MANAGEMENT_JMXREMOTE_PORT);
     int jmxPort = P6Util.parseInt(jmxPortProperty, JMXREMOTE_PORT_DEFAULT);
-    jmxClient = new JmxClient("127.0.0.1", jmxPort);
+    jmxClient = new JmxClient(jmxPort);
   }
   
   @Test
-  public void testPropertyExposal() throws Exception {
-    
+  public void testPropertyExposalViaJMX() throws Exception {
     {
       final Set<ObjectName> beanNames = jmxClient.getBeanNames();
       assertNotNull(beanNames);
@@ -65,8 +64,4 @@ public class P6TestMBean {
     }
   }
   
-  @Test
-  public void testFullReload() {
-   // TODO 
-  }
 }
