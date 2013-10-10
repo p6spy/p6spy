@@ -131,7 +131,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.p6spy.engine.common.P6SpyOptions;
+import com.p6spy.engine.logging.P6LogOptions;
 
 @RunWith(Parameterized.class)
 public class P6TestStatement extends P6TestFramework {
@@ -219,7 +219,7 @@ public class P6TestStatement extends P6TestFramework {
             assertTrue(super.getLastLogEntry().contains(update));
             
             // set the execution threshold very low
-            P6SpyOptions.setExecutionThreshold("0");
+            P6LogOptions.getActiveInstance().setExecutionThreshold("0");
             
             // test a basic select
             String query = "select count(*) from stmt_test";
@@ -231,7 +231,7 @@ public class P6TestStatement extends P6TestFramework {
             rs.close();
             
             // now increase the execution threshold and make sure the query is not captured
-            P6SpyOptions.setExecutionThreshold("10000");
+            P6LogOptions.getActiveInstance().setExecutionThreshold("10000");
             
             // test a basic select
             String nextQuery = "select count(1) from stmt_test where 1 = 2";
@@ -245,7 +245,7 @@ public class P6TestStatement extends P6TestFramework {
             assertEquals(0, rs.getInt(1));
             rs.close();
             
-            P6SpyOptions.setExecutionThreshold("0");
+            P6LogOptions.getActiveInstance().setExecutionThreshold("0");
             
             // finally, just make sure it now works as expected
             rs = statement.executeQuery(nextQuery);

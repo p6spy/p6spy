@@ -13,24 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.p6spy.engine.common;
+package com.p6spy.engine.leak;
 
-public class KeyValue {
+import com.p6spy.engine.common.P6LoadableOptions;
 
-    private String key;
-    private String value;
-
-    public KeyValue(String _key, String _value) {
-        key = _key;
-        value = _value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
+public interface P6LeakLoadableOptions extends P6LoadableOptions, P6LeakOptionsMBean {
 }

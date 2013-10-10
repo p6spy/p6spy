@@ -1,9 +1,21 @@
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
-import com.p6spy.engine.logging.appender.P6TestLogger;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
+
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverConnectionFactory;
@@ -16,20 +28,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.lang.reflect.Proxy;
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
-import java.util.Map;
-import java.util.Properties;
-import java.util.logging.Logger;
-
-import static org.junit.Assert.*;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
+import com.p6spy.engine.logging.appender.P6TestLogger;
+import com.p6spy.engine.test.P6TestOptions;
 
 /**
  * @author Quinton McCombs (dt77102)
@@ -56,12 +59,9 @@ public class DataSourceTest extends P6TestFramework {
   public void setUpFramework() throws Exception {
     P6Core.reinit();
 
-    Map tp = getTestSettings();
-    reloadProperty(tp);
-    Properties props = loadProperties(p6TestProperties);
-    user = props.getProperty("user");
-    password = props.getProperty("password");
-    url = props.getProperty("url");
+    user = P6TestOptions.getActiveInstance().getUser();
+    password = P6TestOptions.getActiveInstance().getPassword();
+    url = P6TestOptions.getActiveInstance().getUrl();
 
     P6DataSource spyDs = new P6DataSource();
     spyDs.setRealDataSource("jdbc/realDs");

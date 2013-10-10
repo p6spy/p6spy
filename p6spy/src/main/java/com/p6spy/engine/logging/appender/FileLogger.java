@@ -14,8 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 package com.p6spy.engine.logging.appender;
-import com.p6spy.engine.common.P6SpyOptions;
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
+import com.p6spy.engine.logging.P6LogOptions;
 
 public class FileLogger extends StdoutLogger {
 
@@ -25,7 +28,7 @@ public class FileLogger extends StdoutLogger {
 
     public void setLogfile(String fileName) {
 	try {
-	    qlog = new PrintStream(new FileOutputStream(fileName, P6SpyOptions.getAppend()));
+	    qlog = new PrintStream(new FileOutputStream(fileName, P6LogOptions.getActiveInstance().getAppend()));
 	} catch (IOException e) {
 	    e.printStackTrace(System.err);
 	}

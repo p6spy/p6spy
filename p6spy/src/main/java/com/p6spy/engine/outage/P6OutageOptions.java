@@ -15,35 +15,68 @@ limitations under the License.
 */
 package com.p6spy.engine.outage;
 
-import com.p6spy.engine.common.*;
+import java.util.Properties;
 
-public class P6OutageOptions extends P6Options {
+import com.p6spy.engine.common.P6ModuleManager;
+import com.p6spy.engine.common.P6Util;
+
+public class P6OutageOptions implements P6OutageLoadableOptions {
     
-    public P6OutageOptions() { }
+    protected boolean outageDetection;
+    protected long outageDetectionInterval;
+    protected long outageMs;
     
-    protected static boolean outageDetection;
-    protected static long outageDetectionInterval;
-    protected static long outageMs;
-            
-    public static boolean getOutageDetection() {
+    @Override
+    public void load(Properties properties) {
+      setOutageDetection(properties.getProperty("outagedetection"));
+      setOutageDetectionInterval(properties.getProperty("outagedetectioninterval"));
+    }
+    
+    /**
+     * Utility method, to make accessing options from app less verbose.
+     * 
+     * @return active instance of the {@link P6OutageLoadableOptions}
+     */
+    public static P6OutageLoadableOptions getActiveInstance() {
+      return P6ModuleManager.getInstance().getOptions(P6OutageOptions.class);
+    }
+    
+    // JMX exposed API
+    
+    @Override
+    public boolean getOutageDetection() {
         return outageDetection;
     }
     
-    public static void setOutageDetection(String _outagedetection) {
-        outageDetection = P6Util.isTrue(_outagedetection, false);
+    @Override
+    public void setOutageDetection(String outagedetection) {
+        setOutageDetection(P6Util.isTrue(outagedetection, false));
     }
     
-    public static long getOutageDetectionInterval() {
+    @Override
+    public void setOutageDetection(boolean outagedetection) {
+        outageDetection = outagedetection;
+    }
+    
+    @Override
+    public long getOutageDetectionInterval() {
         return outageDetectionInterval;
     }
     
-    public static long getOutageDetectionIntervalMS() {
+    @Override
+    public long getOutageDetectionIntervalMS() {
         return outageMs;
     }
-    
-    public static void setOutageDetectionInterval(String _outagedetectioninterval) {
-        outageDetectionInterval = P6Util.parseLong(_outagedetectioninterval,-1l);
-        outageMs = outageDetectionInterval * 1000l;
+
+    @Override
+    public void setOutageDetectionInterval(String outagedetectioninterval) {
+        setOutageDetectionInterval(P6Util.parseLong(outagedetectioninterval, -1l));
     }
     
+    @Override
+    public void setOutageDetectionInterval(long outagedetectioninterval) {
+        outageDetectionInterval = outagedetectioninterval;
+        outageMs = outageDetectionInterval * 1000l;
+    }
+
 }

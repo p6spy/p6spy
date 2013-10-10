@@ -15,16 +15,14 @@ limitations under the License.
 */
 package com.p6spy.engine.leak;
 
-import com.p6spy.engine.proxy.ProxyFactory;
-import com.p6spy.engine.spy.P6CoreFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class P6LeakFactory extends P6CoreFactory {
+import com.p6spy.engine.common.P6LoadableOptions;
+import com.p6spy.engine.proxy.ProxyFactory;
+import com.p6spy.engine.spy.P6Factory;
 
-  public P6LeakFactory() {
-  }
+public class P6LeakFactory implements P6Factory {
 
   @Override
   public Connection getConnection(Connection conn) throws SQLException {
@@ -32,5 +30,9 @@ public class P6LeakFactory extends P6CoreFactory {
     return ProxyFactory.createProxy(conn, Connection.class, invocationHandler);
   }
 
+  @Override
+  public P6LoadableOptions getOptions() {
+    return new P6LeakOptions();
+  }
 
 }

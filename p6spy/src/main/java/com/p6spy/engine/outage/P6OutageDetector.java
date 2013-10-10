@@ -16,6 +16,7 @@ limitations under the License.
 package com.p6spy.engine.outage;
 
 import com.p6spy.engine.common.*;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -54,7 +55,7 @@ public class P6OutageDetector implements Runnable {
         pendingMessages = new ConcurrentHashMap<Object, InvocationInfo>();
 
         P6LogQuery.debug("P6Spy - P6OutageDetector has been invoked.");
-        P6LogQuery.debug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = " + P6OutageOptions.getOutageDetectionIntervalMS());
+        P6LogQuery.debug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = " + P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
     }
 
     /**
@@ -89,7 +90,7 @@ public class P6OutageDetector implements Runnable {
                 // sleep for the configured interval
                 // don't cache this value since the props file may be reloaded
                 // and this value might change
-                Thread.sleep(P6OutageOptions.getOutageDetectionIntervalMS());
+                Thread.sleep(P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
             } catch (Exception e) {
             }
         }
@@ -127,7 +128,7 @@ public class P6OutageDetector implements Runnable {
         P6LogQuery.debug("P6Spy - detectOutage.pendingMessage.size = " + listSize);
 
         long currentTime = System.currentTimeMillis();
-        long threshold = P6OutageOptions.getOutageDetectionIntervalMS();
+        long threshold = P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS();
 
         for (Object jdbcObject : pendingMessages.keySet()) {
             // here is a thread hazard that we'll be lazy about. Another thread

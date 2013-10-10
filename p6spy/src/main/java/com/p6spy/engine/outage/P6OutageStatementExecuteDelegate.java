@@ -36,14 +36,14 @@ class P6OutageStatementExecuteDelegate implements Delegate {
       statementInformation.setStatementQuery((String) args[0]);
     }
 
-    if (P6OutageOptions.getOutageDetection()) {
+    if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().registerInvocation(this, startTime, "statement", "", statementInformation.getStatementQuery());
     }
 
     try {
       return method.invoke(target, args);
     } finally {
-      if (P6OutageOptions.getOutageDetection()) {
+      if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
         P6OutageDetector.getInstance().unregisterInvocation(this);
       }
     }

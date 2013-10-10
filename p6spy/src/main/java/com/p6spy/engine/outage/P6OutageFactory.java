@@ -15,22 +15,23 @@ limitations under the License.
 */
 package com.p6spy.engine.outage;
 
-import com.p6spy.engine.common.P6Options;
-import com.p6spy.engine.proxy.ProxyFactory;
-import com.p6spy.engine.spy.P6CoreFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class P6OutageFactory extends P6CoreFactory {
+import com.p6spy.engine.common.P6LoadableOptions;
+import com.p6spy.engine.proxy.ProxyFactory;
+import com.p6spy.engine.spy.P6Factory;
 
+public class P6OutageFactory implements P6Factory {
+
+  @Override
   public Connection getConnection(Connection conn) throws SQLException {
     P6OutageConnectionInvocationHandler invocationHandler = new P6OutageConnectionInvocationHandler(conn);
     return ProxyFactory.createProxy(conn, Connection.class, invocationHandler);
   }
 
-  public P6Options getOptions() throws SQLException {
-    return (new P6OutageOptions());
+  @Override
+  public P6LoadableOptions getOptions() {
+    return new P6OutageOptions();
   }
-
 }

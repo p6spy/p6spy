@@ -15,12 +15,10 @@ limitations under the License.
 */
 package com.p6spy.engine.common;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
@@ -28,13 +26,16 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.StringTokenizer;
+
+import com.p6spy.engine.spy.P6SpyOptions;
 
 /**
  * [ 2496595 ] spy.properties file not found when path contains a space
@@ -216,56 +217,6 @@ public class P6Util {
         return path;
     }
 
-    // this is our own version, which we need to do to ensure the order is kept
-    // in the property file
-    public static List<KeyValue> loadProperties(String file, String prefix) {
-        List<KeyValue> props = new ArrayList<KeyValue>();
-        FileReader in = null;
-        BufferedReader reader = null;
-
-        try {
-            String path = classPathFile(file);
-
-            if (path == null) {
-                P6LogQuery.error("Can't find " + file + ". "+getCheckedPath());
-            } else {
-                in = new FileReader(path);
-                // read the file
-                reader = new BufferedReader(in);
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if ((line.trim()).startsWith(prefix)) {
-                        StringTokenizer st = new StringTokenizer(line, "=");
-                        try {
-                            String name = st.nextToken();
-                            String value = st.nextToken();
-                            KeyValue kv = new KeyValue(name.trim(), value.trim());
-                            props.add(kv);
-                        } catch (NoSuchElementException e) {
-                            // ignore; means that you have
-                            // something like:
-                            // realdriver2=
-                        }
-                    }
-                }
-            }
-        } catch (FileNotFoundException e1) {
-            P6LogQuery.error("File not found " + file + " " + e1);
-        } catch (IOException e2) {
-            P6LogQuery.error("IO Error reading file " + file + " " + e2);
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException e) {
-            }
-        }
-        return props;
-    }
 
     /**
      * Here we attempt to find the file in the current dir and the classpath
@@ -337,7 +288,7 @@ public class P6Util {
 
     public static PrintStream getPrintStream(String file, boolean append) throws IOException {
         FileOutputStream  fw  = new FileOutputStream(file, append);
-        PrintStream stream = new PrintStream(fw, P6SpyOptions.getAutoflush());
+        PrintStream stream = new PrintStream(fw, P6SpyOptions.getActiveInstance().getAutoflush());
         return(stream);
     }
 
@@ -449,4 +400,32 @@ public class P6Util {
      	return path;
      }
      // end of support method
+
+    
+    public static  Map<String, String> getPropertiesMap(Properties properties) {
+      if (null == properties) {
+        return null;
+      }
+      
+      Map<String, String> propertiesMap = new HashMap<String, String>();
+      for (Entry<Object, Object> property : properties.entrySet()) {
+        propertiesMap.put((String) property.getKey(), (String) property.getValue());
+      }
+      
+      return propertiesMap;
+    }
+    
+    /**
+     * Parses comma separated values string to 
+     * @param csvList
+     * @return
+     */
+    public static List<String> parseCSVList(String csvList) {
+      if (csvList == null || csvList.isEmpty()) {
+        return null;
+      }
+      
+      return new ArrayList<String>(Arrays.asList(csvList.split(",")));
+    }
 }
+
