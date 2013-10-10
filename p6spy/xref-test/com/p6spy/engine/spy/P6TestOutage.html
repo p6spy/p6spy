@@ -58,10 +58,10 @@
 <a class="jxr_linenumber" name="48" href="#48">48</a>    @Before
 <a class="jxr_linenumber" name="49" href="#49">49</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> activateOutage() <strong class="jxr_keyword">throws</strong> SQLException {
 <a class="jxr_linenumber" name="50" href="#50">50</a>      <em class="jxr_comment">// disable outage, as procedure creation takes already quite a while</em>
-<a class="jxr_linenumber" name="51" href="#51">51</a>      P6OutageOptions.getActiveInstance().setOutageDetection(<span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="51" href="#51">51</a>      P6OutageOptions.setOutageDetection(<span class="jxr_string">"false"</span>);
 <a class="jxr_linenumber" name="52" href="#52">52</a>      Statement statement = connection.createStatement();
 <a class="jxr_linenumber" name="53" href="#53">53</a>      statement.execute(SLEEP_ALIAS);
-<a class="jxr_linenumber" name="54" href="#54">54</a>      P6OutageOptions.getActiveInstance().setOutageDetection(<span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="54" href="#54">54</a>      P6OutageOptions.setOutageDetection(<span class="jxr_string">"true"</span>);
 <a class="jxr_linenumber" name="55" href="#55">55</a>    }
 <a class="jxr_linenumber" name="56" href="#56">56</a>  
 <a class="jxr_linenumber" name="57" href="#57">57</a>    @Test

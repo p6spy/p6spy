@@ -119,154 +119,163 @@
 <a class="jxr_linenumber" name="109" href="#109">109</a> 
 <a class="jxr_linenumber" name="110" href="#110">110</a> <strong class="jxr_keyword">package</strong> com.p6spy.engine.spy;
 <a class="jxr_linenumber" name="111" href="#111">111</a> 
-<a class="jxr_linenumber" name="112" href="#112">112</a> <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="113" href="#113">113</a> <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
-<a class="jxr_linenumber" name="114" href="#114">114</a> <strong class="jxr_keyword">import</strong> java.sql.Connection;
-<a class="jxr_linenumber" name="115" href="#115">115</a> <strong class="jxr_keyword">import</strong> java.sql.Driver;
-<a class="jxr_linenumber" name="116" href="#116">116</a> <strong class="jxr_keyword">import</strong> java.sql.DriverManager;
-<a class="jxr_linenumber" name="117" href="#117">117</a> <strong class="jxr_keyword">import</strong> java.sql.SQLException;
-<a class="jxr_linenumber" name="118" href="#118">118</a> <strong class="jxr_keyword">import</strong> java.util.Enumeration;
-<a class="jxr_linenumber" name="119" href="#119">119</a> 
-<a class="jxr_linenumber" name="120" href="#120">120</a> <strong class="jxr_keyword">import</strong> org.apache.log4j.Logger;
-<a class="jxr_linenumber" name="121" href="#121">121</a> 
-<a class="jxr_linenumber" name="122" href="#122">122</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6Util;
-<a class="jxr_linenumber" name="123" href="#123">123</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.test.P6TestOptions;
-<a class="jxr_linenumber" name="124" href="#124">124</a> 
-<a class="jxr_linenumber" name="125" href="#125">125</a> 
-<a class="jxr_linenumber" name="126" href="#126">126</a> @Deprecated <em class="jxr_comment">// T6TestFramework has most if not all of this.</em>
-<a class="jxr_linenumber" name="127" href="#127">127</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/spy/P6TestUtil.html">P6TestUtil</a> {
-<a class="jxr_linenumber" name="128" href="#128">128</a>   
-<a class="jxr_linenumber" name="129" href="#129">129</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOG = Logger.getLogger(P6TestUtil.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="130" href="#130">130</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="131" href="#131">131</a> <em class="jxr_comment">//  protected P6TestUtil() {</em>
-<a class="jxr_linenumber" name="132" href="#132">132</a> <em class="jxr_comment">//  }</em>
-<a class="jxr_linenumber" name="133" href="#133">133</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="134" href="#134">134</a> <em class="jxr_comment">//  protected static Properties loadProperties(String filename) throws IOException {</em>
-<a class="jxr_linenumber" name="135" href="#135">135</a> <em class="jxr_comment">//    if (filename == null) {</em>
-<a class="jxr_linenumber" name="136" href="#136">136</a> <em class="jxr_comment">//      throw new IllegalArgumentException("No properties file specified.");</em>
-<a class="jxr_linenumber" name="137" href="#137">137</a> <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="138" href="#138">138</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="139" href="#139">139</a> <em class="jxr_comment">//    Properties props = new Properties();</em>
-<a class="jxr_linenumber" name="140" href="#140">140</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="141" href="#141">141</a> <em class="jxr_comment">//    InputStream inputStream = P6TestUtil.class.getResourceAsStream(filename);</em>
-<a class="jxr_linenumber" name="142" href="#142">142</a> <em class="jxr_comment">//    if (inputStream == null) {</em>
-<a class="jxr_linenumber" name="143" href="#143">143</a> <em class="jxr_comment">//      inputStream = new FileInputStream(filename);</em>
-<a class="jxr_linenumber" name="144" href="#144">144</a> <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="145" href="#145">145</a> <em class="jxr_comment">//    try {</em>
-<a class="jxr_linenumber" name="146" href="#146">146</a> <em class="jxr_comment">//      props.load(inputStream);</em>
-<a class="jxr_linenumber" name="147" href="#147">147</a> <em class="jxr_comment">//    } finally {</em>
-<a class="jxr_linenumber" name="148" href="#148">148</a> <em class="jxr_comment">//      try {</em>
-<a class="jxr_linenumber" name="149" href="#149">149</a> <em class="jxr_comment">//        inputStream.close();</em>
-<a class="jxr_linenumber" name="150" href="#150">150</a> <em class="jxr_comment">//      } catch (Exception e) {</em>
-<a class="jxr_linenumber" name="151" href="#151">151</a> <em class="jxr_comment">//        // so earlier exception is not shadowed.</em>
-<a class="jxr_linenumber" name="152" href="#152">152</a> <em class="jxr_comment">//      }</em>
-<a class="jxr_linenumber" name="153" href="#153">153</a> <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="154" href="#154">154</a> <em class="jxr_comment">//    return props;</em>
-<a class="jxr_linenumber" name="155" href="#155">155</a> <em class="jxr_comment">//  }</em>
-<a class="jxr_linenumber" name="156" href="#156">156</a> 
-<a class="jxr_linenumber" name="157" href="#157">157</a> <em class="jxr_comment">//  protected static void writeProperty(String filename, Map props) throws IOException {</em>
-<a class="jxr_linenumber" name="158" href="#158">158</a> <em class="jxr_comment">//    File reload = new File(filename);</em>
-<a class="jxr_linenumber" name="159" href="#159">159</a> <em class="jxr_comment">//    reload.delete();</em>
-<a class="jxr_linenumber" name="160" href="#160">160</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="161" href="#161">161</a> <em class="jxr_comment">//    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(reload)));</em>
-<a class="jxr_linenumber" name="162" href="#162">162</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="163" href="#163">163</a> <em class="jxr_comment">//    Iterator i = props.keySet().iterator();</em>
-<a class="jxr_linenumber" name="164" href="#164">164</a> <em class="jxr_comment">//    while (i.hasNext()) {</em>
-<a class="jxr_linenumber" name="165" href="#165">165</a> <em class="jxr_comment">//      String key = (String) i.next();</em>
-<a class="jxr_linenumber" name="166" href="#166">166</a> <em class="jxr_comment">//      String value = (String) props.get(key);</em>
-<a class="jxr_linenumber" name="167" href="#167">167</a> <em class="jxr_comment">//      out.println(key + "=" + value);</em>
-<a class="jxr_linenumber" name="168" href="#168">168</a> <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="169" href="#169">169</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="170" href="#170">170</a> <em class="jxr_comment">//    out.close();</em>
-<a class="jxr_linenumber" name="171" href="#171">171</a> <em class="jxr_comment">//  }</em>
-<a class="jxr_linenumber" name="172" href="#172">172</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="173" href="#173">173</a> <em class="jxr_comment">//  protected static void writeFile(String filename, ArrayList entries) throws IOException {</em>
-<a class="jxr_linenumber" name="174" href="#174">174</a> <em class="jxr_comment">//    File file = new File(filename);</em>
-<a class="jxr_linenumber" name="175" href="#175">175</a> <em class="jxr_comment">//    file.delete();</em>
-<a class="jxr_linenumber" name="176" href="#176">176</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="177" href="#177">177</a> <em class="jxr_comment">//    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));</em>
-<a class="jxr_linenumber" name="178" href="#178">178</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="179" href="#179">179</a> <em class="jxr_comment">//    for (int i = 0; i &lt; entries.size(); i++) {</em>
-<a class="jxr_linenumber" name="180" href="#180">180</a> <em class="jxr_comment">//      String entry = (String) entries.get(i);</em>
-<a class="jxr_linenumber" name="181" href="#181">181</a> <em class="jxr_comment">//      out.println(entry);</em>
-<a class="jxr_linenumber" name="182" href="#182">182</a> <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="183" href="#183">183</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="184" href="#184">184</a> <em class="jxr_comment">//    out.close();</em>
-<a class="jxr_linenumber" name="185" href="#185">185</a> <em class="jxr_comment">//  }</em>
-<a class="jxr_linenumber" name="186" href="#186">186</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="187" href="#187">187</a> <em class="jxr_comment">//  protected static Map getDefaultPropertyFile(String p6TestProperties) throws IOException {</em>
-<a class="jxr_linenumber" name="188" href="#188">188</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="189" href="#189">189</a> <em class="jxr_comment">//    Properties props = loadProperties(p6TestProperties);</em>
-<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_comment">//    String realdrivername = props.getProperty("p6realdriver");</em>
-<a class="jxr_linenumber" name="191" href="#191">191</a> <em class="jxr_comment">//    String realdrivername2 = props.getProperty("p6realdriver2");</em>
-<a class="jxr_linenumber" name="192" href="#192">192</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="193" href="#193">193</a> <em class="jxr_comment">//    HashMap tp = new HashMap();</em>
-<a class="jxr_linenumber" name="194" href="#194">194</a> <em class="jxr_comment">//    tp.put("module.outage", "com.p6spy.engine.outage.P6OutageFactory");</em>
-<a class="jxr_linenumber" name="195" href="#195">195</a> <em class="jxr_comment">//    tp.put("module.log", "com.p6spy.engine.logging.P6LogFactory");</em>
-<a class="jxr_linenumber" name="196" href="#196">196</a> <em class="jxr_comment">//    tp.put("realdriver", realdrivername);</em>
-<a class="jxr_linenumber" name="197" href="#197">197</a> <em class="jxr_comment">//    tp.put("realdriver2", realdrivername2);</em>
-<a class="jxr_linenumber" name="198" href="#198">198</a> <em class="jxr_comment">//    tp.put("filter", "false");</em>
-<a class="jxr_linenumber" name="199" href="#199">199</a> <em class="jxr_comment">//    tp.put("include", "");</em>
-<a class="jxr_linenumber" name="200" href="#200">200</a> <em class="jxr_comment">//    tp.put("exclude", "");</em>
-<a class="jxr_linenumber" name="201" href="#201">201</a> <em class="jxr_comment">//    tp.put("trace", "true");</em>
-<a class="jxr_linenumber" name="202" href="#202">202</a> <em class="jxr_comment">//    tp.put("autoflush", "true");</em>
-<a class="jxr_linenumber" name="203" href="#203">203</a> <em class="jxr_comment">//    tp.put("logfile", "spy.log");</em>
-<a class="jxr_linenumber" name="204" href="#204">204</a> <em class="jxr_comment">//    tp.put("append", "true");</em>
-<a class="jxr_linenumber" name="205" href="#205">205</a> <em class="jxr_comment">//    tp.put("dateformat", "");</em>
-<a class="jxr_linenumber" name="206" href="#206">206</a> <em class="jxr_comment">//    tp.put("includecategories", "");</em>
-<a class="jxr_linenumber" name="207" href="#207">207</a> <em class="jxr_comment">//    tp.put("excludecategories", "debug,result,batch");</em>
-<a class="jxr_linenumber" name="208" href="#208">208</a> <em class="jxr_comment">//    tp.put("stringmatcher", "");</em>
-<a class="jxr_linenumber" name="209" href="#209">209</a> <em class="jxr_comment">//    tp.put("stacktrace", "false");</em>
-<a class="jxr_linenumber" name="210" href="#210">210</a> <em class="jxr_comment">//    tp.put("stacktraceclass", "");</em>
-<a class="jxr_linenumber" name="211" href="#211">211</a> <em class="jxr_comment">//    tp.put("reloadproperties", "false");</em>
-<a class="jxr_linenumber" name="212" href="#212">212</a> <em class="jxr_comment">//    tp.put("reloadpropertiesinterval", "1");</em>
-<a class="jxr_linenumber" name="213" href="#213">213</a> <em class="jxr_comment">//    tp.put("useprefix", "false");</em>
-<a class="jxr_linenumber" name="214" href="#214">214</a> <em class="jxr_comment">//    tp.put("outagedetection", "false");</em>
-<a class="jxr_linenumber" name="215" href="#215">215</a> <em class="jxr_comment">//    tp.put("outagedetectioninterval", "");</em>
-<a class="jxr_linenumber" name="216" href="#216">216</a> <em class="jxr_comment">//    tp.put("entries", "");</em>
-<a class="jxr_linenumber" name="217" href="#217">217</a> <em class="jxr_comment">//    tp.put("forms", "");</em>
-<a class="jxr_linenumber" name="218" href="#218">218</a> <em class="jxr_comment">//    tp.put("formsfile", "testspy.forms");</em>
-<a class="jxr_linenumber" name="219" href="#219">219</a> <em class="jxr_comment">//    tp.put("formslog", "testforms.log");</em>
-<a class="jxr_linenumber" name="220" href="#220">220</a> <em class="jxr_comment">//    tp.put("formstrace", "true");</em>
-<a class="jxr_linenumber" name="221" href="#221">221</a> <em class="jxr_comment">//    tp.put("deregisterdrivers", "true");</em>
-<a class="jxr_linenumber" name="222" href="#222">222</a> <em class="jxr_comment">//    return tp;</em>
-<a class="jxr_linenumber" name="223" href="#223">223</a> <em class="jxr_comment">//  }</em>
-<a class="jxr_linenumber" name="224" href="#224">224</a> 
-<a class="jxr_linenumber" name="225" href="#225">225</a> <em class="jxr_comment">//  protected static void reloadProperty(Map props) throws IOException {</em>
-<a class="jxr_linenumber" name="226" href="#226">226</a> <em class="jxr_comment">//    writeProperty(</em><em class="jxr_comment">/*<em class="jxr_comment">"target/test-classes/com/p6spy/engine/spy/" + */</em>P6TestFramework.PROPERTY_FILE_PATH, props);</em>
-<a class="jxr_linenumber" name="227" href="#227">227</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="228" href="#228">228</a> <em class="jxr_comment">//    P6SpyProperties properties = new P6SpyProperties();</em>
-<a class="jxr_linenumber" name="229" href="#229">229</a> <em class="jxr_comment">//    properties.setSpyProperties(P6TestFramework.PROPERTY_FILE_PATH);</em>
-<a class="jxr_linenumber" name="230" href="#230">230</a> <em class="jxr_comment">//    OptionReloader.reload();</em>
-<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_comment">//  }</em>
+<a class="jxr_linenumber" name="112" href="#112">112</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.OptionReloader;
+<a class="jxr_linenumber" name="113" href="#113">113</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6SpyProperties;
+<a class="jxr_linenumber" name="114" href="#114">114</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6Util;
+<a class="jxr_linenumber" name="115" href="#115">115</a> <strong class="jxr_keyword">import</strong> org.apache.log4j.Logger;
+<a class="jxr_linenumber" name="116" href="#116">116</a> 
+<a class="jxr_linenumber" name="117" href="#117">117</a> <strong class="jxr_keyword">import</strong> java.io.BufferedWriter;
+<a class="jxr_linenumber" name="118" href="#118">118</a> <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="119" href="#119">119</a> <strong class="jxr_keyword">import</strong> java.io.FileInputStream;
+<a class="jxr_linenumber" name="120" href="#120">120</a> <strong class="jxr_keyword">import</strong> java.io.FileWriter;
+<a class="jxr_linenumber" name="121" href="#121">121</a> <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="122" href="#122">122</a> <strong class="jxr_keyword">import</strong> java.io.InputStream;
+<a class="jxr_linenumber" name="123" href="#123">123</a> <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
+<a class="jxr_linenumber" name="124" href="#124">124</a> <strong class="jxr_keyword">import</strong> java.sql.Connection;
+<a class="jxr_linenumber" name="125" href="#125">125</a> <strong class="jxr_keyword">import</strong> java.sql.Driver;
+<a class="jxr_linenumber" name="126" href="#126">126</a> <strong class="jxr_keyword">import</strong> java.sql.DriverManager;
+<a class="jxr_linenumber" name="127" href="#127">127</a> <strong class="jxr_keyword">import</strong> java.sql.SQLException;
+<a class="jxr_linenumber" name="128" href="#128">128</a> <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="129" href="#129">129</a> <strong class="jxr_keyword">import</strong> java.util.Enumeration;
+<a class="jxr_linenumber" name="130" href="#130">130</a> <strong class="jxr_keyword">import</strong> java.util.HashMap;
+<a class="jxr_linenumber" name="131" href="#131">131</a> <strong class="jxr_keyword">import</strong> java.util.Iterator;
+<a class="jxr_linenumber" name="132" href="#132">132</a> <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="133" href="#133">133</a> <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="134" href="#134">134</a> 
+<a class="jxr_linenumber" name="135" href="#135">135</a> @Deprecated <em class="jxr_comment">// T6TestFramework has most if not all of this.</em>
+<a class="jxr_linenumber" name="136" href="#136">136</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/spy/P6TestUtil.html">P6TestUtil</a> {
+<a class="jxr_linenumber" name="137" href="#137">137</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOG = Logger.getLogger(P6TestUtil.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="138" href="#138">138</a> 
+<a class="jxr_linenumber" name="139" href="#139">139</a>   <strong class="jxr_keyword">protected</strong> <a href="../../../../com/p6spy/engine/spy/P6TestUtil.html">P6TestUtil</a>() {
+<a class="jxr_linenumber" name="140" href="#140">140</a>   }
+<a class="jxr_linenumber" name="141" href="#141">141</a> 
+<a class="jxr_linenumber" name="142" href="#142">142</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> Properties loadProperties(String filename) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="143" href="#143">143</a>     <strong class="jxr_keyword">if</strong> (filename == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="144" href="#144">144</a>       <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"No properties file specified."</span>);
+<a class="jxr_linenumber" name="145" href="#145">145</a>     }
+<a class="jxr_linenumber" name="146" href="#146">146</a> 
+<a class="jxr_linenumber" name="147" href="#147">147</a>     Properties props = <strong class="jxr_keyword">new</strong> Properties();
+<a class="jxr_linenumber" name="148" href="#148">148</a> 
+<a class="jxr_linenumber" name="149" href="#149">149</a>     InputStream inputStream = P6TestUtil.<strong class="jxr_keyword">class</strong>.getResourceAsStream(filename);
+<a class="jxr_linenumber" name="150" href="#150">150</a>     <strong class="jxr_keyword">if</strong> (inputStream == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="151" href="#151">151</a>       inputStream = <strong class="jxr_keyword">new</strong> FileInputStream(filename);
+<a class="jxr_linenumber" name="152" href="#152">152</a>     }
+<a class="jxr_linenumber" name="153" href="#153">153</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="154" href="#154">154</a>       props.load(inputStream);
+<a class="jxr_linenumber" name="155" href="#155">155</a>     } <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="156" href="#156">156</a>       <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="157" href="#157">157</a>         inputStream.close();
+<a class="jxr_linenumber" name="158" href="#158">158</a>       } <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="159" href="#159">159</a>         <em class="jxr_comment">// so earlier exception is not shadowed.</em>
+<a class="jxr_linenumber" name="160" href="#160">160</a>       }
+<a class="jxr_linenumber" name="161" href="#161">161</a>     }
+<a class="jxr_linenumber" name="162" href="#162">162</a>     <strong class="jxr_keyword">return</strong> props;
+<a class="jxr_linenumber" name="163" href="#163">163</a>   }
+<a class="jxr_linenumber" name="164" href="#164">164</a> 
+<a class="jxr_linenumber" name="165" href="#165">165</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeProperty(String filename, Map props) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="166" href="#166">166</a>     File reload = <strong class="jxr_keyword">new</strong> File(filename);
+<a class="jxr_linenumber" name="167" href="#167">167</a>     reload.delete();
+<a class="jxr_linenumber" name="168" href="#168">168</a> 
+<a class="jxr_linenumber" name="169" href="#169">169</a>     PrintWriter out = <strong class="jxr_keyword">new</strong> PrintWriter(<strong class="jxr_keyword">new</strong> BufferedWriter(<strong class="jxr_keyword">new</strong> FileWriter(reload)));
+<a class="jxr_linenumber" name="170" href="#170">170</a> 
+<a class="jxr_linenumber" name="171" href="#171">171</a>     Iterator i = props.keySet().iterator();
+<a class="jxr_linenumber" name="172" href="#172">172</a>     <strong class="jxr_keyword">while</strong> (i.hasNext()) {
+<a class="jxr_linenumber" name="173" href="#173">173</a>       String key = (String) i.next();
+<a class="jxr_linenumber" name="174" href="#174">174</a>       String value = (String) props.get(key);
+<a class="jxr_linenumber" name="175" href="#175">175</a>       out.println(key + <span class="jxr_string">"="</span> + value);
+<a class="jxr_linenumber" name="176" href="#176">176</a>     }
+<a class="jxr_linenumber" name="177" href="#177">177</a> 
+<a class="jxr_linenumber" name="178" href="#178">178</a>     out.close();
+<a class="jxr_linenumber" name="179" href="#179">179</a>   }
+<a class="jxr_linenumber" name="180" href="#180">180</a> 
+<a class="jxr_linenumber" name="181" href="#181">181</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeFile(String filename, ArrayList entries) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="182" href="#182">182</a>     File file = <strong class="jxr_keyword">new</strong> File(filename);
+<a class="jxr_linenumber" name="183" href="#183">183</a>     file.delete();
+<a class="jxr_linenumber" name="184" href="#184">184</a> 
+<a class="jxr_linenumber" name="185" href="#185">185</a>     PrintWriter out = <strong class="jxr_keyword">new</strong> PrintWriter(<strong class="jxr_keyword">new</strong> BufferedWriter(<strong class="jxr_keyword">new</strong> FileWriter(file)));
+<a class="jxr_linenumber" name="186" href="#186">186</a> 
+<a class="jxr_linenumber" name="187" href="#187">187</a>     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; entries.size(); i++) {
+<a class="jxr_linenumber" name="188" href="#188">188</a>       String entry = (String) entries.get(i);
+<a class="jxr_linenumber" name="189" href="#189">189</a>       out.println(entry);
+<a class="jxr_linenumber" name="190" href="#190">190</a>     }
+<a class="jxr_linenumber" name="191" href="#191">191</a> 
+<a class="jxr_linenumber" name="192" href="#192">192</a>     out.close();
+<a class="jxr_linenumber" name="193" href="#193">193</a>   }
+<a class="jxr_linenumber" name="194" href="#194">194</a> 
+<a class="jxr_linenumber" name="195" href="#195">195</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> Map getDefaultPropertyFile(String p6TestProperties) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="196" href="#196">196</a> 
+<a class="jxr_linenumber" name="197" href="#197">197</a>     Properties props = loadProperties(p6TestProperties);
+<a class="jxr_linenumber" name="198" href="#198">198</a>     String realdrivername = props.getProperty(<span class="jxr_string">"p6realdriver"</span>);
+<a class="jxr_linenumber" name="199" href="#199">199</a>     String realdrivername2 = props.getProperty(<span class="jxr_string">"p6realdriver2"</span>);
+<a class="jxr_linenumber" name="200" href="#200">200</a> 
+<a class="jxr_linenumber" name="201" href="#201">201</a>     HashMap tp = <strong class="jxr_keyword">new</strong> HashMap();
+<a class="jxr_linenumber" name="202" href="#202">202</a>     tp.put(<span class="jxr_string">"module.outage"</span>, <span class="jxr_string">"com.p6spy.engine.outage.P6OutageFactory"</span>);
+<a class="jxr_linenumber" name="203" href="#203">203</a>     tp.put(<span class="jxr_string">"module.log"</span>, <span class="jxr_string">"com.p6spy.engine.logging.P6LogFactory"</span>);
+<a class="jxr_linenumber" name="204" href="#204">204</a>     tp.put(<span class="jxr_string">"realdriver"</span>, realdrivername);
+<a class="jxr_linenumber" name="205" href="#205">205</a>     tp.put(<span class="jxr_string">"realdriver2"</span>, realdrivername2);
+<a class="jxr_linenumber" name="206" href="#206">206</a>     tp.put(<span class="jxr_string">"filter"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="207" href="#207">207</a>     tp.put(<span class="jxr_string">"include"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="208" href="#208">208</a>     tp.put(<span class="jxr_string">"exclude"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="209" href="#209">209</a>     tp.put(<span class="jxr_string">"trace"</span>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="210" href="#210">210</a>     tp.put(<span class="jxr_string">"autoflush"</span>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="211" href="#211">211</a>     tp.put(<span class="jxr_string">"logfile"</span>, <span class="jxr_string">"spy.log"</span>);
+<a class="jxr_linenumber" name="212" href="#212">212</a>     tp.put(<span class="jxr_string">"append"</span>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="213" href="#213">213</a>     tp.put(<span class="jxr_string">"dateformat"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="214" href="#214">214</a>     tp.put(<span class="jxr_string">"includecategories"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="215" href="#215">215</a>     tp.put(<span class="jxr_string">"excludecategories"</span>, <span class="jxr_string">"debug,result,batch"</span>);
+<a class="jxr_linenumber" name="216" href="#216">216</a>     tp.put(<span class="jxr_string">"stringmatcher"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="217" href="#217">217</a>     tp.put(<span class="jxr_string">"stacktrace"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="218" href="#218">218</a>     tp.put(<span class="jxr_string">"stacktraceclass"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="219" href="#219">219</a>     tp.put(<span class="jxr_string">"reloadproperties"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="220" href="#220">220</a>     tp.put(<span class="jxr_string">"reloadpropertiesinterval"</span>, <span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="221" href="#221">221</a>     tp.put(<span class="jxr_string">"useprefix"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="222" href="#222">222</a>     tp.put(<span class="jxr_string">"outagedetection"</span>, <span class="jxr_string">"false"</span>);
+<a class="jxr_linenumber" name="223" href="#223">223</a>     tp.put(<span class="jxr_string">"outagedetectioninterval"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="224" href="#224">224</a>     tp.put(<span class="jxr_string">"entries"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="225" href="#225">225</a>     tp.put(<span class="jxr_string">"forms"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="226" href="#226">226</a>     tp.put(<span class="jxr_string">"formsfile"</span>, <span class="jxr_string">"testspy.forms"</span>);
+<a class="jxr_linenumber" name="227" href="#227">227</a>     tp.put(<span class="jxr_string">"formslog"</span>, <span class="jxr_string">"testforms.log"</span>);
+<a class="jxr_linenumber" name="228" href="#228">228</a>     tp.put(<span class="jxr_string">"formstrace"</span>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="229" href="#229">229</a>     tp.put(<span class="jxr_string">"deregisterdrivers"</span>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="230" href="#230">230</a>     <strong class="jxr_keyword">return</strong> tp;
+<a class="jxr_linenumber" name="231" href="#231">231</a>   }
 <a class="jxr_linenumber" name="232" href="#232">232</a> 
-<a class="jxr_linenumber" name="233" href="#233">233</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> printAllDrivers() {
-<a class="jxr_linenumber" name="234" href="#234">234</a>     <strong class="jxr_keyword">for</strong> (Enumeration e = DriverManager.getDrivers(); e.hasMoreElements(); ) {
-<a class="jxr_linenumber" name="235" href="#235">235</a>       LOG.info(<span class="jxr_string">"DRIVER FOUND: "</span> + e.nextElement());
-<a class="jxr_linenumber" name="236" href="#236">236</a>     }
-<a class="jxr_linenumber" name="237" href="#237">237</a>   }
-<a class="jxr_linenumber" name="238" href="#238">238</a> 
-<a class="jxr_linenumber" name="239" href="#239">239</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Connection loadDrivers(String drivername)
-<a class="jxr_linenumber" name="240" href="#240">240</a>       <strong class="jxr_keyword">throws</strong> SQLException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-<a class="jxr_linenumber" name="241" href="#241">241</a>     String user = P6TestOptions.getActiveInstance().getUser();
-<a class="jxr_linenumber" name="242" href="#242">242</a>     String password = P6TestOptions.getActiveInstance().getPassword();
-<a class="jxr_linenumber" name="243" href="#243">243</a>     String url = P6TestOptions.getActiveInstance().getUrl();
-<a class="jxr_linenumber" name="244" href="#244">244</a> 
-<a class="jxr_linenumber" name="245" href="#245">245</a>     <strong class="jxr_keyword">if</strong> (drivername != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="246" href="#246">246</a>       LOG.info(<span class="jxr_string">"UTIL REGISTERING DRIVER == "</span> + drivername);
-<a class="jxr_linenumber" name="247" href="#247">247</a>       Class&lt;Driver&gt; driverClass = P6Util.forName(drivername);
-<a class="jxr_linenumber" name="248" href="#248">248</a>       DriverManager.setLogWriter(<strong class="jxr_keyword">new</strong> PrintWriter(System.out, <strong class="jxr_keyword">true</strong>));
-<a class="jxr_linenumber" name="249" href="#249">249</a>       DriverManager.registerDriver(driverClass.newInstance());
-<a class="jxr_linenumber" name="250" href="#250">250</a>     }
-<a class="jxr_linenumber" name="251" href="#251">251</a>     Driver driver = DriverManager.getDriver(url);
-<a class="jxr_linenumber" name="252" href="#252">252</a>     LOG.info(<span class="jxr_string">"UTIL USING DRIVER == "</span> + driver.getClass().getName() + <span class="jxr_string">" FOR URL "</span> + url);
-<a class="jxr_linenumber" name="253" href="#253">253</a>     Connection connection = DriverManager.getConnection(url, user, password);
-<a class="jxr_linenumber" name="254" href="#254">254</a>     printAllDrivers();
-<a class="jxr_linenumber" name="255" href="#255">255</a>     <strong class="jxr_keyword">return</strong> connection;
-<a class="jxr_linenumber" name="256" href="#256">256</a>   }
-<a class="jxr_linenumber" name="257" href="#257">257</a> 
-<a class="jxr_linenumber" name="258" href="#258">258</a> 
-<a class="jxr_linenumber" name="259" href="#259">259</a> }
+<a class="jxr_linenumber" name="233" href="#233">233</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> reloadProperty(Map props) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="234" href="#234">234</a>     writeProperty(<em class="jxr_comment">/*<em class="jxr_comment">"target/test-classes/com/p6spy/engine/spy/" + */</em>P6TestFramework.PROPERTY_FILE, props);</em>
+<a class="jxr_linenumber" name="235" href="#235">235</a> 
+<a class="jxr_linenumber" name="236" href="#236">236</a>     P6SpyProperties properties = <strong class="jxr_keyword">new</strong> P6SpyProperties();
+<a class="jxr_linenumber" name="237" href="#237">237</a>     properties.setSpyProperties(P6TestFramework.PROPERTY_FILE);
+<a class="jxr_linenumber" name="238" href="#238">238</a>     OptionReloader.reload();
+<a class="jxr_linenumber" name="239" href="#239">239</a>   }
+<a class="jxr_linenumber" name="240" href="#240">240</a> 
+<a class="jxr_linenumber" name="241" href="#241">241</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> printAllDrivers() {
+<a class="jxr_linenumber" name="242" href="#242">242</a>     <strong class="jxr_keyword">for</strong> (Enumeration e = DriverManager.getDrivers(); e.hasMoreElements(); ) {
+<a class="jxr_linenumber" name="243" href="#243">243</a>       LOG.info(<span class="jxr_string">"DRIVER FOUND: "</span> + e.nextElement());
+<a class="jxr_linenumber" name="244" href="#244">244</a>     }
+<a class="jxr_linenumber" name="245" href="#245">245</a>   }
+<a class="jxr_linenumber" name="246" href="#246">246</a> 
+<a class="jxr_linenumber" name="247" href="#247">247</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Connection loadDrivers(String drivernameProperty, String p6TestProperties)
+<a class="jxr_linenumber" name="248" href="#248">248</a>       <strong class="jxr_keyword">throws</strong> SQLException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+<a class="jxr_linenumber" name="249" href="#249">249</a>     Properties props = loadProperties(p6TestProperties);
+<a class="jxr_linenumber" name="250" href="#250">250</a>     String drivername = props.getProperty(drivernameProperty);
+<a class="jxr_linenumber" name="251" href="#251">251</a>     String user = props.getProperty(<span class="jxr_string">"user"</span>);
+<a class="jxr_linenumber" name="252" href="#252">252</a>     String password = props.getProperty(<span class="jxr_string">"password"</span>);
+<a class="jxr_linenumber" name="253" href="#253">253</a>     String url = props.getProperty(<span class="jxr_string">"url"</span>);
+<a class="jxr_linenumber" name="254" href="#254">254</a> 
+<a class="jxr_linenumber" name="255" href="#255">255</a>     <strong class="jxr_keyword">if</strong> (drivername != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="256" href="#256">256</a>       LOG.info(<span class="jxr_string">"UTIL REGISTERING DRIVER PROPERTY == "</span> + drivernameProperty + <span class="jxr_string">" TO REGISTER DRIVER == "</span> + drivername);
+<a class="jxr_linenumber" name="257" href="#257">257</a>       Class&lt;Driver&gt; driverClass = P6Util.forName(drivername);
+<a class="jxr_linenumber" name="258" href="#258">258</a>       DriverManager.setLogWriter(<strong class="jxr_keyword">new</strong> PrintWriter(System.out, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="259" href="#259">259</a>       DriverManager.registerDriver(driverClass.newInstance());
+<a class="jxr_linenumber" name="260" href="#260">260</a>     }
+<a class="jxr_linenumber" name="261" href="#261">261</a>     Driver driver = DriverManager.getDriver(url);
+<a class="jxr_linenumber" name="262" href="#262">262</a>     LOG.info(<span class="jxr_string">"UTIL USING DRIVER == "</span> + driver.getClass().getName() + <span class="jxr_string">" FOR URL "</span> + url);
+<a class="jxr_linenumber" name="263" href="#263">263</a>     Connection connection = DriverManager.getConnection(url, user, password);
+<a class="jxr_linenumber" name="264" href="#264">264</a>     printAllDrivers();
+<a class="jxr_linenumber" name="265" href="#265">265</a>     <strong class="jxr_keyword">return</strong> connection;
+<a class="jxr_linenumber" name="266" href="#266">266</a>   }
+<a class="jxr_linenumber" name="267" href="#267">267</a> 
+<a class="jxr_linenumber" name="268" href="#268">268</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

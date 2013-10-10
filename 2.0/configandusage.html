@@ -225,10 +225,6 @@ stacktrace=false
 stacktraceclass=
 
 # determines if property file should be reloaded
-# Please note: reload means forgetting all the previously set
-# settings (even those set during runtime - via JMX)
-# and starting with the clean table 
-# (only the properties read from the configuration file)
 reloadproperties=false
 # determines how often should be reloaded in seconds
 reloadpropertiesinterval=60
@@ -252,9 +248,6 @@ append=true
 #logMessageFormat=com.p6spy.engine.logging.appender.SingleLineFormat
 
 #The following are for log4j logging only
-#Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here
-#once you require different behavior, provide your own log4j configuration file (holding these properties) 
-#and make sure to load/reload it properly. 
 log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender
 log4j.appender.STDOUT.layout=org.apache.log4j.PatternLayout
 log4j.appender.STDOUT.layout.ConversionPattern=p6spy - %m%n
