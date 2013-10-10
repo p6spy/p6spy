@@ -10,6 +10,7 @@ import org.apache.commons.dbcp.DriverConnectionFactory;
 import org.eclipse.jetty.plus.jndi.Resource;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -90,6 +91,7 @@ public class DataSourceTest extends P6TestFramework {
 
   }
 
+  @Ignore
   @Test
   public void testGenericDataSourceWithDriverManager() throws SQLException, NamingException {
     // Create and bind the real data source
