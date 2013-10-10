@@ -25,27 +25,27 @@
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_comment">*/</em>
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">package</strong> com.p6spy.engine.logging.appender;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> java.io.StringWriter;
-<a class="jxr_linenumber" name="20" href="#20">20</a>  
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.Level;
-<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.Logger;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  
-<a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_comment">// adapted from Rafael Alvarez's LoggingStream class</em>
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/p6spy/engine/logging/appender/Log4jLogger.html">Log4jLogger</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../com/p6spy/engine/logging/appender/FormattedLogger.html">FormattedLogger</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../com/p6spy/engine/logging/appender/P6Logger.html">P6Logger</a> {
-<a class="jxr_linenumber" name="26" href="#26">26</a>      
-<a class="jxr_linenumber" name="27" href="#27">27</a>      <strong class="jxr_keyword">protected</strong> Level level = Level.INFO;
-<a class="jxr_linenumber" name="28" href="#28">28</a>      <strong class="jxr_keyword">protected</strong> String lastEntry;
-<a class="jxr_linenumber" name="29" href="#29">29</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Logger log;
-<a class="jxr_linenumber" name="30" href="#30">30</a>      
-<a class="jxr_linenumber" name="31" href="#31">31</a>      <em class="jxr_comment">// By configuring log4j by this method, we control the p6spy logger behavior</em>
-<a class="jxr_linenumber" name="32" href="#32">32</a>      <em class="jxr_comment">// using the same configuration file as p6spy, and any other attempt</em>
-<a class="jxr_linenumber" name="33" href="#33">33</a>      <em class="jxr_comment">// to configure log4j will add to this configuration.</em>
-<a class="jxr_linenumber" name="34" href="#34">34</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../com/p6spy/engine/logging/appender/Log4jLogger.html">Log4jLogger</a>() {
-<a class="jxr_linenumber" name="35" href="#35">35</a>        <em class="jxr_comment">// [Peter Butkovic] functionality moved to P6LogOptions.load()</em>
-<a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_comment">//        P6SpyProperties properties = new P6SpyProperties();</em>
-<a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_comment">//        P6LogLoadableOptions options = P6ModuleManager.getInstance().getOptions(P6LogLoadableOptions.class);</em>
-<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_comment">//        PropertyConfigurator.configure(options.getLog4JProperties());</em>
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6SpyProperties;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.Level;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.Logger;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.PropertyConfigurator;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> java.io.StringWriter;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_comment">// adapted from Rafael Alvarez's LoggingStream class</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/p6spy/engine/logging/appender/Log4jLogger.html">Log4jLogger</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../com/p6spy/engine/logging/appender/FormattedLogger.html">FormattedLogger</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../com/p6spy/engine/logging/appender/P6Logger.html">P6Logger</a> {
+<a class="jxr_linenumber" name="28" href="#28">28</a>      
+<a class="jxr_linenumber" name="29" href="#29">29</a>      <strong class="jxr_keyword">protected</strong> Level level = Level.INFO;
+<a class="jxr_linenumber" name="30" href="#30">30</a>      <strong class="jxr_keyword">protected</strong> String lastEntry;
+<a class="jxr_linenumber" name="31" href="#31">31</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Logger log;
+<a class="jxr_linenumber" name="32" href="#32">32</a>      
+<a class="jxr_linenumber" name="33" href="#33">33</a>      <em class="jxr_comment">// By configuring log4j by this method, we control the p6spy logger behavior</em>
+<a class="jxr_linenumber" name="34" href="#34">34</a>      <em class="jxr_comment">// using the same configuration file as p6spy, and any other attempt</em>
+<a class="jxr_linenumber" name="35" href="#35">35</a>      <em class="jxr_comment">// to configure log4j will add to this configuration.</em>
+<a class="jxr_linenumber" name="36" href="#36">36</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../../com/p6spy/engine/logging/appender/Log4jLogger.html">Log4jLogger</a>() {
+<a class="jxr_linenumber" name="37" href="#37">37</a>          <a href="../../../../../com/p6spy/engine/common/P6SpyProperties.html">P6SpyProperties</a> properties = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/p6spy/engine/common/P6SpyProperties.html">P6SpyProperties</a>();
+<a class="jxr_linenumber" name="38" href="#38">38</a>          PropertyConfigurator.configure(properties.forceReadProperties());
 <a class="jxr_linenumber" name="39" href="#39">39</a>          log = Logger.getLogger(<span class="jxr_string">"p6spy"</span>);
 <a class="jxr_linenumber" name="40" href="#40">40</a>          log.setAdditivity(false);
 <a class="jxr_linenumber" name="41" href="#41">41</a>      }
