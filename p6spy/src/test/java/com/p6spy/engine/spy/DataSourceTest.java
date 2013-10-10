@@ -1,10 +1,20 @@
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
+import com.p6spy.engine.logging.appender.P6TestLogger;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp.ConnectionFactory;
+import org.apache.commons.dbcp.DriverConnectionFactory;
+import org.eclipse.jetty.plus.jndi.Resource;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
-import java.io.IOException;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -13,55 +23,38 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverConnectionFactory;
-import org.eclipse.jetty.plus.jndi.Resource;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
-
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
-import com.p6spy.engine.logging.appender.P6TestLogger;
-import com.p6spy.engine.test.P6TestOptions;
+import static org.junit.Assert.*;
 
 /**
- * @author Quinton McCombs (dt77102)
+ * @author Quinton McCombs
  * @since 10/2013
  */
-@RunWith(Parameterized.class)
-public class DataSourceTest extends P6TestFramework {
+public class DataSourceTest {
 
-  String user;
-  String password;
-  String url;
-  Resource spyDsResource;
-  Resource realDsResource;
+  /*
+     This test is not parameterized because we are only testing generic
+     functionality of adding a proxy with the data source instead of with
+     the driver.
+   */
+
+  private String user;
+  private String password;
+  private String url;
+  private Resource spyDsResource;
+  private Resource realDsResource;
   private Connection con;
   private TestBasicDataSource realDs;
+  private String driverClass;
 
-
-  public DataSourceTest(final String db) throws SQLException, IOException {
-    super(db);
-  }
 
   @Before
-  @Override
-  public void setUpFramework() throws Exception {
+  public void setup() throws Exception {
     P6Core.reinit();
 
-    user = P6TestOptions.getActiveInstance().getUser();
-    password = P6TestOptions.getActiveInstance().getPassword();
-    url = P6TestOptions.getActiveInstance().getUrl();
+    user = "sa";
+    password = "";
+    url = "jdbc:h2:mem:p6spy";
+    driverClass ="org.h2.Driver";
 
     P6DataSource spyDs = new P6DataSource();
     spyDs.setRealDataSource("jdbc/realDs");
@@ -91,13 +84,12 @@ public class DataSourceTest extends P6TestFramework {
 
   }
 
-  @Ignore
   @Test
   public void testGenericDataSourceWithDriverManager() throws SQLException, NamingException {
     // Create and bind the real data source
     // Note: This will get the driver from the DriverManager
     realDs = new TestBasicDataSource();
-    realDs.setDriverClassName(P6SpyDriver.class.getName());
+    realDs.setDriverClassName(driverClass);
     realDs.setUrl(url);
     realDs.setUsername(user);
     realDs.setPassword(password);
@@ -131,7 +123,7 @@ public class DataSourceTest extends P6TestFramework {
     // Create and bind the real data source
     // Note: This will get the driver from the DriverManager
     realDs = new TestBasicDataSource();
-    realDs.setDriverClassName(P6SpyDriver.class.getName());
+    realDs.setDriverClassName(driverClass);
     realDs.setUrl(url);
     realDs.setUsername(user);
     realDs.setPassword(password);
