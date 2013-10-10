@@ -44,9 +44,6 @@ public class P6SpyDriver implements Driver {
   }
 
 
-  /**
-   * for some reason the passthru is null, go create one
-   */
   @Override
   public boolean acceptsURL(final String url) throws SQLException {
     if (url != null && url.startsWith("jdbc:p6spy:")) {
@@ -83,6 +80,10 @@ public class P6SpyDriver implements Driver {
     // if there is no url, we have problems
     if (url == null) {
       throw new SQLException("url is required");
+    }
+
+    if( !acceptsURL(url) ) {
+      return null;
     }
 
     // find the real driver for the URL
