@@ -11,15 +11,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Properties;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.test.P6TestOptions;
 
 @RunWith(Parameterized.class)
 public class P6TestDriverMulti extends P6TestFramework {
@@ -47,20 +47,24 @@ public class P6TestDriverMulti extends P6TestFramework {
 
       try {
           // rebuild a the 2.nd connection for the multi-driver test
-          Properties props = loadProperties(p6TestProperties);
-          String drivername = props.getProperty("p6driver2");
-          String user = props.getProperty("user2");
-          String password = props.getProperty("password2");
-          String url = props.getProperty("url2");
 
-          if( drivername != null ) {
-            P6Util.forName(drivername);
-            System.err.println("REGISTERED: "+drivername);
+        List<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
+          if (driverNames != null && driverNames.isEmpty() && driverNames.size() > 1) {
+            String driverName2 = driverNames.get(1);
+            if( driverName2 != null ) {
+              P6Util.forName(driverName2);
+              System.err.println("REGISTERED: "+driverName2);
+            }  
           }
+          String url2 = P6TestOptions.getActiveInstance().getUrl2();
+          String user2 = P6TestOptions.getActiveInstance().getUser2();
+          String password2 = P6TestOptions.getActiveInstance().getPassword2();
+          
+          
           printAllDrivers();
-          Driver driver = DriverManager.getDriver(url);
-          System.err.println("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
-          Connection conn2 = DriverManager.getConnection(url, user, password);
+          Driver driver = DriverManager.getDriver(url2);
+          System.err.println("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url2);
+          Connection conn2 = DriverManager.getConnection(url2, user2, password2);
           statement2 = conn2.createStatement();
 
           // the original

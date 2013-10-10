@@ -44,7 +44,16 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
+	<!-- jmx testing -->
+	<dependency>
+		<groupId>com.j256.simplejmx</groupId>
+		<artifactId>simplejmx</artifactId>
+	</dependency>
 
+	<dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+	</dependency>
 
     <!-- all the JDBC drivers tested -->
     <dependency>
@@ -71,8 +80,6 @@
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
     </dependency>
-
-
   </dependencies>
 
   <!-- each module needs to have this for the scm information to be correct in maven site -->
@@ -90,7 +97,11 @@
         <configuration>
           <systemPropertyVariables>
             <user.language>en_US</user.language>
+            
+            <!-- to enable remote JMX testing, 
+            	see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
           </systemPropertyVariables>
+         <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false</argLine>
           <includes>
             <include>**/P6Test*.java</include>
             <include>**/*Test.java</include>

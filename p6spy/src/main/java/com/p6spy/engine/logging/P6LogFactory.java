@@ -15,15 +15,18 @@ limitations under the License.
 */
 package com.p6spy.engine.logging;
 
-import com.p6spy.engine.proxy.ProxyFactory;
-import com.p6spy.engine.spy.P6CoreFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class P6LogFactory extends P6CoreFactory {
+import com.p6spy.engine.common.P6LoadableOptions;
+import com.p6spy.engine.proxy.ProxyFactory;
+import com.p6spy.engine.spy.P6Factory;
 
-  public P6LogFactory() {
+public class P6LogFactory implements P6Factory {
+
+  @Override
+  public P6LoadableOptions getOptions() {
+    return new P6LogOptions();
   }
 
   @Override

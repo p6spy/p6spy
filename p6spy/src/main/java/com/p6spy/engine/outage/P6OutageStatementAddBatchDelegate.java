@@ -33,7 +33,7 @@ class P6OutageStatementAddBatchDelegate implements Delegate {
     long startTime = System.currentTimeMillis();
     statementInformation.setStatementQuery((String) args[0]);
 
-    if (P6OutageOptions.getOutageDetection()) {
+    if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
         P6OutageDetector.getInstance().registerInvocation(this, startTime, "batch", "", statementInformation.getStatementQuery());
     }
 
@@ -41,7 +41,7 @@ class P6OutageStatementAddBatchDelegate implements Delegate {
       return method.invoke(target, args);
     }
     finally {
-      if (P6OutageOptions.getOutageDetection()) {
+      if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
           P6OutageDetector.getInstance().unregisterInvocation(this);
       }
     }

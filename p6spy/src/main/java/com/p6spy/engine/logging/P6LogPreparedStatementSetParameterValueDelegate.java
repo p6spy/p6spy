@@ -15,9 +15,9 @@ limitations under the License.
 */
 package com.p6spy.engine.logging;
 
-import com.p6spy.engine.common.P6SpyOptions;
 import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.proxy.Delegate;
+import com.p6spy.engine.spy.P6SpyOptions;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -43,7 +43,7 @@ class P6LogPreparedStatementSetParameterValueDelegate implements Delegate {
 
   private String convertToString(Object o) {
     if (o instanceof java.util.Date) {
-      return new SimpleDateFormat(P6SpyOptions.getDatabaseDialectDateFormat()).format(o);
+      return new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(o);
     } else if (o instanceof byte[]) {
       return toHexString((byte[]) o);
     } else {

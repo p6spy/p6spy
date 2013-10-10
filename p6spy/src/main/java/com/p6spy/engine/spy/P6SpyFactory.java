@@ -12,19 +12,24 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
-package com.p6spy.engine.spy;
+*/package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6Options;
-
+import java.sql.Connection;
 import java.sql.SQLException;
 
-public abstract class P6CoreFactory implements P6Factory {
+import com.p6spy.engine.common.P6LoadableOptions;
 
-  public P6Options getOptions() throws SQLException {
-    // the core options are managed in P6SpyOptions, which is a special case since it must deal with the
-    // driver, module, and reload issues as well
-    return null;
+public class P6SpyFactory implements P6Factory {
+
+  @Override
+  public P6LoadableOptions getOptions() {
+    return new P6SpyOptions();
+  }
+
+  @Override
+  public Connection getConnection(Connection conn) throws SQLException {
+    // no wrapping required here
+    return conn;
   }
 
 }
