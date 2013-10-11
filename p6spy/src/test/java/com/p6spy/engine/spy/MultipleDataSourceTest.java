@@ -8,7 +8,6 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
@@ -25,7 +24,6 @@ import static org.junit.Assert.*;
  * @author Quinton McCombs (dt77102)
  * @since 10/2013
  */
-@Ignore
 public class MultipleDataSourceTest {
   private List<Resource> jndiResources;
 

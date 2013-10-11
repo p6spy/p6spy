@@ -52,7 +52,7 @@ public class DataSourceTest {
     P6Core.reinit();
 
     user = "sa";
-    password = "";
+    password = null;
     url = "jdbc:h2:mem:p6spy";
     driverClass ="org.h2.Driver";
 
@@ -128,7 +128,6 @@ public class DataSourceTest {
     realDs.setUseDriverManager(false);
     realDsResource = new Resource("jdbc/realDs", realDs);
 
-
     // get the data source from JNDI
     DataSource ds = new JndiDataSourceLookup().getDataSource("jdbc/spyDs");
     assertNotNull("JNDI data source not found", ds);
@@ -141,7 +140,6 @@ public class DataSourceTest {
 
     // now verify that the proxy is OUR proxy!
     assertTrue("Wrong invocation handler!", Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler);
-
   }
 
   class TestBasicDataSource extends BasicDataSource {
