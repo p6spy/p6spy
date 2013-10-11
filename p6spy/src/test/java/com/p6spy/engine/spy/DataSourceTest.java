@@ -114,8 +114,6 @@ public class DataSourceTest {
     con.createStatement().execute("select 1 from testtable");
     assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select 1") != -1);
     assertEquals("Incorrect number of spy log messages", 2, ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size());
-
-
   }
 
   @Test
