@@ -1,10 +1,10 @@
 package com.p6spy.engine.proxy;
 
+import net.sf.cglib.proxy.UndeclaredThrowableException;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
@@ -162,6 +162,10 @@ public class GenericInvocationHandlerTest {
 
   public class ExceptionHandlingImpl implements ExceptionHandling {
     boolean throwException = false;
+
+    public ExceptionHandlingImpl() {
+    }
+
     @Override
     public void methodA() throws SQLException {
       if( throwException ) throw new SQLException("fgdfgdfg");
