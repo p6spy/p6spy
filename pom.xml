@@ -449,7 +449,7 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
         <version>3.2.4.RELEASE</version>
-        <scope>test></scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>log4j</groupId>
