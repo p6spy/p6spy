@@ -1,9 +1,20 @@
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
-import com.p6spy.engine.logging.appender.P6TestLogger;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
+
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverConnectionFactory;
@@ -13,17 +24,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.lang.reflect.Proxy;
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
-import java.util.logging.Logger;
-
-import static org.junit.Assert.*;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
+import com.p6spy.engine.logging.appender.P6TestLogger;
 
 /**
  * @author Quinton McCombs
@@ -53,7 +57,13 @@ public class DataSourceTest {
 
     user = "sa";
     password = null;
-    url = "jdbc:h2:mem:p6spy";
+    // please note non-typical DB name
+    // however it seems that the typical one "jdbc:h2:mem:p6spy"
+    // caused authorization exception, see: https://github.com/p6spy/p6spy/issues/76
+    // in some test execution sequences (on some setups only)
+    // I suspect non-proper cleanup in some of the previous tests causing this error
+//  url = "jdbc:h2:mem:p6spy";
+    url = "jdbc:h2:mem:p6spyDSTest";
     driverClass ="org.h2.Driver";
 
     P6DataSource spyDs = new P6DataSource();
@@ -167,6 +177,7 @@ public class DataSourceTest {
           @Override
           public Connection createConnection() throws SQLException {
             Driver driver;
+            
             try {
               driver = (Driver) P6Util.forName(getDriverClassName()).newInstance();
             } catch (Exception e) {
