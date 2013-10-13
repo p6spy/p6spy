@@ -15,7 +15,7 @@ limitations under the License.
 */
 package com.p6spy.engine.proxy;
 
-import java.lang.reflect.Proxy;
+import net.sf.cglib.proxy.Proxy;
 
 /**
  * @author Quinton McCombs

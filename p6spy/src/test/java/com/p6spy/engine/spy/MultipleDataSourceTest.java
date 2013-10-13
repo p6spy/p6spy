@@ -3,6 +3,7 @@ package com.p6spy.engine.spy;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
 import com.p6spy.engine.logging.appender.P6TestLogger;
+import net.sf.cglib.proxy.Proxy;
 import org.eclipse.jetty.plus.jndi.Resource;
 import org.h2.jdbcx.JdbcDataSource;
 import org.hsqldb.jdbc.JDBCDataSource;
@@ -12,7 +13,6 @@ import org.junit.Test;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
 import javax.sql.DataSource;
-import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;

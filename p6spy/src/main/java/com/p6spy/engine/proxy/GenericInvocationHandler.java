@@ -15,7 +15,8 @@ limitations under the License.
 */
 package com.p6spy.engine.proxy;
 
-import java.lang.reflect.InvocationHandler;
+import net.sf.cglib.proxy.InvocationHandler;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
