@@ -15,6 +15,9 @@ env:
 before_script:
  - "psql -c 'create database p6spy;' -U postgres" # test DB creation for PostgresSQL
  - "mysql -e 'create database p6spy;'" # test DB creation for MySQL
+ - "sudo apt-get -y install firebird2.5-superclassic" # install firebird
+ - "dpkg-reconfigure firebird2.5-superclassic" # configure and start the firebird server
+ - "echo "create database '/tmp/firebird_p6spy.gdb';" > /tmp/firebird_create_db.sql && sudo isql-fb -user sysdba -password masterkey -i /tmp/firebird_create_db.sql" # create DB in the firebird
   
 script: if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -Dmaven.test.failure.ignore=true clean test -P travis site:site site:stage; mvn -N ghSite:site; else mvn clean test -P travis; fi;
 
