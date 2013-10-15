@@ -96,7 +96,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -116,6 +116,14 @@ public class P6TestBasics extends P6TestFramework {
     public void setUpFramework() {
     }
     
+    @After
+    public void tearDown() throws SQLException {
+      if (this.connection != null) {
+        // close connection properly
+        this.connection.close();
+      }
+    }
+    
     @Test
     public void testNative() throws Exception {
         connection = P6TestUtil.loadDrivers(null);
@@ -132,9 +140,10 @@ public class P6TestBasics extends P6TestFramework {
     }
 
     protected void preparesql() throws SQLException {
-        Statement statement = connection.createStatement();
+        final Statement statement = connection.createStatement();
         drop(statement);
         statement.execute("create table basic_test (col1 varchar(255), col2 integer)");
+        statement.close();
     }
 
     protected void sqltests() throws SQLException {
@@ -183,16 +192,14 @@ public class P6TestBasics extends P6TestFramework {
     }
 
     protected void drop(Statement statement) {
-        if (statement == null) { return; }
-        dropStatement("drop table basic_test", statement);
-    }
-
-    protected void dropStatement(String sql, Statement statement) {
-        try {
-            statement.execute(sql);
-        } catch (Exception e) {
-            // we don't really care about cleanup failing
+      try {
+        if (statement == null) {
+          return;
         }
+        statement.execute("drop table basic_test");
+      } catch (Exception e) {
+        // we don't really care about cleanup failing
+      }
     }
 
 }
