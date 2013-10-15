@@ -421,6 +421,12 @@
         <version>${sqlite-build}</version>
         <scope>test</scope>
       </dependency>
+	  <!-- Note: they claim this to be type 4.1 driver -->
+      <dependency>
+		<groupId>org.firebirdsql.jdbc</groupId>
+		<artifactId>jaybird-jdk17</artifactId>
+		<version>2.2.3</version>
+		</dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
