@@ -27,3 +27,4 @@ testspy.forms
 .DS_Store
 /pom.xml.versionsBackup
 reload.log
+p6spy/dependency-reduced-pom.xml
