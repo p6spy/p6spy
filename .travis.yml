@@ -29,6 +29,6 @@ script: if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" 
 after_script:
  - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy -DskipTests --settings ~/.m2/deploySettings.xml; fi
 
-#notifications:
-#  email:
-#    - p6spy-developers@googlegroups.com
+notifications:
+ email:
+   - p6spy-developers@googlegroups.com
