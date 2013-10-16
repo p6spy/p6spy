@@ -521,6 +521,7 @@ By default, tests run against H2 database. To enable other databases, make sure 
   * H2 
   * HSQLDB
   * SQLite
+  * Firebird
   * or comma separated list of these
 
 ### Running the tests in the command line
