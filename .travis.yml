@@ -21,7 +21,7 @@ before_script:
  - "psql -c 'create database p6spy;' -U postgres" # [PostgresSQL] test DB creation
  - "mysql -e 'create database p6spy;'" # [MySQL] test DB creation
  - "isql-fb -z -q -i /dev/null" # [Firebird] --version
- - "echo "create database '/tmp/firebird_p6spy.gdb';" > /tmp/firebird_create_db.sql" # [Firebird] preps for test DB creation
+ - echo "create database '/tmp/firebird_p6spy.gdb';" > /tmp/firebird_create_db.sql # [Firebird] preps for test DB creation
  - "sudo isql-fb -user sysdba -password masterkey -i /tmp/firebird_create_db.sql" # [Firebird] test DB creation
   
 script: if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -Dmaven.test.failure.ignore=true clean test -P travis site:site site:stage; mvn -N ghSite:site; else mvn clean test -P travis; fi;
