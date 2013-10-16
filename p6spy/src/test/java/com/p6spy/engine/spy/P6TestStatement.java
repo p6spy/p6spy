@@ -152,13 +152,15 @@ public class P6TestStatement extends P6TestFramework {
         }
     }
     @Test
-    public void testQueryUpdate() {
-        try {
-	    ResultSet rs = null;
+    public void testQueryUpdate() throws SQLException {
+      Statement statement = null;
 
-            // test a basic insert
+        try {
+          ResultSet rs = null;
+
+    	      // test a basic insert
             String update = "insert into stmt_test values (\'bob\', 5)";
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             
             // as executeUpdate Javadocs say:
             // Returns either 
@@ -204,17 +206,21 @@ public class P6TestStatement extends P6TestFramework {
                 assertTrue(e.getMessage().indexOf("Unsupported feature") != -1);
             }
             
-        } catch (Exception e) {
-            fail(e.getMessage()+" due to error: "+getStackTrace(e));
+        } finally {
+          if (statement != null) {
+            statement.close();
+          }
         }
     }
     
     @Test
-    public void testExecutionThreshold() {
-        try {
+    public void testExecutionThreshold() throws SQLException {
+      Statement statement = null;
+
+      try {
             // Add some data into the table
             String update = "insert into stmt_test values (\'bob\', 5)";
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             statement.executeUpdate(update);
             assertTrue(super.getLastLogEntry().contains(update));
             
@@ -253,9 +259,10 @@ public class P6TestStatement extends P6TestFramework {
             rs.next();
             assertEquals(0, rs.getInt(1));
             rs.close();
-            
-        } catch (Exception e) {
-            fail(e.getMessage()+" due to error: "+getStackTrace(e));
+        } finally {
+          if (statement != null) {
+            statement.close();
+          }
         }
     }
 

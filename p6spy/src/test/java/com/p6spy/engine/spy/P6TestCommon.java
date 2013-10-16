@@ -155,14 +155,13 @@ public class P6TestCommon extends P6TestFramework {
     }
 
     @Test
-    public void testMatcher() {
+    public void testMatcher() throws SQLException {
+        // first should match
+        P6LogOptions.getActiveInstance().setFilter("true");
+        P6LogOptions.getActiveInstance().setExclude("");
+        P6LogOptions.getActiveInstance().setInclude("");
+        Statement statement = connection.createStatement();
         try {
-
-            // first should match
-            P6LogOptions.getActiveInstance().setFilter("true");
-            P6LogOptions.getActiveInstance().setExclude("");
-            P6LogOptions.getActiveInstance().setInclude("");
-            Statement statement = connection.createStatement();
             String query = "select count(*) from common_test";
             statement.executeQuery(query);
             assertTrue(super.getLastLogEntry().contains(query));
@@ -184,37 +183,45 @@ public class P6TestCommon extends P6TestFramework {
             assertFalse(super.getLastLogEntry().contains(query));
 
             tryRegEx();
-        } catch (Exception e) {
-            fail(e.getMessage()+getStackTrace(e));
+        } finally {
+          if (statement != null) {
+            statement.close();
+          }
         }
     }
 
-    protected void tryRegEx() throws Exception {
+    protected void tryRegEx() throws SQLException  {
         Statement statement = connection.createStatement();
-
-        // should match (basic)
-        P6LogOptions.getActiveInstance().setFilter("true");
-        P6LogOptions.getActiveInstance().setExclude("");
-        P6LogOptions.getActiveInstance().setInclude("");
-        String query = "select 'y' from common_test";
-        statement.executeQuery(query);
-        assertTrue(super.getLastLogEntry().contains(query));
-
-        // now match should match (test regex)
-        P6LogOptions.getActiveInstance().setFilter("true");
-        P6LogOptions.getActiveInstance().setExclude("[a-z]ommon_test");
-        P6LogOptions.getActiveInstance().setInclude("");
-        query = "select 'x' from common_test";
-        statement.executeQuery(query);
-        assertFalse(super.getLastLogEntry().contains(query));
-
-        // now match should fail (test regex again)
-        P6LogOptions.getActiveInstance().setFilter("true");
-        P6LogOptions.getActiveInstance().setExclude("[0-9]tmt_test");
-        P6LogOptions.getActiveInstance().setInclude("");
-        query = "select 'z' from common_test";
-        statement.executeQuery(query);
-        assertTrue(super.getLastLogEntry().contains(query));
+        
+        try {
+          // should match (basic)
+          P6LogOptions.getActiveInstance().setFilter("true");
+          P6LogOptions.getActiveInstance().setExclude("");
+          P6LogOptions.getActiveInstance().setInclude("");
+          String query = "select 'y' from common_test";
+          statement.executeQuery(query);
+          assertTrue(super.getLastLogEntry().contains(query));
+  
+          // now match should match (test regex)
+          P6LogOptions.getActiveInstance().setFilter("true");
+          P6LogOptions.getActiveInstance().setExclude("[a-z]ommon_test");
+          P6LogOptions.getActiveInstance().setInclude("");
+          query = "select 'x' from common_test";
+          statement.executeQuery(query);
+          assertFalse(super.getLastLogEntry().contains(query));
+  
+          // now match should fail (test regex again)
+          P6LogOptions.getActiveInstance().setFilter("true");
+          P6LogOptions.getActiveInstance().setExclude("[0-9]tmt_test");
+          P6LogOptions.getActiveInstance().setInclude("");
+          query = "select 'z' from common_test";
+          statement.executeQuery(query);
+          assertTrue(super.getLastLogEntry().contains(query));
+        } finally {
+          if (statement != null) {
+            statement.close();
+          }
+        }
     }
 
     @Test
@@ -223,7 +230,7 @@ public class P6TestCommon extends P6TestFramework {
     	connection.setAutoCommit(false);
 
     	Statement statement = connection.createStatement();
-        
+    	try {
         // test rollback logging
       	P6LogOptions.getActiveInstance().setFilter("true");
         P6LogOptions.getActiveInstance().setExclude("");
@@ -258,16 +265,23 @@ public class P6TestCommon extends P6TestFramework {
         statement.executeQuery(query);
         assertTrue(super.getLastLogEntry().contains("intentionally"));
 
-        // set back, otherwise we have problems in PostgresSQL, statement exec
-        // waits for commit
-        connection.setAutoCommit(true);
+      } finally {
+        if (statement != null) {
+          statement.close();
+        }
+      }
+    	
+      // set back, otherwise we have problems in PostgresSQL, statement exec
+      // waits for commit
+      connection.setAutoCommit(true);
     }
 
     @Test
-    public void testStacktrace() {
+    public void testStacktrace() throws SQLException {
+      // get a statement
+      Statement statement = connection.createStatement();
+      
         try {
-            // get a statement
-            Statement statement = connection.createStatement();
             P6LogOptions.getActiveInstance().setStackTrace("true");
 
             // perform a query & make sure we get the stack trace
@@ -301,8 +315,10 @@ public class P6TestCommon extends P6TestFramework {
             assertTrue(super.getLastLogEntry().contains(query));
             assertTrue(super.getLastLogStackTrace().contains("Stack"));
 
-        } catch (Exception e) {
-            fail(e.getMessage()+getStackTrace(e));
+        } finally {
+          if (statement != null) {
+            statement.close();
+          }
         }
     }
 

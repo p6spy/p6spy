@@ -84,6 +84,10 @@
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
     </dependency>
+    <dependency>
+		<groupId>org.firebirdsql.jdbc</groupId>
+		<artifactId>jaybird-jdk17</artifactId>
+	</dependency>
   </dependencies>
 
   <!-- each module needs to have this for the scm information to be correct in maven site -->
@@ -204,7 +208,7 @@
               <systemPropertyVariables>
                 <!-- all the DBs we want to test with
                  except Derby that is causing random jvm crashes -->
-                <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite</DB>
+                <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird</DB>
               </systemPropertyVariables>
             </configuration>
           </plugin>
