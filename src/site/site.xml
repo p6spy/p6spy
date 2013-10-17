@@ -18,13 +18,17 @@
       </item>
       <item name="2.0" collapse="true" href="2.0/install.html">
         <item name="Installation" href="2.0/install.html"/>
+        <item name="Integration" href="2.0/integration.html"/>
         <item name="Configuration and Usage" href="2.0/configandusage.html"/>
         <item name="Release Notes" href="2.0/releasenotes.html"/>
         <item name="Known Issues" href="2.0/knownissues.html"/>
         <item name="FAQ" href="2.0/faq.html"/>
         <item name="Troubleshooting" href="2.0/troubleshooting.html"/>
       </item>
+    </menu>
+    <menu name="Other">
       <item name="Thanks" href="thanks.html"/>
+      <item name="Download" href="https://github.com/p6spy/p6spy/wiki/Download"/>
     </menu>
     <menu ref="modules"/>
     <menu ref="reports"/>
