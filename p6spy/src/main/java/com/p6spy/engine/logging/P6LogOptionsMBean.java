@@ -15,7 +15,6 @@ limitations under the License.
  */
 package com.p6spy.engine.logging;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public interface P6LogOptionsMBean {
@@ -40,39 +39,9 @@ public interface P6LogOptionsMBean {
 
   String getIncludecategories();
 
-  void setLogfile(String logfile);
-
-  String getLogfile();
-
-  String getAppender();
-
-  void setAppender(String className);
-
-  void setDateformat(String dateformat);
-
-  String getDateformat();
-
-  SimpleDateFormat getDateformatter();
-
-  boolean getStackTrace();
-
-  void setStackTrace(boolean stacktrace);
-  
-  String getStackTraceClass();
-
-  void setStackTraceClass(String stacktraceclass);
-
   String getSQLExpression();
 
   void setSQLExpression(String sqlexpression);
-
-  void setAppend(boolean append);
-
-  boolean getAppend();
-
-  String getLogMessageFormatter();
-
-  void setLogMessageFormatter(String logMessageFormatter);
 
   void setExecutionThreshold(long executionThreshold);
 

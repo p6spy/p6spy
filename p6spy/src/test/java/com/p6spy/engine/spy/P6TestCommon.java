@@ -282,7 +282,7 @@ public class P6TestCommon extends P6TestFramework {
       Statement statement = connection.createStatement();
       
         try {
-            P6LogOptions.getActiveInstance().setStackTrace("true");
+            P6SpyOptions.getActiveInstance().setStackTrace("true");
 
             // perform a query & make sure we get the stack trace
             P6LogOptions.getActiveInstance().setFilter("true");
@@ -298,7 +298,7 @@ public class P6TestCommon extends P6TestFramework {
             P6LogOptions.getActiveInstance().setFilter("true");
             P6LogOptions.getActiveInstance().setExclude("");
             P6LogOptions.getActiveInstance().setInclude("");
-            P6LogOptions.getActiveInstance().setStackTraceClass("com.dont.match");
+            P6SpyOptions.getActiveInstance().setStackTraceClass("com.dont.match");
             query = "select 'a' from common_test";
             statement.executeQuery(query);
             // this will actually match - just the stack trace wont fire
@@ -309,7 +309,7 @@ public class P6TestCommon extends P6TestFramework {
             P6LogOptions.getActiveInstance().setFilter("true");
             P6LogOptions.getActiveInstance().setExclude("");
             P6LogOptions.getActiveInstance().setInclude("");
-            P6LogOptions.getActiveInstance().setStackTraceClass("com.p6spy");
+            P6SpyOptions.getActiveInstance().setStackTraceClass("com.p6spy");
             query = "select 'b' from common_test";
             statement.executeQuery(query);
             assertTrue(super.getLastLogEntry().contains(query));

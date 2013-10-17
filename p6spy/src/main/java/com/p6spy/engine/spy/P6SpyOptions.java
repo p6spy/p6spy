@@ -15,6 +15,7 @@ limitations under the License.
 */
 package com.p6spy.engine.spy;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -22,10 +23,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.log4j.PropertyConfigurator;
+
 import com.p6spy.engine.common.P6ModuleManager;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.common.SpyDotPropertiesReloadChangedListener;
 import com.p6spy.engine.logging.P6LogFactory;
+import com.p6spy.engine.spy.appender.FileLogger;
 
 public class P6SpyOptions implements P6SpyLoadableOptions {
 
@@ -50,13 +54,31 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     private String realdatasourceproperties;
     private String databaseDialectDateFormat;
     
+    private boolean append;
+    private String logMessageFormatter;
+    private String dateformat;
+    private boolean stackTrace;
+    private String stackTraceClass;
+    private String logfile;
+    private String appender;
+
+    
     // reloadproperties propagation
     List<SpyDotPropertiesReloadChangedListener> reloadChangeListeners = new ArrayList<SpyDotPropertiesReloadChangedListener>();
     
     @Override
     public void load(Properties properties) {
+      loadLog4jConfig(properties);
+      
+      setLogMessageFormatter(properties.getProperty("logMessageFormatter"));
+      setLogfile(properties.getProperty("logfile"));
+      setAppend(properties.getProperty("append"));
+      setDateformat(properties.getProperty("dateformat"));
+      setAppender(properties.getProperty("appender"));
       setModulelist(properties.getProperty("modulelist"));
       setDriverlist(properties.getProperty("driverlist"));
+      setStackTrace(properties.getProperty("stacktrace"));
+      setStackTraceClass(properties.getProperty("stacktraceclass"));
       setUsePrefix(properties.getProperty("usePrefix"));
       setAutoflush(properties.getProperty("autoflush"));
       setReloadProperties(properties.getProperty("reloadproperties"));
@@ -70,6 +92,19 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
       setDatabaseDialectDateFormat(properties.getProperty("databaseDialectDateFormat"));
     }
     
+    /**
+     * Loads log4j specific configuration.
+     * <br/><br/>
+     * Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here
+     * once you require different behavior, provide your own log4j configuration file (holding these properties) 
+     * and make sure to load/reload it properly.
+     * 
+     * @param properties the properties to load the configuration values from.
+     */
+    private void loadLog4jConfig(Properties properties) {
+      PropertyConfigurator.configure(properties);
+    }
+
     /**
      * Utility method, to make accessing options from app less verbose.
      * 
@@ -295,11 +330,6 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
         if (!moduleNames.contains(P6SpyFactory.class.getName())) {
           moduleNames.add(P6SpyFactory.class.getName());
         }
-        
-        // log module is a must as well
-        if (!moduleNames.contains(P6LogFactory.class.getName())) {
-          moduleNames.add(P6LogFactory.class.getName());
-        }
       }
       
       // set moduleFactories
@@ -326,6 +356,99 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     @Override
     public List<String> getModuleNames() {
       return moduleNames;
+    }
+
+    @Override
+    public void setAppend(boolean append) {
+      this.append = append;
+    }
+
+    @Override
+    public boolean getAppend() {
+      return append;
+    }
+
+    @Override
+    public String getAppender() {
+      return appender;
+    }
+
+    @Override
+    public void setAppender(String className) {
+      appender = className;
+      
+      if (appender == null) {
+        appender = FileLogger.class.getName();
+      }
+    }
+
+    @Override
+    public void setDateformat(String dateformat) {
+      this.dateformat = dateformat;
+    }
+
+    @Override
+    public String getDateformat() {
+      return dateformat;
+    }
+
+    @Override
+    public SimpleDateFormat getDateformatter() {
+      if (dateformat == null || dateformat.equals("")) {
+        return null;
+      } else {
+        return new SimpleDateFormat(dateformat);
+      }
+    }
+
+    @Override
+    public boolean getStackTrace() {
+      return stackTrace;
+    }
+
+    @Override
+    public void setStackTrace(boolean stacktrace) {
+      this.stackTrace = stacktrace;
+    }
+    
+    @Override
+    public void setStackTrace(String stacktrace) {
+      setStackTrace(P6Util.isTrue(stacktrace, true));
+    }
+
+    @Override
+    public String getStackTraceClass() {
+      return stackTraceClass;
+    }
+
+    @Override
+    public void setStackTraceClass(String stacktraceclass) {
+      this.stackTraceClass = stacktraceclass;
+    }
+
+    @Override
+    public void setLogfile(String logfile) {
+      this.logfile = logfile == null ? "spy.log" : logfile;
+    }
+
+    @Override
+    public String getLogfile() {
+      return logfile;
+    }
+
+    @Override
+    public void setAppend(String append) {
+      setAppend(P6Util.isTrue(append, true));
+    }
+
+    @Override
+    public String getLogMessageFormatter() {
+      return logMessageFormatter;
+    }
+
+    @Override
+    public void setLogMessageFormatter(final String logMessageFormatter) {
+      this.logMessageFormatter = logMessageFormatter;
     }
 
 }

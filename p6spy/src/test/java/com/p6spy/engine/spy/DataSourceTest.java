@@ -15,6 +15,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import net.sf.cglib.proxy.Proxy;
+
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverConnectionFactory;
@@ -27,7 +28,7 @@ import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
-import com.p6spy.engine.logging.appender.P6TestLogger;
+import com.p6spy.engine.spy.appender.P6TestLogger;
 
 /**
  * @author Quinton McCombs

@@ -21,10 +21,6 @@ public interface P6LogLoadableOptions extends P6LoadableOptions, P6LogOptionsMBe
 
   // these we don't need to be exposed via JMX
   
-  void setStackTrace(String stacktrace);
-
-  void setAppend(String append);
-
   void setFilter(String filter);
 
   void setExecutionThreshold(String executionThreshold);

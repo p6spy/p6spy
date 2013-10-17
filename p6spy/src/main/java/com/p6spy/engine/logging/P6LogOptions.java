@@ -15,27 +15,16 @@ limitations under the License.
 */
 package com.p6spy.engine.logging;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.PropertyConfigurator;
-
 import com.p6spy.engine.common.P6ModuleManager;
 import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.logging.appender.FileLogger;
 
 public class P6LogOptions implements P6LogLoadableOptions {
 
-  private boolean append;
-  private String logMessageFormatter;
-  private String dateformat;
   private String sqlExpression;
-  private boolean stackTrace;
-  private String stackTraceClass;
   private boolean filter;
-  private String logfile;
-  private String appender;
   private long executionThreshold;
 
   private String include;
@@ -51,17 +40,8 @@ public class P6LogOptions implements P6LogLoadableOptions {
 
   @Override
   public void load(Properties properties) {
-    loadLog4jConfig(properties);
     
-    setAppend(properties.getProperty("append"));
-    setAppender(properties.getProperty("appender"));
-    setLogMessageFormatter(properties.getProperty("logMessageFormatter"));
-    setDateformat(properties.getProperty("dateformat"));
     setSQLExpression(properties.getProperty("sqlexpression"));
-    setStackTrace(properties.getProperty("stacktrace"));
-    setStackTraceClass(properties.getProperty("stacktraceclass"));
-    setLogfile(properties.getProperty("logfile"));
-    setAppend(properties.getProperty("append"));
     setExecutionThreshold(properties.getProperty("executionThreshold"));
     
     setIncludecategories(properties.getProperty("includecategories"));
@@ -71,19 +51,6 @@ public class P6LogOptions implements P6LogLoadableOptions {
     // following depend on the filter => keep the order here
     setInclude(properties.getProperty("include"));
     setExclude(properties.getProperty("exclude"));
-  }
-
-  /**
-   * Loads log4j specific configuration.
-   * <br/><br/>
-   * Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here
-   * once you require different behavior, provide your own log4j configuration file (holding these properties) 
-   * and make sure to load/reload it properly.
-   * 
-   * @param properties the properties to load the configuration values from.
-   */
-  private void loadLog4jConfig(Properties properties) {
-    PropertyConfigurator.configure(properties);
   }
 
   /**
@@ -163,74 +130,6 @@ public class P6LogOptions implements P6LogLoadableOptions {
   }
 
   @Override
-  public void setLogfile(String logfile) {
-    this.logfile = logfile == null ? "spy.log" : logfile;
-  }
-
-  @Override
-  public String getLogfile() {
-    return logfile;
-  }
-
-  @Override
-  public String getAppender() {
-    return appender;
-  }
-
-  @Override
-  public void setAppender(String className) {
-    appender = className;
-    
-    if (appender == null) {
-      appender = FileLogger.class.getName();
-    }
-  }
-
-  @Override
-  public void setDateformat(String dateformat) {
-    this.dateformat = dateformat;
-  }
-
-  @Override
-  public String getDateformat() {
-    return dateformat;
-  }
-
-  @Override
-  public SimpleDateFormat getDateformatter() {
-    if (dateformat == null || dateformat.equals("")) {
-      return null;
-    } else {
-      return new SimpleDateFormat(dateformat);
-    }
-  }
-
-  @Override
-  public boolean getStackTrace() {
-    return stackTrace;
-  }
-
-  @Override
-  public void setStackTrace(boolean stacktrace) {
-    this.stackTrace = stacktrace;
-  }
-  
-  @Override
-  public void setStackTrace(String stacktrace) {
-    setStackTrace(P6Util.isTrue(stacktrace, true));
-  }
-
-  @Override
-  public String getStackTraceClass() {
-    return stackTraceClass;
-  }
-
-  @Override
-  public void setStackTraceClass(String stacktraceclass) {
-    this.stackTraceClass = stacktraceclass;
-  }
-
-  @Override
   public String getSQLExpression() {
     return sqlExpression;
   }
@@ -238,31 +137,6 @@ public class P6LogOptions implements P6LogLoadableOptions {
   @Override
   public void setSQLExpression(String sqlexpression) {
     this.sqlExpression = sqlexpression != null && sqlexpression.equals("") ? null : sqlexpression;
-  }
-
-  @Override
-  public void setAppend(String append) {
-    setAppend(P6Util.isTrue(append, true));
-  }
-  
-  @Override
-  public void setAppend(boolean append) {
-    this.append = append;
-  }
-
-  @Override
-  public boolean getAppend() {
-    return append;
-  }
-
-  @Override
-  public String getLogMessageFormatter() {
-    return logMessageFormatter;
-  }
-
-  @Override
-  public void setLogMessageFormatter(final String logMessageFormatter) {
-    this.logMessageFormatter = logMessageFormatter;
   }
 
   @Override

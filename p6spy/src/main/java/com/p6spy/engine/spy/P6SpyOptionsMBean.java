@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */package com.p6spy.engine.spy;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public interface P6SpyOptionsMBean {
@@ -78,6 +79,36 @@ public interface P6SpyOptionsMBean {
   String getDatabaseDialectDateFormat();
 
   void setDatabaseDialectDateFormat(String databaseDialectDateFormat);
+
+  void setAppend(boolean append);
+
+  boolean getAppend();
+
+  void setLogfile(String logfile);
+
+  String getLogfile();
+
+  String getAppender();
+
+  void setAppender(String className);
+
+  void setDateformat(String dateformat);
+
+  String getDateformat();
+
+  SimpleDateFormat getDateformatter();
+
+  boolean getStackTrace();
+
+  void setStackTrace(boolean stacktrace);
+  
+  String getStackTraceClass();
+
+  void setStackTraceClass(String stacktraceclass);
+
+  String getLogMessageFormatter();
+
+  void setLogMessageFormatter(String logMessageFormatter);
 
 
 }

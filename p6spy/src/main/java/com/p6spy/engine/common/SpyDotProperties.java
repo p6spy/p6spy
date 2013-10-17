@@ -26,17 +26,26 @@ public class SpyDotProperties {
   public static final String DEFAULT_OPTIONS_FILE = OPTIONS_FILE_PROPERTY;
 
   private final long lastModified;
-  private final Properties properties = new Properties();
+  private final Properties properties;
 
   private final File file;
 
   public SpyDotProperties() throws IOException {
     file = locate();
+    
+    if (null == file) {
+      // no config file preset => skip props loading
+      lastModified = -1;
+      properties = null;
+      return;
+    }
+    
     lastModified = file.lastModified();
 
     FileReader fr = null;
     try {
       fr = new FileReader(file);
+      properties = new Properties();
       properties.load(fr);
     } finally {
       if (null != fr) {

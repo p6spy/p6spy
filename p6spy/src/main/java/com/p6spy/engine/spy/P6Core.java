@@ -20,6 +20,7 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6ModuleManager;
 
 /**
@@ -51,9 +52,9 @@ public class P6Core {
           // just make sure to cause module initialization (if not done yet)
           P6ModuleManager.getInstance();
           
-          for (Driver driver : P6SpyDriver.registeredDrivers() ) {
+//          for (Driver driver : P6SpyDriver.registeredDrivers() ) {
 //            P6LogQuery.debug("Driver manager reporting driver registered: " + driver);
-          }
+//          }
         }
       }
     }

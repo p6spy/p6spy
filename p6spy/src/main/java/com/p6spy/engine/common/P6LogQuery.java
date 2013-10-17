@@ -23,11 +23,13 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.logging.appender.FileLogger;
-import com.p6spy.engine.logging.appender.FormattedLogger;
-import com.p6spy.engine.logging.appender.MessageFormattingStrategy;
-import com.p6spy.engine.logging.appender.P6Logger;
+import com.p6spy.engine.spy.P6SpyOptions;
+import com.p6spy.engine.spy.appender.FileLogger;
+import com.p6spy.engine.spy.appender.FormattedLogger;
+import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+import com.p6spy.engine.spy.appender.P6Logger;
 
 public class P6LogQuery {
   protected static PrintStream qlog;
@@ -39,7 +41,7 @@ public class P6LogQuery {
   }
 
   public synchronized static void initMethod() {
-    String appender = P6LogOptions.getActiveInstance().getAppender();
+    String appender = P6SpyOptions.getActiveInstance().getAppender();
 
     // create the logger
     try {
@@ -57,13 +59,13 @@ public class P6LogQuery {
 
     if (logger != null) {
       if (logger instanceof FileLogger) {
-        String logfile = P6LogOptions.getActiveInstance().getLogfile();
+        String logfile = P6SpyOptions.getActiveInstance().getLogfile();
         logfile = (logfile == null) ? "spy.log" : logfile;
 
         ((FileLogger) logger).setLogfile(logfile);
       }
       if (logger instanceof FormattedLogger) {
-        String logMessageFormatter = P6LogOptions.getActiveInstance().getLogMessageFormatter();
+        String logMessageFormatter = P6SpyOptions.getActiveInstance().getLogMessageFormatter();
         if (logMessageFormatter != null) {
           MessageFormattingStrategy strategy = null;
           try {
@@ -91,7 +93,7 @@ public class P6LogQuery {
     try {
       String path = P6Util.classPathFile(file);
       file = (path == null) ? file : path;
-      ps = P6Util.getPrintStream(file, P6LogOptions.getActiveInstance().getAppend());
+      ps = P6Util.getPrintStream(file, P6SpyOptions.getActiveInstance().getAppend());
     } catch (IOException io) {
       P6LogQuery.error("Error opening " + file + ", " + io.getMessage());
       ps = null;
@@ -113,7 +115,7 @@ public class P6LogQuery {
   static protected void doLog(int connectionId, long elapsed, String category, String prepared, String sql) {
     if (logger != null) {
       java.util.Date now = P6Util.timeNow();
-      SimpleDateFormat sdf = P6LogOptions.getActiveInstance().getDateformatter();
+      SimpleDateFormat sdf = P6SpyOptions.getActiveInstance().getDateformatter();
       String stringNow;
       if (sdf == null) {
         stringNow = Long.toString(now.getTime());
@@ -123,8 +125,8 @@ public class P6LogQuery {
 
       logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);
 
-      boolean stackTrace = P6LogOptions.getActiveInstance().getStackTrace();
-      String stackTraceClass = P6LogOptions.getActiveInstance().getStackTraceClass();
+      boolean stackTrace = P6SpyOptions.getActiveInstance().getStackTrace();
+      String stackTraceClass = P6SpyOptions.getActiveInstance().getStackTraceClass();
       if (stackTrace) {
         Exception e = new Exception();
         if (stackTraceClass != null) {
@@ -150,8 +152,13 @@ public class P6LogQuery {
   }
 
   static boolean isCategoryOk(String category) {
-    List<String> includeCategories = P6LogOptions.getActiveInstance().getIncludeCategoriesList();
-    List<String> excludeCategories = P6LogOptions.getActiveInstance().getExcludeCategoriesList();
+    P6LogLoadableOptions logOptions = P6LogOptions.getActiveInstance();
+    if (null == logOptions) {
+      return true;
+    }
+    
+    List<String> includeCategories = logOptions.getIncludeCategoriesList();
+    List<String> excludeCategories = logOptions.getExcludeCategoriesList();
     
     return (includeCategories == null || includeCategories.isEmpty() || foundCategory(category, includeCategories))
         && !foundCategory(category, excludeCategories);
@@ -270,7 +277,7 @@ public class P6LogQuery {
       doLog(-1, "error", "", sql);
     }
   }
-
+  
   public static P6Logger getLogger() {
     return logger;
   }
