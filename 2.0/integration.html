@@ -51,8 +51,8 @@
                           <a href="../2.0/install.html" title="Installation">Installation</a>
             </li>
                       <li class="none">
-                          <a href="../2.0/integration.html" title="Integration">Integration</a>
-            </li>
+            <strong>Integration</strong>
+          </li>
                       <li class="none">
                           <a href="../2.0/configandusage.html" title="Configuration and Usage">Configuration and Usage</a>
             </li>
@@ -63,8 +63,8 @@
                           <a href="../2.0/knownissues.html" title="Known Issues">Known Issues</a>
             </li>
                       <li class="none">
-            <strong>FAQ</strong>
-          </li>
+                          <a href="../2.0/faq.html" title="FAQ">FAQ</a>
+            </li>
                       <li class="none">
                           <a href="../2.0/troubleshooting.html" title="Troubleshooting">Troubleshooting</a>
             </li>
@@ -110,28 +110,20 @@
     </div>
     <div id="bodyColumn">
       <div id="contentBox">
-        <h1>Frequently Asked Questions</h1>
+        <h1>Integrating P6Spy</h1>
+<p>A very typical use case for P6Spy is to enabled SQL logging to troubleshoot various database related issues during development. Assuming that making code changes is acceptable, then the following instructions can be used. If  making code changes is not a viable option, then following the instructions for <a href="install.html">Installing P6Spy</a>.</p>
 
-<ul>
+<ol style="list-style-type: decimal">
   
 <li>
-<p>Can I use log4j?</p>
-<p>Yes. See the Log File Format documentation for more information.</p></li>
-</ul>
-
-<ul>
+<p>Add p6spy.jar to the classpath. If your application uses Maven, Ivy, Gradle, etc just add a dependency on  p6spy:p6spy.</p></li>
   
 <li>
-<p>Can I use regular expressions to determine what is logged?</p>
-<p>Yes. See the Common Property File Settings documentation and refer to the stringmatcher section.</p></li>
-</ul>
-
-<ul>
-  
-<li>
-<p>Once the application is running, can I change the properties and enable the system to use the new properties?</p>
-<p>Yes. See the Common Property File Settings documentation and refer to the reloadproperties section.</p></li>
-</ul>
+<p>Wrap your DataSource with P6DataSource or modify your connection URL to add &#x2018;p6spy:&#x2019;.</p></li>
+</ol>
+<p>If your application uses a DataSource, simply wrap your current DataSource object with P6DataSource. P6DataSource has a constructor method that accepts the DataSource to wrap. This is by far the simplest method especially if you use a dependency injection framework such as Spring or Guice. </p>
+<p>If your application obtains connections from DriverManager, simply modify your JDBC connection URL to include &#x2018;p6spy:&#x2019;. For example, if your URL is <tt>jdbc:mysql://host/db</tt> then just change it to <tt>jdbc:p6spy:mysql://host/db</tt>. P6Spy implements the JDBC 4.0 API allowing automatic registration of our JDBC driver with DriverManager. As long as your application obtains connections through DriverManager, you only need to modify your database connection URL to activate P6Spy.</p>
+<p>By default, a file called spy.log will be created in the current working directory. To customize the logging (including using your application&#x2019;s logging framework) you can provide alternate configuration in a file called spy.properties. This file just needs to be at the root of the classpath. See <a href="configandusage.html">Configuration and Usage</a> for details.</p>
       </div>
     </div>
     <div class="clear">
