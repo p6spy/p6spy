@@ -292,7 +292,7 @@
 <a class="jxr_linenumber" name="282" href="#282">282</a>       Statement statement = connection.createStatement();
 <a class="jxr_linenumber" name="283" href="#283">283</a>       
 <a class="jxr_linenumber" name="284" href="#284">284</a>         <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="285" href="#285">285</a>             P6LogOptions.getActiveInstance().setStackTrace(<span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="285" href="#285">285</a>             P6SpyOptions.getActiveInstance().setStackTrace(<span class="jxr_string">"true"</span>);
 <a class="jxr_linenumber" name="286" href="#286">286</a> 
 <a class="jxr_linenumber" name="287" href="#287">287</a>             <em class="jxr_comment">// perform a query &amp; make sure we get the stack trace</em>
 <a class="jxr_linenumber" name="288" href="#288">288</a>             P6LogOptions.getActiveInstance().setFilter(<span class="jxr_string">"true"</span>);
@@ -308,7 +308,7 @@
 <a class="jxr_linenumber" name="298" href="#298">298</a>             P6LogOptions.getActiveInstance().setFilter(<span class="jxr_string">"true"</span>);
 <a class="jxr_linenumber" name="299" href="#299">299</a>             P6LogOptions.getActiveInstance().setExclude(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="300" href="#300">300</a>             P6LogOptions.getActiveInstance().setInclude(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="301" href="#301">301</a>             P6LogOptions.getActiveInstance().setStackTraceClass(<span class="jxr_string">"com.dont.match"</span>);
+<a class="jxr_linenumber" name="301" href="#301">301</a>             P6SpyOptions.getActiveInstance().setStackTraceClass(<span class="jxr_string">"com.dont.match"</span>);
 <a class="jxr_linenumber" name="302" href="#302">302</a>             query = <span class="jxr_string">"select 'a' from common_test"</span>;
 <a class="jxr_linenumber" name="303" href="#303">303</a>             statement.executeQuery(query);
 <a class="jxr_linenumber" name="304" href="#304">304</a>             <em class="jxr_comment">// this will actually match - just the stack trace wont fire</em>
@@ -319,7 +319,7 @@
 <a class="jxr_linenumber" name="309" href="#309">309</a>             P6LogOptions.getActiveInstance().setFilter(<span class="jxr_string">"true"</span>);
 <a class="jxr_linenumber" name="310" href="#310">310</a>             P6LogOptions.getActiveInstance().setExclude(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="311" href="#311">311</a>             P6LogOptions.getActiveInstance().setInclude(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="312" href="#312">312</a>             P6LogOptions.getActiveInstance().setStackTraceClass(<span class="jxr_string">"com.p6spy"</span>);
+<a class="jxr_linenumber" name="312" href="#312">312</a>             P6SpyOptions.getActiveInstance().setStackTraceClass(<span class="jxr_string">"com.p6spy"</span>);
 <a class="jxr_linenumber" name="313" href="#313">313</a>             query = <span class="jxr_string">"select 'b' from common_test"</span>;
 <a class="jxr_linenumber" name="314" href="#314">314</a>             statement.executeQuery(query);
 <a class="jxr_linenumber" name="315" href="#315">315</a>             assertTrue(<strong class="jxr_keyword">super</strong>.getLastLogEntry().contains(query));

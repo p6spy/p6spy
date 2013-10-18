@@ -153,7 +153,7 @@
 <a class="jxr_linenumber" name="143" href="#143">143</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6LogQuery;
 <a class="jxr_linenumber" name="144" href="#144">144</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6Util;
 <a class="jxr_linenumber" name="145" href="#145">145</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.SpyDotProperties;
-<a class="jxr_linenumber" name="146" href="#146">146</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.logging.appender.P6TestLogger;
+<a class="jxr_linenumber" name="146" href="#146">146</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.P6TestLogger;
 <a class="jxr_linenumber" name="147" href="#147">147</a> <strong class="jxr_keyword">import</strong> com.p6spy.engine.test.P6TestOptions;
 <a class="jxr_linenumber" name="148" href="#148">148</a> 
 <a class="jxr_linenumber" name="149" href="#149">149</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/spy/P6TestFramework.html">P6TestFramework</a> {
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="261" href="#261">261</a> 
 <a class="jxr_linenumber" name="262" href="#262">262</a>   <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> clearLastLogStackTrace() {
 <a class="jxr_linenumber" name="263" href="#263">263</a>     failOnNonP6TestLoggerUsage();
-<a class="jxr_linenumber" name="264" href="#264">264</a>     ((<a href="../../../../com/p6spy/engine/logging/appender/P6TestLogger.html">P6TestLogger</a>) P6LogQuery.getLogger()).clearLastStacktrace();
+<a class="jxr_linenumber" name="264" href="#264">264</a>     ((<a href="../../../../com/p6spy/engine/spy/appender/P6TestLogger.html">P6TestLogger</a>) P6LogQuery.getLogger()).clearLastStacktrace();
 <a class="jxr_linenumber" name="265" href="#265">265</a>   }
 <a class="jxr_linenumber" name="266" href="#266">266</a> }
 </pre>
