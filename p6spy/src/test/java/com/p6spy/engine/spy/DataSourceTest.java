@@ -54,7 +54,8 @@ public class DataSourceTest {
 
   @Before
   public void setup() throws Exception {
-    P6Core.reinit();
+    // make sure to reinit properly
+    new P6TestFramework("ds") {};
 
     user = "sa";
     password = null;

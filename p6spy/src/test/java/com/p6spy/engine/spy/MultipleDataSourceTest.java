@@ -33,7 +33,7 @@ public class MultipleDataSourceTest {
   @Before
   public void setUp() throws Exception {
     // make sure to reinit properly
-    new P6TestFramework("multids") {};
+    new P6TestFramework("ds") {};
 
 
     jndiResources = new ArrayList<Resource>();
