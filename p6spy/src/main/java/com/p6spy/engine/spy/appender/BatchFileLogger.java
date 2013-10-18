@@ -13,14 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.p6spy.engine.logging.appender;
+package com.p6spy.engine.spy.appender;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.P6SpyOptions;
 
 /**
  * SQL batch file logger Private: (?) No Appender that writes a trace of JDBC activity into an SQL
@@ -77,7 +77,7 @@ public class BatchFileLogger extends FileLogger {
     @Override
     public void setLogfile(String fileName) {
         try {
-            boolean append = P6LogOptions.getActiveInstance().getAppend();
+            boolean append = P6SpyOptions.getActiveInstance().getAppend();
             endOfStatement = append && 0L < new File(fileName).length();
             qlog = new PrintStream(new FileOutputStream(fileName, append));
         } catch (IOException e) {

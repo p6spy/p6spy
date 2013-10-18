@@ -110,9 +110,9 @@ reloadpropertiesinterval=60
 # settings (even those set during runtime - via JMX)
 # and starting with the clean table 
 # (only the properties read from the configuration file)
-#appender=com.p6spy.engine.logging.appender.Log4jLogger
-#appender=com.p6spy.engine.logging.appender.StdoutLogger
-appender=com.p6spy.engine.logging.appender.FileLogger
+#appender=com.p6spy.engine.spy.appender.Log4jLogger
+#appender=com.p6spy.engine.spy.appender.StdoutLogger
+appender=com.p6spy.engine.spy.appender.FileLogger
 
 # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) (used for file logger only)
 logfile=spy.log
@@ -122,7 +122,7 @@ logfile=spy.log
 append=true
 
 # class to use for formatting log messages - defaults to SingleLineFormat if not set
-#logMessageFormat=com.p6spy.engine.logging.appender.SingleLineFormat
+#logMessageFormat=com.p6spy.engine.spy.appender.SingleLineFormat
 
 #The following are for log4j logging only
 #Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here

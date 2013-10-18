@@ -35,4 +35,9 @@ public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsMBe
   void registerSpyDotPropertiesReloadChangedListener(SpyDotPropertiesReloadChangedListener reloadChangeListener);
   
   void unregisterSpyDotPropertiesReloadChangedListener(SpyDotPropertiesReloadChangedListener reloadChangeListener);
+  
+  void setStackTrace(String stacktrace);
+
+  void setAppend(String append);
+
 }

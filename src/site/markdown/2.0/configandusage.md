@@ -134,9 +134,9 @@ An example spy.properties file follows:
     useprefix=false
 
     #specifies the appender to use for logging
-    #appender=com.p6spy.engine.logging.appender.Log4jLogger
-    #appender=com.p6spy.engine.logging.appender.StdoutLogger
-    appender=com.p6spy.engine.logging.appender.FileLogger
+    #appender=com.p6spy.engine.spy.appender.Log4jLogger
+    #appender=com.p6spy.engine.spy.appender.StdoutLogger
+    appender=com.p6spy.engine.spy.appender.FileLogger
 
     # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) (used for file logger only)
     logfile = spy.log
@@ -146,7 +146,7 @@ An example spy.properties file follows:
     append=true
 
     # class to use for formatting log messages - defaults to SingleLineFormat if not set
-    #logMessageFormat=com.p6spy.engine.logging.appender.SingleLineFormat
+    #logMessageFormat=com.p6spy.engine.spy.appender.SingleLineFormat
 
     #The following are for log4j logging only
     #Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here
@@ -317,9 +317,9 @@ text file (default).
 * Using a CSV File—To output to a file, uncomment the FileLogger appender and specify a logfile and
   whether or not to append to the file or to clear the file each time:
 
-        #appender=com.p6spy.engine.logging.appender.Log4jLogger
-        #appender=com.p6spy.engine.logging.appender.StdoutLogger
-        appender=com.p6spy.engine.logging.appender.FileLogger
+        #appender=com.p6spy.engine.spy.appender.Log4jLogger
+        #appender=com.p6spy.engine.spy.appender.StdoutLogger
+        appender=com.p6spy.engine.spy.appender.FileLogger
 
         # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname(e:/test/spy.log) (used for file logger only)
         logfile = spy.log
@@ -330,15 +330,15 @@ text file (default).
 
 * Using StdOut—Uncomment the StdoutLogger as follows and all output will be sent to stdout in a CSV format:
 
-        #appender=com.p6spy.engine.logging.appender.Log4jLogger
-        appender=com.p6spy.engine.logging.appender.StdoutLogger
-        #appender=com.p6spy.engine.logging.appender.FileLogger
+        #appender=com.p6spy.engine.spy.appender.Log4jLogger
+        appender=com.p6spy.engine.spy.appender.StdoutLogger
+        #appender=com.p6spy.engine.spy.appender.FileLogger
 
 * Using Log4J—To output to log4j, make sure log4j is in your path, uncomment the log4j appender, and specify the desired log4j settings:
 
-        appender=com.p6spy.engine.logging.appender.Log4jLogger
-        #appender=com.p6spy.engine.logging.appender.StdoutLogger
-        # appender=com.p6spy.engine.logging.appender.FileLogger
+        appender=com.p6spy.engine.spy.appender.Log4jLogger
+        #appender=com.p6spy.engine.spy.appender.StdoutLogger
+        # appender=com.p6spy.engine.spy.appender.FileLogger
 
         #The following are for log4j logging only
         log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender
@@ -407,16 +407,16 @@ Setting useprefix to true requires you to prefix your URLs with p6spy:. The defa
 The log message format is selected by specifying the class to use to format the log messages.  The following
 classes are available with P6Spy.
 
-`com.p6spy.engine.logging.appender.SingleLineFormat`
+`com.p6spy.engine.spy.appender.SingleLineFormat`
 
-`com.p6spy.engine.logging.appender.MultiLineFormat`
+`com.p6spy.engine.spy.appender.MultiLineFormat`
 
 The MultiLineFormat might be better from a readability perspective.  Because it will place the effective SQL statement
 on a separate line.  However, the SingleLineFormat might be better if you have a need to parse the log messages.
 The default is SingleLineFormat for backward compatibility.
 
 You can also supply your own log message formatter to customize the format.  Simply create a class which implements
-the `com.p6spy.engine.logging.appender.MessageFormattingStrategy` interface and place it on the classpath.
+the `com.p6spy.engine.spy.appender.MessageFormattingStrategy` interface and place it on the classpath.
 
 ## Command Line Options
 

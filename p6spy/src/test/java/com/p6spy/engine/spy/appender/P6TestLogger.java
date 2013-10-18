@@ -1,10 +1,13 @@
-package com.p6spy.engine.logging.appender;
+package com.p6spy.engine.spy.appender;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.p6spy.engine.spy.appender.FileLogger;
+import com.p6spy.engine.spy.appender.P6Logger;
 
 /**
  * {@link FileLogger} extension capable of keeping history of log messages as well as the last

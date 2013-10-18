@@ -106,7 +106,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.logging.appender.P6TestLogger;
+import com.p6spy.engine.spy.appender.P6TestLogger;
 
 @RunWith(Parameterized.class)
 public class P6TestCallableStatement extends P6TestPreparedStatement {

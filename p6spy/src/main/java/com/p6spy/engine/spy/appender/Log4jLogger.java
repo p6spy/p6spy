@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.p6spy.engine.logging.appender;
+package com.p6spy.engine.spy.appender;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

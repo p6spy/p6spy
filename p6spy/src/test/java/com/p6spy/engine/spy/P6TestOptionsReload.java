@@ -39,8 +39,8 @@ public class P6TestOptionsReload {
    */
   @Test
   public void testJmxSetPropertyDiscartedOnExplicitJmxReload() throws Exception {
-    final String domainName = P6LogOptions.class.getPackage().getName();
-    final String beanName = P6LogOptions.class.getSimpleName();
+    final String domainName = P6SpyOptions.class.getPackage().getName();
+    final String beanName = P6SpyOptions.class.getSimpleName();
     final String attributeName = "StackTrace";
     
     // precondition
@@ -66,44 +66,44 @@ public class P6TestOptionsReload {
   @Test
   public void testSetPropertyDiscartedOnExplicitReload() throws Exception {
     // precondition
-    assertFalse(P6LogOptions.getActiveInstance().getStackTrace());
+    assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
 
     // value modification
-    P6LogOptions.getActiveInstance().setStackTrace(true);
-    assertTrue(P6LogOptions.getActiveInstance().getStackTrace());
+    P6SpyOptions.getActiveInstance().setStackTrace(true);
+    assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
 
     // props reload
     P6SpyOptions.getActiveInstance().reload();
 
     // jmx value modification discarted
-    assertFalse(P6LogOptions.getActiveInstance().getStackTrace());
+    assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
   }
 
   @Test
   public void testSetPropertyDiscartedOnAutoReload() throws Exception {
     // precondition
-    assertFalse(P6LogOptions.getActiveInstance().getStackTrace());
+    assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
 
     // value modification
-    P6LogOptions.getActiveInstance().setStackTrace(true);
-    assertTrue(P6LogOptions.getActiveInstance().getStackTrace());
+    P6SpyOptions.getActiveInstance().setStackTrace(true);
+    assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
 
     // no explicit props reload, just modify timestamp and wait till autoreload happens
     FileUtils.touch(new File(System.getProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY)));
     Thread.sleep(2000);
 
     // jmx value modification discarted
-    assertFalse(P6LogOptions.getActiveInstance().getStackTrace());
+    assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
   }
   
   @Test
   public void testAutoReloadLifecycle() throws Exception {
     // precondition
-    assertFalse(P6LogOptions.getActiveInstance().getStackTrace());
+    assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
 
     // value modification
-    P6LogOptions.getActiveInstance().setStackTrace(true);
-    assertTrue(P6LogOptions.getActiveInstance().getStackTrace());
+    P6SpyOptions.getActiveInstance().setStackTrace(true);
+    assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
 
     // disable auto reload
     P6SpyOptions.getActiveInstance().setReloadProperties(false);
@@ -111,7 +111,7 @@ public class P6TestOptionsReload {
     Thread.sleep(2000);
 
     // reload didn't happen
-    assertTrue(P6LogOptions.getActiveInstance().getStackTrace());
+    assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
     
     // enable auto reload
     P6SpyOptions.getActiveInstance().setReloadProperties(true);
@@ -119,7 +119,7 @@ public class P6TestOptionsReload {
     Thread.sleep(2000);
 
     // reload did happen
-    assertFalse(P6LogOptions.getActiveInstance().getStackTrace());
+    assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
     
   }
 

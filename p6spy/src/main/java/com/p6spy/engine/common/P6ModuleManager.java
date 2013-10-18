@@ -83,7 +83,9 @@ public class P6ModuleManager {
     }
 
     // unregister mbeans first (to prevent naming conflicts)
-    instance.mBeansRegistry.unregisterMBeans();
+    if (instance.mBeansRegistry != null) {
+      instance.mBeansRegistry.unregisterMBeans();      
+    }
 
     // kill reloader
     if (instance.reloader != null) {
@@ -101,7 +103,16 @@ public class P6ModuleManager {
    * @throws MalformedObjectNameException 
    */
   private P6ModuleManager() throws IOException, InstanceAlreadyExistsException, MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException {
-//    P6LogQuery.debug(this.getClass().getName() + " re/initiating modules started");
+    debug(this.getClass().getName() + " re/initiating modules started");
+
+    // no spy,properties config file found
+    if (null == spyDotProperties.getProperties()) {
+      // TODO refactor once spy.properties won't be mandatory
+      spyOptions = null;
+      reloader = null;
+      mBeansRegistry = null;
+      return;
+    }
     
     // hard coded - core module init - as it holds initial config
     {
@@ -138,7 +149,7 @@ public class P6ModuleManager {
     // init factories
     initFactories();
     
-//    P6LogQuery.debug(this.getClass().getName() + " re/initiating modules done");
+    debug(this.getClass().getName() + " re/initiating modules done");
   }
 
   public static P6ModuleManager getInstance() {
@@ -146,9 +157,7 @@ public class P6ModuleManager {
   }
 
   private static void handleInitEx(Exception e) {
-    // TODO report this problem the same as in the legacy impl
-    // as we're in serious trouble here
-    e.printStackTrace();
+      e.printStackTrace(System.err);
   }
 
   private void initFactories() {
@@ -175,7 +184,7 @@ public class P6ModuleManager {
           P6Factory factory = (P6Factory) P6Util.forName(className).newInstance();
           factories.add(factory);
 
-//          P6LogQuery.debug("Registered factory: " + className + " with options: " + spyOptions);
+          debug("Registered factory: " + className + " with options: " + spyOptions);
         }
       }
 
@@ -185,8 +194,20 @@ public class P6ModuleManager {
       throw new P6DriverNotFoundError(err);
     }
   }
-  
+
+
+  private void debug(String msg) {
+    // not initialized yet => nowhere to log yet
+    if (instance == null || instance.spyOptions == null) {
+      return;
+    }
+
+    P6LogQuery.debug(msg);
+  }
+
+  //
   // API methods
+  //
   
   /**
    * @param optionsClass the class to get the options for.
