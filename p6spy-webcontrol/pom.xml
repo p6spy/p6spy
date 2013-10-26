@@ -19,8 +19,8 @@
   <!-- each module needs to have this for the scm information to be correct in maven site -->
   <scm>
     <url>${parent.scm.url}</url>
-    <connection>${parent.scm.url}</connection>
-    <developerConnection>${parent.scm.url}</developerConnection>
+    <connection>${parent.scm.connection}</connection>
+    <developerConnection>${parent.scm.developerConnection}</developerConnection>
   </scm>
 
   <reporting>
