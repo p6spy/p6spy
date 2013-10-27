@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */package com.p6spy.engine.spy;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.Set;
 
 public interface P6SpyOptionsMBean {
 
@@ -24,9 +23,9 @@ public interface P6SpyOptionsMBean {
    */
   void reload();
   
-  void setUsePrefix(boolean usePrefix);
-
-  boolean getUsePrefix();
+//  void setUsePrefix(boolean usePrefix);
+//
+//  boolean getUsePrefix();
 
   void setAutoflush(boolean autoflush);
 
@@ -36,7 +35,7 @@ public interface P6SpyOptionsMBean {
 
   void setDriverlist(String driverlist);
 
-  List<String> getDriverNames();
+  Set<String> getDriverNames();
 
   boolean getReloadProperties();
 
@@ -74,7 +73,7 @@ public interface P6SpyOptionsMBean {
 
   void setModulelist(String modulelist);
 
-  List<String> getModuleNames();
+  Set<String> getModuleNames();
 
   String getDatabaseDialectDateFormat();
 
@@ -96,8 +95,6 @@ public interface P6SpyOptionsMBean {
 
   String getDateformat();
 
-  SimpleDateFormat getDateformatter();
-
   boolean getStackTrace();
 
   void setStackTrace(boolean stacktrace);
@@ -106,9 +103,9 @@ public interface P6SpyOptionsMBean {
 
   void setStackTraceClass(String stacktraceclass);
 
-  String getLogMessageFormatter();
+  String getLogMessageFormat();
 
-  void setLogMessageFormatter(String logMessageFormatter);
+  void setLogMessageFormat(String logMessageFormatter);
 
 
 }

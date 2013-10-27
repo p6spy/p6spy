@@ -13,22 +13,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.p6spy.engine.common;
+package com.p6spy.engine.spy.option;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
-public class SpyDotProperties {
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.P6ModuleManager;
+
+public class SpyDotProperties implements P6OptionsSource {
 
   public static final String OPTIONS_FILE_PROPERTY = "spy.properties";
   public static final String DEFAULT_OPTIONS_FILE = OPTIONS_FILE_PROPERTY;
 
   private final long lastModified;
-  private final Properties properties;
+  
+  private SpyDotPropertiesReloader reloader;
 
   private final File file;
+  private final Map<String, String> options;
 
   public SpyDotProperties() throws IOException {
     file = locate();
@@ -36,7 +42,7 @@ public class SpyDotProperties {
     if (null == file) {
       // no config file preset => skip props loading
       lastModified = -1;
-      properties = null;
+      options = null;
       return;
     }
     
@@ -45,8 +51,9 @@ public class SpyDotProperties {
     FileReader fr = null;
     try {
       fr = new FileReader(file);
-      properties = new Properties();
+      final Properties properties = new Properties();
       properties.load(fr);
+      options = P6Util.getPropertiesMap(properties);
     } finally {
       if (null != fr) {
         fr.close();
@@ -76,7 +83,21 @@ public class SpyDotProperties {
     return null;
   }
 
-  public Properties getProperties() {
-    return properties;
+  @Override
+  public Map<String, String> getOptions() {
+    return options;
+  }
+
+
+  @Override
+  public void preDestroy(P6ModuleManager p6moduleManager) {
+    if (reloader != null) {
+      reloader.kill(p6moduleManager);
+    }
+  }
+
+  @Override
+  public void postInit(P6ModuleManager p6moduleManager) {
+    reloader = new SpyDotPropertiesReloader(this, p6moduleManager);
   }
 }

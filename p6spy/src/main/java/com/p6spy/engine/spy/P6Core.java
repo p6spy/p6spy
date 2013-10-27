@@ -16,12 +16,10 @@ limitations under the License.
 package com.p6spy.engine.spy;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.List;
 
 import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6ModuleManager;
 
 /**
  * @author Quinton McCombs
@@ -67,6 +65,9 @@ public class P6Core {
     initialized = false;
     // force modules to be reloaded
     P6ModuleManager.getInstance().reload();
+    
+    // force logger to init
+    P6LogQuery.initialize();
     
     initialize();
     initialized = true;

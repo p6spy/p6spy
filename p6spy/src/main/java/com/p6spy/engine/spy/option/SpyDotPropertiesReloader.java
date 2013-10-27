@@ -13,31 +13,36 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.p6spy.engine.common;
+package com.p6spy.engine.spy.option;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.P6SpyLoadableOptions;
+import com.p6spy.engine.spy.P6SpyOptions;
 
-public class SpyDotPropertiesReloader implements SpyDotPropertiesReloadChangedListener {
+public class SpyDotPropertiesReloader implements P6OptionChangedListener {
 
   private ScheduledExecutorService reloader;
   private final SpyDotProperties spyDotProperties;
-  private boolean isKilled = false;
+  private boolean killed = false;
 
   public SpyDotPropertiesReloader(SpyDotProperties spyDotProperties,
-                                  P6SpyLoadableOptions spyOptions) {
+                                  P6ModuleManager p6ModuleManager) {
     this.spyDotProperties = spyDotProperties;
+    
+    final P6SpyLoadableOptions spyOptions = p6ModuleManager.getOptions(P6SpyOptions.class);
     reschedule(spyOptions.getReloadProperties(), spyOptions.getReloadPropertiesInterval());
-    spyOptions.registerSpyDotPropertiesReloadChangedListener(this);
+    
+    p6ModuleManager.registerOptionChangedListener(this);
   }
 
-  public synchronized void reschedule(final boolean isEnabled, final long reloadInterval) {
+  public synchronized void reschedule(final boolean enabled, final long reloadInterval) {
     shutdownNow();
     
-    if (!isEnabled || isKilled) {
+    if (!enabled || killed) {
       return;
     } 
 
@@ -57,14 +62,14 @@ public class SpyDotPropertiesReloader implements SpyDotPropertiesReloadChangedLi
     reloader.scheduleAtFixedRate(reader, reloadInterval, reloadInterval, TimeUnit.SECONDS);
     
     // seems someone killed in the meantime
-    if (isKilled) {
+    if (killed) {
       shutdownNow();
     }
   }
   
-  public void kill(P6SpyLoadableOptions spyOptions) {
-    isKilled = true;
-    spyOptions.unregisterSpyDotPropertiesReloadChangedListener(this);
+  public void kill(P6ModuleManager p6ModuleManager) {
+    p6ModuleManager.unregisterOptionChangedListener(this);
+    killed = true;
     shutdownNow();
   }
   
@@ -80,8 +85,12 @@ public class SpyDotPropertiesReloader implements SpyDotPropertiesReloadChangedLi
   }
 
   @Override
-  public void setAutoReload(boolean isEnabled, long secs) {
-    reschedule(isEnabled, secs);
+  public void optionChanged(String key, Object oldValue, Object newValue) {
+    if (key.equals(P6SpyOptions.RELOADPROPERTIES)) {
+      reschedule(Boolean.valueOf(newValue.toString()), P6SpyOptions.getActiveInstance().getReloadPropertiesInterval());
+    } else if (key.equals(P6SpyOptions.RELOADPROPERTIESINTERVAL)) {
+      reschedule(P6SpyOptions.getActiveInstance().getReloadProperties(), (Long) newValue);
+    }
   }
 
 }

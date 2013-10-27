@@ -13,16 +13,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-package com.p6spy.engine.common;
+package com.p6spy.engine.spy;
 
-import java.util.Properties;
+import java.util.Map;
 
 public interface P6LoadableOptions {
 
   /**
-   * Loads only those properties, that are relevant for the current implementation.
+   * Loads only those options, that are relevant for the current implementation.
    * 
-   * @param properties
+   * @param options
+   *          options to be loaded.
    */
-  void load(Properties properties);
+  void load(Map<String, String> options);
+
+  Map<String, String> getDefaults();
 }

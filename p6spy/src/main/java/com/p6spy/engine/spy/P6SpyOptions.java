@@ -15,81 +15,97 @@ limitations under the License.
 */
 package com.p6spy.engine.spy;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import com.p6spy.engine.common.P6ModuleManager;
 import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.common.SpyDotPropertiesReloadChangedListener;
-import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.spy.appender.FileLogger;
+import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+import com.p6spy.engine.spy.appender.P6Logger;
+import com.p6spy.engine.spy.appender.SingleLineFormat;
+import com.p6spy.engine.spy.option.P6OptionsRepository;
 
 public class P6SpyOptions implements P6SpyLoadableOptions {
 
-    public static final String DEFAULT_DB_DATEFORMAT = "dd-MMM-yy";
+    public static final String USE_PREFIX = "usePrefix";
+    public static final String AUTOFLUSH = "autoflush";
+    public static final String DRIVERLIST = "driverlist";
+    public static final String DRIVER_NAMES = "driverNames";
+    public static final String LOGFILE = "logfile";
+    public static final String LOG_MESSAGE_FORMAT = "logMessageFormat";
+    public static final String APPEND = "append";
+    public static final String DATEFORMAT = "dateformat";
+    public static final String APPENDER = "appender";
+    public static final String MODULELIST = "modulelist";
+    public static final String STACKTRACE = "stacktrace";
+    public static final String STACKTRACECLASS = "stacktraceclass";
+    public static final String RELOADPROPERTIES = "reloadproperties";
+    public static final String RELOADPROPERTIESINTERVAL = "reloadpropertiesinterval";
+    public static final String JNDICONTEXTFACTORY = "jndicontextfactory";
+    public static final String JNDICONTEXTPROVIDERURL = "jndicontextproviderurl";
+    public static final String JNDICONTEXTCUSTOM = "jndicontextcustom";
+    public static final String REALDATASOURCE = "realdatasource";
+    public static final String REALDATASOURCECLASS = "realdatasourceclass";
+    public static final String REALDATASOURCEPROPERTIES = "realdatasourceproperties";
+    // TODO not documented!
+    public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
     
-    private String modulelist;
-    private List<String> moduleNames;
-    private Set<P6Factory> moduleFactories;
+    // those set indirectly (via properties visible from outside)
+    public static final String MODULE_FACTORIES = "moduleFactories";
+    public static final String MODULE_NAMES = "moduleNames";
+    public static final String LOG_MESSAGE_FORMAT_INSTANCE = "logMessageFormatInstance";
+    public static final String APPENDER_INSTANCE = "appenderInstance";
     
-    private String driverlist;
-    private List<String> driverNames;
+    public static final Map<String, String> defaults;
 
-    private boolean usePrefix;
-    private boolean autoflush;
-    private boolean reloadProperties;
-    private long reloadPropertiesInterval;
-    private String jndicontextfactory;
-    private String jndicontextproviderurl;
-    private String jndicontextcustom;
-    private String realdatasource;
-    private String realdatasourceclass;
-    private String realdatasourceproperties;
-    private String databaseDialectDateFormat;
-    
-    private boolean append;
-    private String logMessageFormatter;
-    private String dateformat;
-    private boolean stackTrace;
-    private String stackTraceClass;
-    private String logfile;
-    private String appender;
+    static {
+      defaults = new HashMap<String, String>();
+      defaults.put(LOG_MESSAGE_FORMAT, SingleLineFormat.class.getName());
+      defaults.put(LOGFILE, "spy.log");
+      defaults.put(APPEND, Boolean.TRUE.toString());
+      defaults.put(APPENDER, FileLogger.class.getName());
+      defaults.put(MODULELIST, P6SpyFactory.class.getName());
+      defaults.put(STACKTRACE, Boolean.FALSE.toString());
+      defaults.put(AUTOFLUSH, Boolean.FALSE.toString());
+      defaults.put(RELOADPROPERTIES, Boolean.FALSE.toString());
+      defaults.put(RELOADPROPERTIESINTERVAL, Long.toString(60));
+      defaults.put(DATABASE_DIALECT_DATE_FORMAT, "dd-MMM-yy");
+    }
 
-    
-    // reloadproperties propagation
-    List<SpyDotPropertiesReloadChangedListener> reloadChangeListeners = new ArrayList<SpyDotPropertiesReloadChangedListener>();
+    private final P6OptionsRepository optionsRepository;
+
+    public P6SpyOptions(final P6OptionsRepository optionsRepository) {
+      this.optionsRepository = optionsRepository;
+    }
     
     @Override
-    public void load(Properties properties) {
-      loadLog4jConfig(properties);
+    public void load(Map<String, String> options) {
+      loadLog4jConfig(P6Util.getProperties(options));
       
-      setLogMessageFormatter(properties.getProperty("logMessageFormatter"));
-      setLogfile(properties.getProperty("logfile"));
-      setAppend(properties.getProperty("append"));
-      setDateformat(properties.getProperty("dateformat"));
-      setAppender(properties.getProperty("appender"));
-      setModulelist(properties.getProperty("modulelist"));
-      setDriverlist(properties.getProperty("driverlist"));
-      setStackTrace(properties.getProperty("stacktrace"));
-      setStackTraceClass(properties.getProperty("stacktraceclass"));
-      setUsePrefix(properties.getProperty("usePrefix"));
-      setAutoflush(properties.getProperty("autoflush"));
-      setReloadProperties(properties.getProperty("reloadproperties"));
-      setReloadPropertiesInterval(properties.getProperty("reloadpropertiesinterval"));
-      setJNDIContextFactory(properties.getProperty("jndicontextfactory"));
-      setJNDIContextProviderURL(properties.getProperty("jndicontextproviderurl"));
-      setJNDIContextCustom(properties.getProperty("jndicontextcustom"));
-      setRealDataSource(properties.getProperty("realdatasource"));
-      setRealDataSourceClass(properties.getProperty("realdatasourceclass"));
-      setRealDataSourceProperties(properties.getProperty("realdatasourceproperties"));
-      setDatabaseDialectDateFormat(properties.getProperty("databaseDialectDateFormat"));
+      setLogMessageFormat(options.get(LOG_MESSAGE_FORMAT));
+      setLogfile(options.get(LOGFILE));
+      setAppend(options.get(APPEND));
+      setDateformat(options.get(DATEFORMAT));
+      setAppender(options.get(APPENDER));
+      setModulelist(options.get(MODULELIST));
+      setDriverlist(options.get(DRIVERLIST));
+      setStackTrace(options.get(STACKTRACE));
+      setStackTraceClass(options.get(STACKTRACECLASS));
+//      setUsePrefix(options.get(USE_PREFIX));
+      setAutoflush(options.get(AUTOFLUSH));
+      setReloadProperties(options.get(RELOADPROPERTIES));
+      setReloadPropertiesInterval(options.get(RELOADPROPERTIESINTERVAL));
+      setJNDIContextFactory(options.get(JNDICONTEXTFACTORY));
+      setJNDIContextProviderURL(options.get(JNDICONTEXTPROVIDERURL));
+      setJNDIContextCustom(options.get(JNDICONTEXTCUSTOM));
+      setRealDataSource(options.get(REALDATASOURCE));
+      setRealDataSourceClass(options.get(REALDATASOURCECLASS));
+      setRealDataSourceProperties(options.get(REALDATASOURCEPROPERTIES));
+      setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
     }
     
     /**
@@ -114,36 +130,6 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
       return P6ModuleManager.getInstance().getOptions(P6SpyOptions.class);
     }
 
-    // auto reload listeners
-    
-    @Override
-    public void registerSpyDotPropertiesReloadChangedListener(SpyDotPropertiesReloadChangedListener reloadChangeListener) {
-      if (null == reloadChangeListener) {
-        return;
-      }
-      this.reloadChangeListeners.add(reloadChangeListener);
-    }
-    
-    @Override
-    public void unregisterSpyDotPropertiesReloadChangedListener(SpyDotPropertiesReloadChangedListener reloadChangeListener) {
-      if (null == reloadChangeListener) {
-        return;
-      }
-      this.reloadChangeListeners.remove(reloadChangeListener);
-    }
-    
-    private void fireSpyDotPropertiesReloadChanged(boolean isEnabled) {
-      for (SpyDotPropertiesReloadChangedListener reloadChangeListener : reloadChangeListeners) {
-        reloadChangeListener.setAutoReload(isEnabled, this.getReloadPropertiesInterval());
-      }
-    }
-    
-    private void fireSpyDotPropertiesReloadInternalChanged(long secs) {
-      for (SpyDotPropertiesReloadChangedListener reloadChangeListener : reloadChangeListeners) {
-        reloadChangeListener.setAutoReload(this.getReloadProperties(), secs);
-      }
-    }
-    
     // JMX exporsed API
     
     @Override
@@ -153,137 +139,130 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     
     @Override
     public Set<P6Factory> getModuleFactories() {
-      return moduleFactories;
+      return optionsRepository.getSet(P6Factory.class, MODULE_FACTORIES);
     }
     
-    @Override
-    public void setUsePrefix(String usePrefix) {
-      setUsePrefix(P6Util.isTrue(usePrefix, false));
-    }
-    
-    @Override
-    public void setUsePrefix(boolean usePrefix) {
-        this.usePrefix = usePrefix;
-    }
-
-    @Override
-    public boolean getUsePrefix() {
-        return usePrefix;
-    }
+//    @Override
+//    public void setUsePrefix(String usePrefix) {
+//      optionsRepository.set(Boolean.class, USE_PREFIX, usePrefix);
+//    }
+//    
+//    @Override
+//    public void setUsePrefix(boolean usePrefix) {
+//      optionsRepository.set(Boolean.class, USE_PREFIX, usePrefix);
+//    }
+//
+//    @Override
+//    public boolean getUsePrefix() {
+//      return optionsRepository.get(Boolean.class, USE_PREFIX);
+//    }
 
     @Override
     public void setAutoflush(String autoflush) {
-      setAutoflush(P6Util.isTrue(autoflush, false));
+      optionsRepository.set(Boolean.class, AUTOFLUSH, autoflush);
     }
     
     @Override
     public void setAutoflush(boolean autoflush) {
-      this.autoflush = autoflush;
+      optionsRepository.set(Boolean.class, AUTOFLUSH, autoflush);
     }
 
     @Override
     public boolean getAutoflush() {
-        return autoflush;
+      return optionsRepository.get(Boolean.class, AUTOFLUSH);
     }
 
     @Override
     public String getDriverlist() {
-      return driverlist;
+      return optionsRepository.get(String.class, DRIVERLIST);
     }
 
     @Override
     public void setDriverlist(final String driverlist) {
-      this.driverlist = driverlist;
-      
-      driverNames = new ArrayList<String>();
-      if( driverlist != null && !driverlist.trim().isEmpty() ) {
-          driverNames = Arrays.asList(driverlist.split(","));
-      }
+      optionsRepository.set(String.class, DRIVERLIST, driverlist);
+      optionsRepository.setSet(String.class, DRIVER_NAMES, driverlist);
     }
 
     @Override
     public boolean getReloadProperties() {
-        return reloadProperties;
+        return optionsRepository.get(Boolean.class, RELOADPROPERTIES);
     }
     @Override
     public void setReloadProperties(String reloadproperties) {
-      setReloadProperties(P6Util.isTrue(reloadproperties, false));
+      optionsRepository.set(Boolean.class, RELOADPROPERTIES, reloadproperties);
     }
     
     @Override
     public void setReloadProperties(boolean reloadproperties) {
-      this.reloadProperties = reloadproperties;
-      fireSpyDotPropertiesReloadChanged(reloadproperties);
+      optionsRepository.set(Boolean.class, RELOADPROPERTIES, reloadproperties);
     }
     
     @Override
     public long getReloadPropertiesInterval() {
-        return reloadPropertiesInterval;
+        return optionsRepository.get(Long.class, RELOADPROPERTIESINTERVAL);
     }
     @Override
     public void setReloadPropertiesInterval(String reloadpropertiesinterval) {
-      setReloadPropertiesInterval(P6Util.parseLong(reloadpropertiesinterval, -1l));
+      optionsRepository.set(Long.class, RELOADPROPERTIESINTERVAL, reloadpropertiesinterval);
     }
     
     @Override
     public void setReloadPropertiesInterval(long reloadpropertiesinterval) {
-      this.reloadPropertiesInterval = reloadpropertiesinterval;
-//      this.reloadMs = reloadPropertiesInterval * 1000l;
-      fireSpyDotPropertiesReloadInternalChanged(reloadpropertiesinterval);
+      optionsRepository.set(Long.class, RELOADPROPERTIESINTERVAL, reloadpropertiesinterval);
     }
     
     @Override
     public void setJNDIContextFactory(String jndicontextfactory) {
-      this.jndicontextfactory = jndicontextfactory;
+      optionsRepository.set(String.class, JNDICONTEXTFACTORY, jndicontextfactory);
     }
     @Override
     public String getJNDIContextFactory() {
-        return jndicontextfactory;
+        return optionsRepository.get(String.class, JNDICONTEXTFACTORY);
     }
     @Override
     public void setJNDIContextProviderURL(String jndicontextproviderurl) {
-      this.jndicontextproviderurl = jndicontextproviderurl;
+      optionsRepository.set(String.class, JNDICONTEXTPROVIDERURL, jndicontextproviderurl);
     }
     @Override
     public String getJNDIContextProviderURL() {
-        return jndicontextproviderurl;
+        return optionsRepository.get(String.class, JNDICONTEXTPROVIDERURL);
     }
     @Override
     public void setJNDIContextCustom(String jndicontextcustom) {
-      this.jndicontextcustom = jndicontextcustom;
+      optionsRepository.set(String.class, JNDICONTEXTCUSTOM, jndicontextcustom);
     }
     @Override
     public String getJNDIContextCustom() {
-        return jndicontextcustom;
+        return optionsRepository.get(String.class, JNDICONTEXTCUSTOM);
     }
     @Override
     public void setRealDataSource(String realdatasource) {
-      this.realdatasource = realdatasource;
+      optionsRepository.set(String.class, REALDATASOURCE, realdatasource);
     }
     @Override
     public String getRealDataSource() {
-        return realdatasource;
+        return optionsRepository.get(String.class, REALDATASOURCE);
     }
     @Override
     public void setRealDataSourceClass(String realdatasourceclass) {
-      this.realdatasourceclass = realdatasourceclass;
+      optionsRepository.set(String.class, REALDATASOURCECLASS, realdatasourceclass);
     }
     @Override
     public String getRealDataSourceClass() {
-        return realdatasourceclass;
+      return optionsRepository.get(String.class, REALDATASOURCECLASS);
     }
     @Override
     public void setRealDataSourceProperties(String realdatasourceproperties) {
-      this.realdatasourceproperties = realdatasourceproperties;
+      optionsRepository.set(String.class, REALDATASOURCEPROPERTIES, realdatasourceproperties);
     }
     @Override
     public String getRealDataSourceProperties() {
-        return realdatasourceproperties;
+        return optionsRepository.get(String.class, REALDATASOURCEPROPERTIES);
     }
 
     @Override
-    public List<String> getDriverNames() {
-        return driverNames;
+    public Set<String> getDriverNames() {
+        return optionsRepository.getSet(String.class, DRIVER_NAMES);
     }
 
     /**
@@ -293,7 +272,7 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
      */
     @Override
     public String getDatabaseDialectDateFormat() {
-        return databaseDialectDateFormat;
+        return optionsRepository.get(String.class, DATABASE_DIALECT_DATE_FORMAT);
     }
 
     /**
@@ -303,152 +282,132 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
      */
     @Override
     public void setDatabaseDialectDateFormat(String databaseDialectDateFormat) {
-      this.databaseDialectDateFormat = databaseDialectDateFormat;
-        if (databaseDialectDateFormat == null || databaseDialectDateFormat.length() == 0) {
-          this.databaseDialectDateFormat = DEFAULT_DB_DATEFORMAT;
-        }
+      optionsRepository.set(String.class, DATABASE_DIALECT_DATE_FORMAT, databaseDialectDateFormat);
     }
 
 
     @Override
     public String getModulelist() {
-      return this.modulelist;
+      // TODO handle getters for lists represented in csv strings correctly
+      return optionsRepository.get(String.class, MODULELIST);
     }
 
     @Override
     public void setModulelist(String modulelist) {
-      this.modulelist = modulelist;
-      
-      // set moduleNames
-      {
-        moduleNames = new ArrayList<String>();
-        if( modulelist != null && !modulelist.trim().isEmpty() ) {
-          moduleNames = new ArrayList<String>(Arrays.asList(modulelist.split(",")));
-        } 
-
-        // core module is a must
-        if (!moduleNames.contains(P6SpyFactory.class.getName())) {
-          moduleNames.add(P6SpyFactory.class.getName());
-        }
+      // no mather what P6SpyOptions is a must
+      if (modulelist != null && modulelist.contains(P6OptionsRepository.COLLECTION_REMOVAL_PREFIX + P6SpyFactory.class.getName())) {
+        throw new IllegalArgumentException(P6SpyFactory.class.getName() + " can't be removed from the module list, as it's considered a core factory!");
       }
+//      if (modulelist != null && !modulelist.contains(P6SpyFactory.class.getName())) {
+//        modulelist += "," + P6SpyFactory.class.getName();
+//      }
       
-      // set moduleFactories
-      {
-        moduleFactories = new HashSet<P6Factory>();
-        for (String moduleName : moduleNames) {
-          try {
-            if (null == moduleName || moduleName.trim().isEmpty()) {
-              continue;
-            }
-            
-            moduleFactories.add((P6Factory) Class.forName(moduleName).newInstance());
-          } catch (InstantiationException e) {
-            System.err.println("Cannot instantiate module factory: " + moduleName + ". " + e);
-          } catch (IllegalAccessException e) {
-            System.err.println("Cannot instantiate module factory: " + moduleName + ". " + e);
-          } catch (ClassNotFoundException e) {
-            System.err.println("Cannot instantiate module factory: " + moduleName + ". " + e);
-          }
-        }
-      }
-    }
+      // TODO handle getters for lists represented in csv strings correctly
+      optionsRepository.set(String.class, MODULELIST, modulelist);
+      optionsRepository.setSet(String.class, MODULE_NAMES, modulelist);
+      optionsRepository.setSet(P6Factory.class, MODULE_FACTORIES, modulelist);
+    }      
 
     @Override
-    public List<String> getModuleNames() {
-      return moduleNames;
+    public Set<String> getModuleNames() {
+      return optionsRepository.getSet(String.class, MODULE_NAMES);
     }
 
     @Override
     public void setAppend(boolean append) {
-      this.append = append;
+      optionsRepository.set(Boolean.class, APPEND, append);
     }
 
     @Override
     public boolean getAppend() {
-      return append;
+      return optionsRepository.get(Boolean.class, APPEND);
     }
 
     @Override
     public String getAppender() {
-      return appender;
+      return optionsRepository.get(String.class, APPENDER);
     }
 
     @Override
+    public P6Logger getAppenderInstance() {
+      return optionsRepository.get(P6Logger.class, APPENDER_INSTANCE);
+    }
+    
+    @Override
     public void setAppender(String className) {
-      appender = className;
-      
-      if (appender == null) {
-        appender = FileLogger.class.getName();
-      }
+      optionsRepository.set(String.class, APPENDER, className);
+      optionsRepository.set(P6Logger.class, APPENDER_INSTANCE, className);
     }
 
     @Override
     public void setDateformat(String dateformat) {
-      this.dateformat = dateformat;
+      optionsRepository.set(String.class, DATEFORMAT, dateformat);
     }
 
     @Override
     public String getDateformat() {
-      return dateformat;
-    }
-
-    @Override
-    public SimpleDateFormat getDateformatter() {
-      if (dateformat == null || dateformat.equals("")) {
-        return null;
-      } else {
-        return new SimpleDateFormat(dateformat);
-      }
+      return optionsRepository.get(String.class, DATEFORMAT);
     }
 
     @Override
     public boolean getStackTrace() {
-      return stackTrace;
+      return optionsRepository.get(Boolean.class, STACKTRACE);
     }
 
     @Override
     public void setStackTrace(boolean stacktrace) {
-      this.stackTrace = stacktrace;
+      optionsRepository.set(Boolean.class, STACKTRACE, stacktrace);
     }
     
     @Override
     public void setStackTrace(String stacktrace) {
-      setStackTrace(P6Util.isTrue(stacktrace, true));
+      optionsRepository.set(Boolean.class, STACKTRACE, stacktrace);
     }
 
     @Override
     public String getStackTraceClass() {
-      return stackTraceClass;
+      return optionsRepository.get(String.class, STACKTRACECLASS);
     }
 
     @Override
     public void setStackTraceClass(String stacktraceclass) {
-      this.stackTraceClass = stacktraceclass;
+      optionsRepository.set(String.class, STACKTRACECLASS, stacktraceclass);
     }
 
     @Override
     public void setLogfile(String logfile) {
-      this.logfile = logfile == null ? "spy.log" : logfile;
+      optionsRepository.set(String.class, LOGFILE, logfile);
     }
 
     @Override
     public String getLogfile() {
-      return logfile;
+      return optionsRepository.get(String.class, LOGFILE);
     }
 
     @Override
     public void setAppend(String append) {
-      setAppend(P6Util.isTrue(append, true));
+      optionsRepository.set(Boolean.class, APPEND, append);
     }
 
     @Override
-    public String getLogMessageFormatter() {
-      return logMessageFormatter;
+    public String getLogMessageFormat() {
+      return optionsRepository.get(String.class, LOG_MESSAGE_FORMAT);
     }
 
     @Override
-    public void setLogMessageFormatter(final String logMessageFormatter) {
-      this.logMessageFormatter = logMessageFormatter;
+    public void setLogMessageFormat(final String logMessageFormat) {
+      optionsRepository.set(String.class, LOG_MESSAGE_FORMAT, logMessageFormat);
+      optionsRepository.set(MessageFormattingStrategy.class, LOG_MESSAGE_FORMAT_INSTANCE, logMessageFormat);
+    }
+
+    @Override
+    public MessageFormattingStrategy getLogMessageFormatInstance() {
+      return optionsRepository.get(MessageFormattingStrategy.class, LOG_MESSAGE_FORMAT_INSTANCE);
+    }
+    
+    @Override
+    public Map<String, String> getDefaults() {
+      return defaults;
     }
 
 }

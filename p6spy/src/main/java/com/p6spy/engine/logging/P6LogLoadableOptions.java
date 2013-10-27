@@ -15,7 +15,7 @@ limitations under the License.
 */
 package com.p6spy.engine.logging;
 
-import com.p6spy.engine.common.P6LoadableOptions;
+import com.p6spy.engine.spy.P6LoadableOptions;
 
 public interface P6LogLoadableOptions extends P6LoadableOptions, P6LogOptionsMBean {
 

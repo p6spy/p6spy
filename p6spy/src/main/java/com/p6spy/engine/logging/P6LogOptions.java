@@ -15,42 +15,58 @@ limitations under the License.
 */
 package com.p6spy.engine.logging;
 
-import java.util.List;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-import com.p6spy.engine.common.P6ModuleManager;
-import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.P6ModuleManager;
+import com.p6spy.engine.spy.option.P6OptionsRepository;
 
 public class P6LogOptions implements P6LogLoadableOptions {
 
-  private String sqlExpression;
-  private boolean filter;
-  private long executionThreshold;
+  public static final String EXCLUDE = "exclude";
+  public static final String INCLUDE = "include";
+  public static final String FILTER = "filter";
+  public static final String EXCLUDECATEGORIES = "excludecategories";
+  public static final String INCLUDECATEGORIES = "includecategories";
+  public static final String EXECUTION_THRESHOLD = "executionThreshold";
+  public static final String SQLEXPRESSION = "sqlexpression";
 
-  private String include;
-  private String exclude;
-  private List<String> includeTableList;
-  private List<String> excludeTableList;
+  // those set indirectly (via properties visible from outside) 
+  public static final String INCLUDE_TABLES = "includeTables";
+  public static final String EXCLUDE_TABLES = "excludeTables";
+  public static final String INCLUDECATEGORIES_SET = "includecategoriesSet";
+  public static final String EXCLUDECATEGORIES_SET = "excludecategoriesSet";
+
   
-  private String includecategories;
-  private String excludecategories;
-  private List<String> includeCategoriesList;
-  private List<String> excludeCategoriesList;
+  public static final Map<String, String> defaults;
 
+  static {
+    defaults = new HashMap<String, String>();
+    
+    defaults.put(FILTER, Boolean.toString(false));
+    defaults.put(EXCLUDECATEGORIES, "info,debug,result,resultset,batch");
+    defaults.put(EXECUTION_THRESHOLD, Long.toString(0));
+  }
 
+  private final P6OptionsRepository optionsRepository;
+
+  public P6LogOptions(final P6OptionsRepository optionsRepository) {
+    this.optionsRepository = optionsRepository;
+  }
+  
   @Override
-  public void load(Properties properties) {
+  public void load(Map<String, String> options) {
     
-    setSQLExpression(properties.getProperty("sqlexpression"));
-    setExecutionThreshold(properties.getProperty("executionThreshold"));
+    setSQLExpression(options.get(SQLEXPRESSION));
+    setExecutionThreshold(options.get(EXECUTION_THRESHOLD));
     
-    setIncludecategories(properties.getProperty("includecategories"));
-    setExcludecategories(properties.getProperty("excludecategories"));
+    setIncludecategories(options.get(INCLUDECATEGORIES));
+    setExcludecategories(options.get(EXCLUDECATEGORIES));
     
-    setFilter(properties.getProperty("filter"));
-    // following depend on the filter => keep the order here
-    setInclude(properties.getProperty("include"));
-    setExclude(properties.getProperty("exclude"));
+    setFilter(options.get(FILTER));
+    setInclude(options.get(INCLUDE));
+    setExclude(options.get(EXCLUDE));
   }
 
   /**
@@ -61,116 +77,115 @@ public class P6LogOptions implements P6LogLoadableOptions {
   public static P6LogLoadableOptions getActiveInstance() {
     return P6ModuleManager.getInstance().getOptions(P6LogOptions.class);
   }
-  
+
+  @Override
+  public Map<String, String> getDefaults() {
+    return defaults;
+  }
+
   // JMX exposed API
   
   @Override
   public void setExclude(String exclude) {
-    this.exclude = exclude;
-    this.excludeTableList = P6Util.parseCSVList(exclude);  
+    optionsRepository.set(String.class, EXCLUDE, exclude);
+    optionsRepository.setSet(String.class, EXCLUDE_TABLES, exclude);
   }
 
   @Override
   public String getExclude() {
-    return exclude;
+    return optionsRepository.get(String.class, EXCLUDE);
   }
 
   @Override
   public void setExcludecategories(String excludecategories) {
-    this.excludecategories = excludecategories;
-    this.excludeCategoriesList = P6Util.parseCSVList(excludecategories);  
+    optionsRepository.set(String.class, EXCLUDECATEGORIES, excludecategories);
+    optionsRepository.setSet(String.class, EXCLUDECATEGORIES_SET, excludecategories);
   }
 
   @Override
   public String getExcludecategories() {
-    return excludecategories;
+    return optionsRepository.get(String.class, EXCLUDECATEGORIES);
   }
 
   @Override
   public void setFilter(String filter) {
-    setFilter(P6Util.isTrue(filter, false));
+    optionsRepository.set(Boolean.class, FILTER, filter);
   }
   
   @Override
   public void setFilter(boolean filter) {
-    this.filter = filter;
+    optionsRepository.set(Boolean.class, FILTER, filter);
   }
 
   @Override
   public boolean getFilter() {
-    return filter;
+    return optionsRepository.get(Boolean.class, FILTER);
   }
 
   @Override
   public void setInclude(String include) {
-    this.include = include;
-    
-    if (getFilter()) {
-      this.includeTableList = P6Util.parseCSVList(include);  
-    }
+    optionsRepository.set(String.class, INCLUDE, include);
+    optionsRepository.setSet(String.class, INCLUDE_TABLES, include);
   }
 
   @Override
   public String getInclude() {
-    return include;
+    return optionsRepository.get(String.class, INCLUDE);
   }
 
   @Override
   public void setIncludecategories(String includecategories) {
-    this.includecategories = includecategories;
-    
-    if (getFilter()) {
-      this.includeCategoriesList = P6Util.parseCSVList(includecategories);  
-    }
+    optionsRepository.set(String.class, INCLUDECATEGORIES, includecategories);
+    optionsRepository.setSet(String.class, INCLUDECATEGORIES_SET, includecategories);
   }
 
   @Override
   public String getIncludecategories() {
-    return includecategories;
+    return optionsRepository.get(String.class, INCLUDECATEGORIES);
   }
 
   @Override
   public String getSQLExpression() {
-    return sqlExpression;
+    return optionsRepository.get(String.class, SQLEXPRESSION);
   }
 
   @Override
   public void setSQLExpression(String sqlexpression) {
-    this.sqlExpression = sqlexpression != null && sqlexpression.equals("") ? null : sqlexpression;
+    optionsRepository.set(String.class, SQLEXPRESSION, sqlexpression);
   }
 
   @Override
   public void setExecutionThreshold(String executionThreshold) {
-    setExecutionThreshold(P6Util.parseLong(executionThreshold, 0));
+    optionsRepository.set(Long.class, EXECUTION_THRESHOLD, executionThreshold);
   }
   
   @Override
   public void setExecutionThreshold(long executionThreshold) {
-    this.executionThreshold = executionThreshold;
+    optionsRepository.set(Long.class, EXECUTION_THRESHOLD, executionThreshold);
   }
 
   @Override
   public long getExecutionThreshold() {
-      return executionThreshold;
+    return optionsRepository.get(Long.class, EXECUTION_THRESHOLD);
   }
   
   @Override
-  public List<String> getIncludeTableList() {
-    return includeTableList;
+  public Set<String> getIncludeTables() {
+    return optionsRepository.getSet(String.class, INCLUDE_TABLES);
   }
 
   @Override
-  public List<String> getExcludeTableList() {
-    return excludeTableList;
+  public Set<String> getExcludeTables() {
+    return optionsRepository.getSet(String.class, EXCLUDE_TABLES);
   }
 
   @Override
-  public List<String> getIncludeCategoriesList() {
-    return includeCategoriesList;
+  public Set<String> getIncludeCategoriesSet() {
+    return optionsRepository.getSet(String.class, INCLUDECATEGORIES_SET);
   }
 
   @Override
-  public List<String> getExcludeCategoriesList() {
-    return excludeCategoriesList;
+  public Set<String> getExcludeCategoriesSet() {
+    return optionsRepository.getSet(String.class, EXCLUDECATEGORIES_SET);
   }
 }
