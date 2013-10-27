@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package com.p6spy.engine.spy.option;
 
 import static org.junit.Assert.assertFalse;
@@ -25,7 +25,8 @@ import java.sql.SQLException;
 import javax.management.JMException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.j256.simplejmx.client.JmxClient;
@@ -33,14 +34,13 @@ import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.P6TestFramework;
 import com.p6spy.engine.spy.P6TestMBean;
-import com.p6spy.engine.spy.option.SpyDotProperties;
 
 public class P6TestOptionsReload {
 
-  private static JmxClient jmxClient = null;
+  private JmxClient jmxClient = null;
 
-  @BeforeClass
-  public static void connectToJMX() throws JMException, SQLException, IOException,
+  @Before
+  public void setUp() throws JMException, SQLException, IOException,
       InterruptedException {
     // make sure to reinit properly
     new P6TestFramework("reload") {
@@ -49,6 +49,12 @@ public class P6TestOptionsReload {
     String jmxPortProperty = System.getProperty(P6TestMBean.COM_SUN_MANAGEMENT_JMXREMOTE_PORT);
     int jmxPort = P6Util.parseInt(jmxPortProperty, P6TestMBean.JMXREMOTE_PORT_DEFAULT);
     jmxClient = new JmxClient(jmxPort);
+  }
+
+  @After
+  public void tearDown() {
+    // cleanup to make sure other tests work as expected
+    System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.STACKTRACE);
   }
 
   /**
@@ -96,7 +102,7 @@ public class P6TestOptionsReload {
     // props reload
     P6SpyOptions.getActiveInstance().reload();
 
-    // jmx value modification discarted
+    // value modification discarted
     assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
   }
 
@@ -150,7 +156,7 @@ public class P6TestOptionsReload {
     // => false (+ survives across reloads)
     {
       System.getProperties().remove(SpyDotProperties.OPTIONS_FILE_PROPERTY);
-      
+
       P6SpyOptions.getActiveInstance().reload();
 
       assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
@@ -159,7 +165,7 @@ public class P6TestOptionsReload {
 
       assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
     }
-    
+
     // [default] stacktrace=false
     // [SpyDotProperties] #stacktrace=true
     // => false (+ survives across reloads)
@@ -217,11 +223,11 @@ public class P6TestOptionsReload {
       File p6TestProperties = new File(P6TestFramework.TEST_FILE_PATH, "P6Test_reload_2.properties");
       System
           .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
-      
+
       final String domainName = P6SpyOptions.class.getPackage().getName();
       final String beanName = P6SpyOptions.class.getSimpleName();
       final String attributeName = "StackTrace";
-      
+
       // jmx value modification
       jmxClient.setAttribute(domainName, beanName, attributeName, true);
 
@@ -232,5 +238,33 @@ public class P6TestOptionsReload {
       assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
     }
   }
-  
+
+  @Test
+  public void testSpyDotPropertiesWithSpaceInPathWorks() throws Exception {
+
+    final File spyDotPropertiesWithSpaceInPath;
+    // create spy.properties file with the space in path
+    {
+      final File tmpFile = File.createTempFile("whatever", ".tmp");
+      final File tmpDir = tmpFile.getParentFile();
+      tmpFile.delete();
+      final File dirWithSpace = new File(tmpDir.getAbsolutePath() + "/path with space");
+      dirWithSpace.deleteOnExit();
+      dirWithSpace.mkdir();
+      assertTrue(dirWithSpace.exists());
+      final File source = new File(P6TestFramework.TEST_FILE_PATH, "P6Test_reload_2.properties");
+      spyDotPropertiesWithSpaceInPath = new File(dirWithSpace, "P6Test_reload_2.properties");
+      FileUtils.copyFile(source, spyDotPropertiesWithSpaceInPath);
+    }
+    // ensure property loaded from file correctly
+    // [default] stacktrace=false
+    // [SpyDotProperties] stacktrace=true
+    // => true
+    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
+        spyDotPropertiesWithSpaceInPath.getAbsolutePath());
+    P6SpyOptions.getActiveInstance().reload();
+
+    assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
+  }
+
 }
