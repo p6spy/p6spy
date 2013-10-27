@@ -146,6 +146,21 @@ public class P6TestOptionsReload {
   @Test
   public void testOptionSourcesPriorities() throws Exception {
     // [default] stacktrace=false
+    // # no properties file at all
+    // => false (+ survives across reloads)
+    {
+      System.getProperties().remove(SpyDotProperties.OPTIONS_FILE_PROPERTY);
+      
+      P6SpyOptions.getActiveInstance().reload();
+
+      assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
+
+      P6SpyOptions.getActiveInstance().reload();
+
+      assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
+    }
+    
+    // [default] stacktrace=false
     // [SpyDotProperties] #stacktrace=true
     // => false (+ survives across reloads)
     {
@@ -156,8 +171,6 @@ public class P6TestOptionsReload {
 
       assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
 
-      System
-          .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
       P6SpyOptions.getActiveInstance().reload();
 
       assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
@@ -219,4 +232,5 @@ public class P6TestOptionsReload {
       assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
     }
   }
+  
 }
