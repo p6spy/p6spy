@@ -1,8 +1,23 @@
-# Configuration and Usage
+# <a name="confusage">Configuration and Usage</a>
+
+Configuration follows layered approach, where each layer overrides the values set by the lower ones (leaving those not provided unchanged):
+- JMX set properties (please note, that these are reset on next reload)
+- System properties
+- Environment variables
+- spy.properties
+- defaults
+
+For the full list of available options, see the section [Common Property File Settings](#settings). 
+Please note that providing any of these via System properties/Environment variables is possible, using the particular property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;
+
+To enable full overriding capabilities, all those options considering lists (comma separated) values follow the rules:
+- "-"&lt;property value&gt; - causes removal of particular value from the list
+- &lt;property value&gt; - causes adding of particular value to the list
+please be aware of the restriction. In fact this also means you need to be aware of values set by the lower configuration layers (including defaults) to properly override.modify those.
 
 ## <a name="settings">Common Property File Settings</a>
 
-An example spy.properties file follows:
+An example spy.properties file follows (please note default values mentioned as these reffer to defaults mentioned in section: [Configuration and Usage](#confusage)):
 
     #################################################################
     # P6Spy Options File                                            #

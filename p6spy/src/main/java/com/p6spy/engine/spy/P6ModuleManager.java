@@ -136,6 +136,9 @@ public class P6ModuleManager {
       }
     }
 
+    // make sure the proper listener registration
+    optionsRepository.registerOptionChangedListener(new P6LogQuery());
+    
     optionsRepository.initCompleted();
 
     // init MBeans
