@@ -40,8 +40,7 @@ public class P6TestOptionsReload {
   private JmxClient jmxClient = null;
 
   @Before
-  public void setUp() throws JMException, SQLException, IOException,
-      InterruptedException {
+  public void setUp() throws JMException, SQLException, IOException, InterruptedException {
     // make sure to reinit properly
     new P6TestFramework("reload") {
     };
@@ -241,7 +240,9 @@ public class P6TestOptionsReload {
 
   @Test
   public void testSpyDotPropertiesWithSpaceInPathWorks() throws Exception {
-
+    //
+    // setup preconditions
+    //
     final File spyDotPropertiesWithSpaceInPath;
     // create spy.properties file with the space in path
     {
@@ -256,12 +257,33 @@ public class P6TestOptionsReload {
       spyDotPropertiesWithSpaceInPath = new File(dirWithSpace, "P6Test_reload_2.properties");
       FileUtils.copyFile(source, spyDotPropertiesWithSpaceInPath);
     }
+
+    //
+    // full path in system property case
+    //
+
     // ensure property loaded from file correctly
     // [default] stacktrace=false
     // [SpyDotProperties] stacktrace=true
     // => true
     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
         spyDotPropertiesWithSpaceInPath.getAbsolutePath());
+    P6SpyOptions.getActiveInstance().reload();
+
+    assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
+
+    //
+    // relative path with p6.home in system properties case
+    //
+
+    // ensure property loaded from file correctly
+    // [default] stacktrace=false
+    // [SpyDotProperties] stacktrace=true
+    // => true
+    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
+        spyDotPropertiesWithSpaceInPath.getName());
+    System
+        .setProperty("p6.home", spyDotPropertiesWithSpaceInPath.getParentFile().getAbsolutePath());
     P6SpyOptions.getActiveInstance().reload();
 
     assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
