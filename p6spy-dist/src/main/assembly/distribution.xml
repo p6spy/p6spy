@@ -4,9 +4,7 @@
 
   <id>distribution</id>
   <formats>
-    <!-- tar format is used for distributions -->
-    <format>tar</format>
-    <!-- zip format is used for the embedded container -->
+    <format>tar.gz</format>
     <format>zip</format>
   </formats>
   <includeBaseDirectory>true</includeBaseDirectory>
