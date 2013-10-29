@@ -1,126 +1,18 @@
 /*
- *
- * ====================================================================
- *
- * The P6Spy Software License, Version 1.1
- *
- * This license is derived and fully compatible with the Apache Software
- * license, see http://www.apache.org/LICENSE.txt
- *
- * Copyright (c) 2001-2002 Andy Martin, Ph.D. and Jeff Goke
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in
- * the documentation and/or other materials provided with the
- * distribution.
- *
- * 3. The end-user documentation included with the redistribution, if
- * any, must include the following acknowlegement:
- * "The original concept and code base for P6Spy was conceived
- * and developed by Andy Martin, Ph.D. who generously contribued
- * the first complete release to the public under this license.
- * This product was due to the pioneering work of Andy
- * that began in December of 1995 developing applications that could
- * seamlessly be deployed with minimal effort but with dramatic results.
- * This code is maintained and extended by Jeff Goke and with the ideas
- * and contributions of other P6Spy contributors.
- * (http://www.p6spy.com)"
- * Alternately, this acknowlegement may appear in the software itself,
- * if and wherever such third-party acknowlegements normally appear.
- *
- * 4. The names "P6Spy", "Jeff Goke", and "Andy Martin" must not be used
- * to endorse or promote products derived from this software without
- * prior written permission. For written permission, please contact
- * license@p6spy.com.
- *
- * 5. Products derived from this software may not be called "P6Spy"
- * nor may "P6Spy" appear in their names without prior written
- * permission of Jeff Goke and Andy Martin.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- */
+Copyright 2013 P6Spy
 
-/**
- * Description: Test class for statements
- *
- * $Author: cheechq $
- * $Revision: 1.11 $
- * $Date: 2003/06/03 19:20:26 $
- *
- * $Id: P6TestFramework.java,v 1.11 2003/06/03 19:20:26 cheechq Exp $
- * $Source: /cvsroot/p6spy/p6spy/com/p6spy/engine/test/P6TestFramework.java,v $
- * $Log: P6TestFramework.java,v $
- * Revision 1.11  2003/06/03 19:20:26  cheechq
- * removed unused imports
- *
- * Revision 1.10  2003/04/09 16:44:00  jeffgoke
- * Added Jboss JMX support.  Updated documentation.  Added execution threshold property to only log queries taking longer than a specified time.
- *
- * Revision 1.9  2003/02/14 22:22:58  aarvesen
- * use a define for the property file
- *
- * Revision 1.8  2003/01/28 19:32:31  jeffgoke
- * fixed bug exposed by test framework where option reloading was having problems if options were manipulated before the driver was created.
- *
- * Revision 1.7  2003/01/28 17:59:12  jeffgoke
- * fixed test cases to use new options
- *
- * Revision 1.6  2003/01/23 00:43:37  aarvesen
- * Changed the module to be dot rather than underscore
- *
- * Revision 1.5  2003/01/03 21:19:24  aarvesen
- * use the new P6Util.forName
- *
- * Revision 1.4  2002/12/19 23:46:54  aarvesen
- * use factory rather than driver
- *
- * Revision 1.3  2002/12/18 01:03:03  aarvesen
- * Remove no-longer-used p6cache driver
- *
- * Revision 1.2  2002/10/06 18:24:04  jeffgoke
- * no message
- *
- * Revision 1.1  2002/05/24 07:30:46  jeffgoke
- * version 1 rewrite
- *
- * Revision 1.4  2002/05/18 06:39:52  jeffgoke
- * Peter Laird added Outage detection.  Added junit tests for outage detection.
- * Fixed multi-driver tests.
- *
- * Revision 1.3  2002/05/16 04:58:40  jeffgoke
- * Viktor Szathmary added multi-driver support.
- * Rewrote P6SpyOptions to be easier to manage.
- * Fixed several bugs.
- *
- * Revision 1.2  2002/05/05 00:43:00  jeffgoke
- * Added Philip's reload code.
- *
- * Revision 1.1  2002/04/21 06:16:20  jeffgoke
- * added test cases, fixed batch bugs
- *
- *
- *
- */
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.p6spy.engine.spy;
 
 import java.io.CharArrayWriter;
@@ -134,7 +26,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -142,8 +33,8 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.common.SpyDotProperties;
 import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.spy.option.SpyDotProperties;
 import com.p6spy.engine.test.P6TestOptions;
 
 public abstract class P6TestFramework {
@@ -187,7 +78,7 @@ public abstract class P6TestFramework {
 
   public P6TestFramework(String db) throws SQLException, IOException {
     this.db = db;
-    File p6TestProperties = new File (TEST_FILE_PATH, "P6Test_" + db + ".properties");
+    final File p6TestProperties = new File (TEST_FILE_PATH, "P6Test_" + db + ".properties");
     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
     log.info("Setting up test for "+db);
     
@@ -203,7 +94,7 @@ public abstract class P6TestFramework {
     
   @Before
   public void setUpFramework() throws Exception {
-      List<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
+      Collection<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
       String user = P6TestOptions.getActiveInstance().getUser();
       String password = P6TestOptions.getActiveInstance().getPassword();
       String url = P6TestOptions.getActiveInstance().getUrl();
@@ -232,7 +123,6 @@ public abstract class P6TestFramework {
       System.err.println("1 DRIVER FOUND == " + e.nextElement());
     }
   }
-
 
   //
   // log entries retrieval

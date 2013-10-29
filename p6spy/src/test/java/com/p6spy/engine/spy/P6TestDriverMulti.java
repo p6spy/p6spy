@@ -1,3 +1,18 @@
+/*
+Copyright 2013 P6Spy
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.p6spy.engine.spy;
 
 import static org.junit.Assert.assertTrue;
@@ -11,7 +26,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Iterator;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,9 +63,13 @@ public class P6TestDriverMulti extends P6TestFramework {
       try {
           // rebuild a the 2.nd connection for the multi-driver test
 
-        List<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
+        Collection<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
           if (driverNames != null && driverNames.isEmpty() && driverNames.size() > 1) {
-            String driverName2 = driverNames.get(1);
+            Iterator<String> iterator = driverNames.iterator();
+            // skip the 1.st elem
+            iterator.next();
+            
+            String driverName2 = iterator.next();
             if( driverName2 != null ) {
               P6Util.forName(driverName2);
               System.err.println("REGISTERED: "+driverName2);

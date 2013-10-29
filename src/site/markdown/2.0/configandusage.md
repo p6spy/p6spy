@@ -1,8 +1,23 @@
-# Configuration and Usage
+# <a name="confusage">Configuration and Usage</a>
+
+Configuration follows layered approach, where each layer overrides the values set by the lower ones (leaving those not provided unchanged):
+- JMX set properties (please note, that these are reset on next reload)
+- System properties
+- Environment variables
+- spy.properties
+- defaults
+
+For the full list of available options, see the section [Common Property File Settings](#settings). 
+Please note that providing any of these via System properties/Environment variables is possible, using the particular property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;
+
+To enable full overriding capabilities, all those options considering lists (comma separated) values follow the rules:
+- "-"&lt;property value&gt; - causes removal of particular value from the list
+- &lt;property value&gt; - causes adding of particular value to the list
+please be aware of the restriction. In fact this also means you need to be aware of values set by the lower configuration layers (including defaults) to properly override.modify those.
 
 ## <a name="settings">Common Property File Settings</a>
 
-An example spy.properties file follows:
+An example spy.properties file follows (please note default values mentioned as these reffer to defaults mentioned in section: [Configuration and Usage](#confusage)):
 
     #################################################################
     # P6Spy Options File                                            #
@@ -10,22 +25,14 @@ An example spy.properties file follows:
     #################################################################
 
     #################################################################
-    # MODULES                                                       #
-    #                                                               #
-    # Modules provide the P6Spy functionality. If a module, such    #
-    # as module_log is commented out, that functionality will not   #
-    # be available. If it is not commented out (if it is active),   #
-    # the functionality will be active.                             #
-    #                                                               #
-    # Values set in Modules cannot be reloaded using the            #
-    # reloadproperties variable. Once they are loaded, they remain  #
-    # in memory until the application is restarted.                 #
-    #                                                               #
-    #################################################################
-
-    module.log=com.p6spy.engine.logging.P6LogFactory
-    #module.outage=com.p6spy.engine.outage.P6OutageFactory
-    #module.leak=com.p6spy.engine.leak.P6LeakFactory
+	# MODULES                                                       #
+	#                                                               #
+	# Modulelist addapts the modular functionality of P6Spy.		#
+	# Only modules listed are active 								#
+	# Please note that the core module (P6SpyFactory) can't be		# 
+	# deactivated											        #
+	#################################################################
+	#modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
 
     ################################################################
     # P6LOG SPECIFIC PROPERTIES #
@@ -50,8 +57,8 @@ An example spy.properties file follows:
     # This time is reloadable. #
     #
     # executionthreshold=integer time (milliseconds)
-    #
-    executionthreshold=
+    # (default is 0)
+    #executionthreshold=
 
     ################################################################
     # P6OUTAGE SPECIFIC PROPERTIES #
@@ -71,9 +78,11 @@ An example spy.properties file follows:
     # outagedetection=true|false
     # outagedetectioninterval=integer time (seconds)
     #
-    outagedetection=false
-    outagedetectioninterval=
-
+	# (default is false)
+	#outagedetection=false
+	# (default is 60)
+	#outagedetectioninterval=30
+	
     ################################################################
     # COMMON PROPERTIES #
     ################################################################
@@ -81,33 +90,41 @@ An example spy.properties file follows:
     # A comma separated list of JDBC drivers to load and register.
     # This is rarely needed!  Only use this when you the driver is not
     # getting loaded automatically.
-    driverlist=
+    # (default is empty)
+    #driverlist=
 
     # comma separated list of tables to include
-    include =
+    # (default is empty)
+    #include =
     # comma separated list of tables to exclude
-    exclude =
+    # (default is empty)
+    #exclude =
 
     # sql expression to evaluate if using regex
-    sqlexpression =
+    # (default is empty)
+	#sqlexpression = 
 
     # filter what is logged
-    filter=false
+	# (default is false)
+	#filter=false
 
-    # turn on tracing
-    trace = true
-    autoflush = true
+	# for flushing per statement
+	# (default is false)
+	#autoflush = false
 
-    # sets the date format using Java's SimpleDateFormat routine
-    dateformat=
+    # sets the date format using Java's SimpleDateFormat routine. 
+	# In case property is not set, miliseconds since 1.1.1970 (unix time) is used (default is empty)
+	#dateformat=
+
 
     #list of categories to explicitly include
-    includecategories=
+    # (default is empty)
+    #includecategories=
 
     #list of categories to exclude: error, info, batch, debug, statement,
     #commit, rollback and result are valid values
-    #excludecategories=
-    excludecategories=info,debug,result,batch
+    # (default is info,debug,result,resultset,batch)
+    #excludecategories=info,debug,result,resultset,batch
 
     #allows you to use a regex engine or your own matching engine to determine
     #which statements to log
@@ -125,27 +142,34 @@ An example spy.properties file follows:
     # Please note: reload means forgetting all the previously set
     # settings (even those set during runtime - via JMX)
     # and starting with the clean table 
-    # (only the properties read from the configuration file)
-    reloadproperties=false
-    # determines how often should be reloaded in seconds
-    reloadpropertiesinterval=60
+	# (default is false)
+	#reloadproperties=false
+	# determines how often should be reloaded in seconds
+	# (default is 60)
+	#reloadpropertiesinterval=60
 
     #if=true then url must be prefixed with p6spy:
     useprefix=false
 
     #specifies the appender to use for logging
-    #appender=com.p6spy.engine.spy.appender.Log4jLogger
-    #appender=com.p6spy.engine.spy.appender.StdoutLogger
-    appender=com.p6spy.engine.spy.appender.FileLogger
+	# Please note: reload means forgetting all the previously set
+	# settings (even those set during runtime - via JMX)
+	# and starting with the clean table 
+	# (only the properties read from the configuration file)
+    # (default is com.p6spy.engine.spy.appender.FileLogger)
+	#appender=com.p6spy.engine.spy.appender.Log4jLogger
+	#appender=com.p6spy.engine.spy.appender.StdoutLogger
+	#appender=com.p6spy.engine.spy.appender.FileLogger
 
     # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) (used for file logger only)
-    logfile = spy.log
+    # (default is spy.log)
+    #logfile = spy.log
 
     # append to the p6spy log file. if this is set to false the
     # log file is truncated every time. (file logger only)
     append=true
 
-    # class to use for formatting log messages - defaults to SingleLineFormat if not set
+    # class to use for formatting log messages (default is: com.p6spy.engine.spy.appender.SingleLineFormat)
     #logMessageFormat=com.p6spy.engine.spy.appender.SingleLineFormat
 
     #The following are for log4j logging only
@@ -193,30 +217,30 @@ An example spy.properties file follows:
     #################################################################
     realdatasourceproperties=port;3306,serverName;myhost,databaseName;jbossdb,foo;bar
 
-
-    #################################################################
-    # JNDI DataSource lookup #
-    # #
-    # If you are using the DataSource support outside of an app #
-    # server, you will probably need to define the JNDI Context #
-    # environment. #
-    # #
-    # If the P6Spy code will be executing inside an app server then #
-    # do not use these properties, and the DataSource lookup will #
-    # use the naming context defined by the app server. #
-    # #
-    # The two standard elements of the naming environment are #
-    # jndicontextfactory and jndicontextproviderurl. If you need #
-    # additional elements, use the jndicontextcustom property. #
-    # You can define multiple properties in jndicontextcustom, #
-    # in name value pairs. Separate the name and value with a #
-    # semicolon, and separate the pairs with commas. #
-    # #
-    # The example shown here is for a standalone program running on #
-    # a machine that is also running JBoss, so the JDNI context #
-    # is configured for JBoss (3.0.4). #
-    # #
-    #################################################################
+	#################################################################
+	# JNDI DataSource lookup                                        #
+	#                                                               #
+	# If you are using the DataSource support outside of an app     #
+	# server, you will probably need to define the JNDI Context     #
+	# environment.                                                  #
+	#                                                               #
+	# If the P6Spy code will be executing inside an app server then #
+	# do not use these properties, and the DataSource lookup will   #
+	# use the naming context defined by the app server.             #
+	#                                                               #
+	# The two standard elements of the naming environment are	    #
+	# jndicontextfactory and jndicontextproviderurl. If you need    #
+	# additional elements, use the jndicontextcustom property.      #
+	# You can define multiple properties in jndicontextcustom,      #
+	# in name value pairs. Separate the name and value with a       #
+	# semicolon, and separate the pairs with commas.                #
+	#                                                               #
+	# The example shown here is for a standalone program running on #
+	# a machine that is also running JBoss, so the JDNI context     #
+	# is configured for JBoss (3.0.4).                              #
+	#                                                               #
+	# (by default all these are empty)                              #
+	#################################################################
     #jndicontextfactory=org.jnp.interfaces.NamingContextFactory
     #jndicontextproviderurl=localhost:1099
     #jndicontextcustom=java.naming.factory.url.pkgs;org.jboss.nameing:org.jnp.interfaces
@@ -225,22 +249,24 @@ An example spy.properties file follows:
     #jndicontextproviderurl=iiop://localhost:900
 
 
-### module.xxx
+### modulelist
 
-module.xxx is a particular module loaded at system startup. A module contains a group of functionality. If a
-module line is not commented out, it is loaded into memory, and will remain in memory until the application is
-restarted. Modules can not be changed by using the reloadproperties function. If all modules are commented out,
-then nothing except the wrapped database driver is loaded.
+modulelist holds the list of p6spy modules activated. A module contains a group of functionality. If none are specified only core
+p6spy framework will be activated (no logging,...). Still once reload of the properties happen, or these are set by JMX, modules would be
+dynamically loaded/unloaded.
 
-Currently the following modules are supported:
+The following modules come with the p6spy by default:
 
-    module.log=com.p6spy.engine.logging.P6LogSpyDriver
-    module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
-    module.leak=com.p6spy.engine.leak.P6LeakFactory
 
-module.log is required for the logging functionality, see [P6Log](#p6log).
-module.outage is required for the outage functionality, see [P6Outage](#p6outage).
-module.leak is required for the leak functionality, see [P6Leak](#p6leak).
+    modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
+
+
+Where these are required:
+ - com.p6spy.engine.logging.P6LogFactory - for the logging functionality, see [P6Log](#p6log).
+ - com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see [P6Outage](#p6outage).
+ - com.p6spy.engine.leak.P6LeakFactory - for and leak functionality, see [P6Leak](#p6leak).
+
+Please note to implement custom module have a look at the imlpementation of the any of the existing ones.
 
 ### driverlist
 
@@ -377,7 +403,7 @@ comma-delimited list of categories to include. See excludecategories for a valid
 ### dateformat
 
 Setting a value for dateformat changes the date format value printed in the log file. No value prints the current time
-in milliseconds, a useful feature for parsing the log. The date format engine is Java's SimpleDateFormat class.
+in milliseconds (unix time), a useful feature for parsing the log. The date format engine is Java's SimpleDateFormat class.
 Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
 
     dateformat=MM-dd-yy HH:mm:ss:SS

@@ -1,4 +1,4 @@
-package com.p6spy.engine.common;
+package com.p6spy.engine.spy;
 
 public interface SpyDotPropertiesReloadChangedListener {
 

@@ -15,7 +15,7 @@ limitations under the License.
  */
 package com.p6spy.engine.logging;
 
-import java.util.List;
+import java.util.Set;
 
 public interface P6LogOptionsMBean {
 
@@ -47,12 +47,12 @@ public interface P6LogOptionsMBean {
 
   long getExecutionThreshold();
 
-  List<String> getIncludeTableList();
+  Set<String> getIncludeTables();
 
-  List<String> getExcludeTableList();
+  Set<String> getExcludeTables();
 
-  List<String> getIncludeCategoriesList();
+  Set<String> getIncludeCategoriesSet();
 
-  List<String> getExcludeCategoriesList();
+  Set<String> getExcludeCategoriesSet();
 
 }

@@ -13,15 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.p6spy.engine.logging;
+package com.p6spy.engine.spy.option;
 
-import com.p6spy.engine.spy.P6LoadableOptions;
+public interface P6OptionChangedListener {
 
-public interface P6LogLoadableOptions extends P6LoadableOptions, P6LogOptionsMBean {
-
-  // these we don't need to be exposed via JMX
-  
-  void setFilter(String filter);
-
-  void setExecutionThreshold(String executionThreshold);
+  public void optionChanged(final String key, final Object oldValue, final Object newValue);
 }

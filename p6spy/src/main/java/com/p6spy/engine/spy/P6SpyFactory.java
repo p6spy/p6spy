@@ -17,13 +17,13 @@ limitations under the License.
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.p6spy.engine.common.P6LoadableOptions;
+import com.p6spy.engine.spy.option.P6OptionsRepository;
 
 public class P6SpyFactory implements P6Factory {
 
   @Override
-  public P6LoadableOptions getOptions() {
-    return new P6SpyOptions();
+  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
+    return new P6SpyOptions(optionsRepository);
   }
 
   @Override

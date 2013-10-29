@@ -20,72 +20,66 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.FormattedLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
+import com.p6spy.engine.spy.option.P6OptionChangedListener;
 
-public class P6LogQuery {
+public class P6LogQuery implements P6OptionChangedListener {
   protected static PrintStream qlog;
 
   protected static P6Logger logger;
 
   static {
-    initMethod();
+    initialize();
   }
 
-  public synchronized static void initMethod() {
-    String appender = P6SpyOptions.getActiveInstance().getAppender();
+  /**
+   * Options that cause re-init of {@link P6LogQuery}.
+   */
+  private static final Set<String> ON_CHANGE = new HashSet<String>(Arrays.asList(
+      P6SpyOptions.APPENDER, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT));
 
-    // create the logger
-    try {
-      logger = (P6Logger) P6Util.forName(appender).newInstance();
-    } catch (Exception e1) {
-      // try one more hack to load the thing
-      try {
-        ClassLoader loader = ClassLoader.getSystemClassLoader();
-        logger = (P6Logger) loader.loadClass(appender).newInstance();
-
-      } catch (Exception e) {
-        System.err.println("Cannot instantiate " + appender + ", even on second attempt.  Logging to file log4jaux.log: " + e);
-      }
+  public void optionChanged(final String key, final Object oldValue, final Object newValue) {
+    if (ON_CHANGE.contains(key)) {
+      initialize();
     }
+  }
 
+  public synchronized static void initialize() {
+    final P6ModuleManager moduleManager = P6ModuleManager.getInstance();
+    if (null == moduleManager) {
+      // not initialized yet => can't proceed
+      return;
+    }
+    
+    final P6SpyOptions opts = moduleManager.getOptions(P6SpyOptions.class);
+    logger = opts.getAppenderInstance();
     if (logger != null) {
       if (logger instanceof FileLogger) {
-        String logfile = P6SpyOptions.getActiveInstance().getLogfile();
-        logfile = (logfile == null) ? "spy.log" : logfile;
-
+        final String logfile = opts.getLogfile();
         ((FileLogger) logger).setLogfile(logfile);
       }
       if (logger instanceof FormattedLogger) {
-        String logMessageFormatter = P6SpyOptions.getActiveInstance().getLogMessageFormatter();
-        if (logMessageFormatter != null) {
-          MessageFormattingStrategy strategy = null;
-          try {
-            strategy = (MessageFormattingStrategy) P6Util.forName(logMessageFormatter).newInstance();
-          } catch (Exception e1) {
-            // try one more hack to load the thing
-            try {
-              ClassLoader loader = ClassLoader.getSystemClassLoader();
-              strategy = (MessageFormattingStrategy) loader.loadClass(logMessageFormatter).newInstance();
-            } catch (Exception e) {
-              System.err.println("Cannot instantiate " + logMessageFormatter + ", even on second attempt. " + e);
-            }
-          }
-          if (strategy != null) {
-            ((FormattedLogger) logger).setStrategy(strategy);
-          }
-
+        final MessageFormattingStrategy strategy = opts.getLogMessageFormatInstance();
+        if (strategy != null) {
+          ((FormattedLogger) logger).setStrategy(strategy);
         }
       }
     }
+    
+    // hook itself to reflect changes
+    moduleManager.registerOptionChangedListener(new P6LogQuery());
   }
 
   static public PrintStream logPrintStream(String file) {
@@ -113,20 +107,26 @@ public class P6LogQuery {
 
   // this is an internal procedure used to actually write the log information
   static protected void doLog(int connectionId, long elapsed, String category, String prepared, String sql) {
+    // giveit one more try if not initialized yet
+    if (logger == null) {
+      initialize();
+    }
+    
     if (logger != null) {
-      java.util.Date now = P6Util.timeNow();
-      SimpleDateFormat sdf = P6SpyOptions.getActiveInstance().getDateformatter();
-      String stringNow;
-      if (sdf == null) {
-        stringNow = Long.toString(now.getTime());
+//      java.util.Date now = P6Util.timeNow();
+      final String format = P6SpyOptions.getActiveInstance().getDateformat();
+      final String stringNow;
+      if (format == null) {
+        stringNow = Long.toString(System.currentTimeMillis());
       } else {
-        stringNow = sdf.format(new java.util.Date(now.getTime())).trim();
+        stringNow = new SimpleDateFormat(format).format(new java.util.Date()).trim();
       }
+//      sdf.format(new java.util.Date(System.currentTimeMillis())).trim();
 
       logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);
 
-      boolean stackTrace = P6SpyOptions.getActiveInstance().getStackTrace();
-      String stackTraceClass = P6SpyOptions.getActiveInstance().getStackTraceClass();
+      final boolean stackTrace = P6SpyOptions.getActiveInstance().getStackTrace();
+      final String stackTraceClass = P6SpyOptions.getActiveInstance().getStackTraceClass();
       if (stackTrace) {
         Exception e = new Exception();
         if (stackTraceClass != null) {
@@ -152,36 +152,43 @@ public class P6LogQuery {
   }
 
   static boolean isCategoryOk(String category) {
-    P6LogLoadableOptions logOptions = P6LogOptions.getActiveInstance();
-    if (null == logOptions) {
+    P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
+    if (null == opts) {
       return true;
     }
     
-    List<String> includeCategories = logOptions.getIncludeCategoriesList();
-    List<String> excludeCategories = logOptions.getExcludeCategoriesList();
+    // no filtering => nothing more to be done here
+    if (!opts.getFilter()) {
+      return true;
+    }
+
+    final Set<String> includeCategories = opts.getIncludeCategoriesSet();
+    final Set<String> excludeCategories = opts.getExcludeCategoriesSet();
     
     return (includeCategories == null || includeCategories.isEmpty() || foundCategory(category, includeCategories))
         && !foundCategory(category, excludeCategories);
   }
 
-  static boolean foundCategory(String category, List<String> categories) {
-    if (categories != null) {
-      for (String categorie : categories) {
-        if (category.equals(categorie)) {
-          return true;
-        }
-      }
-    }
-    return false;
+  static boolean foundCategory(String category, Set<String> categories) {
+    return categories == null || categories.contains(category);
+//    if (categories != null) {
+//      for (String categorie : categories) {
+//        if (category.equals(categorie)) {
+//          return true;
+//        }
+//      }
+//    }
+//    return false;
   }
 
   static boolean isQueryOk(final String sql) {
-    if (P6LogOptions.getActiveInstance().getSQLExpression() != null) {
+    final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
+    if (opts.getSQLExpression() != null) {
       return isSqlOk(sql);
     } 
     
-    List<String> includeTables = P6LogOptions.getActiveInstance().getIncludeTableList();
-    List<String> excludeTables = P6LogOptions.getActiveInstance().getExcludeTableList();
+    final Set<String> includeTables = opts.getIncludeTables();
+    final Set<String> excludeTables = opts.getExcludeTables();
     
     return ((includeTables == null || includeTables.isEmpty() || isTableFound(sql, includeTables))) && !isTableFound(sql, excludeTables);
   }
@@ -191,7 +198,7 @@ public class P6LogQuery {
     return Pattern.matches(sqlexpression, sql);
   }
 
-  static boolean isTableFound(final String sql, final List<String> tables) {
+  static boolean isTableFound(final String sql, final Set<String> tables) {
     final String sqlLowercased = sql.toLowerCase();
 
     if (tables != null) {
