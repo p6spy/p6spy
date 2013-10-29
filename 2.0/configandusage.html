@@ -111,9 +111,30 @@
     <div id="bodyColumn">
       <div id="contentBox">
         <h1><a name="confusage">Configuration and Usage</a></h1>
-<p>Configuration follows layered approach, where each layer overrides the values set by the lower ones (leaving those not provided unchanged): - JMX set properties (please note, that these are reset on next reload) - System properties - Environment variables - spy.properties - defaults</p>
+<p>Configuration follows layered approach, where each layer overrides the values set by the lower ones (leaving those not provided unchanged):</p>
+
+<ul>
+  
+<li>JMX set properties (please note, that these are reset on next reload)</li>
+  
+<li>System properties</li>
+  
+<li>Environment variables</li>
+  
+<li>spy.properties</li>
+  
+<li>defaults</li>
+</ul>
 <p>For the full list of available options, see the section <a href="#settings">Common Property File Settings</a>. Please note that providing any of these via System properties/Environment variables is possible, using the particular property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;</p>
-<p>To enable full overriding capabilities, all those options considering lists (comma separated) values follow the rules: - &#x201c;-&#x201d;&lt;property value&gt; - causes removal of particular value from the list - &lt;property value&gt; - causes adding of particular value to the list please be aware of the restriction. In fact this also means you need to be aware of values set by the lower configuration layers (including defaults) to properly override.modify those.</p>
+<p>To enable full overriding capabilities, all those options considering lists (comma separated) values follow the rules:</p>
+
+<ul>
+  
+<li>&#x201c;-&#x201d;&lt;property value&gt; - causes removal of particular value from the list</li>
+  
+<li>&lt;property value&gt; - causes adding of particular value to the list</li>
+</ul>
+<p>please be aware of the restriction. In fact this also means you need to be aware of values set by the lower configuration layers (including defaults) to properly override.modify those.</p>
 <div class="section">
 <h2><a name="settings">Common Property File Settings</a><a name="Common_Property_File_Settings"></a></h2>
 <p>An example spy.properties file follows (please note default values mentioned as these reffer to defaults mentioned in section: <a href="#confusage">Configuration and Usage</a>):</p>
