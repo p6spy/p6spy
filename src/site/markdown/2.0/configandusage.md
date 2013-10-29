@@ -1,18 +1,21 @@
 # <a name="confusage">Configuration and Usage</a>
 
 Configuration follows layered approach, where each layer overrides the values set by the lower ones (leaving those not provided unchanged):
-- JMX set properties (please note, that these are reset on next reload)
-- System properties
-- Environment variables
-- spy.properties
-- defaults
+
+* JMX set properties (please note, that these are reset on next reload)
+* System properties
+* Environment variables
+* spy.properties
+* defaults
 
 For the full list of available options, see the section [Common Property File Settings](#settings). 
 Please note that providing any of these via System properties/Environment variables is possible, using the particular property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;
 
 To enable full overriding capabilities, all those options considering lists (comma separated) values follow the rules:
-- "-"&lt;property value&gt; - causes removal of particular value from the list
-- &lt;property value&gt; - causes adding of particular value to the list
+
+* "-"&lt;property value&gt; - causes removal of particular value from the list
+* &lt;property value&gt; - causes adding of particular value to the list
+
 please be aware of the restriction. In fact this also means you need to be aware of values set by the lower configuration layers (including defaults) to properly override.modify those.
 
 ## <a name="settings">Common Property File Settings</a>
@@ -627,7 +630,6 @@ No other statements are logged except the long-running statements.
 2, any statement requiring at least 2 seconds is logged. The same statement will continue to be logged for as
 long as it executes. So, if the interval is set to 2 and a query takes 11 seconds, it is logged 5 times (at
 the 2, 4, 6, 8, 10-second intervals).
-
 
 ### <a name="p6leak">P6Leak</a>
 
