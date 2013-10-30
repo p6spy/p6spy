@@ -162,9 +162,6 @@
             <relocation>
               <pattern>net.sf.cglib</pattern>
               <shadedPattern>com.p6spy.cglib</shadedPattern>
-              <includes>
-                <include>net.sf.cglib.*</include>
-              </includes>
             </relocation>
           </relocations>
           <shadedArtifactAttached>false</shadedArtifactAttached>
