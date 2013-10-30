@@ -167,7 +167,7 @@
               </includes>
             </relocation>
           </relocations>
-          <shadedArtifactAttached>true</shadedArtifactAttached>
+          <shadedArtifactAttached>false</shadedArtifactAttached>
         </configuration>
       </plugin>
     </plugins>

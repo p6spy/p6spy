@@ -9,16 +9,21 @@
   </formats>
   <includeBaseDirectory>true</includeBaseDirectory>
 
-  <dependencySets>
-    <dependencySet>
-      <useTransitiveDependencies>false</useTransitiveDependencies>
+  <moduleSets>
+    <moduleSet>
+      <useAllReactorProjects>true</useAllReactorProjects>
       <includes>
-        <include>p6spy:p6spy*</include>
+        <include>p6spy:p6spy:jar</include>
+        <include>p6spy:p6spy*:war</include>
       </includes>
-      <fileMode>0644</fileMode>
-      <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
-    </dependencySet>
-  </dependencySets>
+      <binaries>
+        <fileMode>0644</fileMode>
+        <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+        <includeDependencies>false</includeDependencies>
+        <unpack>false</unpack>
+      </binaries>
+    </moduleSet>
+  </moduleSets>
 
   <fileSets>
     <fileSet>
