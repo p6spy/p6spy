@@ -627,7 +627,6 @@
     </profile>
   </profiles>
 
-
   <modules>
     <module>p6spy</module>
     <module>p6spy-webcontrol</module>
