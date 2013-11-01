@@ -93,10 +93,6 @@ driverlist=
 # In case property is not set, miliseconds since 1.1.1970 (unix time) is used (default is empty)
 #dateformat=
 
-#list of categories to explicitly include
-# (default is empty)
-#includecategories=
-
 #list of categories to exclude: error, info, batch, debug, statement, resultset
 #commit, rollback and result are valid values
 # (default is info,debug,result,resultset,batch)

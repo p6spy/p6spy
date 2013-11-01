@@ -22,16 +22,12 @@ import com.p6spy.engine.spy.P6SpyOptions;
 
 public class FileLogger extends StdoutLogger {
 
-    public FileLogger() {
-	//this("spy.log");
-    }
-
     public void setLogfile(String fileName) {
-	try {
-	    qlog = new PrintStream(new FileOutputStream(fileName, P6SpyOptions.getActiveInstance().getAppend()));
-	} catch (IOException e) {
-	    e.printStackTrace(System.err);
-	}
+    	try {
+    	    qlog = new PrintStream(new FileOutputStream(fileName, P6SpyOptions.getActiveInstance().getAppend()));
+    	} catch (IOException e) {
+    	    e.printStackTrace(System.err);
+    	}
     }
 }
 
