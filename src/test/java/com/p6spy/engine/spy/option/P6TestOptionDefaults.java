@@ -95,9 +95,7 @@ public class P6TestOptionDefaults {
 
     Assert.assertNull(opts.getSQLExpression());
     Assert.assertEquals(0L, opts.getExecutionThreshold());
-    Assert.assertNull(opts.getIncludecategories());
     Assert.assertEquals("info,debug,result,resultset,batch", opts.getExcludecategories());
-    Assert.assertNull(opts.getIncludeCategoriesSet());
     Assert.assertTrue(opts.getExcludeCategoriesSet().containsAll(
         Arrays.asList(new String[] { "info", "debug", "result", "resultset", "batch" })));
     Assert.assertFalse(opts.getFilter());

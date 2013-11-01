@@ -80,4 +80,8 @@ public class P6TestLogger extends FileLogger implements P6Logger {
     this.lastStacktrace = null;
   }
 
+  public void clearLogEntries() {
+    this.logs.clear();
+  }
+
 }

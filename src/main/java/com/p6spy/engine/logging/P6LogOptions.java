@@ -28,14 +28,12 @@ public class P6LogOptions implements P6LogLoadableOptions {
   public static final String INCLUDE = "include";
   public static final String FILTER = "filter";
   public static final String EXCLUDECATEGORIES = "excludecategories";
-  public static final String INCLUDECATEGORIES = "includecategories";
   public static final String EXECUTION_THRESHOLD = "executionThreshold";
   public static final String SQLEXPRESSION = "sqlexpression";
 
   // those set indirectly (via properties visible from outside) 
   public static final String INCLUDE_TABLES = "includeTables";
   public static final String EXCLUDE_TABLES = "excludeTables";
-  public static final String INCLUDECATEGORIES_SET = "includecategoriesSet";
   public static final String EXCLUDECATEGORIES_SET = "excludecategoriesSet";
 
   
@@ -61,7 +59,6 @@ public class P6LogOptions implements P6LogLoadableOptions {
     setSQLExpression(options.get(SQLEXPRESSION));
     setExecutionThreshold(options.get(EXECUTION_THRESHOLD));
     
-    setIncludecategories(options.get(INCLUDECATEGORIES));
     setExcludecategories(options.get(EXCLUDECATEGORIES));
     
     setFilter(options.get(FILTER));
@@ -134,17 +131,6 @@ public class P6LogOptions implements P6LogLoadableOptions {
   }
 
   @Override
-  public void setIncludecategories(String includecategories) {
-    optionsRepository.set(String.class, INCLUDECATEGORIES, includecategories);
-    optionsRepository.setSet(String.class, INCLUDECATEGORIES_SET, includecategories);
-  }
-
-  @Override
-  public String getIncludecategories() {
-    return optionsRepository.get(String.class, INCLUDECATEGORIES);
-  }
-
-  @Override
   public String getSQLExpression() {
     return optionsRepository.get(String.class, SQLEXPRESSION);
   }
@@ -177,11 +163,6 @@ public class P6LogOptions implements P6LogLoadableOptions {
   @Override
   public Set<String> getExcludeTables() {
     return optionsRepository.getSet(String.class, EXCLUDE_TABLES);
-  }
-
-  @Override
-  public Set<String> getIncludeCategoriesSet() {
-    return optionsRepository.getSet(String.class, INCLUDECATEGORIES_SET);
   }
 
   @Override

@@ -119,11 +119,6 @@ An example spy.properties file follows (please note default values mentioned as 
 	# In case property is not set, miliseconds since 1.1.1970 (unix time) is used (default is empty)
 	#dateformat=
 
-
-    #list of categories to explicitly include
-    # (default is empty)
-    #includecategories=
-
     #list of categories to exclude: error, info, batch, debug, statement,
     #commit, rollback and result are valid values
     # (default is info,debug,result,resultset,batch)
@@ -398,11 +393,6 @@ The log includes category information that describes the type of statement. This
 
 Enter a comma-delimited list of categories to exclude from your log file. See filter, include, exclude for more details on how this process works.
 
-### includecategories
-
-includecategories includes category information that describes the type of statement. This property is a
-comma-delimited list of categories to include. See excludecategories for a valid list of categories.
-
 ### dateformat
 
 Setting a value for dateformat changes the date format value printed in the log file. No value prints the current time
@@ -551,6 +541,7 @@ By default, tests run against H2 database. To enable other databases, make sure 
   * HSQLDB
   * SQLite
   * Firebird
+  * Derby
   * or comma separated list of these
 
 ### Running the tests in the command line

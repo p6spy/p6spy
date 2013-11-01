@@ -138,6 +138,16 @@ public abstract class P6TestFramework {
     failOnNonP6TestLoggerUsage();
     return ((P6TestLogger) P6LogQuery.getLogger()).getLastEntry();
   }
+  
+  protected void clearLogEnties() {
+    failOnNonP6TestLoggerUsage();
+    ((P6TestLogger) P6LogQuery.getLogger()).clearLogEntries();
+  }
+  
+  protected int getLogEntiesCount() {
+    failOnNonP6TestLoggerUsage();
+    return ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size();
+  }
 
   protected String getLastButOneLogEntry() {
     failOnNonP6TestLoggerUsage();
