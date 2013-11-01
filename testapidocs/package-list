@@ -1,0 +1,5 @@
+com.p6spy.engine.proxy
+com.p6spy.engine.spy
+com.p6spy.engine.spy.appender
+com.p6spy.engine.spy.option
+com.p6spy.engine.test
