@@ -629,7 +629,6 @@
 
   <modules>
     <module>p6spy</module>
-    <module>p6spy-webcontrol</module>
     <module>p6spy-dist</module>
   </modules>
 

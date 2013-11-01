@@ -33,12 +33,6 @@
       <artifactId>p6spy</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>p6spy</groupId>
-      <artifactId>p6spy-webcontrol</artifactId>
-      <version>${project.version}</version>
-      <type>war</type>
-    </dependency>
   </dependencies>
 
 

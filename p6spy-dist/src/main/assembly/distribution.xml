@@ -14,7 +14,6 @@
       <useAllReactorProjects>true</useAllReactorProjects>
       <includes>
         <include>p6spy:p6spy:jar</include>
-        <include>p6spy:p6spy*:war</include>
       </includes>
       <binaries>
         <fileMode>0644</fileMode>
