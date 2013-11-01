@@ -156,17 +156,11 @@ public class P6LogQuery implements P6OptionChangedListener {
       return true;
     }
 
-    final Set<String> includeCategories = opts.getIncludeCategoriesSet();
     final Set<String> excludeCategories = opts.getExcludeCategoriesSet();
     
-    return (includeCategories == null || includeCategories.isEmpty() || foundCategory(category, includeCategories))
-        && !foundCategory(category, excludeCategories);
+    return excludeCategories == null || !excludeCategories.contains(category);
   }
-
-  static boolean foundCategory(String category, Set<String> categories) {
-    return categories == null || categories.contains(category);
-  }
-
+  
   static boolean isQueryOk(final String sql) {
     final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
     if (opts.getSQLExpression() != null) {

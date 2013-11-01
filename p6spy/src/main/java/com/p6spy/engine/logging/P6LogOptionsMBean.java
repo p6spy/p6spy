@@ -35,10 +35,6 @@ public interface P6LogOptionsMBean {
 
   String getInclude();
 
-  void setIncludecategories(String includecategories);
-
-  String getIncludecategories();
-
   String getSQLExpression();
 
   void setSQLExpression(String sqlexpression);
@@ -50,8 +46,6 @@ public interface P6LogOptionsMBean {
   Set<String> getIncludeTables();
 
   Set<String> getExcludeTables();
-
-  Set<String> getIncludeCategoriesSet();
 
   Set<String> getExcludeCategoriesSet();
 
