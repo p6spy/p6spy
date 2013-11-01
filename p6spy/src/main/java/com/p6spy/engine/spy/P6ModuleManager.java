@@ -136,7 +136,7 @@ public class P6ModuleManager {
       }
     }
 
-    // make sure the proper listener registration
+    // make sure the proper listener registration happens
     optionsRepository.registerOptionChangedListener(new P6LogQuery());
     
     optionsRepository.initCompleted();

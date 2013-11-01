@@ -36,7 +36,8 @@ import com.p6spy.engine.spy.appender.P6Logger;
 import com.p6spy.engine.spy.option.P6OptionChangedListener;
 
 public class P6LogQuery implements P6OptionChangedListener {
-  protected static PrintStream qlog;
+  
+  private static PrintStream qlog;
 
   protected static P6Logger logger;
 
@@ -48,7 +49,7 @@ public class P6LogQuery implements P6OptionChangedListener {
    * Options that cause re-init of {@link P6LogQuery}.
    */
   private static final Set<String> ON_CHANGE = new HashSet<String>(Arrays.asList(
-      P6SpyOptions.APPENDER, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT));
+      P6SpyOptions.APPENDER, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
 
   public void optionChanged(final String key, final Object oldValue, final Object newValue) {
     if (ON_CHANGE.contains(key)) {
@@ -77,9 +78,6 @@ public class P6LogQuery implements P6OptionChangedListener {
         }
       }
     }
-    
-    // hook itself to reflect changes
-    moduleManager.registerOptionChangedListener(new P6LogQuery());
   }
 
   static public PrintStream logPrintStream(String file) {
@@ -113,7 +111,6 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
     
     if (logger != null) {
-//      java.util.Date now = P6Util.timeNow();
       final String format = P6SpyOptions.getActiveInstance().getDateformat();
       final String stringNow;
       if (format == null) {
@@ -121,7 +118,6 @@ public class P6LogQuery implements P6OptionChangedListener {
       } else {
         stringNow = new SimpleDateFormat(format).format(new java.util.Date()).trim();
       }
-//      sdf.format(new java.util.Date(System.currentTimeMillis())).trim();
 
       logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);
 
@@ -143,8 +139,6 @@ public class P6LogQuery implements P6OptionChangedListener {
         }
       }
     }
-
-
   }
 
   static boolean isLoggable(String sql) {
@@ -171,14 +165,6 @@ public class P6LogQuery implements P6OptionChangedListener {
 
   static boolean foundCategory(String category, Set<String> categories) {
     return categories == null || categories.contains(category);
-//    if (categories != null) {
-//      for (String categorie : categories) {
-//        if (category.equals(categorie)) {
-//          return true;
-//        }
-//      }
-//    }
-//    return false;
   }
 
   static boolean isQueryOk(final String sql) {
@@ -221,11 +207,9 @@ public class P6LogQuery implements P6OptionChangedListener {
   // useful for the JSP demarcation tool
   static public void logText(String text) {
     logger.logText(text);
-    //qlog.println(text);
   }
 
   static public void log(String category, String prepared, String sql) {
-    //if (qlog != null) {
     if (logger != null && isCategoryOk(category)) {
       doLog(-1, category, prepared, sql);
     }
