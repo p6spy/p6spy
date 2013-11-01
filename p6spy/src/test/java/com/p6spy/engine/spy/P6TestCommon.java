@@ -51,12 +51,10 @@ public class P6TestCommon extends P6TestFramework {
             // sample data
             {
               final String insert = "insert into common_test values (\'foo1\', 1)";
-              final Statement statement = connection.createStatement();
               statement.executeUpdate(insert);
             }
             {
               final String insert = "insert into common_test values (\'foo2\', 2)";
-              final Statement statement = connection.createStatement();
               statement.executeUpdate(insert);
             }
             
