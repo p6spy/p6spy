@@ -9,6 +9,7 @@
   </formats>
   <includeBaseDirectory>true</includeBaseDirectory>
 
+<!--
   <moduleSets>
     <moduleSet>
       <useAllReactorProjects>true</useAllReactorProjects>
@@ -23,10 +24,22 @@
       </binaries>
     </moduleSet>
   </moduleSets>
+-->
+  <dependencySets>
+    <dependencySet>
+      <includes>
+        <include>p6spy:p6spy:jar</include>
+      </includes>
+      <fileMode>0644</fileMode>
+      <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+      <useProjectArtifact>true</useProjectArtifact>
+      <useProjectAttachments>true</useProjectAttachments>
+    </dependencySet>
+  </dependencySets>
 
   <fileSets>
     <fileSet>
-      <directory>src/main/individualFiles</directory>
+      <directory>src/main/assembly/individualFiles</directory>
       <fileMode>0644</fileMode>
       <outputDirectory>/</outputDirectory>
     </fileSet>
