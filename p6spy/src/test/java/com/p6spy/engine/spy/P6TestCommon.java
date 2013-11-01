@@ -15,10 +15,7 @@ limitations under the License.
 */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -133,6 +130,7 @@ public class P6TestCommon extends P6TestFramework {
 
     	try {
         // test rollback logging
+    	  super.clearLogEnties();
         String query = "select 'y' from common_test";
         statement.executeQuery(query);
         assertTrue(super.getLastLogEntry().contains(query));
@@ -140,6 +138,7 @@ public class P6TestCommon extends P6TestFramework {
         assertTrue(super.getLastLogEntry().contains("rollback"));
 
         // test commit logging
+        super.clearLogEnties();
         query = "select 'y' from common_test";
         statement.executeQuery(query);
         assertTrue(super.getLastLogEntry().contains(query));
@@ -147,44 +146,70 @@ public class P6TestCommon extends P6TestFramework {
         assertTrue(super.getLastLogEntry().contains("commit"));
 
         // test debug logging
+        super.clearLogEnties();
         P6LogOptions.getActiveInstance().setExclude("common_test");
         P6LogOptions.getActiveInstance().setExcludecategories("-debug");
-        P6LogOptions.getActiveInstance().setIncludecategories("debug,info");
         query = "select 'y' from common_test";
         statement.executeQuery(query);
-        P6LogOptions.getActiveInstance().setExclude("-common_test,debug");
-        P6LogOptions.getActiveInstance().setIncludecategories("-debug,-info");
+        P6LogOptions.getActiveInstance().setExclude("-common_test");
+        P6LogOptions.getActiveInstance().setExcludecategories("debug");
         assertTrue(super.getLastLogEntry().contains("intentionally"));
 
         // test result + resultset logging
-        query = "select col1, col2 from common_test";
-        P6LogOptions.getActiveInstance().setExcludecategories("-resultset,-result");
-        ResultSet resultSet = statement.executeQuery(query);
-        while (resultSet.next()) {
-          String col1 = resultSet.getString("col1");
-          assertTrue(col1.startsWith("foo"));
-          // check result logged (just once)
-//          assertFalse(super.getLastButOneLogEntry().contains("result"));
-          assertTrue(super.getLastLogEntry().contains("result"));
-          assertTrue(super.getLastLogEntry().contains(query));
-        }
-
-        assertTrue(super.getLastButOneLogEntry().contains("resultset"));
-        assertTrue(super.getLastButOneLogEntry().contains(query));
-
-        P6LogOptions.getActiveInstance().setExcludecategories("resultset,result");
-        
+        testResultAndResultSetCategory(true, true);
+        testResultAndResultSetCategory(true, false);
+        testResultAndResultSetCategory(false, true);
+        testResultAndResultSetCategory(false, false);
+  
       } finally {
         if (statement != null) {
           statement.close();
         }
       }
-    	
+  
       // set back, otherwise we have problems in PostgresSQL, statement exec
       // waits for commit
       connection.setAutoCommit(true);
     }
-    
+  
+    private void testResultAndResultSetCategory(final boolean resultCategoryNotExcluded,
+                                                final boolean resultsetCategoryNotExcluded)
+        throws SQLException {
+      final String query = "select col1, col2 from common_test";
+      P6LogOptions.getActiveInstance().setExcludecategories(
+          (resultCategoryNotExcluded ? "-" : "") + "result," + (resultsetCategoryNotExcluded ? "-" : "")
+              + "resultset");
+      final ResultSet resultSet = statement.executeQuery(query);
+      super.clearLogEnties();
+  
+      while (resultSet.next()) {
+        String col1 = resultSet.getString("col1");
+        assertTrue(col1.startsWith("foo"));
+        if (resultCategoryNotExcluded) {
+          assertTrue("calling get*() is supposed to cause \"result\" logged", super.getLastLogEntry()
+              .contains("| result |"));
+          assertTrue(super.getLastLogEntry().contains(query));
+        }
+      }
+      if (resultsetCategoryNotExcluded) {
+        assertTrue(super.getLastButOneLogEntry().contains("| resultset |"));
+        assertTrue(super.getLastButOneLogEntry().contains(query));
+      }
+      resultSet.close();
+      // reset back to original setup
+      P6LogOptions.getActiveInstance().setExcludecategories("resultset,result");
+  
+      if (!resultCategoryNotExcluded && !resultsetCategoryNotExcluded) {
+        assertEquals(
+            "if \"result\" \"resultset\" are in excludecategories they should NOT be logged", 0,
+            super.getLogEntiesCount());
+      } else {
+        assertNotEquals(
+            "if \"result\" \"resultset\" are NOT in excludecategories they should be logged", 0,
+            super.getLogEntiesCount());
+      }
+    }
+
     @Test
     public void testMessageFormatStrategies() throws Exception {
       // SingleLineFormat case (by default)
