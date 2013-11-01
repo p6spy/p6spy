@@ -27,31 +27,26 @@
 <a class="jxr_linenumber" name="17" href="#17">17</a>  
 <a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_comment">// log4j, stdout, and file logger all use the same format</em>
 <a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_comment">// so we descend from this class.</em>
-<a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_comment">// also, they all have to do the get and setLastEntry stuff</em>
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_comment">// so we go ahead and do the work here.</em>
-<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/p6spy/engine/spy/appender/FormattedLogger.html">FormattedLogger</a> {
-<a class="jxr_linenumber" name="23" href="#23">23</a>    <strong class="jxr_keyword">protected</strong> String lastEntry;
-<a class="jxr_linenumber" name="24" href="#24">24</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../com/p6spy/engine/spy/appender/MessageFormattingStrategy.html">MessageFormattingStrategy</a> strategy;
-<a class="jxr_linenumber" name="25" href="#25">25</a>  
-<a class="jxr_linenumber" name="26" href="#26">26</a>    <strong class="jxr_keyword">protected</strong> <a href="../../../../../com/p6spy/engine/spy/appender/FormattedLogger.html">FormattedLogger</a>() {
-<a class="jxr_linenumber" name="27" href="#27">27</a>      strategy = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/p6spy/engine/spy/appender/SingleLineFormat.html">SingleLineFormat</a>();
-<a class="jxr_linenumber" name="28" href="#28">28</a>    }
-<a class="jxr_linenumber" name="29" href="#29">29</a>  
-<a class="jxr_linenumber" name="30" href="#30">30</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logSQL(<strong class="jxr_keyword">int</strong> connectionId, String now, <strong class="jxr_keyword">long</strong> elapsed, String category, String prepared, String sql) {
-<a class="jxr_linenumber" name="31" href="#31">31</a>      String logEntry = <span class="jxr_string">"#"</span> + now + <span class="jxr_string">" | took "</span> + elapsed + <span class="jxr_string">"ms | "</span> + category + <span class="jxr_string">" | connection "</span> + connectionId + <span class="jxr_string">"|"</span> + prepared + <span class="jxr_string">"\n"</span> + sql + <span class="jxr_string">";"</span>;
-<a class="jxr_linenumber" name="32" href="#32">32</a>      logText(logEntry);
-<a class="jxr_linenumber" name="33" href="#33">33</a>    }
-<a class="jxr_linenumber" name="34" href="#34">34</a>  
-<a class="jxr_linenumber" name="35" href="#35">35</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">void</strong> logText(String text);
-<a class="jxr_linenumber" name="36" href="#36">36</a>  
-<a class="jxr_linenumber" name="37" href="#37">37</a>    <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="38" href="#38">38</a>  <em class="jxr_javadoccomment">   * Sets the strategy implementation to use for formatting log message.  If not set, this will default to {@link SingleLineFormat}</em>
-<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="40" href="#40">40</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStrategy(<strong class="jxr_keyword">final</strong> <a href="../../../../../com/p6spy/engine/spy/appender/MessageFormattingStrategy.html">MessageFormattingStrategy</a> strategy) {
-<a class="jxr_linenumber" name="41" href="#41">41</a>      <strong class="jxr_keyword">this</strong>.strategy = strategy;
-<a class="jxr_linenumber" name="42" href="#42">42</a>    }
-<a class="jxr_linenumber" name="43" href="#43">43</a>  }
-<a class="jxr_linenumber" name="44" href="#44">44</a>  
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/p6spy/engine/spy/appender/FormattedLogger.html">FormattedLogger</a> {
+<a class="jxr_linenumber" name="21" href="#21">21</a>    <strong class="jxr_keyword">private</strong> <a href="../../../../../com/p6spy/engine/spy/appender/MessageFormattingStrategy.html">MessageFormattingStrategy</a> strategy;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  
+<a class="jxr_linenumber" name="23" href="#23">23</a>    <strong class="jxr_keyword">protected</strong> <a href="../../../../../com/p6spy/engine/spy/appender/FormattedLogger.html">FormattedLogger</a>() {
+<a class="jxr_linenumber" name="24" href="#24">24</a>      strategy = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/p6spy/engine/spy/appender/SingleLineFormat.html">SingleLineFormat</a>();
+<a class="jxr_linenumber" name="25" href="#25">25</a>    }
+<a class="jxr_linenumber" name="26" href="#26">26</a>  
+<a class="jxr_linenumber" name="27" href="#27">27</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logSQL(<strong class="jxr_keyword">int</strong> connectionId, String now, <strong class="jxr_keyword">long</strong> elapsed, String category, String prepared, String sql) {
+<a class="jxr_linenumber" name="28" href="#28">28</a>      logText(strategy.formatMessage(connectionId, now, elapsed, category, prepared, sql));
+<a class="jxr_linenumber" name="29" href="#29">29</a>    }
+<a class="jxr_linenumber" name="30" href="#30">30</a>  
+<a class="jxr_linenumber" name="31" href="#31">31</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">void</strong> logText(String text);
+<a class="jxr_linenumber" name="32" href="#32">32</a>  
+<a class="jxr_linenumber" name="33" href="#33">33</a>    <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment">   * Sets the strategy implementation to use for formatting log message.  If not set, this will default to {@link SingleLineFormat}</em>
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment">   */</em>
+<a class="jxr_linenumber" name="36" href="#36">36</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStrategy(<strong class="jxr_keyword">final</strong> <a href="../../../../../com/p6spy/engine/spy/appender/MessageFormattingStrategy.html">MessageFormattingStrategy</a> strategy) {
+<a class="jxr_linenumber" name="37" href="#37">37</a>      <strong class="jxr_keyword">this</strong>.strategy = strategy;
+<a class="jxr_linenumber" name="38" href="#38">38</a>    }
+<a class="jxr_linenumber" name="39" href="#39">39</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
