@@ -123,7 +123,7 @@ public class P6TestCommon extends P6TestFramework {
 
     @Test
     public void testCategories() throws Exception {
-    	// we would like to see transactions in action here => prevent autocommit
+      // we would like to see transactions in action here => prevent autocommit
     	connection.setAutoCommit(false);
 
     	try {
@@ -132,9 +132,11 @@ public class P6TestCommon extends P6TestFramework {
         String query = "select 'y' from common_test";
         statement.executeQuery(query);
         assertTrue(super.getLastLogEntry().contains(query));
+        statement.close();
         connection.rollback();
         assertTrue(super.getLastLogEntry().contains("rollback"));
 
+        statement = connection.createStatement();
         // test commit logging
         super.clearLogEnties();
         query = "select 'y' from common_test";
