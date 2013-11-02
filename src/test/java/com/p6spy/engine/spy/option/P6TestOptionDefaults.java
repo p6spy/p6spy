@@ -101,8 +101,11 @@ public class P6TestOptionDefaults {
     Assert.assertFalse(opts.getFilter());
     Assert.assertNull(opts.getIncludeTables());
     Assert.assertNull(opts.getExcludeTables());
+    Assert.assertNull(opts.getIncludeTablesPattern());
+    Assert.assertNull(opts.getExcludeTablesPattern());
     Assert.assertNull(opts.getInclude());
     Assert.assertNull(opts.getExclude());
+    Assert.assertNull(opts.getSQLExpressionPattern());
   }
 
   @Test

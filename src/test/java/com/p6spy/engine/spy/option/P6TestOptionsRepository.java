@@ -18,6 +18,7 @@ package com.p6spy.engine.spy.option;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -46,6 +47,8 @@ public class P6TestOptionsRepository {
         SingleLineFormat.class.getName()) instanceof MessageFormattingStrategy);
     Assert.assertTrue(optRepo.parse(MessageFormattingStrategy.class,
         MultiLineFormat.class.getName()) instanceof MessageFormattingStrategy);
+    Assert.assertTrue(optRepo.parse(Pattern.class,
+        "somepattern") instanceof Pattern);
   }
 
   @Test(expected = IllegalArgumentException.class)

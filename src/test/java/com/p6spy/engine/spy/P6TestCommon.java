@@ -15,7 +15,12 @@ limitations under the License.
 */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -84,41 +89,116 @@ public class P6TestCommon extends P6TestFramework {
     }
 
     @Test
-    public void testMatcher() throws SQLException {
-        // first should match
-        String query = "select count(*) from common_test";
+    public void testIncludeExcludeTableNames() throws SQLException {
+
+      final String query = "select 'x' from common_test";
+      final String countQuery = "select count(*) from common_test";
+
+      // include null && exclude null => logged
+      {
+        super.clearLogEnties();
+        
+        assertNull(P6LogOptions.getActiveInstance().getExcludeTables());
+        assertNull(P6LogOptions.getActiveInstance().getIncludeTables());
         statement.executeQuery(query);
+        assertEquals(1, super.getLogEntiesCount());
         assertTrue(super.getLastLogEntry().contains(query));
+      }
 
-        // now match still fail because table is excluded
-        P6LogOptions.getActiveInstance().setExclude("common_test");
-        query = "select 'x' from common_test";
+      // include empty && exclude empty => logged
+      {
+        super.clearLogEnties();
+
+        // adding and removing afterwards causes empty set
+        P6LogOptions.getActiveInstance().setInclude("non_existing_table");
+        P6LogOptions.getActiveInstance().setInclude("-non_existing_table");
+        P6LogOptions.getActiveInstance().setExclude("non_existing_table");
+        P6LogOptions.getActiveInstance().setExclude("-non_existing_table");
+        
+        assertEquals(0, P6LogOptions.getActiveInstance().getIncludeTables().size());
+        assertEquals(0, P6LogOptions.getActiveInstance().getExcludeTables().size());
         statement.executeQuery(query);
-        P6LogOptions.getActiveInstance().setExclude("-common_test");
-        assertFalse(super.getLastLogEntry().contains(query));
+        assertEquals(1, super.getLogEntiesCount());
+        assertTrue(super.getLastLogEntry().contains(query));
+      }
+      
+      // table is excluded => NOT logged
+      {
+        super.clearLogEnties();
+        P6LogOptions.getActiveInstance().setExclude(
+            "non_existing_table1,common_test,non_existing_table2,non_existing_table3");
+        statement.executeQuery(query);
+        P6LogOptions.getActiveInstance().setExclude(
+            "-non_existing_table1,-common_test,-non_existing_table2,-non_existing_table3");
+        assertEquals(0, super.getLogEntiesCount());
+      }
 
-        tryRegEx();
+      // table is included => logged
+      {
+        super.clearLogEnties();
+        P6LogOptions.getActiveInstance().setInclude("common_test");
+        statement.executeQuery(query);
+        P6LogOptions.getActiveInstance().setInclude("-common_test");
+        assertEquals(1, super.getLogEntiesCount());
+        assertTrue(super.getLastLogEntry().contains(query));
+      }
+
+      // table is NOT included (but include is non-empty) => NOT logged
+      {
+        super.clearLogEnties();
+        P6LogOptions.getActiveInstance().setInclude("non_existing_table");
+        statement.executeQuery(query);
+        P6LogOptions.getActiveInstance().setInclude("-non_existing_table");
+        assertEquals(0, super.getLogEntiesCount());
+      }
     }
 
-    protected void tryRegEx() throws SQLException  {
-      // should match (basic)
-      String query = "select 'y' from common_test";
-      statement.executeQuery(query);
-      assertTrue(super.getLastLogEntry().contains(query));
+    @Test
+    public void testIncludeExcludeTableNamesRegexp() throws SQLException  {
+      final String query = "select 'y' from common_test";
+      
+      // table is excluded (matches regexp) => NOT logged
+      {
+        super.clearLogEnties();
+        P6LogOptions.getActiveInstance().setExclude("[a-z]ommon_test");
+        statement.executeQuery(query);
+        P6LogOptions.getActiveInstance().setExclude("-[a-z]ommon_test");
+        assertEquals(0, super.getLogEntiesCount());      
+      }
+      
+      // table is NOT excluded (doesn't match regexp) => logged
+      {
+        super.clearLogEnties();
+        P6LogOptions.getActiveInstance().setExclude("[0-9]tmt_test");
+        statement.executeQuery(query);
+        P6LogOptions.getActiveInstance().setExclude("-[0-9]tmt_test");
+        assertEquals(1, super.getLogEntiesCount());
+        assertTrue(super.getLastLogEntry().contains(query));
+      }
+    }
 
-      // now match should match (test regex)
-      P6LogOptions.getActiveInstance().setExclude("[a-z]ommon_test");
-      query = "select 'x' from common_test";
-      statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setExclude("-[a-z]ommon_test");
-      assertFalse(super.getLastLogEntry().contains(query));
-
-      // now match should fail (test regex again)
-      P6LogOptions.getActiveInstance().setExclude("[0-9]tmt_test");
-      query = "select 'z' from common_test";
-      P6LogOptions.getActiveInstance().setExclude("-[0-9]tmt_test");
-      statement.executeQuery(query);
-      assertTrue(super.getLastLogEntry().contains(query));
+    @Test
+    public void testSqlExpressionPattern() throws SQLException  {
+      final String query = "select 'y' from common_test";
+      
+      // sql expression NOT matched => NOT logged
+      {
+        super.clearLogEnties();
+        P6LogOptions.getActiveInstance().setSQLExpression("^select[ ]'x'.*$");
+        statement.executeQuery(query);
+        P6LogOptions.getActiveInstance().setSQLExpression("-^select[ ]'x'.*$");
+        assertEquals(0, super.getLogEntiesCount());
+      }
+      
+      // sql expression matched => NOT logged
+      {
+        super.clearLogEnties();
+        P6LogOptions.getActiveInstance().setSQLExpression("^select[ ]'y'.*$");
+        statement.executeQuery(query);
+        P6LogOptions.getActiveInstance().setSQLExpression("-^select[ ]'y'.*$");
+        assertEquals(1, super.getLogEntiesCount());
+        assertTrue(super.getLastLogEntry().contains(query));
+      }
     }
 
     @Test
