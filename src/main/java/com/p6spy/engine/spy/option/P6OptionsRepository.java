@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.p6spy.engine.common.P6Util;
 
@@ -73,6 +74,8 @@ public class P6OptionsRepository {
       throw new IllegalArgumentException("please call the setSet() method instead!");
     } else if (type.isAssignableFrom(Collection.class) || type.isAssignableFrom(List.class)) {
       throw new IllegalArgumentException("type not supported:" + type.getName());
+    } else if (type.isAssignableFrom(Pattern.class)) {
+      return Pattern.compile(value.toString());
     } else {
       Object instance;
       try {
