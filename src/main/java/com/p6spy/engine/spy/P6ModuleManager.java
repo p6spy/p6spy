@@ -67,6 +67,7 @@ public class P6ModuleManager {
       cleanUp();
 
       instance = new P6ModuleManager();
+      P6LogQuery.initialize();
     } catch (IOException e) {
       handleInitEx(e);
     } catch (MBeanRegistrationException e) {

@@ -15,16 +15,6 @@ limitations under the License.
 */
 package com.p6spy.engine.common;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.P6ModuleManager;
@@ -34,6 +24,16 @@ import com.p6spy.engine.spy.appender.FormattedLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
 import com.p6spy.engine.spy.option.P6OptionChangedListener;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class P6LogQuery implements P6OptionChangedListener {
   
@@ -149,11 +149,6 @@ public class P6LogQuery implements P6OptionChangedListener {
       return true;
     }
     
-    // no filtering => nothing more to be done here
-    if (!opts.getFilter()) {
-      return true;
-    }
-
     final Set<String> excludeCategories = opts.getExcludeCategoriesSet();
     
     return excludeCategories == null || !excludeCategories.contains(category);
