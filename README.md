@@ -14,6 +14,6 @@ Developer's mailing list: [Post](p6spy-developers@googlegroups.com) - [Archive](
 Issue tracking: [View/Create issues](https://github.com/p6spy/p6spy/issues)    
 
 **Code Quality:**   
-[SonarQube analysis](http://nemo.sonarqube.org/dashboard/index/p6spy:p6spy-parent)
+[SonarQube analysis](http://nemo.sonarqube.org/dashboard/index/p6spy:p6spy)
 
 **Note: This is NOT a fork of the original project.  This is the new home of this project.**
