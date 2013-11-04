@@ -25,25 +25,25 @@
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_comment">*/</em>
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">package</strong> com.p6spy.engine.common;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> java.io.PrintStream;
-<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> java.io.StringWriter;
-<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> java.text.SimpleDateFormat;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
-<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> java.util.HashSet;
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Set;
-<a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.logging.P6LogLoadableOptions;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.logging.P6LogOptions;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.P6ModuleManager;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.P6SpyOptions;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.FileLogger;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.FormattedLogger;
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.P6Logger;
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.P6OptionChangedListener;
 <a class="jxr_linenumber" name="27" href="#27">27</a>  
-<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.logging.P6LogLoadableOptions;
-<a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.logging.P6LogOptions;
-<a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.P6ModuleManager;
-<a class="jxr_linenumber" name="31" href="#31">31</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.P6SpyOptions;
-<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.FileLogger;
-<a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.FormattedLogger;
-<a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.MessageFormattingStrategy;
-<a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.P6Logger;
-<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.P6OptionChangedListener;
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> java.io.PrintStream;
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> java.io.PrintWriter;
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <strong class="jxr_keyword">import</strong> java.io.StringWriter;
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> java.text.SimpleDateFormat;
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> java.util.HashSet;
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <strong class="jxr_keyword">import</strong> java.util.Set;
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
 <a class="jxr_linenumber" name="38" href="#38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/common/P6LogQuery.html">P6LogQuery</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/p6spy/engine/spy/option/P6OptionChangedListener.html">P6OptionChangedListener</a> {
 <a class="jxr_linenumber" name="39" href="#39">39</a>    
@@ -159,111 +159,106 @@
 <a class="jxr_linenumber" name="149" href="#149">149</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="150" href="#150">150</a>     }
 <a class="jxr_linenumber" name="151" href="#151">151</a>     
-<a class="jxr_linenumber" name="152" href="#152">152</a>     <em class="jxr_comment">// no filtering =&gt; nothing more to be done here</em>
-<a class="jxr_linenumber" name="153" href="#153">153</a>     <strong class="jxr_keyword">if</strong> (!opts.getFilter()) {
-<a class="jxr_linenumber" name="154" href="#154">154</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="155" href="#155">155</a>     }
-<a class="jxr_linenumber" name="156" href="#156">156</a> 
-<a class="jxr_linenumber" name="157" href="#157">157</a>     <strong class="jxr_keyword">final</strong> Set&lt;String&gt; excludeCategories = opts.getExcludeCategoriesSet();
-<a class="jxr_linenumber" name="158" href="#158">158</a>     
-<a class="jxr_linenumber" name="159" href="#159">159</a>     <strong class="jxr_keyword">return</strong> excludeCategories == <strong class="jxr_keyword">null</strong> || !excludeCategories.contains(category);
-<a class="jxr_linenumber" name="160" href="#160">160</a>   }
-<a class="jxr_linenumber" name="161" href="#161">161</a>   
-<a class="jxr_linenumber" name="162" href="#162">162</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isQueryOk(<strong class="jxr_keyword">final</strong> String sql) {
-<a class="jxr_linenumber" name="163" href="#163">163</a>     <strong class="jxr_keyword">final</strong> <a href="../../../../com/p6spy/engine/logging/P6LogLoadableOptions.html">P6LogLoadableOptions</a> opts = P6LogOptions.getActiveInstance();
+<a class="jxr_linenumber" name="152" href="#152">152</a>     <strong class="jxr_keyword">final</strong> Set&lt;String&gt; excludeCategories = opts.getExcludeCategoriesSet();
+<a class="jxr_linenumber" name="153" href="#153">153</a>     
+<a class="jxr_linenumber" name="154" href="#154">154</a>     <strong class="jxr_keyword">return</strong> excludeCategories == <strong class="jxr_keyword">null</strong> || !excludeCategories.contains(category);
+<a class="jxr_linenumber" name="155" href="#155">155</a>   }
+<a class="jxr_linenumber" name="156" href="#156">156</a>   
+<a class="jxr_linenumber" name="157" href="#157">157</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isQueryOk(<strong class="jxr_keyword">final</strong> String sql) {
+<a class="jxr_linenumber" name="158" href="#158">158</a>     <strong class="jxr_keyword">final</strong> <a href="../../../../com/p6spy/engine/logging/P6LogLoadableOptions.html">P6LogLoadableOptions</a> opts = P6LogOptions.getActiveInstance();
+<a class="jxr_linenumber" name="159" href="#159">159</a>     
+<a class="jxr_linenumber" name="160" href="#160">160</a>     <strong class="jxr_keyword">final</strong> Pattern sqlExpressionPattern = opts.getSQLExpressionPattern();
+<a class="jxr_linenumber" name="161" href="#161">161</a>     <strong class="jxr_keyword">if</strong> (sqlExpressionPattern != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="162" href="#162">162</a>       <strong class="jxr_keyword">return</strong> sqlExpressionPattern.matcher(sql).matches();
+<a class="jxr_linenumber" name="163" href="#163">163</a>     } 
 <a class="jxr_linenumber" name="164" href="#164">164</a>     
-<a class="jxr_linenumber" name="165" href="#165">165</a>     <strong class="jxr_keyword">final</strong> Pattern sqlExpressionPattern = opts.getSQLExpressionPattern();
-<a class="jxr_linenumber" name="166" href="#166">166</a>     <strong class="jxr_keyword">if</strong> (sqlExpressionPattern != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="167" href="#167">167</a>       <strong class="jxr_keyword">return</strong> sqlExpressionPattern.matcher(sql).matches();
-<a class="jxr_linenumber" name="168" href="#168">168</a>     } 
-<a class="jxr_linenumber" name="169" href="#169">169</a>     
-<a class="jxr_linenumber" name="170" href="#170">170</a>     <strong class="jxr_keyword">final</strong> Pattern includePattern = opts.getIncludeTablesPattern();
-<a class="jxr_linenumber" name="171" href="#171">171</a>     <strong class="jxr_keyword">final</strong> Pattern excludePattern = opts.getExcludeTablesPattern();
+<a class="jxr_linenumber" name="165" href="#165">165</a>     <strong class="jxr_keyword">final</strong> Pattern includePattern = opts.getIncludeTablesPattern();
+<a class="jxr_linenumber" name="166" href="#166">166</a>     <strong class="jxr_keyword">final</strong> Pattern excludePattern = opts.getExcludeTablesPattern();
+<a class="jxr_linenumber" name="167" href="#167">167</a>     
+<a class="jxr_linenumber" name="168" href="#168">168</a>     <strong class="jxr_keyword">final</strong> Set&lt;String&gt; includeTables = opts.getIncludeTables();
+<a class="jxr_linenumber" name="169" href="#169">169</a>     <strong class="jxr_keyword">final</strong> Set&lt;String&gt; excludeTables = opts.getExcludeTables();
+<a class="jxr_linenumber" name="170" href="#170">170</a>     
+<a class="jxr_linenumber" name="171" href="#171">171</a>     <strong class="jxr_keyword">final</strong> String sqlLowercased = sql.toLowerCase();
 <a class="jxr_linenumber" name="172" href="#172">172</a>     
-<a class="jxr_linenumber" name="173" href="#173">173</a>     <strong class="jxr_keyword">final</strong> Set&lt;String&gt; includeTables = opts.getIncludeTables();
-<a class="jxr_linenumber" name="174" href="#174">174</a>     <strong class="jxr_keyword">final</strong> Set&lt;String&gt; excludeTables = opts.getExcludeTables();
-<a class="jxr_linenumber" name="175" href="#175">175</a>     
-<a class="jxr_linenumber" name="176" href="#176">176</a>     <strong class="jxr_keyword">final</strong> String sqlLowercased = sql.toLowerCase();
-<a class="jxr_linenumber" name="177" href="#177">177</a>     
-<a class="jxr_linenumber" name="178" href="#178">178</a>     <strong class="jxr_keyword">return</strong> (includeTables == <strong class="jxr_keyword">null</strong> || includeTables.isEmpty() || includePattern.matcher(sqlLowercased).matches()) 
-<a class="jxr_linenumber" name="179" href="#179">179</a>         &amp;&amp; (excludeTables == <strong class="jxr_keyword">null</strong> || excludeTables.isEmpty() || !excludePattern.matcher(sqlLowercased).matches());
-<a class="jxr_linenumber" name="180" href="#180">180</a>   }
-<a class="jxr_linenumber" name="181" href="#181">181</a> 
-<a class="jxr_linenumber" name="182" href="#182">182</a>   <em class="jxr_comment">// ----------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="183" href="#183">183</a>   <em class="jxr_comment">// public accessor methods for logging and viewing query data</em>
-<a class="jxr_linenumber" name="184" href="#184">184</a>   <em class="jxr_comment">// ----------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="185" href="#185">185</a> 
-<a class="jxr_linenumber" name="186" href="#186">186</a>   <em class="jxr_comment">// this a way for an external to dump an unrestricted line of text into the log</em>
-<a class="jxr_linenumber" name="187" href="#187">187</a>   <em class="jxr_comment">// useful for the JSP demarcation tool</em>
-<a class="jxr_linenumber" name="188" href="#188">188</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logText(String text) {
-<a class="jxr_linenumber" name="189" href="#189">189</a>     logger.logText(text);
-<a class="jxr_linenumber" name="190" href="#190">190</a>   }
-<a class="jxr_linenumber" name="191" href="#191">191</a> 
-<a class="jxr_linenumber" name="192" href="#192">192</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> log(String category, String prepared, String sql) {
-<a class="jxr_linenumber" name="193" href="#193">193</a>     <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong> &amp;&amp; isCategoryOk(category)) {
-<a class="jxr_linenumber" name="194" href="#194">194</a>       doLog(-1, category, prepared, sql);
-<a class="jxr_linenumber" name="195" href="#195">195</a>     }
-<a class="jxr_linenumber" name="196" href="#196">196</a>   }
-<a class="jxr_linenumber" name="197" href="#197">197</a> 
-<a class="jxr_linenumber" name="198" href="#198">198</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logElapsed(<strong class="jxr_keyword">int</strong> connectionId, <strong class="jxr_keyword">long</strong> startTime, String category, String prepared, String sql) {
-<a class="jxr_linenumber" name="199" href="#199">199</a>     logElapsed(connectionId, startTime, System.currentTimeMillis(), category, prepared, sql);
-<a class="jxr_linenumber" name="200" href="#200">200</a>   }
-<a class="jxr_linenumber" name="201" href="#201">201</a> 
-<a class="jxr_linenumber" name="202" href="#202">202</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logElapsed(<strong class="jxr_keyword">int</strong> connectionId, <strong class="jxr_keyword">long</strong> startTime, <strong class="jxr_keyword">long</strong> endTime, String category, String prepared, String sql) {
-<a class="jxr_linenumber" name="203" href="#203">203</a>     <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong> &amp;&amp; meetsThresholdRequirement(endTime - startTime) &amp;&amp; isLoggable(sql) &amp;&amp; isCategoryOk(category)) {
-<a class="jxr_linenumber" name="204" href="#204">204</a>       doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
-<a class="jxr_linenumber" name="205" href="#205">205</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isDebugEnabled()) {
-<a class="jxr_linenumber" name="206" href="#206">206</a>       debug(<span class="jxr_string">"P6Spy intentionally did not log category: "</span> + category + <span class="jxr_string">", statement: "</span> + sql + <span class="jxr_string">"  Reason: logger="</span> + logger + <span class="jxr_string">", isLoggable="</span>
-<a class="jxr_linenumber" name="207" href="#207">207</a>           + isLoggable(sql) + <span class="jxr_string">", isCategoryOk="</span> + isCategoryOk(category) + <span class="jxr_string">", meetsTreshold="</span> + meetsThresholdRequirement(endTime - startTime));
-<a class="jxr_linenumber" name="208" href="#208">208</a>     }
-<a class="jxr_linenumber" name="209" href="#209">209</a>   }
+<a class="jxr_linenumber" name="173" href="#173">173</a>     <strong class="jxr_keyword">return</strong> (includeTables == <strong class="jxr_keyword">null</strong> || includeTables.isEmpty() || includePattern.matcher(sqlLowercased).matches()) 
+<a class="jxr_linenumber" name="174" href="#174">174</a>         &amp;&amp; (excludeTables == <strong class="jxr_keyword">null</strong> || excludeTables.isEmpty() || !excludePattern.matcher(sqlLowercased).matches());
+<a class="jxr_linenumber" name="175" href="#175">175</a>   }
+<a class="jxr_linenumber" name="176" href="#176">176</a> 
+<a class="jxr_linenumber" name="177" href="#177">177</a>   <em class="jxr_comment">// ----------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="178" href="#178">178</a>   <em class="jxr_comment">// public accessor methods for logging and viewing query data</em>
+<a class="jxr_linenumber" name="179" href="#179">179</a>   <em class="jxr_comment">// ----------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="180" href="#180">180</a> 
+<a class="jxr_linenumber" name="181" href="#181">181</a>   <em class="jxr_comment">// this a way for an external to dump an unrestricted line of text into the log</em>
+<a class="jxr_linenumber" name="182" href="#182">182</a>   <em class="jxr_comment">// useful for the JSP demarcation tool</em>
+<a class="jxr_linenumber" name="183" href="#183">183</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logText(String text) {
+<a class="jxr_linenumber" name="184" href="#184">184</a>     logger.logText(text);
+<a class="jxr_linenumber" name="185" href="#185">185</a>   }
+<a class="jxr_linenumber" name="186" href="#186">186</a> 
+<a class="jxr_linenumber" name="187" href="#187">187</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> log(String category, String prepared, String sql) {
+<a class="jxr_linenumber" name="188" href="#188">188</a>     <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong> &amp;&amp; isCategoryOk(category)) {
+<a class="jxr_linenumber" name="189" href="#189">189</a>       doLog(-1, category, prepared, sql);
+<a class="jxr_linenumber" name="190" href="#190">190</a>     }
+<a class="jxr_linenumber" name="191" href="#191">191</a>   }
+<a class="jxr_linenumber" name="192" href="#192">192</a> 
+<a class="jxr_linenumber" name="193" href="#193">193</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logElapsed(<strong class="jxr_keyword">int</strong> connectionId, <strong class="jxr_keyword">long</strong> startTime, String category, String prepared, String sql) {
+<a class="jxr_linenumber" name="194" href="#194">194</a>     logElapsed(connectionId, startTime, System.currentTimeMillis(), category, prepared, sql);
+<a class="jxr_linenumber" name="195" href="#195">195</a>   }
+<a class="jxr_linenumber" name="196" href="#196">196</a> 
+<a class="jxr_linenumber" name="197" href="#197">197</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logElapsed(<strong class="jxr_keyword">int</strong> connectionId, <strong class="jxr_keyword">long</strong> startTime, <strong class="jxr_keyword">long</strong> endTime, String category, String prepared, String sql) {
+<a class="jxr_linenumber" name="198" href="#198">198</a>     <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong> &amp;&amp; meetsThresholdRequirement(endTime - startTime) &amp;&amp; isLoggable(sql) &amp;&amp; isCategoryOk(category)) {
+<a class="jxr_linenumber" name="199" href="#199">199</a>       doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
+<a class="jxr_linenumber" name="200" href="#200">200</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isDebugEnabled()) {
+<a class="jxr_linenumber" name="201" href="#201">201</a>       debug(<span class="jxr_string">"P6Spy intentionally did not log category: "</span> + category + <span class="jxr_string">", statement: "</span> + sql + <span class="jxr_string">"  Reason: logger="</span> + logger + <span class="jxr_string">", isLoggable="</span>
+<a class="jxr_linenumber" name="202" href="#202">202</a>           + isLoggable(sql) + <span class="jxr_string">", isCategoryOk="</span> + isCategoryOk(category) + <span class="jxr_string">", meetsTreshold="</span> + meetsThresholdRequirement(endTime - startTime));
+<a class="jxr_linenumber" name="203" href="#203">203</a>     }
+<a class="jxr_linenumber" name="204" href="#204">204</a>   }
+<a class="jxr_linenumber" name="205" href="#205">205</a> 
+<a class="jxr_linenumber" name="206" href="#206">206</a>   <em class="jxr_comment">//-&gt;JAW: new method that checks to see if this statement should be logged based</em>
+<a class="jxr_linenumber" name="207" href="#207">207</a>   <em class="jxr_comment">//on whether on not it has taken greater than x amount of time.</em>
+<a class="jxr_linenumber" name="208" href="#208">208</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> meetsThresholdRequirement(<strong class="jxr_keyword">long</strong> timeTaken) {
+<a class="jxr_linenumber" name="209" href="#209">209</a>     <strong class="jxr_keyword">long</strong> executionThreshold = P6LogOptions.getActiveInstance().getExecutionThreshold();
 <a class="jxr_linenumber" name="210" href="#210">210</a> 
-<a class="jxr_linenumber" name="211" href="#211">211</a>   <em class="jxr_comment">//-&gt;JAW: new method that checks to see if this statement should be logged based</em>
-<a class="jxr_linenumber" name="212" href="#212">212</a>   <em class="jxr_comment">//on whether on not it has taken greater than x amount of time.</em>
-<a class="jxr_linenumber" name="213" href="#213">213</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> meetsThresholdRequirement(<strong class="jxr_keyword">long</strong> timeTaken) {
-<a class="jxr_linenumber" name="214" href="#214">214</a>     <strong class="jxr_keyword">long</strong> executionThreshold = P6LogOptions.getActiveInstance().getExecutionThreshold();
-<a class="jxr_linenumber" name="215" href="#215">215</a> 
-<a class="jxr_linenumber" name="216" href="#216">216</a>     <strong class="jxr_keyword">if</strong> (executionThreshold &lt;= 0) {
-<a class="jxr_linenumber" name="217" href="#217">217</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="218" href="#218">218</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (timeTaken &gt; executionThreshold) {
-<a class="jxr_linenumber" name="219" href="#219">219</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="220" href="#220">220</a>     } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="221" href="#221">221</a>       <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="222" href="#222">222</a>     }
-<a class="jxr_linenumber" name="223" href="#223">223</a>   }
-<a class="jxr_linenumber" name="224" href="#224">224</a> 
-<a class="jxr_linenumber" name="225" href="#225">225</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> info(String sql) {
-<a class="jxr_linenumber" name="226" href="#226">226</a>     <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong> &amp;&amp; isCategoryOk(<span class="jxr_string">"info"</span>)) {
-<a class="jxr_linenumber" name="227" href="#227">227</a>       doLog(-1, <span class="jxr_string">"info"</span>, <span class="jxr_string">""</span>, sql);
-<a class="jxr_linenumber" name="228" href="#228">228</a>     }
-<a class="jxr_linenumber" name="229" href="#229">229</a>   }
-<a class="jxr_linenumber" name="230" href="#230">230</a> 
-<a class="jxr_linenumber" name="231" href="#231">231</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDebugEnabled() {
-<a class="jxr_linenumber" name="232" href="#232">232</a>     <strong class="jxr_keyword">return</strong> isCategoryOk(<span class="jxr_string">"debug"</span>);
-<a class="jxr_linenumber" name="233" href="#233">233</a>   }
-<a class="jxr_linenumber" name="234" href="#234">234</a> 
-<a class="jxr_linenumber" name="235" href="#235">235</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> debug(String sql) {
-<a class="jxr_linenumber" name="236" href="#236">236</a>     <strong class="jxr_keyword">if</strong> (isDebugEnabled()) {
-<a class="jxr_linenumber" name="237" href="#237">237</a>       <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="238" href="#238">238</a>         doLog(-1, <span class="jxr_string">"debug"</span>, <span class="jxr_string">""</span>, sql);
-<a class="jxr_linenumber" name="239" href="#239">239</a>       } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="240" href="#240">240</a>         System.err.println(sql);
-<a class="jxr_linenumber" name="241" href="#241">241</a>       }
-<a class="jxr_linenumber" name="242" href="#242">242</a>     }
-<a class="jxr_linenumber" name="243" href="#243">243</a>   }
-<a class="jxr_linenumber" name="244" href="#244">244</a> 
-<a class="jxr_linenumber" name="245" href="#245">245</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> error(String sql) {
-<a class="jxr_linenumber" name="246" href="#246">246</a>     System.err.println(<span class="jxr_string">"Warning: "</span> + sql);
-<a class="jxr_linenumber" name="247" href="#247">247</a>     <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="248" href="#248">248</a>       doLog(-1, <span class="jxr_string">"error"</span>, <span class="jxr_string">""</span>, sql);
-<a class="jxr_linenumber" name="249" href="#249">249</a>     }
-<a class="jxr_linenumber" name="250" href="#250">250</a>   }
-<a class="jxr_linenumber" name="251" href="#251">251</a>   
-<a class="jxr_linenumber" name="252" href="#252">252</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/p6spy/engine/spy/appender/P6Logger.html">P6Logger</a> getLogger() {
-<a class="jxr_linenumber" name="253" href="#253">253</a>     <strong class="jxr_keyword">return</strong> logger;
-<a class="jxr_linenumber" name="254" href="#254">254</a>   }
-<a class="jxr_linenumber" name="255" href="#255">255</a> 
-<a class="jxr_linenumber" name="256" href="#256">256</a> }
+<a class="jxr_linenumber" name="211" href="#211">211</a>     <strong class="jxr_keyword">if</strong> (executionThreshold &lt;= 0) {
+<a class="jxr_linenumber" name="212" href="#212">212</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="213" href="#213">213</a>     } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (timeTaken &gt; executionThreshold) {
+<a class="jxr_linenumber" name="214" href="#214">214</a>       <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="215" href="#215">215</a>     } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="216" href="#216">216</a>       <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="217" href="#217">217</a>     }
+<a class="jxr_linenumber" name="218" href="#218">218</a>   }
+<a class="jxr_linenumber" name="219" href="#219">219</a> 
+<a class="jxr_linenumber" name="220" href="#220">220</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> info(String sql) {
+<a class="jxr_linenumber" name="221" href="#221">221</a>     <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong> &amp;&amp; isCategoryOk(<span class="jxr_string">"info"</span>)) {
+<a class="jxr_linenumber" name="222" href="#222">222</a>       doLog(-1, <span class="jxr_string">"info"</span>, <span class="jxr_string">""</span>, sql);
+<a class="jxr_linenumber" name="223" href="#223">223</a>     }
+<a class="jxr_linenumber" name="224" href="#224">224</a>   }
+<a class="jxr_linenumber" name="225" href="#225">225</a> 
+<a class="jxr_linenumber" name="226" href="#226">226</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isDebugEnabled() {
+<a class="jxr_linenumber" name="227" href="#227">227</a>     <strong class="jxr_keyword">return</strong> isCategoryOk(<span class="jxr_string">"debug"</span>);
+<a class="jxr_linenumber" name="228" href="#228">228</a>   }
+<a class="jxr_linenumber" name="229" href="#229">229</a> 
+<a class="jxr_linenumber" name="230" href="#230">230</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> debug(String sql) {
+<a class="jxr_linenumber" name="231" href="#231">231</a>     <strong class="jxr_keyword">if</strong> (isDebugEnabled()) {
+<a class="jxr_linenumber" name="232" href="#232">232</a>       <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="233" href="#233">233</a>         doLog(-1, <span class="jxr_string">"debug"</span>, <span class="jxr_string">""</span>, sql);
+<a class="jxr_linenumber" name="234" href="#234">234</a>       } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="235" href="#235">235</a>         System.err.println(sql);
+<a class="jxr_linenumber" name="236" href="#236">236</a>       }
+<a class="jxr_linenumber" name="237" href="#237">237</a>     }
+<a class="jxr_linenumber" name="238" href="#238">238</a>   }
+<a class="jxr_linenumber" name="239" href="#239">239</a> 
+<a class="jxr_linenumber" name="240" href="#240">240</a>   <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> error(String sql) {
+<a class="jxr_linenumber" name="241" href="#241">241</a>     System.err.println(<span class="jxr_string">"Warning: "</span> + sql);
+<a class="jxr_linenumber" name="242" href="#242">242</a>     <strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="243" href="#243">243</a>       doLog(-1, <span class="jxr_string">"error"</span>, <span class="jxr_string">""</span>, sql);
+<a class="jxr_linenumber" name="244" href="#244">244</a>     }
+<a class="jxr_linenumber" name="245" href="#245">245</a>   }
+<a class="jxr_linenumber" name="246" href="#246">246</a>   
+<a class="jxr_linenumber" name="247" href="#247">247</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/p6spy/engine/spy/appender/P6Logger.html">P6Logger</a> getLogger() {
+<a class="jxr_linenumber" name="248" href="#248">248</a>     <strong class="jxr_keyword">return</strong> logger;
+<a class="jxr_linenumber" name="249" href="#249">249</a>   }
+<a class="jxr_linenumber" name="250" href="#250">250</a> 
+<a class="jxr_linenumber" name="251" href="#251">251</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

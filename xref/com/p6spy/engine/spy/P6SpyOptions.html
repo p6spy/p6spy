@@ -25,402 +25,439 @@
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_comment">*/</em>
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">package</strong> com.p6spy.engine.spy;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
-<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> java.util.Set;
-<a class="jxr_linenumber" name="22" href="#22">22</a>  
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.PropertyConfigurator;
-<a class="jxr_linenumber" name="24" href="#24">24</a>  
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6Util;
-<a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.FileLogger;
-<a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.MessageFormattingStrategy;
-<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.P6Logger;
-<a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.SingleLineFormat;
-<a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.P6OptionsRepository;
-<a class="jxr_linenumber" name="31" href="#31">31</a>  
-<a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyOptions.html">P6SpyOptions</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyLoadableOptions.html">P6SpyLoadableOptions</a> {
-<a class="jxr_linenumber" name="33" href="#33">33</a>  
-<a class="jxr_linenumber" name="34" href="#34">34</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String USE_PREFIX = <span class="jxr_string">"usePrefix"</span>;
-<a class="jxr_linenumber" name="35" href="#35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String AUTOFLUSH = <span class="jxr_string">"autoflush"</span>;
-<a class="jxr_linenumber" name="36" href="#36">36</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DRIVERLIST = <span class="jxr_string">"driverlist"</span>;
-<a class="jxr_linenumber" name="37" href="#37">37</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DRIVER_NAMES = <span class="jxr_string">"driverNames"</span>;
-<a class="jxr_linenumber" name="38" href="#38">38</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOGFILE = <span class="jxr_string">"logfile"</span>;
-<a class="jxr_linenumber" name="39" href="#39">39</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOG_MESSAGE_FORMAT = <span class="jxr_string">"logMessageFormat"</span>;
-<a class="jxr_linenumber" name="40" href="#40">40</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String APPEND = <span class="jxr_string">"append"</span>;
-<a class="jxr_linenumber" name="41" href="#41">41</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DATEFORMAT = <span class="jxr_string">"dateformat"</span>;
-<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String APPENDER = <span class="jxr_string">"appender"</span>;
-<a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MODULELIST = <span class="jxr_string">"modulelist"</span>;
-<a class="jxr_linenumber" name="44" href="#44">44</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String STACKTRACE = <span class="jxr_string">"stacktrace"</span>;
-<a class="jxr_linenumber" name="45" href="#45">45</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String STACKTRACECLASS = <span class="jxr_string">"stacktraceclass"</span>;
-<a class="jxr_linenumber" name="46" href="#46">46</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String RELOADPROPERTIES = <span class="jxr_string">"reloadproperties"</span>;
-<a class="jxr_linenumber" name="47" href="#47">47</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String RELOADPROPERTIESINTERVAL = <span class="jxr_string">"reloadpropertiesinterval"</span>;
-<a class="jxr_linenumber" name="48" href="#48">48</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JNDICONTEXTFACTORY = <span class="jxr_string">"jndicontextfactory"</span>;
-<a class="jxr_linenumber" name="49" href="#49">49</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JNDICONTEXTPROVIDERURL = <span class="jxr_string">"jndicontextproviderurl"</span>;
-<a class="jxr_linenumber" name="50" href="#50">50</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JNDICONTEXTCUSTOM = <span class="jxr_string">"jndicontextcustom"</span>;
-<a class="jxr_linenumber" name="51" href="#51">51</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REALDATASOURCE = <span class="jxr_string">"realdatasource"</span>;
-<a class="jxr_linenumber" name="52" href="#52">52</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REALDATASOURCECLASS = <span class="jxr_string">"realdatasourceclass"</span>;
-<a class="jxr_linenumber" name="53" href="#53">53</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REALDATASOURCEPROPERTIES = <span class="jxr_string">"realdatasourceproperties"</span>;
-<a class="jxr_linenumber" name="54" href="#54">54</a>      <em class="jxr_comment">// TODO not documented!</em>
-<a class="jxr_linenumber" name="55" href="#55">55</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DATABASE_DIALECT_DATE_FORMAT = <span class="jxr_string">"databaseDialectDateFormat"</span>;
-<a class="jxr_linenumber" name="56" href="#56">56</a>      
-<a class="jxr_linenumber" name="57" href="#57">57</a>      <em class="jxr_comment">// those set indirectly (via properties visible from outside)</em>
-<a class="jxr_linenumber" name="58" href="#58">58</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MODULE_FACTORIES = <span class="jxr_string">"moduleFactories"</span>;
-<a class="jxr_linenumber" name="59" href="#59">59</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MODULE_NAMES = <span class="jxr_string">"moduleNames"</span>;
-<a class="jxr_linenumber" name="60" href="#60">60</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOG_MESSAGE_FORMAT_INSTANCE = <span class="jxr_string">"logMessageFormatInstance"</span>;
-<a class="jxr_linenumber" name="61" href="#61">61</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String APPENDER_INSTANCE = <span class="jxr_string">"appenderInstance"</span>;
-<a class="jxr_linenumber" name="62" href="#62">62</a>      
-<a class="jxr_linenumber" name="63" href="#63">63</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;String, String&gt; defaults;
-<a class="jxr_linenumber" name="64" href="#64">64</a>  
-<a class="jxr_linenumber" name="65" href="#65">65</a>      <strong class="jxr_keyword">static</strong> {
-<a class="jxr_linenumber" name="66" href="#66">66</a>        defaults = <strong class="jxr_keyword">new</strong> HashMap&lt;String, String&gt;();
-<a class="jxr_linenumber" name="67" href="#67">67</a>        defaults.put(LOG_MESSAGE_FORMAT, SingleLineFormat.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="68" href="#68">68</a>        defaults.put(LOGFILE, <span class="jxr_string">"spy.log"</span>);
-<a class="jxr_linenumber" name="69" href="#69">69</a>        defaults.put(APPEND, Boolean.TRUE.toString());
-<a class="jxr_linenumber" name="70" href="#70">70</a>        defaults.put(APPENDER, FileLogger.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="71" href="#71">71</a>        defaults.put(MODULELIST, P6SpyFactory.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="72" href="#72">72</a>        defaults.put(STACKTRACE, Boolean.FALSE.toString());
-<a class="jxr_linenumber" name="73" href="#73">73</a>        defaults.put(AUTOFLUSH, Boolean.FALSE.toString());
-<a class="jxr_linenumber" name="74" href="#74">74</a>        defaults.put(RELOADPROPERTIES, Boolean.FALSE.toString());
-<a class="jxr_linenumber" name="75" href="#75">75</a>        defaults.put(RELOADPROPERTIESINTERVAL, Long.toString(60));
-<a class="jxr_linenumber" name="76" href="#76">76</a>        defaults.put(DATABASE_DIALECT_DATE_FORMAT, <span class="jxr_string">"dd-MMM-yy"</span>);
-<a class="jxr_linenumber" name="77" href="#77">77</a>      }
-<a class="jxr_linenumber" name="78" href="#78">78</a>  
-<a class="jxr_linenumber" name="79" href="#79">79</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/p6spy/engine/spy/option/P6OptionsRepository.html">P6OptionsRepository</a> optionsRepository;
-<a class="jxr_linenumber" name="80" href="#80">80</a>  
-<a class="jxr_linenumber" name="81" href="#81">81</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyOptions.html">P6SpyOptions</a>(<strong class="jxr_keyword">final</strong> <a href="../../../../com/p6spy/engine/spy/option/P6OptionsRepository.html">P6OptionsRepository</a> optionsRepository) {
-<a class="jxr_linenumber" name="82" href="#82">82</a>        <strong class="jxr_keyword">this</strong>.optionsRepository = optionsRepository;
-<a class="jxr_linenumber" name="83" href="#83">83</a>      }
-<a class="jxr_linenumber" name="84" href="#84">84</a>      
-<a class="jxr_linenumber" name="85" href="#85">85</a>      @Override
-<a class="jxr_linenumber" name="86" href="#86">86</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> load(Map&lt;String, String&gt; options) {
-<a class="jxr_linenumber" name="87" href="#87">87</a>        loadLog4jConfig(P6Util.getProperties(options));
-<a class="jxr_linenumber" name="88" href="#88">88</a>        
-<a class="jxr_linenumber" name="89" href="#89">89</a>        setLogMessageFormat(options.get(LOG_MESSAGE_FORMAT));
-<a class="jxr_linenumber" name="90" href="#90">90</a>        setLogfile(options.get(LOGFILE));
-<a class="jxr_linenumber" name="91" href="#91">91</a>        setAppend(options.get(APPEND));
-<a class="jxr_linenumber" name="92" href="#92">92</a>        setDateformat(options.get(DATEFORMAT));
-<a class="jxr_linenumber" name="93" href="#93">93</a>        setAppender(options.get(APPENDER));
-<a class="jxr_linenumber" name="94" href="#94">94</a>        setModulelist(options.get(MODULELIST));
-<a class="jxr_linenumber" name="95" href="#95">95</a>        setDriverlist(options.get(DRIVERLIST));
-<a class="jxr_linenumber" name="96" href="#96">96</a>        setStackTrace(options.get(STACKTRACE));
-<a class="jxr_linenumber" name="97" href="#97">97</a>        setStackTraceClass(options.get(STACKTRACECLASS));
-<a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_comment">//      setUsePrefix(options.get(USE_PREFIX));</em>
-<a class="jxr_linenumber" name="99" href="#99">99</a>        setAutoflush(options.get(AUTOFLUSH));
-<a class="jxr_linenumber" name="100" href="#100">100</a>       setReloadProperties(options.get(RELOADPROPERTIES));
-<a class="jxr_linenumber" name="101" href="#101">101</a>       setReloadPropertiesInterval(options.get(RELOADPROPERTIESINTERVAL));
-<a class="jxr_linenumber" name="102" href="#102">102</a>       setJNDIContextFactory(options.get(JNDICONTEXTFACTORY));
-<a class="jxr_linenumber" name="103" href="#103">103</a>       setJNDIContextProviderURL(options.get(JNDICONTEXTPROVIDERURL));
-<a class="jxr_linenumber" name="104" href="#104">104</a>       setJNDIContextCustom(options.get(JNDICONTEXTCUSTOM));
-<a class="jxr_linenumber" name="105" href="#105">105</a>       setRealDataSource(options.get(REALDATASOURCE));
-<a class="jxr_linenumber" name="106" href="#106">106</a>       setRealDataSourceClass(options.get(REALDATASOURCECLASS));
-<a class="jxr_linenumber" name="107" href="#107">107</a>       setRealDataSourceProperties(options.get(REALDATASOURCEPROPERTIES));
-<a class="jxr_linenumber" name="108" href="#108">108</a>       setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
-<a class="jxr_linenumber" name="109" href="#109">109</a>     }
-<a class="jxr_linenumber" name="110" href="#110">110</a>     
-<a class="jxr_linenumber" name="111" href="#111">111</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="112" href="#112">112</a> <em class="jxr_javadoccomment">     * Loads log4j specific configuration.</em>
-<a class="jxr_linenumber" name="113" href="#113">113</a> <em class="jxr_javadoccomment">     * &lt;br/&gt;&lt;br/&gt;</em>
-<a class="jxr_linenumber" name="114" href="#114">114</a> <em class="jxr_javadoccomment">     * Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here</em>
-<a class="jxr_linenumber" name="115" href="#115">115</a> <em class="jxr_javadoccomment">     * once you require different behavior, provide your own log4j configuration file (holding these properties) </em>
-<a class="jxr_linenumber" name="116" href="#116">116</a> <em class="jxr_javadoccomment">     * and make sure to load/reload it properly.</em>
-<a class="jxr_linenumber" name="117" href="#117">117</a> <em class="jxr_javadoccomment">     * </em>
-<a class="jxr_linenumber" name="118" href="#118">118</a> <em class="jxr_javadoccomment">     * @param properties the properties to load the configuration values from.</em>
-<a class="jxr_linenumber" name="119" href="#119">119</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="120" href="#120">120</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> loadLog4jConfig(Properties properties) {
-<a class="jxr_linenumber" name="121" href="#121">121</a>       PropertyConfigurator.configure(properties);
-<a class="jxr_linenumber" name="122" href="#122">122</a>     }
-<a class="jxr_linenumber" name="123" href="#123">123</a> 
-<a class="jxr_linenumber" name="124" href="#124">124</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="125" href="#125">125</a> <em class="jxr_javadoccomment">     * Utility method, to make accessing options from app less verbose.</em>
-<a class="jxr_linenumber" name="126" href="#126">126</a> <em class="jxr_javadoccomment">     * </em>
-<a class="jxr_linenumber" name="127" href="#127">127</a> <em class="jxr_javadoccomment">     * @return active instance of the {@link P6SpyLoadableOptions}</em>
-<a class="jxr_linenumber" name="128" href="#128">128</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="129" href="#129">129</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyLoadableOptions.html">P6SpyLoadableOptions</a> getActiveInstance() {
-<a class="jxr_linenumber" name="130" href="#130">130</a>       <strong class="jxr_keyword">return</strong> P6ModuleManager.getInstance().getOptions(P6SpyOptions.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="131" href="#131">131</a>     }
-<a class="jxr_linenumber" name="132" href="#132">132</a> 
-<a class="jxr_linenumber" name="133" href="#133">133</a>     <em class="jxr_comment">// JMX exporsed API</em>
-<a class="jxr_linenumber" name="134" href="#134">134</a>     
-<a class="jxr_linenumber" name="135" href="#135">135</a>     @Override
-<a class="jxr_linenumber" name="136" href="#136">136</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reload() {
-<a class="jxr_linenumber" name="137" href="#137">137</a>       P6ModuleManager.getInstance().reload();
-<a class="jxr_linenumber" name="138" href="#138">138</a>     }
-<a class="jxr_linenumber" name="139" href="#139">139</a>     
-<a class="jxr_linenumber" name="140" href="#140">140</a>     @Override
-<a class="jxr_linenumber" name="141" href="#141">141</a>     <strong class="jxr_keyword">public</strong> Set&lt;P6Factory&gt; getModuleFactories() {
-<a class="jxr_linenumber" name="142" href="#142">142</a>       <strong class="jxr_keyword">return</strong> optionsRepository.getSet(P6Factory.<strong class="jxr_keyword">class</strong>, MODULE_FACTORIES);
-<a class="jxr_linenumber" name="143" href="#143">143</a>     }
-<a class="jxr_linenumber" name="144" href="#144">144</a>     
-<a class="jxr_linenumber" name="145" href="#145">145</a> <em class="jxr_comment">//    @Override</em>
-<a class="jxr_linenumber" name="146" href="#146">146</a> <em class="jxr_comment">//    public void setUsePrefix(String usePrefix) {</em>
-<a class="jxr_linenumber" name="147" href="#147">147</a> <em class="jxr_comment">//      optionsRepository.set(Boolean.class, USE_PREFIX, usePrefix);</em>
-<a class="jxr_linenumber" name="148" href="#148">148</a> <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="149" href="#149">149</a> <em class="jxr_comment">//    </em>
-<a class="jxr_linenumber" name="150" href="#150">150</a> <em class="jxr_comment">//    @Override</em>
-<a class="jxr_linenumber" name="151" href="#151">151</a> <em class="jxr_comment">//    public void setUsePrefix(boolean usePrefix) {</em>
-<a class="jxr_linenumber" name="152" href="#152">152</a> <em class="jxr_comment">//      optionsRepository.set(Boolean.class, USE_PREFIX, usePrefix);</em>
-<a class="jxr_linenumber" name="153" href="#153">153</a> <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="154" href="#154">154</a> <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="155" href="#155">155</a> <em class="jxr_comment">//    @Override</em>
-<a class="jxr_linenumber" name="156" href="#156">156</a> <em class="jxr_comment">//    public boolean getUsePrefix() {</em>
-<a class="jxr_linenumber" name="157" href="#157">157</a> <em class="jxr_comment">//      return optionsRepository.get(Boolean.class, USE_PREFIX);</em>
-<a class="jxr_linenumber" name="158" href="#158">158</a> <em class="jxr_comment">//    }</em>
-<a class="jxr_linenumber" name="159" href="#159">159</a> 
-<a class="jxr_linenumber" name="160" href="#160">160</a>     @Override
-<a class="jxr_linenumber" name="161" href="#161">161</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAutoflush(String autoflush) {
-<a class="jxr_linenumber" name="162" href="#162">162</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, AUTOFLUSH, autoflush);
-<a class="jxr_linenumber" name="163" href="#163">163</a>     }
-<a class="jxr_linenumber" name="164" href="#164">164</a>     
-<a class="jxr_linenumber" name="165" href="#165">165</a>     @Override
-<a class="jxr_linenumber" name="166" href="#166">166</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAutoflush(<strong class="jxr_keyword">boolean</strong> autoflush) {
-<a class="jxr_linenumber" name="167" href="#167">167</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, AUTOFLUSH, autoflush);
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.P6Util;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.FileLogger;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.P6Logger;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.SingleLineFormat;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.P6OptionsRepository;
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.PropertyConfigurator;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> java.util.HashMap;
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> java.util.Properties;
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Set;
+<a class="jxr_linenumber" name="30" href="#30">30</a>  
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyOptions.html">P6SpyOptions</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyLoadableOptions.html">P6SpyLoadableOptions</a> {
+<a class="jxr_linenumber" name="32" href="#32">32</a>  
+<a class="jxr_linenumber" name="33" href="#33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String USE_PREFIX = <span class="jxr_string">"usePrefix"</span>;
+<a class="jxr_linenumber" name="34" href="#34">34</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String AUTOFLUSH = <span class="jxr_string">"autoflush"</span>;
+<a class="jxr_linenumber" name="35" href="#35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DRIVERLIST = <span class="jxr_string">"driverlist"</span>;
+<a class="jxr_linenumber" name="36" href="#36">36</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DRIVER_NAMES = <span class="jxr_string">"driverNames"</span>;
+<a class="jxr_linenumber" name="37" href="#37">37</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOGFILE = <span class="jxr_string">"logfile"</span>;
+<a class="jxr_linenumber" name="38" href="#38">38</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOG_MESSAGE_FORMAT = <span class="jxr_string">"logMessageFormat"</span>;
+<a class="jxr_linenumber" name="39" href="#39">39</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String APPEND = <span class="jxr_string">"append"</span>;
+<a class="jxr_linenumber" name="40" href="#40">40</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DATEFORMAT = <span class="jxr_string">"dateformat"</span>;
+<a class="jxr_linenumber" name="41" href="#41">41</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String APPENDER = <span class="jxr_string">"appender"</span>;
+<a class="jxr_linenumber" name="42" href="#42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MODULELIST = <span class="jxr_string">"modulelist"</span>;
+<a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String STACKTRACE = <span class="jxr_string">"stacktrace"</span>;
+<a class="jxr_linenumber" name="44" href="#44">44</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String STACKTRACECLASS = <span class="jxr_string">"stacktraceclass"</span>;
+<a class="jxr_linenumber" name="45" href="#45">45</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String RELOADPROPERTIES = <span class="jxr_string">"reloadproperties"</span>;
+<a class="jxr_linenumber" name="46" href="#46">46</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String RELOADPROPERTIESINTERVAL = <span class="jxr_string">"reloadpropertiesinterval"</span>;
+<a class="jxr_linenumber" name="47" href="#47">47</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JNDICONTEXTFACTORY = <span class="jxr_string">"jndicontextfactory"</span>;
+<a class="jxr_linenumber" name="48" href="#48">48</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JNDICONTEXTPROVIDERURL = <span class="jxr_string">"jndicontextproviderurl"</span>;
+<a class="jxr_linenumber" name="49" href="#49">49</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JNDICONTEXTCUSTOM = <span class="jxr_string">"jndicontextcustom"</span>;
+<a class="jxr_linenumber" name="50" href="#50">50</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REALDATASOURCE = <span class="jxr_string">"realdatasource"</span>;
+<a class="jxr_linenumber" name="51" href="#51">51</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REALDATASOURCECLASS = <span class="jxr_string">"realdatasourceclass"</span>;
+<a class="jxr_linenumber" name="52" href="#52">52</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REALDATASOURCEPROPERTIES = <span class="jxr_string">"realdatasourceproperties"</span>;
+<a class="jxr_linenumber" name="53" href="#53">53</a>      <em class="jxr_comment">// TODO not documented!</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DATABASE_DIALECT_DATE_FORMAT = <span class="jxr_string">"databaseDialectDateFormat"</span>;
+<a class="jxr_linenumber" name="55" href="#55">55</a>      
+<a class="jxr_linenumber" name="56" href="#56">56</a>      <em class="jxr_comment">// those set indirectly (via properties visible from outside)</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MODULE_FACTORIES = <span class="jxr_string">"moduleFactories"</span>;
+<a class="jxr_linenumber" name="58" href="#58">58</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MODULE_NAMES = <span class="jxr_string">"moduleNames"</span>;
+<a class="jxr_linenumber" name="59" href="#59">59</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LOG_MESSAGE_FORMAT_INSTANCE = <span class="jxr_string">"logMessageFormatInstance"</span>;
+<a class="jxr_linenumber" name="60" href="#60">60</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String APPENDER_INSTANCE = <span class="jxr_string">"appenderInstance"</span>;
+<a class="jxr_linenumber" name="61" href="#61">61</a>      
+<a class="jxr_linenumber" name="62" href="#62">62</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;String, String&gt; defaults;
+<a class="jxr_linenumber" name="63" href="#63">63</a>  
+<a class="jxr_linenumber" name="64" href="#64">64</a>      <strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="65" href="#65">65</a>        defaults = <strong class="jxr_keyword">new</strong> HashMap&lt;String, String&gt;();
+<a class="jxr_linenumber" name="66" href="#66">66</a>        defaults.put(LOG_MESSAGE_FORMAT, SingleLineFormat.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="67" href="#67">67</a>        defaults.put(LOGFILE, <span class="jxr_string">"spy.log"</span>);
+<a class="jxr_linenumber" name="68" href="#68">68</a>        defaults.put(APPEND, Boolean.TRUE.toString());
+<a class="jxr_linenumber" name="69" href="#69">69</a>        defaults.put(APPENDER, FileLogger.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="70" href="#70">70</a>        defaults.put(MODULELIST, P6SpyFactory.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="71" href="#71">71</a>        defaults.put(STACKTRACE, Boolean.FALSE.toString());
+<a class="jxr_linenumber" name="72" href="#72">72</a>        defaults.put(AUTOFLUSH, Boolean.FALSE.toString());
+<a class="jxr_linenumber" name="73" href="#73">73</a>        defaults.put(RELOADPROPERTIES, Boolean.FALSE.toString());
+<a class="jxr_linenumber" name="74" href="#74">74</a>        defaults.put(RELOADPROPERTIESINTERVAL, Long.toString(60));
+<a class="jxr_linenumber" name="75" href="#75">75</a>        defaults.put(DATABASE_DIALECT_DATE_FORMAT, <span class="jxr_string">"dd-MMM-yy"</span>);
+<a class="jxr_linenumber" name="76" href="#76">76</a>      }
+<a class="jxr_linenumber" name="77" href="#77">77</a>  
+<a class="jxr_linenumber" name="78" href="#78">78</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/p6spy/engine/spy/option/P6OptionsRepository.html">P6OptionsRepository</a> optionsRepository;
+<a class="jxr_linenumber" name="79" href="#79">79</a>  
+<a class="jxr_linenumber" name="80" href="#80">80</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyOptions.html">P6SpyOptions</a>(<strong class="jxr_keyword">final</strong> <a href="../../../../com/p6spy/engine/spy/option/P6OptionsRepository.html">P6OptionsRepository</a> optionsRepository) {
+<a class="jxr_linenumber" name="81" href="#81">81</a>        <strong class="jxr_keyword">this</strong>.optionsRepository = optionsRepository;
+<a class="jxr_linenumber" name="82" href="#82">82</a>      }
+<a class="jxr_linenumber" name="83" href="#83">83</a>      
+<a class="jxr_linenumber" name="84" href="#84">84</a>      @Override
+<a class="jxr_linenumber" name="85" href="#85">85</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> load(Map&lt;String, String&gt; options) {
+<a class="jxr_linenumber" name="86" href="#86">86</a>        loadLog4jConfig(P6Util.getProperties(options));
+<a class="jxr_linenumber" name="87" href="#87">87</a>  
+<a class="jxr_linenumber" name="88" href="#88">88</a>        <strong class="jxr_keyword">if</strong> (options.get(LOG_MESSAGE_FORMAT) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="89" href="#89">89</a>          setLogMessageFormat(options.get(LOG_MESSAGE_FORMAT));
+<a class="jxr_linenumber" name="90" href="#90">90</a>        }
+<a class="jxr_linenumber" name="91" href="#91">91</a>        <strong class="jxr_keyword">if</strong> (options.get(LOGFILE) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="92" href="#92">92</a>          setLogfile(options.get(LOGFILE));
+<a class="jxr_linenumber" name="93" href="#93">93</a>        }
+<a class="jxr_linenumber" name="94" href="#94">94</a>        <strong class="jxr_keyword">if</strong> (options.get(APPEND) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="95" href="#95">95</a>          setAppend(options.get(APPEND));
+<a class="jxr_linenumber" name="96" href="#96">96</a>        }
+<a class="jxr_linenumber" name="97" href="#97">97</a>        <strong class="jxr_keyword">if</strong> (options.get(DATEFORMAT) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="98" href="#98">98</a>          setDateformat(options.get(DATEFORMAT));
+<a class="jxr_linenumber" name="99" href="#99">99</a>        }
+<a class="jxr_linenumber" name="100" href="#100">100</a>       <strong class="jxr_keyword">if</strong> (options.get(APPENDER) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="101" href="#101">101</a>         setAppender(options.get(APPENDER));
+<a class="jxr_linenumber" name="102" href="#102">102</a>       }
+<a class="jxr_linenumber" name="103" href="#103">103</a>       <strong class="jxr_keyword">if</strong> (options.get(MODULELIST) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="104" href="#104">104</a>         setModulelist(options.get(MODULELIST));
+<a class="jxr_linenumber" name="105" href="#105">105</a>       }
+<a class="jxr_linenumber" name="106" href="#106">106</a>       <strong class="jxr_keyword">if</strong> (options.get(DRIVERLIST) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="107" href="#107">107</a>         setDriverlist(options.get(DRIVERLIST));
+<a class="jxr_linenumber" name="108" href="#108">108</a>       }
+<a class="jxr_linenumber" name="109" href="#109">109</a>       <strong class="jxr_keyword">if</strong> (options.get(STACKTRACE) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="110" href="#110">110</a>         setStackTrace(options.get(STACKTRACE));
+<a class="jxr_linenumber" name="111" href="#111">111</a>       }
+<a class="jxr_linenumber" name="112" href="#112">112</a>       <strong class="jxr_keyword">if</strong> (options.get(STACKTRACECLASS) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="113" href="#113">113</a>         setStackTraceClass(options.get(STACKTRACECLASS));
+<a class="jxr_linenumber" name="114" href="#114">114</a>       }
+<a class="jxr_linenumber" name="115" href="#115">115</a>       <em class="jxr_comment">//      setUsePrefix(options.get(USE_PREFIX));</em>
+<a class="jxr_linenumber" name="116" href="#116">116</a>       <strong class="jxr_keyword">if</strong> (options.get(AUTOFLUSH) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="117" href="#117">117</a>         setAutoflush(options.get(AUTOFLUSH));
+<a class="jxr_linenumber" name="118" href="#118">118</a>       }
+<a class="jxr_linenumber" name="119" href="#119">119</a>       <strong class="jxr_keyword">if</strong> (options.get(RELOADPROPERTIES) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="120" href="#120">120</a>         setReloadProperties(options.get(RELOADPROPERTIES));
+<a class="jxr_linenumber" name="121" href="#121">121</a>       }
+<a class="jxr_linenumber" name="122" href="#122">122</a>       <strong class="jxr_keyword">if</strong> (options.get(RELOADPROPERTIESINTERVAL) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="123" href="#123">123</a>         setReloadPropertiesInterval(options.get(RELOADPROPERTIESINTERVAL));
+<a class="jxr_linenumber" name="124" href="#124">124</a>       }
+<a class="jxr_linenumber" name="125" href="#125">125</a>       <strong class="jxr_keyword">if</strong> (options.get(JNDICONTEXTFACTORY) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="126" href="#126">126</a>         setJNDIContextFactory(options.get(JNDICONTEXTFACTORY));
+<a class="jxr_linenumber" name="127" href="#127">127</a>       }
+<a class="jxr_linenumber" name="128" href="#128">128</a>       <strong class="jxr_keyword">if</strong> (options.get(JNDICONTEXTPROVIDERURL) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="129" href="#129">129</a>         setJNDIContextProviderURL(options.get(JNDICONTEXTPROVIDERURL));
+<a class="jxr_linenumber" name="130" href="#130">130</a>       }
+<a class="jxr_linenumber" name="131" href="#131">131</a>       <strong class="jxr_keyword">if</strong> (options.get(JNDICONTEXTCUSTOM) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="132" href="#132">132</a>         setJNDIContextCustom(options.get(JNDICONTEXTCUSTOM));
+<a class="jxr_linenumber" name="133" href="#133">133</a>       }
+<a class="jxr_linenumber" name="134" href="#134">134</a>       <strong class="jxr_keyword">if</strong> (options.get(REALDATASOURCE) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="135" href="#135">135</a>         setRealDataSource(options.get(REALDATASOURCE));
+<a class="jxr_linenumber" name="136" href="#136">136</a>       }
+<a class="jxr_linenumber" name="137" href="#137">137</a>       <strong class="jxr_keyword">if</strong> (options.get(REALDATASOURCECLASS) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="138" href="#138">138</a>         setRealDataSourceClass(options.get(REALDATASOURCECLASS));
+<a class="jxr_linenumber" name="139" href="#139">139</a>       }
+<a class="jxr_linenumber" name="140" href="#140">140</a>       <strong class="jxr_keyword">if</strong> (options.get(REALDATASOURCEPROPERTIES) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="141" href="#141">141</a>         setRealDataSourceProperties(options.get(REALDATASOURCEPROPERTIES));
+<a class="jxr_linenumber" name="142" href="#142">142</a>       }
+<a class="jxr_linenumber" name="143" href="#143">143</a>       <strong class="jxr_keyword">if</strong> (options.get(DATABASE_DIALECT_DATE_FORMAT) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="144" href="#144">144</a>         setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
+<a class="jxr_linenumber" name="145" href="#145">145</a>       }
+<a class="jxr_linenumber" name="146" href="#146">146</a>     }
+<a class="jxr_linenumber" name="147" href="#147">147</a>     
+<a class="jxr_linenumber" name="148" href="#148">148</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="149" href="#149">149</a> <em class="jxr_javadoccomment">     * Loads log4j specific configuration.</em>
+<a class="jxr_linenumber" name="150" href="#150">150</a> <em class="jxr_javadoccomment">     * &lt;br/&gt;&lt;br/&gt;</em>
+<a class="jxr_linenumber" name="151" href="#151">151</a> <em class="jxr_javadoccomment">     * Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here</em>
+<a class="jxr_linenumber" name="152" href="#152">152</a> <em class="jxr_javadoccomment">     * once you require different behavior, provide your own log4j configuration file (holding these properties) </em>
+<a class="jxr_linenumber" name="153" href="#153">153</a> <em class="jxr_javadoccomment">     * and make sure to load/reload it properly.</em>
+<a class="jxr_linenumber" name="154" href="#154">154</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="155" href="#155">155</a> <em class="jxr_javadoccomment">     * @param properties the properties to load the configuration values from.</em>
+<a class="jxr_linenumber" name="156" href="#156">156</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="157" href="#157">157</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> loadLog4jConfig(Properties properties) {
+<a class="jxr_linenumber" name="158" href="#158">158</a>       PropertyConfigurator.configure(properties);
+<a class="jxr_linenumber" name="159" href="#159">159</a>     }
+<a class="jxr_linenumber" name="160" href="#160">160</a> 
+<a class="jxr_linenumber" name="161" href="#161">161</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="162" href="#162">162</a> <em class="jxr_javadoccomment">     * Utility method, to make accessing options from app less verbose.</em>
+<a class="jxr_linenumber" name="163" href="#163">163</a> <em class="jxr_javadoccomment">     * </em>
+<a class="jxr_linenumber" name="164" href="#164">164</a> <em class="jxr_javadoccomment">     * @return active instance of the {@link P6SpyLoadableOptions}</em>
+<a class="jxr_linenumber" name="165" href="#165">165</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="166" href="#166">166</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a href="../../../../com/p6spy/engine/spy/P6SpyLoadableOptions.html">P6SpyLoadableOptions</a> getActiveInstance() {
+<a class="jxr_linenumber" name="167" href="#167">167</a>       <strong class="jxr_keyword">return</strong> P6ModuleManager.getInstance().getOptions(P6SpyOptions.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="168" href="#168">168</a>     }
 <a class="jxr_linenumber" name="169" href="#169">169</a> 
-<a class="jxr_linenumber" name="170" href="#170">170</a>     @Override
-<a class="jxr_linenumber" name="171" href="#171">171</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getAutoflush() {
-<a class="jxr_linenumber" name="172" href="#172">172</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(Boolean.<strong class="jxr_keyword">class</strong>, AUTOFLUSH);
-<a class="jxr_linenumber" name="173" href="#173">173</a>     }
-<a class="jxr_linenumber" name="174" href="#174">174</a> 
-<a class="jxr_linenumber" name="175" href="#175">175</a>     @Override
-<a class="jxr_linenumber" name="176" href="#176">176</a>     <strong class="jxr_keyword">public</strong> String getDriverlist() {
-<a class="jxr_linenumber" name="177" href="#177">177</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, DRIVERLIST);
-<a class="jxr_linenumber" name="178" href="#178">178</a>     }
-<a class="jxr_linenumber" name="179" href="#179">179</a> 
-<a class="jxr_linenumber" name="180" href="#180">180</a>     @Override
-<a class="jxr_linenumber" name="181" href="#181">181</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDriverlist(<strong class="jxr_keyword">final</strong> String driverlist) {
-<a class="jxr_linenumber" name="182" href="#182">182</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, DRIVERLIST, driverlist);
-<a class="jxr_linenumber" name="183" href="#183">183</a>       optionsRepository.setSet(String.<strong class="jxr_keyword">class</strong>, DRIVER_NAMES, driverlist);
-<a class="jxr_linenumber" name="184" href="#184">184</a>     }
-<a class="jxr_linenumber" name="185" href="#185">185</a> 
-<a class="jxr_linenumber" name="186" href="#186">186</a>     @Override
-<a class="jxr_linenumber" name="187" href="#187">187</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getReloadProperties() {
-<a class="jxr_linenumber" name="188" href="#188">188</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(Boolean.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIES);
-<a class="jxr_linenumber" name="189" href="#189">189</a>     }
-<a class="jxr_linenumber" name="190" href="#190">190</a>     @Override
-<a class="jxr_linenumber" name="191" href="#191">191</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReloadProperties(String reloadproperties) {
-<a class="jxr_linenumber" name="192" href="#192">192</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIES, reloadproperties);
-<a class="jxr_linenumber" name="193" href="#193">193</a>     }
-<a class="jxr_linenumber" name="194" href="#194">194</a>     
-<a class="jxr_linenumber" name="195" href="#195">195</a>     @Override
-<a class="jxr_linenumber" name="196" href="#196">196</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReloadProperties(<strong class="jxr_keyword">boolean</strong> reloadproperties) {
-<a class="jxr_linenumber" name="197" href="#197">197</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIES, reloadproperties);
-<a class="jxr_linenumber" name="198" href="#198">198</a>     }
-<a class="jxr_linenumber" name="199" href="#199">199</a>     
-<a class="jxr_linenumber" name="200" href="#200">200</a>     @Override
-<a class="jxr_linenumber" name="201" href="#201">201</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getReloadPropertiesInterval() {
-<a class="jxr_linenumber" name="202" href="#202">202</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(Long.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIESINTERVAL);
-<a class="jxr_linenumber" name="203" href="#203">203</a>     }
-<a class="jxr_linenumber" name="204" href="#204">204</a>     @Override
-<a class="jxr_linenumber" name="205" href="#205">205</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReloadPropertiesInterval(String reloadpropertiesinterval) {
-<a class="jxr_linenumber" name="206" href="#206">206</a>       optionsRepository.set(Long.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIESINTERVAL, reloadpropertiesinterval);
-<a class="jxr_linenumber" name="207" href="#207">207</a>     }
-<a class="jxr_linenumber" name="208" href="#208">208</a>     
-<a class="jxr_linenumber" name="209" href="#209">209</a>     @Override
-<a class="jxr_linenumber" name="210" href="#210">210</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReloadPropertiesInterval(<strong class="jxr_keyword">long</strong> reloadpropertiesinterval) {
-<a class="jxr_linenumber" name="211" href="#211">211</a>       optionsRepository.set(Long.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIESINTERVAL, reloadpropertiesinterval);
-<a class="jxr_linenumber" name="212" href="#212">212</a>     }
-<a class="jxr_linenumber" name="213" href="#213">213</a>     
-<a class="jxr_linenumber" name="214" href="#214">214</a>     @Override
-<a class="jxr_linenumber" name="215" href="#215">215</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setJNDIContextFactory(String jndicontextfactory) {
-<a class="jxr_linenumber" name="216" href="#216">216</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTFACTORY, jndicontextfactory);
-<a class="jxr_linenumber" name="217" href="#217">217</a>     }
-<a class="jxr_linenumber" name="218" href="#218">218</a>     @Override
-<a class="jxr_linenumber" name="219" href="#219">219</a>     <strong class="jxr_keyword">public</strong> String getJNDIContextFactory() {
-<a class="jxr_linenumber" name="220" href="#220">220</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTFACTORY);
+<a class="jxr_linenumber" name="170" href="#170">170</a>     <em class="jxr_comment">// JMX exporsed API</em>
+<a class="jxr_linenumber" name="171" href="#171">171</a>     
+<a class="jxr_linenumber" name="172" href="#172">172</a>     @Override
+<a class="jxr_linenumber" name="173" href="#173">173</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reload() {
+<a class="jxr_linenumber" name="174" href="#174">174</a>       P6ModuleManager.getInstance().reload();
+<a class="jxr_linenumber" name="175" href="#175">175</a>     }
+<a class="jxr_linenumber" name="176" href="#176">176</a>     
+<a class="jxr_linenumber" name="177" href="#177">177</a>     @Override
+<a class="jxr_linenumber" name="178" href="#178">178</a>     <strong class="jxr_keyword">public</strong> Set&lt;P6Factory&gt; getModuleFactories() {
+<a class="jxr_linenumber" name="179" href="#179">179</a>       <strong class="jxr_keyword">return</strong> optionsRepository.getSet(P6Factory.<strong class="jxr_keyword">class</strong>, MODULE_FACTORIES);
+<a class="jxr_linenumber" name="180" href="#180">180</a>     }
+<a class="jxr_linenumber" name="181" href="#181">181</a>     
+<a class="jxr_linenumber" name="182" href="#182">182</a> <em class="jxr_comment">//    @Override</em>
+<a class="jxr_linenumber" name="183" href="#183">183</a> <em class="jxr_comment">//    public void setUsePrefix(String usePrefix) {</em>
+<a class="jxr_linenumber" name="184" href="#184">184</a> <em class="jxr_comment">//      optionsRepository.set(Boolean.class, USE_PREFIX, usePrefix);</em>
+<a class="jxr_linenumber" name="185" href="#185">185</a> <em class="jxr_comment">//    }</em>
+<a class="jxr_linenumber" name="186" href="#186">186</a> <em class="jxr_comment">//    </em>
+<a class="jxr_linenumber" name="187" href="#187">187</a> <em class="jxr_comment">//    @Override</em>
+<a class="jxr_linenumber" name="188" href="#188">188</a> <em class="jxr_comment">//    public void setUsePrefix(boolean usePrefix) {</em>
+<a class="jxr_linenumber" name="189" href="#189">189</a> <em class="jxr_comment">//      optionsRepository.set(Boolean.class, USE_PREFIX, usePrefix);</em>
+<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_comment">//    }</em>
+<a class="jxr_linenumber" name="191" href="#191">191</a> <em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="192" href="#192">192</a> <em class="jxr_comment">//    @Override</em>
+<a class="jxr_linenumber" name="193" href="#193">193</a> <em class="jxr_comment">//    public boolean getUsePrefix() {</em>
+<a class="jxr_linenumber" name="194" href="#194">194</a> <em class="jxr_comment">//      return optionsRepository.get(Boolean.class, USE_PREFIX);</em>
+<a class="jxr_linenumber" name="195" href="#195">195</a> <em class="jxr_comment">//    }</em>
+<a class="jxr_linenumber" name="196" href="#196">196</a> 
+<a class="jxr_linenumber" name="197" href="#197">197</a>     @Override
+<a class="jxr_linenumber" name="198" href="#198">198</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAutoflush(String autoflush) {
+<a class="jxr_linenumber" name="199" href="#199">199</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, AUTOFLUSH, autoflush);
+<a class="jxr_linenumber" name="200" href="#200">200</a>     }
+<a class="jxr_linenumber" name="201" href="#201">201</a>     
+<a class="jxr_linenumber" name="202" href="#202">202</a>     @Override
+<a class="jxr_linenumber" name="203" href="#203">203</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAutoflush(<strong class="jxr_keyword">boolean</strong> autoflush) {
+<a class="jxr_linenumber" name="204" href="#204">204</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, AUTOFLUSH, autoflush);
+<a class="jxr_linenumber" name="205" href="#205">205</a>     }
+<a class="jxr_linenumber" name="206" href="#206">206</a> 
+<a class="jxr_linenumber" name="207" href="#207">207</a>     @Override
+<a class="jxr_linenumber" name="208" href="#208">208</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getAutoflush() {
+<a class="jxr_linenumber" name="209" href="#209">209</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(Boolean.<strong class="jxr_keyword">class</strong>, AUTOFLUSH);
+<a class="jxr_linenumber" name="210" href="#210">210</a>     }
+<a class="jxr_linenumber" name="211" href="#211">211</a> 
+<a class="jxr_linenumber" name="212" href="#212">212</a>     @Override
+<a class="jxr_linenumber" name="213" href="#213">213</a>     <strong class="jxr_keyword">public</strong> String getDriverlist() {
+<a class="jxr_linenumber" name="214" href="#214">214</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, DRIVERLIST);
+<a class="jxr_linenumber" name="215" href="#215">215</a>     }
+<a class="jxr_linenumber" name="216" href="#216">216</a> 
+<a class="jxr_linenumber" name="217" href="#217">217</a>     @Override
+<a class="jxr_linenumber" name="218" href="#218">218</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDriverlist(<strong class="jxr_keyword">final</strong> String driverlist) {
+<a class="jxr_linenumber" name="219" href="#219">219</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, DRIVERLIST, driverlist);
+<a class="jxr_linenumber" name="220" href="#220">220</a>       optionsRepository.setSet(String.<strong class="jxr_keyword">class</strong>, DRIVER_NAMES, driverlist);
 <a class="jxr_linenumber" name="221" href="#221">221</a>     }
-<a class="jxr_linenumber" name="222" href="#222">222</a>     @Override
-<a class="jxr_linenumber" name="223" href="#223">223</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setJNDIContextProviderURL(String jndicontextproviderurl) {
-<a class="jxr_linenumber" name="224" href="#224">224</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTPROVIDERURL, jndicontextproviderurl);
-<a class="jxr_linenumber" name="225" href="#225">225</a>     }
-<a class="jxr_linenumber" name="226" href="#226">226</a>     @Override
-<a class="jxr_linenumber" name="227" href="#227">227</a>     <strong class="jxr_keyword">public</strong> String getJNDIContextProviderURL() {
-<a class="jxr_linenumber" name="228" href="#228">228</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTPROVIDERURL);
-<a class="jxr_linenumber" name="229" href="#229">229</a>     }
-<a class="jxr_linenumber" name="230" href="#230">230</a>     @Override
-<a class="jxr_linenumber" name="231" href="#231">231</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setJNDIContextCustom(String jndicontextcustom) {
-<a class="jxr_linenumber" name="232" href="#232">232</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTCUSTOM, jndicontextcustom);
-<a class="jxr_linenumber" name="233" href="#233">233</a>     }
-<a class="jxr_linenumber" name="234" href="#234">234</a>     @Override
-<a class="jxr_linenumber" name="235" href="#235">235</a>     <strong class="jxr_keyword">public</strong> String getJNDIContextCustom() {
-<a class="jxr_linenumber" name="236" href="#236">236</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTCUSTOM);
-<a class="jxr_linenumber" name="237" href="#237">237</a>     }
-<a class="jxr_linenumber" name="238" href="#238">238</a>     @Override
-<a class="jxr_linenumber" name="239" href="#239">239</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setRealDataSource(String realdatasource) {
-<a class="jxr_linenumber" name="240" href="#240">240</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCE, realdatasource);
-<a class="jxr_linenumber" name="241" href="#241">241</a>     }
-<a class="jxr_linenumber" name="242" href="#242">242</a>     @Override
-<a class="jxr_linenumber" name="243" href="#243">243</a>     <strong class="jxr_keyword">public</strong> String getRealDataSource() {
-<a class="jxr_linenumber" name="244" href="#244">244</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCE);
-<a class="jxr_linenumber" name="245" href="#245">245</a>     }
+<a class="jxr_linenumber" name="222" href="#222">222</a> 
+<a class="jxr_linenumber" name="223" href="#223">223</a>     @Override
+<a class="jxr_linenumber" name="224" href="#224">224</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getReloadProperties() {
+<a class="jxr_linenumber" name="225" href="#225">225</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(Boolean.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIES);
+<a class="jxr_linenumber" name="226" href="#226">226</a>     }
+<a class="jxr_linenumber" name="227" href="#227">227</a>     @Override
+<a class="jxr_linenumber" name="228" href="#228">228</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReloadProperties(String reloadproperties) {
+<a class="jxr_linenumber" name="229" href="#229">229</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIES, reloadproperties);
+<a class="jxr_linenumber" name="230" href="#230">230</a>     }
+<a class="jxr_linenumber" name="231" href="#231">231</a>     
+<a class="jxr_linenumber" name="232" href="#232">232</a>     @Override
+<a class="jxr_linenumber" name="233" href="#233">233</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReloadProperties(<strong class="jxr_keyword">boolean</strong> reloadproperties) {
+<a class="jxr_linenumber" name="234" href="#234">234</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIES, reloadproperties);
+<a class="jxr_linenumber" name="235" href="#235">235</a>     }
+<a class="jxr_linenumber" name="236" href="#236">236</a>     
+<a class="jxr_linenumber" name="237" href="#237">237</a>     @Override
+<a class="jxr_linenumber" name="238" href="#238">238</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getReloadPropertiesInterval() {
+<a class="jxr_linenumber" name="239" href="#239">239</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(Long.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIESINTERVAL);
+<a class="jxr_linenumber" name="240" href="#240">240</a>     }
+<a class="jxr_linenumber" name="241" href="#241">241</a>     @Override
+<a class="jxr_linenumber" name="242" href="#242">242</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReloadPropertiesInterval(String reloadpropertiesinterval) {
+<a class="jxr_linenumber" name="243" href="#243">243</a>       optionsRepository.set(Long.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIESINTERVAL, reloadpropertiesinterval);
+<a class="jxr_linenumber" name="244" href="#244">244</a>     }
+<a class="jxr_linenumber" name="245" href="#245">245</a>     
 <a class="jxr_linenumber" name="246" href="#246">246</a>     @Override
-<a class="jxr_linenumber" name="247" href="#247">247</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setRealDataSourceClass(String realdatasourceclass) {
-<a class="jxr_linenumber" name="248" href="#248">248</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCECLASS, realdatasourceclass);
+<a class="jxr_linenumber" name="247" href="#247">247</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setReloadPropertiesInterval(<strong class="jxr_keyword">long</strong> reloadpropertiesinterval) {
+<a class="jxr_linenumber" name="248" href="#248">248</a>       optionsRepository.set(Long.<strong class="jxr_keyword">class</strong>, RELOADPROPERTIESINTERVAL, reloadpropertiesinterval);
 <a class="jxr_linenumber" name="249" href="#249">249</a>     }
-<a class="jxr_linenumber" name="250" href="#250">250</a>     @Override
-<a class="jxr_linenumber" name="251" href="#251">251</a>     <strong class="jxr_keyword">public</strong> String getRealDataSourceClass() {
-<a class="jxr_linenumber" name="252" href="#252">252</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCECLASS);
-<a class="jxr_linenumber" name="253" href="#253">253</a>     }
-<a class="jxr_linenumber" name="254" href="#254">254</a>     @Override
-<a class="jxr_linenumber" name="255" href="#255">255</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setRealDataSourceProperties(String realdatasourceproperties) {
-<a class="jxr_linenumber" name="256" href="#256">256</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCEPROPERTIES, realdatasourceproperties);
-<a class="jxr_linenumber" name="257" href="#257">257</a>     }
-<a class="jxr_linenumber" name="258" href="#258">258</a>     @Override
-<a class="jxr_linenumber" name="259" href="#259">259</a>     <strong class="jxr_keyword">public</strong> String getRealDataSourceProperties() {
-<a class="jxr_linenumber" name="260" href="#260">260</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCEPROPERTIES);
-<a class="jxr_linenumber" name="261" href="#261">261</a>     }
-<a class="jxr_linenumber" name="262" href="#262">262</a> 
+<a class="jxr_linenumber" name="250" href="#250">250</a>     
+<a class="jxr_linenumber" name="251" href="#251">251</a>     @Override
+<a class="jxr_linenumber" name="252" href="#252">252</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setJNDIContextFactory(String jndicontextfactory) {
+<a class="jxr_linenumber" name="253" href="#253">253</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTFACTORY, jndicontextfactory);
+<a class="jxr_linenumber" name="254" href="#254">254</a>     }
+<a class="jxr_linenumber" name="255" href="#255">255</a>     @Override
+<a class="jxr_linenumber" name="256" href="#256">256</a>     <strong class="jxr_keyword">public</strong> String getJNDIContextFactory() {
+<a class="jxr_linenumber" name="257" href="#257">257</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTFACTORY);
+<a class="jxr_linenumber" name="258" href="#258">258</a>     }
+<a class="jxr_linenumber" name="259" href="#259">259</a>     @Override
+<a class="jxr_linenumber" name="260" href="#260">260</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setJNDIContextProviderURL(String jndicontextproviderurl) {
+<a class="jxr_linenumber" name="261" href="#261">261</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTPROVIDERURL, jndicontextproviderurl);
+<a class="jxr_linenumber" name="262" href="#262">262</a>     }
 <a class="jxr_linenumber" name="263" href="#263">263</a>     @Override
-<a class="jxr_linenumber" name="264" href="#264">264</a>     <strong class="jxr_keyword">public</strong> Set&lt;String&gt; getDriverNames() {
-<a class="jxr_linenumber" name="265" href="#265">265</a>         <strong class="jxr_keyword">return</strong> optionsRepository.getSet(String.<strong class="jxr_keyword">class</strong>, DRIVER_NAMES);
+<a class="jxr_linenumber" name="264" href="#264">264</a>     <strong class="jxr_keyword">public</strong> String getJNDIContextProviderURL() {
+<a class="jxr_linenumber" name="265" href="#265">265</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTPROVIDERURL);
 <a class="jxr_linenumber" name="266" href="#266">266</a>     }
-<a class="jxr_linenumber" name="267" href="#267">267</a> 
-<a class="jxr_linenumber" name="268" href="#268">268</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="269" href="#269">269</a> <em class="jxr_javadoccomment">     * Returns the databaseDialectDateFormat.</em>
-<a class="jxr_linenumber" name="270" href="#270">270</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="271" href="#271">271</a> <em class="jxr_javadoccomment">     * @return String</em>
-<a class="jxr_linenumber" name="272" href="#272">272</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="273" href="#273">273</a>     @Override
-<a class="jxr_linenumber" name="274" href="#274">274</a>     <strong class="jxr_keyword">public</strong> String getDatabaseDialectDateFormat() {
-<a class="jxr_linenumber" name="275" href="#275">275</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, DATABASE_DIALECT_DATE_FORMAT);
-<a class="jxr_linenumber" name="276" href="#276">276</a>     }
-<a class="jxr_linenumber" name="277" href="#277">277</a> 
-<a class="jxr_linenumber" name="278" href="#278">278</a>     <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="279" href="#279">279</a> <em class="jxr_javadoccomment">     * Sets the databaseDialectDateFormat.</em>
-<a class="jxr_linenumber" name="280" href="#280">280</a> <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="281" href="#281">281</a> <em class="jxr_javadoccomment">     * @param databaseDialectDateFormat The databaseDialectDateFormat to set</em>
-<a class="jxr_linenumber" name="282" href="#282">282</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="267" href="#267">267</a>     @Override
+<a class="jxr_linenumber" name="268" href="#268">268</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setJNDIContextCustom(String jndicontextcustom) {
+<a class="jxr_linenumber" name="269" href="#269">269</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTCUSTOM, jndicontextcustom);
+<a class="jxr_linenumber" name="270" href="#270">270</a>     }
+<a class="jxr_linenumber" name="271" href="#271">271</a>     @Override
+<a class="jxr_linenumber" name="272" href="#272">272</a>     <strong class="jxr_keyword">public</strong> String getJNDIContextCustom() {
+<a class="jxr_linenumber" name="273" href="#273">273</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, JNDICONTEXTCUSTOM);
+<a class="jxr_linenumber" name="274" href="#274">274</a>     }
+<a class="jxr_linenumber" name="275" href="#275">275</a>     @Override
+<a class="jxr_linenumber" name="276" href="#276">276</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setRealDataSource(String realdatasource) {
+<a class="jxr_linenumber" name="277" href="#277">277</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCE, realdatasource);
+<a class="jxr_linenumber" name="278" href="#278">278</a>     }
+<a class="jxr_linenumber" name="279" href="#279">279</a>     @Override
+<a class="jxr_linenumber" name="280" href="#280">280</a>     <strong class="jxr_keyword">public</strong> String getRealDataSource() {
+<a class="jxr_linenumber" name="281" href="#281">281</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCE);
+<a class="jxr_linenumber" name="282" href="#282">282</a>     }
 <a class="jxr_linenumber" name="283" href="#283">283</a>     @Override
-<a class="jxr_linenumber" name="284" href="#284">284</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDatabaseDialectDateFormat(String databaseDialectDateFormat) {
-<a class="jxr_linenumber" name="285" href="#285">285</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, DATABASE_DIALECT_DATE_FORMAT, databaseDialectDateFormat);
+<a class="jxr_linenumber" name="284" href="#284">284</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setRealDataSourceClass(String realdatasourceclass) {
+<a class="jxr_linenumber" name="285" href="#285">285</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCECLASS, realdatasourceclass);
 <a class="jxr_linenumber" name="286" href="#286">286</a>     }
-<a class="jxr_linenumber" name="287" href="#287">287</a> 
-<a class="jxr_linenumber" name="288" href="#288">288</a> 
-<a class="jxr_linenumber" name="289" href="#289">289</a>     @Override
-<a class="jxr_linenumber" name="290" href="#290">290</a>     <strong class="jxr_keyword">public</strong> String getModulelist() {
-<a class="jxr_linenumber" name="291" href="#291">291</a>       <em class="jxr_comment">// TODO handle getters for lists represented in csv strings correctly</em>
-<a class="jxr_linenumber" name="292" href="#292">292</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, MODULELIST);
-<a class="jxr_linenumber" name="293" href="#293">293</a>     }
-<a class="jxr_linenumber" name="294" href="#294">294</a> 
+<a class="jxr_linenumber" name="287" href="#287">287</a>     @Override
+<a class="jxr_linenumber" name="288" href="#288">288</a>     <strong class="jxr_keyword">public</strong> String getRealDataSourceClass() {
+<a class="jxr_linenumber" name="289" href="#289">289</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCECLASS);
+<a class="jxr_linenumber" name="290" href="#290">290</a>     }
+<a class="jxr_linenumber" name="291" href="#291">291</a>     @Override
+<a class="jxr_linenumber" name="292" href="#292">292</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setRealDataSourceProperties(String realdatasourceproperties) {
+<a class="jxr_linenumber" name="293" href="#293">293</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCEPROPERTIES, realdatasourceproperties);
+<a class="jxr_linenumber" name="294" href="#294">294</a>     }
 <a class="jxr_linenumber" name="295" href="#295">295</a>     @Override
-<a class="jxr_linenumber" name="296" href="#296">296</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setModulelist(String modulelist) {
-<a class="jxr_linenumber" name="297" href="#297">297</a>       <em class="jxr_comment">// no mather what P6SpyOptions is a must</em>
-<a class="jxr_linenumber" name="298" href="#298">298</a>       <strong class="jxr_keyword">if</strong> (modulelist != <strong class="jxr_keyword">null</strong> &amp;&amp; modulelist.contains(P6OptionsRepository.COLLECTION_REMOVAL_PREFIX + P6SpyFactory.<strong class="jxr_keyword">class</strong>.getName())) {
-<a class="jxr_linenumber" name="299" href="#299">299</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(P6SpyFactory.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">" can't be removed from the module list, as it's considered a core factory!"</span>);
-<a class="jxr_linenumber" name="300" href="#300">300</a>       }
-<a class="jxr_linenumber" name="301" href="#301">301</a> <em class="jxr_comment">//      if (modulelist != null &amp;&amp; !modulelist.contains(P6SpyFactory.class.getName())) {</em>
-<a class="jxr_linenumber" name="302" href="#302">302</a> <em class="jxr_comment">//        modulelist += "," + P6SpyFactory.class.getName();</em>
-<a class="jxr_linenumber" name="303" href="#303">303</a> <em class="jxr_comment">//      }</em>
-<a class="jxr_linenumber" name="304" href="#304">304</a>       
-<a class="jxr_linenumber" name="305" href="#305">305</a>       <em class="jxr_comment">// TODO handle getters for lists represented in csv strings correctly</em>
-<a class="jxr_linenumber" name="306" href="#306">306</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, MODULELIST, modulelist);
-<a class="jxr_linenumber" name="307" href="#307">307</a>       optionsRepository.setSet(String.<strong class="jxr_keyword">class</strong>, MODULE_NAMES, modulelist);
-<a class="jxr_linenumber" name="308" href="#308">308</a>       optionsRepository.setSet(P6Factory.<strong class="jxr_keyword">class</strong>, MODULE_FACTORIES, modulelist);
-<a class="jxr_linenumber" name="309" href="#309">309</a>     }      
-<a class="jxr_linenumber" name="310" href="#310">310</a> 
-<a class="jxr_linenumber" name="311" href="#311">311</a>     @Override
-<a class="jxr_linenumber" name="312" href="#312">312</a>     <strong class="jxr_keyword">public</strong> Set&lt;String&gt; getModuleNames() {
-<a class="jxr_linenumber" name="313" href="#313">313</a>       <strong class="jxr_keyword">return</strong> optionsRepository.getSet(String.<strong class="jxr_keyword">class</strong>, MODULE_NAMES);
-<a class="jxr_linenumber" name="314" href="#314">314</a>     }
-<a class="jxr_linenumber" name="315" href="#315">315</a> 
-<a class="jxr_linenumber" name="316" href="#316">316</a>     @Override
-<a class="jxr_linenumber" name="317" href="#317">317</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAppend(<strong class="jxr_keyword">boolean</strong> append) {
-<a class="jxr_linenumber" name="318" href="#318">318</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, APPEND, append);
-<a class="jxr_linenumber" name="319" href="#319">319</a>     }
-<a class="jxr_linenumber" name="320" href="#320">320</a> 
-<a class="jxr_linenumber" name="321" href="#321">321</a>     @Override
-<a class="jxr_linenumber" name="322" href="#322">322</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getAppend() {
-<a class="jxr_linenumber" name="323" href="#323">323</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(Boolean.<strong class="jxr_keyword">class</strong>, APPEND);
-<a class="jxr_linenumber" name="324" href="#324">324</a>     }
+<a class="jxr_linenumber" name="296" href="#296">296</a>     <strong class="jxr_keyword">public</strong> String getRealDataSourceProperties() {
+<a class="jxr_linenumber" name="297" href="#297">297</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, REALDATASOURCEPROPERTIES);
+<a class="jxr_linenumber" name="298" href="#298">298</a>     }
+<a class="jxr_linenumber" name="299" href="#299">299</a> 
+<a class="jxr_linenumber" name="300" href="#300">300</a>     @Override
+<a class="jxr_linenumber" name="301" href="#301">301</a>     <strong class="jxr_keyword">public</strong> Set&lt;String&gt; getDriverNames() {
+<a class="jxr_linenumber" name="302" href="#302">302</a>         <strong class="jxr_keyword">return</strong> optionsRepository.getSet(String.<strong class="jxr_keyword">class</strong>, DRIVER_NAMES);
+<a class="jxr_linenumber" name="303" href="#303">303</a>     }
+<a class="jxr_linenumber" name="304" href="#304">304</a> 
+<a class="jxr_linenumber" name="305" href="#305">305</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="306" href="#306">306</a> <em class="jxr_javadoccomment">     * Returns the databaseDialectDateFormat.</em>
+<a class="jxr_linenumber" name="307" href="#307">307</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="308" href="#308">308</a> <em class="jxr_javadoccomment">     * @return String</em>
+<a class="jxr_linenumber" name="309" href="#309">309</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="310" href="#310">310</a>     @Override
+<a class="jxr_linenumber" name="311" href="#311">311</a>     <strong class="jxr_keyword">public</strong> String getDatabaseDialectDateFormat() {
+<a class="jxr_linenumber" name="312" href="#312">312</a>         <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, DATABASE_DIALECT_DATE_FORMAT);
+<a class="jxr_linenumber" name="313" href="#313">313</a>     }
+<a class="jxr_linenumber" name="314" href="#314">314</a> 
+<a class="jxr_linenumber" name="315" href="#315">315</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="316" href="#316">316</a> <em class="jxr_javadoccomment">     * Sets the databaseDialectDateFormat.</em>
+<a class="jxr_linenumber" name="317" href="#317">317</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="318" href="#318">318</a> <em class="jxr_javadoccomment">     * @param databaseDialectDateFormat The databaseDialectDateFormat to set</em>
+<a class="jxr_linenumber" name="319" href="#319">319</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="320" href="#320">320</a>     @Override
+<a class="jxr_linenumber" name="321" href="#321">321</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDatabaseDialectDateFormat(String databaseDialectDateFormat) {
+<a class="jxr_linenumber" name="322" href="#322">322</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, DATABASE_DIALECT_DATE_FORMAT, databaseDialectDateFormat);
+<a class="jxr_linenumber" name="323" href="#323">323</a>     }
+<a class="jxr_linenumber" name="324" href="#324">324</a> 
 <a class="jxr_linenumber" name="325" href="#325">325</a> 
 <a class="jxr_linenumber" name="326" href="#326">326</a>     @Override
-<a class="jxr_linenumber" name="327" href="#327">327</a>     <strong class="jxr_keyword">public</strong> String getAppender() {
-<a class="jxr_linenumber" name="328" href="#328">328</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, APPENDER);
-<a class="jxr_linenumber" name="329" href="#329">329</a>     }
-<a class="jxr_linenumber" name="330" href="#330">330</a> 
-<a class="jxr_linenumber" name="331" href="#331">331</a>     @Override
-<a class="jxr_linenumber" name="332" href="#332">332</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/appender/P6Logger.html">P6Logger</a> getAppenderInstance() {
-<a class="jxr_linenumber" name="333" href="#333">333</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(P6Logger.<strong class="jxr_keyword">class</strong>, APPENDER_INSTANCE);
-<a class="jxr_linenumber" name="334" href="#334">334</a>     }
-<a class="jxr_linenumber" name="335" href="#335">335</a>     
-<a class="jxr_linenumber" name="336" href="#336">336</a>     @Override
-<a class="jxr_linenumber" name="337" href="#337">337</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAppender(String className) {
-<a class="jxr_linenumber" name="338" href="#338">338</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, APPENDER, className);
-<a class="jxr_linenumber" name="339" href="#339">339</a>       optionsRepository.set(P6Logger.<strong class="jxr_keyword">class</strong>, APPENDER_INSTANCE, className);
-<a class="jxr_linenumber" name="340" href="#340">340</a>     }
-<a class="jxr_linenumber" name="341" href="#341">341</a> 
-<a class="jxr_linenumber" name="342" href="#342">342</a>     @Override
-<a class="jxr_linenumber" name="343" href="#343">343</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDateformat(String dateformat) {
-<a class="jxr_linenumber" name="344" href="#344">344</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, DATEFORMAT, dateformat);
-<a class="jxr_linenumber" name="345" href="#345">345</a>     }
-<a class="jxr_linenumber" name="346" href="#346">346</a> 
-<a class="jxr_linenumber" name="347" href="#347">347</a>     @Override
-<a class="jxr_linenumber" name="348" href="#348">348</a>     <strong class="jxr_keyword">public</strong> String getDateformat() {
-<a class="jxr_linenumber" name="349" href="#349">349</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, DATEFORMAT);
-<a class="jxr_linenumber" name="350" href="#350">350</a>     }
-<a class="jxr_linenumber" name="351" href="#351">351</a> 
-<a class="jxr_linenumber" name="352" href="#352">352</a>     @Override
-<a class="jxr_linenumber" name="353" href="#353">353</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getStackTrace() {
-<a class="jxr_linenumber" name="354" href="#354">354</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(Boolean.<strong class="jxr_keyword">class</strong>, STACKTRACE);
-<a class="jxr_linenumber" name="355" href="#355">355</a>     }
-<a class="jxr_linenumber" name="356" href="#356">356</a> 
-<a class="jxr_linenumber" name="357" href="#357">357</a>     @Override
-<a class="jxr_linenumber" name="358" href="#358">358</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStackTrace(<strong class="jxr_keyword">boolean</strong> stacktrace) {
-<a class="jxr_linenumber" name="359" href="#359">359</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, STACKTRACE, stacktrace);
-<a class="jxr_linenumber" name="360" href="#360">360</a>     }
-<a class="jxr_linenumber" name="361" href="#361">361</a>     
-<a class="jxr_linenumber" name="362" href="#362">362</a>     @Override
-<a class="jxr_linenumber" name="363" href="#363">363</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStackTrace(String stacktrace) {
-<a class="jxr_linenumber" name="364" href="#364">364</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, STACKTRACE, stacktrace);
-<a class="jxr_linenumber" name="365" href="#365">365</a>     }
-<a class="jxr_linenumber" name="366" href="#366">366</a> 
-<a class="jxr_linenumber" name="367" href="#367">367</a>     @Override
-<a class="jxr_linenumber" name="368" href="#368">368</a>     <strong class="jxr_keyword">public</strong> String getStackTraceClass() {
-<a class="jxr_linenumber" name="369" href="#369">369</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, STACKTRACECLASS);
-<a class="jxr_linenumber" name="370" href="#370">370</a>     }
-<a class="jxr_linenumber" name="371" href="#371">371</a> 
-<a class="jxr_linenumber" name="372" href="#372">372</a>     @Override
-<a class="jxr_linenumber" name="373" href="#373">373</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStackTraceClass(String stacktraceclass) {
-<a class="jxr_linenumber" name="374" href="#374">374</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, STACKTRACECLASS, stacktraceclass);
-<a class="jxr_linenumber" name="375" href="#375">375</a>     }
-<a class="jxr_linenumber" name="376" href="#376">376</a> 
-<a class="jxr_linenumber" name="377" href="#377">377</a>     @Override
-<a class="jxr_linenumber" name="378" href="#378">378</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setLogfile(String logfile) {
-<a class="jxr_linenumber" name="379" href="#379">379</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, LOGFILE, logfile);
-<a class="jxr_linenumber" name="380" href="#380">380</a>     }
-<a class="jxr_linenumber" name="381" href="#381">381</a> 
-<a class="jxr_linenumber" name="382" href="#382">382</a>     @Override
-<a class="jxr_linenumber" name="383" href="#383">383</a>     <strong class="jxr_keyword">public</strong> String getLogfile() {
-<a class="jxr_linenumber" name="384" href="#384">384</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, LOGFILE);
-<a class="jxr_linenumber" name="385" href="#385">385</a>     }
-<a class="jxr_linenumber" name="386" href="#386">386</a> 
-<a class="jxr_linenumber" name="387" href="#387">387</a>     @Override
-<a class="jxr_linenumber" name="388" href="#388">388</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAppend(String append) {
-<a class="jxr_linenumber" name="389" href="#389">389</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, APPEND, append);
-<a class="jxr_linenumber" name="390" href="#390">390</a>     }
-<a class="jxr_linenumber" name="391" href="#391">391</a> 
-<a class="jxr_linenumber" name="392" href="#392">392</a>     @Override
-<a class="jxr_linenumber" name="393" href="#393">393</a>     <strong class="jxr_keyword">public</strong> String getLogMessageFormat() {
-<a class="jxr_linenumber" name="394" href="#394">394</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, LOG_MESSAGE_FORMAT);
-<a class="jxr_linenumber" name="395" href="#395">395</a>     }
-<a class="jxr_linenumber" name="396" href="#396">396</a> 
-<a class="jxr_linenumber" name="397" href="#397">397</a>     @Override
-<a class="jxr_linenumber" name="398" href="#398">398</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setLogMessageFormat(<strong class="jxr_keyword">final</strong> String logMessageFormat) {
-<a class="jxr_linenumber" name="399" href="#399">399</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, LOG_MESSAGE_FORMAT, logMessageFormat);
-<a class="jxr_linenumber" name="400" href="#400">400</a>       optionsRepository.set(MessageFormattingStrategy.<strong class="jxr_keyword">class</strong>, LOG_MESSAGE_FORMAT_INSTANCE, logMessageFormat);
-<a class="jxr_linenumber" name="401" href="#401">401</a>     }
-<a class="jxr_linenumber" name="402" href="#402">402</a> 
-<a class="jxr_linenumber" name="403" href="#403">403</a>     @Override
-<a class="jxr_linenumber" name="404" href="#404">404</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/appender/MessageFormattingStrategy.html">MessageFormattingStrategy</a> getLogMessageFormatInstance() {
-<a class="jxr_linenumber" name="405" href="#405">405</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(MessageFormattingStrategy.<strong class="jxr_keyword">class</strong>, LOG_MESSAGE_FORMAT_INSTANCE);
-<a class="jxr_linenumber" name="406" href="#406">406</a>     }
-<a class="jxr_linenumber" name="407" href="#407">407</a>     
-<a class="jxr_linenumber" name="408" href="#408">408</a>     @Override
-<a class="jxr_linenumber" name="409" href="#409">409</a>     <strong class="jxr_keyword">public</strong> Map&lt;String, String&gt; getDefaults() {
-<a class="jxr_linenumber" name="410" href="#410">410</a>       <strong class="jxr_keyword">return</strong> defaults;
-<a class="jxr_linenumber" name="411" href="#411">411</a>     }
-<a class="jxr_linenumber" name="412" href="#412">412</a> 
-<a class="jxr_linenumber" name="413" href="#413">413</a> }
+<a class="jxr_linenumber" name="327" href="#327">327</a>     <strong class="jxr_keyword">public</strong> String getModulelist() {
+<a class="jxr_linenumber" name="328" href="#328">328</a>       <em class="jxr_comment">// TODO handle getters for lists represented in csv strings correctly</em>
+<a class="jxr_linenumber" name="329" href="#329">329</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, MODULELIST);
+<a class="jxr_linenumber" name="330" href="#330">330</a>     }
+<a class="jxr_linenumber" name="331" href="#331">331</a> 
+<a class="jxr_linenumber" name="332" href="#332">332</a>     @Override
+<a class="jxr_linenumber" name="333" href="#333">333</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setModulelist(String modulelist) {
+<a class="jxr_linenumber" name="334" href="#334">334</a>       <em class="jxr_comment">// no mather what P6SpyOptions is a must</em>
+<a class="jxr_linenumber" name="335" href="#335">335</a>       <strong class="jxr_keyword">if</strong> (modulelist != <strong class="jxr_keyword">null</strong> &amp;&amp; modulelist.contains(P6OptionsRepository.COLLECTION_REMOVAL_PREFIX + P6SpyFactory.<strong class="jxr_keyword">class</strong>.getName())) {
+<a class="jxr_linenumber" name="336" href="#336">336</a>         <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(P6SpyFactory.<strong class="jxr_keyword">class</strong>.getName() + <span class="jxr_string">" can't be removed from the module list, as it's considered a core factory!"</span>);
+<a class="jxr_linenumber" name="337" href="#337">337</a>       }
+<a class="jxr_linenumber" name="338" href="#338">338</a> <em class="jxr_comment">//      if (modulelist != null &amp;&amp; !modulelist.contains(P6SpyFactory.class.getName())) {</em>
+<a class="jxr_linenumber" name="339" href="#339">339</a> <em class="jxr_comment">//        modulelist += "," + P6SpyFactory.class.getName();</em>
+<a class="jxr_linenumber" name="340" href="#340">340</a> <em class="jxr_comment">//      }</em>
+<a class="jxr_linenumber" name="341" href="#341">341</a>       
+<a class="jxr_linenumber" name="342" href="#342">342</a>       <em class="jxr_comment">// TODO handle getters for lists represented in csv strings correctly</em>
+<a class="jxr_linenumber" name="343" href="#343">343</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, MODULELIST, modulelist);
+<a class="jxr_linenumber" name="344" href="#344">344</a>       optionsRepository.setSet(String.<strong class="jxr_keyword">class</strong>, MODULE_NAMES, modulelist);
+<a class="jxr_linenumber" name="345" href="#345">345</a>       optionsRepository.setSet(P6Factory.<strong class="jxr_keyword">class</strong>, MODULE_FACTORIES, modulelist);
+<a class="jxr_linenumber" name="346" href="#346">346</a>     }      
+<a class="jxr_linenumber" name="347" href="#347">347</a> 
+<a class="jxr_linenumber" name="348" href="#348">348</a>     @Override
+<a class="jxr_linenumber" name="349" href="#349">349</a>     <strong class="jxr_keyword">public</strong> Set&lt;String&gt; getModuleNames() {
+<a class="jxr_linenumber" name="350" href="#350">350</a>       <strong class="jxr_keyword">return</strong> optionsRepository.getSet(String.<strong class="jxr_keyword">class</strong>, MODULE_NAMES);
+<a class="jxr_linenumber" name="351" href="#351">351</a>     }
+<a class="jxr_linenumber" name="352" href="#352">352</a> 
+<a class="jxr_linenumber" name="353" href="#353">353</a>     @Override
+<a class="jxr_linenumber" name="354" href="#354">354</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAppend(<strong class="jxr_keyword">boolean</strong> append) {
+<a class="jxr_linenumber" name="355" href="#355">355</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, APPEND, append);
+<a class="jxr_linenumber" name="356" href="#356">356</a>     }
+<a class="jxr_linenumber" name="357" href="#357">357</a> 
+<a class="jxr_linenumber" name="358" href="#358">358</a>     @Override
+<a class="jxr_linenumber" name="359" href="#359">359</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getAppend() {
+<a class="jxr_linenumber" name="360" href="#360">360</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(Boolean.<strong class="jxr_keyword">class</strong>, APPEND);
+<a class="jxr_linenumber" name="361" href="#361">361</a>     }
+<a class="jxr_linenumber" name="362" href="#362">362</a> 
+<a class="jxr_linenumber" name="363" href="#363">363</a>     @Override
+<a class="jxr_linenumber" name="364" href="#364">364</a>     <strong class="jxr_keyword">public</strong> String getAppender() {
+<a class="jxr_linenumber" name="365" href="#365">365</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, APPENDER);
+<a class="jxr_linenumber" name="366" href="#366">366</a>     }
+<a class="jxr_linenumber" name="367" href="#367">367</a> 
+<a class="jxr_linenumber" name="368" href="#368">368</a>     @Override
+<a class="jxr_linenumber" name="369" href="#369">369</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/appender/P6Logger.html">P6Logger</a> getAppenderInstance() {
+<a class="jxr_linenumber" name="370" href="#370">370</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(P6Logger.<strong class="jxr_keyword">class</strong>, APPENDER_INSTANCE);
+<a class="jxr_linenumber" name="371" href="#371">371</a>     }
+<a class="jxr_linenumber" name="372" href="#372">372</a>     
+<a class="jxr_linenumber" name="373" href="#373">373</a>     @Override
+<a class="jxr_linenumber" name="374" href="#374">374</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAppender(String className) {
+<a class="jxr_linenumber" name="375" href="#375">375</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, APPENDER, className);
+<a class="jxr_linenumber" name="376" href="#376">376</a>       optionsRepository.set(P6Logger.<strong class="jxr_keyword">class</strong>, APPENDER_INSTANCE, className);
+<a class="jxr_linenumber" name="377" href="#377">377</a>     }
+<a class="jxr_linenumber" name="378" href="#378">378</a> 
+<a class="jxr_linenumber" name="379" href="#379">379</a>     @Override
+<a class="jxr_linenumber" name="380" href="#380">380</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDateformat(String dateformat) {
+<a class="jxr_linenumber" name="381" href="#381">381</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, DATEFORMAT, dateformat);
+<a class="jxr_linenumber" name="382" href="#382">382</a>     }
+<a class="jxr_linenumber" name="383" href="#383">383</a> 
+<a class="jxr_linenumber" name="384" href="#384">384</a>     @Override
+<a class="jxr_linenumber" name="385" href="#385">385</a>     <strong class="jxr_keyword">public</strong> String getDateformat() {
+<a class="jxr_linenumber" name="386" href="#386">386</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, DATEFORMAT);
+<a class="jxr_linenumber" name="387" href="#387">387</a>     }
+<a class="jxr_linenumber" name="388" href="#388">388</a> 
+<a class="jxr_linenumber" name="389" href="#389">389</a>     @Override
+<a class="jxr_linenumber" name="390" href="#390">390</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> getStackTrace() {
+<a class="jxr_linenumber" name="391" href="#391">391</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(Boolean.<strong class="jxr_keyword">class</strong>, STACKTRACE);
+<a class="jxr_linenumber" name="392" href="#392">392</a>     }
+<a class="jxr_linenumber" name="393" href="#393">393</a> 
+<a class="jxr_linenumber" name="394" href="#394">394</a>     @Override
+<a class="jxr_linenumber" name="395" href="#395">395</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStackTrace(<strong class="jxr_keyword">boolean</strong> stacktrace) {
+<a class="jxr_linenumber" name="396" href="#396">396</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, STACKTRACE, stacktrace);
+<a class="jxr_linenumber" name="397" href="#397">397</a>     }
+<a class="jxr_linenumber" name="398" href="#398">398</a>     
+<a class="jxr_linenumber" name="399" href="#399">399</a>     @Override
+<a class="jxr_linenumber" name="400" href="#400">400</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStackTrace(String stacktrace) {
+<a class="jxr_linenumber" name="401" href="#401">401</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, STACKTRACE, stacktrace);
+<a class="jxr_linenumber" name="402" href="#402">402</a>     }
+<a class="jxr_linenumber" name="403" href="#403">403</a> 
+<a class="jxr_linenumber" name="404" href="#404">404</a>     @Override
+<a class="jxr_linenumber" name="405" href="#405">405</a>     <strong class="jxr_keyword">public</strong> String getStackTraceClass() {
+<a class="jxr_linenumber" name="406" href="#406">406</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, STACKTRACECLASS);
+<a class="jxr_linenumber" name="407" href="#407">407</a>     }
+<a class="jxr_linenumber" name="408" href="#408">408</a> 
+<a class="jxr_linenumber" name="409" href="#409">409</a>     @Override
+<a class="jxr_linenumber" name="410" href="#410">410</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setStackTraceClass(String stacktraceclass) {
+<a class="jxr_linenumber" name="411" href="#411">411</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, STACKTRACECLASS, stacktraceclass);
+<a class="jxr_linenumber" name="412" href="#412">412</a>     }
+<a class="jxr_linenumber" name="413" href="#413">413</a> 
+<a class="jxr_linenumber" name="414" href="#414">414</a>     @Override
+<a class="jxr_linenumber" name="415" href="#415">415</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setLogfile(String logfile) {
+<a class="jxr_linenumber" name="416" href="#416">416</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, LOGFILE, logfile);
+<a class="jxr_linenumber" name="417" href="#417">417</a>     }
+<a class="jxr_linenumber" name="418" href="#418">418</a> 
+<a class="jxr_linenumber" name="419" href="#419">419</a>     @Override
+<a class="jxr_linenumber" name="420" href="#420">420</a>     <strong class="jxr_keyword">public</strong> String getLogfile() {
+<a class="jxr_linenumber" name="421" href="#421">421</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, LOGFILE);
+<a class="jxr_linenumber" name="422" href="#422">422</a>     }
+<a class="jxr_linenumber" name="423" href="#423">423</a> 
+<a class="jxr_linenumber" name="424" href="#424">424</a>     @Override
+<a class="jxr_linenumber" name="425" href="#425">425</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setAppend(String append) {
+<a class="jxr_linenumber" name="426" href="#426">426</a>       optionsRepository.set(Boolean.<strong class="jxr_keyword">class</strong>, APPEND, append);
+<a class="jxr_linenumber" name="427" href="#427">427</a>     }
+<a class="jxr_linenumber" name="428" href="#428">428</a> 
+<a class="jxr_linenumber" name="429" href="#429">429</a>     @Override
+<a class="jxr_linenumber" name="430" href="#430">430</a>     <strong class="jxr_keyword">public</strong> String getLogMessageFormat() {
+<a class="jxr_linenumber" name="431" href="#431">431</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(String.<strong class="jxr_keyword">class</strong>, LOG_MESSAGE_FORMAT);
+<a class="jxr_linenumber" name="432" href="#432">432</a>     }
+<a class="jxr_linenumber" name="433" href="#433">433</a> 
+<a class="jxr_linenumber" name="434" href="#434">434</a>     @Override
+<a class="jxr_linenumber" name="435" href="#435">435</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setLogMessageFormat(<strong class="jxr_keyword">final</strong> String logMessageFormat) {
+<a class="jxr_linenumber" name="436" href="#436">436</a>       optionsRepository.set(String.<strong class="jxr_keyword">class</strong>, LOG_MESSAGE_FORMAT, logMessageFormat);
+<a class="jxr_linenumber" name="437" href="#437">437</a>       optionsRepository.set(MessageFormattingStrategy.<strong class="jxr_keyword">class</strong>, LOG_MESSAGE_FORMAT_INSTANCE, logMessageFormat);
+<a class="jxr_linenumber" name="438" href="#438">438</a>     }
+<a class="jxr_linenumber" name="439" href="#439">439</a> 
+<a class="jxr_linenumber" name="440" href="#440">440</a>     @Override
+<a class="jxr_linenumber" name="441" href="#441">441</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/appender/MessageFormattingStrategy.html">MessageFormattingStrategy</a> getLogMessageFormatInstance() {
+<a class="jxr_linenumber" name="442" href="#442">442</a>       <strong class="jxr_keyword">return</strong> optionsRepository.get(MessageFormattingStrategy.<strong class="jxr_keyword">class</strong>, LOG_MESSAGE_FORMAT_INSTANCE);
+<a class="jxr_linenumber" name="443" href="#443">443</a>     }
+<a class="jxr_linenumber" name="444" href="#444">444</a>     
+<a class="jxr_linenumber" name="445" href="#445">445</a>     @Override
+<a class="jxr_linenumber" name="446" href="#446">446</a>     <strong class="jxr_keyword">public</strong> Map&lt;String, String&gt; getDefaults() {
+<a class="jxr_linenumber" name="447" href="#447">447</a>       <strong class="jxr_keyword">return</strong> defaults;
+<a class="jxr_linenumber" name="448" href="#448">448</a>     }
+<a class="jxr_linenumber" name="449" href="#449">449</a> 
+<a class="jxr_linenumber" name="450" href="#450">450</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
