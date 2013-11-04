@@ -302,6 +302,7 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
 
   // since 1.7
   public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-    return rds.getParentLogger();
+    //return rds.getParentLogger();
+    throw new SQLFeatureNotSupportedException("Feature not supported");
   }
 }
