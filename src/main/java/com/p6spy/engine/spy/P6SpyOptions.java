@@ -15,18 +15,19 @@ limitations under the License.
 */
 package com.p6spy.engine.spy;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import org.apache.log4j.PropertyConfigurator;
+
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
-import org.apache.log4j.PropertyConfigurator;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 public class P6SpyOptions implements P6SpyLoadableOptions {
 
@@ -84,65 +85,27 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     @Override
     public void load(Map<String, String> options) {
       loadLog4jConfig(P6Util.getProperties(options));
-
-      if (options.get(LOG_MESSAGE_FORMAT) != null) {
-        setLogMessageFormat(options.get(LOG_MESSAGE_FORMAT));
-      }
-      if (options.get(LOGFILE) != null) {
-        setLogfile(options.get(LOGFILE));
-      }
-      if (options.get(APPEND) != null) {
-        setAppend(options.get(APPEND));
-      }
-      if (options.get(DATEFORMAT) != null) {
-        setDateformat(options.get(DATEFORMAT));
-      }
-      if (options.get(APPENDER) != null) {
-        setAppender(options.get(APPENDER));
-      }
-      if (options.get(MODULELIST) != null) {
-        setModulelist(options.get(MODULELIST));
-      }
-      if (options.get(DRIVERLIST) != null) {
-        setDriverlist(options.get(DRIVERLIST));
-      }
-      if (options.get(STACKTRACE) != null) {
-        setStackTrace(options.get(STACKTRACE));
-      }
-      if (options.get(STACKTRACECLASS) != null) {
-        setStackTraceClass(options.get(STACKTRACECLASS));
-      }
-      //      setUsePrefix(options.get(USE_PREFIX));
-      if (options.get(AUTOFLUSH) != null) {
-        setAutoflush(options.get(AUTOFLUSH));
-      }
-      if (options.get(RELOADPROPERTIES) != null) {
-        setReloadProperties(options.get(RELOADPROPERTIES));
-      }
-      if (options.get(RELOADPROPERTIESINTERVAL) != null) {
-        setReloadPropertiesInterval(options.get(RELOADPROPERTIESINTERVAL));
-      }
-      if (options.get(JNDICONTEXTFACTORY) != null) {
-        setJNDIContextFactory(options.get(JNDICONTEXTFACTORY));
-      }
-      if (options.get(JNDICONTEXTPROVIDERURL) != null) {
-        setJNDIContextProviderURL(options.get(JNDICONTEXTPROVIDERURL));
-      }
-      if (options.get(JNDICONTEXTCUSTOM) != null) {
-        setJNDIContextCustom(options.get(JNDICONTEXTCUSTOM));
-      }
-      if (options.get(REALDATASOURCE) != null) {
-        setRealDataSource(options.get(REALDATASOURCE));
-      }
-      if (options.get(REALDATASOURCECLASS) != null) {
-        setRealDataSourceClass(options.get(REALDATASOURCECLASS));
-      }
-      if (options.get(REALDATASOURCEPROPERTIES) != null) {
-        setRealDataSourceProperties(options.get(REALDATASOURCEPROPERTIES));
-      }
-      if (options.get(DATABASE_DIALECT_DATE_FORMAT) != null) {
-        setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
-      }
+      
+      setLogMessageFormat(options.get(LOG_MESSAGE_FORMAT));
+      setLogfile(options.get(LOGFILE));
+      setAppend(options.get(APPEND));
+      setDateformat(options.get(DATEFORMAT));
+      setAppender(options.get(APPENDER));
+      setModulelist(options.get(MODULELIST));
+      setDriverlist(options.get(DRIVERLIST));
+      setStackTrace(options.get(STACKTRACE));
+      setStackTraceClass(options.get(STACKTRACECLASS));
+//      setUsePrefix(options.get(USE_PREFIX));
+      setAutoflush(options.get(AUTOFLUSH));
+      setReloadProperties(options.get(RELOADPROPERTIES));
+      setReloadPropertiesInterval(options.get(RELOADPROPERTIESINTERVAL));
+      setJNDIContextFactory(options.get(JNDICONTEXTFACTORY));
+      setJNDIContextProviderURL(options.get(JNDICONTEXTPROVIDERURL));
+      setJNDIContextCustom(options.get(JNDICONTEXTCUSTOM));
+      setRealDataSource(options.get(REALDATASOURCE));
+      setRealDataSourceClass(options.get(REALDATASOURCECLASS));
+      setRealDataSourceProperties(options.get(REALDATASOURCEPROPERTIES));
+      setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
     }
     
     /**
