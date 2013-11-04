@@ -19,8 +19,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.p6spy.engine.common.P6LogQuery;
-
 /**
  * @author Quinton McCombs
  * @since 09/2013
@@ -49,10 +47,6 @@ public class P6Core {
         if( !initialized) {
           // just make sure to cause module initialization (if not done yet)
           P6ModuleManager.getInstance();
-          
-//          for (Driver driver : P6SpyDriver.registeredDrivers() ) {
-//            P6LogQuery.debug("Driver manager reporting driver registered: " + driver);
-//          }
         }
       }
     }
@@ -65,9 +59,6 @@ public class P6Core {
     initialized = false;
     // force modules to be reloaded
     P6ModuleManager.getInstance().reload();
-    
-    // force logger to init
-    P6LogQuery.initialize();
     
     initialize();
     initialized = true;
