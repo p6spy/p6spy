@@ -37,8 +37,6 @@ import java.util.regex.Pattern;
 
 public class P6LogQuery implements P6OptionChangedListener {
   
-  private static PrintStream qlog;
-
   protected static P6Logger logger;
 
   static {
@@ -158,34 +156,22 @@ public class P6LogQuery implements P6OptionChangedListener {
   
   static boolean isQueryOk(final String sql) {
     final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
-    if (opts.getSQLExpression() != null) {
-      return isSqlOk(sql);
+    
+    final Pattern sqlExpressionPattern = opts.getSQLExpressionPattern();
+    if (sqlExpressionPattern != null) {
+      return sqlExpressionPattern.matcher(sql).matches();
     } 
+    
+    final Pattern includePattern = opts.getIncludeTablesPattern();
+    final Pattern excludePattern = opts.getExcludeTablesPattern();
     
     final Set<String> includeTables = opts.getIncludeTables();
     final Set<String> excludeTables = opts.getExcludeTables();
     
-    return ((includeTables == null || includeTables.isEmpty() || isTableFound(sql, includeTables))) && !isTableFound(sql, excludeTables);
-  }
-
-  static boolean isSqlOk(final String sql) {
-    String sqlexpression = P6LogOptions.getActiveInstance().getSQLExpression();
-    return Pattern.matches(sqlexpression, sql);
-  }
-
-  static boolean isTableFound(final String sql, final Set<String> tables) {
     final String sqlLowercased = sql.toLowerCase();
-
-    if (tables != null) {
-      for (String table : tables) {
-        // TODO [Peter Butkovic] improve performance by precompiling + caching the patterns
-        if (Pattern.matches("select.*from(.*" + table + ".*)(where|;|$)", sqlLowercased)) {
-          return true;
-        }
-      }
-    }
-
-    return false;
+    
+    return (includeTables == null || includeTables.isEmpty() || includePattern.matcher(sqlLowercased).matches()) 
+        && (excludeTables == null || excludeTables.isEmpty() || !excludePattern.matcher(sqlLowercased).matches());
   }
 
   // ----------------------------------------------------------------------------------------------------------

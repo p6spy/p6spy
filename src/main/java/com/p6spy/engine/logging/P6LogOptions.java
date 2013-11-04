@@ -18,6 +18,7 @@ package com.p6spy.engine.logging;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
@@ -34,11 +35,13 @@ public class P6LogOptions implements P6LogLoadableOptions {
   // those set indirectly (via properties visible from outside) 
   public static final String INCLUDE_TABLES = "includeTables";
   public static final String EXCLUDE_TABLES = "excludeTables";
+  public static final String INCLUDE_TABLES_PATTERN = "includeTablesPattern";
+  public static final String EXCLUDE_TABLES_PATTERN = "excludeTablesPattern";
   public static final String EXCLUDECATEGORIES_SET = "excludecategoriesSet";
-
+  public static final String SQLEXPRESSION_PATTERN = "sqlexpressionPattern";
   
   public static final Map<String, String> defaults;
-
+  
   static {
     defaults = new HashMap<String, String>();
     
@@ -86,6 +89,37 @@ public class P6LogOptions implements P6LogLoadableOptions {
   public void setExclude(String exclude) {
     optionsRepository.set(String.class, EXCLUDE, exclude);
     optionsRepository.setSet(String.class, EXCLUDE_TABLES, exclude);
+    
+    final Set<String> tables = optionsRepository.getSet(String.class, EXCLUDE_TABLES);
+    // please note: in case of add+remove from the tables set it might become empty
+    // then pattern would be null => won't replace the old value, but in business logic
+    // we check for tables.isEmpty() => won't go for pattern in that case, see: P6LogQuery.isQueryOk()
+    optionsRepository.set(Pattern.class, EXCLUDE_TABLES_PATTERN, getPattern(tables));
+  }
+
+  /**
+   * @param tableNames
+   *          table names.
+   * @return regexp string matching table names in {@code SQL} statement {@code FROM} clause.
+   */
+  private String getPattern(final Set<String> tableNames) {
+    if (null == tableNames || tableNames.isEmpty()) {
+      return null;
+    }
+    
+    final StringBuilder sb = new StringBuilder("select.*from(.*(");
+
+    boolean isFirstOne = true;
+    for (String tableName : tableNames) {
+      if (!isFirstOne) {
+        sb.append("|");
+      } else {
+        isFirstOne = false;
+      }
+      sb.append("(").append(tableName).append(")");
+    }
+
+    return sb.append(").*)(where|;|$)").toString();
   }
 
   @Override
@@ -123,6 +157,12 @@ public class P6LogOptions implements P6LogLoadableOptions {
   public void setInclude(String include) {
     optionsRepository.set(String.class, INCLUDE, include);
     optionsRepository.setSet(String.class, INCLUDE_TABLES, include);
+    
+    final Set<String> tables = optionsRepository.getSet(String.class, INCLUDE_TABLES);
+    // please note: in case of add+remove from the tables set it might become empty
+    // then pattern would be null => won't replace the old value, but in business logic
+    // we check for tables.isEmpty() => won't go for pattern in that case, see: P6LogQuery.isQueryOk()
+    optionsRepository.set(Pattern.class, INCLUDE_TABLES_PATTERN, getPattern(tables));
   }
 
   @Override
@@ -134,10 +174,16 @@ public class P6LogOptions implements P6LogLoadableOptions {
   public String getSQLExpression() {
     return optionsRepository.get(String.class, SQLEXPRESSION);
   }
+  
+  @Override
+  public Pattern getSQLExpressionPattern() {
+    return optionsRepository.get(Pattern.class, SQLEXPRESSION_PATTERN);
+  }
 
   @Override
   public void setSQLExpression(String sqlexpression) {
     optionsRepository.set(String.class, SQLEXPRESSION, sqlexpression);
+    optionsRepository.set(Pattern.class, SQLEXPRESSION_PATTERN, sqlexpression);
   }
 
   @Override
@@ -154,7 +200,7 @@ public class P6LogOptions implements P6LogLoadableOptions {
   public long getExecutionThreshold() {
     return optionsRepository.get(Long.class, EXECUTION_THRESHOLD);
   }
-  
+
   @Override
   public Set<String> getIncludeTables() {
     return optionsRepository.getSet(String.class, INCLUDE_TABLES);
@@ -163,6 +209,16 @@ public class P6LogOptions implements P6LogLoadableOptions {
   @Override
   public Set<String> getExcludeTables() {
     return optionsRepository.getSet(String.class, EXCLUDE_TABLES);
+  }
+  
+  @Override
+  public Pattern getIncludeTablesPattern() {
+    return optionsRepository.get(Pattern.class, INCLUDE_TABLES_PATTERN);
+  }
+
+  @Override
+  public Pattern getExcludeTablesPattern() {
+    return optionsRepository.get(Pattern.class, EXCLUDE_TABLES_PATTERN);
   }
 
   @Override
