@@ -76,7 +76,6 @@ public class P6TestCommon extends P6TestFramework {
     public void tearDownCommon() throws SQLException {
         try {
             dropTestTable();
-            statement.close();
         }  catch (Exception e) {
             fail(e.getMessage());
         } finally {
