@@ -47,7 +47,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       Statement statement = connection.createStatement();
       dropPrepared(statement);
       statement.execute("create table prepstmt_test (col1 varchar(255), col2 integer)");
-
+      statement.close();
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -77,6 +77,8 @@ public class P6TestPreparedStatement extends P6TestFramework {
       // verify the log message for the select
       assertTrue(getLastLogEntry().contains(query));
       
+      rs.close();
+      prep.close();
     } catch (Exception e) {
       fail(e.getMessage() + " due to error: " + getStackTrace(e));
     }
@@ -106,11 +108,14 @@ public class P6TestPreparedStatement extends P6TestFramework {
         }
         bigSelect.append(" col2=?");
       }
+      prep.close();
+      
       prep = getPreparedStatement(bigSelect.toString());
       for (int i = 1; i <= MaxFields; i++) {
         prep.setInt(i, i);
       }
-
+      prep.close();
+      
       // test batch inserts
       update = "insert into prepstmt_test values (?,?)";
       prep = getPreparedStatement(update);
@@ -127,12 +132,16 @@ public class P6TestPreparedStatement extends P6TestFramework {
       assertTrue(super.getLastLogEntry().contains(update));
       assertTrue(super.getLastLogEntry().contains("aspen"));
       assertTrue(super.getLastLogEntry().contains("4"));
-
+      prep.close();
+      
       String query = "select count(*) from prepstmt_test";
       prep = getPreparedStatement(query);
       ResultSet rs = prep.executeQuery();
       rs.next();
       assertEquals(4, rs.getInt(1));
+      
+      rs.close();
+      prep.close();
     } catch (Exception e) {
       fail(e.getMessage() + " due to error: " + getStackTrace(e));
     }
@@ -143,6 +152,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
     try {
       Statement statement = connection.createStatement();
       dropPrepared(statement);
+      statement.close();  
     } catch (Exception e) {
       fail(e.getMessage());
     }
