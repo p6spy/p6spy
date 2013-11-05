@@ -509,8 +509,8 @@ P6Spy includes a JMX application, tested with JBoss 2.4.x, that allows the P6Spy
 
 ## Building the Source
 
-1. Make sure to have Java installed.
-1. Download and install [Apache Maven](http://maven.apache.org).
+1. Make sure to have Java 1.7 or later installed.
+1. Download and install [Apache Maven](http://maven.apache.org) 3.0.4 or later.
 
 The following are useful Maven commands:
 

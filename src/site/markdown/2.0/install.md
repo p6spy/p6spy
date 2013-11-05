@@ -23,6 +23,9 @@ The instructions for all application servers make the following assumptions.
    extracted the contents to a temporary directory. Throughout the rest of the instructions, the files included 
    in this temporary directory will be referenced by name only.  
    
+1. Your application is running on Java 1.6 or later.  For earlier versions of Java, you will need to 
+   use [P6Spy 1.3](../1.3/install.html)
+   
 After you have completed the installation, a log file called **spy.log** will be created in the current working
 directory when the application runs.  This log file will contain a list of the various database statements 
 executed.  You can alter the location of this log file as well as what gets logged by editing **spy.properties**.  See
