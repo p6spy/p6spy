@@ -14,7 +14,10 @@
   <artifactId>p6spy</artifactId>
   <name>P6Spy</name>
   <version>2.0-alpha-1-SNAPSHOT</version>
-
+  <organization>
+	<name>P6Spy</name>
+  </organization>
+  <inceptionYear>2013</inceptionYear>
   <description>
     P6Spy is an open source framework for applications that intercept and optionally modify database
     statements.
@@ -395,9 +398,53 @@
           </execution>
         </executions>
       </plugin>
+      
+	<plugin>
+		<groupId>org.codehaus.mojo</groupId>
+		<artifactId>license-maven-plugin</artifactId>
+		<executions>
+			<!-- generate license headers automatically -->
+			<execution>
+				<id>update licenses</id>
+				<goals>
+					<goal>update-file-header</goal>
+				</goals>
+				<phase>process-sources</phase>
+				<configuration>
+					<failOnMissingHeader>false</failOnMissingHeader>
+					<failOnNotUptodateHeader>false</failOnNotUptodateHeader>
+				</configuration>
+			</execution>
+		</executions>
+	</plugin>
+      
     </plugins>
+    
+    <pluginManagement>
+    	<plugins>
+	    	<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<addSvnKeyWords>false</addSvnKeyWords>
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+					<failOnMissingHeader>true</failOnMissingHeader>
+					<failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+					<licenseName>apache_v2</licenseName>
+					<roots>
+						<root>src/main/assembly</root>
+						<root>src/main/java</root>
+						<root>src/main/resources</root>
+						<root>src/test/java</root>
+						<root>src/test/resources</root>
+					</roots>
+				</configuration>
+			</plugin>
+		</plugins>
+    </pluginManagement>
   </build>
-
+    
   <dependencies>
     <dependency>
       <groupId>log4j</groupId>
@@ -655,6 +702,26 @@
               </systemPropertyVariables>
             </configuration>
           </plugin>
+
+ 		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>license-maven-plugin</artifactId>
+			<executions>
+				<!-- check/force licenses on travis only (too late for modifications) -->
+				<execution>
+					<id>check licenses</id>
+					<goals>
+						<goal>check-file-header</goal>
+					</goals>
+					<phase>process-sources</phase>
+					<configuration>
+						<failOnMissingHeader>true</failOnMissingHeader>
+						<failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+
         </plugins>
       </build>
     </profile>
