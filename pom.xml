@@ -182,6 +182,26 @@
           </systemProperties>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.3.1</version>
+        <executions>
+           <execution>
+             <id>enforce-java</id>
+             <goals><goal>enforce</goal></goals>
+             <configuration>
+               <rules>
+                 <requireJavaVersion>
+                   <!-- require Java 1.7 or later for the build -->
+                   <version>(1.7,)</version>
+                 </requireJavaVersion>
+               </rules>    
+             </configuration>
+           </execution>
+         </executions>
+        
+      </plugin>
 <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
