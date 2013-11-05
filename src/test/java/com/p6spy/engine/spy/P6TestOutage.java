@@ -82,7 +82,7 @@ public class P6TestOutage extends P6TestFramework {
     Assert.assertTrue(super.getLastLogEntry().contains("CALL SLEEP"));
 
     // exec slooooow query => outage detected
-    callSleep(2000);
+    callSleep(3000);
     Assert.assertTrue(super.getLastButOneLogEntry().contains("OUTAGE"));
     Assert.assertTrue(super.getLastLogEntry().contains("CALL SLEEP"));
   }
