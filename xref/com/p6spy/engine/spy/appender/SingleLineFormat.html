@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="35" href="#35">35</a>    @Override
 <a class="jxr_linenumber" name="36" href="#36">36</a>    <strong class="jxr_keyword">public</strong> String formatMessage(<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> connectionId, <strong class="jxr_keyword">final</strong> String now, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> elapsed, <strong class="jxr_keyword">final</strong> String category, <strong class="jxr_keyword">final</strong> String prepared, <strong class="jxr_keyword">final</strong> String sql) {
-<a class="jxr_linenumber" name="37" href="#37">37</a>      <strong class="jxr_keyword">return</strong> <span class="jxr_string">"#"</span> + now + <span class="jxr_string">" | took "</span> + elapsed + <span class="jxr_string">"ms | "</span> + category + <span class="jxr_string">" | connection "</span> + connectionId + <span class="jxr_string">"|"</span> + prepared + <span class="jxr_string">"|"</span> + sql +<span class="jxr_string">";"</span>;
+<a class="jxr_linenumber" name="37" href="#37">37</a>      <strong class="jxr_keyword">return</strong> now + <span class="jxr_string">"|"</span> + elapsed + <span class="jxr_string">"|"</span> + category + <span class="jxr_string">"|connection "</span> + connectionId + <span class="jxr_string">"|"</span> + prepared + <span class="jxr_string">"|"</span> + sql;
 <a class="jxr_linenumber" name="38" href="#38">38</a>    }
 <a class="jxr_linenumber" name="39" href="#39">39</a>  }
 </pre>
