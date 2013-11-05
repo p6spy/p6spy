@@ -21,22 +21,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.p6spy.engine.spy.appender.FileLogger;
-import com.p6spy.engine.spy.appender.P6Logger;
-
 /**
  * {@link FileLogger} extension capable of keeping history of log messages as well as the last
  * Stacktrace.<br/>
  * <br/>
  * 
- * Please note: It's logging to {@code spy.log} file
  * 
  * @author peterb
- * @author $Author: $
- * @review.state RED Rev: 0
- * @version $Rev: $
  */
-public class P6TestLogger extends FileLogger implements P6Logger {
+public class P6TestLogger extends StdoutLogger {
 
   private ArrayList<String> logs = new ArrayList<String>();
   private String lastStacktrace;
@@ -46,6 +39,7 @@ public class P6TestLogger extends FileLogger implements P6Logger {
     if (null != text) {
       logs.add(text);
     }
+    super.logText(text);
   }
 
   public List<String> getLogs() {
@@ -74,6 +68,7 @@ public class P6TestLogger extends FileLogger implements P6Logger {
     PrintWriter pw = new PrintWriter(sw);
     e.printStackTrace(pw);
     lastStacktrace = sw.toString();
+    super.logException(e);
   }
 
   public void clearLastStacktrace() {

@@ -15,27 +15,21 @@ limitations under the License.
 */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.appender.MultiLineFormat;
+import com.p6spy.engine.spy.appender.SingleLineFormat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.spy.appender.MultiLineFormat;
-import com.p6spy.engine.spy.appender.SingleLineFormat;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestCommon extends P6TestFramework {
@@ -265,16 +259,19 @@ public class P6TestCommon extends P6TestFramework {
       while (resultSet.next()) {
         String col1 = resultSet.getString("col1");
         assertTrue(col1.startsWith("foo"));
-        if (resultCategoryNotExcluded) {
-          assertTrue("calling get*() is supposed to cause \"result\" logged", super.getLastLogEntry()
-              .contains("| result |"));
-          assertTrue(super.getLastLogEntry().contains(query));
+      }
+      int resultCount = 0;
+      int resultSetCount = 0;
+      for( String logMessage : getLogEnties() ) {
+        if( logMessage.contains("result") && !logMessage.contains("resultset")) {
+          resultCount++;
+        } else {
+          resultSetCount++;
         }
       }
-      if (resultsetCategoryNotExcluded) {
-        assertTrue(super.getLastButOneLogEntry().contains("| resultset |"));
-        assertTrue(super.getLastButOneLogEntry().contains(query));
-      }
+      assertEquals("incorrect number of log messages", resultCategoryNotExcluded ? 2 : 0, resultCount);
+      assertEquals("incorrect number of log messages", resultsetCategoryNotExcluded ? 2 :0 , resultSetCount);
+      
       resultSet.close();
       // reset back to original setup
       P6LogOptions.getActiveInstance().setExcludecategories("resultset,result");
