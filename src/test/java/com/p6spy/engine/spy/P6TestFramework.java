@@ -15,6 +15,15 @@ limitations under the License.
 */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.spy.option.SpyDotProperties;
+import com.p6spy.engine.test.P6TestOptions;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.runners.Parameterized.Parameters;
+
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
@@ -26,16 +35,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
-
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.runners.Parameterized.Parameters;
-
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.appender.P6TestLogger;
-import com.p6spy.engine.spy.option.SpyDotProperties;
-import com.p6spy.engine.test.P6TestOptions;
+import java.util.List;
 
 public abstract class P6TestFramework {
   private static final Logger log = Logger.getLogger(P6TestFramework.class);
@@ -147,6 +147,11 @@ public abstract class P6TestFramework {
   protected int getLogEntiesCount() {
     failOnNonP6TestLoggerUsage();
     return ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size();
+  }
+
+  protected List<String> getLogEnties() {
+    failOnNonP6TestLoggerUsage();
+    return ((P6TestLogger) P6LogQuery.getLogger()).getLogs();
   }
 
   protected String getLastButOneLogEntry() {

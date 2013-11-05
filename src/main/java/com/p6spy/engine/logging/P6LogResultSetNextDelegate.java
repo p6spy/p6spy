@@ -26,8 +26,6 @@ import java.lang.reflect.Method;
  * @since 09/2013
  */
 class P6LogResultSetNextDelegate implements Delegate {
-
-
   private final ResultSetInformation resultSetInformation;
 
   public P6LogResultSetNextDelegate(final ResultSetInformation resultSetInformation) {
@@ -48,16 +46,21 @@ class P6LogResultSetNextDelegate implements Delegate {
   @Override
   public Object invoke(final Object target, final Method method, final Object[] args) throws Throwable {
     long startTime = System.currentTimeMillis();
+    Object result = null;
     try {
-        if (resultSetInformation.getCurrRow() > -1) {
-          // only dump the data on subsequent calls to next
-          // Note: The last row processed might not be logged since this is always one row behind!
-          resultSetInformation.generateLogMessage();
-        }
-        resultSetInformation.setCurrRow(resultSetInformation.getCurrRow()+1);
-        return method.invoke(target, args);
+      if (resultSetInformation.getCurrRow() > -1) {
+        // only dump the data on subsequent calls to next
+        resultSetInformation.generateLogMessage();
+      }
+      resultSetInformation.setCurrRow(resultSetInformation.getCurrRow() + 1);
+      result = method.invoke(target, args);
+      return result;
     } finally {
+      // the result of the proxied method call will be true or false since this is used to proxy the call to ResultSet.next()
+      // we do not need to log the call if the result was false as it means that there were no more results.
+      if( Boolean.TRUE.equals(result) ) {
         P6LogQuery.logElapsed(resultSetInformation.getConnectionId(), startTime, "result", resultSetInformation.getPreparedQuery(), resultSetInformation.getQuery());
+      }
     }
   }
 }

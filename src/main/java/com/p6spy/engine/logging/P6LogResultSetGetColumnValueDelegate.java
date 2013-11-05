@@ -15,7 +15,6 @@ limitations under the License.
 */
 package com.p6spy.engine.logging;
 
-import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.proxy.Delegate;
 
@@ -47,16 +46,10 @@ class P6LogResultSetGetColumnValueDelegate implements Delegate {
    */
   @Override
   public Object invoke(final Object target, final Method method, final Object[] args) throws Throwable {
-    long startTime = System.currentTimeMillis();
     // the first argument will always be the column index or the column name
     String columnName = String.valueOf(args[0]);
-    Object result;
-    try {
-      result = method.invoke(target, args);
-      resultSetInformation.setColumnValue(columnName, result);
-      return result;
-    } finally {
-      P6LogQuery.logElapsed(resultSetInformation.getConnectionId(), startTime, "result", resultSetInformation.getPreparedQuery(), resultSetInformation.getQuery());
-    }
+    Object result = method.invoke(target, args);
+    resultSetInformation.setColumnValue(columnName, result);
+    return result;
   }
 }
