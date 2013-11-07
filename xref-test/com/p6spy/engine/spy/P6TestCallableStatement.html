@@ -141,29 +141,33 @@
 <a class="jxr_linenumber" name="131" href="#131">131</a>     <strong class="jxr_keyword">this</strong>.clearLogEnties();
 <a class="jxr_linenumber" name="132" href="#132">132</a> 
 <a class="jxr_linenumber" name="133" href="#133">133</a>     <em class="jxr_comment">// register the stored proc with the database - only for H2!!!!</em>
-<a class="jxr_linenumber" name="134" href="#134">134</a>     connection.createStatement().execute(<span class="jxr_string">"create alias TEST_PROC for \&quot;"</span>+<strong class="jxr_keyword">this</strong>.getClass().getName()+<span class="jxr_string">".testProc\&quot;"</span>);
-<a class="jxr_linenumber" name="135" href="#135">135</a>     
-<a class="jxr_linenumber" name="136" href="#136">136</a>     <em class="jxr_comment">// execute the statement</em>
-<a class="jxr_linenumber" name="137" href="#137">137</a>     String query =<span class="jxr_string">"? = call TEST_PROC(?,?)"</span>;
-<a class="jxr_linenumber" name="138" href="#138">138</a>     CallableStatement stmt = connection.prepareCall(query);
-<a class="jxr_linenumber" name="139" href="#139">139</a>     stmt.registerOutParameter(1, Types.INTEGER);
-<a class="jxr_linenumber" name="140" href="#140">140</a>     stmt.setInt(2, 1);
-<a class="jxr_linenumber" name="141" href="#141">141</a>     stmt.setNull(3,Types.VARCHAR);
-<a class="jxr_linenumber" name="142" href="#142">142</a>     stmt.execute();
-<a class="jxr_linenumber" name="143" href="#143">143</a>     <strong class="jxr_keyword">int</strong> retVal = stmt.getInt(1);
-<a class="jxr_linenumber" name="144" href="#144">144</a>     assertEquals(2, retVal);
-<a class="jxr_linenumber" name="145" href="#145">145</a>     
-<a class="jxr_linenumber" name="146" href="#146">146</a>     <em class="jxr_comment">// verify that the third parameter is NULL</em>
-<a class="jxr_linenumber" name="147" href="#147">147</a>     assertTrue(getLastLogEntry().contains(<span class="jxr_string">"1,NULL"</span>));
-<a class="jxr_linenumber" name="148" href="#148">148</a>     
+<a class="jxr_linenumber" name="134" href="#134">134</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="135" href="#135">135</a>       connection.createStatement().execute(<span class="jxr_string">"create alias TEST_PROC for \&quot;"</span>+<strong class="jxr_keyword">this</strong>.getClass().getName()+<span class="jxr_string">".testProc\&quot;"</span>);
+<a class="jxr_linenumber" name="136" href="#136">136</a>     } <strong class="jxr_keyword">catch</strong>( Exception e ) {
+<a class="jxr_linenumber" name="137" href="#137">137</a>       <em class="jxr_comment">// ignore failures</em>
+<a class="jxr_linenumber" name="138" href="#138">138</a>     }
+<a class="jxr_linenumber" name="139" href="#139">139</a>     
+<a class="jxr_linenumber" name="140" href="#140">140</a>     <em class="jxr_comment">// execute the statement</em>
+<a class="jxr_linenumber" name="141" href="#141">141</a>     String query =<span class="jxr_string">"? = call TEST_PROC(?,?)"</span>;
+<a class="jxr_linenumber" name="142" href="#142">142</a>     CallableStatement stmt = connection.prepareCall(query);
+<a class="jxr_linenumber" name="143" href="#143">143</a>     stmt.registerOutParameter(1, Types.INTEGER);
+<a class="jxr_linenumber" name="144" href="#144">144</a>     stmt.setInt(2, 1);
+<a class="jxr_linenumber" name="145" href="#145">145</a>     stmt.setNull(3,Types.VARCHAR);
+<a class="jxr_linenumber" name="146" href="#146">146</a>     stmt.execute();
+<a class="jxr_linenumber" name="147" href="#147">147</a>     <strong class="jxr_keyword">int</strong> retVal = stmt.getInt(1);
+<a class="jxr_linenumber" name="148" href="#148">148</a>     assertEquals(2, retVal);
 <a class="jxr_linenumber" name="149" href="#149">149</a>     
-<a class="jxr_linenumber" name="150" href="#150">150</a>   }
-<a class="jxr_linenumber" name="151" href="#151">151</a>   
-<a class="jxr_linenumber" name="152" href="#152">152</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> testProc(<strong class="jxr_keyword">int</strong> param1, String param2) {
-<a class="jxr_linenumber" name="153" href="#153">153</a>     <strong class="jxr_keyword">return</strong> 2;
+<a class="jxr_linenumber" name="150" href="#150">150</a>     <em class="jxr_comment">// verify that the third parameter is NULL</em>
+<a class="jxr_linenumber" name="151" href="#151">151</a>     assertTrue(getLastLogEntry().contains(<span class="jxr_string">"1,NULL"</span>));
+<a class="jxr_linenumber" name="152" href="#152">152</a>     
+<a class="jxr_linenumber" name="153" href="#153">153</a>     
 <a class="jxr_linenumber" name="154" href="#154">154</a>   }
-<a class="jxr_linenumber" name="155" href="#155">155</a> 
-<a class="jxr_linenumber" name="156" href="#156">156</a> }
+<a class="jxr_linenumber" name="155" href="#155">155</a>   
+<a class="jxr_linenumber" name="156" href="#156">156</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> testProc(<strong class="jxr_keyword">int</strong> param1, String param2) {
+<a class="jxr_linenumber" name="157" href="#157">157</a>     <strong class="jxr_keyword">return</strong> 2;
+<a class="jxr_linenumber" name="158" href="#158">158</a>   }
+<a class="jxr_linenumber" name="159" href="#159">159</a> 
+<a class="jxr_linenumber" name="160" href="#160">160</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
