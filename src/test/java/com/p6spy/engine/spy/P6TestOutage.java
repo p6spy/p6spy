@@ -25,6 +25,7 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.p6spy.engine.test.P6TestFramework;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.test.P6TestFramework;
 import net.sf.cglib.proxy.Proxy;
 import org.junit.After;
 import org.junit.Before;

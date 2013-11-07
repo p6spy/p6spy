@@ -29,6 +29,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.p6spy.engine.test.P6TestFramework;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

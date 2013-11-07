@@ -37,7 +37,7 @@ import com.p6spy.engine.outage.P6OutageOptions;
 import com.p6spy.engine.spy.P6SpyFactory;
 import com.p6spy.engine.spy.P6SpyLoadableOptions;
 import com.p6spy.engine.spy.P6SpyOptions;
-import com.p6spy.engine.spy.P6TestFramework;
+import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 

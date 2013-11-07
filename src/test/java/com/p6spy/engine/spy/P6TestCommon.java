@@ -22,6 +22,7 @@ package com.p6spy.engine.spy;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
+import com.p6spy.engine.test.P6TestFramework;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

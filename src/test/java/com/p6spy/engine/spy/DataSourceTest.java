@@ -24,6 +24,7 @@ import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.BaseTestCase;
+import com.p6spy.engine.test.P6TestFramework;
 import net.sf.cglib.proxy.Proxy;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;

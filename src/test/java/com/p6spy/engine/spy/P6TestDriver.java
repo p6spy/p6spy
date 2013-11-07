@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.test.P6TestFramework;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
