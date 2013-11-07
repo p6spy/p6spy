@@ -22,9 +22,8 @@ package com.p6spy.engine.spy;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
 import com.p6spy.engine.spy.appender.P6TestLogger;
-
+import com.p6spy.engine.test.BaseTestCase;
 import net.sf.cglib.proxy.Proxy;
-
 import org.eclipse.jetty.plus.jndi.Resource;
 import org.h2.jdbcx.JdbcDataSource;
 import org.hsqldb.jdbc.JDBCDataSource;
@@ -34,7 +33,6 @@ import org.junit.Test;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
 import javax.sql.DataSource;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -46,7 +44,7 @@ import static org.junit.Assert.*;
  * @author Quinton McCombs (dt77102)
  * @since 10/2013
  */
-public class MultipleDataSourceTest {
+public class MultipleDataSourceTest extends BaseTestCase {
   private List<Resource> jndiResources;
 
   @Before

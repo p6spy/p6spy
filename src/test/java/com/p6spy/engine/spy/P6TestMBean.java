@@ -19,25 +19,23 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Set;
-
-import javax.management.JMException;
-import javax.management.ObjectName;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.j256.simplejmx.client.JmxClient;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.outage.P6OutageOptions;
+import com.p6spy.engine.test.BaseTestCase;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class P6TestMBean {
+import javax.management.JMException;
+import javax.management.ObjectName;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Set;
+
+import static org.junit.Assert.*;
+
+public class P6TestMBean extends BaseTestCase {
 
   public static final String COM_SUN_MANAGEMENT_JMXREMOTE_PORT = "com.sun.management.jmxremote.port";
   public static final int JMXREMOTE_PORT_DEFAULT = 1234;

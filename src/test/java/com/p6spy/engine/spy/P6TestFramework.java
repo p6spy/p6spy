@@ -23,6 +23,7 @@ import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.option.SpyDotProperties;
+import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestOptions;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -41,7 +42,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
-public abstract class P6TestFramework {
+public abstract class P6TestFramework extends BaseTestCase {
   private static final Logger log = Logger.getLogger(P6TestFramework.class);
 
   /**

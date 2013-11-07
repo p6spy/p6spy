@@ -19,22 +19,12 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
-import java.util.logging.Logger;
-
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
+import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.test.BaseTestCase;
 import net.sf.cglib.proxy.Proxy;
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverConnectionFactory;
@@ -44,16 +34,22 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
-import com.p6spy.engine.spy.appender.P6TestLogger;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Quinton McCombs
  * @since 10/2013
  */
-public class DataSourceTest {
+public class DataSourceTest extends BaseTestCase {
 
   /*
      This test is not parameterized because we are only testing generic
