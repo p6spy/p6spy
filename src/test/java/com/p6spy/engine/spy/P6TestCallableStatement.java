@@ -126,6 +126,29 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
     
   }
   
+  @Test
+  public void testStoredProcedureWithNullInputParameter() throws SQLException {
+    this.clearLogEnties();
+
+    // register the stored proc with the database - only for H2!!!!
+    connection.createStatement().execute("create alias TEST_PROC for \""+this.getClass().getName()+".testProc\"");
+    
+    // execute the statement
+    String query ="? = call TEST_PROC(?,?)";
+    CallableStatement stmt = connection.prepareCall(query);
+    stmt.registerOutParameter(1, Types.INTEGER);
+    stmt.setInt(2, 1);
+    stmt.setNull(3,Types.VARCHAR);
+    stmt.execute();
+    int retVal = stmt.getInt(1);
+    assertEquals(2, retVal);
+    
+    // verify that the third parameter is NULL
+    assertTrue(getLastLogEntry().contains("1,NULL"));
+    
+    
+  }
+  
   public static int testProc(int param1, String param2) {
     return 2;
   }
