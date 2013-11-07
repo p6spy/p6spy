@@ -19,25 +19,23 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.spy.appender.P6TestLogger;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.spy.appender.P6TestLogger;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestCallableStatement extends P6TestPreparedStatement {
@@ -45,13 +43,13 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
   private static final Collection<Object[]> DBS_IN_TEST = Arrays.asList(new Object[][] { { "H2" } });
   
   /**
-   * Always returns {@link DBS_IN_TEST} as we don't
+   * Always returns {@link #DBS_IN_TEST} as we don't
    * need to rerun for each DB here.
    * The thing is that not all the DBs support stored procedures. Morever syntax might differ. 
    * We want just to prove that callable statements are correctly prxied.
    * So let's test just with H2 (default DB).
    * 
-   * @return {@link DBS_IN_TEST}
+   * @return {@link #DBS_IN_TEST}
    */
   @Parameters
   public static Collection<Object[]> dbs() {
@@ -100,6 +98,36 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
         assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
       }
       
+  }
+  
+  @Test
+  public void testStoredProcedureNoResultSet() throws SQLException {
+    this.clearLogEnties();
+
+    // register the stored proc with the database - only for H2!!!!
+    connection.createStatement().execute("create alias TEST_PROC for \""+this.getClass().getName()+".testProc\"");
+    
+    // execute the statement
+    String query ="? = call TEST_PROC(?,?)";
+    CallableStatement stmt = connection.prepareCall(query);
+    stmt.registerOutParameter(1, Types.INTEGER);
+    stmt.setInt(2, 1);
+    stmt.setString(3,"hi");
+    stmt.execute();
+    int retVal = stmt.getInt(1);
+    assertEquals(2, retVal);
+    
+    // the last log message should have the original query
+    assertTrue(getLastLogEntry().contains(query));
+    
+    // verify that the bind parameters are resolved in the log message
+    assertTrue(getLastLogEntry().contains("1,'hi'"));
+    
+    
+  }
+  
+  public static int testProc(int param1, String param2) {
+    return 2;
   }
 
 }
