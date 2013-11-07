@@ -131,7 +131,11 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
     this.clearLogEnties();
 
     // register the stored proc with the database - only for H2!!!!
-    connection.createStatement().execute("create alias TEST_PROC for \""+this.getClass().getName()+".testProc\"");
+    try {
+      connection.createStatement().execute("create alias TEST_PROC for \""+this.getClass().getName()+".testProc\"");
+    } catch( Exception e ) {
+      // ignore failures
+    }
     
     // execute the statement
     String query ="? = call TEST_PROC(?,?)";
