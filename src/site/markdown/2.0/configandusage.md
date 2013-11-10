@@ -531,7 +531,7 @@ To run the JUnit tests against specific database(s):
 
 1. Make sure to have Java installed.
 1. Download and install [Apache Maven](http://maven.apache.org).
-1. Please note, that PostgreSQL, MySQL and Firebird specific tests require to have the detabase servers running with the specific databases, users and permissions setup. (to enable )
+1. Please note, that PostgreSQL, MySQL and Firebird specific tests require to have the detabase servers running with the specific databases, users and permissions setup (see: [Integration tests-like environment with Vagrant](#vagrant) section).
 
 By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:
 
@@ -561,7 +561,7 @@ where &lt;DB_NAMES&gt; would hold the value of `DB` environment variable describ
 
 The `DB` environment variable can be set using Arguments tab -&gt; VM Argument of the JUnit Run Configuration.
 
-### Integration tests-like environment with Vagrant
+### <a name="vagrant">Integration tests-like environment with Vagrant</a>
 
 It might be tricky to run full batery of tests on developer machine (especially due to need of DB servers setup).
 To make things easier, [Vagrant] (http://www.vagrantup.com/) is used to create environment close to the one running on our integration test servers ([travis-ci] (https://travis-ci.org/)).
