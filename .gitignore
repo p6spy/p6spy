@@ -28,3 +28,6 @@ testspy.forms
 /pom.xml.versionsBackup
 reload.log
 dependency-reduced-pom.xml
+.vagrant
+.m2/repository
+Berksfile.lock

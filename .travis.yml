@@ -11,18 +11,13 @@ env:
 
 before_install:
  - "sudo apt-get update -qq"
- - "sudo apt-get install -qq firebird2.5-super firebird2.5-dev" # [Firebird] install
- - "sudo sed /ENABLE_FIREBIRD_SERVER=/s/no/yes/ -i /etc/default/firebird2.5" # [Firebird] config
- - "cat /etc/default/firebird2.5 | grep ENABLE_FIREBIRD_SERVER" # [Firebird] debug out
- - "sudo service firebird2.5-super start" # [Firebird] startup
+ - script/travis/before_install_firebird.sh
 # - sudo apt-get install -qq pgp
 
 before_script:
- - "psql -c 'create database p6spy;' -U postgres" # [PostgresSQL] test DB creation
- - "mysql -e 'create database p6spy;'" # [MySQL] test DB creation
- - "isql-fb -z -q -i /dev/null" # [Firebird] --version
- - echo "create database '/tmp/firebird_p6spy.gdb';" > /tmp/firebird_create_db.sql # [Firebird] preps for test DB creation
- - "sudo isql-fb -user sysdba -password masterkey -i /tmp/firebird_create_db.sql" # [Firebird] test DB creation
+ - script/travis/before_script_firebird.sh
+ - script/travis/before_script_mysql.sh
+ - script/travis/before_script_postgresql.sh
   
 script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -Dmaven.test.failure.ignore=true clean test -P travis site:site site:stage; mvn -N ghSite:site; else mvn clean test -P travis; fi;
 
