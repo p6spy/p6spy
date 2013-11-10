@@ -531,7 +531,7 @@ To run the JUnit tests against specific database(s):
 
 1. Make sure to have Java installed.
 1. Download and install [Apache Maven](http://maven.apache.org).
-1. Please note, that PostgreSQL and MySQL specific tests require to have the detabase servers running with the specific databases, users and permissions setup.
+1. Please note, that PostgreSQL, MySQL and Firebird specific tests require to have the detabase servers running with the specific databases, users and permissions setup (see: [Integration tests-like environment with Vagrant](#vagrant) section).
 
 By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:
 
@@ -543,6 +543,7 @@ By default, tests run against H2 database. To enable other databases, make sure 
   * Firebird
   * Derby
   * or comma separated list of these
+
 
 ### Running the tests in the command line
 
@@ -559,6 +560,29 @@ where &lt;DB_NAMES&gt; would hold the value of `DB` environment variable describ
 1. Right click the Class holding the test to run and choose: Run As -> JUnit Test
 
 The `DB` environment variable can be set using Arguments tab -&gt; VM Argument of the JUnit Run Configuration.
+
+### <a name="vagrant">Integration tests-like environment with Vagrant</a>
+
+It might be tricky to run full batery of tests on developer machine (especially due to need of DB servers setup).
+To make things easier, [Vagrant] (http://www.vagrantup.com/) is used to create environment close to the one running on our integration test servers ([travis-ci] (https://travis-ci.org/)).
+
+To have tests running please follow these steps:
+
+1. Install [Vagrant] (http://www.vagrantup.com/) in your environment with Virtualbox as provider
+1. Install Vagrant plugins we use:
+
+        vagrant plugin install vagrant-omnibus
+        vagrant plugin install vagrant-berkshelf
+        vagrant plugin install vagrant-cachier
+
+1. To remotely debug the integration tests on your local machine run following:
+
+        vagrant up
+        vagrant ssh
+        cd /vagrant
+        mvn clean test -P travis -Dmaven.surefire.debug
+  		
+1. Use your favorite java IDE to remotelly debug the tests run.
 
 ## P6Spy Modules
 
