@@ -30,4 +30,3 @@ reload.log
 dependency-reduced-pom.xml
 .vagrant
 Berksfile.lock
-script/vagrant/m2_cached/repository
