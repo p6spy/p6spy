@@ -29,5 +29,5 @@ testspy.forms
 reload.log
 dependency-reduced-pom.xml
 .vagrant
-.m2/repository
+script/vagrant/.m2/repository
 Berksfile.lock
