@@ -59,7 +59,7 @@ public class P6Core {
   /**
    * Used by tests to reinitialize the framework.  This method should not be used by production code!
    */
-  static synchronized void reinit() {
+  public static synchronized void reinit() {
     initialized = false;
     // force modules to be reloaded
     P6ModuleManager.getInstance().reload();

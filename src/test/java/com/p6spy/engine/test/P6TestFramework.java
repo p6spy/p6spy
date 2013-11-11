@@ -17,13 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package com.p6spy.engine.spy;
+package com.p6spy.engine.test;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.P6Core;
+import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.option.SpyDotProperties;
-import com.p6spy.engine.test.P6TestOptions;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.runners.Parameterized.Parameters;
@@ -41,38 +42,16 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
-public abstract class P6TestFramework {
+/**
+ * Base test case for tests which should execute against all databases defined for testing.
+ * The list of database is defined by the system property 'DB'.  It should be set to a 
+ * comma separated list of thr database names.  If not set, it defaults to H2.
+ * <p>
+ *   Example: MySQL,PostgresSQL,H2,HSQLDB,SQLite
+ * </p>
+ */
+public abstract class P6TestFramework extends BaseTestCase {
   private static final Logger log = Logger.getLogger(P6TestFramework.class);
-
-  /**
-   * Environment variable enabling control over the DB to be used for testing. <br/>
-   * <br/>
-   * Comma separated values are allowed here, like:
-   * <p>
-   * MySQL,PostgresSQL,H2,HSQLDB,SQLite
-   * </p>
-   * However if none is specified, default is:
-   * <p>
-   * H2
-   * </p>
-   */
-  private static final String ENV_DB = (System.getProperty("DB") == null ? "H2" : System
-      .getProperty("DB"));
-
-  public static final Collection<Object[]> DBS_IN_TEST;
-
-  static {
-    if (ENV_DB.contains(",")) {
-      Object[] dbs = ENV_DB.split(",");
-      Object[][] params = new Object[dbs.length][1];
-      for (int i = 0; i < dbs.length; i++) {
-        params[i] = new Object[]{dbs[i]};
-      }
-      DBS_IN_TEST = Arrays.asList(params);
-    } else {
-      DBS_IN_TEST = Arrays.asList(new Object[][]{{ENV_DB}});
-    }
-  }
 
   public static final String TEST_FILE_PATH = "target/test-classes/com/p6spy/engine/spy";
   
@@ -84,7 +63,7 @@ public abstract class P6TestFramework {
     this.db = db;
     final File p6TestProperties = new File (TEST_FILE_PATH, "P6Test_" + db + ".properties");
     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
-    log.info("Setting up test for "+db);
+    log.info("P6Spy will be configured using "+p6TestProperties.getName());
     
     // make sure to reinit for each Driver run as we run parametrized builds
     // and need to have fresh stuff for every specific driver
@@ -93,7 +72,21 @@ public abstract class P6TestFramework {
 
   @Parameters(name = "{index}: {0}")
   public static Collection<Object[]> dbs() {
-    return DBS_IN_TEST;
+    Collection<Object[]> result;
+    String dbList = (System.getProperty("DB") == null ? "H2" : System.getProperty("DB"));
+    
+    if (dbList.contains(",")) {
+      Object[] dbs = dbList.split(",");
+      Object[][] params = new Object[dbs.length][1];
+      for (int i = 0; i < dbs.length; i++) {
+        params[i] = new Object[]{dbs[i]};
+      }
+      result = Arrays.asList(params);
+    } else {
+      result = Arrays.asList(new Object[][]{{dbList}});
+    }
+    
+    return result;
   }
     
   @Before

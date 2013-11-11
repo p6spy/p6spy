@@ -19,7 +19,11 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
+import com.p6spy.engine.test.P6TestFramework;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -28,10 +32,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestBasics extends P6TestFramework {

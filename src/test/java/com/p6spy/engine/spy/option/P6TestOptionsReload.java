@@ -36,7 +36,7 @@ import org.junit.Test;
 import com.j256.simplejmx.client.JmxClient;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.P6SpyOptions;
-import com.p6spy.engine.spy.P6TestFramework;
+import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.spy.P6TestMBean;
 
 public class P6TestOptionsReload {
