@@ -22,4 +22,4 @@ popd
 
 # let's cache the maven repo (kind of manually)
 # if you want even more caching, make sure you make link in the host system to your maven repo
-ln -s /vagrant/.m2 /home/vagrant/.m2
+ln -s /vagrant/script/vagrant/.m2 /home/vagrant/.m2
