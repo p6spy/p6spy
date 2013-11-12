@@ -11,12 +11,14 @@ popd
 # in VM current dir is accesible in the: /vagrant
 pushd /vagrant/script/travis
 
+# ./before_install_oracle.sh
 ./before_install_firebird.sh 
-# ./before_install_db2.sh
+./before_install_db2.sh
 
 ./before_script_firebird.sh
 ./before_script_mysql.sh
 ./before_script_postgres.sh
+./before_script_db2.sh
 
 popd
 
