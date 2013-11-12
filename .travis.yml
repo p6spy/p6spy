@@ -12,12 +12,14 @@ env:
 before_install:
  - "sudo apt-get update -qq"
  - script/travis/before_install_firebird.sh
+ - script/travis/before_install_db2.sh
 # - sudo apt-get install -qq pgp
 
 before_script:
  - script/travis/before_script_firebird.sh
  - script/travis/before_script_mysql.sh
  - script/travis/before_script_postgres.sh
+ - script/travis/before_script_db2.sh
   
 script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -Dmaven.test.failure.ignore=true clean test -P travis site:site site:stage; mvn -N ghSite:site; else mvn clean test -P travis; fi;
 
