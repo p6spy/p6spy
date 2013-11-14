@@ -29,8 +29,6 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
 import com.p6spy.engine.spy.option.P6OptionChangedListener;
 
-import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -80,20 +78,6 @@ public class P6LogQuery implements P6OptionChangedListener {
         }
       }
     }
-  }
-
-  static public PrintStream logPrintStream(String file) {
-    PrintStream ps = null;
-    try {
-      String path = P6Util.classPathFile(file);
-      file = (path == null) ? file : path;
-      ps = P6Util.getPrintStream(file, P6SpyOptions.getActiveInstance().getAppend());
-    } catch (IOException io) {
-      P6LogQuery.error("Error opening " + file + ", " + io.getMessage());
-      ps = null;
-    }
-
-    return ps;
   }
 
   static protected void doLog(long elapsed, String category, String prepared, String sql) {
@@ -181,12 +165,6 @@ public class P6LogQuery implements P6OptionChangedListener {
   // ----------------------------------------------------------------------------------------------------------
   // public accessor methods for logging and viewing query data
   // ----------------------------------------------------------------------------------------------------------
-
-  // this a way for an external to dump an unrestricted line of text into the log
-  // useful for the JSP demarcation tool
-  static public void logText(String text) {
-    logger.logText(text);
-  }
 
   static public void log(String category, String prepared, String sql) {
     if (logger != null && isCategoryOk(category)) {

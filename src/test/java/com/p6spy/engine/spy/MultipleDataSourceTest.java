@@ -42,7 +42,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * @author Quinton McCombs (dt77102)
+ * @author Quinton McCombs
  * @since 10/2013
  */
 public class MultipleDataSourceTest extends BaseTestCase {
