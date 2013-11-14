@@ -20,81 +20,15 @@
 package com.p6spy.engine.common;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.StringTokenizer;
 
-import com.p6spy.engine.spy.P6SpyOptions;
-
-/**
- * [ 2496595 ] spy.properties file not found when path contains a space
-You may monitor this Tracker item after you log in (register an account, if you do not already have one)
-Submitted By:
-David McMeans - dmcmeans    Date Submitted:
-2009-01-09 22:20
-Last Updated By:
-dmcmeans - Attachment added     Date Last Updated:
-2009-01-09 22:20
-Number of Comments:
-0   Number of Attachments:
-1
-Category: (?)
-None    Group: (?)
-None
-Assigned To: (?)
-Nobody/Anonymous    Priority: (?)
-5
-Status: (?)
-Open    Resolution: (?)
-None
-Summary: (?)
-spy.properties file not found when path contains a space    Private: (?)
-No
-p6spy fails to load when the path to the properties file contains a space.
-
-E.g.
-/E:/Program%20Files/apache-tomcat-5.5.26/webapps/myapp/WEB-INF/classes/spy.
-properties
-
-We narrowed the problem to classLoadPropertyFile() in P6Util.java. The
-solution is to decode the URL path before passing it to the File
-constructor:
-
-public static File classLoadPropertyFile(java.net.URL purl) {
-try {
-if (purl != null) {
-// modified by jayakumar for JDK 1.2 support
-//return new File(purl.getPath());
-// return new File(getPath(purl));
-
-// modified by davidmcmeans to handle %20's, etc. in the
-URL path
-return new File( URLDecoder.decode( purl.getPath(), "UTF-8"
-));
-
-// end of modification
-}
-} catch (Exception e) {
-// we ignore this, since JDK 1.2 does not support this method
-}
-return null;
-}
- * @author patmoore
- *
- */
 public class P6Util {
 
     public static int parseInt(String i, int defaultValue) {
@@ -110,115 +44,12 @@ public class P6Util {
         }
     }
 
-    public static long parseLong(String l, long defaultValue) {
-        if (l == null || l.equals("")) {
-            return defaultValue;
-        }
-        try {
-            return (Long.parseLong(l));
-        } catch(NumberFormatException nfe) {
-            P6LogQuery.error("NumberFormatException occured parsing value "+l);
-            return defaultValue;
-        }
-    }
-
     public static boolean isTrue(String s, boolean defaultValue) {
         if (s == null) {
             return defaultValue;
         }
         return(s.equals("1") || s.trim().equalsIgnoreCase("true"));
     }
-
-    public static int atoi(Object s) {
-        int i = 0;
-
-        if (s != null) {
-            String n = s.toString();
-            int dot = n.indexOf('.');
-            if (dot != -1) {
-                n = n.substring(0,dot);
-            }
-
-            try {
-                i = Integer.valueOf(n).intValue();
-            } catch (NumberFormatException e) {
-                i = 0;
-            }
-        }
-
-        return(i);
-    }
-
-    public static Properties loadProperties(String file) {
-        Properties props = new Properties();
-        try {
-            String path = classPathFile(file);
-            if (path == null) {
-                P6LogQuery.error("Can't find " + file + ". "+getCheckedPath());
-            } else {
-                FileInputStream in = new FileInputStream(path);
-                props.load(in);
-                //removeDots(props);
-                in.close();
-            }
-        } catch (FileNotFoundException e1) {
-            P6LogQuery.error("File not found " + file + " " + e1);
-        } catch (IOException e2) {
-            P6LogQuery.error("IO Error reading file " + file + " " + e2);
-        }
-
-        return props;
-    }
-
-//    protected static void removeDots(Properties props) {
-//        Map<String, String> hash     = new HashMap<String, String>();
-//        boolean done     = false;
-//
-//        for(Enumeration<Object> keys = props.keys(); keys.hasMoreElements();) {
-//            String key = (String) keys.nextElement();
-//            if (key.indexOf('.') != -1) {
-//                int len    = key.length();
-//                int newLen = 0;
-//                char[] car = new char[len];
-//                for (int i = 0; i < len; i++) {
-//                    char c = key.charAt(i);
-//                    if (c != '.') {
-//                        car[newLen++] = c;
-//                    }
-//                }
-//
-//                String out = new String(car, 0, newLen);
-//                hash.put(out, props.getProperty(key));
-//            }
-//        }
-//
-//        if (done) {
-//            props.putAll(hash);
-//        }
-//    }
-
-    protected static String getCheckedPath() {
-        String checkedPath = "\n\nClassloader via thread: <"+getClassPathAsString(Thread.currentThread().getContextClassLoader())+">\n\n";
-        checkedPath += "Classloader via Class: <"+getClassPathAsString(P6Util.class.getClassLoader())+">\n\n";
-        checkedPath += "java.class.path: <"+System.getProperty("java.class.path")+">\n\n";
-        return checkedPath;
-    }
-
-    protected static String getClassPathAsString(ClassLoader classLoader) {
-        String path = "";
-        try {
-            URL[] urls = ((URLClassLoader)classLoader).getURLs();
-            for (URL url : urls) {
-                if (path != "") {
-                    path += ";";
-                }
-                path += url.toString();
-            }
-        } catch(ClassCastException e) {
-        }
-        return path;
-    }
-
 
     /**
      * Here we attempt to find the file in the current dir and the classpath
@@ -284,25 +115,6 @@ public class P6Util {
         return null;
     }
 
-    public static java.util.Date timeNow() {
-        return(new java.util.Date());
-    }
-
-    public static PrintStream getPrintStream(String file, boolean append) throws IOException {
-        FileOutputStream  fw  = new FileOutputStream(file, append);
-        PrintStream stream = new PrintStream(fw, P6SpyOptions.getActiveInstance().getAutoflush());
-        return(stream);
-    }
-
-    public static String timeTaken(java.util.Date start, String msg) {
-        double t = (double) elapsed(start) / (double) 1000;
-        return "Time: " + msg + ": " + t;
-    }
-
-    public static long elapsed(java.util.Date start) {
-        return(start == null) ? 0 : (timeNow().getTime() - start.getTime());
-    }
-
     /**
      * A utility for using the current class loader (rather than the
      * system class loader) when instantiating a new class.
@@ -331,63 +143,6 @@ public class P6Util {
         return Class.forName(name);
     }
 
-//    /** A utility for dynamically setting the value of a given static class
-//     * method */
-//    public static void dynamicSet(Class klass, String property, String value) {
-//        try {
-//            P6Util.set(klass, property, new String[] {value});
-//        } catch (IllegalAccessException e) {
-//            P6LogQuery.error("Could not set property "+property+" due to IllegalAccessException");
-//        } catch (NoSuchMethodException e) {
-//            // we are avoid this because it is perfectly okay for there to be get methods
-//            // we do not really want to set
-//        } catch (InvocationTargetException e) {
-//            P6LogQuery.error("Could not set property "+property+" due to InvoicationTargetException");
-//        }
-//    }
-//
-//    public static void set(Class klass, String method, Object[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-//        Method m = klass.getDeclaredMethod(method, new Class[] {String.class});
-//        m.invoke(null,args);
-//    }
-//
-//    /** A utility for dynamically getting the value of a given static class
-//     * method */
-//    public static String dynamicGet(Class klass, String property) {
-//        try {
-//            Object value = P6Util.get(klass, property);
-//            return value == null ? null : value.toString();
-//        } catch (IllegalAccessException e) {
-//            P6LogQuery.error("Could not get property "+property+" due to IllegalAccessException");
-//        } catch (NoSuchMethodException e) {
-//            P6LogQuery.error("Could not get property "+property+" due to NoSuchMethodException");
-//        } catch (InvocationTargetException e) {
-//            P6LogQuery.error("Could not get property "+property+" due to InvoicationTargetException");
-//        }
-//        return null;
-//    }
-//
-//    public static Object get(Class klass, String method) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-//        Method m = klass.getDeclaredMethod(method, null);
-//        return m.invoke(null);
-//    }
-//
-//    public static List<String> findAllMethods(Class<?> klass) {
-//        List<String> list = new ArrayList<String>();
-//
-//        Method[] methods = klass.getDeclaredMethods();
-//
-//        for(int i=0; methods != null && i < methods.length; i++) {
-//            Method method = methods[i];
-//            String methodName = method.getName();
-//            if (methodName.startsWith("get")) {
-//                list.add(methodName);
-//            }
-//        }
-//        return list;
-//    }
-
-    // method add by jayakumar for JDK1.2 support for URL.getPath()
     public static String getPath(URL theURL) {
      	String file = theURL.getFile();
      	String path = null;
@@ -401,7 +156,6 @@ public class P6Util {
    		}
      	return path;
      }
-     // end of support method
 
     
     public static Map<String, String> getPropertiesMap(Properties properties) {
@@ -409,12 +163,6 @@ public class P6Util {
         return null;
       }
       
-//      Map<String, String> propertiesMap = new HashMap<String, String>();
-//      for (Entry<Object, Object> property : properties.entrySet()) {
-//        propertiesMap.put((String) property.getKey(), (String) property.getValue());
-//      }
-//      
-//      return propertiesMap;
       return new HashMap<String, String>((Map) properties);
     }
     
@@ -424,10 +172,6 @@ public class P6Util {
       }
       
       return new ArrayList<String>(Arrays.asList(csv.split(",")));
-    }
-
-    public static Set<String> parseCSVSet(String csv) {
-      return new HashSet<String>(parseCSVList(csv));
     }
 
     public static Properties getProperties(Map<String, String> map) {

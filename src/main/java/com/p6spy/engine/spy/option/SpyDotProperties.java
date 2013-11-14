@@ -19,14 +19,14 @@
  */
 package com.p6spy.engine.spy.option;
 
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.P6ModuleManager;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
-
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.P6ModuleManager;
 
 public class SpyDotProperties implements P6OptionsSource {
 
@@ -64,6 +64,8 @@ public class SpyDotProperties implements P6OptionsSource {
       }
     }
   }
+  
+  
 
   public boolean isModified() {
     return locate().lastModified() != lastModified;
