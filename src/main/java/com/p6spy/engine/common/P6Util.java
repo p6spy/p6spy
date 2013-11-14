@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 public class P6Util {
 
@@ -51,69 +50,76 @@ public class P6Util {
         return(s.equals("1") || s.trim().equalsIgnoreCase("true"));
     }
 
-    /**
-     * Here we attempt to find the file in the current dir and the classpath
-     * If we can't find it then we return null
-     */
-    public static String classPathFile(String file) {
-        File fp             = null;
-        String path         = null;
-        String separator    = System.getProperty("path.separator");
-        String slash        = System.getProperty("file.separator");
-        String classpath    = "." + separator + System.getProperty("java.class.path");
-        String local        = System.getProperty("p6.home");
+  /**
+   * Locates a file on the file system or on the classpath.  
+   * <p>
+   *   Search order - 
+   *   <ol>
+   *     <li>current working directory</li>
+   *     <li>p6 home</li>
+   *     <li>class path</li>
+   *   </ol>
+   * </p>
+   * 
+   * @param file the relative path of the file to locate
+   * @return A URL to the file or null if not found
+   */
+  public static URL locateFile(String file) {
+    File fp;
+    String p6home = System.getProperty("p6.home");
+    URL result = null;
 
-        // first try to load options via the classloader
-        try {
-            // If p6.home is specified, just look there
-            if (local != null) {
-                fp = new File(local, file);
-            } else {
-                // try to get the classloader via the current thread
-                fp = classLoadPropertyFile(Thread.currentThread().getContextClassLoader().getResource(file));
+    try {
+      // try to find relative to current working directory first
+      fp = new File(file);
+      if (fp.exists()) {
+        result = fp.toURI().toURL();
+      }
 
-                if (fp == null) {
-                    // next try the current class
-                    fp = classLoadPropertyFile(P6Util.class.getClassLoader().getResource(file));
-                }
-
-                if (fp == null) {
-                    // now the ClassLoader system resource
-                    classLoadPropertyFile(ClassLoader.getSystemResource(file));
-                }
-            }
-
-            if (fp.exists()) {
-                return fp.getCanonicalPath();
-            }
-        } catch (Exception exc) {
+      // next try relative to p6home
+      if (result == null) {
+        if (p6home != null) {
+          fp = new File(p6home, file);
+          if (fp.exists()) {
+            result = fp.toURI().toURL();
+          }
         }
+      }
 
-        // if that failed, see what we can do on our own
-        StringTokenizer tok = new StringTokenizer(classpath, separator);
-
-        do {
-            String dir = tok.nextToken();
-            path = dir.equals(".") ? file : dir + slash + file;
-            fp = new File(path);
-        } while (!fp.exists() && tok.hasMoreTokens());
-
-        return fp.exists() ? path : null;
+      // next try to load from context class loader
+      if (result == null) {
+        result = locateOnClassPath(file);
+      }
+    } catch (Exception e) {
     }
 
-    public static File classLoadPropertyFile(java.net.URL purl) {
-        try {
-            if (purl != null) {
-            	// modified by jayakumar for JDK 1.2 support
-                //return new File(purl.getPath());
-                return new File(getPath(purl));
-                // end of modification
-            }
-        } catch (Exception e) {
-            // we ignore this, since JDK 1.2 does not suppport this method
-        }
-        return null;
+    return result;
+
+  }
+
+  /**
+   * Locates a file on the classpath.
+   * 
+   * @param filename the relative path of the file to load
+   * @return the URL of the file or null if not found
+   */
+  public static URL locateOnClassPath(String filename) {
+    URL result;
+    // first try to load from context class loader
+    result = Thread.currentThread().getContextClassLoader().getResource(filename);
+
+    // next try the current class loader which loaded p6spy
+    if (result == null) {
+      result = P6Util.class.getClassLoader().getResource(filename);
     }
+
+    // finally try the system class loader
+    if (result == null) {
+      result = ClassLoader.getSystemResource(filename);
+    }
+
+    return result;
+  }
 
     /**
      * A utility for using the current class loader (rather than the
