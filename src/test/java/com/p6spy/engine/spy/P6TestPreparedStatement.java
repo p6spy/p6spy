@@ -147,6 +147,20 @@ public class P6TestPreparedStatement extends P6TestFramework {
       fail(e.getMessage() + " due to error: " + getStackTrace(e));
     }
   }
+  
+  @Test
+  public void testCallingSetMethodsOnStatementInterface() throws SQLException {
+    String sql = "select * from prepstmt_test where col1 = ?";
+    PreparedStatement prep = getPreparedStatement(sql);
+
+    prep.setMaxRows(1);
+    assertEquals(1, prep.getMaxRows());
+    
+    prep.setQueryTimeout(12);
+    // The SQLLite driver returns the value in ms
+    assertEquals(("SQLite".equals(db) ? 12000 : 12), prep.getQueryTimeout());
+    
+  }
 
   @After
   public void tearDownPreparedStatement() {
