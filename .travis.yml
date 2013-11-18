@@ -21,7 +21,7 @@ before_script:
  - script/travis/before_script_postgres.sh
  - script/travis/before_script_db2.sh
   
-script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -Dmaven.test.failure.ignore=true clean test -P travis site:site site:stage; mvn -N ghSite:site; else mvn clean test -P travis; fi;
+script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn -Dmaven.test.failure.ignore=true clean test -P travis site:site site:stage; mvn -N ghSite:site; else mvn clean test -P travis; fi;
 
 after_script:
  - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then groovy script/travis/generateMavenSettingsForDeploy.groovy; mvn clean deploy -DskipTests --settings ~/.m2/deploySettings.xml; fi
