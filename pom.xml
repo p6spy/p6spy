@@ -696,7 +696,7 @@
             <configuration>
               <systemPropertyVariables>
                 <!-- all the DBs we want to test with -->
-                <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,DB2</DB>
+                <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,DB2,Oracle</DB>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -733,6 +733,14 @@
 			<groupId>com.ibm.db2</groupId>
 	        <artifactId>db2jcc_license_cu</artifactId>
 	        <version>9.7</version>
+	        <scope>test</scope>
+		</dependency>
+		
+		<!-- fetched from the cloudbees maven repo -->
+ 		<dependency>
+			<groupId>com.oracle</groupId>
+	        <artifactId>ojdbc7</artifactId>
+	        <version>12.1.0.1</version>
 	        <scope>test</scope>
 		</dependency>
       </dependencies>
