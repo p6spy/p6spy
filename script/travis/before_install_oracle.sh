@@ -11,7 +11,7 @@
 # Modified by Peter Butkovic <butkovic@gmail.com> to enable i386 install on amd64 architecture (precise 64)
 # based on: http://www.ubuntugeek.com/how-to-install-oracle-10g-xe-in-64-bit-ubuntu.html
 # 
-set -ex
+# set -ex
 
 #
 # Utilities
@@ -48,7 +48,8 @@ sudo chmod 755 /usr/bin/free
 # add Oracle repo + key
 sudo bash -c 'echo "deb http://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
 wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
-sudo sh -c 'apt-get update -qq; true' # just to prevent stopping on error
+# sudo sh -c 'apt-get update -qq; true' # just to prevent stopping on error
+sudo apt-get update -qq
 # sudo apt-get update -qq | true
 
 #
