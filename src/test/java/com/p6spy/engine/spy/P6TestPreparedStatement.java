@@ -66,6 +66,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       prep.setString(1, "execQueryTest");
       prep.setInt(2, 2);
       prep.executeUpdate();
+      prep.close();
       
       String query = "select * from prepstmt_test where col1 = ?";
       prep = getPreparedStatement(query);
