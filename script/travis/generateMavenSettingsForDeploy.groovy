@@ -1,17 +1,5 @@
 #!/usr/bin/env groovy
 
-// get environment variables
-def usernameValue = System.getenv("SONATYPE_USERNAME")
-def passwordValue = System.getenv("SONATYPE_PASSWORD")
-if( usernameValue == null ) {
-  println "Environment variable SONATYPE_USERNAME not set - skipping deployment"
-  System.exit(-1)
-}
-if( passwordValue == null ) {
-  println "Environment variable SONATYPE_PASSWORD not set - skipping deployment"
-  System.exit(-1)
-}
-
 // load existing settings.xml file
 def originalSettingsFile = new File(System.getProperty("user.home"), ".m2/settings.xml")
 if( !originalSettingsFile.exists() ) {
@@ -21,28 +9,70 @@ if( !originalSettingsFile.exists() ) {
 def settings = new XmlParser().parse(originalSettingsFile);
 println "Maven settings loaded from ${originalSettingsFile.absolutePath}"
 
-def servers = settings.servers
-if( servers.size() == 0 ) {
-  // create the node if it did not exist
-  settings.append(new NodeBuilder().createNode("servers"))
-  servers = settings.servers
+// get environment variables
+def usernameValue = System.getenv("SONATYPE_USERNAME")
+def passwordValue = System.getenv("SONATYPE_PASSWORD")
+
+if( usernameValue != null && passwordValue != null ) {
+
+  def servers = settings.servers
+  if( servers.size() == 0 ) {
+    // create the node if it did not exist
+    settings.append(new NodeBuilder().createNode("servers"))
+    servers = settings.servers
+  }
+
+  // append server node for snapshots
+  println "Appending server node for snapshots"
+  servers[0].append(NodeBuilder.newInstance().server {
+    username(usernameValue)
+    password(passwordValue)
+    id('sonatype-nexus-snapshots')
+  })
+
+  // append server node for staging
+  println "Appending server node for staging"
+  servers[0].append(NodeBuilder.newInstance().server {
+    username(usernameValue)
+    password(passwordValue)
+    id('sonatype-nexus-staging')
+  })
+} else {
+  println "Environments variable SONATYPE_USERNAME or SONATYPE_PASSWORD not set"
 }
 
-// append server node for snapshots
-println "Appending server node for snapshots"
-servers[0].append(NodeBuilder.newInstance().server {
-  username(usernameValue)
-  password(passwordValue)
-  id('sonatype-nexus-snapshots')
+// add cloudbees repositories
+def profiles = settings.profiles
+if( profiles.size() == 0 ) {
+  // create the node if it did not exist
+  settings.append(new NodeBuilder().createNode("profiles"))
+  profiles = settings.profiles
+}
+
+println "Appending profile for cloudbees repositories"
+profiles[0].append(NodeBuilder.newInstance().profile {
+  id('cloudbees')
+  repositories {
+    respository {
+      id('cloudbees-release')
+      snapshots {
+        enabled('false')
+      }
+      name('cloudbees-release')
+      url('http://repository-p6spy.forge.cloudbees.com/release')
+    }
+  }
 })
 
-// append server node for staging
-println "Appending server node for staging"
-servers[0].append(NodeBuilder.newInstance().server {
-  username(usernameValue)
-  password(passwordValue)
-  id('sonatype-nexus-staging')
-})
+def activeProfiles = settings.activeProfiles
+if( activeProfiles.size() == 0 ) {
+  // create the node if it did not exist
+  settings.append(new NodeBuilder().createNode("activeProfiles"))
+  activeProfiles = settings.activeProfiles
+}
+
+activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('cloudbees'))
+
 
 // write out new settings.xml file
 def targetFile = new File(originalSettingsFile.parentFile, 'deploySettings.xml')

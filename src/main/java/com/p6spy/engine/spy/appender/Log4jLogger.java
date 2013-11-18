@@ -19,17 +19,16 @@
  */
 package com.p6spy.engine.spy.appender;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 // adapted from Rafael Alvarez's LoggingStream class
 public class Log4jLogger extends FormattedLogger implements P6Logger {
     
     protected Level level = Level.INFO;
-    protected String lastEntry;
     private static Logger log;
     
     // By configuring log4j by this method, we control the p6spy logger behavior

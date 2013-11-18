@@ -19,14 +19,15 @@
  */
 package com.p6spy.engine.spy.option;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
-
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.P6ModuleManager;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Map;
+import java.util.Properties;
 
 public class SpyDotProperties implements P6OptionsSource {
 
@@ -37,54 +38,89 @@ public class SpyDotProperties implements P6OptionsSource {
   
   private SpyDotPropertiesReloader reloader;
 
-  private final File file;
   private final Map<String, String> options;
 
+  /**
+   * Creates a new instance and loads the properties file if found.
+   * 
+   * @throws IOException
+   */
   public SpyDotProperties() throws IOException {
-    file = locate();
+    URL url = locate();
     
-    if (null == file) {
+    if (null == url) {
       // no config file preset => skip props loading
       lastModified = -1;
       options = null;
       return;
     }
     
-    lastModified = file.lastModified();
+    lastModified = lastModified();
 
-    FileReader fr = null;
+    InputStream in = null;
     try {
-      fr = new FileReader(file);
+      in = url.openStream();
       final Properties properties = new Properties();
-      properties.load(fr);
+      properties.load(in);
       options = P6Util.getPropertiesMap(properties);
     } finally {
-      if (null != fr) {
-        fr.close();
+      if (null != in) {
+        try {
+          in.close();
+        } catch( Exception e ) {
+        }
       }
     }
   }
 
+
+  /**
+   * Determines if the file has been modified since it was loaded
+   * 
+   * @return true if modified, false otherwise
+   */
   public boolean isModified() {
-    return locate().lastModified() != lastModified;
+    return lastModified() != lastModified;
+  }
+  
+  private long lastModified() {
+    long lastModified = -1;
+    URLConnection con = null;
+    URL url = locate();
+    if( url != null ) {
+      try {
+        con = url.openConnection(); 
+        lastModified = con.getLastModified();
+      } catch (IOException e) {
+        // ignore
+      } finally {
+        if( con != null ) {
+          // getLastModified opens an input stream if it is a file
+          // the inputStream must be closed manually!
+          InputStream in = null;
+          try {
+             in = con.getInputStream();
+          } catch (IOException e) {
+          }
+          if( in != null ) {
+            try {
+              in.close();
+            } catch (IOException e) {}
+          }
+
+        }
+      }
+    }
+    return lastModified;
   }
 
-  private File locate() {
+  private URL locate() {
     String propsFileName = System.getProperty(OPTIONS_FILE_PROPERTY, DEFAULT_OPTIONS_FILE);
     if (null == propsFileName || propsFileName.isEmpty()) {
       propsFileName = DEFAULT_OPTIONS_FILE;
     }
 
-    final String propsFile = P6Util.classPathFile(propsFileName);
-    if (propsFile != null) {
-      final File propertiesFile = new File(propsFile);
-      if (propertiesFile.exists()) {
-        return propertiesFile;
-      }
-    }
-
-    // locating failed!
-    return null;
+    return P6Util.locateFile(propsFileName);
   }
 
   @Override

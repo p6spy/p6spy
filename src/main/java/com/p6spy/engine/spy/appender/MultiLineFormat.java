@@ -20,7 +20,7 @@
 package com.p6spy.engine.spy.appender;
 
 /**
- * @author Quinton McCombs (dt77102)
+ * @author Quinton McCombs 
  * @since 09/2013
  */
 public class MultiLineFormat implements MessageFormattingStrategy {

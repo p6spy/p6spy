@@ -22,7 +22,7 @@ package com.p6spy.engine.common;
 import java.sql.SQLException;
 
 /**
- * @author Quinton McCombs (dt77102)
+ * @author Quinton McCombs
  * @since 09/2013
  */
 public class StatementInformation {

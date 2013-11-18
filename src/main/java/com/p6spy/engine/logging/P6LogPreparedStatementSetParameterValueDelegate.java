@@ -23,6 +23,7 @@ import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.proxy.Delegate;
 
 import java.lang.reflect.Method;
+import java.sql.Statement;
 
 class P6LogPreparedStatementSetParameterValueDelegate implements Delegate {
   private final PreparedStatementInformation preparedStatementInformation;
@@ -33,12 +34,15 @@ class P6LogPreparedStatementSetParameterValueDelegate implements Delegate {
 
   @Override
   public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-    int position = (Integer) args[0];
-    Object value = null;
-    if( !method.getName().equals("setNull")) {
-      value = args[1];
+    // ignore calls to any methods defined on the Statement interface!
+    if( !Statement.class.equals(method.getDeclaringClass()) ) {
+      int position = (Integer) args[0];
+      Object value = null;
+      if( !method.getName().equals("setNull") && args.length > 1 ) {
+        value = args[1];
+      }
+      preparedStatementInformation.setParameterValue(position, value);
     }
-    preparedStatementInformation.setParameterValue(position, value);
     return method.invoke(target, args);
   }
 

@@ -1,6 +1,7 @@
 # <a name="confusage">Configuration and Usage</a>
 
-Configuration follows layered approach, where each layer overrides the values set by the lower ones (leaving those not provided unchanged):
+Configuration follows layered approach, where each layer overrides the values set by the lower ones 
+(leaving those not provided unchanged):
 
 * JMX set properties (please note, that these are reset on next reload)
 * System properties
@@ -9,18 +10,28 @@ Configuration follows layered approach, where each layer overrides the values se
 * defaults
 
 For the full list of available options, see the section [Common Property File Settings](#settings). 
-Please note that providing any of these via System properties/Environment variables is possible, using the particular property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;
+Please note that providing any of these via System properties/Environment variables is possible, using the particular 
+property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;
 
 To enable full overriding capabilities, all those options considering lists (comma separated) values follow the rules:
 
 * "-"&lt;property value&gt; - causes removal of particular value from the list
 * &lt;property value&gt; - causes adding of particular value to the list
 
-please be aware of the restriction. In fact this also means you need to be aware of values set by the lower configuration layers (including defaults) to properly override.modify those.
+Please be aware of the restriction. In fact this also means you need to be aware of values set by the lower 
+configuration layers (including defaults) to properly override.modify those.
+
+The `spy.properties` configuration file can be located in various places.  The following locations are searched
+to locate the file.  
+
+1. The current working directory
+1. The directory name configured in the system property "p6.home"
+1. The classpath
 
 ## <a name="settings">Common Property File Settings</a>
 
-An example spy.properties file follows (please note default values mentioned as these reffer to defaults mentioned in section: [Configuration and Usage](#confusage)):
+An example spy.properties file follows (please note default values mentioned as these refer to defaults mentioned 
+in section: [Configuration and Usage](#confusage)):
 
     #################################################################
     # P6Spy Options File                                            #
@@ -28,14 +39,14 @@ An example spy.properties file follows (please note default values mentioned as 
     #################################################################
 
     #################################################################
-	# MODULES                                                       #
-	#                                                               #
-	# Modulelist addapts the modular functionality of P6Spy.		#
-	# Only modules listed are active 								#
-	# Please note that the core module (P6SpyFactory) can't be		# 
-	# deactivated											        #
-	#################################################################
-	#modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
+	  # MODULES                                                       #
+	  #                                                               #
+	  # Modulelist addapts the modular functionality of P6Spy.		    #
+	  # Only modules listed are active 								                #
+	  # Please note that the core module (P6SpyFactory) can't be		  # 
+	  # deactivated											                              #
+	  #################################################################
+	  #modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
 
     ################################################################
     # P6LOG SPECIFIC PROPERTIES #
@@ -81,10 +92,10 @@ An example spy.properties file follows (please note default values mentioned as 
     # outagedetection=true|false
     # outagedetectioninterval=integer time (seconds)
     #
-	# (default is false)
-	#outagedetection=false
-	# (default is 60)
-	#outagedetectioninterval=30
+	  # (default is false)
+	  #outagedetection=false
+	  # (default is 60)
+	  #outagedetectioninterval=30
 	
     ################################################################
     # COMMON PROPERTIES #
@@ -105,19 +116,19 @@ An example spy.properties file follows (please note default values mentioned as 
 
     # sql expression to evaluate if using regex
     # (default is empty)
-	#sqlexpression = 
+	  #sqlexpression = 
 
     # filter what is logged
-	# (default is false)
-	#filter=false
+	  # (default is false)
+	  #filter=false
 
-	# for flushing per statement
-	# (default is false)
-	#autoflush = false
+    # for flushing per statement
+    # (default is false)
+    #autoflush = false
 
     # sets the date format using Java's SimpleDateFormat routine. 
-	# In case property is not set, miliseconds since 1.1.1970 (unix time) is used (default is empty)
-	#dateformat=
+    # In case property is not set, miliseconds since 1.1.1970 (unix time) is used (default is empty)
+    #dateformat=
 
     #list of categories to exclude: error, info, batch, debug, statement,
     #commit, rollback and result are valid values
@@ -140,24 +151,24 @@ An example spy.properties file follows (please note default values mentioned as 
     # Please note: reload means forgetting all the previously set
     # settings (even those set during runtime - via JMX)
     # and starting with the clean table 
-	# (default is false)
-	#reloadproperties=false
-	# determines how often should be reloaded in seconds
-	# (default is 60)
-	#reloadpropertiesinterval=60
+    # (default is false)
+    #reloadproperties=false
+    # determines how often should be reloaded in seconds
+    # (default is 60)
+    #reloadpropertiesinterval=60
 
     #if=true then url must be prefixed with p6spy:
     useprefix=false
 
     #specifies the appender to use for logging
-	# Please note: reload means forgetting all the previously set
-	# settings (even those set during runtime - via JMX)
-	# and starting with the clean table 
-	# (only the properties read from the configuration file)
+    # Please note: reload means forgetting all the previously set
+    # settings (even those set during runtime - via JMX)
+    # and starting with the clean table 
+    # (only the properties read from the configuration file)
     # (default is com.p6spy.engine.spy.appender.FileLogger)
-	#appender=com.p6spy.engine.spy.appender.Log4jLogger
-	#appender=com.p6spy.engine.spy.appender.StdoutLogger
-	#appender=com.p6spy.engine.spy.appender.FileLogger
+    #appender=com.p6spy.engine.spy.appender.Log4jLogger
+    #appender=com.p6spy.engine.spy.appender.StdoutLogger
+    #appender=com.p6spy.engine.spy.appender.FileLogger
 
     # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) (used for file logger only)
     # (default is spy.log)
@@ -215,30 +226,30 @@ An example spy.properties file follows (please note default values mentioned as 
     #################################################################
     realdatasourceproperties=port;3306,serverName;myhost,databaseName;jbossdb,foo;bar
 
-	#################################################################
-	# JNDI DataSource lookup                                        #
-	#                                                               #
-	# If you are using the DataSource support outside of an app     #
-	# server, you will probably need to define the JNDI Context     #
-	# environment.                                                  #
-	#                                                               #
-	# If the P6Spy code will be executing inside an app server then #
-	# do not use these properties, and the DataSource lookup will   #
-	# use the naming context defined by the app server.             #
-	#                                                               #
-	# The two standard elements of the naming environment are	    #
-	# jndicontextfactory and jndicontextproviderurl. If you need    #
-	# additional elements, use the jndicontextcustom property.      #
-	# You can define multiple properties in jndicontextcustom,      #
-	# in name value pairs. Separate the name and value with a       #
-	# semicolon, and separate the pairs with commas.                #
-	#                                                               #
-	# The example shown here is for a standalone program running on #
-	# a machine that is also running JBoss, so the JDNI context     #
-	# is configured for JBoss (3.0.4).                              #
-	#                                                               #
-	# (by default all these are empty)                              #
-	#################################################################
+    #################################################################
+    # JNDI DataSource lookup                                        #
+    #                                                               #
+    # If you are using the DataSource support outside of an app     #
+    # server, you will probably need to define the JNDI Context     #
+    # environment.                                                  #
+    #                                                               #
+    # If the P6Spy code will be executing inside an app server then #
+    # do not use these properties, and the DataSource lookup will   #
+    # use the naming context defined by the app server.             #
+    #                                                               #
+    # The two standard elements of the naming environment are	    #
+    # jndicontextfactory and jndicontextproviderurl. If you need    #
+    # additional elements, use the jndicontextcustom property.      #
+    # You can define multiple properties in jndicontextcustom,      #
+    # in name value pairs. Separate the name and value with a       #
+    # semicolon, and separate the pairs with commas.                #
+    #                                                               #
+    # The example shown here is for a standalone program running on #
+    # a machine that is also running JBoss, so the JDNI context     #
+    # is configured for JBoss (3.0.4).                              #
+    #                                                               #
+    # (by default all these are empty)                              #
+    #################################################################
     #jndicontextfactory=org.jnp.interfaces.NamingContextFactory
     #jndicontextproviderurl=localhost:1099
     #jndicontextcustom=java.naming.factory.url.pkgs;org.jboss.nameing:org.jnp.interfaces
