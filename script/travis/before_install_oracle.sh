@@ -46,7 +46,7 @@ EOF
 sudo chmod 755 /usr/bin/free
 
 # add Oracle repo + key
-sudo bash -c 'echo "deb https://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
+sudo bash -c 'echo "deb http://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
 wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
 sudo sh -c 'apt-get update -qq; true' # just to prevent stopping on error
 # sudo apt-get update -qq | true
