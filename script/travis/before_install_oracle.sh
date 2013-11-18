@@ -45,15 +45,12 @@ EOF
 
 sudo chmod 755 /usr/bin/free
 
-
-
-
 #
 # ok, bc, is the dependency that is required by DB2 as well => let's remove it from oracle xe dependencies and provide 64bit one only
 #
 
 # Install the Oracle 10g dependant packages
-sudo apt-get install -qq --force-yes libc6:i386 libaio:i386
+sudo apt-get install -qq --force-yes libc6:i386
 sudo apt-get install -qq bc 
 
 # travis hates the oracle repo => direct download
@@ -68,6 +65,7 @@ if [ -z "$TRAVIS_BRANCH" ]; then
 
 	# only download the package, to manually install afterwards
 	sudo apt-get install -qq --force-yes -d oracle-xe-universal:i386
+	sudo apt-get install -qq --force-yes libaio:i386
 
 	# remove key + repo (to prevent failures on next updates)
 	sudo apt-key del B38A8516
@@ -75,9 +73,10 @@ if [ -z "$TRAVIS_BRANCH" ]; then
 	sudo apt-get update -qq
 	sudo apt-get autoremove -qq
 else
-	sudo wget -q0 http://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe-universal_10.2.0.1-1.1_i386.deb /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb
+	wget -q https://oss.oracle.com/debian/dists/unstable/main/binary-i386/libaio_0.3.104-1_i386.deb /tmp/libaio_0.3.104-1_i386.deb
+	sudo dpkg -i --force-architecture /tmp/libaio_0.3.104-1_i386.deb
+	sudo wget -q http://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe-universal_10.2.0.1-1.1_i386.deb /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb
 fi  
-
 
 mkdir /tmp/oracle_unpack
 dpkg-deb -x /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb /tmp/oracle_unpack
