@@ -704,13 +704,15 @@
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>license-maven-plugin</artifactId>
 			<executions>
-				<!-- check/force licenses on travis only (too late for modifications) -->
+				<!-- check/force licenses on travis only (too late for modifications)
+					moreover let's do it prior to "process-sources" phase - as that's where we generate these
+					to make sure developer introducing new file, took care of this on his/her local machine -->
 				<execution>
 					<id>check licenses</id>
 					<goals>
 						<goal>check-file-header</goal>
 					</goals>
-					<phase>process-sources</phase>
+					<phase>generate-sources</phase>
 					<configuration>
 						<failOnMissingHeader>true</failOnMissingHeader>
 						<failOnNotUptodateHeader>true</failOnNotUptodateHeader>
