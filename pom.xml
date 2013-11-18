@@ -408,7 +408,7 @@
 				<goals>
 					<goal>update-file-header</goal>
 				</goals>
-				<phase>process-sources</phase>
+				<phase>process-resources</phase>
 				<configuration>
 					<failOnMissingHeader>false</failOnMissingHeader>
 					<failOnNotUptodateHeader>false</failOnNotUptodateHeader>
@@ -705,14 +705,14 @@
 			<artifactId>license-maven-plugin</artifactId>
 			<executions>
 				<!-- check/force licenses on travis only (too late for modifications)
-					moreover let's do it prior to "process-sources" phase - as that's where we generate these
+					moreover let's do it prior to "process-resources" phase - as that's where we generate these
 					to make sure developer introducing new file, took care of this on his/her local machine -->
 				<execution>
 					<id>check licenses</id>
 					<goals>
 						<goal>check-file-header</goal>
 					</goals>
-					<phase>generate-sources</phase>
+					<phase>generate-resources</phase>
 					<configuration>
 						<failOnMissingHeader>true</failOnMissingHeader>
 						<failOnNotUptodateHeader>true</failOnNotUptodateHeader>
