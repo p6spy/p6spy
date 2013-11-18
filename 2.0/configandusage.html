@@ -635,7 +635,9 @@ effective SQL string
   
 <li>Download and install <a class="externalLink" href="http://maven.apache.org">Apache Maven</a>.</li>
   
-<li>Please note, that PostgreSQL, MySQL and Firebird specific tests require to have the detabase servers running with the specific databases, users and permissions setup (see: <a href="#vagrant">Integration tests-like environment with Vagrant</a> section).</li>
+<li>Please note, that PostgreSQL, MySQL, Firebird, DB2 and Oracle specific tests require to have the detabase servers running with the specific databases, users and permissions setup (see: <a href="#vagrant">Integration tests-like environment with Vagrant</a> section).</li>
+  
+<li>Moreover as the DB2 and Oracle jdbc drivers are not publicly available in maven repositories, these are enabled in travis profile only (see: <a href="#vagrant">Integration tests-like environment with Vagrant</a> section).</li>
 </ol>
 <p>By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:</p>
 
@@ -654,6 +656,10 @@ effective SQL string
 <li>Firebird</li>
   
 <li>Derby</li>
+  
+<li>DB2</li>
+  
+<li>Oracle</li>
   
 <li>or comma separated list of these</li>
 </ul>
@@ -702,11 +708,11 @@ vagrant plugin install vagrant-cachier
 <pre>vagrant up
 vagrant ssh
 cd /vagrant
-mvn clean test -P travis -Dmaven.surefire.debug
+mvn clean test -P travis -Dmaven.surefire.debug --settings ~/.m2/deploySettings.xml
 </pre></div></li>
   
 <li>
-<p>Use your favorite java IDE to remotelly debug the tests run.</p></li>
+<p>Use your favorite java IDE to remotely debug the tests run.</p></li>
 </ol></div></div>
 <div class="section">
 <h2>P6Spy Modules<a name="P6Spy_Modules"></a></h2>
