@@ -160,6 +160,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
     // The SQLLite driver returns the value in ms
     assertEquals(("SQLite".equals(db) ? 12000 : 12), prep.getQueryTimeout());
     
+    prep.close();
   }
 
   @After
