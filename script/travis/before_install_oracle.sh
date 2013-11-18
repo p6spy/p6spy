@@ -45,12 +45,8 @@ EOF
 
 sudo chmod 755 /usr/bin/free
 
-# add Oracle repo + key
-sudo bash -c 'echo "deb http://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
-wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
-# sudo sh -c 'apt-get update -qq; true' # just to prevent stopping on error
-sudo apt-get update -qq
-# sudo apt-get update -qq | true
+
+
 
 #
 # ok, bc, is the dependency that is required by DB2 as well => let's remove it from oracle xe dependencies and provide 64bit one only
@@ -60,8 +56,28 @@ sudo apt-get update -qq
 sudo apt-get install -qq --force-yes libc6:i386 libaio:i386
 sudo apt-get install -qq bc 
 
-# only download the package, to manually install afterwards
-sudo apt-get install -qq --force-yes -d oracle-xe-universal:i386
+# travis hates the oracle repo => direct download
+# but vagrant can cache apt-get packages (prevent redownload), so let's leave both for now
+if [ -z "$TRAVIS_BRANCH" ]; then
+	sudo wget -q0 http://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe-universal_10.2.0.1-1.1_i386.deb /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb
+else
+	# add Oracle repo + key
+	sudo bash -c 'echo "deb http://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
+	wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
+	# sudo sh -c 'apt-get update -qq; true' # just to prevent stopping on error
+	sudo apt-get update -qq
+	# sudo apt-get update -qq | true
+
+	# only download the package, to manually install afterwards
+	sudo apt-get install -qq --force-yes -d oracle-xe-universal:i386
+
+	# remove key + repo (to prevent failures on next updates)
+	sudo apt-key del B38A8516
+	sudo bash -c 'rm -rf /etc/apt/sources.list.d/oracle.list'
+	sudo apt-get update -qq
+	sudo apt-get autoremove -qq
+fi  
+
 
 mkdir /tmp/oracle_unpack
 dpkg-deb -x /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb /tmp/oracle_unpack
@@ -73,12 +89,6 @@ dpkg -b /tmp/oracle_unpack /tmp/oracle_repack/oracle-xe-universal_fixed_10.2.0.1
 
 # install Oracle 10g with the fixed dependencies, to prevent i386/amd64 conflicts on bc package
 sudo dpkg -i --force-architecture /tmp/oracle_repack/oracle-xe-universal_fixed_10.2.0.1-1.1_i386.deb
-
-# remove key + repo (to prevent failures on next updates)
-sudo apt-key del B38A8516
-sudo bash -c 'rm -rf /etc/apt/sources.list.d/oracle.list'
-sudo apt-get update -qq
-sudo apt-get autoremove -qq
 
 # Fix the problem when the configuration script eats the last
 # character of the password if it is 'n': replace IFS="\n" with IFS=$'\n'.
