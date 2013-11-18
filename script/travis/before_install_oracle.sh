@@ -73,9 +73,9 @@ if [ -z "$TRAVIS_BRANCH" ]; then
 	sudo apt-get update -qq
 	sudo apt-get autoremove -qq
 else
-	wget -q https://oss.oracle.com/debian/dists/unstable/main/binary-i386/libaio_0.3.104-1_i386.deb /tmp/libaio_0.3.104-1_i386.deb
+	wget -O /tmp/libaio_0.3.104-1_i386.deb http://oss.oracle.com/debian/dists/unstable/main/binary-i386/libaio_0.3.104-1_i386.deb
 	sudo dpkg -i --force-architecture /tmp/libaio_0.3.104-1_i386.deb
-	sudo wget -q http://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe-universal_10.2.0.1-1.1_i386.deb /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb
+	sudo wget -O /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb http://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe-universal_10.2.0.1-1.1_i386.deb
 fi  
 
 mkdir /tmp/oracle_unpack
