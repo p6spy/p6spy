@@ -8,8 +8,11 @@
 # vagrant-cachier maven support pending (see status of: https://github.com/fgrehm/vagrant-cachier/issues/57)
 # => let's do it kind of manually for now
 # if you want even more caching, make sure you make link in the host system to your maven repo
+# moreover we prepare settings.xml here as well
 rm -rf /home/vagrant/.m2
+sudo rm -rf /root/.m2
 ln -s /vagrant/script/vagrant/m2_cached /home/vagrant/.m2
+sudo ln -s /vagrant/script/vagrant/m2_cached /root/.m2
 
 # in VM current dir is accesible in the: /vagrant
 pushd /vagrant/script/vagrant
@@ -31,6 +34,8 @@ pushd /vagrant/script/travis
 ./before_script_postgres.sh
 ./before_script_db2.sh
 ./before_script_oracle.sh
+
+groovy generateMavenSettingsForDeploy.groovy
 
 popd
 
