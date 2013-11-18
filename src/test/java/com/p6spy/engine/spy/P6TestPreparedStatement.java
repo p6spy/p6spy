@@ -66,6 +66,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       prep.setString(1, "execQueryTest");
       prep.setInt(2, 2);
       prep.executeUpdate();
+      prep.close();
       
       String query = "select * from prepstmt_test where col1 = ?";
       prep = getPreparedStatement(query);
@@ -160,6 +161,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
     // The SQLLite driver returns the value in ms
     assertEquals(("SQLite".equals(db) ? 12000 : 12), prep.getQueryTimeout());
     
+    prep.close();
   }
 
   @After

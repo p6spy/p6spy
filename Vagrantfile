@@ -119,6 +119,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	  chef.add_recipe "postgresql::server"
 	  chef.add_recipe "mysql::server"
 	  chef.add_recipe "sqlite"
+	  chef.add_recipe "groovy"
 
 	  chef.json = {
 
@@ -130,15 +131,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		  "oracle" => { "accept_oracle_download_terms" => "true" },
 		  "accept_license_agreement" => "true",
 	  },
-	  	  "maven" => {
+	  # maven
+	  "maven" => {
 		  "version" => "3",
 		  "3" => {
 		  "url" => "http://apache.openmirror.de/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.tar.gz",
-		  "checksum" => "077ed466455991d5abb4748a1d022e2d2a54dc4d557c723ecbacdc857c61d51b"
-	  }
+		  "checksum" => "077ed466455991d5abb4748a1d022e2d2a54dc4d557c723ecbacdc857c61d51b" }
 	  },
-	  # PostgreSQL
-	  "postgresql" => {
+		  # PostgreSQL
+		  "postgresql" => {
 		  "version" => "9.2",
 		  "password" => { "postgres" => "123" },
 		  # otherwise certificate error on restart
@@ -153,13 +154,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	  },
 
 		  # MySQL
-		  "mysql" => { "server_root_password" => "123", 
-			  "server_repl_password" => "123",
-			  "server_debian_password" => "123" }
-	  } 
+		  "mysql" => { 
+		  "server_root_password" => "123", 
+		  "server_repl_password" => "123",
+		  "server_debian_password" => "123" 
+	  },
+		  # groovy
+		  "groovy" => { "version" => "2.1.9" }
+	  }
   end
 
-	config.vm.provision "shell", path: "script/vagrant/script.sh"
+  config.vm.provision "shell", path: "script/vagrant/script.sh"
 
 
   # Enable provisioning with chef server, specifying the chef server URL,

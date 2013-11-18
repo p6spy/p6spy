@@ -166,11 +166,12 @@
         <configuration>
           <systemPropertyVariables>
             <user.language>en_US</user.language>
-            <!-- to enable remote JMX testing, 
-            	see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
           </systemPropertyVariables>
+          <!-- to enable remote JMX testing, 
+            	see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
+		  <!-- to workaround oracle timezone issue: http://stackoverflow.com/questions/9156379/ora-01882-timezone-region-not-found -->
           <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false
-            -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false
+            -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false -Doracle.jdbc.timezoneAsRegion=false
           </argLine>
           <includes>
             <include>**/P6Test*.java</include>
@@ -408,7 +409,7 @@
 				<goals>
 					<goal>update-file-header</goal>
 				</goals>
-				<phase>process-sources</phase>
+				<phase>process-resources</phase>
 				<configuration>
 					<failOnMissingHeader>false</failOnMissingHeader>
 					<failOnNotUptodateHeader>false</failOnNotUptodateHeader>
@@ -695,7 +696,7 @@
             <configuration>
               <systemPropertyVariables>
                 <!-- all the DBs we want to test with -->
-                <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,DB2</DB>
+                <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,DB2,Oracle</DB>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -704,13 +705,15 @@
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>license-maven-plugin</artifactId>
 			<executions>
-				<!-- check/force licenses on travis only (too late for modifications) -->
+				<!-- check/force licenses on travis only (too late for modifications)
+					moreover let's do it prior to "process-resources" phase - as that's where we generate these
+					to make sure developer introducing new file, took care of this on his/her local machine -->
 				<execution>
 					<id>check licenses</id>
 					<goals>
 						<goal>check-file-header</goal>
 					</goals>
-					<phase>process-sources</phase>
+					<phase>generate-resources</phase>
 					<configuration>
 						<failOnMissingHeader>true</failOnMissingHeader>
 						<failOnNotUptodateHeader>true</failOnNotUptodateHeader>
@@ -732,6 +735,14 @@
 			<groupId>com.ibm.db2</groupId>
 	        <artifactId>db2jcc_license_cu</artifactId>
 	        <version>9.7</version>
+	        <scope>test</scope>
+		</dependency>
+		
+		<!-- fetched from the cloudbees maven repo -->
+ 		<dependency>
+			<groupId>com.oracle</groupId>
+	        <artifactId>ojdbc7</artifactId>
+	        <version>12.1.0.1</version>
 	        <scope>test</scope>
 		</dependency>
       </dependencies>
