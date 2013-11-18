@@ -59,8 +59,6 @@ sudo apt-get install -qq bc
 # travis hates the oracle repo => direct download
 # but vagrant can cache apt-get packages (prevent redownload), so let's leave both for now
 if [ -z "$TRAVIS_BRANCH" ]; then
-	sudo wget -q0 http://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe-universal_10.2.0.1-1.1_i386.deb /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb
-else
 	# add Oracle repo + key
 	sudo bash -c 'echo "deb http://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
 	wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
@@ -76,6 +74,8 @@ else
 	sudo bash -c 'rm -rf /etc/apt/sources.list.d/oracle.list'
 	sudo apt-get update -qq
 	sudo apt-get autoremove -qq
+else
+	sudo wget -q0 http://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe-universal_10.2.0.1-1.1_i386.deb /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb
 fi  
 
 
