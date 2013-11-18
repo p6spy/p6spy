@@ -53,7 +53,7 @@ println "Appending profile for cloudbees repositories"
 profiles[0].append(NodeBuilder.newInstance().profile {
   id('cloudbees')
   repositories {
-    respository {
+    repository {
       id('cloudbees-release')
       snapshots {
         enabled('false')
