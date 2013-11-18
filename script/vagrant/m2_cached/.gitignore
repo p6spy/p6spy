@@ -1,4 +1,3 @@
-# Ignore everything in this directory
-*
-# Except this file
-!.gitignore
+# make sure to cache m2 on local machine, rather than in git repo
+repository
+deploySettings.xml
