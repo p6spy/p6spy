@@ -39,9 +39,9 @@ import com.p6spy.engine.test.P6TestFramework;
  * @author Peter Butkovic
  */
 @RunWith(Parameterized.class)
-public class ValidSqlLoggedTest extends P6TestFramework {
+public class P6TestPreparedStatementLoggedValid extends P6TestFramework {
 
-  public ValidSqlLoggedTest(String db) throws SQLException, IOException {
+  public P6TestPreparedStatementLoggedValid(String db) throws SQLException, IOException {
     super(db);
   }
 
@@ -59,7 +59,7 @@ public class ValidSqlLoggedTest extends P6TestFramework {
     // TIMESTAMP (does something different than expected on SQL Server an MySQL)
     // some extra added anyway
     statement
-        .execute("create table valid_sql_logged (col_varchar varchar(255), col_integer integer, col_decimal decimal, col_date date, col_timestamp timestamp"
+        .execute("create table valid_sql_logged (col_varchar varchar(255), col_integer integer, col_decimal decimal, col_date date, col_timestamp timestamp, col_smallint smallint"
             + (isBooleanSupported() ? ", col_boolean boolean" : "") + ")");
 
     statement.close();
@@ -67,37 +67,57 @@ public class ValidSqlLoggedTest extends P6TestFramework {
   }
 
   @Test
-  public void testPreparedStatement() throws SQLException {
-    final PreparedStatement prep = getPreparedStatement();
+  public void testPreparedStatementExecQuery() throws SQLException {
+    testPreparedStatement(false);
+  }
+  
+  @Test
+  public void testPreparedStatementExecUpdate() throws SQLException {
+    testPreparedStatement(true);
+  }
+  
+  private void testPreparedStatement(boolean isUpdate) throws SQLException {
+    final PreparedStatement prep = getPreparedStatement(isUpdate);
     prep.setString(1, "prepstmt_test_col1");
     prep.setInt(2, 1);
     prep.setInt(3, 1);
     prep.setDate(4, new Date(0));
     prep.setTimestamp(5, new Timestamp(0));
+    prep.setInt(6, 1);
     if (isBooleanSupported()) {
-      prep.setBoolean(6, true);  
+      prep.setBoolean(7, true);  
     }
     prep.executeQuery();
     prep.close();
 
-    reRunStatement();
+    reRunStatement(isUpdate);
   }
 
   @Test
-  public void testPreparedStatementWithNulls() throws SQLException {
-    final PreparedStatement prep = getPreparedStatement();
+  public void testPreparedStatementExecUpdateWithNulls() throws SQLException {
+    testPreparedStatementWithNulls(true);
+  }
+  
+  @Test
+  public void testPreparedStatementExecQueryWithNulls() throws SQLException {
+    testPreparedStatementWithNulls(false); 
+  }
+  
+  private void testPreparedStatementWithNulls(boolean isUpdate) throws SQLException {
+    final PreparedStatement prep = getPreparedStatement(isUpdate);
     prep.setNull(1, java.sql.Types.VARCHAR);
     prep.setNull(2, java.sql.Types.INTEGER);
     prep.setNull(3, java.sql.Types.INTEGER);
     prep.setNull(4, java.sql.Types.DATE);
     prep.setNull(5, java.sql.Types.TIMESTAMP);
+    prep.setNull(6, java.sql.Types.INTEGER);
     if (isBooleanSupported()) {
-      prep.setNull(6, java.sql.Types.BOOLEAN);  
+      prep.setNull(7, java.sql.Types.BOOLEAN);  
     }    
     prep.executeQuery();
     prep.close();
     
-    reRunStatement();
+    reRunStatement(isUpdate);
   }
 
   /**
@@ -105,26 +125,40 @@ public class ValidSqlLoggedTest extends P6TestFramework {
    * 
    * @throws SQLException
    */
-  private void reRunStatement() throws SQLException {
+  private void reRunStatement(boolean isUpdate) throws SQLException {
     final String loggedStmt = super.getLastLogEntry();
     final String sql = loggedStmt.substring(loggedStmt.lastIndexOf("|") + 1);
 
     // re-run the logged statement => to prove it's valid
     super.clearLogEnties();
     final Statement stmt = connection.createStatement();
-    stmt.execute(sql);
+    if (isUpdate) {
+      stmt.executeUpdate(sql);
+    } else {
+      stmt.execute(sql);      
+    }
     stmt.close();
     assertEquals(sql, loggedStmt.substring(loggedStmt.lastIndexOf("|") + 1));
   }
 
-  private PreparedStatement getPreparedStatement() throws SQLException {
-    return connection
-        .prepareStatement("select * from valid_sql_logged where col_varchar = ? and col_integer = ? and col_decimal = ? and col_date = ? and col_timestamp = ?"
-            + (isBooleanSupported() ? " and col_boolean = ?" : ""));
+  private PreparedStatement getPreparedStatement(boolean isUpdate) throws SQLException {
+    if (isUpdate) {
+      return connection
+          .prepareStatement("insert into valid_sql_logged (col_varchar, col_integer, col_decimal, col_date, col_timestamp, col_smallint"
+              + (isBooleanSupported() ? ", col_boolean" : "") + ") values (?,?,?,?,?,?" + (isBooleanSupported() ? ",?" : "") + ")");
+    } else {
+      return connection
+          .prepareStatement("select * from valid_sql_logged where col_varchar = ? and col_integer = ? and col_decimal = ? and col_date = ? and col_timestamp = ? and col_smallint = ?"
+              + (isBooleanSupported() ? " and col_boolean = ?" : ""));
+    }
   }
+  
 
   private boolean isBooleanSupported() {
-    return !"Oracle".equals(db);
+    return !"Oracle".equals(db) 
+        && !"Firebird".equals(db) /* see: http://firebirdsql.org/manual/migration-mssql-data-types.html */
+        && !"DB2".equals(db) /* http://publib.boulder.ibm.com/infocenter/db2luw/v9/index.jsp?topic=%2Fcom.ibm.db2.udb.apdv.java.doc%2Fdoc%2Frjvjdata.htm */ 
+        && !"SQLite".equals(db) /* https://www.sqlite.org/datatype3.html */;
   }
 
   protected void drop(Statement statement) {
