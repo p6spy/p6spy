@@ -19,13 +19,10 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.test.P6TestFramework;
-import net.sf.cglib.proxy.Proxy;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -33,7 +30,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static org.junit.Assert.*;
+import net.sf.cglib.proxy.Proxy;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.test.P6TestFramework;
 
 @RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
@@ -45,10 +51,13 @@ public class P6TestPreparedStatement extends P6TestFramework {
   @Before
   public void setUpPreparedStatement() {
     try {
-      Statement statement = connection.createStatement();
-      dropPrepared(statement);
-      statement.execute("create table prepstmt_test (col1 varchar(255), col2 integer)");
-      statement.close();
+      {
+        Statement statement = connection.createStatement();
+        dropPrepared(statement);
+        statement.execute("create table prepstmt_test (col1 varchar(255), col2 integer)");
+        statement.execute("create table prepstmt_test2 (col1 varchar(255), col2 integer)");
+        statement.close();
+      }
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -81,6 +90,74 @@ public class P6TestPreparedStatement extends P6TestFramework {
       
       rs.close();
       prep.close();
+    } catch (Exception e) {
+      fail(e.getMessage() + " due to error: " + getStackTrace(e));
+    }
+  }
+  
+  @Test
+  public void testSameColumnNameInMultipleTables() {
+    try {
+      // insert test data
+      {
+        final String update = "insert into prepstmt_test values (?, ?)";
+        final PreparedStatement prep = getPreparedStatement(update);
+        prep.setString(1, "prepstmt_test_col1");
+        prep.setInt(2, 1);
+        prep.executeUpdate();
+        prep.close();
+      }
+      {
+        final String update = "insert into prepstmt_test2 values (?, ?)";
+        final PreparedStatement prep = getPreparedStatement(update);
+        prep.setString(1, "prepstmt_test_col2");
+        prep.setInt(2, 1);
+        prep.executeUpdate();
+        prep.close();
+      }
+
+      super.clearLogEnties();
+
+      // let's check that returned data are reported correctly
+      P6LogOptions.getActiveInstance().setExcludecategories("-result,-resultset");
+
+      final String query = "select prepstmt_test.col1, prepstmt_test2.col1, prepstmt_test.col2, prepstmt_test2.col2 from prepstmt_test, prepstmt_test2 where prepstmt_test.col2 = prepstmt_test2.col2 and prepstmt_test.col1 = ? and prepstmt_test2.col1 = ?";
+      final PreparedStatement prep = getPreparedStatement(query);
+      prep.setString(1, "prepstmt_test_col1");
+      prep.setString(2, "prepstmt_test_col2");
+      final ResultSet rs = prep.executeQuery();
+
+      // check "statement" logged properly
+      assertNotNull(super.getLastLogEntry());
+      assertTrue("prepared statement not logged properly",
+          super.getLastLogEntry().contains("statement"));
+      assertTrue("prepared statement not logged properly", super.getLastLogEntry().contains(query));
+      assertTrue(
+          "prepared statement not logged properly",
+          super.getLastLogEntry().contains(
+              query.replaceFirst("\\?", "\'prepstmt_test_col1\'").replaceFirst("\\?",
+                  "\'prepstmt_test_col2\'")));
+
+      // check returned (real) data not messed up
+      while (rs.next()) {
+        assertEquals("returned values messed up", "prepstmt_test_col1", rs.getString(1));
+        assertEquals("returned values messed up", "prepstmt_test_col2", rs.getString(2));
+        assertEquals("returned values messed up", 1, rs.getInt(3));
+        assertEquals("returned values messed up", 1, rs.getInt(4));
+      }
+      rs.close();
+      prep.close();
+
+      // check "resultset" logged properly
+      assertNotNull(super.getLastLogEntry());
+      assertTrue("resultset not logged", super.getLastLogEntry().contains("resultset"));
+      assertTrue(
+          "logged resultset holds incorrect values",
+          super.getLastLogEntry().endsWith(
+              "1 = prepstmt_test_col1, 2 = prepstmt_test_col2, 3 = 1, 4 = 1"));
+
+      P6LogOptions.getActiveInstance().setExcludecategories("result,resultset");
+
     } catch (Exception e) {
       fail(e.getMessage() + " due to error: " + getStackTrace(e));
     }
@@ -177,6 +254,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
 
   protected void dropPrepared(Statement statement) {
     dropPreparedStatement("drop table prepstmt_test", statement);
+    dropPreparedStatement("drop table prepstmt_test2", statement);
   }
 
   protected void dropPreparedStatement(String sql, Statement statement) {
