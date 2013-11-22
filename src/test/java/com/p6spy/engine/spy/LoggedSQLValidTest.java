@@ -71,7 +71,7 @@ public class LoggedSQLValidTest extends P6TestFramework {
   }
 
   @Test
-  public void testPrepStmtExecQueryVarchar() throws SQLException {
+  public void testPreparedStatementExecQuery() throws SQLException {
     try {
       testPreparedStatement(false);
     } catch (Exception e) {
@@ -129,6 +129,11 @@ public class LoggedSQLValidTest extends P6TestFramework {
 
   @Test
   public void testPreparedStatementExecQueryWithNulls() throws SQLException {
+    // Derby fails on this one => let's just skip it 
+    if ("Derby".equals(db)) {
+      return;
+    }
+
     try {
       testPreparedStatementWithNulls(false);
     } catch (Exception e) {
@@ -203,8 +208,7 @@ public class LoggedSQLValidTest extends P6TestFramework {
     return !"HSQLDB".equals(db) /*
                                  * could not figure out the correct date format for this one
                                  * skipping, to keep effort low
-                                 */
-        && !"Derby".equals(db) /* works, but not for nulls with execQuery(), for some reason */;
+                                 */;
   }
 
   private boolean isBooleanSupported() {
