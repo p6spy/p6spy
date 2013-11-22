@@ -69,7 +69,6 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
     // tests inspired by: http://opensourcejavaphp.net/java/h2/org/h2/test/jdbc/TestCallableStatement.java.html
     Statement stat = connection.createStatement();
     {
-      //stat.execute("CREATE TABLE TEST(ID INT, NAME VARCHAR)");
       CallableStatement call = connection.prepareCall("INSERT INTO TEST VALUES(?, ?)");
       call.setInt(1, 1);
       call.setString(2, "Hello");
@@ -111,11 +110,6 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
   public void testStoredProcedureNoResultSet() throws SQLException {
     this.clearLogEnties();
 
-    // register the stored proc with the database - only for H2!!!!
-    Statement stmt = connection.createStatement();
-    stmt.execute("create alias TEST_PROC for \"" + this.getClass().getName() + ".testProc\"");
-    stmt.close();
-
     // execute the statement
     String query = "? = call TEST_PROC(?,?)";
     CallableStatement call = connection.prepareCall(query);
@@ -140,15 +134,6 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
     this.clearLogEnties();
 
-    // register the stored proc with the database - only for H2!!!!
-    try {
-      Statement stmt = connection.createStatement();
-      stmt.execute("create alias TEST_PROC for \"" + this.getClass().getName() + ".testProc\"");
-      stmt.close();
-    } catch (Exception e) {
-      // ignore failures
-    }
-
     // execute the statement
     String query = "? = call TEST_PROC(?,?)";
     CallableStatement stmt = connection.prepareCall(query);
@@ -164,10 +149,6 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
     assertTrue(getLastLogEntry().contains("1,NULL"));
 
 
-  }
-
-  public static int testProc(int param1, String param2) {
-    return 2;
   }
 
 }

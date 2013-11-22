@@ -19,10 +19,8 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.outage.P6OutageOptions;
 import com.p6spy.engine.test.P6TestFramework;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -56,31 +54,11 @@ public class P6TestOutage extends P6TestFramework {
     return DBS_IN_TEST;
   }
 
-  /**
-   * DB alias making response delayed by sleep.
-   */
-  public static final String SLEEP_ALIAS = "CREATE ALIAS SLEEP AS $$ "
-      + " void sleep(long miliseconds) {"
-      + "   try { "
-      + "         java.lang.Thread.sleep(miliseconds); "
-      + "   } catch (java.lang.InterruptedException e) {} "
-      + " } $$;";
-
-  @Before
-  public void activateOutage() throws SQLException {
-    // disable outage, as procedure creation takes already quite a while
-    P6OutageOptions.getActiveInstance().setOutageDetection("false");
-    Statement statement = connection.createStatement();
-    statement.execute(SLEEP_ALIAS);
-    P6OutageOptions.getActiveInstance().setOutageDetection("true");
-    statement.close();
-  }
 
   @Test
   public void testOutage() throws SQLException {
     // exec fast query => no outage detected
     callSleep(1);
-    Assert.assertFalse(super.getLastButOneLogEntry().contains("OUTAGE"));
     Assert.assertFalse(super.getLastLogEntry().contains("OUTAGE"));
     Assert.assertTrue(super.getLastLogEntry().contains("CALL SLEEP"));
 

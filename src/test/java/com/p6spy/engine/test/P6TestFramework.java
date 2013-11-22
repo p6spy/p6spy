@@ -108,7 +108,7 @@ public abstract class P6TestFramework extends BaseTestCase {
       connection = DriverManager.getConnection(url, user, password);
 
       printAllDrivers();
-    LiquibaseUtils.setup(url, user, password);
+      LiquibaseUtils.setup(url, user, password);
 
 
   }
