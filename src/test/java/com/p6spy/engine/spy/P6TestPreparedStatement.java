@@ -21,8 +21,6 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.test.P6TestFramework;
 import net.sf.cglib.proxy.Proxy;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -31,27 +29,16 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
 
   public P6TestPreparedStatement(String db) throws SQLException, IOException {
     super(db);
-  }
-
-  @Before
-  public void setUpPreparedStatement() {
-    try {
-      Statement statement = connection.createStatement();
-      dropPrepared(statement);
-      statement.execute("create table prepstmt_test (col1 varchar(255), col2 integer)");
-      statement.close();
-    } catch (Exception e) {
-      fail(e.getMessage());
-    }
   }
 
   @Test
@@ -67,18 +54,18 @@ public class P6TestPreparedStatement extends P6TestFramework {
       prep.setInt(2, 2);
       prep.executeUpdate();
       prep.close();
-      
+
       String query = "select * from prepstmt_test where col1 = ?";
       prep = getPreparedStatement(query);
       prep.setString(1, "execQueryTest");
       ResultSet rs = prep.executeQuery();
-      
+
       // verify that we got back a proxy for the result set
       assertTrue("Resultset was not a proxy", Proxy.isProxyClass(rs.getClass()));
-      
+
       // verify the log message for the select
       assertTrue(getLastLogEntry().contains(query));
-      
+
       rs.close();
       prep.close();
     } catch (Exception e) {
@@ -95,6 +82,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       prep.setString(1, "miller");
       prep.setInt(2, 1);
       prep.executeUpdate();
+      prep.close();
       assertTrue(super.getLastLogEntry().contains(update));
       assertTrue(super.getLastLogEntry().contains("miller"));
       assertTrue(super.getLastLogEntry().contains("1"));
@@ -110,14 +98,13 @@ public class P6TestPreparedStatement extends P6TestFramework {
         }
         bigSelect.append(" col2=?");
       }
-      prep.close();
-      
+
       prep = getPreparedStatement(bigSelect.toString());
       for (int i = 1; i <= MaxFields; i++) {
         prep.setInt(i, i);
       }
       prep.close();
-      
+
       // test batch inserts
       update = "insert into prepstmt_test values (?,?)";
       prep = getPreparedStatement(update);
@@ -135,20 +122,20 @@ public class P6TestPreparedStatement extends P6TestFramework {
       assertTrue(super.getLastLogEntry().contains("aspen"));
       assertTrue(super.getLastLogEntry().contains("4"));
       prep.close();
-      
+
       String query = "select count(*) from prepstmt_test";
       prep = getPreparedStatement(query);
       ResultSet rs = prep.executeQuery();
       rs.next();
       assertEquals(4, rs.getInt(1));
-      
+
       rs.close();
       prep.close();
     } catch (Exception e) {
       fail(e.getMessage() + " due to error: " + getStackTrace(e));
     }
   }
-  
+
   @Test
   public void testCallingSetMethodsOnStatementInterface() throws SQLException {
     String sql = "select * from prepstmt_test where col1 = ?";
@@ -156,35 +143,12 @@ public class P6TestPreparedStatement extends P6TestFramework {
 
     prep.setMaxRows(1);
     assertEquals(1, prep.getMaxRows());
-    
+
     prep.setQueryTimeout(12);
     // The SQLLite driver returns the value in ms
     assertEquals(("SQLite".equals(db) ? 12000 : 12), prep.getQueryTimeout());
-    
+
     prep.close();
-  }
-
-  @After
-  public void tearDownPreparedStatement() {
-    try {
-      Statement statement = connection.createStatement();
-      dropPrepared(statement);
-      statement.close();  
-    } catch (Exception e) {
-      fail(e.getMessage());
-    }
-  }
-
-  protected void dropPrepared(Statement statement) {
-    dropPreparedStatement("drop table prepstmt_test", statement);
-  }
-
-  protected void dropPreparedStatement(String sql, Statement statement) {
-    try {
-      statement.execute(sql);
-    } catch (Exception e) {
-      // we don't really care about cleanup failing
-    }
   }
 
   protected PreparedStatement getPreparedStatement(String query) throws SQLException {

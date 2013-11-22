@@ -26,6 +26,7 @@ import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.option.SpyDotProperties;
 import org.apache.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runners.Parameterized.Parameters;
 
@@ -103,10 +104,20 @@ public abstract class P6TestFramework extends BaseTestCase {
       }
 
       Driver driver = DriverManager.getDriver(url);
-      System.err.println("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
+      log.info("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
       connection = DriverManager.getConnection(url, user, password);
 
       printAllDrivers();
+    LiquibaseUtils.setup(url, user, password);
+
+
+  }
+
+  @After
+  public void closeConnection( ) throws Exception {
+    if (connection != null && !connection.isClosed() ) {
+      connection.close();
+    }
   }
 
   protected static String getStackTrace(Exception e) {
@@ -117,7 +128,7 @@ public abstract class P6TestFramework extends BaseTestCase {
 
   protected static void printAllDrivers() {
     for (Enumeration e = DriverManager.getDrivers(); e.hasMoreElements(); ) {
-      System.err.println("1 DRIVER FOUND == " + e.nextElement());
+      log.info("1 DRIVER FOUND == " + e.nextElement());
     }
   }
 

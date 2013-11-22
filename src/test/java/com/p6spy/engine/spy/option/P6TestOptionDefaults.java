@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import com.p6spy.engine.test.BaseTestCase;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -41,7 +42,7 @@ import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 
-public class P6TestOptionDefaults {
+public class P6TestOptionDefaults extends BaseTestCase {
 
   @BeforeClass
   public static void setUp() throws SQLException, IOException {

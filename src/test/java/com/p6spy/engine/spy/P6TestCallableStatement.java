@@ -35,20 +35,22 @@ import java.sql.Types;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class P6TestCallableStatement extends P6TestPreparedStatement {
 
-  private static final Collection<Object[]> DBS_IN_TEST = Arrays.asList(new Object[][] { { "H2" } });
-  
+  private static final Collection<Object[]> DBS_IN_TEST = Arrays.asList(new Object[][]{{"H2"}});
+
   /**
    * Always returns {@link #DBS_IN_TEST} as we don't
    * need to rerun for each DB here.
-   * The thing is that not all the DBs support stored procedures. Morever syntax might differ. 
+   * The thing is that not all the DBs support stored procedures. Morever syntax might differ.
    * We want just to prove that callable statements are correctly prxied.
    * So let's test just with H2 (default DB).
-   * 
+   *
    * @return {@link #DBS_IN_TEST}
    */
   @Parameters
@@ -56,103 +58,114 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
     return DBS_IN_TEST;
   }
 
-  
-	public P6TestCallableStatement(String db) throws SQLException, IOException {
+
+  public P6TestCallableStatement(String db) throws SQLException, IOException {
     super(db);
   }
-	  
-    @Test
-    public void testCallable() throws SQLException {
-      
-      // tests inspired by: http://opensourcejavaphp.net/java/h2/org/h2/test/jdbc/TestCallableStatement.java.html
-      Statement stat = connection.createStatement();
-      {
-        stat.execute("CREATE TABLE TEST(ID INT, NAME VARCHAR)");
-        CallableStatement call = connection.prepareCall("INSERT INTO TEST VALUES(?, ?)");
-        call.setInt(1, 1);
-        call.setString(2, "Hello");
-        call.execute();
-      
-        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("INSERT INTO TEST VALUES") != -1);
-      }
-     
-      {
-        CallableStatement call = connection.prepareCall("SELECT * FROM TEST", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-        ResultSet rs = call.executeQuery();
-        rs.next();
-        assertEquals(1, rs.getInt(1));
-        assertEquals("Hello", rs.getString(2));
-        assertFalse(rs.next());
-        
-        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
-      }
-      
-      {
-        CallableStatement call = connection.prepareCall("SELECT * FROM TEST", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
-        ResultSet rs = call.executeQuery();
-        rs.next();
-        assertEquals(1, rs.getInt(1));
-        assertEquals("Hello", rs.getString(2));
-        assertFalse(rs.next());
 
-        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
-      }
-      
+  @Test
+  public void testCallable() throws SQLException {
+
+    // tests inspired by: http://opensourcejavaphp.net/java/h2/org/h2/test/jdbc/TestCallableStatement.java.html
+    Statement stat = connection.createStatement();
+    {
+      //stat.execute("CREATE TABLE TEST(ID INT, NAME VARCHAR)");
+      CallableStatement call = connection.prepareCall("INSERT INTO TEST VALUES(?, ?)");
+      call.setInt(1, 1);
+      call.setString(2, "Hello");
+      call.execute();
+      call.close();
+
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("INSERT INTO TEST VALUES") != -1);
+    }
+
+    {
+      CallableStatement call = connection.prepareCall("SELECT * FROM TEST", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+      ResultSet rs = call.executeQuery();
+      rs.next();
+      assertEquals(1, rs.getInt(1));
+      assertEquals("Hello", rs.getString(2));
+      assertFalse(rs.next());
+      rs.close();
+      call.close();
+
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
+    }
+
+    {
+      CallableStatement call = connection.prepareCall("SELECT * FROM TEST", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
+      ResultSet rs = call.executeQuery();
+      rs.next();
+      assertEquals(1, rs.getInt(1));
+      assertEquals("Hello", rs.getString(2));
+      assertFalse(rs.next());
+      rs.close();
+      call.close();
+
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
+    }
+
   }
-  
+
   @Test
   public void testStoredProcedureNoResultSet() throws SQLException {
     this.clearLogEnties();
 
     // register the stored proc with the database - only for H2!!!!
-    connection.createStatement().execute("create alias TEST_PROC for \""+this.getClass().getName()+".testProc\"");
-    
+    Statement stmt = connection.createStatement();
+    stmt.execute("create alias TEST_PROC for \"" + this.getClass().getName() + ".testProc\"");
+    stmt.close();
+
     // execute the statement
-    String query ="? = call TEST_PROC(?,?)";
-    CallableStatement stmt = connection.prepareCall(query);
-    stmt.registerOutParameter(1, Types.INTEGER);
-    stmt.setInt(2, 1);
-    stmt.setString(3,"hi");
-    stmt.execute();
-    int retVal = stmt.getInt(1);
+    String query = "? = call TEST_PROC(?,?)";
+    CallableStatement call = connection.prepareCall(query);
+    call.registerOutParameter(1, Types.INTEGER);
+    call.setInt(2, 1);
+    call.setString(3, "hi");
+    call.execute();
+    int retVal = call.getInt(1);
     assertEquals(2, retVal);
-    
+    call.close();
+
     // the last log message should have the original query
     assertTrue(getLastLogEntry().contains(query));
-    
+
     // verify that the bind parameters are resolved in the log message
     assertTrue(getLastLogEntry().contains("1,'hi'"));
-    
-    
+
+
   }
-  
+
   @Test
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
     this.clearLogEnties();
 
     // register the stored proc with the database - only for H2!!!!
     try {
-      connection.createStatement().execute("create alias TEST_PROC for \""+this.getClass().getName()+".testProc\"");
-    } catch( Exception e ) {
+      Statement stmt = connection.createStatement();
+      stmt.execute("create alias TEST_PROC for \"" + this.getClass().getName() + ".testProc\"");
+      stmt.close();
+    } catch (Exception e) {
       // ignore failures
     }
-    
+
     // execute the statement
-    String query ="? = call TEST_PROC(?,?)";
+    String query = "? = call TEST_PROC(?,?)";
     CallableStatement stmt = connection.prepareCall(query);
     stmt.registerOutParameter(1, Types.INTEGER);
     stmt.setInt(2, 1);
-    stmt.setNull(3,Types.VARCHAR);
+    stmt.setNull(3, Types.VARCHAR);
     stmt.execute();
     int retVal = stmt.getInt(1);
     assertEquals(2, retVal);
-    
+    stmt.close();
+
     // verify that the third parameter is NULL
     assertTrue(getLastLogEntry().contains("1,NULL"));
-    
-    
+
+
   }
-  
+
   public static int testProc(int param1, String param2) {
     return 2;
   }
