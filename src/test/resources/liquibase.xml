@@ -26,62 +26,8 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="1" author="quintonm">
-    <!-- used by DataSourceTest -->
-    <createTable tableName="testtable">
-      <column name="col1" type="int"/>
-    </createTable>
-  </changeSet>
 
-  <changeSet id="2" author="quintonm">
-    <!-- used by P6TestBasics -->
-    <createTable tableName="basic_test">
-      <column name="col1" type="varchar(255)"/>
-      <column name="col2" type="int"/>
-    </createTable>
-  </changeSet>
-
-  <changeSet id="3" author="quintonm">
-    <!-- used by P6TestCallableStatement -->
-    <createTable tableName="test">
-      <column name="id" type="int"/>
-      <column name="name" type="varchar(255)"/>
-    </createTable>
-  </changeSet>
-
-  <changeSet id="4" author="quintonm">
-    <!-- used by P6TestCommon -->
-    <createTable tableName="common_test">
-      <column name="col1" type="varchar(255)"/>
-      <column name="col2" type="int"/>
-    </createTable>
-  </changeSet>
-
-  <changeSet id="5" author="quintonm">
-    <!-- used by P6TestDriverMulti -->
-    <createTable tableName="multidriver_test2">
-      <column name="col1" type="varchar(255)"/>
-      <column name="col2" type="int"/>
-    </createTable>
-  </changeSet>
-
-  <changeSet id="6" author="quintonm">
-    <!-- used by P6TestPreparedStatement -->
-    <createTable tableName="prepstmt_test">
-      <column name="col1" type="varchar(255)"/>
-      <column name="col2" type="int"/>
-    </createTable>
-  </changeSet>
-
-  <changeSet id="7" author="quintonm">
-    <!-- used by P6TestPreparedStatement -->
-    <createTable tableName="stmt_test">
-      <column name="col1" type="varchar(255)"/>
-      <column name="col2" type="int"/>
-    </createTable>
-  </changeSet>
-
-  <changeSet id="8" author="quintonm">
+  <changeSet id="customers-table" author="quintonm">
     <!-- generic table to be used by all tests -->
     <createTable tableName="customers">
       <column name="id" type="int"/>
@@ -93,7 +39,7 @@
     </loadData>
   </changeSet>
 
-  <changeSet id="9" author="quintonm">
+  <changeSet id="contacts-table" author="quintonm">
     <!-- generic table to be used by all tests -->
     <createTable tableName="contacts">
       <column name="id" type="int"/>
@@ -105,7 +51,7 @@
     </loadData>
   </changeSet>
 
-  <changeSet id="10" author="quintonm">
+  <changeSet id="create-test-proc" author="quintonm">
     <!-- used by P6TestCallableStatement -->
     <preConditions onFail="CONTINUE">
       <dbms type="H2"/>
@@ -118,7 +64,7 @@
     </createProcedure>
   </changeSet>
   
-  <changeSet id="11" author="quintonm">
+  <changeSet id="create-sleep-proc" author="quintonm">
     <!-- used by P6TestOutage -->
     <preConditions onFail="CONTINUE">
       <dbms type="H2"/>

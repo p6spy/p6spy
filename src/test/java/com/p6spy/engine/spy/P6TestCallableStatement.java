@@ -21,93 +21,95 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.test.P6TestFramework;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class P6TestCallableStatement extends P6TestPreparedStatement {
+public class P6TestCallableStatement extends P6TestFramework {
+  private static final Logger log = Logger.getLogger(P6TestCallableStatement.class);
 
-  private static final Collection<Object[]> DBS_IN_TEST = Arrays.asList(new Object[][]{{"H2"}});
-
-  /**
-   * Always returns {@link #DBS_IN_TEST} as we don't
-   * need to rerun for each DB here.
-   * The thing is that not all the DBs support stored procedures. Morever syntax might differ.
-   * We want just to prove that callable statements are correctly prxied.
-   * So let's test just with H2 (default DB).
-   *
-   * @return {@link #DBS_IN_TEST}
-   */
-  @Parameters
-  public static Collection<Object[]> dbs() {
-    return DBS_IN_TEST;
-  }
-
+  // H2 is the only db with stored procs defined currently
+  private static final Collection<String> testWithStoredProcs = Arrays.asList("H2");
 
   public P6TestCallableStatement(String db) throws SQLException, IOException {
     super(db);
   }
+  
+  private boolean storedProcTestingEnabled() {
+    return testWithStoredProcs.contains(db);
+  }
+  
+  
 
   @Test
   public void testCallable() throws SQLException {
+    if( db.equals("SQLite")) {
+      // sqllite does nto support callable statements!
+      return;
+    }
 
     // tests inspired by: http://opensourcejavaphp.net/java/h2/org/h2/test/jdbc/TestCallableStatement.java.html
-    Statement stat = connection.createStatement();
     {
-      CallableStatement call = connection.prepareCall("INSERT INTO TEST VALUES(?, ?)");
-      call.setInt(1, 1);
-      call.setString(2, "Hello");
+      CallableStatement call = connection.prepareCall("INSERT INTO CONTACTS(id,name) VALUES(?, ?)");
+      call.setInt(1, 100);
+      call.setString(2, "David");
       call.execute();
       call.close();
 
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("INSERT INTO TEST VALUES") != -1);
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("INSERT INTO CONTACTS") != -1);
     }
 
     {
-      CallableStatement call = connection.prepareCall("SELECT * FROM TEST", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+      CallableStatement call = connection.prepareCall("SELECT ID,NAME FROM CONTACTS WHERE ID=100", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
       ResultSet rs = call.executeQuery();
       rs.next();
-      assertEquals(1, rs.getInt(1));
-      assertEquals("Hello", rs.getString(2));
+      assertEquals(100, rs.getInt(1));
+      assertEquals("David", rs.getString(2));
       assertFalse(rs.next());
       rs.close();
       call.close();
 
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT ID,NAME FROM CONTACTS") != -1);
     }
 
     {
-      CallableStatement call = connection.prepareCall("SELECT * FROM TEST", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
+      CallableStatement call = connection.prepareCall("SELECT ID,NAME FROM CONTACTS WHERE ID=100", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
       ResultSet rs = call.executeQuery();
       rs.next();
-      assertEquals(1, rs.getInt(1));
-      assertEquals("Hello", rs.getString(2));
+      assertEquals(100, rs.getInt(1));
+      assertEquals("David", rs.getString(2));
       assertFalse(rs.next());
       rs.close();
       call.close();
 
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT ID,NAME FROM CONTACTS") != -1);
     }
 
   }
 
   @Test
   public void testStoredProcedureNoResultSet() throws SQLException {
+    if( db.equals("SQLite")) {
+      // sqllite does nto support callable statements!
+      return;
+    }
+    if( !storedProcTestingEnabled() ) {
+      return;
+    }
+    
     this.clearLogEnties();
 
     // execute the statement
@@ -132,6 +134,14 @@ public class P6TestCallableStatement extends P6TestPreparedStatement {
 
   @Test
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
+    if( db.equals("SQLite")) {
+      // sqllite does nto support callable statements!
+      return;
+    }
+    if( !storedProcTestingEnabled() ) {
+      return;
+    }
+    
     this.clearLogEnties();
 
     // execute the statement

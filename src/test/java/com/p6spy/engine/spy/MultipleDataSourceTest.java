@@ -23,7 +23,6 @@ import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.BaseTestCase;
-import com.p6spy.engine.test.LiquibaseUtils;
 import com.p6spy.engine.test.P6TestFramework;
 import net.sf.cglib.proxy.Proxy;
 import org.eclipse.jetty.plus.jndi.Resource;
@@ -40,9 +39,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Quinton McCombs
@@ -65,20 +62,17 @@ public class MultipleDataSourceTest extends BaseTestCase {
     realDs1.setUser("sa");
     realDs1.setURL("jdbc:h2:mem:multids1");
     jndiResources.add(new Resource("jdbc/realDs1", realDs1));
-    LiquibaseUtils.setup(realDs1);
 
     JdbcDataSource realDs2 = new JdbcDataSource();
     realDs2.setUser("sa");
     realDs2.setURL("jdbc:h2:mem:multids2");
     jndiResources.add(new Resource("jdbc/realDs2", realDs2));
-    LiquibaseUtils.setup(realDs2);
 
     JDBCDataSource realDs3 = new JDBCDataSource();
     realDs3.setUser("sa");
     realDs3.setPassword("");
     realDs3.setUrl("jdbc:hsqldb:mem:multids3");
     jndiResources.add(new Resource("jdbc/realDs3", realDs3));
-    LiquibaseUtils.setup(realDs3);
 
     // create the spy wrapper data sources and bind to jndi
     P6DataSource spyDs1 = new P6DataSource();

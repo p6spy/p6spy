@@ -51,15 +51,12 @@ public class P6TestCommon extends P6TestFramework {
   @Before
   public void setUpCommon() throws SQLException {
     statement = connection.createStatement();
-    statement.executeUpdate("insert into common_test values (\'foo1\', 1)");
-    statement.executeUpdate("insert into common_test values (\'foo2\', 2)");
   }
 
   @Test
   public void testIncludeExcludeTableNames() throws SQLException {
 
-    final String query = "select 'x' from common_test";
-    final String countQuery = "select count(*) from common_test";
+    final String query = "select 'x' from customers";
 
 
     // include null && exclude null => logged
@@ -94,19 +91,19 @@ public class P6TestCommon extends P6TestFramework {
     {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setExclude(
-          "non_existing_table1,common_test,non_existing_table2,non_existing_table3");
+          "non_existing_table1,customers,non_existing_table2,non_existing_table3");
       statement.executeQuery(query);
       P6LogOptions.getActiveInstance().setExclude(
-          "-non_existing_table1,-common_test,-non_existing_table2,-non_existing_table3");
+          "-non_existing_table1,-customers,-non_existing_table2,-non_existing_table3");
       assertEquals(0, super.getLogEntiesCount());
     }
 
     // table is included => logged
     {
       super.clearLogEnties();
-      P6LogOptions.getActiveInstance().setInclude("common_test");
+      P6LogOptions.getActiveInstance().setInclude("customers");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setInclude("-common_test");
+      P6LogOptions.getActiveInstance().setInclude("-customers");
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
@@ -124,15 +121,15 @@ public class P6TestCommon extends P6TestFramework {
 
   @Test
   public void testIncludeExcludeTableNamesRegexp() throws SQLException {
-    final String query = "select 'y' from common_test";
+    final String query = "select 'y' from customers";
 
 
     // table is excluded (matches regexp) => NOT logged
     {
       super.clearLogEnties();
-      P6LogOptions.getActiveInstance().setExclude("[a-z]ommon_test");
+      P6LogOptions.getActiveInstance().setExclude("[a-z]ustomers");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setExclude("-[a-z]ommon_test");
+      P6LogOptions.getActiveInstance().setExclude("-[a-z]ustomers");
       assertEquals(0, super.getLogEntiesCount());
     }
 
@@ -149,7 +146,7 @@ public class P6TestCommon extends P6TestFramework {
 
   @Test
   public void testSqlExpressionPattern() throws SQLException {
-    final String query = "select 'y' from common_test";
+    final String query = "select 'y' from customers";
 
     // sql expression NOT matched => NOT logged
     {
@@ -179,7 +176,7 @@ public class P6TestCommon extends P6TestFramework {
 
     // test rollback logging
     super.clearLogEnties();
-    String query = "select 'y' from common_test";
+    String query = "select 'y' from customers";
     statement.executeQuery(query);
     assertTrue(super.getLastLogEntry().contains(query));
     statement.close();  // required for sqllite
@@ -189,7 +186,7 @@ public class P6TestCommon extends P6TestFramework {
 
     // test commit logging
     super.clearLogEnties();
-    query = "select 'y' from common_test";
+    query = "select 'y' from customers";
     statement.executeQuery(query);
     assertTrue(super.getLastLogEntry().contains(query));
     connection.commit();
@@ -197,11 +194,11 @@ public class P6TestCommon extends P6TestFramework {
 
     // test debug logging
     super.clearLogEnties();
-    P6LogOptions.getActiveInstance().setExclude("common_test");
+    P6LogOptions.getActiveInstance().setExclude("customers");
     P6LogOptions.getActiveInstance().setExcludecategories("-debug");
-    query = "select 'y' from common_test";
+    query = "select 'y' from customers";
     statement.executeQuery(query);
-    P6LogOptions.getActiveInstance().setExclude("-common_test");
+    P6LogOptions.getActiveInstance().setExclude("-customers");
     P6LogOptions.getActiveInstance().setExcludecategories("debug");
     assertTrue(super.getLastLogEntry().contains("intentionally"));
 
@@ -220,7 +217,7 @@ public class P6TestCommon extends P6TestFramework {
   private void testResultAndResultSetCategory(final boolean resultCategoryNotExcluded,
                                               final boolean resultsetCategoryNotExcluded)
       throws SQLException {
-    final String query = "select col1, col2 from common_test";
+    final String query = "select id, name from customers where id in (1,2)";
     P6LogOptions.getActiveInstance().setExcludecategories(
         (resultCategoryNotExcluded ? "-" : "") + "result," + (resultsetCategoryNotExcluded ? "-" : "")
             + "resultset");
@@ -228,8 +225,8 @@ public class P6TestCommon extends P6TestFramework {
     super.clearLogEnties();
 
     while (resultSet.next()) {
-      String col1 = resultSet.getString("col1");
-      assertTrue(col1.startsWith("foo"));
+      String col1 = resultSet.getString("name");
+      assertTrue(col1.startsWith("david") || col1.startsWith("mary"));
     }
     int resultCount = 0;
     int resultSetCount = 0;
@@ -262,7 +259,7 @@ public class P6TestCommon extends P6TestFramework {
   public void testMessageFormatStrategies() throws Exception {
     // SingleLineFormat case (by default)
     {
-      String query = "select count(*) from common_test";
+      String query = "select count(*) from customers";
       statement.executeQuery(query);
       assertFalse(super.getLastLogEntry().contains("\n"));
     }
@@ -270,7 +267,7 @@ public class P6TestCommon extends P6TestFramework {
     // MultiLineFormat case
     {
       P6SpyOptions.getActiveInstance().setLogMessageFormat(MultiLineFormat.class.getName());
-      String query = "select count(*) from common_test";
+      String query = "select count(*) from customers";
       statement.executeQuery(query);
       assertTrue(super.getLastLogEntry().contains("\n"));
     }
@@ -285,7 +282,7 @@ public class P6TestCommon extends P6TestFramework {
     P6SpyOptions.getActiveInstance().setStackTrace("true");
 
     // perform a query & make sure we get the stack trace
-    String query = "select 'y' from common_test";
+    String query = "select 'y' from customers";
     statement.executeQuery(query);
     assertTrue(super.getLastLogEntry().contains(query));
     assertTrue(super.getLastLogStackTrace().contains("Stack"));
@@ -293,7 +290,7 @@ public class P6TestCommon extends P6TestFramework {
     // filter on stack trace that will not match
     super.clearLastLogStackTrace();
     P6SpyOptions.getActiveInstance().setStackTraceClass("com.dont.match");
-    query = "select 'a' from common_test";
+    query = "select 'a' from customers";
     statement.executeQuery(query);
     // this will actually match - just the stack trace wont fire
     assertTrue(super.getLastLogEntry().contains(query));
@@ -301,7 +298,7 @@ public class P6TestCommon extends P6TestFramework {
 
     super.clearLastLogStackTrace();
     P6SpyOptions.getActiveInstance().setStackTraceClass("com.p6spy");
-    query = "select 'b' from common_test";
+    query = "select 'b' from customers";
     statement.executeQuery(query);
     assertTrue(super.getLastLogEntry().contains(query));
     assertTrue(super.getLastLogStackTrace().contains("Stack"));

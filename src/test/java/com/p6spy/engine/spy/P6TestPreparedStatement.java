@@ -44,20 +44,9 @@ public class P6TestPreparedStatement extends P6TestFramework {
   @Test
   public void testExecuteQuery() {
     try {
-      // insert test data
-      String update = "insert into prepstmt_test values (?, ?)";
-      PreparedStatement prep = getPreparedStatement(update);
-      prep.setString(1, "execQueryTest");
-      prep.setInt(2, 1);
-      prep.executeUpdate();
-      prep.setString(1, "execQueryTest");
-      prep.setInt(2, 2);
-      prep.executeUpdate();
-      prep.close();
-
-      String query = "select * from prepstmt_test where col1 = ?";
-      prep = getPreparedStatement(query);
-      prep.setString(1, "execQueryTest");
+      String query = "select * from customers where id = ?";
+      PreparedStatement prep = getPreparedStatement(query);
+      prep.setInt(1, 1);
       ResultSet rs = prep.executeQuery();
 
       // verify that we got back a proxy for the result set
@@ -74,62 +63,40 @@ public class P6TestPreparedStatement extends P6TestFramework {
   }
 
   @Test
+  public void testExecute() {
+    try {
+      // test a basic insert
+      String update = "insert into customers (id,name) values (?, ?)";
+      PreparedStatement prep = getPreparedStatement(update);
+      prep.setString(2, "yoller");
+      prep.setInt(1, 100);
+      prep.execute();
+      prep.close();
+      assertTrue(super.getLastLogEntry().contains(update));
+      assertTrue(super.getLastLogEntry().contains("yoller"));
+      assertTrue(super.getLastLogEntry().contains("100"));
+
+      prep.close();
+    } catch (Exception e) {
+      fail(e.getMessage() + " due to error: " + getStackTrace(e));
+    }
+  }
+
+  @Test
   public void testExecuteUpdate() {
     try {
       // test a basic insert
-      String update = "insert into prepstmt_test values (?, ?)";
+      String update = "update customers set name=? where id=?";
       PreparedStatement prep = getPreparedStatement(update);
-      prep.setString(1, "miller");
+      prep.setString(1, "yoller");
       prep.setInt(2, 1);
-      prep.executeUpdate();
+      int rowsUpdated = prep.executeUpdate();
       prep.close();
       assertTrue(super.getLastLogEntry().contains(update));
-      assertTrue(super.getLastLogEntry().contains("miller"));
+      assertTrue(super.getLastLogEntry().contains("yoller"));
       assertTrue(super.getLastLogEntry().contains("1"));
+      assertEquals(1, rowsUpdated);
 
-
-      // test dynamic allocation of P6_MAX_FIELDS
-      int MaxFields = 10;
-      StringBuffer bigSelect = new StringBuffer(MaxFields);
-      bigSelect.append("select count(*) from prepstmt_test where");
-      for (int i = 0; i < MaxFields; i++) {
-        if (i > 0) {
-          bigSelect.append(" or ");
-        }
-        bigSelect.append(" col2=?");
-      }
-
-      prep = getPreparedStatement(bigSelect.toString());
-      for (int i = 1; i <= MaxFields; i++) {
-        prep.setInt(i, i);
-      }
-      prep.close();
-
-      // test batch inserts
-      update = "insert into prepstmt_test values (?,?)";
-      prep = getPreparedStatement(update);
-      prep.setString(1, "danny");
-      prep.setInt(2, 2);
-      prep.addBatch();
-      prep.setString(1, "denver");
-      prep.setInt(2, 3);
-      prep.addBatch();
-      prep.setString(1, "aspen");
-      prep.setInt(2, 4);
-      prep.addBatch();
-      prep.executeBatch();
-      assertTrue(super.getLastLogEntry().contains(update));
-      assertTrue(super.getLastLogEntry().contains("aspen"));
-      assertTrue(super.getLastLogEntry().contains("4"));
-      prep.close();
-
-      String query = "select count(*) from prepstmt_test";
-      prep = getPreparedStatement(query);
-      ResultSet rs = prep.executeQuery();
-      rs.next();
-      assertEquals(4, rs.getInt(1));
-
-      rs.close();
       prep.close();
     } catch (Exception e) {
       fail(e.getMessage() + " due to error: " + getStackTrace(e));

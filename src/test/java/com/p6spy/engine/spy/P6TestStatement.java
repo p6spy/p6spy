@@ -46,10 +46,10 @@ public class P6TestStatement extends P6TestFramework {
     Statement statement = null;
 
     try {
-      ResultSet rs = null;
+      ResultSet rs;
 
       // test a basic insert
-      String update = "insert into STMT_TEST values (\'bob\', 5)";
+      String update = "insert into customers(name,id) values ('bob', 100)";
       statement = connection.createStatement();
 
       // as executeUpdate Javadocs say:
@@ -69,7 +69,7 @@ public class P6TestStatement extends P6TestFramework {
       assertTrue("neither no result indicated, nor statement is not null", noResult || statement.getResultSet() == null);
 
       // test a basic select
-      String query = "select count(*) from stmt_test";
+      String query = "select count(*) from customers where id=100";
       rs = statement.executeQuery(query);
       assertTrue(super.getLastLogEntry().contains(query));
       rs.next();
@@ -78,16 +78,16 @@ public class P6TestStatement extends P6TestFramework {
 
       try {
         // test batch inserts
-        update = "insert into stmt_test values (\'jim\', 6)";
+        update = "insert into customers(name,id) values ('jim', 101)";
         statement.addBatch(update);
-        update = "insert into stmt_test values (\'billy\', 7)";
+        update = "insert into customers(name,id) values ('billy', 102)";
         statement.addBatch(update);
-        update = "insert into stmt_test values (\'bambi\', 8)";
+        update = "insert into customers(name,id) values ('bambi', 103)";
         statement.addBatch(update);
         statement.executeBatch();
         assertTrue(super.getLastLogEntry().contains(update));
 
-        query = "select count(*) from stmt_test";
+        query = "select count(*) from customers where id >= 100";
         rs = statement.executeQuery(query);
         rs.next();
         assertEquals(4, rs.getInt(1));
@@ -107,20 +107,14 @@ public class P6TestStatement extends P6TestFramework {
 
   @Test
   public void testExecutionThreshold() throws SQLException {
-    Statement statement = null;
+    Statement statement = connection.createStatement();
 
     try {
-      // Add some data into the table
-      String update = "insert into stmt_test values (\'bob\', 5)";
-      statement = connection.createStatement();
-      statement.executeUpdate(update);
-      assertTrue(super.getLastLogEntry().contains(update));
-
       // set the execution threshold very low
       P6LogOptions.getActiveInstance().setExecutionThreshold("0");
 
       // test a basic select
-      String query = "select count(*) from stmt_test";
+      String query = "select count(*) from customers";
       ResultSet rs = statement.executeQuery(query);
       assertTrue(super.getLastLogEntry().contains(query));
       // finally just make sure the query executed!
@@ -132,7 +126,7 @@ public class P6TestStatement extends P6TestFramework {
       P6LogOptions.getActiveInstance().setExecutionThreshold("10000");
 
       // test a basic select
-      String nextQuery = "select count(1) from stmt_test where 1 = 2";
+      String nextQuery = "select count(*) from customers where 1 = 2";
       rs = statement.executeQuery(nextQuery);
       // make sure the previous query is still the last query
       assertTrue(super.getLastLogEntry().contains(query));

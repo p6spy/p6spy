@@ -23,6 +23,7 @@ import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.P6Core;
 import com.p6spy.engine.spy.P6SpyOptions;
+import com.p6spy.engine.spy.P6TestUtil;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.option.SpyDotProperties;
 import org.apache.log4j.Logger;
@@ -40,32 +41,31 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
 
 /**
  * Base test case for tests which should execute against all databases defined for testing.
- * The list of database is defined by the system property 'DB'.  It should be set to a 
+ * The list of database is defined by the system property 'DB'.  It should be set to a
  * comma separated list of thr database names.  If not set, it defaults to H2.
  * <p>
- *   Example: MySQL,PostgresSQL,H2,HSQLDB,SQLite
+ * Example: MySQL,PostgresSQL,H2,HSQLDB,SQLite
  * </p>
  */
 public abstract class P6TestFramework extends BaseTestCase {
   private static final Logger log = Logger.getLogger(P6TestFramework.class);
 
   public static final String TEST_FILE_PATH = "target/test-classes/com/p6spy/engine/spy";
-  
+
   protected final String db;
 
   protected Connection connection = null;
 
   public P6TestFramework(String db) throws SQLException, IOException {
     this.db = db;
-    final File p6TestProperties = new File (TEST_FILE_PATH, "P6Test_" + db + ".properties");
+    final File p6TestProperties = new File(TEST_FILE_PATH, "P6Test_" + db + ".properties");
     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
-    log.info("P6Spy will be configured using "+p6TestProperties.getName());
-    
+    log.info("P6Spy will be configured using " + p6TestProperties.getName());
+
     // make sure to reinit for each Driver run as we run parametrized builds
     // and need to have fresh stuff for every specific driver
     P6Core.reinit();
@@ -75,7 +75,7 @@ public abstract class P6TestFramework extends BaseTestCase {
   public static Collection<Object[]> dbs() {
     Collection<Object[]> result;
     String dbList = (System.getProperty("DB") == null ? "H2" : System.getProperty("DB"));
-    
+
     if (dbList.contains(",")) {
       Object[] dbs = dbList.split(",");
       Object[][] params = new Object[dbs.length][1];
@@ -86,50 +86,44 @@ public abstract class P6TestFramework extends BaseTestCase {
     } else {
       result = Arrays.asList(new Object[][]{{dbList}});
     }
-    
+
     return result;
   }
-    
+
   @Before
   public void setUpFramework() throws Exception {
-      Collection<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
-      String user = P6TestOptions.getActiveInstance().getUser();
-      String password = P6TestOptions.getActiveInstance().getPassword();
-      String url = P6TestOptions.getActiveInstance().getUrl();
+    Collection<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
+    String user = P6TestOptions.getActiveInstance().getUser();
+    String password = P6TestOptions.getActiveInstance().getPassword();
+    String url = P6TestOptions.getActiveInstance().getUrl();
 
-      if( driverNames != null && !driverNames.isEmpty()) {
-        for (String driverName : driverNames) {
-          P6Util.forName(driverName);                
-        }
+    if (driverNames != null && !driverNames.isEmpty()) {
+      for (String driverName : driverNames) {
+        P6Util.forName(driverName);
       }
+    }
 
-      Driver driver = DriverManager.getDriver(url);
-      log.info("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
-      connection = DriverManager.getConnection(url, user, password);
+    Driver driver = DriverManager.getDriver(url);
+    log.info("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
+    connection = DriverManager.getConnection(url, user, password);
 
-      printAllDrivers();
-      LiquibaseUtils.setup(url, user, password);
+    P6TestUtil.printAllDrivers();
+    P6TestUtil.setupTestData(url, user, password);
 
 
   }
 
   @After
-  public void closeConnection( ) throws Exception {
-    if (connection != null && !connection.isClosed() ) {
+  public void closeConnection() throws Exception {
+    if (connection != null && !connection.isClosed()) {
       connection.close();
     }
   }
 
   protected static String getStackTrace(Exception e) {
-      CharArrayWriter c = new CharArrayWriter();
-      e.printStackTrace(new PrintWriter(c));
-      return c.toString();
-  }
-
-  protected static void printAllDrivers() {
-    for (Enumeration e = DriverManager.getDrivers(); e.hasMoreElements(); ) {
-      log.info("1 DRIVER FOUND == " + e.nextElement());
-    }
+    CharArrayWriter c = new CharArrayWriter();
+    e.printStackTrace(new PrintWriter(c));
+    return c.toString();
   }
 
   //
@@ -146,12 +140,12 @@ public abstract class P6TestFramework extends BaseTestCase {
     failOnNonP6TestLoggerUsage();
     return ((P6TestLogger) P6LogQuery.getLogger()).getLastEntry();
   }
-  
+
   protected void clearLogEnties() {
     failOnNonP6TestLoggerUsage();
     ((P6TestLogger) P6LogQuery.getLogger()).clearLogEntries();
   }
-  
+
   protected int getLogEntiesCount() {
     failOnNonP6TestLoggerUsage();
     return ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size();

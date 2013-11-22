@@ -43,16 +43,16 @@ public class P6TestBasics extends P6TestFramework {
   public void sqltests() throws SQLException {
 
     // insert test
-    String insert = "insert into basic_test values (\'bob\', 5)";
+    String insert = "insert into customers(name,id) values (\'bob\', 100)";
     Statement statement = connection.createStatement();
     statement.executeUpdate(insert);
 
     // update test
-    String update = "update basic_test set col1 = \'bill\' where col2 = 5";
+    String update = "update customers set name = \'bill\' where id = 100";
     statement.executeUpdate(update);
 
     // query test
-    String query = "select col1 from basic_test where col2 = 5";
+    String query = "select name from customers where id = 100";
     ResultSet rs = statement.executeQuery(query);
     rs.next();
     assertEquals(rs.getString(1), "bill");
@@ -60,28 +60,28 @@ public class P6TestBasics extends P6TestFramework {
     statement.close();
 
     // prepared test
-    PreparedStatement ps = connection.prepareStatement("insert into basic_test values (?, ?)");
+    PreparedStatement ps = connection.prepareStatement("insert into customers(name,id) values (?, ?)");
     ps.setString(1, "joe");
-    ps.setInt(2, 6);
+    ps.setInt(2, 200);
     ps.executeUpdate();
     ps.setString(1, "andy");
-    ps.setInt(2, 7);
+    ps.setInt(2, 201);
     ps.execute();
     ps.close();
 
-    ps = connection.prepareStatement("update basic_test set col1 = ? where col2 = ?");
+    ps = connection.prepareStatement("update customers set name = ? where id = ?");
     ps.setString(1, "charles");
-    ps.setInt(2, 6);
+    ps.setInt(2, 200);
     ps.executeUpdate();
     ps.setString(1, "bobby");
-    ps.setInt(2, 7);
+    ps.setInt(2, 201);
     ps.execute();
     ps.close();
 
 
-    ps = connection.prepareStatement("select col1 from basic_test where col1 = ? and col2 = ?");
+    ps = connection.prepareStatement("select name from customers where name = ? and id = ?");
     ps.setString(1, "charles");
-    ps.setInt(2, 6);
+    ps.setInt(2, 200);
     rs = ps.executeQuery();
     rs.next();
     assertEquals("charles", rs.getString(1));

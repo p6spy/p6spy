@@ -24,7 +24,6 @@ import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.BaseTestCase;
-import com.p6spy.engine.test.LiquibaseUtils;
 import com.p6spy.engine.test.P6TestFramework;
 import net.sf.cglib.proxy.Proxy;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -45,9 +44,7 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Quinton McCombs
@@ -129,7 +126,7 @@ public class DataSourceTest extends BaseTestCase {
     realDs.setUseDriverManager(true);
     realDsResource = new Resource("jdbc/realDs", realDs);
 
-    LiquibaseUtils.setup(realDs);
+    P6TestUtil.setupTestData(realDs);
 
 
     // get the data source from JNDI
@@ -147,7 +144,7 @@ public class DataSourceTest extends BaseTestCase {
 
     //con.createStatement().execute("create table testtable (col1 integer)");
     Statement stmt = con.createStatement();
-    stmt.execute("select 1 from testtable");
+    stmt.execute("select 1 from customers");
     stmt.close();
     assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select 1") != -1);
     assertEquals("Incorrect number of spy log messages", 1, ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size());
@@ -165,7 +162,7 @@ public class DataSourceTest extends BaseTestCase {
     realDs.setUseDriverManager(false);
     realDsResource = new Resource("jdbc/realDs", realDs);
 
-    LiquibaseUtils.setup(realDs);
+    P6TestUtil.setupTestData(realDs);
 
     // get the data source from JNDI
     DataSource ds = new JndiDataSourceLookup().getDataSource("jdbc/spyDs");
