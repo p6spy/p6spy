@@ -105,7 +105,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
 
   @Test
   public void testCallingSetMethodsOnStatementInterface() throws SQLException {
-    String sql = "select * from prepstmt_test where col1 = ?";
+    String sql = "select * from customers where id = ?";
     PreparedStatement prep = getPreparedStatement(sql);
 
     prep.setMaxRows(1);
