@@ -51,33 +51,25 @@ sudo chmod 755 /usr/bin/free
 
 # Install the Oracle 10g dependant packages
 sudo apt-get install -qq --force-yes libc6:i386
-sudo apt-get install -qq bc 
+# travis needs the "apt-transport-https" to enable https transport
+sudo apt-get install -qq bc apt-transport-https
 
-# travis hates the oracle repo => direct download
-# but vagrant can cache apt-get packages (prevent redownload), so let's leave both for now
-if [ -z "$TRAVIS_BRANCH" ]; then
-	# add Oracle repo + key
-	sudo bash -c 'echo "deb http://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
-	wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
-	# sudo sh -c 'apt-get update -qq; true' # just to prevent stopping on error
-	sudo apt-get update -qq
-	# sudo apt-get update -qq | true
+# add Oracle repo + key (please note https is a must here, otherwise "apt-get update" fails for this repo with the "Undetermined error")
+sudo bash -c 'echo "deb https://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
+wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
+sudo apt-get update -qq
 
-	# only download the package, to manually install afterwards
-	sudo apt-get install -qq --force-yes -d oracle-xe-universal:i386
-	sudo apt-get install -qq --force-yes libaio:i386
+# only download the package, to manually install afterwards
+sudo apt-get install -qq --force-yes -d oracle-xe-universal:i386
+sudo apt-get install -qq --force-yes libaio:i386
 
-	# remove key + repo (to prevent failures on next updates)
-	sudo apt-key del B38A8516
-	sudo bash -c 'rm -rf /etc/apt/sources.list.d/oracle.list'
-	sudo apt-get update -qq
-	sudo apt-get autoremove -qq
-else
-	wget -qO /tmp/libaio_0.3.104-1_i386.deb http://oss.oracle.com/debian/dists/unstable/main/binary-i386/libaio_0.3.104-1_i386.deb
-	sudo dpkg -i --force-architecture /tmp/libaio_0.3.104-1_i386.deb
-	sudo wget -qO /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb http://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe-universal_10.2.0.1-1.1_i386.deb
-fi  
+# remove key + repo (to prevent failures on next updates)
+sudo apt-key del B38A8516
+sudo bash -c 'rm -rf /etc/apt/sources.list.d/oracle.list'
+sudo apt-get update -qq
+sudo apt-get autoremove -qq
 
+# remove bc from the dependencies of the oracle-xe-universal package (to keep 64bit one installed)
 mkdir /tmp/oracle_unpack
 dpkg-deb -x /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb /tmp/oracle_unpack
 cd /tmp/oracle_unpack
