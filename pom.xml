@@ -170,8 +170,10 @@
           <!-- to enable remote JMX testing, 
             	see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
 		  <!-- to workaround oracle timezone issue: http://stackoverflow.com/questions/9156379/ora-01882-timezone-region-not-found -->
+		  <!-- to get rid of DB2 traces => -Ddb2.jcc.override.traceLevel=0
+		  	see: http://publib.boulder.ibm.com/infocenter/idshelp/v111/index.jsp?topic=/com.ibm.jccids.doc/com.ibm.db2.luw.apdv.java.doc/doc/r0052075.htm -->
           <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false
-            -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false -Doracle.jdbc.timezoneAsRegion=false
+            -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false -Doracle.jdbc.timezoneAsRegion=false -Ddb2.jcc.override.traceLevel=0
           </argLine>
           <includes>
             <include>**/P6Test*.java</include>
