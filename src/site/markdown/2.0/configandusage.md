@@ -181,6 +181,10 @@ in section: [Configuration and Usage](#confusage)):
     # class to use for formatting log messages (default is: com.p6spy.engine.spy.appender.SingleLineFormat)
     #logMessageFormat=com.p6spy.engine.spy.appender.SingleLineFormat
 
+    # format that is used for logging of the date/time/... (has to be compatible with java.text.SimpleDateFormat)
+    # (default is dd-MMM-yy)
+    #databaseDialectDateFormat=dd-MMM-yy
+
     #The following are for log4j logging only
     #Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here
     #once you require different behavior, provide your own log4j configuration file (holding these properties) 
