@@ -24,9 +24,15 @@ configuration layers (including defaults) to properly override.modify those.
 The `spy.properties` configuration file can be located in various places.  The following locations are searched
 to locate the file.  
 
+1. The file name configured in the system property "spy.properties"
 1. The current working directory
 1. The directory name configured in the system property "p6.home"
 1. The classpath
+
+## Properties exposal via JMX
+
+Please note that all the properties are exposed via JMX. So you can use your tool of choice (e.g.,JConsole) to view/change them. 
+Moreover reload operation is exposed as well. To provide on-demand reload option.
 
 ## <a name="settings">Common Property File Settings</a>
 
@@ -454,15 +460,21 @@ the `com.p6spy.engine.spy.appender.MessageFormattingStrategy` interface and plac
 
 ## Command Line Options
 
-Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag.
+Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag (system property), adding the the prefix: 
+
+	p6spy.config.
 
 An example follows:
 
-    java -Dp6logfile=my.log -Dp6trace=true
+    java -Dp6spy.config.logfile=my.log -Dp6spy.config.append=true
 
 In addition, you can set the default directory to look for spy.properties, as shown in the following example:
 
-    java -Dp6.home=c:\orion\lib
+    java -Dp6.home=c:\jboss\lib
+
+Moreover to set different file to be used as the properties file (as an example: another_spy.properties), it should be specified using system property "spy.properties" as:
+
+	java -Dspy.properties=c:\jboss\lib\another_spy.properties
 
 ## Log File Format
 
@@ -498,29 +510,6 @@ The log file format of spy.log follows:
   the effective SQL statement that is passed to the database. Of course, the database
   still sees the prepared statement, but this string is a convenient way to see the
   actual values being sent to the database.
-
-## The JSP Application
-
-P6Spy includes a JSP application. Use this application to view P6Spy configuration information and
-to create a demarcation in the log file. To use the JSP application, complete the following steps:
-
-1. Copy **p6spy-webcontrol.war** into the deployment directory of your
-  application server. In JBoss, for example, the directory might be `C:\JBoss\server\web\deploy`.
-1. Once **p6spy.war** is deployed, access the application by navigating
-  to `http://machine:port/p6spy-webcontrol`.  For example, if you are running the application on your
-  own machine, and using Tomcat as the servlet engine, navigate to
-  `http://localhost:8080/p6spy-webcontrol`.
-
-## The JBoss JMX Application
-
-P6Spy includes a JMX application, tested with JBoss 2.4.x, that allows the P6Spy configuration to be managed via JMX. To use this
-
-1. In spy.properties set reloadproperties=true
-1. Open JBoss.jcml and insert the following after the "JMX Adaptors" section:
-
-        <mbean code="com.p6spy.management.jboss.P6SpyManager" name=":service=P6SpyManager"/>
-
-1. Access the application by using the default JMX port (http://localhost:8082/) and clicking on "service=P6SpyManager".
 
 ## Building the Source
 
