@@ -32,8 +32,10 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -41,75 +43,38 @@ import static org.junit.Assert.*;
 public class P6TestCallableStatement extends P6TestFramework {
   private static final Logger log = Logger.getLogger(P6TestCallableStatement.class);
 
-  // H2 is the only db with stored procs defined currently
-  private static final Collection<String> testWithStoredProcs = Arrays.asList("H2");
+  @Parameterized.Parameters(name = "{index}: {0}")
+  public static Collection<Object[]> dbs() {
+    Collection<Object[]> result;
+    String dbList = (System.getProperty("DB") == null ? "H2" : System.getProperty("DB"));
+
+    if (dbList.contains(",")) {
+      Object[] dbs = dbList.split(",");
+      List<Object[]> dbsToTest = new ArrayList<Object[]>();
+      for (int i = 0; i < dbs.length; i++) {
+        //  Check against list of databases with stored procs
+        // As procs become available for other databases, enable them here.
+        if( Arrays.asList("H2").contains(dbs[i])) {
+          dbsToTest.add(new Object[]{dbs[i]});
+        } else {
+          log.info("Skipping "+dbs[i]+" because stored procedures have not been created for testing");
+        }
+      }
+      result = dbsToTest;
+    } else {
+      result = Arrays.asList(new Object[][]{{dbList}});
+    }
+
+    return result;
+  }
+
 
   public P6TestCallableStatement(String db) throws SQLException, IOException {
     super(db);
   }
   
-  private boolean storedProcTestingEnabled() {
-    return testWithStoredProcs.contains(db);
-  }
-  
-  
-
-  @Test
-  public void testCallable() throws SQLException {
-    if( db.equals("SQLite")) {
-      // sqllite does not support callable statements!
-      return;
-    }
-
-    // tests inspired by: http://opensourcejavaphp.net/java/h2/org/h2/test/jdbc/TestCallableStatement.java.html
-    {
-      CallableStatement call = connection.prepareCall("insert into contacts(id,name) values(?, ?)");
-      call.setInt(1, 100);
-      call.setString(2, "David");
-      call.execute();
-      call.close();
-
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("insert into contacts") != -1);
-    }
-
-    {
-      CallableStatement call = connection.prepareCall("select id,name from contacts where id=100", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-      ResultSet rs = call.executeQuery();
-      rs.next();
-      assertEquals(100, rs.getInt(1));
-      assertEquals("David", rs.getString(2));
-      assertFalse(rs.next());
-      rs.close();
-      call.close();
-
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select id,name from contacts") != -1);
-    }
-
-    {
-      CallableStatement call = connection.prepareCall("select id,name from contacts where id=100", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
-      ResultSet rs = call.executeQuery();
-      rs.next();
-      assertEquals(100, rs.getInt(1));
-      assertEquals("David", rs.getString(2));
-      assertFalse(rs.next());
-      rs.close();
-      call.close();
-
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select id,name from contacts") != -1);
-    }
-
-  }
-
   @Test
   public void testStoredProcedureNoResultSet() throws SQLException {
-    if( db.equals("SQLite")) {
-      // sqllite does not support callable statements!
-      return;
-    }
-    if( !storedProcTestingEnabled() ) {
-      return;
-    }
-    
     this.clearLogEnties();
 
     // execute the statement
@@ -128,20 +93,10 @@ public class P6TestCallableStatement extends P6TestFramework {
 
     // verify that the bind parameters are resolved in the log message
     assertTrue(getLastLogEntry().contains("1,'hi'"));
-
-
   }
 
   @Test
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
-    if( db.equals("SQLite")) {
-      // sqllite does not support callable statements!
-      return;
-    }
-    if( !storedProcTestingEnabled() ) {
-      return;
-    }
-    
     this.clearLogEnties();
 
     // execute the statement
@@ -157,8 +112,6 @@ public class P6TestCallableStatement extends P6TestFramework {
 
     // verify that the third parameter is NULL
     assertTrue(getLastLogEntry().contains("1,NULL"));
-
-
   }
 
 }
