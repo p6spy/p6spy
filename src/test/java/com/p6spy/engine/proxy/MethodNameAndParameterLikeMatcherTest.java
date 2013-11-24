@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.proxy;
 
+import com.p6spy.engine.test.BaseTestCase;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -28,7 +29,7 @@ import static org.junit.Assert.assertTrue;
  * @author Quinton McCombs
  * @since 09/2013
  */
-public class MethodNameAndParameterLikeMatcherTest {
+public class MethodNameAndParameterLikeMatcherTest extends BaseTestCase {
 
   @Test
   public void testParameterMatches() throws Exception {

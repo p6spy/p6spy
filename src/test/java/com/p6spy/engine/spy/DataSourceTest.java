@@ -35,13 +35,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.sql.Statement;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
@@ -71,7 +71,8 @@ public class DataSourceTest extends BaseTestCase {
   @Before
   public void setup() throws Exception {
     // make sure to reinit properly
-    new P6TestFramework("ds") {};
+    new P6TestFramework("ds") {
+    };
 
     user = "sa";
     password = null;
@@ -82,13 +83,14 @@ public class DataSourceTest extends BaseTestCase {
     // I suspect non-proper cleanup in some of the previous tests causing this error
 //  url = "jdbc:h2:mem:p6spy";
     url = "jdbc:h2:mem:p6spyDSTest";
-    driverClass ="org.h2.Driver";
+    driverClass = "org.h2.Driver";
 
     P6DataSource spyDs = new P6DataSource();
     spyDs.setRealDataSource("jdbc/realDs");
     spyDsResource = new Resource("jdbc/spyDs", spyDs);
 
     ((P6TestLogger) P6LogQuery.getLogger()).clearLogs();
+
   }
 
   @After
@@ -113,7 +115,7 @@ public class DataSourceTest extends BaseTestCase {
   }
 
   @Test
-  public void testGenericDataSourceWithDriverManager() throws SQLException, NamingException {
+  public void testGenericDataSourceWithDriverManager() throws Exception {
     // Create and bind the real data source
     // Note: This will get the driver from the DriverManager
     realDs = new TestBasicDataSource();
@@ -123,6 +125,8 @@ public class DataSourceTest extends BaseTestCase {
     realDs.setPassword(password);
     realDs.setUseDriverManager(true);
     realDsResource = new Resource("jdbc/realDs", realDs);
+
+    P6TestUtil.setupTestData(realDs);
 
 
     // get the data source from JNDI
@@ -138,14 +142,16 @@ public class DataSourceTest extends BaseTestCase {
     // now verify that the proxy is OUR proxy!
     assertTrue("Wrong invocation handler!", Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler);
 
-    con.createStatement().execute("create table testtable (col1 integer)");
-    con.createStatement().execute("select 1 from testtable");
+    //con.createStatement().execute("create table testtable (col1 integer)");
+    Statement stmt = con.createStatement();
+    stmt.execute("select 1 from customers");
+    stmt.close();
     assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select 1") != -1);
-    assertEquals("Incorrect number of spy log messages", 2, ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size());
+    assertEquals("Incorrect number of spy log messages", 1, ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size());
   }
 
   @Test
-  public void testGenericDataSourceWithOutDriverManager() throws SQLException, NamingException {
+  public void testGenericDataSourceWithOutDriverManager() throws Exception {
     // Create and bind the real data source
     // Note: This will get the driver from the DriverManager
     realDs = new TestBasicDataSource();
@@ -155,6 +161,8 @@ public class DataSourceTest extends BaseTestCase {
     realDs.setPassword(password);
     realDs.setUseDriverManager(false);
     realDsResource = new Resource("jdbc/realDs", realDs);
+
+    P6TestUtil.setupTestData(realDs);
 
     // get the data source from JNDI
     DataSource ds = new JndiDataSourceLookup().getDataSource("jdbc/spyDs");
@@ -195,7 +203,7 @@ public class DataSourceTest extends BaseTestCase {
           @Override
           public Connection createConnection() throws SQLException {
             Driver driver;
-            
+
             try {
               driver = (Driver) P6Util.forName(getDriverClassName()).newInstance();
             } catch (Exception e) {

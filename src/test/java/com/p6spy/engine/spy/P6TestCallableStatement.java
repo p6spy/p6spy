@@ -21,140 +21,97 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.test.P6TestFramework;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class P6TestCallableStatement extends P6TestPreparedStatement {
+public class P6TestCallableStatement extends P6TestFramework {
+  private static final Logger log = Logger.getLogger(P6TestCallableStatement.class);
 
-  private static final Collection<Object[]> DBS_IN_TEST = Arrays.asList(new Object[][] { { "H2" } });
-  
-  /**
-   * Always returns {@link #DBS_IN_TEST} as we don't
-   * need to rerun for each DB here.
-   * The thing is that not all the DBs support stored procedures. Morever syntax might differ. 
-   * We want just to prove that callable statements are correctly prxied.
-   * So let's test just with H2 (default DB).
-   * 
-   * @return {@link #DBS_IN_TEST}
-   */
-  @Parameters
+  @Parameterized.Parameters(name = "{index}: {0}")
   public static Collection<Object[]> dbs() {
-    return DBS_IN_TEST;
+    Collection<Object[]> result;
+    String dbList = (System.getProperty("DB") == null ? "H2" : System.getProperty("DB"));
+
+    if (dbList.contains(",")) {
+      Object[] dbs = dbList.split(",");
+      List<Object[]> dbsToTest = new ArrayList<Object[]>();
+      for (int i = 0; i < dbs.length; i++) {
+        //  Check against list of databases with stored procs
+        // As procs become available for other databases, enable them here.
+        if( Arrays.asList("H2").contains(dbs[i])) {
+          dbsToTest.add(new Object[]{dbs[i]});
+        } else {
+          log.info("Skipping "+dbs[i]+" because stored procedures have not been created for testing");
+        }
+      }
+      result = dbsToTest;
+    } else {
+      result = Arrays.asList(new Object[][]{{dbList}});
+    }
+
+    return result;
   }
 
-  
-	public P6TestCallableStatement(String db) throws SQLException, IOException {
+
+  public P6TestCallableStatement(String db) throws SQLException, IOException {
     super(db);
-  }
-	  
-    @Test
-    public void testCallable() throws SQLException {
-      
-      // tests inspired by: http://opensourcejavaphp.net/java/h2/org/h2/test/jdbc/TestCallableStatement.java.html
-      Statement stat = connection.createStatement();
-      {
-        stat.execute("CREATE TABLE TEST(ID INT, NAME VARCHAR)");
-        CallableStatement call = connection.prepareCall("INSERT INTO TEST VALUES(?, ?)");
-        call.setInt(1, 1);
-        call.setString(2, "Hello");
-        call.execute();
-      
-        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("INSERT INTO TEST VALUES") != -1);
-      }
-     
-      {
-        CallableStatement call = connection.prepareCall("SELECT * FROM TEST", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-        ResultSet rs = call.executeQuery();
-        rs.next();
-        assertEquals(1, rs.getInt(1));
-        assertEquals("Hello", rs.getString(2));
-        assertFalse(rs.next());
-        
-        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
-      }
-      
-      {
-        CallableStatement call = connection.prepareCall("SELECT * FROM TEST", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
-        ResultSet rs = call.executeQuery();
-        rs.next();
-        assertEquals(1, rs.getInt(1));
-        assertEquals("Hello", rs.getString(2));
-        assertFalse(rs.next());
-
-        assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT * FROM TEST") != -1);
-      }
-      
   }
   
   @Test
   public void testStoredProcedureNoResultSet() throws SQLException {
     this.clearLogEnties();
 
-    // register the stored proc with the database - only for H2!!!!
-    connection.createStatement().execute("create alias TEST_PROC for \""+this.getClass().getName()+".testProc\"");
-    
     // execute the statement
-    String query ="? = call TEST_PROC(?,?)";
-    CallableStatement stmt = connection.prepareCall(query);
-    stmt.registerOutParameter(1, Types.INTEGER);
-    stmt.setInt(2, 1);
-    stmt.setString(3,"hi");
-    stmt.execute();
-    int retVal = stmt.getInt(1);
+    String query = "? = call test_proc(?,?)";
+    CallableStatement call = connection.prepareCall(query);
+    call.registerOutParameter(1, Types.INTEGER);
+    call.setInt(2, 1);
+    call.setString(3, "hi");
+    call.execute();
+    int retVal = call.getInt(1);
     assertEquals(2, retVal);
-    
+    call.close();
+
     // the last log message should have the original query
     assertTrue(getLastLogEntry().contains(query));
-    
+
     // verify that the bind parameters are resolved in the log message
     assertTrue(getLastLogEntry().contains("1,'hi'"));
-    
-    
   }
-  
+
   @Test
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
     this.clearLogEnties();
 
-    // register the stored proc with the database - only for H2!!!!
-    try {
-      connection.createStatement().execute("create alias TEST_PROC for \""+this.getClass().getName()+".testProc\"");
-    } catch( Exception e ) {
-      // ignore failures
-    }
-    
     // execute the statement
-    String query ="? = call TEST_PROC(?,?)";
+    String query = "? = call test_proc(?,?)";
     CallableStatement stmt = connection.prepareCall(query);
     stmt.registerOutParameter(1, Types.INTEGER);
     stmt.setInt(2, 1);
-    stmt.setNull(3,Types.VARCHAR);
+    stmt.setNull(3, Types.VARCHAR);
     stmt.execute();
     int retVal = stmt.getInt(1);
     assertEquals(2, retVal);
-    
+    stmt.close();
+
     // verify that the third parameter is NULL
     assertTrue(getLastLogEntry().contains("1,NULL"));
-    
-    
-  }
-  
-  public static int testProc(int param1, String param2) {
-    return 2;
   }
 
 }
