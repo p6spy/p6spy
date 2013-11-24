@@ -54,6 +54,11 @@ public class BaseTestCase {
     protected void finished(final Description description) {
       log.info("Completed test " + description.getDisplayName());
     }
+
+    @Override
+    protected void failed(Throwable e, Description description) {
+      log.error("Failed test "+description.getDisplayName(), e);
+    }
   };
 
 

@@ -28,6 +28,7 @@ import java.sql.SQLException;
 
 import javax.management.JMException;
 
+import com.p6spy.engine.test.BaseTestCase;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -39,7 +40,7 @@ import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.spy.P6TestMBean;
 
-public class P6TestOptionsReload {
+public class P6TestOptionsReload extends BaseTestCase {
 
   private JmxClient jmxClient = null;
 

@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.proxy;
 
+import com.p6spy.engine.test.BaseTestCase;
 import net.sf.cglib.proxy.UndeclaredThrowableException;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class GenericInvocationHandlerTest {
+public class GenericInvocationHandlerTest extends BaseTestCase {
   @Test
   public void testInvoke() throws Exception {
 

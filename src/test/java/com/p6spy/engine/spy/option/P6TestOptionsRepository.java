@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.p6spy.engine.test.BaseTestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +33,7 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 
-public class P6TestOptionsRepository {
+public class P6TestOptionsRepository extends BaseTestCase {
 
   private P6OptionsRepository optRepo;
 

@@ -51,7 +51,8 @@ public class MultipleDataSourceTest extends BaseTestCase {
   @Before
   public void setUp() throws Exception {
     // make sure to reinit properly
-    new P6TestFramework("ds") {};
+    new P6TestFramework("ds") {
+    };
 
 
     jndiResources = new ArrayList<Resource>();
@@ -65,13 +66,13 @@ public class MultipleDataSourceTest extends BaseTestCase {
     JdbcDataSource realDs2 = new JdbcDataSource();
     realDs2.setUser("sa");
     realDs2.setURL("jdbc:h2:mem:multids2");
-    jndiResources.add( new Resource("jdbc/realDs2", realDs2));
+    jndiResources.add(new Resource("jdbc/realDs2", realDs2));
 
     JDBCDataSource realDs3 = new JDBCDataSource();
     realDs3.setUser("sa");
     realDs3.setPassword("");
     realDs3.setUrl("jdbc:hsqldb:mem:multids3");
-    jndiResources.add( new Resource("jdbc/realDs3", realDs3));
+    jndiResources.add(new Resource("jdbc/realDs3", realDs3));
 
     // create the spy wrapper data sources and bind to jndi
     P6DataSource spyDs1 = new P6DataSource();
@@ -89,10 +90,11 @@ public class MultipleDataSourceTest extends BaseTestCase {
 
   @After
   public void cleanup() {
-    for( Resource resource : jndiResources ) {
+    for (Resource resource : jndiResources) {
       try {
         resource.release();
-      } catch(Exception e) {}
+      } catch (Exception e) {
+      }
     }
   }
 
@@ -135,7 +137,7 @@ public class MultipleDataSourceTest extends BaseTestCase {
     // now verify that the proxy is OUR proxy!
     assertTrue("Wrong invocation handler!", Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler);
 
-    if(con.getMetaData().getDatabaseProductName().contains("HSQL") ) {
+    if (con.getMetaData().getDatabaseProductName().contains("HSQL")) {
       con.createStatement().execute("set database sql syntax ora true");
     }
     con.createStatement().execute("select current_date from dual");
@@ -148,11 +150,11 @@ public class MultipleDataSourceTest extends BaseTestCase {
     // get the connection
     Connection con = ds.getConnection();
 
-    if( Proxy.isProxyClass(con.getClass()) ) {
+    if (Proxy.isProxyClass(con.getClass())) {
       assertTrue("p6spy proxy is enabled!", !(Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler));
     }
 
-    if(con.getMetaData().getDatabaseProductName().contains("HSQL") ) {
+    if (con.getMetaData().getDatabaseProductName().contains("HSQL")) {
       con.createStatement().execute("set database sql syntax ora true");
     }
     con.createStatement().execute("select current_date from dual");
