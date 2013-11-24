@@ -21,6 +21,7 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.test.P6TestFramework;
+import net.sf.cglib.proxy.Proxy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,67 +43,65 @@ public class P6TestStatement extends P6TestFramework {
   }
 
   @Test
-  public void testQueryUpdate() throws SQLException {
-    Statement statement = null;
+  public void testExecute() throws SQLException {
+    String query= "insert into customers(name,id) values ('bob', 100)";
+    P6TestUtil.execute(connection, query);
 
-    try {
-      ResultSet rs;
+    // validate logging
+    assertTrue(super.getLastLogEntry().contains(query));
 
-      // test a basic insert
-      String update = "insert into customers(name,id) values ('bob', 100)";
-      statement = connection.createStatement();
+    // validate that the sql executed against the db
+    assertEquals(1, P6TestUtil.queryForInt(connection, "select count(*) from customers where id=100"));
+  }
 
-      // as executeUpdate Javadocs say:
-      // Returns either
-      // (1) the row count for SQL Data Manipulation Language (DML) statements or
-      // (2) 0 for SQL statements that return nothing
-      //
-      // most of the drivers return != 0, except SQLite, that returns == 0
-      // for the SQLite calling: rs = statement.getResultSet() fails with:
-      // SQLException statement is not executing getResultset on insert
-      //
-      // => let's check for the result and handle correctly
-      boolean noResult = 0 != statement.executeUpdate(update);
-      assertTrue(super.getLastLogEntry().contains(update));
+  public void testExecuteUpdate() throws SQLException {
+    String query= "update customers set name='xyz' where id=1";
+    int rowCount = P6TestUtil.executeUpdate(connection, query);
+    assertEquals(1, rowCount);
 
-      // most of drivers
-      assertTrue("neither no result indicated, nor statement is not null", noResult || statement.getResultSet() == null);
+    // validate logging
+    assertTrue(super.getLastLogEntry().contains(query));
 
-      // test a basic select
-      String query = "select count(*) from customers where id=100";
-      rs = statement.executeQuery(query);
-      assertTrue(super.getLastLogEntry().contains(query));
-      rs.next();
-      assertEquals(1, rs.getInt(1));
-      rs.close();
+    // validate that the sql executed against the db
+    assertEquals(1, P6TestUtil.queryForInt(connection, "select count(*) from customers where id=100"));
+  }
 
-      try {
-        // test batch inserts
-        update = "insert into customers(name,id) values ('jim', 101)";
-        statement.addBatch(update);
-        update = "insert into customers(name,id) values ('billy', 102)";
-        statement.addBatch(update);
-        update = "insert into customers(name,id) values ('bambi', 103)";
-        statement.addBatch(update);
-        statement.executeBatch();
-        assertTrue(super.getLastLogEntry().contains(update));
+  @Test
+  public void testExecuteBatch() throws SQLException {
+    P6LogOptions.getActiveInstance().setExcludecategories("-batch");
+    // test batch inserts
+    Statement stmt = connection.createStatement();
+    String sql = "insert into customers(name,id) values ('jim', 101)";
+    stmt.addBatch(sql);
+    assertTrue(super.getLastLogEntry().contains(sql));
+    assertTrue(super.getLastLogEntry().contains("|batch|"));
+    sql = "insert into customers(name,id) values ('billy', 102)";
+    stmt.addBatch(sql);
+    assertTrue(super.getLastLogEntry().contains(sql));
+    assertTrue(super.getLastLogEntry().contains("|batch|"));
 
-        query = "select count(*) from customers where id >= 100";
-        rs = statement.executeQuery(query);
-        rs.next();
-        assertEquals(4, rs.getInt(1));
-        rs.close();
-      } catch (Exception e) {
-        // you may not be able to execute this Prepared & Callable, so
-        // this is an okay error, but only this!
-        assertTrue(e.getMessage().indexOf("Unsupported feature") != -1);
-      }
+    stmt.executeBatch();
+    assertTrue(super.getLastLogEntry().contains(sql));
 
-    } finally {
-      if (statement != null) {
-        statement.close();
-      }
-    }
+    assertEquals(2, P6TestUtil.queryForInt(connection,"select count(*) from customers where id > 100"));
+
+    stmt.close();
+  }
+
+  @Test
+  public void testExecuteQuery() throws SQLException {
+    Statement stmt = connection.createStatement();
+    String query = "select count(*) from customers where id=1";
+    ResultSet rs = stmt.executeQuery(query);
+
+    // verify that we got back a proxy for the result set
+    assertTrue("Resultset was not a proxy", Proxy.isProxyClass(rs.getClass()));
+
+    // verify statement logging
+    assertTrue(super.getLastLogEntry().contains(query));
+
+    rs.close();
+    stmt.close();
   }
 
   @Test

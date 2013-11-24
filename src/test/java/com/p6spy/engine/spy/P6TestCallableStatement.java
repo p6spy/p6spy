@@ -57,23 +57,23 @@ public class P6TestCallableStatement extends P6TestFramework {
   @Test
   public void testCallable() throws SQLException {
     if( db.equals("SQLite")) {
-      // sqllite does nto support callable statements!
+      // sqllite does not support callable statements!
       return;
     }
 
     // tests inspired by: http://opensourcejavaphp.net/java/h2/org/h2/test/jdbc/TestCallableStatement.java.html
     {
-      CallableStatement call = connection.prepareCall("INSERT INTO CONTACTS(id,name) VALUES(?, ?)");
+      CallableStatement call = connection.prepareCall("insert into contacts(id,name) values(?, ?)");
       call.setInt(1, 100);
       call.setString(2, "David");
       call.execute();
       call.close();
 
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("INSERT INTO CONTACTS") != -1);
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("insert into contacts") != -1);
     }
 
     {
-      CallableStatement call = connection.prepareCall("SELECT ID,NAME FROM CONTACTS WHERE ID=100", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+      CallableStatement call = connection.prepareCall("select id,name from contacts where id=100", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
       ResultSet rs = call.executeQuery();
       rs.next();
       assertEquals(100, rs.getInt(1));
@@ -82,11 +82,11 @@ public class P6TestCallableStatement extends P6TestFramework {
       rs.close();
       call.close();
 
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT ID,NAME FROM CONTACTS") != -1);
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select id,name from contacts") != -1);
     }
 
     {
-      CallableStatement call = connection.prepareCall("SELECT ID,NAME FROM CONTACTS WHERE ID=100", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
+      CallableStatement call = connection.prepareCall("select id,name from contacts where id=100", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
       ResultSet rs = call.executeQuery();
       rs.next();
       assertEquals(100, rs.getInt(1));
@@ -95,7 +95,7 @@ public class P6TestCallableStatement extends P6TestFramework {
       rs.close();
       call.close();
 
-      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("SELECT ID,NAME FROM CONTACTS") != -1);
+      assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select id,name from contacts") != -1);
     }
 
   }
@@ -103,7 +103,7 @@ public class P6TestCallableStatement extends P6TestFramework {
   @Test
   public void testStoredProcedureNoResultSet() throws SQLException {
     if( db.equals("SQLite")) {
-      // sqllite does nto support callable statements!
+      // sqllite does not support callable statements!
       return;
     }
     if( !storedProcTestingEnabled() ) {
@@ -113,7 +113,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     this.clearLogEnties();
 
     // execute the statement
-    String query = "? = call TEST_PROC(?,?)";
+    String query = "? = call test_proc(?,?)";
     CallableStatement call = connection.prepareCall(query);
     call.registerOutParameter(1, Types.INTEGER);
     call.setInt(2, 1);
@@ -135,7 +135,7 @@ public class P6TestCallableStatement extends P6TestFramework {
   @Test
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
     if( db.equals("SQLite")) {
-      // sqllite does nto support callable statements!
+      // sqllite does not support callable statements!
       return;
     }
     if( !storedProcTestingEnabled() ) {
@@ -145,7 +145,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     this.clearLogEnties();
 
     // execute the statement
-    String query = "? = call TEST_PROC(?,?)";
+    String query = "? = call test_proc(?,?)";
     CallableStatement stmt = connection.prepareCall(query);
     stmt.registerOutParameter(1, Types.INTEGER);
     stmt.setInt(2, 1);

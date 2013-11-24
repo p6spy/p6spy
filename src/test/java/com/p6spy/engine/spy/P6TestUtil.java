@@ -90,4 +90,14 @@ public class P6TestUtil {
       log.info("1 DRIVER FOUND == " + e.nextElement());
     }
   }
+
+  public static int executeUpdate(Connection connection, String query) throws SQLException {
+    Statement stmt = null;
+    try {
+      stmt = connection.createStatement();
+      return stmt.executeUpdate(query);
+    } finally {
+      if( stmt != null) try {stmt.close();} catch(Exception e) {}
+    }
+  }
 }
