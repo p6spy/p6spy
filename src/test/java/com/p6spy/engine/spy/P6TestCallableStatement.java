@@ -19,8 +19,6 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.P6TestFramework;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -29,7 +27,6 @@ import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -54,7 +51,7 @@ public class P6TestCallableStatement extends P6TestFramework {
       for (int i = 0; i < dbs.length; i++) {
         //  Check against list of databases with stored procs
         // As procs become available for other databases, enable them here.
-        if( Arrays.asList("H2").contains(dbs[i])) {
+        if( Arrays.asList("H2","Oracle","MySQL").contains(dbs[i])) {
           dbsToTest.add(new Object[]{dbs[i]});
         } else {
           log.info("Skipping "+dbs[i]+" because stored procedures have not been created for testing");
@@ -78,7 +75,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     this.clearLogEnties();
 
     // execute the statement
-    String query = "? = call test_proc(?,?)";
+    String query = "{? = call test_proc(?,?)}";
     CallableStatement call = connection.prepareCall(query);
     call.registerOutParameter(1, Types.INTEGER);
     call.setInt(2, 1);
@@ -100,7 +97,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     this.clearLogEnties();
 
     // execute the statement
-    String query = "? = call test_proc(?,?)";
+    String query = "{? = call test_proc(?,?)}";
     CallableStatement stmt = connection.prepareCall(query);
     stmt.registerOutParameter(1, Types.INTEGER);
     stmt.setInt(2, 1);
