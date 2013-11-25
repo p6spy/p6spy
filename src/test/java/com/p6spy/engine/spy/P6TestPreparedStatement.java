@@ -19,10 +19,14 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.test.P6TestFramework;
+import net.sf.cglib.proxy.Proxy;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -30,17 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import net.sf.cglib.proxy.Proxy;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.test.P6TestFramework;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
@@ -100,9 +94,11 @@ public class P6TestPreparedStatement extends P6TestFramework {
   public void testSameColumnNameInMultipleTables() throws SQLException {
 
     // fix pending uncomment for tesing of the:   
+/*
     if ("Oracle".equals(db)) {
       return;
     }
+*/
     
     try {
         // insert test data
