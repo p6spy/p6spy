@@ -92,12 +92,6 @@ public class P6TestPreparedStatement extends P6TestFramework {
   
   @Test
   public void testSameColumnNameInMultipleTables() throws SQLException {
-
-    // fix pending uncomment for tesing of the:   
-    if ("Oracle".equals(db)) {
-      return;
-    }
-    
     try {
         // insert test data
         {
