@@ -19,12 +19,14 @@
  */
 package com.p6spy.engine.proxy;
 
+import com.p6spy.engine.common.P6Proxy;
 import com.p6spy.engine.test.BaseTestCase;
 import net.sf.cglib.proxy.UndeclaredThrowableException;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
@@ -139,6 +141,20 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
       assertEquals("Wrong exception thrown", SQLException.class, e.getClass());
     }
   }
+
+  @Test
+  public void testP6ProxyDelegate(){
+    Set set = new HashSet();
+    GenericInvocationHandler<Set> invocationHandler = new GenericInvocationHandler<Set>(set);
+    Set proxy = ProxyFactory.createProxy(set, Set.class, invocationHandler);
+
+    assertTrue(proxy instanceof P6Proxy);
+
+    HashSet underlying = (HashSet) ((P6Proxy)proxy).getUnderlying();
+
+    assertFalse(Proxy.isProxyClass(underlying.getClass()));
+  }
+
 
   public class TestDelegate implements Delegate {
     private Boolean invokedFlag;

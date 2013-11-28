@@ -46,6 +46,7 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   public GenericInvocationHandler(T underlying) {
     this.underlying = underlying;
     this.delegateMap = new HashMap<MethodMatcher, Delegate>();
+    delegateMap.put(new MethodNameMatcher("getUnderlying"), new P6ProxyDelegate(underlying));
   }
 
   /**
