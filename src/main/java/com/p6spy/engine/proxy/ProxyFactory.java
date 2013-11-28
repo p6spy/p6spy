@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.proxy;
 
+import com.p6spy.engine.common.P6Proxy;
 import net.sf.cglib.proxy.Proxy;
 
 /**
@@ -31,7 +32,7 @@ public class ProxyFactory {
     //noinspection unchecked
     return (T) Proxy.newProxyInstance(
         underlying.getClass().getClassLoader(),
-        new Class[]{interfaceClass},
+        new Class[]{interfaceClass, P6Proxy.class},
         invocationHandler);
   }
 
