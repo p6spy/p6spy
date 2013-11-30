@@ -20,8 +20,8 @@
 package com.p6spy.engine.spy;
 
 import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.test.P6TestFramework;
-import net.sf.cglib.proxy.Proxy;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,7 +78,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       ResultSet rs = prep.executeQuery();
       
       // verify that we got back a proxy for the result set
-      assertTrue("Resultset was not a proxy", Proxy.isProxyClass(rs.getClass()));
+      assertTrue("Resultset was not a proxy", ProxyFactory.isProxy(rs.getClass()));
       
       // verify the log message for the select
       assertTrue(getLastLogEntry().contains(query));

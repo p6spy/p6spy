@@ -34,8 +34,8 @@ class P6LogConnectionCreateStatementDelegate implements Delegate {
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-    Statement statement = (Statement) method.invoke(target, args);
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
+    Statement statement = (Statement) method.invoke(underlying, args);
     P6LogStatementInvocationHandler invocationHandler = new P6LogStatementInvocationHandler(statement, connectionInformation);
     return ProxyFactory.createProxy(statement, Statement.class, invocationHandler);
   }

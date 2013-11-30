@@ -21,6 +21,7 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
+import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
@@ -131,11 +132,8 @@ public class MultipleDataSourceTest extends BaseTestCase {
     // get the connection
     Connection con = ds.getConnection();
 
-    // first verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", Proxy.isProxyClass(con.getClass()));
-
-    // now verify that the proxy is OUR proxy!
-    assertTrue("Wrong invocation handler!", Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler);
+    // verify that the connection class is a proxy
+    assertTrue("Connection is not a proxy", ProxyFactory.isProxy(con.getClass()));
 
     if (con.getMetaData().getDatabaseProductName().contains("HSQL")) {
       con.createStatement().execute("set database sql syntax ora true");
@@ -150,7 +148,7 @@ public class MultipleDataSourceTest extends BaseTestCase {
     // get the connection
     Connection con = ds.getConnection();
 
-    if (Proxy.isProxyClass(con.getClass())) {
+    if (ProxyFactory.isProxy(con.getClass())) {
       assertTrue("p6spy proxy is enabled!", !(Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler));
     }
 

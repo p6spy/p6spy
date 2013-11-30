@@ -35,14 +35,14 @@ class P6OutagePreparedStatementSetParameterValueDelegate implements Delegate {
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     int position = (Integer) args[0];
     Object value = null;
     if( !method.getName().equals("setNull")) {
       value = args[1];
     }
     preparedStatementInformation.setParameterValue(position, convertToString(value));
-    return method.invoke(target, args);
+    return method.invoke(underlying, args);
   }
 
   private String convertToString(Object o) {

@@ -34,8 +34,8 @@ class P6LeakConnectionCreateStatementDelegate implements Delegate {
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-    Statement statement = (Statement) method.invoke(target, args);
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
+    Statement statement = (Statement) method.invoke(underlying, args);
     P6LeakStatementInvocationHandler invocationHandler = new P6LeakStatementInvocationHandler(statement, connectionInformation);
     return ProxyFactory.createProxy(statement, Statement.class, invocationHandler);
   }

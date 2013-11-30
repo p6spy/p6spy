@@ -21,11 +21,10 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.logging.P6LogConnectionInvocationHandler;
+import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
-import net.sf.cglib.proxy.Proxy;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverConnectionFactory;
@@ -136,13 +135,9 @@ public class DataSourceTest extends BaseTestCase {
     // get the connection
     con = ds.getConnection();
 
-    // first verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", Proxy.isProxyClass(con.getClass()));
+    // verify that the connection class is a proxy
+    assertTrue("Connection is not a proxy", ProxyFactory.isProxy(con));
 
-    // now verify that the proxy is OUR proxy!
-    assertTrue("Wrong invocation handler!", Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler);
-
-    //con.createStatement().execute("create table testtable (col1 integer)");
     Statement stmt = con.createStatement();
     stmt.execute("select 1 from customers");
     stmt.close();
@@ -171,11 +166,9 @@ public class DataSourceTest extends BaseTestCase {
     // get the connection
     con = ds.getConnection();
 
-    // first verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", Proxy.isProxyClass(con.getClass()));
+    // verify that the connection class is a proxy
+    assertTrue("Connection is not a proxy", ProxyFactory.isProxy(con));
 
-    // now verify that the proxy is OUR proxy!
-    assertTrue("Wrong invocation handler!", Proxy.getInvocationHandler(con) instanceof P6LogConnectionInvocationHandler);
   }
 
   class TestBasicDataSource extends BasicDataSource {

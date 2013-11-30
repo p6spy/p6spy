@@ -32,8 +32,8 @@ class P6LeakStatementCloseDelegate implements Delegate {
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     P6Objects.close(statementInformation);
-    return method.invoke(target, args);
+    return method.invoke(underlying, args);
   }
 }

@@ -33,7 +33,7 @@ class P6LogPreparedStatementSetParameterValueDelegate implements Delegate {
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     // ignore calls to any methods defined on the Statement interface!
     if( !Statement.class.equals(method.getDeclaringClass()) ) {
       int position = (Integer) args[0];
@@ -43,7 +43,7 @@ class P6LogPreparedStatementSetParameterValueDelegate implements Delegate {
       }
       preparedStatementInformation.setParameterValue(position, value);
     }
-    return method.invoke(target, args);
+    return method.invoke(underlying, args);
   }
 
 

@@ -41,7 +41,7 @@ class P6LeakResultSetCloseDelegate implements Delegate {
    * Called by the invocation handler instead of the target method.  Since this method is called
    * instead of the target method, it is up to implementations to invoke the target method (if applicable).
    *
-   * @param target The object being proxied
+   * @param proxy The object being proxied
    * @param method The method that was invoked
    * @param args   The arguments of the method (if any).  This argument will be null if there
    *               were no arguments.
@@ -49,8 +49,8 @@ class P6LeakResultSetCloseDelegate implements Delegate {
    * @throws Throwable
    */
   @Override
-  public Object invoke(final Object target, final Method method, final Object[] args) throws Throwable {
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     P6Objects.close(resultSetInformation);
-    return method.invoke(target, args);
+    return method.invoke(underlying, args);
   }
 }
