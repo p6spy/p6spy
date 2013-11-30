@@ -143,7 +143,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
     }
   }
 
-  public class TestDelegate implements Delegate {
+  public static class TestDelegate implements Delegate {
     private Boolean invokedFlag;
     private Throwable exceptionToThrow = null;
 
@@ -173,17 +173,17 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
     }
   }
 
-  public class TestDelegate2 extends TestDelegate {
+  public static class TestDelegate2 extends TestDelegate {
 
     public TestDelegate2() {
     }
   }
 
-  public interface ExceptionHandling {
+  public static interface ExceptionHandling {
     void methodA() throws SQLException;
   }
 
-  public class ExceptionHandlingImpl implements ExceptionHandling {
+  public static class ExceptionHandlingImpl implements ExceptionHandling {
     boolean throwException = false;
 
     public ExceptionHandlingImpl() {
