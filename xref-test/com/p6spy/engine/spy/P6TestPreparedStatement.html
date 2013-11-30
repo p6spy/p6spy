@@ -30,8 +30,8 @@
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">package</strong> com.p6spy.engine.spy;
 <a class="jxr_linenumber" name="21" href="#21">21</a>  
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.logging.P6LogOptions;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.test.P6TestFramework;
-<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> net.sf.cglib.proxy.Proxy;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.proxy.ProxyFactory;
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.test.P6TestFramework;
 <a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.After;
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
 <a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
@@ -88,7 +88,7 @@
 <a class="jxr_linenumber" name="78" href="#78">78</a>        ResultSet rs = prep.executeQuery();
 <a class="jxr_linenumber" name="79" href="#79">79</a>        
 <a class="jxr_linenumber" name="80" href="#80">80</a>        <em class="jxr_comment">// verify that we got back a proxy for the result set</em>
-<a class="jxr_linenumber" name="81" href="#81">81</a>        assertTrue(<span class="jxr_string">"Resultset was not a proxy"</span>, Proxy.isProxyClass(rs.getClass()));
+<a class="jxr_linenumber" name="81" href="#81">81</a>        assertTrue(<span class="jxr_string">"Resultset was not a proxy"</span>, ProxyFactory.isProxy(rs.getClass()));
 <a class="jxr_linenumber" name="82" href="#82">82</a>        
 <a class="jxr_linenumber" name="83" href="#83">83</a>        <em class="jxr_comment">// verify the log message for the select</em>
 <a class="jxr_linenumber" name="84" href="#84">84</a>        assertTrue(getLastLogEntry().contains(query));

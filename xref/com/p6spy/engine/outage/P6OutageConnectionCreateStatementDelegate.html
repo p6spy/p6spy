@@ -44,8 +44,8 @@
 <a class="jxr_linenumber" name="34" href="#34">34</a>    }
 <a class="jxr_linenumber" name="35" href="#35">35</a>  
 <a class="jxr_linenumber" name="36" href="#36">36</a>    @Override
-<a class="jxr_linenumber" name="37" href="#37">37</a>    <strong class="jxr_keyword">public</strong> Object invoke(Object target, Method method, Object[] args) <strong class="jxr_keyword">throws</strong> Throwable {
-<a class="jxr_linenumber" name="38" href="#38">38</a>      Statement statement = (Statement) method.invoke(target, args);
+<a class="jxr_linenumber" name="37" href="#37">37</a>    <strong class="jxr_keyword">public</strong> Object invoke(<strong class="jxr_keyword">final</strong> Object proxy, <strong class="jxr_keyword">final</strong> Object underlying, <strong class="jxr_keyword">final</strong> Method method, <strong class="jxr_keyword">final</strong> Object[] args) <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="38" href="#38">38</a>      Statement statement = (Statement) method.invoke(underlying, args);
 <a class="jxr_linenumber" name="39" href="#39">39</a>      <a href="../../../../com/p6spy/engine/outage/P6OutageStatementInvocationHandler.html">P6OutageStatementInvocationHandler</a> invocationHandler = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/outage/P6OutageStatementInvocationHandler.html">P6OutageStatementInvocationHandler</a>(statement, connectionInformation);
 <a class="jxr_linenumber" name="40" href="#40">40</a>      <strong class="jxr_keyword">return</strong> ProxyFactory.createProxy(statement, Statement.<strong class="jxr_keyword">class</strong>, invocationHandler);
 <a class="jxr_linenumber" name="41" href="#41">41</a>    }

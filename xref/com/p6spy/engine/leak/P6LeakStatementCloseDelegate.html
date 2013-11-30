@@ -42,9 +42,9 @@
 <a class="jxr_linenumber" name="32" href="#32">32</a>    }
 <a class="jxr_linenumber" name="33" href="#33">33</a>  
 <a class="jxr_linenumber" name="34" href="#34">34</a>    @Override
-<a class="jxr_linenumber" name="35" href="#35">35</a>    <strong class="jxr_keyword">public</strong> Object invoke(Object target, Method method, Object[] args) <strong class="jxr_keyword">throws</strong> Throwable {
+<a class="jxr_linenumber" name="35" href="#35">35</a>    <strong class="jxr_keyword">public</strong> Object invoke(<strong class="jxr_keyword">final</strong> Object proxy, <strong class="jxr_keyword">final</strong> Object underlying, <strong class="jxr_keyword">final</strong> Method method, <strong class="jxr_keyword">final</strong> Object[] args) <strong class="jxr_keyword">throws</strong> Throwable {
 <a class="jxr_linenumber" name="36" href="#36">36</a>      P6Objects.close(statementInformation);
-<a class="jxr_linenumber" name="37" href="#37">37</a>      <strong class="jxr_keyword">return</strong> method.invoke(target, args);
+<a class="jxr_linenumber" name="37" href="#37">37</a>      <strong class="jxr_keyword">return</strong> method.invoke(underlying, args);
 <a class="jxr_linenumber" name="38" href="#38">38</a>    }
 <a class="jxr_linenumber" name="39" href="#39">39</a>  }
 </pre>
