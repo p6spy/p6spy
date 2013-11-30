@@ -25,7 +25,16 @@ import org.apache.log4j.Logger;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ * Appender which uses Log4J configured via spy.properties.
+ * <p>
+ *   Note: This appender is deprecated in P6Spy 2.0.  For similar functionality,
+ *   use the Slf4JLogger instead.
+ * </p>
+ *
+ */
 // adapted from Rafael Alvarez's LoggingStream class
+@Deprecated
 public class Log4jLogger extends FormattedLogger implements P6Logger {
     
     protected Level level = Level.INFO;
