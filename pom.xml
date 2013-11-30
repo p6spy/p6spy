@@ -569,11 +569,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc6</artifactId>
-      <version>11.2.0.4</version>
-    </dependency>
-    <dependency>
       <!-- Note: This is a type 3 driver! -->
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
