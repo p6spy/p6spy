@@ -34,8 +34,8 @@ public class P6LogConnectionPrepareCallDelegate extends P6LogConnectionCreateSta
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-    CallableStatement statement = (CallableStatement) method.invoke(target, args);
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
+    CallableStatement statement = (CallableStatement) method.invoke(underlying, args);
     String query = (String) args[0];
     P6LogCallableStatementInvocationHandler invocationHandler = new P6LogCallableStatementInvocationHandler(statement,
         getConnectionInformation(), query, statement.getParameterMetaData());

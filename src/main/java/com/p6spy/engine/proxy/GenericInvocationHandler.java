@@ -19,6 +19,8 @@
  */
 package com.p6spy.engine.proxy;
 
+import com.p6spy.engine.common.P6WrapperIsWrapperDelegate;
+import com.p6spy.engine.common.P6WrapperUnwrapDelegate;
 import net.sf.cglib.proxy.InvocationHandler;
 
 import java.lang.reflect.InvocationTargetException;
@@ -46,7 +48,13 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   public GenericInvocationHandler(T underlying) {
     this.underlying = underlying;
     this.delegateMap = new HashMap<MethodMatcher, Delegate>();
-    delegateMap.put(new MethodNameMatcher("getUnderlying"), new P6ProxyDelegate(underlying));
+    addDelegatesForWrapperInterface();
+  }
+
+  private void addDelegatesForWrapperInterface() {
+    // This covers the implementation of the java.sql.Wrapper interface
+    delegateMap.put(new MethodNameMatcher("isWrapperFor"), new P6WrapperIsWrapperDelegate());
+    delegateMap.put(new MethodNameMatcher("unwrap"), new P6WrapperUnwrapDelegate());
   }
 
   /**
@@ -73,7 +81,7 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
     try {
       for (MethodMatcher methodMatcher : delegateMap.keySet()) {
         if (methodMatcher.matches(method)) {
-          return delegateMap.get(methodMatcher).invoke(underlying, method, args);
+          return delegateMap.get(methodMatcher).invoke(proxy, underlying, method, args);
         }
       }
 

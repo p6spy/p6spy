@@ -35,11 +35,11 @@ class P6LogPreparedStatementExecuteDelegate implements Delegate {
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     long startTime = System.currentTimeMillis();
 
     try {
-      Object result = method.invoke(target, args);
+      Object result = method.invoke(underlying, args);
       
       if( result != null && result instanceof ResultSet) {
         P6LogResultSetInvocationHandler resultSetInvocationHandler = new P6LogResultSetInvocationHandler((ResultSet)result, preparedStatementInformation);

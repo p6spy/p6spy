@@ -40,7 +40,7 @@ class P6LogResultSetNextDelegate implements Delegate {
    * Called by the invocation handler instead of the target method.  Since this method is called
    * instead of the target method, it is up to implementations to invoke the target method (if applicable).
    *
-   * @param target The object being proxied
+   * @param proxy The object being proxied
    * @param method The method that was invoked
    * @param args   The arguments of the method (if any).  This argument will be null if there
    *               were no arguments.
@@ -48,7 +48,7 @@ class P6LogResultSetNextDelegate implements Delegate {
    * @throws Throwable
    */
   @Override
-  public Object invoke(final Object target, final Method method, final Object[] args) throws Throwable {
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     long startTime = System.currentTimeMillis();
     Object result = null;
     try {
@@ -57,7 +57,7 @@ class P6LogResultSetNextDelegate implements Delegate {
         resultSetInformation.generateLogMessage();
       }
       resultSetInformation.setCurrRow(resultSetInformation.getCurrRow() + 1);
-      result = method.invoke(target, args);
+      result = method.invoke(underlying, args);
       return result;
     } finally {
       // the result of the proxied method call will be true or false since this is used to proxy the call to ResultSet.next()

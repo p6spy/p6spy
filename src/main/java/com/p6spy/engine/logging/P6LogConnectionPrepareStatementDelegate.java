@@ -34,8 +34,8 @@ public class P6LogConnectionPrepareStatementDelegate extends P6LogConnectionCrea
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-    PreparedStatement statement = (PreparedStatement) method.invoke(target, args);
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
+    PreparedStatement statement = (PreparedStatement) method.invoke(underlying, args);
     String query = (String) args[0];
     P6LogPreparedStatementInvocationHandler invocationHandler = new P6LogPreparedStatementInvocationHandler(statement,
         getConnectionInformation(), query, statement.getParameterMetaData());

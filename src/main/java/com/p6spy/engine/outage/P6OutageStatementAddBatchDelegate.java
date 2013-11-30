@@ -33,7 +33,7 @@ class P6OutageStatementAddBatchDelegate implements Delegate {
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     long startTime = System.currentTimeMillis();
     statementInformation.setStatementQuery((String) args[0]);
 
@@ -42,7 +42,7 @@ class P6OutageStatementAddBatchDelegate implements Delegate {
     }
 
     try {
-      return method.invoke(target, args);
+      return method.invoke(underlying, args);
     }
     finally {
       if (P6OutageOptions.getActiveInstance().getOutageDetection()) {

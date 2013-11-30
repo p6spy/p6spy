@@ -19,19 +19,20 @@
  */
 package com.p6spy.engine.proxy;
 
-import com.p6spy.engine.common.P6Proxy;
 import com.p6spy.engine.test.BaseTestCase;
 import net.sf.cglib.proxy.UndeclaredThrowableException;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class GenericInvocationHandlerTest extends BaseTestCase {
   @Test
@@ -88,8 +89,8 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
       delegate.setExceptionToThrow(new IllegalArgumentException("blah"));
       proxy.methodA();
       fail("No exception thrown");
-    } catch(Exception e) {
-      assertEquals("Wrong exception thrown!",IllegalArgumentException.class, e.getClass());
+    } catch (Exception e) {
+      assertEquals("Wrong exception thrown!", IllegalArgumentException.class, e.getClass());
     }
 
     // declared checked exception will be passed through only if they are declared by the interface
@@ -97,7 +98,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
       delegate.setExceptionToThrow(new IOException("blah"));
       proxy.methodA();
       fail("No exception thrown");
-    } catch(Exception e) {
+    } catch (Exception e) {
       assertEquals("Wrong exception thrown", UndeclaredThrowableException.class, e.getClass());
       assertEquals("Wrong nested exception", IOException.class, e.getCause().getClass());
     }
@@ -105,7 +106,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
       delegate.setExceptionToThrow(new SQLException("blah"));
       proxy.methodA();
       fail("No exception thrown");
-    } catch(Exception e) {
+    } catch (Exception e) {
       assertEquals("Wrong exception thrown", SQLException.class, e.getClass());
     }
   }
@@ -120,7 +121,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
       targetObj.throwException = true;
       proxy.methodA();
       fail("No exception thrown");
-    } catch(Exception e) {
+    } catch (Exception e) {
       assertEquals("Wrong exception thrown", SQLException.class, e.getClass());
     }
   }
@@ -137,30 +138,16 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
       targetObj.throwException = true;
       proxy.methodA();
       fail("No exception thrown");
-    } catch(Exception e) {
+    } catch (Exception e) {
       assertEquals("Wrong exception thrown", SQLException.class, e.getClass());
     }
   }
-
-  @Test
-  public void testP6ProxyDelegate(){
-    Set set = new HashSet();
-    GenericInvocationHandler<Set> invocationHandler = new GenericInvocationHandler<Set>(set);
-    Set proxy = ProxyFactory.createProxy(set, Set.class, invocationHandler);
-
-    assertTrue(proxy instanceof P6Proxy);
-
-    HashSet underlying = (HashSet) ((P6Proxy)proxy).getUnderlying();
-
-    assertFalse(Proxy.isProxyClass(underlying.getClass()));
-  }
-
 
   public class TestDelegate implements Delegate {
     private Boolean invokedFlag;
     private Throwable exceptionToThrow = null;
 
-    public TestDelegate()  {
+    public TestDelegate() {
       this.invokedFlag = false;
     }
 
@@ -177,18 +164,18 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
     }
 
     @Override
-    public Object invoke(Object targetObject, Method method, Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
       setInvoked(true);
-      if( exceptionToThrow != null ) {
+      if (exceptionToThrow != null) {
         throw exceptionToThrow;
       }
-      return method.invoke(targetObject, args);
+      return method.invoke(underlying, args);
     }
   }
 
   public class TestDelegate2 extends TestDelegate {
 
-    public TestDelegate2()  {
+    public TestDelegate2() {
     }
   }
 
@@ -204,7 +191,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
 
     @Override
     public void methodA() throws SQLException {
-      if( throwException ) throw new SQLException("fgdfgdfg");
+      if (throwException) throw new SQLException("fgdfgdfg");
     }
   }
 }

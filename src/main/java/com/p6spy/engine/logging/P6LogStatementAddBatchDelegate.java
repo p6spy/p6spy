@@ -34,12 +34,12 @@ class P6LogStatementAddBatchDelegate implements Delegate {
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     statementInformation.setStatementQuery((String) args[0]);
     long startTime = System.currentTimeMillis();
 
     try {
-      return method.invoke(target, args);
+      return method.invoke(underlying, args);
     }
     finally {
       P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, "batch", "", statementInformation.getStatementQuery());

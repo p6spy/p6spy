@@ -34,8 +34,8 @@ public class P6OutageConnectionPrepareCallDelegate extends P6OutageConnectionCre
   }
 
   @Override
-  public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-    CallableStatement statement = (CallableStatement) method.invoke(target, args);
+  public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
+    CallableStatement statement = (CallableStatement) method.invoke(underlying, args);
     String query = (String) args[0];
     P6OutageCallableStatementInvocationHandler invocationHandler = new P6OutageCallableStatementInvocationHandler(statement,
         getConnectionInformation(), query, statement.getParameterMetaData());
