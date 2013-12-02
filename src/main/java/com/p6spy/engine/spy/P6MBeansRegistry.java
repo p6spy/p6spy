@@ -29,6 +29,7 @@ import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
+import javax.management.StandardMBean;
 
 public class P6MBeansRegistry {
 
@@ -51,6 +52,9 @@ public class P6MBeansRegistry {
       NotCompliantMBeanException, MalformedObjectNameException {
     MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
     for (P6LoadableOptions mBean : mBeans) {
+      if (!(mBean instanceof StandardMBean)) {
+        throw new IllegalArgumentException("mBean has to be instance of the StandardMBean class! But is not: " + mBean);
+      }
       mbs.registerMBean(mBean, getObjectName(mBean));
     }
   }

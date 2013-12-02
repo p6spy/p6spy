@@ -24,10 +24,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.management.StandardMBean;
+
+import com.p6spy.engine.leak.P6LeakOptionsMBean;
 import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
-public class P6LogOptions implements P6LogLoadableOptions {
+public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions {
 
   public static final String EXCLUDE = "exclude";
   public static final String INCLUDE = "include";
@@ -57,6 +60,7 @@ public class P6LogOptions implements P6LogLoadableOptions {
   private final P6OptionsRepository optionsRepository;
 
   public P6LogOptions(final P6OptionsRepository optionsRepository) {
+    super(P6LogOptionsMBean.class, false);
     this.optionsRepository = optionsRepository;
   }
   
