@@ -22,10 +22,12 @@ package com.p6spy.engine.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.management.StandardMBean;
+
 import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
-public class P6TestOptions implements P6TestLoadableOptions {
+public class P6TestOptions extends StandardMBean implements P6TestLoadableOptions {
 
   public static final String PASSWORD2 = "password2";
   public static final String USER2 = "user2";
@@ -39,6 +41,7 @@ public class P6TestOptions implements P6TestLoadableOptions {
   private final P6OptionsRepository optionsRepository;
 
   public P6TestOptions(final P6OptionsRepository optionsRepository) {
+    super(P6TestOptionsMBean.class, false);
     this.optionsRepository = optionsRepository;
   }
   
