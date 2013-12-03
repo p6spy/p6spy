@@ -50,9 +50,9 @@ is the directory in which JBoss is installed.
         <connection-url>jdbc:p6spy:mysql://<hostname>:<port>/<database></connection-url>
         <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
 
-## Apache Tomcat
+## Apache Tomcat 6.x
 
-The following instructions were tested with Apache Tomcat 6.x.  For these instructions, it is assumed that $CATALINA_HOME
+The following instructions were tested with Apache Tomcat 6.0.30.  For these instructions, it is assumed that $CATALINA_HOME
 refers to the tomcat installation directory.  Please be aware that there are many ways to configure JNDI data sources
 on tomcat.
 
@@ -75,6 +75,65 @@ on tomcat.
                    ...
                    />
    
+## Apache Tomcat 7.x
+
+The following instructions were tested with Apache Tomcat 7.0.47.  For these instructions, it is assumed that $CATALINA_HOME
+refers to the tomcat installation directory.  Please be aware that there are many ways to configure JNDI data sources
+on tomcat.
+
+1. Move the **p6spy.jar** file to the lib directory. An example of the path to your
+   lib directory is `$CATALINA_HOME\lib\`.
+1. Move the **spy.properties** file to the conf directory. An example of the path to your
+   conf directory is `$CATALINA_HOME\conf\`.
+1. Configure the class name of the real JDBC driver in spy.properties
+   
+       driverlist=com.mysql.jdbc.Driver
+           
+1. Modify the JDBC connection URL and driver class for the data source.  Please be aware that there are several places
+   where a JNDI data source may be defined. It is normally defined in a `<Resource/>` element in 
+   `$CATALINA_BASE/conf/server.xml` or in the application specific `$CATALINA_BASE/conf/catalina/localhost/????.xml`.   
+   See [Tomcat JNDI Resources](http://tomcat.apache.org/tomcat-7.0-doc/jndi-resources-howto.html#JDBC_Data_Sources)
+   for specifics of where a data source is configured.  An example of the pertinent portions of the resource definition
+   are shown below.
+   
+        <Resource name="jdbc/mydb"
+                   type="javax.sql.DataSource"
+                   ...
+                   driverClassName="com.p6spy.engine.spy.P6SpyDriver"
+                   url="jdbc:p6spy:mysql://<hostname>:<port>/<database>"
+                   ...
+                   />
+   
+## Apache Tomcat 8.x
+
+The following instructions were tested with Apache Tomcat 8.0.0-RC5.  For these instructions, it is assumed that $CATALINA_HOME
+refers to the tomcat installation directory.  Please be aware that there are many ways to configure JNDI data sources
+on tomcat.
+
+1. Move the **p6spy.jar** file to the lib directory. An example of the path to your
+   lib directory is `$CATALINA_HOME\lib\`.
+1. Move the **spy.properties** file to the conf directory. An example of the path to your
+   conf directory is `$CATALINA_HOME\conf\`.
+1. Configure the class name of the real JDBC driver in spy.properties
+   
+       driverlist=com.mysql.jdbc.Driver
+           
+1. Modify the JDBC connection URL and driver class for the data source.  Please be aware that there are several places
+   where a JNDI data source may be defined. It is normally defined in a `<Resource/>` element in 
+   `$CATALINA_BASE/conf/server.xml` or in the application specific `$CATALINA_BASE/conf/catalina/localhost/????.xml`.   
+   See [Tomcat JNDI Resources](http://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html)
+   for specifics of where a data source is configured.  An example of the pertinent portions of the resource definition
+   are shown below.
+   
+        <Resource name="jdbc/mydb"
+                   type="javax.sql.DataSource"
+                   ...
+                   driverClassName="com.p6spy.engine.spy.P6SpyDriver"
+                   url="jdbc:p6spy:mysql://<hostname>:<port>/<database>"
+                   ...
+                   />
+   
+
 ## <a name="unspec">Generic Instructions</a>
 
 The following installation instructions are intended for use with application servers not listed below and
