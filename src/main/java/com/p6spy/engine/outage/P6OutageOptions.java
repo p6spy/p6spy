@@ -22,10 +22,12 @@ package com.p6spy.engine.outage;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.management.StandardMBean;
+
 import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
-public class P6OutageOptions implements P6OutageLoadableOptions {
+public class P6OutageOptions extends StandardMBean implements P6OutageLoadableOptions {
 
   public static final String OUTAGEDETECTIONINTERVAL = "outagedetectioninterval";
   public static final String OUTAGEDETECTION = "outagedetection";
@@ -41,6 +43,7 @@ public class P6OutageOptions implements P6OutageLoadableOptions {
   private final P6OptionsRepository optionsRepository;
 
   public P6OutageOptions(final P6OptionsRepository optionsRepository) {
+    super(P6OutageOptionsMBean.class, false);
     this.optionsRepository = optionsRepository;
   }
 

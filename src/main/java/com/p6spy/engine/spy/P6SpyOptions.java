@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.management.StandardMBean;
+
 import org.apache.log4j.PropertyConfigurator;
 
 import com.p6spy.engine.common.P6Util;
@@ -33,7 +35,7 @@ import com.p6spy.engine.spy.appender.P6Logger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
-public class P6SpyOptions implements P6SpyLoadableOptions {
+public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions {
 
     public static final String USE_PREFIX = "usePrefix";
     public static final String AUTOFLUSH = "autoflush";
@@ -83,6 +85,7 @@ public class P6SpyOptions implements P6SpyLoadableOptions {
     private final P6OptionsRepository optionsRepository;
 
     public P6SpyOptions(final P6OptionsRepository optionsRepository) {
+      super(P6SpyOptionsMBean.class, false);
       this.optionsRepository = optionsRepository;
     }
     

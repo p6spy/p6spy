@@ -21,11 +21,14 @@ package com.p6spy.engine.leak;
 
 import java.util.Map;
 
+import javax.management.StandardMBean;
+
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
-public class P6LeakOptions implements P6LeakLoadableOptions {
+public class P6LeakOptions extends StandardMBean implements P6LeakLoadableOptions {
 
   public P6LeakOptions(final P6OptionsRepository optionsRepository) {
+    super(P6LeakOptionsMBean.class, false);
   }
   
   @Override
