@@ -92,7 +92,7 @@
   <td class="src"><pre class="src">&nbsp;  @Deprecated</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;38</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T createProxy(<span class="keyword">final</span> T underlying, <span class="keyword">final</span> Class&lt;T&gt; notUsed, <span class="keyword">final</span> GenericInvocationHandler&lt;T&gt; invocationHandler) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;39</td>  <td class="nbHitsCovered">&nbsp;894</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> createProxy(underlying, invocationHandler);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;39</td>  <td class="nbHitsCovered">&nbsp;902</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> createProxy(underlying, invocationHandler);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;40</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;41</td>  <td class="nbHits">&nbsp;</td>
@@ -117,10 +117,10 @@
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T createProxy(<span class="keyword">final</span> T underlying, <span class="keyword">final</span> GenericInvocationHandler&lt;T&gt; invocationHandler) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;51</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="comment">//noinspection unchecked</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;52</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    Enhancer enhancer = <span class="keyword">new</span> Enhancer();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;53</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    enhancer.setCallback(invocationHandler);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;54</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    enhancer.setInterfaces(getInterfaces(underlying.getClass()));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;55</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> (T) enhancer.create();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;52</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    Enhancer enhancer = <span class="keyword">new</span> Enhancer();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;53</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    enhancer.setCallback(invocationHandler);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;54</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    enhancer.setInterfaces(getInterfaces(underlying.getClass()));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;55</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> (T) enhancer.create();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;56</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;57</td>  <td class="nbHits">&nbsp;</td>
@@ -165,30 +165,30 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;78</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">private</span> <span class="keyword">static</span> Class&lt;?&gt;[] getInterfaces(<span class="keyword">final</span> Class&lt;?&gt; clazz) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    Set&lt;Class&lt;?&gt;&gt; interfaces = <span class="keyword">new</span> HashSet&lt;Class&lt;?&gt;&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    Set&lt;Class&lt;?&gt;&gt; interfaces = <span class="keyword">new</span> HashSet&lt;Class&lt;?&gt;&gt;();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;80</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;81</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="comment">// add all interfaces directly implemented by the given class.</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    interfaces.addAll(Arrays.asList(clazz.getInterfaces()));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    interfaces.addAll(Arrays.asList(clazz.getInterfaces()));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;83</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;84</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="comment">// loop through superclasses adding interfaces</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    Class&lt;?&gt; superclass = clazz.getSuperclass();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;86</td>  <td class="nbHitsUncovered"><a title="Line 86: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;2158</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 86: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">    <span class="keyword">while</span> (superclass != <span class="keyword">null</span> &amp;&amp; !superclass.equals(Object.<span class="keyword">class</span>)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;87</td>  <td class="nbHitsCovered">&nbsp;1255</td>  <td class="src"><pre class="src">&nbsp;      interfaces.addAll(Arrays.asList(superclass.getInterfaces()));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;1255</td>  <td class="src"><pre class="src">&nbsp;      superclass = superclass.getSuperclass();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;85</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    Class&lt;?&gt; superclass = clazz.getSuperclass();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;86</td>  <td class="nbHitsUncovered"><a title="Line 86: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;2174</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 86: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">    <span class="keyword">while</span> (superclass != <span class="keyword">null</span> &amp;&amp; !superclass.equals(Object.<span class="keyword">class</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;87</td>  <td class="nbHitsCovered">&nbsp;1263</td>  <td class="src"><pre class="src">&nbsp;      interfaces.addAll(Arrays.asList(superclass.getInterfaces()));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;1263</td>  <td class="src"><pre class="src">&nbsp;      superclass = superclass.getSuperclass();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;89</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;90</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;91</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="comment">// add P6Proxy interface</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    interfaces.add(P6Proxy.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;92</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    interfaces.add(P6Proxy.<span class="keyword">class</span>);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;93</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;94</td>  <td class="nbHitsCovered">&nbsp;903</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> interfaces.toArray(<span class="keyword">new</span> Class&lt;?&gt;[interfaces.size()]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;94</td>  <td class="nbHitsCovered">&nbsp;911</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> interfaces.toArray(<span class="keyword">new</span> Class&lt;?&gt;[interfaces.size()]);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;95</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
@@ -197,6 +197,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 12/2/13 9:25 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 12/3/13 7:13 AM.</div>
 </body>
 </html>
