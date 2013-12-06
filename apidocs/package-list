@@ -6,3 +6,4 @@ com.p6spy.engine.proxy
 com.p6spy.engine.spy
 com.p6spy.engine.spy.appender
 com.p6spy.engine.spy.option
+org.objectweb.util.monolog.wrapper.p6spy
