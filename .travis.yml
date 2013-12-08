@@ -14,7 +14,6 @@ before_install:
  - script/travis/before_install_firebird.sh
  - script/travis/before_install_db2.sh
  - script/travis/before_install_oracle.sh
-# - sudo apt-get install -qq pgp
 
 before_script:
  - script/travis/before_script_firebird.sh
@@ -23,11 +22,13 @@ before_script:
  - script/travis/before_script_db2.sh
  - script/travis/before_script_oracle.sh
  - groovy script/travis/generateMavenSettingsForDeploy.groovy
+
+install: mvn -B dependency:resolve dependency:resolve-plugins
   
-script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn clean test site:site site:stage -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/deploySettings.xml; mvn -N ghSite:site; else mvn clean test -P travis --settings ~/.m2/deploySettings.xml; fi;
+script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B clean test site:site site:stage -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/deploySettings.xml; mvn -N ghSite:site; else mvn -B clean test -P travis --settings ~/.m2/deploySettings.xml; fi;
 
 after_script:
- - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn clean deploy -DskipTests --settings ~/.m2/deploySettings.xml; fi
+ - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B clean deploy -DskipTests --settings ~/.m2/deploySettings.xml; fi
 
 notifications:
  email:
