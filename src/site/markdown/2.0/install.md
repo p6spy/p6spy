@@ -36,7 +36,7 @@ Application Servers:
 [Apache Tomcat](#tomcat)
 [Generic](#generic)
 
-## <a name="jboss">JBoss
+## <a name="jboss">JBoss</a>
 
 The following sections contain specific information on installing P6Spy on [JBoss 5.x](#jboss5)
 
@@ -55,12 +55,12 @@ is the directory in which JBoss is installed.
         <connection-url>jdbc:p6spy:mysql://<hostname>:<port>/<database></connection-url>
         <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
 
-## <a name="tomcat">Apache Tomcat
+## <a name="tomcat">Apache Tomcat</a>
 
 The following sections contain specific information on installing P6Spy on [Tomcat 6.x](#tomcat6),
 [Tomcat 7.x](#tomcat7), [Tomcat 8.x](#tomcat8)
 
-### <a name="tomcat6">Apache Tomcat 6.x
+### <a name="tomcat6">Apache Tomcat 6.x</a>
 
 The following instructions were tested with Apache Tomcat 6.0.30.  For these instructions, it is assumed that $CATALINA_HOME
 refers to the tomcat installation directory.  Please be aware that there are many ways to configure JNDI data sources
@@ -85,7 +85,7 @@ on tomcat.
                    ...
                    />
    
-### <a name="tomcat7">Apache Tomcat 7.x
+### <a name="tomcat7">Apache Tomcat 7.x</a>
 
 The following instructions were tested with Apache Tomcat 7.0.47.  For these instructions, it is assumed that $CATALINA_HOME
 refers to the tomcat installation directory.  Please be aware that there are many ways to configure JNDI data sources
@@ -114,7 +114,7 @@ on tomcat.
                    ...
                    />
    
-### <a name="tomcat8">Apache Tomcat 8.x
+### <a name="tomcat8">Apache Tomcat 8.x</a>
 
 The following instructions were tested with Apache Tomcat 8.0.0-RC5.  For these instructions, it is assumed that $CATALINA_HOME
 refers to the tomcat installation directory.  Please be aware that there are many ways to configure JNDI data sources
