@@ -24,9 +24,8 @@ configuration layers (including defaults) to properly override.modify those.
 The `spy.properties` configuration file can be located in various places.  The following locations are searched
 to locate the file.  
 
-1. The file name configured in the system property "spy.properties"
-1. The current working directory
-1. The directory name configured in the system property "p6.home"
+1. The file name configured in the system property "spy.properties" (can include path)
+1. The current working directory (for relative path) or any directory (for absolute path)
 1. The classpath
 
 ## Properties exposal via JMX
@@ -436,10 +435,6 @@ Every parameter specified in the property file can be set and overriden at the c
 An example follows:
 
     java -Dp6spy.config.logfile=my.log -Dp6spy.config.append=true
-
-In addition, you can set the default directory to look for spy.properties, as shown in the following example:
-
-    java -Dp6.home=c:\jboss\lib
 
 Moreover to set different file to be used as the properties file (as an example: another_spy.properties), it should be specified using system property "spy.properties" as:
 

@@ -262,6 +262,9 @@ public class P6TestOptionsReload extends BaseTestCase {
       spyDotPropertiesWithSpaceInPath = new File(dirWithSpace, "P6Test_reload_2.properties");
       FileUtils.copyFile(source, spyDotPropertiesWithSpaceInPath);
     }
+    
+    // by default property should not be set
+    assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
 
     //
     // full path in system property case
@@ -275,22 +278,7 @@ public class P6TestOptionsReload extends BaseTestCase {
         spyDotPropertiesWithSpaceInPath.getAbsolutePath());
     P6SpyOptions.getActiveInstance().reload();
 
-    assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
-
-    //
-    // relative path with p6.home in system properties case
-    //
-
-    // ensure property loaded from file correctly
-    // [default] stacktrace=false
-    // [SpyDotProperties] stacktrace=true
-    // => true
-    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
-        spyDotPropertiesWithSpaceInPath.getName());
-    System
-        .setProperty("p6.home", spyDotPropertiesWithSpaceInPath.getParentFile().getAbsolutePath());
-    P6SpyOptions.getActiveInstance().reload();
-
+    // property correctly loaded
     assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
   }
 

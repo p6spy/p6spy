@@ -53,10 +53,9 @@ public class P6Util {
   /**
    * Locates a file on the file system or on the classpath.  
    * <p>
-   *   Search order - 
+   *   Search order:
    *   <ol>
-   *     <li>current working directory</li>
-   *     <li>p6 home</li>
+   *     <li>current working directory (for relative path) or any directory (for absolute path)</li>
    *     <li>class path</li>
    *   </ol>
    * </p>
@@ -66,7 +65,6 @@ public class P6Util {
    */
   public static URL locateFile(String file) {
     File fp;
-    String p6home = System.getProperty("p6.home");
     URL result = null;
 
     try {
@@ -74,16 +72,6 @@ public class P6Util {
       fp = new File(file);
       if (fp.exists()) {
         result = fp.toURI().toURL();
-      }
-
-      // next try relative to p6home
-      if (result == null) {
-        if (p6home != null) {
-          fp = new File(p6home, file);
-          if (fp.exists()) {
-            result = fp.toURI().toURL();
-          }
-        }
       }
 
       // next try to load from context class loader
