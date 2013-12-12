@@ -272,39 +272,27 @@
 <a class="jxr_linenumber" name="262" href="#262">262</a>       spyDotPropertiesWithSpaceInPath = <strong class="jxr_keyword">new</strong> File(dirWithSpace, <span class="jxr_string">"P6Test_reload_2.properties"</span>);
 <a class="jxr_linenumber" name="263" href="#263">263</a>       FileUtils.copyFile(source, spyDotPropertiesWithSpaceInPath);
 <a class="jxr_linenumber" name="264" href="#264">264</a>     }
-<a class="jxr_linenumber" name="265" href="#265">265</a> 
-<a class="jxr_linenumber" name="266" href="#266">266</a>     <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="267" href="#267">267</a>     <em class="jxr_comment">// full path in system property case</em>
-<a class="jxr_linenumber" name="268" href="#268">268</a>     <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="269" href="#269">269</a> 
-<a class="jxr_linenumber" name="270" href="#270">270</a>     <em class="jxr_comment">// ensure property loaded from file correctly</em>
-<a class="jxr_linenumber" name="271" href="#271">271</a>     <em class="jxr_comment">// [default] stacktrace=false</em>
-<a class="jxr_linenumber" name="272" href="#272">272</a>     <em class="jxr_comment">// [SpyDotProperties] stacktrace=true</em>
-<a class="jxr_linenumber" name="273" href="#273">273</a>     <em class="jxr_comment">// =&gt; true</em>
-<a class="jxr_linenumber" name="274" href="#274">274</a>     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
-<a class="jxr_linenumber" name="275" href="#275">275</a>         spyDotPropertiesWithSpaceInPath.getAbsolutePath());
-<a class="jxr_linenumber" name="276" href="#276">276</a>     P6SpyOptions.getActiveInstance().reload();
-<a class="jxr_linenumber" name="277" href="#277">277</a> 
-<a class="jxr_linenumber" name="278" href="#278">278</a>     assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
-<a class="jxr_linenumber" name="279" href="#279">279</a> 
-<a class="jxr_linenumber" name="280" href="#280">280</a>     <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="281" href="#281">281</a>     <em class="jxr_comment">// relative path with p6.home in system properties case</em>
-<a class="jxr_linenumber" name="282" href="#282">282</a>     <em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="283" href="#283">283</a> 
-<a class="jxr_linenumber" name="284" href="#284">284</a>     <em class="jxr_comment">// ensure property loaded from file correctly</em>
-<a class="jxr_linenumber" name="285" href="#285">285</a>     <em class="jxr_comment">// [default] stacktrace=false</em>
-<a class="jxr_linenumber" name="286" href="#286">286</a>     <em class="jxr_comment">// [SpyDotProperties] stacktrace=true</em>
-<a class="jxr_linenumber" name="287" href="#287">287</a>     <em class="jxr_comment">// =&gt; true</em>
-<a class="jxr_linenumber" name="288" href="#288">288</a>     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
-<a class="jxr_linenumber" name="289" href="#289">289</a>         spyDotPropertiesWithSpaceInPath.getName());
-<a class="jxr_linenumber" name="290" href="#290">290</a>     System
-<a class="jxr_linenumber" name="291" href="#291">291</a>         .setProperty(<span class="jxr_string">"p6.home"</span>, spyDotPropertiesWithSpaceInPath.getParentFile().getAbsolutePath());
-<a class="jxr_linenumber" name="292" href="#292">292</a>     P6SpyOptions.getActiveInstance().reload();
-<a class="jxr_linenumber" name="293" href="#293">293</a> 
-<a class="jxr_linenumber" name="294" href="#294">294</a>     assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
-<a class="jxr_linenumber" name="295" href="#295">295</a>   }
-<a class="jxr_linenumber" name="296" href="#296">296</a> 
-<a class="jxr_linenumber" name="297" href="#297">297</a> }
+<a class="jxr_linenumber" name="265" href="#265">265</a>     
+<a class="jxr_linenumber" name="266" href="#266">266</a>     <em class="jxr_comment">// by default property should not be set</em>
+<a class="jxr_linenumber" name="267" href="#267">267</a>     assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
+<a class="jxr_linenumber" name="268" href="#268">268</a> 
+<a class="jxr_linenumber" name="269" href="#269">269</a>     <em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="270" href="#270">270</a>     <em class="jxr_comment">// full path in system property case</em>
+<a class="jxr_linenumber" name="271" href="#271">271</a>     <em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="272" href="#272">272</a> 
+<a class="jxr_linenumber" name="273" href="#273">273</a>     <em class="jxr_comment">// ensure property loaded from file correctly</em>
+<a class="jxr_linenumber" name="274" href="#274">274</a>     <em class="jxr_comment">// [default] stacktrace=false</em>
+<a class="jxr_linenumber" name="275" href="#275">275</a>     <em class="jxr_comment">// [SpyDotProperties] stacktrace=true</em>
+<a class="jxr_linenumber" name="276" href="#276">276</a>     <em class="jxr_comment">// =&gt; true</em>
+<a class="jxr_linenumber" name="277" href="#277">277</a>     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
+<a class="jxr_linenumber" name="278" href="#278">278</a>         spyDotPropertiesWithSpaceInPath.getAbsolutePath());
+<a class="jxr_linenumber" name="279" href="#279">279</a>     P6SpyOptions.getActiveInstance().reload();
+<a class="jxr_linenumber" name="280" href="#280">280</a> 
+<a class="jxr_linenumber" name="281" href="#281">281</a>     <em class="jxr_comment">// property correctly loaded</em>
+<a class="jxr_linenumber" name="282" href="#282">282</a>     assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
+<a class="jxr_linenumber" name="283" href="#283">283</a>   }
+<a class="jxr_linenumber" name="284" href="#284">284</a> 
+<a class="jxr_linenumber" name="285" href="#285">285</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

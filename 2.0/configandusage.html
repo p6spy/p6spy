@@ -127,11 +127,9 @@
 
 <ol style="list-style-type: decimal">
   
-<li>The file name configured in the system property &#x201c;spy.properties&#x201d;</li>
+<li>The file name configured in the system property &#x201c;spy.properties&#x201d; (can include path)</li>
   
-<li>The current working directory</li>
-  
-<li>The directory name configured in the system property &#x201c;p6.home&#x201d;</li>
+<li>The current working directory (for relative path) or any directory (for absolute path)</li>
   
 <li>The classpath</li>
 </ol>
@@ -525,11 +523,6 @@ appender=com.p6spy.engine.spy.appender.StdoutLogger
 
 <div class="source">
 <pre>java -Dp6spy.config.logfile=my.log -Dp6spy.config.append=true
-</pre></div>
-<p>In addition, you can set the default directory to look for spy.properties, as shown in the following example:</p>
-
-<div class="source">
-<pre>java -Dp6.home=c:\jboss\lib
 </pre></div>
 <p>Moreover to set different file to be used as the properties file (as an example: another_spy.properties), it should be specified using system property &#x201c;spy.properties&#x201d; as:</p>
 
