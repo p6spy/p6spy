@@ -23,7 +23,7 @@
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false" reset="true">
 
-  <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+  <appender name="CONSOLE" class="com.p6spy.engine.spy.appender.Log4jLoggerTest$Log4JTestApppender">
     <param name="Target" value="System.out" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c.%M] %m%n" />

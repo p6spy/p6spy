@@ -172,7 +172,6 @@ in section: [Configuration and Usage](#confusage)):
     # and starting with the clean table 
     # (only the properties read from the configuration file)
     # (default is com.p6spy.engine.spy.appender.FileLogger)
-    #appender=com.p6spy.engine.spy.appender.Log4jLogger  (Deprecated)
     #appender=com.p6spy.engine.spy.appender.Slf4JLogger
     #appender=com.p6spy.engine.spy.appender.StdoutLogger
     #appender=com.p6spy.engine.spy.appender.FileLogger
@@ -191,22 +190,6 @@ in section: [Configuration and Usage](#confusage)):
     # format that is used for logging of the date/time/... (has to be compatible with java.text.SimpleDateFormat)
     # (default is dd-MMM-yy)
     #databaseDialectDateFormat=dd-MMM-yy
-
-    #The following are for log4j logging only
-    #Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here
-    #once you require different behavior, provide your own log4j configuration file (holding these properties) 
-    #and make sure to load/reload it properly.
-    #Warning: This appender is deprecated and will be removed in a future release.
-    log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender
-    log4j.appender.STDOUT.layout=org.apache.log4j.PatternLayout
-    log4j.appender.STDOUT.layout.ConversionPattern=p6spy - %m%n
-
-    #log4j.appender.CHAINSAW_CLIENT=org.apache.log4j.net.SocketAppender
-    #log4j.appender.CHAINSAW_CLIENT.RemoteHost=localhost
-    #log4j.appender.CHAINSAW_CLIENT.Port=4445
-    #log4j.appender.CHAINSAW_CLIENT.LocationInfo=true
-
-    log4j.logger.p6spy=INFO,STDOUT
 
     #################################################################
     # DataSource replacement #
@@ -358,13 +341,13 @@ An example follows:
 
 Appenders allow you to specify where and how log information is output. Appenders are a flexible architecture
 allowing anyone to write their own output class for P6Spy. To use an appender, specify the classname of the
-appender to use. The current release comes with three options which are log4j (deprecated), slf4j, stdout,
+appender to use. The current release comes with three options which are slf4j, stdout,
 and logging to a CSV text file (default).
 
 * Using a CSV File—To output to a file, uncomment the FileLogger appender and specify a logfile and
   whether or not to append to the file or to clear the file each time:
 
-        #appender=com.p6spy.engine.spy.appender.Log4jLogger
+        #appender=com.p6spy.engine.spy.appender.Slf4JLogger
         #appender=com.p6spy.engine.spy.appender.StdoutLogger
         appender=com.p6spy.engine.spy.appender.FileLogger
 
@@ -377,36 +360,13 @@ and logging to a CSV text file (default).
 
 * Using StdOut—Uncomment the StdoutLogger as follows and all output will be sent to stdout in a CSV format:
 
-        #appender=com.p6spy.engine.spy.appender.Log4jLogger
+        #appender=com.p6spy.engine.spy.appender.Slf4JLogger
         appender=com.p6spy.engine.spy.appender.StdoutLogger
         #appender=com.p6spy.engine.spy.appender.FileLogger
 
 * Using SLF4J - To output to SLF4J, you need to make slf4j-api and the appropriate bridge to the actual logging
 implementation on your classpath.  All log messages will be written at the INFO level to the 'p6spy' category.  For
 further instructions on configuring SLF4J, see the [SLF4J documentation](http://www.slf4j.org/manual.html).
-
-* Using Log4J—To output to log4j, make sure log4j is in your path, uncomment the log4j appender,
-and specify the desired log4j settings:
-
-        appender=com.p6spy.engine.spy.appender.Log4jLogger
-        #appender=com.p6spy.engine.spy.appender.StdoutLogger
-        # appender=com.p6spy.engine.spy.appender.FileLogger
-
-        #The following are for log4j logging only
-        log4j.appender.STDOUT=org.apache.log4j.ConsoleAppender
-        log4j.appender.STDOUT.layout=org.apache.log4j.PatternLayout
-        log4j.appender.STDOUT.layout.ConversionPattern=p6spy - %m%n
-
-        #log4j.appender.CHAINSAW_CLIENT=org.apache.log4j.net.SocketAppender
-        #log4j.appender.CHAINSAW_CLIENT.RemoteHost=localhost
-        #log4j.appender.CHAINSAW_CLIENT.Port=4445
-        #log4j.appender.CHAINSAW_CLIENT.LocationInfo=true
-
-        log4j.logger.p6spy=INFO,STDOUT
-
-    If for some reason log4j cannot be initialized, the logging will go to a file called log4jaux.log.
-
-    Note: The Log4J appender is now deprecated and will be removed in a future release.
 
 ### excludecategories
 

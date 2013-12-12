@@ -21,14 +21,10 @@ package com.p6spy.engine.spy;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.management.StandardMBean;
 
-import org.apache.log4j.PropertyConfigurator;
-
-import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
@@ -91,8 +87,6 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     
     @Override
     public void load(Map<String, String> options) {
-      loadLog4jConfig(P6Util.getProperties(options));
-      
       setLogMessageFormat(options.get(LOG_MESSAGE_FORMAT));
       setLogfile(options.get(LOGFILE));
       setAppend(options.get(APPEND));
@@ -115,19 +109,6 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
     }
     
-    /**
-     * Loads log4j specific configuration.
-     * <br/><br/>
-     * Please note: The existing configuration is not cleared nor reset. It's rather iterative approach here
-     * once you require different behavior, provide your own log4j configuration file (holding these properties) 
-     * and make sure to load/reload it properly.
-     * 
-     * @param properties the properties to load the configuration values from.
-     */
-    private void loadLog4jConfig(Properties properties) {
-      PropertyConfigurator.configure(properties);
-    }
-
     /**
      * Utility method, to make accessing options from app less verbose.
      * 
