@@ -60,7 +60,6 @@ public class SpyDotPropertiesTest extends BaseTestCase {
     if( testFile != null ) {
       testFile.delete();
     }
-    
   }
 
   @Test
@@ -92,27 +91,6 @@ public class SpyDotPropertiesTest extends BaseTestCase {
       // if the file was not closed properly, the delete will fail!
       fail("temporary file was not deleted!");
     }
-    
-  }
-
-  @Test
-  public void testLoadFromP6Home() throws Exception {
-    
-    // create p6home
-    String p6home = "target/p6home";
-    System.setProperty("p6.home", p6home);
-    File p6HomeDir = new File(p6home);
-    p6HomeDir.mkdirs();
-    
-    // create the file to load
-    testFile = File.createTempFile("test", null, p6HomeDir);
-    PrintWriter pw = new PrintWriter(testFile);
-    pw.println("modulelist=testModule");
-    pw.close();
-    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, testFile.getName());
-
-    SpyDotProperties props = new SpyDotProperties();
-    assertNotNull("properties not loaded!", props.getOptions());
   }
 
   @Test
