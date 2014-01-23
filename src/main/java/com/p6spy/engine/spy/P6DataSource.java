@@ -40,7 +40,8 @@ import javax.sql.DataSource;
 
 import com.p6spy.engine.common.P6LogQuery;
 
-public class P6DataSource extends P6Base implements DataSource, Referenceable, Serializable {
+@SuppressWarnings("serial")
+public class P6DataSource implements DataSource, Referenceable, Serializable {
 
   protected DataSource rds;
   protected String rdsName;
@@ -54,11 +55,9 @@ public class P6DataSource extends P6Base implements DataSource, Referenceable, S
    * Default no-arg constructor for Serialization
    */
   public P6DataSource() {
-    super(null);
   }
 
   public P6DataSource(DataSource source) {
-    super(null);
     rds = source;
   }
 

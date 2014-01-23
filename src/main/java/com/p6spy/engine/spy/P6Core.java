@@ -46,13 +46,17 @@ public class P6Core {
    * Initializes the P6Spy framework
    */
   public static void initialize() {
-    if (!initialized) {
-      synchronized (P6Core.class) {
-        if( !initialized) {
-          // just make sure to cause module initialization (if not done yet)
-          P6ModuleManager.getInstance();
+    try {
+      if (!initialized) {
+        synchronized (P6Core.class) {
+          if( !initialized) {
+            // just make sure to cause module initialization (if not done yet)
+            P6ModuleManager.getInstance();
+          }
         }
       }
+    } catch (Throwable t) {
+      t.printStackTrace();
     }
   }
 
