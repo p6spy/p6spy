@@ -117,12 +117,12 @@
   <td class="src"><pre class="src">&nbsp;      NotCompliantMBeanException, MalformedObjectNameException {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;53</td>  <td class="nbHitsCovered">&nbsp;208</td>  <td class="src"><pre class="src">&nbsp;    MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;54</td>  <td class="nbHitsCovered"><a title="Line 54: Conditional coverage 100% (2/2).">&nbsp;208</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 54: Conditional coverage 100% (2/2).">    <span class="keyword">for</span> (P6LoadableOptions mBean : mBeans) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;55</td>  <td class="nbHitsUncovered"><a title="Line 55: Conditional coverage 50% (1/2).">&nbsp;631</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 55: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (!(mBean <span class="keyword">instanceof</span> StandardMBean)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;55</td>  <td class="nbHitsUncovered"><a title="Line 55: Conditional coverage 50% (1/2).">&nbsp;630</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 55: Conditional coverage 50% (1/2).">      <span class="keyword">if</span> (!(mBean <span class="keyword">instanceof</span> StandardMBean)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;56</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"mBean has to be instance of the StandardMBean class! But is not: "</span> + mBean);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;57</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;58</td>  <td class="nbHitsCovered">&nbsp;631</td>  <td class="src"><pre class="src">&nbsp;      mbs.registerMBean(mBean, getObjectName(mBean));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;59</td>  <td class="nbHitsCovered">&nbsp;631</td>  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;58</td>  <td class="nbHitsCovered">&nbsp;630</td>  <td class="src"><pre class="src">&nbsp;      mbs.registerMBean(mBean, getObjectName(mBean));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;59</td>  <td class="nbHitsCovered">&nbsp;630</td>  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;60</td>  <td class="nbHitsCovered">&nbsp;208</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;61</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
@@ -132,16 +132,16 @@
   <td class="src"><pre class="src">&nbsp;      MalformedObjectNameException {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;64</td>  <td class="nbHitsCovered">&nbsp;207</td>  <td class="src"><pre class="src">&nbsp;    MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;65</td>  <td class="nbHitsCovered"><a title="Line 65: Conditional coverage 100% (2/2).">&nbsp;207</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 65: Conditional coverage 100% (2/2).">    <span class="keyword">for</span> (P6LoadableOptions mBean : mBeans) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;66</td>  <td class="nbHitsCovered">&nbsp;627</td>  <td class="src"><pre class="src">&nbsp;      mbs.unregisterMBean(getObjectName(mBean));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;67</td>  <td class="nbHitsCovered">&nbsp;627</td>  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;66</td>  <td class="nbHitsCovered">&nbsp;626</td>  <td class="src"><pre class="src">&nbsp;      mbs.unregisterMBean(getObjectName(mBean));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;67</td>  <td class="nbHitsCovered">&nbsp;626</td>  <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;68</td>  <td class="nbHitsCovered">&nbsp;207</td>  <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;69</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;70</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">private</span> ObjectName getObjectName(P6LoadableOptions mBean) <span class="keyword">throws</span> MalformedObjectNameException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsCovered">&nbsp;1258</td>  <td class="src"><pre class="src">&nbsp;    String packageName = mBean.getClass().getPackage().getName();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;72</td>  <td class="nbHitsUncovered"><a title="Line 72: Conditional coverage 50% (1/2).">&nbsp;1258</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 72: Conditional coverage 50% (1/2).">    packageName = <span class="keyword">null</span> == packageName ? <span class="string">"com.p6spy"</span> : packageName;</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;73</td>  <td class="nbHitsCovered">&nbsp;1258</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> <span class="keyword">new</span> ObjectName(packageName + <span class="string">":name="</span> + mBean.getClass().getSimpleName());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsCovered">&nbsp;1256</td>  <td class="src"><pre class="src">&nbsp;    String packageName = mBean.getClass().getPackage().getName();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;72</td>  <td class="nbHitsUncovered"><a title="Line 72: Conditional coverage 50% (1/2).">&nbsp;1256</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 72: Conditional coverage 50% (1/2).">    packageName = <span class="keyword">null</span> == packageName ? <span class="string">"com.p6spy"</span> : packageName;</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;73</td>  <td class="nbHitsCovered">&nbsp;1256</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> <span class="keyword">new</span> ObjectName(packageName + <span class="string">":name="</span> + mBean.getClass().getSimpleName());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;74</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;75</td>  <td class="nbHits">&nbsp;</td>
@@ -150,6 +150,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 12/12/13 11:45 AM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 1/23/14 9:41 PM.</div>
 </body>
 </html>
