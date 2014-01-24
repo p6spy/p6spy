@@ -52,6 +52,8 @@ public class ProxyFactory {
     Enhancer enhancer = new Enhancer();
     enhancer.setCallback(invocationHandler);
     enhancer.setInterfaces(getInterfaces(underlying.getClass()));
+    // fix for the https://github.com/p6spy/p6spy/issues/188
+    enhancer.setClassLoader(Thread.currentThread().getContextClassLoader());
     return (T) enhancer.create();
   }
 
