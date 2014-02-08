@@ -45,22 +45,18 @@ public class P6TestCallableStatement extends P6TestFramework {
     Collection<Object[]> result;
     String dbList = (System.getProperty("DB") == null ? "H2" : System.getProperty("DB"));
 
-    if (dbList.contains(",")) {
-      Object[] dbs = dbList.split(",");
-      List<Object[]> dbsToTest = new ArrayList<Object[]>();
-      for (int i = 0; i < dbs.length; i++) {
-        //  Check against list of databases with stored procs
-        // As procs become available for other databases, enable them here.
-        if( Arrays.asList("H2","Oracle","MySQL").contains(dbs[i])) {
-          dbsToTest.add(new Object[]{dbs[i]});
-        } else {
-          log.info("Skipping "+dbs[i]+" because stored procedures have not been created for testing");
-        }
+    Object[] dbs = dbList.split(",");
+    List<Object[]> dbsToTest = new ArrayList<Object[]>();
+    for (int i = 0; i < dbs.length; i++) {
+      //  Check against list of databases with stored procs
+      // As procs become available for other databases, enable them here.
+      if( Arrays.asList("H2","Oracle","MySQL").contains(dbs[i])) {
+        dbsToTest.add(new Object[]{dbs[i]});
+      } else {
+        log.info("Skipping "+dbs[i]+" because stored procedures have not been created for testing");
       }
-      result = dbsToTest;
-    } else {
-      result = Arrays.asList(new Object[][]{{dbList}});
     }
+    result = dbsToTest;
 
     return result;
   }
