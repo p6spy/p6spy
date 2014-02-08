@@ -56,6 +56,9 @@
     <preConditions onFail="CONTINUE">
       <dbms type="H2"/>
     </preConditions>
+    <sql>
+      DROP ALIAS IF EXISTS TEST_PROC;
+    </sql>
     <createProcedure>
       CREATE ALIAS TEST_PROC AS $$ 
       int testProc(int param1, String param2) {
@@ -101,6 +104,9 @@
     <preConditions onFail="CONTINUE">
       <dbms type="H2"/>
     </preConditions>
+    <sql>
+      DROP ALIAS IF EXISTS SLEEP;
+    </sql>
     <createProcedure>
       CREATE ALIAS SLEEP AS $$ 
       void sleep(long miliseconds) {
