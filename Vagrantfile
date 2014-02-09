@@ -144,7 +144,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		  "password" => { "postgres" => "123" },
 		  # otherwise certificate error on restart
 		  config: { 
-		  "ssl" => "false" 
+		  "ssl" => "false"
 	  },
 		  pg_hba: [  
 			  { type: 'local', db: 'all', user: 'all', addr: '', method: 'trust' },

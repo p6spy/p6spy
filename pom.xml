@@ -176,9 +176,10 @@
             -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false -Doracle.jdbc.timezoneAsRegion=false -Ddb2.jcc.override.traceLevel=0
           </argLine>
           <includes>
-            <include>**/P6Test*.java</include>
-            <include>**/*Test.java</include>
+             <include>**/P6Test*.java</include>
+             <include>**/*Test.java</include>
           </includes>
+
           <systemProperties>
             <property>
               <name>derby.stream.error.file</name>
@@ -504,10 +505,24 @@
       <version>1.4</version>
       <scope>test</scope>
     </dependency>
+    <!-- xa datasource testing  -->
+    <dependency>
+    	<groupId>org.codehaus.btm</groupId>
+    	<artifactId>btm</artifactId>
+    	<version>2.1.4</version>
+    	<scope>test</scope>
+	</dependency>	    
+	<dependency>
+    	<groupId>org.apache.geronimo.specs</groupId>
+    	<artifactId>geronimo-jta_1.1_spec</artifactId>
+    	<version>1.1.1</version>
+    	<scope>test</scope>
+	</dependency>	
+	
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
-      <version>3.0.7</version>
+      <version>3.0.8</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -548,7 +563,14 @@
       <version>2.4</version>
       <scope>test</scope>
     </dependency>
-
+	
+	<dependency>
+		<groupId>commons-beanutils</groupId>
+		<artifactId>commons-beanutils</artifactId>
+		<version>1.9.1</version>
+		<scope>test</scope>
+	</dependency>
+	
     <!-- all the JDBC drivers tested -->
     <dependency>
       <groupId>mysql</groupId>
@@ -763,7 +785,7 @@
 	        <version>9.7</version>
 	        <scope>test</scope>
 		</dependency>
-		
+
 		<!-- fetched from the cloudbees maven repo -->
  		<dependency>
 			<groupId>com.oracle</groupId>

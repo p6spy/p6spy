@@ -42,3 +42,8 @@ echo "DB2 ODBC driver set to $DB2_ODBC_DRIVER"
 mvn install:install-file -Dfile=/opt/ibm/db2/V9.7/java/db2jcc4.jar -DgroupId=com.ibm.db2 -DartifactId=db2jcc4 -Dversion=9.7 -Dpackaging=jar -DgeneratePom=true 
 mvn install:install-file -Dfile=/opt/ibm/db2/V9.7/java/db2jcc_license_cu.jar -DgroupId=com.ibm.db2 -DartifactId=db2jcc_license_cu -Dversion=9.7 -Dpackaging=jar -DgeneratePom=true
 
+# fix for:
+# Failure in loading native library db2jcct2, java.lang.UnsatisfiedLinkError: no db2jcct2 in java.library.path:  ERRORCODE=-4472, SQLSTATE=null
+# see: https://stackoverflow.com/questions/3957131/java-lang-unsatisfiedlinkerror-while-loading-db2-jdbc-driver
+echo 'export LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/;' >> /home/vagrant/.bashrc
+echo 'export LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/;' >> /home/travis/.bashrc

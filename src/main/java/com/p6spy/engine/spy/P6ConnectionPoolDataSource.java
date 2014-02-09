@@ -19,12 +19,18 @@
  */
 package com.p6spy.engine.spy;
 
+import java.sql.SQLException;
+
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
 import javax.sql.PooledConnection;
-import java.sql.SQLException;
+import javax.sql.XAConnection;
+import javax.sql.XADataSource;
 
-public class P6ConnectionPoolDataSource extends P6DataSource implements ConnectionPoolDataSource {
+// Does it make sense to implement ConnectionPoolDataSource and XADataSource in one class?
+// it makes our life simpler (with btm testing), and seems we're not the only ones, see: org.h2.jdbcx.JdbcDataSource
+@SuppressWarnings("serial")
+public class P6ConnectionPoolDataSource extends P6DataSource implements ConnectionPoolDataSource, XADataSource {
 
   public P6ConnectionPoolDataSource() {
     super();
@@ -41,8 +47,7 @@ public class P6ConnectionPoolDataSource extends P6DataSource implements Connecti
     }
 
     PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection();
-    P6PooledConnection pooledConnection = new P6PooledConnection(pc);
-    return pooledConnection;
+    return new P6PooledConnection(pc);
   }
 
   @Override
@@ -52,8 +57,33 @@ public class P6ConnectionPoolDataSource extends P6DataSource implements Connecti
     }
 
     PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection(user, password);
-    P6PooledConnection pooledConnection = new P6PooledConnection(pc);
-    return pooledConnection;
+    return new P6PooledConnection(pc);
+  }
+
+  @Override
+  public XAConnection getXAConnection() throws SQLException {
+    if (rds == null) {
+      bindDataSource();
+    }
+    
+    if (rds instanceof XADataSource) {
+      return new P6XAConnection(((XADataSource) rds).getXAConnection());  
+    }
+    
+    throw new IllegalStateException("realdatasource type not supported: " + rds);
+  }
+
+  @Override
+  public XAConnection getXAConnection(String user, String password) throws SQLException {
+    if (rds == null) {
+      bindDataSource();
+    }
+    
+    if (rds instanceof XADataSource) {
+      return new P6XAConnection(((XADataSource) rds).getXAConnection(user, password));  
+    }
+    
+    throw new IllegalStateException("realdatasource type not supported: " + rds);
   }
 
 }

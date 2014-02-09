@@ -74,7 +74,7 @@ public class DataSourceTest extends BaseTestCase {
     };
 
     user = "sa";
-    password = null;
+    password ="sa";
     // please note non-typical DB name
     // however it seems that the typical one "jdbc:h2:mem:p6spy"
     // caused authorization exception, see: https://github.com/p6spy/p6spy/issues/76
