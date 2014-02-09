@@ -32,12 +32,9 @@ import java.util.Hashtable;
 public class P6DataSourceFactory implements ObjectFactory {
 
 
-  protected final String dataSourceClassName =
-      "com.p6spy.engine.spy.P6DataSource";
+  protected static final String dataSourceClassName = P6DataSource.class.getName();
 
-  protected final String poolDataSourceName =
-      "com.p6spy.engine.spy.P6ConnectionPoolDataSource";
-
+  protected static final String poolDataSourceName = P6ConnectionPoolDataSource.class.getName();
 
   public Object getObjectInstance(Object refObj,
                                   Name nm,

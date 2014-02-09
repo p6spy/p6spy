@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.management.StandardMBean;
+import javax.sql.XADataSource;
 
 import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
@@ -35,6 +36,7 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
   public static final String PASSWORD = "password";
   public static final String USER = "user";
   public static final String URL = "url";
+  public static final String XA_DATASOURCE = "xaDataSource";
 
   private static final Map<String, String> defaults = new HashMap<String, String>();
 
@@ -53,6 +55,7 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
     setUrl2(properties.get(URL2));
     setUser2(properties.get(USER2));
     setPassword2(properties.get(PASSWORD2));
+    setXaDataSource(properties.get(XA_DATASOURCE));
   }
 
   /**
@@ -127,6 +130,16 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
   @Override
   public void setPassword2(String password2) {
     optionsRepository.set(String.class, PASSWORD2, password2);
+  }
+  
+  @Override
+  public void setXaDataSource(String xaDataSource) {
+    optionsRepository.set(XADataSource.class, XA_DATASOURCE, xaDataSource);
+  }
+  
+  @Override
+  public XADataSource getXaDataSource() {
+    return optionsRepository.get(XADataSource.class, XA_DATASOURCE);
   }
 
 }

@@ -19,6 +19,8 @@
  */
 package com.p6spy.engine.test;
 
+import javax.sql.XADataSource;
+
 import com.p6spy.engine.spy.P6LoadableOptions;
 
 public interface P6TestLoadableOptions extends P6LoadableOptions, P6TestOptionsMBean {
@@ -47,5 +49,9 @@ public interface P6TestLoadableOptions extends P6LoadableOptions, P6TestOptionsM
   String getPassword2();
 
   void setPassword2(String password2);
+
+  XADataSource getXaDataSource();
+
+  void setXaDataSource(String xaDataSource);
 
 }
