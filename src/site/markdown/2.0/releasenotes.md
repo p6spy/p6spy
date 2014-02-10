@@ -1,8 +1,8 @@
 # Release Notes
 
-## Version 2.0
+## Version 2.0.0-alpha1 and up
 
-TBD
+see: [github report](../github-report.html)
 
 ## Version 1.3
 
