@@ -208,27 +208,6 @@
          </executions>
         
       </plugin>
-<!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.7</version>
-        <inherited>true</inherited>
-        <executions>
-          <execution>
-            <id>sources</id>
-            <phase>site</phase>
-            <goals>
-              <goal>sources</goal>
-            </goals>
-            <configuration>
-              <classifier>sources</classifier>
-              <classifier>javadoc</classifier>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
--->
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -324,17 +303,6 @@
           </execution>
         </executions>
       </plugin>
-      
-<!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
-        </configuration>
-      </plugin>
--->
       
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

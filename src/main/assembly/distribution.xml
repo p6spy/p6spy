@@ -28,31 +28,15 @@
   </formats>
   <includeBaseDirectory>true</includeBaseDirectory>
 
-<!--
-  <moduleSets>
-    <moduleSet>
-      <useAllReactorProjects>true</useAllReactorProjects>
-      <includes>
-        <include>p6spy:p6spy:jar</include>
-      </includes>
-      <binaries>
-        <fileMode>0644</fileMode>
-        <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
-        <includeDependencies>false</includeDependencies>
-        <unpack>false</unpack>
-      </binaries>
-    </moduleSet>
-  </moduleSets>
--->
   <dependencySets>
     <dependencySet>
       <includes>
         <include>p6spy:p6spy:jar</include>
       </includes>
       <fileMode>0644</fileMode>
-      <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       <useProjectArtifact>true</useProjectArtifact>
       <useProjectAttachments>true</useProjectAttachments>
+      <scope>provided</scope>
     </dependencySet>
   </dependencySets>
 
@@ -61,6 +45,32 @@
       <directory>src/main/assembly/individualFiles</directory>
       <fileMode>0644</fileMode>
       <outputDirectory>/</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.basedir}</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>license.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/site</directory>
+      <outputDirectory>docs</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>license.txt</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>p6spy*-javadoc.jar</include>
+        <include>p6spy*-sources.jar</include>
+      </includes>
     </fileSet>
   </fileSets>
 
