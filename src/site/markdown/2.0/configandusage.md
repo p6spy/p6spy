@@ -51,6 +51,7 @@ in section: [Configuration and Usage](#confusage)):
 	  # Please note that the core module (P6SpyFactory) can't be		  # 
 	  # deactivated											                              #
 	  #################################################################
+	  modulelist=com.p6spy.engine.logging.P6LogFactory
 	  #modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
 
     ################################################################
@@ -107,9 +108,12 @@ in section: [Configuration and Usage](#confusage)):
     ################################################################
 
     # A comma separated list of JDBC drivers to load and register.
-    # This is rarely needed!  Only use this when you the driver is not
-    # getting loaded automatically.
     # (default is empty)
+    #
+    # Note: This is normally only needed when using P6Spy in an
+    # application server environment with a JNDI data source or when
+    # using a JDBC driver that does not implement the JDBC 4.0 API
+    # (specifically automatic registration).
     #driverlist=
 
     # comma separated list of tables to include
@@ -158,14 +162,12 @@ in section: [Configuration and Usage](#confusage)):
     # and starting with the clean table 
     # (default is false)
     #reloadproperties=false
+    
     # determines how often should be reloaded in seconds
     # (default is 60)
     #reloadpropertiesinterval=60
 
-    #if=true then url must be prefixed with p6spy:
-    useprefix=false
-
-    #specifies the appender to use for logging
+    # specifies the appender to use for logging
     # Please note: reload means forgetting all the previously set
     # settings (even those set during runtime - via JMX)
     # and starting with the clean table 
@@ -191,34 +193,34 @@ in section: [Configuration and Usage](#confusage)):
     #databaseDialectDateFormat=dd-MMM-yy
 
     #################################################################
-    # DataSource replacement #
-    # #
-    # Replace the real DataSource class in your application server #
+    # DataSource replacement                                        #
+    #                                                               #
+    # Replace the real DataSource class in your application server  #
     # configuration with the name com.p6spy.engine.spy.P6DataSource,#
-    # or com.p6spy.engine.spy.P6ConnectionPoolDataSource #
-    # (that provides connection pooling and xa support). #
-    # then add the JNDI name and class name of the real #
-    # DataSource here #
-    # #
-    # Values set in this item cannot be reloaded using the #
-    # reloadproperties variable. Once it is loaded, it remains #
-    # in memory until the application is restarted. #
-    # #
+    # or com.p6spy.engine.spy.P6ConnectionPoolDataSource            #
+    # (that provides connection pooling and xa support).            #
+    # then add the JNDI name and class name of the real             #
+    # DataSource here                                               #
+    #                                                               #
+    # Values set in this item cannot be reloaded using the          #
+    # reloadproperties variable. Once it is loaded, it remains      #
+    # in memory until the application is restarted.                 #
+    #                                                               #
     #################################################################
     realdatasource=/RealMySqlDS
     realdatasourceclass=com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 
     #################################################################
-    # DataSource properties #
-    # #
-    # If you are using the DataSource support to intercept calls #
-    # to a DataSource that requires properties for proper setup, #
-    # define those properties here. Use name value pairs, separate #
-    # the name and value with a semicolon, and separate the #
-    # pairs with commas. #
-    # #
-    # The example shown here is for mysql #
-    # #
+    # DataSource properties                                         #
+    #                                                               #
+    # If you are using the DataSource support to intercept calls    #
+    # to a DataSource that requires properties for proper setup,    #
+    # define those properties here. Use name value pairs, separate  #
+    # the name and value with a semicolon, and separate the         #
+    # pairs with commas.                                            #
+    #                                                               #
+    # The example shown here is for mysql                           #
+    #                                                               # 
     #################################################################
     realdatasourceproperties=port;3306,serverName;myhost,databaseName;jbossdb,foo;bar
 
@@ -233,7 +235,7 @@ in section: [Configuration and Usage](#confusage)):
     # do not use these properties, and the DataSource lookup will   #
     # use the naming context defined by the app server.             #
     #                                                               #
-    # The two standard elements of the naming environment are	    #
+    # The two standard elements of the naming environment are	      #
     # jndicontextfactory and jndicontextproviderurl. If you need    #
     # additional elements, use the jndicontextcustom property.      #
     # You can define multiple properties in jndicontextcustom,      #
@@ -271,12 +273,16 @@ Where these are required:
  - com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see [P6Outage](#p6outage).
  - com.p6spy.engine.leak.P6LeakFactory - for and leak functionality, see [P6Leak](#p6leak).
 
-Please note to implement custom module have a look at the imlpementation of the any of the existing ones.
+Please note to implement custom module have a look at the implementation of the any of the existing ones.
 
 ### driverlist
 
-This is a comma separated list of JDBC driver classes to load and register with the DriverManager.  This is rarely used
-since type 4 drivers are automatically loaded and registered.  Only use this option when needed.
+This is a comma separated list of JDBC driver classes to load and register with DriverManager.  You should list
+the classname(s) of the JDBC driver(s) that you want to proxy with P6Spy if any of the following conditions are met.
+
+1. The JDBC driver does not implement the JDBC 4.0 API 
+1. You are using a JNDI Data Source - Some application servers will prevent the automatic registration feature
+    from working.  
 
 ### filter, include, exclude
 
