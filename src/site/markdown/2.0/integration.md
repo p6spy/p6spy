@@ -4,7 +4,7 @@ A very typical use case for P6Spy is to enabled SQL logging to troubleshoot vari
 development.  Assuming that making code changes is acceptable, then the following instructions can be used.  If
  making code changes is not a viable option, then following the instructions for [Installing P6Spy](install.html).
 
-1. Add p6spy.jar to the classpath.  If your application uses Maven, Ivy, Gradle, etc just add a dependency on 
+1. Add **p6spy.jar** to the classpath.  If your application uses Maven, Ivy, Gradle, etc just add a dependency on 
    p6spy:p6spy.
 
 1. Wrap your DataSource with P6DataSource or modify your connection URL to add 'p6spy:'.

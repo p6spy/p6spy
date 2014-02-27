@@ -31,10 +31,10 @@ directory when the application runs.  This log file will contain a list of the v
 executed.  You can alter the location of this log file as well as what gets logged by editing **spy.properties**.  See
 [Common Property File Settings](configandusage.html#settings) for the various configuration options available.
 
-Application Servers:
-[JBoss](#jboss)
-[Apache Tomcat](#tomcat)
-[Generic](#generic)
+Application Servers:    
+[JBoss](#jboss)    
+[Apache Tomcat](#tomcat)    
+[Generic](#generic)    
 
 ## <a name="jboss">JBoss</a>
 
@@ -48,6 +48,10 @@ is the directory in which JBoss is installed.
 
 1. Move the **p6spy.jar** file to the `$JBOSS_DIST\server\default\lib` directory.
 1. Move the **spy.properties** file to the `$JBOSS_DIST\server\default\conf` directory.
+1. Configure the class name of the real JDBC driver in **spy.properties**
+   
+       driverlist=com.mysql.jdbc.Driver
+           
 1. Update the connection URL and driver class for your data source in `$JBOSS_DIST\server\default\deploy`.  This file 
    is normally called `?????-ds.xml'.   An example of the pertinent portions (not the complete XML file) follows:
 
@@ -70,6 +74,10 @@ on tomcat.
    lib directory is `$CATALINA_HOME\lib\`.
 1. Move the **spy.properties** file to the conf directory. An example of the path to your
    conf directory is `$CATALINA_HOME\conf\`.
+1. Configure the class name of the real JDBC driver in **spy.properties**
+   
+       driverlist=com.mysql.jdbc.Driver
+           
 1. Modify the JDBC connection URL and driver class for the data source.  Please be aware that there are several places
    where a JNDI data source may be defined. It is normally defined in a `<Resource/>` element in 
    `$CATALINA_BASE/conf/server.xml` or in the application specific `$CATALINA_BASE/conf/catalina/localhost/????.xml`.   
@@ -95,7 +103,7 @@ on tomcat.
    lib directory is `$CATALINA_HOME\lib\`.
 1. Move the **spy.properties** file to the conf directory. An example of the path to your
    conf directory is `$CATALINA_HOME\conf\`.
-1. Configure the class name of the real JDBC driver in spy.properties
+1. Configure the class name of the real JDBC driver in **spy.properties**
    
        driverlist=com.mysql.jdbc.Driver
            
@@ -124,7 +132,7 @@ on tomcat.
    lib directory is `$CATALINA_HOME\lib\`.
 1. Move the **spy.properties** file to the conf directory. An example of the path to your
    conf directory is `$CATALINA_HOME\conf\`.
-1. Configure the class name of the real JDBC driver in spy.properties
+1. Configure the class name of the real JDBC driver in **spy.properties**
    
        driverlist=com.mysql.jdbc.Driver
            
@@ -146,13 +154,17 @@ on tomcat.
 
 ## <a name="generic">Generic Instructions</a>
 
-The following installation instructions are intended for use with application servers not listed below and
+The following installation instructions are intended for use with other application servers and
 applications that do not use application servers. To install P6Spy, complete the following steps:
 
 1. Put the **p6spy.jar** file in your classpath.
 1. Put **spy.properties** into a directory which is on the classpath.  Many application servers have a directory for
    configuration files which are accessible via the classpath.  Most applications which do not run an application
    server will have one as well.
+1. Configure the class name of the real JDBC driver in **spy.properties**
+   
+       driverlist=com.mysql.jdbc.Driver
+           
 1. Configure the data source.
 
 If the JNDI DataSource is configured using a driver class (implements javax.sql.Driver), then you should modify the 
