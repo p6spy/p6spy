@@ -438,7 +438,7 @@ the `com.p6spy.engine.spy.appender.MessageFormattingStrategy` interface and plac
 
 Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag (system property), adding the the prefix: 
 
-  p6spy.config.
+    p6spy.config.
 
 An example follows:
 
@@ -446,7 +446,7 @@ An example follows:
 
 Moreover to set different file to be used as the properties file (as an example: another_spy.properties), it should be specified using system property "spy.properties" as:
 
-  java -Dspy.properties=c:\jboss\lib\another_spy.properties
+    java -Dspy.properties=c:\jboss\lib\another_spy.properties
 
 ## Log File Format
 
@@ -492,7 +492,7 @@ The following are useful Maven commands:
 
 to build binaries:
 
-  mvn clean install
+    mvn clean install
 
  to build the site:
 
