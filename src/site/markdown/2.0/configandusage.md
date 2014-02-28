@@ -44,44 +44,44 @@ in section: [Configuration and Usage](#confusage)):
     #################################################################
 
     #################################################################
-	  # MODULES                                                       #
-	  #                                                               #
-	  # Modulelist addapts the modular functionality of P6Spy.		    #
-	  # Only modules listed are active 								                #
-	  # Please note that the core module (P6SpyFactory) can't be		  # 
-	  # deactivated											                              #
-	  #################################################################
-	  modulelist=com.p6spy.engine.logging.P6LogFactory
-	  #modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
+    # MODULES                                                       #
+    #                                                               #
+    # Modulelist addapts the modular functionality of P6Spy.        #
+    # Only modules listed are active                                #
+    # Please note that the core module (P6SpyFactory) can't be      #
+    # deactivated                                                   #
+    #################################################################
+    modulelist=com.p6spy.engine.logging.P6LogFactory
+    #modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
 
     ################################################################
-    # P6LOG SPECIFIC PROPERTIES #
+    # P6LOG SPECIFIC PROPERTIES                                    #
     ################################################################
     # no properties currently available
 
     ################################################################
-    # P6LEAK SPECIFIC PROPERTIES #
+    # P6LEAK SPECIFIC PROPERTIES                                   #
     ################################################################
     # no properties currently available
 
     ################################################################
-    # EXECUTION THRESHOLD PROPERTIES #
+    # EXECUTION THRESHOLD PROPERTIES                               #
     ################################################################
-    # This feature applies to the standard logging of P6Spy. #
-    # While the standard logging logs out every statement #
-    # regardless of its execution time, this feature puts a time #
-    # condition on that logging. Only statements that have taken #
-    # longer than the time specified (in milliseconds) will be #
-    # logged. This way it is possible to see only statements that #
-    # have exceeded some high water mark. #
-    # This time is reloadable. #
+    # This feature applies to the standard logging of P6Spy.       
+    # While the standard logging logs out every statement          
+    # regardless of its execution time, this feature puts a time   
+    # condition on that logging. Only statements that have taken   
+    # longer than the time specified (in milliseconds) will be     
+    # logged. This way it is possible to see only statements that  
+    # have exceeded some high water mark.                          
+    # This time is reloadable.                                     
     #
     # executionthreshold=integer time (milliseconds)
     # (default is 0)
     #executionthreshold=
 
     ################################################################
-    # P6OUTAGE SPECIFIC PROPERTIES #
+    # P6OUTAGE SPECIFIC PROPERTIES                                 #
     ################################################################
     # Outage Detection
     #
@@ -98,13 +98,13 @@ in section: [Configuration and Usage](#confusage)):
     # outagedetection=true|false
     # outagedetectioninterval=integer time (seconds)
     #
-	  # (default is false)
-	  #outagedetection=false
-	  # (default is 60)
-	  #outagedetectioninterval=30
-	
+    # (default is false)
+    #outagedetection=false
+    # (default is 60)
+    #outagedetectioninterval=30
+  
     ################################################################
-    # COMMON PROPERTIES #
+    # COMMON PROPERTIES                                            #
     ################################################################
 
     # A comma separated list of JDBC drivers to load and register.
@@ -125,11 +125,11 @@ in section: [Configuration and Usage](#confusage)):
 
     # sql expression to evaluate if using regex
     # (default is empty)
-	  #sqlexpression = 
+    #sqlexpression = 
 
     # filter what is logged
-	  # (default is false)
-	  #filter=false
+    # (default is false)
+    #filter=false
 
     # for flushing per statement
     # (default is false)
@@ -220,7 +220,7 @@ in section: [Configuration and Usage](#confusage)):
     # pairs with commas.                                            #
     #                                                               #
     # The example shown here is for mysql                           #
-    #                                                               # 
+    #                                                               #
     #################################################################
     realdatasourceproperties=port;3306,serverName;myhost,databaseName;jbossdb,foo;bar
 
@@ -235,7 +235,7 @@ in section: [Configuration and Usage](#confusage)):
     # do not use these properties, and the DataSource lookup will   #
     # use the naming context defined by the app server.             #
     #                                                               #
-    # The two standard elements of the naming environment are	      #
+    # The two standard elements of the naming environment are       #
     # jndicontextfactory and jndicontextproviderurl. If you need    #
     # additional elements, use the jndicontextcustom property.      #
     # You can define multiple properties in jndicontextcustom,      #
@@ -438,7 +438,7 @@ the `com.p6spy.engine.spy.appender.MessageFormattingStrategy` interface and plac
 
 Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag (system property), adding the the prefix: 
 
-	p6spy.config.
+  p6spy.config.
 
 An example follows:
 
@@ -446,7 +446,7 @@ An example follows:
 
 Moreover to set different file to be used as the properties file (as an example: another_spy.properties), it should be specified using system property "spy.properties" as:
 
-	java -Dspy.properties=c:\jboss\lib\another_spy.properties
+  java -Dspy.properties=c:\jboss\lib\another_spy.properties
 
 ## Log File Format
 
@@ -492,7 +492,7 @@ The following are useful Maven commands:
 
 to build binaries:
 
-	mvn clean install
+  mvn clean install
 
  to build the site:
 
@@ -528,7 +528,7 @@ By default, tests run against H2 database. To enable other databases, make sure 
 
 use the following maven command:
 
-	mvn clean test -DDB=<DB_NAMES>
+  mvn clean test -DDB=<DB_NAMES>
 
 where &lt;DB_NAMES&gt; would hold the value of `DB` environment variable described before.
 
@@ -560,7 +560,7 @@ To have tests running please follow these steps:
         vagrant ssh
         cd /vagrant
         mvn clean test -P travis -Dmaven.surefire.debug --settings ~/.m2/deploySettings.xml
-  		
+      
 1. Use your favorite java IDE to remotely debug the tests run.
 
 ## P6Spy Modules
