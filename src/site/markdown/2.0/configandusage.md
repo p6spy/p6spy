@@ -528,7 +528,7 @@ By default, tests run against H2 database. To enable other databases, make sure 
 
 use the following maven command:
 
-  mvn clean test -DDB=<DB_NAMES>
+    mvn clean test -DDB=<DB_NAMES>
 
 where &lt;DB_NAMES&gt; would hold the value of `DB` environment variable described before.
 
