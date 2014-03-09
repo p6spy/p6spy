@@ -19,6 +19,8 @@
  */
 package com.p6spy.engine.proxy;
 
+import net.sf.cglib.core.NamingPolicy;
+import net.sf.cglib.core.Predicate;
 import net.sf.cglib.proxy.Enhancer;
 
 import java.util.Arrays;
@@ -54,6 +56,7 @@ public class ProxyFactory {
     enhancer.setInterfaces(getInterfaces(underlying.getClass()));
     // fix for the https://github.com/p6spy/p6spy/issues/188
     enhancer.setClassLoader(Thread.currentThread().getContextClassLoader());
+    enhancer.setNamingPolicy(ProxyNamingPolicy.INSTANCE);
     return (T) enhancer.create();
   }
 
