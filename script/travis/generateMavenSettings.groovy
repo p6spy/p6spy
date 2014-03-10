@@ -43,7 +43,6 @@ if( usernameValue != null && passwordValue != null ) {
   println "Environments variable SONATYPE_USERNAME or SONATYPE_PASSWORD not set"
 }
 
-// add cloudbees repositories
 def profiles = settings.profiles
 if( profiles.size() == 0 ) {
   // create the node if it did not exist
@@ -54,6 +53,9 @@ if( profiles.size() == 0 ) {
 println "Appending profile for p6spy-it-mvnrepo"
 profiles[0].append(NodeBuilder.newInstance().profile {
   id('p6spy-it-mvnrepo')
+  activation {
+    activeByDefault(true)
+  }
   repositories {
     repository {
       id('p6spy-it-mvnrepo')
@@ -68,16 +70,6 @@ profiles[0].append(NodeBuilder.newInstance().profile {
     }
   }
 })
-
-def activeProfiles = settings.activeProfiles
-if( activeProfiles.size() == 0 ) {
-  // create the node if it did not exist
-  settings.append(new NodeBuilder().createNode("activeProfiles"))
-  activeProfiles = settings.activeProfiles
-}
-
-activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('p6spy-it-mvnrepo'))
-
 
 // write out new settings.xml file
 def targetFile = new File(originalSettingsFile.parentFile, 'deploySettings.xml')
