@@ -15,6 +15,7 @@ before_install:
  - script/travis/before_install_firebird.sh
  - script/travis/before_install_db2.sh
  - script/travis/before_install_oracle.sh
+ - groovy script/travis/generateMavenSettings.groovy
 
 before_script:
  - script/travis/before_script_firebird.sh
@@ -22,7 +23,6 @@ before_script:
  - script/travis/before_script_postgres.sh
  - script/travis/before_script_db2.sh
  - script/travis/before_script_oracle.sh
- - groovy script/travis/generateMavenSettings.groovy
 
 install: mvn -B dependency:resolve dependency:resolve-plugins
   
