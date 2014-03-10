@@ -1,6 +1,4 @@
 #!/usr/bin/env groovy
-import javafx.scene.NodeBuilder
-import org.eclipse.jetty.xml.XmlParser
 
 // load existing settings.xml file
 def originalSettingsFile = new File(System.getProperty("user.home"), ".m2/settings.xml")
@@ -72,7 +70,7 @@ profiles[0].append(NodeBuilder.newInstance().profile {
 })
 
 // write out new settings.xml file
-def targetFile = new File(originalSettingsFile.parentFile, 'deploySettings.xml')
+def targetFile = new File(originalSettingsFile.parentFile, 'p6spySettings.xml')
 println "Writing ${targetFile.absolutePath}"
 def writer = new FileWriter(targetFile)
 new XmlNodePrinter(new PrintWriter(writer)).print(settings)
