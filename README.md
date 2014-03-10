@@ -5,7 +5,7 @@ p6spy
 P6Spy is a framework that enables database data to be seamlessly intercepted and logged with no code changes to existing application. The P6Spy distribution includes P6Log, an application which logs all JDBC transactions for any Java application.
 
 **Documentation:**
-[Installation](http://p6spy.github.io/p6spy/2.0/install.html)
+[Installation](http://p6spy.github.io/p6spy/2.0/install.html)    
 [Configuration](http://p6spy.github.io/p6spy/2.0/configandusage.html)
 
 **Need help?**    
