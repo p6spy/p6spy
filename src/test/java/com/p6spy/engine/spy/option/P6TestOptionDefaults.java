@@ -19,16 +19,19 @@
  */
 package com.p6spy.engine.spy.option;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-import com.p6spy.engine.test.BaseTestCase;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
@@ -38,14 +41,20 @@ import com.p6spy.engine.outage.P6OutageOptions;
 import com.p6spy.engine.spy.P6SpyFactory;
 import com.p6spy.engine.spy.P6SpyLoadableOptions;
 import com.p6spy.engine.spy.P6SpyOptions;
-import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
+import com.p6spy.engine.test.BaseTestCase;
+import com.p6spy.engine.test.P6TestFramework;
 
 public class P6TestOptionDefaults extends BaseTestCase {
 
+  final static File LOG_FILE = new File("spy.log");
+  
   @BeforeClass
   public static void setUp() throws SQLException, IOException {
+    // cleanup all
+    LOG_FILE.delete();
+    
     // make sure to reinit properly
     new P6TestFramework("blank") {
     };
@@ -54,6 +63,13 @@ public class P6TestOptionDefaults extends BaseTestCase {
   @After
   public void tearDown() throws SQLException, IOException {
     System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST, "");
+  }
+  
+  @AfterClass
+  public static void tearDownAll() {
+    // post clean up
+    LOG_FILE.delete();
+
   }
 
   @Test
@@ -129,4 +145,29 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertEquals(30L, opts.getOutageDetectionInterval());
     Assert.assertEquals(30000L, opts.getOutageDetectionIntervalMS());
   }
+
+  @Test
+  public void testImplicitlyDisabledLoggedCategories() throws IOException {
+    {
+      final String msg = "debug logged test msg";
+      P6LogQuery.debug(msg);
+      final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
+      Assert.assertFalse(logged.contains(msg));
+    }
+    
+    {
+      final String msg = "info logged test msg";
+      P6LogQuery.info(msg);
+      final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
+      Assert.assertFalse(logged.contains(msg));
+    }
+    
+    {
+      final String msg = "error logged test msg";
+      P6LogQuery.error(msg);
+      final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
+      Assert.assertTrue(logged.contains(msg));
+    }
+  }
+
 }
