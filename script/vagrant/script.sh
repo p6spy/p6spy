@@ -35,7 +35,7 @@ pushd /vagrant/script/travis
 ./before_script_db2.sh
 ./before_script_oracle.sh
 
-groovy generateMavenSettingsForDeploy.groovy
+groovy generateMavenSettings.groovy
 
 popd
 

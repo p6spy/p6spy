@@ -64,7 +64,7 @@ profiles[0].append(NodeBuilder.newInstance().profile {
         enabled('true')
       }
       name('p6spy-it-mvnrepo')
-      url('https://github.com/p6spy/p6spy-it-mvnrepo/blob/master')
+      url('https://github.com/p6spy/p6spy-it-mvnrepo/raw/master')
     }
   }
 })
