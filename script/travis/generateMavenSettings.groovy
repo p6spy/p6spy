@@ -1,4 +1,6 @@
 #!/usr/bin/env groovy
+import javafx.scene.NodeBuilder
+import org.eclipse.jetty.xml.XmlParser
 
 // load existing settings.xml file
 def originalSettingsFile = new File(System.getProperty("user.home"), ".m2/settings.xml")
@@ -49,17 +51,20 @@ if( profiles.size() == 0 ) {
   profiles = settings.profiles
 }
 
-println "Appending profile for cloudbees repositories"
+println "Appending profile for p6spy-it-mvnrepo"
 profiles[0].append(NodeBuilder.newInstance().profile {
-  id('cloudbees')
+  id('p6spy-it-mvnrepo')
   repositories {
     repository {
-      id('cloudbees-release')
+      id('p6spy-it-mvnrepo')
       snapshots {
-        enabled('false')
+        enabled('true')
       }
-      name('cloudbees-release')
-      url('http://repository-p6spy.forge.cloudbees.com/release')
+      releases {
+        enabled('true')
+      }
+      name('p6spy-it-mvnrepo')
+      url('https://github.com/p6spy/p6spy-it-mvnrepo/blob/master')
     }
   }
 })
@@ -71,7 +76,7 @@ if( activeProfiles.size() == 0 ) {
   activeProfiles = settings.activeProfiles
 }
 
-activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('cloudbees'))
+activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('p6spy-it-mvnrepo'))
 
 
 // write out new settings.xml file
