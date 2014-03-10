@@ -22,7 +22,7 @@ before_script:
  - script/travis/before_script_postgres.sh
  - script/travis/before_script_db2.sh
  - script/travis/before_script_oracle.sh
- - groovy script/travis/generateMavenSettingsForDeploy.groovy
+ - groovy script/travis/generateMavenSettings.groovy
 
 install: mvn -B dependency:resolve dependency:resolve-plugins
   
