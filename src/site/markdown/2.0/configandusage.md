@@ -46,13 +46,14 @@ in section: [Configuration and Usage](#confusage)):
     #################################################################
     # MODULES                                                       #
     #                                                               #
-    # Modulelist addapts the modular functionality of P6Spy.        #
-    # Only modules listed are active                                #
-    # Please note that the core module (P6SpyFactory) can't be      #
-    # deactivated                                                   #
+    # Modulelist addapts the modular functionality of P6Spy.		#
+    # Only modules listed are active.						        #
+    # (default is com.p6spy.engine.logging.P6LogFactory and         #
+    # com.p6spy.engine.spy.P6SpyFactory)                            #
+    # Please note that the core module (P6SpyFactory) can't be		# 
+    # deactivated											        #
     #################################################################
-    modulelist=com.p6spy.engine.logging.P6LogFactory
-    #modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
+    #modulelist=com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
 
     ################################################################
     # P6LOG SPECIFIC PROPERTIES                                    #
@@ -183,7 +184,8 @@ in section: [Configuration and Usage](#confusage)):
 
     # append to the p6spy log file. if this is set to false the
     # log file is truncated every time. (file logger only)
-    append=true
+    # (default is true)
+    #append=true
 
     # class to use for formatting log messages (default is: com.p6spy.engine.spy.appender.SingleLineFormat)
     #logMessageFormat=com.p6spy.engine.spy.appender.SingleLineFormat
@@ -207,8 +209,8 @@ in section: [Configuration and Usage](#confusage)):
     # in memory until the application is restarted.                 #
     #                                                               #
     #################################################################
-    realdatasource=/RealMySqlDS
-    realdatasourceclass=com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+    #realdatasource=/RealMySqlDS
+    #realdatasourceclass=com.mysql.jdbc.jdbc2.optional.MysqlDataSource
 
     #################################################################
     # DataSource properties                                         #
@@ -222,7 +224,7 @@ in section: [Configuration and Usage](#confusage)):
     # The example shown here is for mysql                           #
     #                                                               #
     #################################################################
-    realdatasourceproperties=port;3306,serverName;myhost,databaseName;jbossdb,foo;bar
+    #realdatasourceproperties=port;3306,serverName;myhost,databaseName;jbossdb,foo;bar
 
     #################################################################
     # JNDI DataSource lookup                                        #
