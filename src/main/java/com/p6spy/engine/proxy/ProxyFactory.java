@@ -19,19 +19,19 @@
  */
 package com.p6spy.engine.proxy;
 
-import net.sf.cglib.core.NamingPolicy;
-import net.sf.cglib.core.Predicate;
-import net.sf.cglib.proxy.Enhancer;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import net.sf.cglib.proxy.Enhancer;
 
 /**
  * @author Quinton McCombs
  * @since 09/2013
  */
 public class ProxyFactory {
+
+  private static final String SQLITE_PACKAGE_PREFIX = "org.sqlite";
 
   /**
    * @deprecated use {@link #createProxy(Object, GenericInvocationHandler)} instead
@@ -49,14 +49,20 @@ public class ProxyFactory {
    * @param invocationHandler the invocation handler
    * @return
    */
+  @SuppressWarnings("unchecked")
   public static <T> T createProxy(final T underlying, final GenericInvocationHandler<T> invocationHandler) {
     //noinspection unchecked
-    Enhancer enhancer = new Enhancer();
+    final Enhancer enhancer = new Enhancer();
     enhancer.setCallback(invocationHandler);
     enhancer.setInterfaces(getInterfaces(underlying.getClass()));
     // fix for the https://github.com/p6spy/p6spy/issues/188
     enhancer.setClassLoader(Thread.currentThread().getContextClassLoader());
-    enhancer.setNamingPolicy(ProxyNamingPolicy.INSTANCE);
+    
+    // sqlite has all the classes package protected 
+    // => no chance to go for different package hierarchy there
+    if (!underlying.getClass().getPackage().getName().startsWith(SQLITE_PACKAGE_PREFIX)) {
+      enhancer.setNamingPolicy(ProxyNamingPolicy.INSTANCE);
+    }
     return (T) enhancer.create();
   }
 
@@ -83,14 +89,11 @@ public class ProxyFactory {
   private static Class<?>[] getInterfaces(final Class<?> clazz) {
     Set<Class<?>> interfaces = new HashSet<Class<?>>();
 
-    // add all interfaces directly implemented by the given class.
-    interfaces.addAll(Arrays.asList(clazz.getInterfaces()));
-
     // loop through superclasses adding interfaces
-    Class<?> superclass = clazz.getSuperclass();
-    while (superclass != null && !superclass.equals(Object.class)) {
-      interfaces.addAll(Arrays.asList(superclass.getInterfaces()));
-      superclass = superclass.getSuperclass();
+    Class<?> examinedClass = clazz;
+    while (examinedClass != null && !examinedClass.equals(Object.class)) {
+      interfaces.addAll(Arrays.asList(examinedClass.getInterfaces()));
+      examinedClass = examinedClass.getSuperclass();
     }
 
     // add P6Proxy interface
