@@ -27,7 +27,7 @@ Sample settings.xml:
         <repository>
           <id>p6spy-it-mvnrepo</id>
           <name>p6spy-it-mvnrepo</name>
-          <url>https://github.com/p6spy/p6spy-it-mvnrepo/blob/master</url>
+          <url>https://github.com/p6spy/p6spy-it-mvnrepo/raw/master</url>
           <snapshots><enabled>true</enabled></snapshots>
           <releases><enabled>true</enabled></releases>
         </repository>
