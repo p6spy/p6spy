@@ -23,11 +23,16 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -38,6 +43,8 @@ import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.outage.P6OutageFactory;
 import com.p6spy.engine.outage.P6OutageLoadableOptions;
 import com.p6spy.engine.outage.P6OutageOptions;
+import com.p6spy.engine.spy.P6Factory;
+import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.P6SpyFactory;
 import com.p6spy.engine.spy.P6SpyLoadableOptions;
 import com.p6spy.engine.spy.P6SpyOptions;
@@ -48,10 +55,14 @@ import com.p6spy.engine.test.P6TestFramework;
 
 public class P6TestOptionDefaults extends BaseTestCase {
 
-  final static File LOG_FILE = new File("spy.log");
+  private static final File LOG_FILE = new File("spy.log");
   
+  @SuppressWarnings("unchecked")
+  private static final List<Class<? extends P6Factory>> DEFAULT_FACTORIES = Arrays.asList(
+      P6SpyFactory.class, P6LogFactory.class);
+
   @BeforeClass
-  public static void setUp() throws SQLException, IOException {
+  public static void setUpAll() throws SQLException, IOException {
     // cleanup all
     LOG_FILE.delete();
     
@@ -60,6 +71,15 @@ public class P6TestOptionDefaults extends BaseTestCase {
     };
   }
 
+  @Before
+  public void setUp() {
+    // make sure to have no modules explicitly loaded by default
+    {
+      System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+      P6SpyOptions.getActiveInstance().reload();
+    }
+  }
+  
   @After
   public void tearDown() throws SQLException, IOException {
     System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST, "");
@@ -73,6 +93,26 @@ public class P6TestOptionDefaults extends BaseTestCase {
   }
 
   @Test
+  public void testDefaultOptions() {
+    assertP6FactoryClassesEqual(DEFAULT_FACTORIES, P6ModuleManager.getInstance().getFactories());
+    
+    Assert.assertNotNull(P6SpyOptions.getActiveInstance());
+    Assert.assertNotNull(P6LogOptions.getActiveInstance());
+    Assert.assertNull(P6OutageOptions.getActiveInstance());
+  }
+  
+  private void assertP6FactoryClassesEqual(List<Class<? extends P6Factory>> expected,
+                                           Collection<P6Factory> factories) {
+    final Set<Class<? extends P6Factory>> expectedSet = new HashSet<Class<? extends P6Factory>>(
+        expected);
+
+    for (P6Factory factory : factories) {
+      expectedSet.remove(factory.getClass());
+    }
+    Assert.assertTrue(expectedSet.isEmpty());
+  }
+  
+  @Test
   public void testP6SpyOptionDefaults() {
     P6SpyLoadableOptions opts = P6SpyOptions.getActiveInstance();
     Assert.assertNotNull(opts);
@@ -82,11 +122,12 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertTrue(opts.getAppend());
     Assert.assertNull(opts.getDateformat());
     Assert.assertEquals(FileLogger.class.getName(), opts.getAppender());
-    Assert.assertEquals(P6SpyFactory.class.getName(), opts.getModulelist());
-    Assert.assertEquals(1, opts.getModuleFactories().size());
-    Assert.assertTrue(opts.getModuleFactories().iterator().next() instanceof P6SpyFactory);
-    Assert.assertEquals(1, opts.getModuleNames().size());
+    Assert.assertEquals(P6SpyFactory.class.getName() + ","+ P6LogFactory.class.getName(), opts.getModulelist());
+    Assert.assertEquals(2, opts.getModuleFactories().size());
+    assertP6FactoryClassesEqual(DEFAULT_FACTORIES, opts.getModuleFactories());
+    Assert.assertEquals(2, opts.getModuleNames().size());
     Assert.assertTrue(opts.getModuleNames().contains(P6SpyFactory.class.getName()));
+    Assert.assertTrue(opts.getModuleNames().contains(P6LogFactory.class.getName()));
     Assert.assertNull(opts.getDriverlist());
     Assert.assertNull(opts.getDriverNames());
     Assert.assertFalse(opts.getStackTrace());
@@ -144,10 +185,45 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertFalse(opts.getOutageDetection());
     Assert.assertEquals(30L, opts.getOutageDetectionInterval());
     Assert.assertEquals(30000L, opts.getOutageDetectionIntervalMS());
+    
+    // cleanup - make sure to have relevant module unloaded
+    {
+      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+          "-" + P6LogFactory.class.getName());
+      P6SpyOptions.getActiveInstance().reload();
+    }
   }
 
   @Test
-  public void testImplicitlyDisabledLoggedCategories() throws IOException {
+  public void testImplicitlyDisabledLogCategories() {
+    // let's explicitly remove P6LogFactory
+    {
+      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+          "-" + P6LogFactory.class.getName());
+      P6SpyOptions.getActiveInstance().reload();
+    }
+    
+    try {
+      assertDefaultDisabledLogCategories();
+    } catch(IOException e) {
+      e.printStackTrace();
+      Assert.fail();
+    }
+  }
+  
+  @Test
+  public void testWithP6LogOptionDefaultsDefaultDisabledLogCategories() {
+    // P6LogFactory is present by default
+
+    try {
+      assertDefaultDisabledLogCategories();
+    } catch(IOException e) {
+      e.printStackTrace();
+      Assert.fail();
+    }
+  }
+
+  private void assertDefaultDisabledLogCategories() throws IOException {
     {
       final String msg = "debug logged test msg";
       P6LogQuery.debug(msg);
@@ -169,5 +245,4 @@ public class P6TestOptionDefaults extends BaseTestCase {
       Assert.assertTrue(logged.contains(msg));
     }
   }
-
 }
