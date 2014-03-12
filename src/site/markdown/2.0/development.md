@@ -108,7 +108,7 @@ To have tests running please follow these steps:
         vagrant up
         vagrant ssh
         cd /vagrant
-        mvn clean test -P travis -Dmaven.surefire.debug --settings ~/.m2/deploySettings.xml
+        mvn clean test -P travis -Dmaven.surefire.debug --settings ~/.m2/p6spySettings.xml
       
 1. Use your favorite java IDE to remotely debug the tests run.
 
