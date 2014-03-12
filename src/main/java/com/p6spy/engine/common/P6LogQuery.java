@@ -39,6 +39,11 @@ import java.util.regex.Pattern;
 
 public class P6LogQuery implements P6OptionChangedListener {
   
+  private static final String CATEGORY_INFO = "info";
+  private static final String CATEGORY_DEBUG = "debug";
+  private static final Set<String> CATEGORIES_IMPLICITLY_EXCLUDED = new HashSet<String>(
+      Arrays.asList(CATEGORY_DEBUG, CATEGORY_INFO));
+  
   protected static P6Logger logger;
 
   static {
@@ -132,9 +137,9 @@ public class P6LogQuery implements P6OptionChangedListener {
   }
 
   static boolean isCategoryOk(String category) {
-    P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
+    final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
     if (null == opts) {
-      return true;
+      return !CATEGORIES_IMPLICITLY_EXCLUDED.contains(category);
     }
     
     final Set<String> excludeCategories = opts.getExcludeCategoriesSet();
@@ -200,19 +205,19 @@ public class P6LogQuery implements P6OptionChangedListener {
   }
 
   static public void info(String sql) {
-    if (logger != null && isCategoryOk("info")) {
-      doLog(-1, "info", "", sql);
+    if (logger != null && isCategoryOk(CATEGORY_INFO)) {
+      doLog(-1, CATEGORY_INFO, "", sql);
     }
   }
 
   static public boolean isDebugEnabled() {
-    return isCategoryOk("debug");
+    return isCategoryOk(CATEGORY_DEBUG);
   }
 
   static public void debug(String sql) {
     if (isDebugEnabled()) {
       if (logger != null) {
-        doLog(-1, "debug", "", sql);
+        doLog(-1, CATEGORY_DEBUG, "", sql);
       } else {
         System.err.println(sql);
       }

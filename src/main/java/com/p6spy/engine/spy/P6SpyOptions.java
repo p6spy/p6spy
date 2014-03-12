@@ -25,6 +25,7 @@ import java.util.Set;
 
 import javax.management.StandardMBean;
 
+import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
@@ -70,7 +71,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       defaults.put(LOGFILE, "spy.log");
       defaults.put(APPEND, Boolean.TRUE.toString());
       defaults.put(APPENDER, FileLogger.class.getName());
-      defaults.put(MODULELIST, P6SpyFactory.class.getName());
+      defaults.put(MODULELIST, P6SpyFactory.class.getName() + ","+ P6LogFactory.class.getName());
       defaults.put(STACKTRACE, Boolean.FALSE.toString());
       defaults.put(AUTOFLUSH, Boolean.FALSE.toString());
       defaults.put(RELOADPROPERTIES, Boolean.FALSE.toString());

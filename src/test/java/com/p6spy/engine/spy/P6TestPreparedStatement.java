@@ -22,7 +22,9 @@ package com.p6spy.engine.spy;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.test.P6TestFramework;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +56,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
         statement.close();
       }
     } catch (Exception e) {
-      fail(e.getMessage());
+      fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }
   }
 
@@ -86,7 +88,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       rs.close();
       prep.close();
     } catch (Exception e) {
-      fail(e.getMessage() + " due to error: " + getStackTrace(e));
+      fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }
   }
   
@@ -154,7 +156,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
         P6LogOptions.getActiveInstance().setExcludecategories("result,resultset");
       
     } catch (Exception e) {
-      fail(e.getMessage() + " due to error: " + getStackTrace(e));
+      fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }
   }
 
@@ -217,7 +219,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       rs.close();
       prep.close();
     } catch (Exception e) {
-      fail(e.getMessage() + " due to error: " + getStackTrace(e));
+      fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }
   }
   
@@ -243,7 +245,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       dropPrepared(statement);
       statement.close();  
     } catch (Exception e) {
-      fail(e.getMessage());
+      fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }
   }
 
