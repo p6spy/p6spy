@@ -17,23 +17,23 @@ Sample settings.xml:
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-	<profiles>
-		<profile>
-			<id>p6spy-it-mvnrepo</id>
+  <profiles>
+    <profile>
+    <id>p6spy-it-mvnrepo</id>
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
       <repositories>
         <repository>
           <id>p6spy-it-mvnrepo</id>
-    			<name>p6spy-it-mvnrepo</name>
-          <url>https://github.com/p6spy/p6spy-it-mvnrepo/blob/master</url>
+          <name>p6spy-it-mvnrepo</name>
+          <url>https://github.com/p6spy/p6spy-it-mvnrepo/raw/master</url>
           <snapshots><enabled>true</enabled></snapshots>
           <releases><enabled>true</enabled></releases>
         </repository>
       </repositories>
-		</profile>
-	</profiles>
+    </profile>
+  </profiles>
 </settings>
 ```
 
@@ -108,7 +108,7 @@ To have tests running please follow these steps:
         vagrant up
         vagrant ssh
         cd /vagrant
-        mvn clean test -P travis -Dmaven.surefire.debug --settings ~/.m2/deploySettings.xml
+        mvn clean test -P travis -Dmaven.surefire.debug --settings ~/.m2/p6spySettings.xml
       
 1. Use your favorite java IDE to remotely debug the tests run.
 
