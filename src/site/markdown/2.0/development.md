@@ -96,19 +96,19 @@ To make things easier, [Vagrant] (http://www.vagrantup.com/) is used to create e
 
 To have tests running please follow these steps:
 
-1. Install [Vagrant] (http://www.vagrantup.com/) in your environment with Virtualbox as provider
+1. Install [Vagrant] (http://www.vagrantup.com/) in your environment with Virtualbox as provider (please note 1.2.x version is currently only supported, due to plugin: [vagrant-berkshelf] (https://github.com/berkshelf/vagrant-berkshelf) compatibility)
 1. Install Vagrant plugins we use:
 
         vagrant plugin install vagrant-omnibus
         vagrant plugin install vagrant-berkshelf
-        vagrant plugin install vagrant-cachier
+        vagrant plugin install vagrant-cachier --plugin-version 0.5.1 # this is the last stable one compatible with vagrant 1.2.x
 
 1. To remotely debug the integration tests on your local machine run following:
 
         vagrant up
         vagrant ssh
         cd /vagrant
-        mvn clean test -P travis -Dmaven.surefire.debug --settings ~/.m2/p6spySettings.xml
+        mvn clean test -P travis -Dmaven.surefire.debug --settings ~/.m2/deploySettings.xml
       
 1. Use your favorite java IDE to remotely debug the tests run.
 
