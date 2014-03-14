@@ -26,31 +26,40 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-
   <changeSet id="customers-table" author="quintonm">
     <!-- generic table to be used by all tests -->
     <createTable tableName="customers">
       <column name="id" type="int"/>
       <column name="name" type="varchar(255)"/>
     </createTable>
-    <loadData tableName="customers" file="testdata/customers.csv">
-      <column name="id" type="numeric"/>
-      <column name="name" type="string"/>
-    </loadData>
   </changeSet>
 
+	<changeSet id="seed-customers-table" author="butkovic"
+		runAlways="true">
+		<delete tableName="customers" />
+		<loadData tableName="customers" file="testdata/customers.csv">
+			<column name="id" type="numeric" />
+			<column name="name" type="string" />
+		</loadData>
+	</changeSet>
+    
   <changeSet id="contacts-table" author="quintonm">
     <!-- generic table to be used by all tests -->
     <createTable tableName="contacts">
       <column name="id" type="int"/>
       <column name="name" type="varchar(255)"/>
     </createTable>
-    <loadData tableName="contacts" file="testdata/contacts.csv">
-      <column name="id" type="numeric"/>
-      <column name="name" type="string"/>
-    </loadData>
   </changeSet>
 
+	<changeSet id="seed-contacts-table" author="butkovic"
+		runAlways="true">
+		<delete tableName="contacts" />
+		<loadData tableName="contacts" file="testdata/contacts.csv">
+			<column name="id" type="numeric" />
+			<column name="name" type="string" />
+		</loadData>
+	</changeSet>
+  
   <changeSet id="create-test-proc-h2" author="quintonm">
     <!-- used by P6TestCallableStatement -->
     <preConditions onFail="CONTINUE">
