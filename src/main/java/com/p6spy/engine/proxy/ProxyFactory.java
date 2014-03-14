@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.sf.cglib.core.CodeGenerationException;
+import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.proxy.Enhancer;
 
 /**
@@ -30,8 +32,6 @@ import net.sf.cglib.proxy.Enhancer;
  * @since 09/2013
  */
 public class ProxyFactory {
-
-  private static final String SQLITE_PACKAGE_PREFIX = "org.sqlite";
 
   /**
    * @deprecated use {@link #createProxy(Object, GenericInvocationHandler)} instead
@@ -51,19 +51,39 @@ public class ProxyFactory {
    */
   @SuppressWarnings("unchecked")
   public static <T> T createProxy(final T underlying, final GenericInvocationHandler<T> invocationHandler) {
-    //noinspection unchecked
+    try {
+      final Enhancer enhancer = createProxy(underlying, invocationHandler, ProxyNamingPolicy.INSTANCE);
+      return (T) enhancer.create();
+    } catch (CodeGenerationException e) {
+      // fallback, as proxied class might implement non-public interfaces 
+      // that have trouble with our ProxyNamingPolicy (for example for SQLite)
+      final Enhancer enhancer = createProxy(underlying, invocationHandler, null);
+      return (T) enhancer.create();
+    }
+  }
+
+  /**
+   * Creates a proxy for the given object delegating all method calls to the invocation handler.  The proxy will
+   * implement all interfaces implemented by the object to be proxied.
+   *
+   * @param underlying        the object to proxy
+   * @param invocationHandler the invocation handler
+   * @param namingPolicy      the naming policy
+   * @return
+   */
+  private static <T> Enhancer createProxy(final T underlying,
+                                           final GenericInvocationHandler<T> invocationHandler, 
+                                           final NamingPolicy namingPolicy) {
+    // noinspection unchecked
     final Enhancer enhancer = new Enhancer();
     enhancer.setCallback(invocationHandler);
     enhancer.setInterfaces(getInterfaces(underlying.getClass()));
     // fix for the https://github.com/p6spy/p6spy/issues/188
     enhancer.setClassLoader(Thread.currentThread().getContextClassLoader());
-    
-    // sqlite has all the classes package protected 
-    // => no chance to go for different package hierarchy there
-    if (!underlying.getClass().getPackage().getName().startsWith(SQLITE_PACKAGE_PREFIX)) {
-      enhancer.setNamingPolicy(ProxyNamingPolicy.INSTANCE);
+    if (null != namingPolicy) {
+      enhancer.setNamingPolicy(namingPolicy);  
     }
-    return (T) enhancer.create();
+    return enhancer;
   }
 
   /**
