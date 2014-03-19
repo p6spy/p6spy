@@ -1,12 +1,44 @@
 # Release Notes
 
-## Version 2.0.0-alpha1 and up
+For the full changelog (since 2.0.0-aplha1), see: [github report](../github-report.html)
 
-see: [github report](../github-report.html)
+## Version 2.0.1
+
+* fixed usage with signed jdbc jars (see: [issue #200] (https://github.com/p6spy/p6spy/issues/200))
+* internal logs not printed out any more (see: [issue #201] (https://github.com/p6spy/p6spy/issues/201))
+
+## Version 2.0.0-alpha1 and 2.0.0
+
+* project hosting was moved from [sourceforge](http://sourceforge.net/projects/p6spy/) to [github](https://github.com/p6spy/p6spy)
+* major part of the legacy code was refactored
+* Java 6/7 JDBC API support introduced,
+* proxying via modified `JDBC` `URL`s only was implemented, so for for MySQL original url would be (without a need for any further configuration):
+
+    ```
+    jdbc:mysql://<hostname>:<port>/<database>
+    ```
+        
+    the one proxied via p6spy would one:
+    
+    ```
+    jdbc:p6spy:mysql://<hostname>:<port>/<database>
+    ```
+  
+ * XA Datasource support has been introduced,
+ * configuration via:
+     * system/environment properties and
+     * JMX properties
+     * as an alternative to file configuration only
+     * or even zero config use case supported,
+ * slf4j support (more flexible as previously used log4j),
+ * junit tests were migrated to junit 4 (well most of the old ones were failing anyway),
+ * Continuous integration using Travis was setup providing testing on popular:
+     * DB systems (namely: Oracle, DB2, PostgreSQL, MySQL, H2, HSQLDB, SQLite, Firebird, and Derby), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy) as well as 
+     * application servers (namely: Wildfly 8, JBoss 4.2, 5.1, 6.1, 7.1, Glassfish 3.1, 4.0, Jetty 7.6, 8.1, 9.1, Tomcat 6, 7, 8, Resin 4, Jonas 5.3 and Geronimo 2.1, 2.2), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy-it).
 
 ## Version 1.3
 
-?????
+* release notes not provided
 
 ## Version 1.2
 
