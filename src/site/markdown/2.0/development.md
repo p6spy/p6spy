@@ -5,9 +5,45 @@
 1. Make sure to have Java 1.7 or later installed.
 1. Download and install [Apache Maven](http://maven.apache.org) 3.0.4 or later.
 
-## Maven configuration
+## Building the project
+The following are useful Maven commands:
 
-The P6Spy maven repo must be added as a repository in the maven settings.xml file.  This should be done
+to build binaries:
+
+    mvn clean install
+
+ to build the site:
+
+    mvn site
+
+ to run the JUnit tests Refer to the [Running the tests](#tests) section
+
+## <a name="tests">Running the tests</a>
+
+To run the JUnit tests against specific database(s):
+
+1. Make sure to have Java installed.
+1. Download and install [Apache Maven](http://maven.apache.org).
+1. Please note, that PostgreSQL, MySQL, Firebird, DB2 and Oracle specific tests require to have the detabase servers running with the specific databases, users and permissions setup (see: [Integration tests-like environment with Vagrant](#vagrant) section).
+1. Moreover as the DB2 and Oracle jdbc drivers are not publicly available in maven repositories, these are enabled in travis profile only (see: [Integration tests-like environment with Vagrant](#vagrant) section).
+
+By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:
+
+  * PostgreSQL
+  * MySQL
+  * H2 
+  * HSQLDB
+  * SQLite
+  * Firebird
+  * Derby
+  * DB2
+  * Oracle
+  * or comma separated list of these
+
+
+### Custom maven repository
+
+For some specific database tests (not using default - H2 dabase), the P6Spy maven repo should be added as a repository in the maven settings.xml file. This should be done
 by adding the p6spy profile as shown in the example below.
 
 Sample settings.xml:
@@ -37,42 +73,6 @@ Sample settings.xml:
 </settings>
 ```
 
-The following are useful Maven commands:
-
-to build binaries:
-
-    mvn clean install
-
- to build the site:
-
-    mvn site
-
- to run the JUnit tests Refer to the [Running the tests](#tests) section
-
- 
-## <a name="tests">Running the tests</a>
-
-To run the JUnit tests against specific database(s):
-
-1. Make sure to have Java installed.
-1. Download and install [Apache Maven](http://maven.apache.org).
-1. Please note, that PostgreSQL, MySQL, Firebird, DB2 and Oracle specific tests require to have the detabase servers running with the specific databases, users and permissions setup (see: [Integration tests-like environment with Vagrant](#vagrant) section).
-1. Moreover as the DB2 and Oracle jdbc drivers are not publicly available in maven repositories, these are enabled in travis profile only (see: [Integration tests-like environment with Vagrant](#vagrant) section).
-
-By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:
-
-  * PostgreSQL
-  * MySQL
-  * H2 
-  * HSQLDB
-  * SQLite
-  * Firebird
-  * Derby
-  * DB2
-  * Oracle
-  * or comma separated list of these
-
-
 ### Running the tests in the command line
 
 use the following maven command:
@@ -84,7 +84,7 @@ where &lt;DB_NAMES&gt; would hold the value of `DB` environment variable describ
 ### Running the tests in Eclipse
 
 1. Make sure to have [m2e plugin](http://eclipse.org/m2e/) installed 
-1. Import all the p6spy projects to eclipse (as Maven projects)
+1. Import the p6spy project to eclipse (as Maven project)
 1. Right click the Class holding the test to run and choose: Run As -> JUnit Test
 
 The `DB` environment variable can be set using Arguments tab -&gt; VM Argument of the JUnit Run Configuration.

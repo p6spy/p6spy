@@ -538,11 +538,14 @@
       <scope>test</scope>
     </dependency>
 
+	<!-- needed for testing, let's prevent users from needing modify their settings.xml just for the project build -->
     <dependency>
       <groupId>p6spy</groupId>
       <artifactId>p6spy-signedjar-test</artifactId>
       <version>1.0.0</version>
-      <scope>test</scope>
+      <scope>system</scope>
+      <systemPath>${basedir}/src/test/resources/p6spy-signedjar-test-1.0.0.jar</systemPath>
+      <optional>true</optional>
     </dependency>
     <dependency>
 		<groupId>commons-beanutils</groupId>
@@ -719,6 +722,10 @@
                 however keep in mind that some tests run with preconfigured drivers (i.e. multidriver, ...)-->
                 <DB>${env.DB}</DB>
               </systemPropertyVariables>
+	          <!-- signed jar proxing -->
+              <additionalClasspathElements>
+	          	<additionalClasspathElement>${project.build.directory}/test-classes/p6spy-signedjar-test-1.0.0.jar</additionalClasspathElement>
+	          </additionalClasspathElements>
             </configuration>
           </plugin>
         </plugins>
@@ -737,6 +744,11 @@
                 <!-- all the DBs we want to test with -->
                 <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,DB2,Oracle</DB>
               </systemPropertyVariables>
+              
+              <!-- signed jar proxing -->
+              <additionalClasspathElements>
+	          	<additionalClasspathElement>${project.build.directory}/test-classes/p6spy-signedjar-test-1.0.0.jar</additionalClasspathElement>
+	          </additionalClasspathElements>
             </configuration>
           </plugin>
 
