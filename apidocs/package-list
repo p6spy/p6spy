@@ -3,6 +3,7 @@ com.p6spy.engine.leak
 com.p6spy.engine.logging
 com.p6spy.engine.outage
 com.p6spy.engine.proxy
+com.p6spy.engine.proxy.cache
 com.p6spy.engine.spy
 com.p6spy.engine.spy.appender
 com.p6spy.engine.spy.option
