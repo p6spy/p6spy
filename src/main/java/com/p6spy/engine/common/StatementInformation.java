@@ -19,17 +19,16 @@
  */
 package com.p6spy.engine.common;
 
-import java.sql.SQLException;
 
 /**
  * @author Quinton McCombs
  * @since 09/2013
  */
-public class StatementInformation {
+public class StatementInformation implements Loggable {
 
   private final ConnectionInformation connectionInformation;
   private String statementQuery;
-
+  
   public StatementInformation(final ConnectionInformation connectionInformation) {
     this.connectionInformation = connectionInformation;
   }
@@ -46,7 +45,13 @@ public class StatementInformation {
     return connectionInformation.getConnectionId();
   }
 
-  public String getPreparedStatementQuery() throws SQLException {
+  @Override
+  public String getSqlWithValues() {
     return "";
+  }
+
+  @Override
+  public String getSql() {
+    return statementQuery;
   }
 }

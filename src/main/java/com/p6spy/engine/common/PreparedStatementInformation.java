@@ -19,36 +19,35 @@
  */
 package com.p6spy.engine.common;
 
-import com.p6spy.engine.spy.P6SpyOptions;
-
 import java.sql.ParameterMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.p6spy.engine.spy.P6SpyOptions;
+
 /**
  * @author Quinton McCombs
  * @since 09/2013
  */
-public class PreparedStatementInformation extends StatementInformation {
+public class PreparedStatementInformation extends StatementInformation implements Loggable {
   private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-  private final List<String> parameterValues;
+  private final List<Object> parameterValues;
   private final int parameterCount;
-  private final ParameterMetaData parameterMetaData;
+//  private final ParameterMetaData parameterMetaData;
 
   public PreparedStatementInformation(final ConnectionInformation connectionInformation,ParameterMetaData parameterMetaData)
       throws SQLException {
     super(connectionInformation);
-    this.parameterMetaData = parameterMetaData;
+//    this.parameterMetaData = parameterMetaData;
     this.parameterCount = parameterMetaData.getParameterCount();
-    this.parameterValues = new ArrayList<String>(parameterMetaData.getParameterCount());
+    this.parameterValues = new ArrayList<Object>(parameterMetaData.getParameterCount());
 
     // pre-populate parameter values list with nulls to allow for the values to be set later by index
-    for( int i = 0; i < parameterCount; i++) {
+    for(int i = 0; i < parameterCount; i++) {
       parameterValues.add(null);
     }
-
   }
 
   int getParameterCount() {
@@ -63,10 +62,9 @@ public class PreparedStatementInformation extends StatementInformation {
    * @throws java.sql.SQLException
    */
   @Override
-  public String getPreparedStatementQuery() throws SQLException {
-    StringBuilder sb = new StringBuilder();
-
-    String statementQuery = getStatementQuery();
+  public String getSqlWithValues() {
+    final StringBuilder sb = new StringBuilder();
+    final String statementQuery = getStatementQuery();
 
     // iterate over the characters in the query replacing the parameter placeholders
     // with the actual values
@@ -78,7 +76,7 @@ public class PreparedStatementInformation extends StatementInformation {
         if( parameterValues.get(currentParameter) == null) {
           sb.append("NULL");
         } else {
-          sb.append(parameterValues.get(currentParameter));
+          sb.append(convertToString(parameterValues.get(currentParameter)));
         }
         currentParameter++;
       } else {
@@ -95,7 +93,7 @@ public class PreparedStatementInformation extends StatementInformation {
    * @param value the value of the parameter
    */
   public void setParameterValue(final int position, final Object value) {
-    parameterValues.set(position-1,convertToString(value));
+    parameterValues.set(position-1, value);
   }
 
   private String convertToString(Object o) {
@@ -131,17 +129,11 @@ public class PreparedStatementInformation extends StatementInformation {
           The method call only works if service side prepared statements
           are enabled.  The URL parameter 'useServerPrepStmts=true' enables.
      */
-
-    boolean shouldQuote = true;
     if( Number.class.isAssignableFrom(obj.getClass()) ||
         Boolean.class.isAssignableFrom(obj.getClass()) ) {
-      shouldQuote = false;
-    } 
-    
-    if( shouldQuote ) {
-      return "'" + stringValue + "'";
-    } else {
       return stringValue;
+    } else {
+      return "'" + stringValue + "'";
     }
   }
 
@@ -154,5 +146,5 @@ public class PreparedStatementInformation extends StatementInformation {
     }
     return sb.toString();
   }
-
+  
 }
