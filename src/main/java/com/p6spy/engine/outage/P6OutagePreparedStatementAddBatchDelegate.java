@@ -37,7 +37,7 @@ class P6OutagePreparedStatementAddBatchDelegate implements Delegate {
 
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
         P6OutageDetector.getInstance().registerInvocation(this, startTime, "batch",
-            preparedStatementInformation.getStatementQuery(), preparedStatementInformation.getPreparedStatementQuery());
+            preparedStatementInformation.getStatementQuery(), preparedStatementInformation.getSqlWithValues());
     }
 
     try {

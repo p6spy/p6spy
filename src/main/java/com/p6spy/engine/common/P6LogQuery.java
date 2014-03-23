@@ -177,14 +177,36 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
+  static public void log(String category, Loggable loggable) {
+    if (logger != null && isCategoryOk(category)) {
+      doLog(-1, category, loggable.getSql(), loggable.getSqlWithValues());
+    }
+  }
+
   static public void logElapsed(int connectionId, long startTime, String category, String prepared, String sql) {
     logElapsed(connectionId, startTime, System.currentTimeMillis(), category, prepared, sql);
   }
 
   static public void logElapsed(int connectionId, long startTime, long endTime, String category, String prepared, String sql) {
-    if (logger != null && meetsThresholdRequirement(endTime - startTime) && isLoggable(sql) && isCategoryOk(category)) {
+    if (logger != null && meetsThresholdRequirement(endTime - startTime) && isCategoryOk(category) && isLoggable(sql) ) {
       doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
     } else if (isDebugEnabled()) {
+      debug("P6Spy intentionally did not log category: " + category + ", statement: " + sql + "  Reason: logger=" + logger + ", isLoggable="
+          + isLoggable(sql) + ", isCategoryOk=" + isCategoryOk(category) + ", meetsTreshold=" + meetsThresholdRequirement(endTime - startTime));
+    }
+  }
+  
+  static public void logElapsed(int connectionId, long startTime, String category, Loggable loggable) {
+    logElapsed(connectionId, startTime, System.currentTimeMillis(), category, loggable);
+  }
+
+  static public void logElapsed(int connectionId, long startTime, long endTime, String category, Loggable loggable) {
+    // usually an expensive operation => cache where possible
+    String sql = null;
+    if (logger != null && meetsThresholdRequirement(endTime - startTime) && isCategoryOk(category) && isLoggable(sql = loggable.getSql())) {
+      doLogElapsed(connectionId, startTime, endTime, category, sql, loggable.getSqlWithValues());
+    } else if (isDebugEnabled()) {
+      sql = loggable.getSqlWithValues();
       debug("P6Spy intentionally did not log category: " + category + ", statement: " + sql + "  Reason: logger=" + logger + ", isLoggable="
           + isLoggable(sql) + ", isCategoryOk=" + isCategoryOk(category) + ", meetsTreshold=" + meetsThresholdRequirement(endTime - startTime));
     }
@@ -194,14 +216,11 @@ public class P6LogQuery implements P6OptionChangedListener {
   //on whether on not it has taken greater than x amount of time.
   static private boolean meetsThresholdRequirement(long timeTaken) {
     long executionThreshold = P6LogOptions.getActiveInstance().getExecutionThreshold();
-
+    
     if (executionThreshold <= 0) {
       return true;
-    } else if (timeTaken > executionThreshold) {
-      return true;
-    } else {
-      return false;
-    }
+    } 
+    return timeTaken > executionThreshold;
   }
 
   static public void info(String sql) {

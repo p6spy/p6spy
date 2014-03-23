@@ -36,6 +36,7 @@ import javax.management.NotCompliantMBeanException;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.spy.option.EnvironmentVariables;
 import com.p6spy.engine.spy.option.P6OptionChangedListener;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
@@ -72,6 +73,10 @@ public class P6ModuleManager {
 
       instance = new P6ModuleManager();
       P6LogQuery.initialize();
+      
+      // get rid of old cached stuff
+      GenericInvocationHandler.clearCache();
+      
     } catch (IOException e) {
       handleInitEx(e);
     } catch (MBeanRegistrationException e) {
