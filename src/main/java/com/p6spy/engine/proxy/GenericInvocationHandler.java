@@ -19,14 +19,18 @@
  */
 package com.p6spy.engine.proxy;
 
-import com.p6spy.engine.common.P6WrapperIsWrapperDelegate;
-import com.p6spy.engine.common.P6WrapperUnwrapDelegate;
-import net.sf.cglib.proxy.InvocationHandler;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+
+import net.sf.cglib.proxy.InvocationHandler;
+
+import com.p6spy.engine.common.P6WrapperIsWrapperDelegate;
+import com.p6spy.engine.common.P6WrapperUnwrapDelegate;
+import com.p6spy.engine.proxy.cache.Cache;
+import com.p6spy.engine.proxy.cache.CacheFactory;
+import com.p6spy.engine.proxy.cache.MethodMatcherCacheKey;
 
 /**
  * Base class for invocation handlers.  This class is designed to be a generic implementation
@@ -37,8 +41,11 @@ import java.util.Map;
  */
 public class GenericInvocationHandler<T> implements InvocationHandler {
   private final Map<MethodMatcher, Delegate> delegateMap;
-
+  
   private final T underlying;
+  
+  final static Cache<MethodMatcherCacheKey, MethodMatcher> cache = CacheFactory
+      .<MethodMatcherCacheKey, MethodMatcher> newCache();
 
   /**
    * Creates a new invocation handler for the given object.
@@ -78,13 +85,24 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   }
 
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    try {
-      for (MethodMatcher methodMatcher : delegateMap.keySet()) {
-        if (methodMatcher.matches(method)) {
-          return delegateMap.get(methodMatcher).invoke(proxy, underlying, method, args);
+    MethodMatcher methodMatcher = cache.get(new MethodMatcherCacheKey(getClass(), method));
+    
+    if (null == methodMatcher) {
+      for (MethodMatcher matcher : delegateMap.keySet()) {
+        if (matcher.matches(method)) {
+          methodMatcher = matcher;
+          cache.put(new MethodMatcherCacheKey(this.getClass(), method), methodMatcher);
+          break;
         }
       }
-
+    }
+      
+    try {
+      if (null != methodMatcher) {
+        final Delegate delegate = delegateMap.get(methodMatcher);
+        return delegate.invoke(proxy, underlying, method, args);
+      }
+          
       return method.invoke(underlying, args);
     } catch (InvocationTargetException e) {
       throw e.getCause();
@@ -93,6 +111,10 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
 
   protected T getUnderlying() {
     return underlying;
+  }
+
+  public static void clearCache() {
+    cache.clear();
   }
 
 }
