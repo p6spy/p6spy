@@ -8,7 +8,7 @@
 
 sudo bash -c 'echo "deb http://archive.canonical.com/ubuntu precise partner" >> /etc/apt/sources.list'
 sudo apt-get update -qq
-sudo apt-get install -y bc db2exc
+sudo apt-get install -qq -y bc db2exc
 
 echo "Running db2profile and db2rmln"
 sudo /bin/sh -c '. ~db2inst1/sqllib/db2profile ; $DB2DIR/cfg/db2rmln'
