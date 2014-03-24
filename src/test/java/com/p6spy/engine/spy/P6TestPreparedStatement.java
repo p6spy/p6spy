@@ -53,6 +53,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
         dropPrepared(statement);
         statement.execute("create table prepstmt_test (col1 varchar(255), col2 integer)");
         statement.execute("create table prepstmt_test2 (col1 varchar(255), col2 integer)");
+        statement.execute("create table prepstmt_test3  (col1 timestamp)");
         statement.close();
       }
     } catch (Exception e) {
@@ -238,6 +239,17 @@ public class P6TestPreparedStatement extends P6TestFramework {
     prep.close();
   }
 
+    @Test
+    public void testAddToDate() throws SQLException {
+     if (db.equals("PostgreSQL")) {
+         String select = "select * from prepstmt_test3 where (date(col1) + ?) < now()  ";
+         PreparedStatement prep = getPreparedStatement(select);
+         prep.setInt(1, 10);
+         prep.executeQuery();
+         prep.close();
+     }
+    }
+
   @After
   public void tearDownPreparedStatement() {
     try {
@@ -252,6 +264,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
   protected void dropPrepared(Statement statement) {
     dropPreparedStatement("drop table prepstmt_test", statement);
     dropPreparedStatement("drop table prepstmt_test2", statement);
+    dropPreparedStatement("drop table prepstmt_test3", statement);
   }
 
   protected void dropPreparedStatement(String sql, Statement statement) {

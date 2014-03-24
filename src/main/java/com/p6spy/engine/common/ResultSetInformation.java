@@ -19,7 +19,6 @@
  */
 package com.p6spy.engine.common;
 
-import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class ResultSetInformation implements Loggable {
   private final Map<String, Object> resultMap= new LinkedHashMap<String, Object>();
   private int currRow = -1;
 
-  public ResultSetInformation(final StatementInformation statementInformation) throws SQLException {
+  public ResultSetInformation(final StatementInformation statementInformation) {
     this.statementInformation = statementInformation;
     this.query = statementInformation.getStatementQuery();
   }
