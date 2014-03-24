@@ -39,7 +39,7 @@ public class ResultSetInformation implements Loggable {
     this.query = statementInformation.getStatementQuery();
   }
 
-  public void generateLogMessage() {
+  public void generateLogMessage() throws SQLException {
     P6LogQuery.log("resultset", this);
     resultMap.clear();
   }

@@ -19,13 +19,13 @@
  */
 package com.p6spy.engine.common;
 
-import java.sql.ParameterMetaData;
+import com.p6spy.engine.spy.P6SpyOptions;
+
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.p6spy.engine.spy.P6SpyOptions;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Quinton McCombs
@@ -33,25 +33,17 @@ import com.p6spy.engine.spy.P6SpyOptions;
  */
 public class PreparedStatementInformation extends StatementInformation implements Loggable {
   private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-  private final List<Object> parameterValues;
-  private final int parameterCount;
-//  private final ParameterMetaData parameterMetaData;
+  private final Map<Integer, Object> parameterValues = new HashMap<Integer, Object>();
+    private final PreparedStatement statement;
 
-  public PreparedStatementInformation(final ConnectionInformation connectionInformation,ParameterMetaData parameterMetaData)
+    public PreparedStatementInformation(final ConnectionInformation connectionInformation,PreparedStatement statement)
       throws SQLException {
-    super(connectionInformation);
-//    this.parameterMetaData = parameterMetaData;
-    this.parameterCount = parameterMetaData.getParameterCount();
-    this.parameterValues = new ArrayList<Object>(parameterMetaData.getParameterCount());
-
-    // pre-populate parameter values list with nulls to allow for the values to be set later by index
-    for(int i = 0; i < parameterCount; i++) {
-      parameterValues.add(null);
+        super(connectionInformation);
+        this.statement = statement;
     }
-  }
 
-  int getParameterCount() {
-    return parameterCount;
+  private int getParameterCount() throws SQLException {
+    return statement.getParameterMetaData().getParameterCount();
   }
 
   /**
@@ -62,7 +54,7 @@ public class PreparedStatementInformation extends StatementInformation implement
    * @throws java.sql.SQLException
    */
   @Override
-  public String getSqlWithValues() {
+  public String getSqlWithValues() throws SQLException {
     final StringBuilder sb = new StringBuilder();
     final String statementQuery = getStatementQuery();
 
@@ -93,7 +85,7 @@ public class PreparedStatementInformation extends StatementInformation implement
    * @param value the value of the parameter
    */
   public void setParameterValue(final int position, final Object value) {
-    parameterValues.set(position-1, value);
+    parameterValues.put(position - 1, value);
   }
 
   private String convertToString(Object o) {

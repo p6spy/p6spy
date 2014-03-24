@@ -38,7 +38,7 @@ public class P6LogConnectionPrepareStatementDelegate extends P6LogConnectionCrea
     PreparedStatement statement = (PreparedStatement) method.invoke(underlying, args);
     String query = (String) args[0];
     P6LogPreparedStatementInvocationHandler invocationHandler = new P6LogPreparedStatementInvocationHandler(statement,
-        getConnectionInformation(), query, statement.getParameterMetaData());
+        getConnectionInformation(), query);
     return ProxyFactory.createProxy(statement, PreparedStatement.class, invocationHandler);
   }
 

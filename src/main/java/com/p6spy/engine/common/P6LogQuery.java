@@ -31,6 +31,7 @@ import com.p6spy.engine.spy.option.P6OptionChangedListener;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -177,7 +178,7 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  static public void log(String category, Loggable loggable) {
+  static public void log(String category, Loggable loggable) throws SQLException {
     if (logger != null && isCategoryOk(category)) {
       doLog(-1, category, loggable.getSql(), loggable.getSqlWithValues());
     }
@@ -196,11 +197,11 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
   
-  static public void logElapsed(int connectionId, long startTime, String category, Loggable loggable) {
+  static public void logElapsed(int connectionId, long startTime, String category, Loggable loggable) throws SQLException {
     logElapsed(connectionId, startTime, System.currentTimeMillis(), category, loggable);
   }
 
-  static public void logElapsed(int connectionId, long startTime, long endTime, String category, Loggable loggable) {
+  static public void logElapsed(int connectionId, long startTime, long endTime, String category, Loggable loggable) throws SQLException {
     // usually an expensive operation => cache where possible
     String sql = null;
     if (logger != null && meetsThresholdRequirement(endTime - startTime) && isCategoryOk(category) && isLoggable(sql = loggable.getSql())) {

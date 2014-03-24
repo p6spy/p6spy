@@ -24,7 +24,6 @@ import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameMatcher;
 
-import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -35,12 +34,11 @@ class P6OutagePreparedStatementInvocationHandler extends GenericInvocationHandle
 
   public P6OutagePreparedStatementInvocationHandler(PreparedStatement underlying,
                                                     ConnectionInformation connectionInformation,
-                                                    String query,
-                                                    final ParameterMetaData parameterMetaData)
+                                                    String query)
       throws SQLException {
 
     super(underlying);
-    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation, parameterMetaData);
+    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation, underlying);
     preparedStatementInformation.setStatementQuery(query);
 
     P6OutagePreparedStatementExecuteDelegate executeDelegate = new P6OutagePreparedStatementExecuteDelegate(preparedStatementInformation);

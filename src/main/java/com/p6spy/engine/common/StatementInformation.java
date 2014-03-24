@@ -20,6 +20,8 @@
 package com.p6spy.engine.common;
 
 
+import java.sql.SQLException;
+
 /**
  * @author Quinton McCombs
  * @since 09/2013
@@ -46,7 +48,7 @@ public class StatementInformation implements Loggable {
   }
 
   @Override
-  public String getSqlWithValues() {
+  public String getSqlWithValues() throws SQLException {
     return "";
   }
 
