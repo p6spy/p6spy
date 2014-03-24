@@ -38,7 +38,7 @@ class P6OutagePreparedStatementInvocationHandler extends GenericInvocationHandle
       throws SQLException {
 
     super(underlying);
-    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation, underlying);
+    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation);
     preparedStatementInformation.setStatementQuery(query);
 
     P6OutagePreparedStatementExecuteDelegate executeDelegate = new P6OutagePreparedStatementExecuteDelegate(preparedStatementInformation);

@@ -38,7 +38,7 @@ class P6LogPreparedStatementInvocationHandler extends GenericInvocationHandler<P
       throws SQLException {
 
     super(underlying);
-    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation, underlying);
+    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation);
     preparedStatementInformation.setStatementQuery(query);
 
     P6LogPreparedStatementExecuteDelegate executeDelegate = new P6LogPreparedStatementExecuteDelegate(preparedStatementInformation);

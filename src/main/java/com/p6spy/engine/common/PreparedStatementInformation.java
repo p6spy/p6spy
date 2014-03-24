@@ -21,7 +21,6 @@ package com.p6spy.engine.common;
 
 import com.p6spy.engine.spy.P6SpyOptions;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -34,19 +33,13 @@ import java.util.Map;
 public class PreparedStatementInformation extends StatementInformation implements Loggable {
   private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
   private final Map<Integer, Object> parameterValues = new HashMap<Integer, Object>();
-    private final PreparedStatement statement;
 
-    public PreparedStatementInformation(final ConnectionInformation connectionInformation,PreparedStatement statement)
+    public PreparedStatementInformation(final ConnectionInformation connectionInformation)
       throws SQLException {
         super(connectionInformation);
-        this.statement = statement;
     }
 
-  private int getParameterCount() throws SQLException {
-    return statement.getParameterMetaData().getParameterCount();
-  }
-
-  /**
+    /**
    * Generates the query for the prepared statement with all parameter placeholders
    * replaced with the actual parameter values
    *
@@ -63,7 +56,7 @@ public class PreparedStatementInformation extends StatementInformation implement
     int currentParameter = 0;
     for( int pos = 0; pos < statementQuery.length(); pos ++) {
       char character = statementQuery.charAt(pos);
-      if( statementQuery.charAt(pos) == '?' && currentParameter < getParameterCount()) {
+      if( statementQuery.charAt(pos) == '?' && currentParameter <= parameterValues.size()) {
         // replace with parameter value
         if( parameterValues.get(currentParameter) == null) {
           sb.append("NULL");
