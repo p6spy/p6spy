@@ -19,8 +19,6 @@
  */
 package com.p6spy.engine.common;
 
-import java.sql.SQLException;
-
 /**
  * Assures capability of the class to be logged by {@link P6LogQuery}.
  * 
@@ -36,6 +34,6 @@ public interface Loggable {
   /**
    * @return The {@code SQL} having '?' replaced with real values used.
    */
-  String getSqlWithValues() throws SQLException;
+  String getSqlWithValues();
 
 }

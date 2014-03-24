@@ -25,7 +25,6 @@ import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameMatcher;
 
 import java.sql.CallableStatement;
-import java.sql.SQLException;
 
 /**
  * Invocation handler for {@link java.sql.PreparedStatement}
@@ -34,10 +33,9 @@ class P6LogCallableStatementInvocationHandler extends GenericInvocationHandler<C
 
   public P6LogCallableStatementInvocationHandler(CallableStatement underlying,
                                                  ConnectionInformation connectionInformation,
-                                                 String query)
-      throws SQLException {
+                                                 String query) {
 
-    super(underlying);
+      super(underlying);
     PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation);
     preparedStatementInformation.setStatementQuery(query);
 

@@ -21,7 +21,6 @@ package com.p6spy.engine.common;
 
 import com.p6spy.engine.spy.P6SpyOptions;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,8 +33,7 @@ public class PreparedStatementInformation extends StatementInformation implement
   private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
   private final Map<Integer, Object> parameterValues = new HashMap<Integer, Object>();
 
-    public PreparedStatementInformation(final ConnectionInformation connectionInformation)
-      throws SQLException {
+    public PreparedStatementInformation(final ConnectionInformation connectionInformation) {
         super(connectionInformation);
     }
 
@@ -44,10 +42,9 @@ public class PreparedStatementInformation extends StatementInformation implement
    * replaced with the actual parameter values
    *
    * @return the SQL
-   * @throws java.sql.SQLException
    */
   @Override
-  public String getSqlWithValues() throws SQLException {
+  public String getSqlWithValues() {
     final StringBuilder sb = new StringBuilder();
     final String statementQuery = getStatementQuery();
 
