@@ -2,12 +2,16 @@
 
 For the full changelog (since 2.0.0-aplha1), see: [github report](../github-report.html)
 
-## Version 2.0.1
+## Version 2.0.2 [release pending]
+
+* fixed PostgreSQL issue: `operator is not unique: date + unknown` (see: [issue #214] (https://github.com/p6spy/p6spy/issues/214)), thanks to [Frank Bregulla] (https://github.com/ffriedrich) for report and fix
+
+## Version 2.0.1 [15.03.2014]
 
 * fixed usage with signed jdbc jars (see: [issue #200] (https://github.com/p6spy/p6spy/issues/200))
 * internal logs not printed out any more (see: [issue #201] (https://github.com/p6spy/p6spy/issues/201))
 
-## Version 2.0.0-alpha1 and 2.0.0
+## Version 2.0.0-alpha1 [13.11.2013] and 2.0.0 [04.03.2014]
 
 * project hosting was moved from [sourceforge](http://sourceforge.net/projects/p6spy/) to [github](https://github.com/p6spy/p6spy)
 * major part of the legacy code was refactored
@@ -36,7 +40,7 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
      * DB systems (namely: Oracle, DB2, PostgreSQL, MySQL, H2, HSQLDB, SQLite, Firebird, and Derby), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy) as well as 
      * application servers (namely: Wildfly 8, JBoss 4.2, 5.1, 6.1, 7.1, Glassfish 3.1, 4.0, Jetty 7.6, 8.1, 9.1, Tomcat 6, 7, 8, Resin 4, Jonas 5.3 and Geronimo 2.1, 2.2), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy-it).
 
-## Version 1.3
+## Version 1.3 [27.12.2005]
 
 * release notes not provided
 
