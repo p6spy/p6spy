@@ -671,7 +671,7 @@
           <includeOpenIssues>false</includeOpenIssues>
           <onlyMilestoneIssues>false</onlyMilestoneIssues>
           <onlyCurrentVersion>false</onlyCurrentVersion>
-          <columnNames>Id,Type,Summary,Created,Updated,Fix Version</columnNames>
+          <columnNames>Id,Type,Reporter,Summary,Created,Updated,Fix Version</columnNames>
         </configuration>
       </plugin>
     </plugins>
