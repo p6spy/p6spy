@@ -5,6 +5,7 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 ## Version 2.0.2 [release pending]
 
 * fixed PostgreSQL issue: `operator is not unique: date + unknown` (see: [issue #214] (https://github.com/p6spy/p6spy/issues/214)), thanks to [Frank Bregulla] (https://github.com/ffriedrich) for report and fix
+* significant performance improvements for huge data selects (still a work in progress, see: [issue #84] (https://github.com/p6spy/p6spy/issues/84#issuecomment-38394979))
 
 ## Version 2.0.1 [15.03.2014]
 
