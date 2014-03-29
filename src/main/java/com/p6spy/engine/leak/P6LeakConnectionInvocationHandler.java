@@ -39,7 +39,7 @@ public class P6LeakConnectionInvocationHandler extends GenericInvocationHandler<
     P6LeakConnectionCreateStatementDelegate createStatementDelegate = new P6LeakConnectionCreateStatementDelegate(connectionInformation);
 
     addDelegate(
-        new MethodNameMatcher("closeDelegate"),
+        new MethodNameMatcher("close"),
         closeDelegate
     );
 
