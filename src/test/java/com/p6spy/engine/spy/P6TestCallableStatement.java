@@ -89,6 +89,27 @@ public class P6TestCallableStatement extends P6TestFramework {
   }
 
   @Test
+  public void testNamedParameters() throws SQLException {
+    if( connection.getMetaData().supportsNamedParameters() ) {
+      this.clearLogEnties();
+
+      // execute the statement
+      String query = "{? = call test_proc(?,?)}";
+      CallableStatement call = connection.prepareCall(query);
+      call.registerOutParameter(1, Types.INTEGER);
+      call.setInt("param1", 1);
+      call.setString("param2", "hi");
+      call.execute();
+
+      // the last log message should have the original query
+      assertTrue(getLastLogEntry().contains(query));
+
+      // for now, named parameters are not logged!
+      //assertTrue(getLastLogEntry().contains("1,'hi'"));
+    }
+  }
+
+  @Test
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
     this.clearLogEnties();
 
