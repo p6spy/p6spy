@@ -19,15 +19,17 @@
  */
 package com.p6spy.engine.proxy;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import net.sf.cglib.core.CodeGenerationException;
 import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.proxy.Enhancer;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
+ * Factory for creating proxies
+ * 
  * @author Quinton McCombs
  * @since 09/2013
  */
