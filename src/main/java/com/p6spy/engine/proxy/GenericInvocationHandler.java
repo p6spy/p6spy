@@ -19,18 +19,17 @@
  */
 package com.p6spy.engine.proxy;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.sf.cglib.proxy.InvocationHandler;
-
 import com.p6spy.engine.common.P6WrapperIsWrapperDelegate;
 import com.p6spy.engine.common.P6WrapperUnwrapDelegate;
 import com.p6spy.engine.proxy.cache.Cache;
 import com.p6spy.engine.proxy.cache.CacheFactory;
 import com.p6spy.engine.proxy.cache.MethodMatcherCacheKey;
+import net.sf.cglib.proxy.InvocationHandler;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class for invocation handlers.  This class is designed to be a generic implementation
@@ -84,6 +83,7 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
     return delegateMap.get(methodMatcher);
   }
 
+  @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     MethodMatcher methodMatcher = cache.get(new MethodMatcherCacheKey(getClass(), method));
     

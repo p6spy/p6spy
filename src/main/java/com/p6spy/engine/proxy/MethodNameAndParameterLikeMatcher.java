@@ -23,6 +23,21 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
+ * Used to select methods based on the method name and parameters.  The method name matching follows the 
+ * same rules as {@link com.p6spy.engine.proxy.MethodNameMatcher}.  The list of parameters is an exact match
+ * for the same number of parameters.
+ * 
+ * <p>
+ * Example:<br/>
+ * new MethodNameAndParameterLikeMatcher("testMethod", int.class, String.class) would match the following methods.<br/>
+ * testMethod(int p1, String p2)<br/>
+ * testMethod(int p1, String p2, String p3)<br/>
+ *<br/> 
+ * However, it would not match the following methods.<br/>
+ * testMethod(int p1)<br/>
+ * testMethod(String p1, int p2)<br/>
+ * </p> 
+ * 
  * @author Quinton McCombs
  * @since 09/2013
  */

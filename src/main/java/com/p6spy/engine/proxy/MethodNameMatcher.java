@@ -22,6 +22,31 @@ package com.p6spy.engine.proxy;
 import java.lang.reflect.Method;
 
 /**
+ * Used to select methods based on the method name.  If the name ends with * then
+ * it will match any method name that starts with that name.  The comparison is case sensitive. 
+ * 
+ * <p>
+ * Example #1:<br/>
+ * new MethodNameMatcher("testMethod") would match the following methods.<br/>
+ * testMethod()<br/>
+ * testMethod(int p1, String p2)<br/>
+ * testMethod(int p1, String p2, String p3)<br/>
+ *<br/> 
+ * However, it would not match the following method.<br/>
+ * TestMethod(int p1)<br/>
+ * </p>
+ *
+ * <p>
+ * Example #2:<br/>
+ * new MethodNameMatcher("testM*") would match the following methods.<br/>
+ * testMethod()<br/>
+ * testMethodA(int p1, String p2)<br/>
+ * testMethodB(int p1, String p2, String p3)<br/>
+ *<br/> 
+ * However, it would not match the following method.<br/>
+ * TestMethod(int p1)<br/>
+ * </p>
+ * 
  * @author Quinton McCombs
  * @since 09/2013
  */
