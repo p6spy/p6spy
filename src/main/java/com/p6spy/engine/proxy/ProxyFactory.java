@@ -36,14 +36,6 @@ import java.util.Set;
 public class ProxyFactory {
 
   /**
-   * @deprecated use {@link #createProxy(Object, GenericInvocationHandler)} instead
-   */
-  @Deprecated
-  public static <T> T createProxy(final T underlying, final Class<T> notUsed, final GenericInvocationHandler<T> invocationHandler) {
-    return createProxy(underlying, invocationHandler);
-  }
-
-  /**
    * Creates a proxy for the given object delegating all method calls to the invocation handler.  The proxy will
    * implement all interfaces implemented by the object to be proxied.
    *
