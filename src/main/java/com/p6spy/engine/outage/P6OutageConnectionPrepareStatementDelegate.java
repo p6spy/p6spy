@@ -39,7 +39,7 @@ public class P6OutageConnectionPrepareStatementDelegate extends P6OutageConnecti
     String query = (String) args[0];
     P6OutagePreparedStatementInvocationHandler invocationHandler = new P6OutagePreparedStatementInvocationHandler(statement,
         getConnectionInformation(), query);
-    return ProxyFactory.createProxy(statement, PreparedStatement.class, invocationHandler);
+    return ProxyFactory.createProxy(statement, invocationHandler);
   }
 
 }
