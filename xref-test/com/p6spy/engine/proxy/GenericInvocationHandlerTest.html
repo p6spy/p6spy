@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="46" href="#46">46</a>      invocationHandler.addDelegate(<strong class="jxr_keyword">new</strong> MethodNameMatcher(<span class="jxr_string">"size"</span>), delegate);
 <a class="jxr_linenumber" name="47" href="#47">47</a>      invocationHandler.addDelegate(<strong class="jxr_keyword">new</strong> MethodNameMatcher(<span class="jxr_string">"clear"</span>), delegate);
 <a class="jxr_linenumber" name="48" href="#48">48</a>  
-<a class="jxr_linenumber" name="49" href="#49">49</a>      Set proxy = ProxyFactory.createProxy(set, Set.<strong class="jxr_keyword">class</strong>, invocationHandler);
+<a class="jxr_linenumber" name="49" href="#49">49</a>      Set proxy = ProxyFactory.createProxy(set, invocationHandler);
 <a class="jxr_linenumber" name="50" href="#50">50</a>  
 <a class="jxr_linenumber" name="51" href="#51">51</a>      proxy.add(<span class="jxr_string">"a"</span>);
 <a class="jxr_linenumber" name="52" href="#52">52</a>      assertFalse(<span class="jxr_string">"interceptor should not have been invoked"</span>, delegate.isInvoked());
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="82" href="#82">82</a>      <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">TestDelegate</a> delegate = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">TestDelegate</a>();
 <a class="jxr_linenumber" name="83" href="#83">83</a>      GenericInvocationHandler&lt;ExceptionHandling&gt; invocationHandler = <strong class="jxr_keyword">new</strong> GenericInvocationHandler&lt;ExceptionHandling&gt;(targetObj);
 <a class="jxr_linenumber" name="84" href="#84">84</a>      invocationHandler.addDelegate(<strong class="jxr_keyword">new</strong> MethodNameMatcher(<span class="jxr_string">"methodA"</span>), delegate);
-<a class="jxr_linenumber" name="85" href="#85">85</a>      <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">ExceptionHandling</a> proxy = ProxyFactory.createProxy(targetObj, ExceptionHandling.<strong class="jxr_keyword">class</strong>, invocationHandler);
+<a class="jxr_linenumber" name="85" href="#85">85</a>      <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">ExceptionHandling</a> proxy = ProxyFactory.createProxy(targetObj, invocationHandler);
 <a class="jxr_linenumber" name="86" href="#86">86</a>  
 <a class="jxr_linenumber" name="87" href="#87">87</a>      <em class="jxr_comment">// unchecked exceptions will be passed through</em>
 <a class="jxr_linenumber" name="88" href="#88">88</a>      <strong class="jxr_keyword">try</strong> {
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="115" href="#115">115</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testExceptionHandlingWithExceptionThrownByMethodWithoutDelegate() {
 <a class="jxr_linenumber" name="116" href="#116">116</a>     <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">ExceptionHandlingImpl</a> targetObj = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">ExceptionHandlingImpl</a>();
 <a class="jxr_linenumber" name="117" href="#117">117</a>     GenericInvocationHandler&lt;ExceptionHandling&gt; invocationHandler = <strong class="jxr_keyword">new</strong> GenericInvocationHandler&lt;ExceptionHandling&gt;(targetObj);
-<a class="jxr_linenumber" name="118" href="#118">118</a>     <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">ExceptionHandling</a> proxy = ProxyFactory.createProxy(targetObj, ExceptionHandling.<strong class="jxr_keyword">class</strong>, invocationHandler);
+<a class="jxr_linenumber" name="118" href="#118">118</a>     <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">ExceptionHandling</a> proxy = ProxyFactory.createProxy(targetObj, invocationHandler);
 <a class="jxr_linenumber" name="119" href="#119">119</a> 
 <a class="jxr_linenumber" name="120" href="#120">120</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="121" href="#121">121</a>       targetObj.throwException = <strong class="jxr_keyword">true</strong>;
@@ -142,7 +142,7 @@
 <a class="jxr_linenumber" name="132" href="#132">132</a>     <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">TestDelegate</a> delegate = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">TestDelegate</a>();
 <a class="jxr_linenumber" name="133" href="#133">133</a>     GenericInvocationHandler&lt;ExceptionHandling&gt; invocationHandler = <strong class="jxr_keyword">new</strong> GenericInvocationHandler&lt;ExceptionHandling&gt;(targetObj);
 <a class="jxr_linenumber" name="134" href="#134">134</a>     invocationHandler.addDelegate(<strong class="jxr_keyword">new</strong> MethodNameMatcher(<span class="jxr_string">"methodA"</span>), delegate);
-<a class="jxr_linenumber" name="135" href="#135">135</a>     <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">ExceptionHandling</a> proxy = ProxyFactory.createProxy(targetObj, ExceptionHandling.<strong class="jxr_keyword">class</strong>, invocationHandler);
+<a class="jxr_linenumber" name="135" href="#135">135</a>     <a href="../../../../com/p6spy/engine/proxy/GenericInvocationHandlerTest.html">ExceptionHandling</a> proxy = ProxyFactory.createProxy(targetObj, invocationHandler);
 <a class="jxr_linenumber" name="136" href="#136">136</a> 
 <a class="jxr_linenumber" name="137" href="#137">137</a>     <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="138" href="#138">138</a>       targetObj.throwException = <strong class="jxr_keyword">true</strong>;

@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="43" href="#43">43</a>        
 <a class="jxr_linenumber" name="44" href="#44">44</a>        <strong class="jxr_keyword">if</strong>( result != <strong class="jxr_keyword">null</strong> &amp;&amp; result instanceof ResultSet) {
 <a class="jxr_linenumber" name="45" href="#45">45</a>          <a href="../../../../com/p6spy/engine/logging/P6LogResultSetInvocationHandler.html">P6LogResultSetInvocationHandler</a> resultSetInvocationHandler = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/logging/P6LogResultSetInvocationHandler.html">P6LogResultSetInvocationHandler</a>((ResultSet)result, preparedStatementInformation);
-<a class="jxr_linenumber" name="46" href="#46">46</a>          result = ProxyFactory.createProxy((ResultSet) result, ResultSet.<strong class="jxr_keyword">class</strong>, resultSetInvocationHandler);
+<a class="jxr_linenumber" name="46" href="#46">46</a>          result = ProxyFactory.createProxy((ResultSet) result, resultSetInvocationHandler);
 <a class="jxr_linenumber" name="47" href="#47">47</a>        }
 <a class="jxr_linenumber" name="48" href="#48">48</a>        <strong class="jxr_keyword">return</strong> result;
 <a class="jxr_linenumber" name="49" href="#49">49</a>        
