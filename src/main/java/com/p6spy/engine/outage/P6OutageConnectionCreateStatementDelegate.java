@@ -37,7 +37,7 @@ class P6OutageConnectionCreateStatementDelegate implements Delegate {
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     Statement statement = (Statement) method.invoke(underlying, args);
     P6OutageStatementInvocationHandler invocationHandler = new P6OutageStatementInvocationHandler(statement, connectionInformation);
-    return ProxyFactory.createProxy(statement, Statement.class, invocationHandler);
+    return ProxyFactory.createProxy(statement, invocationHandler);
   }
 
   ConnectionInformation getConnectionInformation() {

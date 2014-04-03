@@ -43,7 +43,7 @@ class P6LogStatementExecuteDelegate implements Delegate {
       Object result = method.invoke(underlying, args);
       if( result != null && result instanceof ResultSet) {
         P6LogResultSetInvocationHandler resultSetInvocationHandler = new P6LogResultSetInvocationHandler((ResultSet)result, statementInformation);
-        result = ProxyFactory.createProxy((ResultSet)result, ResultSet.class, resultSetInvocationHandler);
+        result = ProxyFactory.createProxy((ResultSet)result, resultSetInvocationHandler);
       }
       return result;
     }
