@@ -571,6 +571,7 @@
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
       <version>${hsqldb-build}</version>
+      <classifier>jdk6debug</classifier>
       <scope>test</scope>
     </dependency>
     <dependency>
