@@ -46,7 +46,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
     invocationHandler.addDelegate(new MethodNameMatcher("size"), delegate);
     invocationHandler.addDelegate(new MethodNameMatcher("clear"), delegate);
 
-    Set proxy = ProxyFactory.createProxy(set, Set.class, invocationHandler);
+    Set proxy = ProxyFactory.createProxy(set, invocationHandler);
 
     proxy.add("a");
     assertFalse("interceptor should not have been invoked", delegate.isInvoked());
@@ -82,7 +82,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
     TestDelegate delegate = new TestDelegate();
     GenericInvocationHandler<ExceptionHandling> invocationHandler = new GenericInvocationHandler<ExceptionHandling>(targetObj);
     invocationHandler.addDelegate(new MethodNameMatcher("methodA"), delegate);
-    ExceptionHandling proxy = ProxyFactory.createProxy(targetObj, ExceptionHandling.class, invocationHandler);
+    ExceptionHandling proxy = ProxyFactory.createProxy(targetObj, invocationHandler);
 
     // unchecked exceptions will be passed through
     try {
@@ -115,7 +115,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
   public void testExceptionHandlingWithExceptionThrownByMethodWithoutDelegate() {
     ExceptionHandlingImpl targetObj = new ExceptionHandlingImpl();
     GenericInvocationHandler<ExceptionHandling> invocationHandler = new GenericInvocationHandler<ExceptionHandling>(targetObj);
-    ExceptionHandling proxy = ProxyFactory.createProxy(targetObj, ExceptionHandling.class, invocationHandler);
+    ExceptionHandling proxy = ProxyFactory.createProxy(targetObj, invocationHandler);
 
     try {
       targetObj.throwException = true;
@@ -132,7 +132,7 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
     TestDelegate delegate = new TestDelegate();
     GenericInvocationHandler<ExceptionHandling> invocationHandler = new GenericInvocationHandler<ExceptionHandling>(targetObj);
     invocationHandler.addDelegate(new MethodNameMatcher("methodA"), delegate);
-    ExceptionHandling proxy = ProxyFactory.createProxy(targetObj, ExceptionHandling.class, invocationHandler);
+    ExceptionHandling proxy = ProxyFactory.createProxy(targetObj, invocationHandler);
 
     try {
       targetObj.throwException = true;

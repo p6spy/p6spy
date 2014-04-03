@@ -36,12 +36,17 @@ class P6LogPreparedStatementSetParameterValueDelegate implements Delegate {
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     // ignore calls to any methods defined on the Statement interface!
     if( !Statement.class.equals(method.getDeclaringClass()) ) {
-      int position = (Integer) args[0];
-      Object value = null;
-      if( !method.getName().equals("setNull") && args.length > 1 ) {
-        value = args[1];
+      
+      // short term fix to prevent ClassCastException when setting named parameters
+      // on a CallableStatement
+      if( args[0] instanceof Integer ) {
+        int position = (Integer) args[0];
+        Object value = null;
+        if (!method.getName().equals("setNull") && args.length > 1) {
+          value = args[1];
+        }
+        preparedStatementInformation.setParameterValue(position, value);
       }
-      preparedStatementInformation.setParameterValue(position, value);
     }
     return method.invoke(underlying, args);
   }

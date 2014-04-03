@@ -60,32 +60,15 @@
 		</loadData>
 	</changeSet>
   
-  <changeSet id="create-test-proc-h2" author="quintonm">
-    <!-- used by P6TestCallableStatement -->
-    <preConditions onFail="CONTINUE">
-      <dbms type="H2"/>
-    </preConditions>
-    <sql>
-      DROP ALIAS IF EXISTS TEST_PROC;
-    </sql>
-    <createProcedure>
-      CREATE ALIAS TEST_PROC AS $$ 
-      int testProc(int param1, String param2) {
-         return 2;
-      } $$;      
-    </createProcedure>
-  </changeSet>
-  
   <changeSet id="create-test-proc-oracle" author="quintonm">
     <!-- used by P6TestCallableStatement -->
     <preConditions onFail="CONTINUE">
       <dbms type="Oracle"/>
     </preConditions>
     <createProcedure>
-      create or replace function test_proc(param1 number, param2 varchar2) 
-      return number as
+      create or replace procedure test_proc(param1 number, param2 varchar2, result_param out number) as
       begin
-         return 2;
+        result_param := 2;
       end;      
     </createProcedure>
   </changeSet>
@@ -97,16 +80,33 @@
     </preConditions>
     <!-- liquibase does not drop stored procedures automatically -->
     <sql>
-      drop function if exists test_proc
+      drop procedure if exists test_proc
     </sql>
     <createProcedure>
-      create function test_proc(param1 int, param2 varchar(100)) 
-      returns int 
+      create procedure test_proc(param1 int, param2 varchar(100), out result_param int) 
       begin
-         return 2;
+        set result_param = 2;
       end      
     </createProcedure>
   </changeSet>
+  
+  <changeSet id="create-test-proc-hsqldb" author="quintonm">
+    <!-- used by P6TestCallableStatement -->
+    <preConditions onFail="CONTINUE">
+      <dbms type="HSQLDB"/>
+    </preConditions>
+    <sql>
+      DROP procedure TEST_PROC IF EXISTS;
+    </sql>
+    <createProcedure>
+      CREATE PROCEDURE TEST_PROC(param1 numeric, param2 varchar(100), out result_param numeric)
+      begin atomic
+        set result_param = 2;
+      end
+    </createProcedure>
+  </changeSet>
+  
+  
   
   <changeSet id="create-sleep-proc" author="quintonm">
     <!-- used by P6TestOutage -->

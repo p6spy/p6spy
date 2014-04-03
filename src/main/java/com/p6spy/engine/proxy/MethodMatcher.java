@@ -22,11 +22,20 @@ package com.p6spy.engine.proxy;
 import java.lang.reflect.Method;
 
 /**
+ * Used to determine if a method matches some set of selection criteria. Implementations of are expected to be
+ * thread safe.
+ * 
  * @author Quinton McCombs
  * @since 09/2013
  */
 public interface MethodMatcher {
 
+  /**
+   * Determines is the method meets the selection criteria.
+   * 
+   * @param method The method to test
+   * @return true if it is a match, false otherwise
+   */
   boolean matches(final Method method);
 
 }

@@ -38,7 +38,7 @@ class P6LeakStatementExecuteDelegate implements Delegate {
     Object result = method.invoke(underlying, args);
     if (result != null && result instanceof ResultSet) {
       P6LeakResultSetInvocationHandler resultSetInvocationHandler = new P6LeakResultSetInvocationHandler((ResultSet) result, statementInformation);
-      result = ProxyFactory.createProxy((ResultSet) result, ResultSet.class, resultSetInvocationHandler);
+      result = ProxyFactory.createProxy((ResultSet) result, resultSetInvocationHandler);
     }
     return result;
   }

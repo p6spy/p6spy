@@ -43,14 +43,14 @@ public class P6TestCallableStatement extends P6TestFramework {
   @Parameterized.Parameters(name = "{index}: {0}")
   public static Collection<Object[]> dbs() {
     Collection<Object[]> result;
-    String dbList = (System.getProperty("DB") == null ? "H2" : System.getProperty("DB"));
+    String dbList = (System.getProperty("DB") == null ? "HSQLDB" : System.getProperty("DB"));
 
     Object[] dbs = dbList.split(",");
     List<Object[]> dbsToTest = new ArrayList<Object[]>();
     for (int i = 0; i < dbs.length; i++) {
       //  Check against list of databases with stored procs
       // As procs become available for other databases, enable them here.
-      if( Arrays.asList("H2","Oracle","MySQL").contains(dbs[i])) {
+      if( Arrays.asList("Oracle","MySQL","HSQLDB").contains(dbs[i])) {
         dbsToTest.add(new Object[]{dbs[i]});
       } else {
         log.info("Skipping "+dbs[i]+" because stored procedures have not been created for testing");
@@ -71,13 +71,13 @@ public class P6TestCallableStatement extends P6TestFramework {
     this.clearLogEnties();
 
     // execute the statement
-    String query = "{? = call test_proc(?,?)}";
+    String query = "{call test_proc(?,?,?)}";
     CallableStatement call = connection.prepareCall(query);
-    call.registerOutParameter(1, Types.INTEGER);
-    call.setInt(2, 1);
-    call.setString(3, "hi");
+    call.registerOutParameter(3, Types.INTEGER);
+    call.setInt(1, 1);
+    call.setString(2, "hi");
     call.execute();
-    int retVal = call.getInt(1);
+    int retVal = call.getInt(3);
     assertEquals(2, retVal);
     call.close();
 
@@ -89,17 +89,48 @@ public class P6TestCallableStatement extends P6TestFramework {
   }
 
   @Test
+  public void testNamedParameters() throws SQLException {
+    this.clearLogEnties();
+    
+    String param1Name = "param1";
+    String param2Name = "param2";
+    String resultParamName = "result_param";
+    
+    if( "HSQLDB".equals(db) ) {
+      // HSQLDB uses @p1, @p2, etc...  as the "names" of the parameters
+      param1Name = "@p1";
+      param2Name = "@p2";
+      resultParamName = "@p3";
+    }
+
+    // execute the statement
+    String query = "{call test_proc(?,?,?)}";
+    CallableStatement call = connection.prepareCall(query);
+    call.setInt(param1Name, 1);
+    call.setString(param2Name, "hi");
+    call.registerOutParameter(resultParamName, Types.INTEGER);
+    call.execute();
+    call.close();
+
+    // the last log message should have the original query
+    assertTrue(getLastLogEntry().contains(query));
+
+    // for now, named parameters are not logged!
+    //assertTrue(getLastLogEntry().contains("1,'hi'"));
+  }
+
+  @Test
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
     this.clearLogEnties();
 
     // execute the statement
-    String query = "{? = call test_proc(?,?)}";
+    String query = "{call test_proc(?,?,?)}";
     CallableStatement stmt = connection.prepareCall(query);
-    stmt.registerOutParameter(1, Types.INTEGER);
-    stmt.setInt(2, 1);
-    stmt.setNull(3, Types.VARCHAR);
+    stmt.registerOutParameter(3, Types.INTEGER);
+    stmt.setInt(1, 1);
+    stmt.setNull(2, Types.VARCHAR);
     stmt.execute();
-    int retVal = stmt.getInt(1);
+    int retVal = stmt.getInt(3);
     assertEquals(2, retVal);
     stmt.close();
 
