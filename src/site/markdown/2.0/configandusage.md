@@ -416,10 +416,6 @@ If you set append=true, the log will be suddenly truncated when you change your 
 
 reloadproperties will not reload any driver information (such as realdriver, realdriver2, and realdriver3) and will not change the modules that are in memory.
 
-### useprefix
-
-Setting useprefix to true requires you to prefix your URLs with p6spy:. The default setting is false.
-
 ### logMessageFormat
 
 The log message format is selected by specifying the class to use to format the log messages.  The following
