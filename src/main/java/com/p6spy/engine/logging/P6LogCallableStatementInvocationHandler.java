@@ -19,8 +19,8 @@
  */
 package com.p6spy.engine.logging;
 
+import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameMatcher;
 
@@ -36,12 +36,12 @@ class P6LogCallableStatementInvocationHandler extends GenericInvocationHandler<C
                                                  String query) {
 
       super(underlying);
-    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation);
-    preparedStatementInformation.setStatementQuery(query);
+    CallableStatementInformation callableStatementInformation = new CallableStatementInformation(connectionInformation);
+    callableStatementInformation.setStatementQuery(query);
 
-    P6LogPreparedStatementExecuteDelegate executeDelegate = new P6LogPreparedStatementExecuteDelegate(preparedStatementInformation);
-    P6LogPreparedStatementAddBatchDelegate addBatchDelegate = new P6LogPreparedStatementAddBatchDelegate(preparedStatementInformation);
-    P6LogPreparedStatementSetParameterValueDelegate setParameterValueDelegate = new P6LogPreparedStatementSetParameterValueDelegate(preparedStatementInformation);
+    P6LogPreparedStatementExecuteDelegate executeDelegate = new P6LogPreparedStatementExecuteDelegate(callableStatementInformation);
+    P6LogPreparedStatementAddBatchDelegate addBatchDelegate = new P6LogPreparedStatementAddBatchDelegate(callableStatementInformation);
+    P6LogCallableStatementSetParameterValueDelegate setParameterValueDelegate = new P6LogCallableStatementSetParameterValueDelegate(callableStatementInformation);
 
     addDelegate(
         new MethodNameMatcher("executeBatch"),

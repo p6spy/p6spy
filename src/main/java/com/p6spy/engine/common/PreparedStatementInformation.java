@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Stores information about the prepared statement and bind variables.
+ *
  * @author Quinton McCombs
  * @since 09/2013
  */
@@ -37,7 +39,7 @@ public class PreparedStatementInformation extends StatementInformation implement
         super(connectionInformation);
     }
 
-    /**
+  /**
    * Generates the query for the prepared statement with all parameter placeholders
    * replaced with the actual parameter values
    *
@@ -55,11 +57,7 @@ public class PreparedStatementInformation extends StatementInformation implement
       char character = statementQuery.charAt(pos);
       if( statementQuery.charAt(pos) == '?' && currentParameter <= parameterValues.size()) {
         // replace with parameter value
-        if( parameterValues.get(currentParameter) == null) {
-          sb.append("NULL");
-        } else {
-          sb.append(convertToString(parameterValues.get(currentParameter)));
-        }
+        sb.append(convertToString(parameterValues.get(currentParameter)));
         currentParameter++;
       } else {
         sb.append(character);
@@ -78,17 +76,28 @@ public class PreparedStatementInformation extends StatementInformation implement
     parameterValues.put(position - 1, value);
   }
 
-  private String convertToString(Object o) {
+  protected Map<Integer, Object> getParameterValues() {
+    return parameterValues;
+  }
+
+  protected String convertToString(Object value) {
     String result;
-    if (o instanceof java.util.Date) {
-      result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(o);
-    } else if (o instanceof byte[]) {
-      result = toHexString((byte[]) o);
+    if( value == null ) {
+      result = "NULL";
     } else {
-      result =  (o == null) ? null : o.toString();
+
+      if (value instanceof java.util.Date) {
+        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
+      } else if (value instanceof byte[]) {
+        result = toHexString((byte[]) value);
+      } else {
+        result = value.toString();
+      }
+
+      result = quoteIfNeeded(result, value);
     }
 
-    return quoteIfNeeded(result, o);
+    return result;
   }
   
   private String quoteIfNeeded(String stringValue, Object obj) {

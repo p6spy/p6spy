@@ -110,13 +110,16 @@ public class P6TestCallableStatement extends P6TestFramework {
     call.setString(param2Name, "hi");
     call.registerOutParameter(resultParamName, Types.INTEGER);
     call.execute();
+    int retVal = call.getInt(3);
+    assertEquals(2, retVal);
     call.close();
 
     // the last log message should have the original query
     assertTrue(getLastLogEntry().contains(query));
 
-    // for now, named parameters are not logged!
-    //assertTrue(getLastLogEntry().contains("1,'hi'"));
+    assertTrue(getLastLogEntry().contains("{call test_proc(?,?,?)}"));
+    assertTrue(getLastLogEntry().contains(param1Name+":"+"1"));
+    assertTrue(getLastLogEntry().contains(param2Name+":"+"'hi'"));
   }
 
   @Test
