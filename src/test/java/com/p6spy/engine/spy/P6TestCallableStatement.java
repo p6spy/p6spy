@@ -110,7 +110,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     call.setString(param2Name, "hi");
     call.registerOutParameter(resultParamName, Types.INTEGER);
     call.execute();
-    int retVal = call.getInt(3);
+    int retVal = call.getInt(resultParamName);
     assertEquals(2, retVal);
     call.close();
 
