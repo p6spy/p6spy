@@ -19,29 +19,31 @@
  */
 package com.p6spy.engine.logging;
 
-import com.p6spy.engine.common.PreparedStatementInformation;
-import com.p6spy.engine.proxy.Delegate;
+import com.p6spy.engine.common.CallableStatementInformation;
 
 import java.lang.reflect.Method;
 import java.sql.Statement;
 
-class P6LogPreparedStatementSetParameterValueDelegate implements Delegate {
-  protected final PreparedStatementInformation preparedStatementInformation;
+class P6LogCallableStatementSetParameterValueDelegate extends P6LogPreparedStatementSetParameterValueDelegate {
 
-  public P6LogPreparedStatementSetParameterValueDelegate(PreparedStatementInformation preparedStatementInformation) {
-    this.preparedStatementInformation = preparedStatementInformation;
+  public P6LogCallableStatementSetParameterValueDelegate(CallableStatementInformation callableStatementInformation) {
+    super(callableStatementInformation);
   }
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    // ignore calls to any methods defined on the Statement interface!
-    if( !Statement.class.equals(method.getDeclaringClass()) ) {
-      int position = (Integer) args[0];
-      Object value = null;
-      if (!method.getName().equals("setNull") && args.length > 1) {
-        value = args[1];
+    if( args[0] instanceof Integer ) {
+      return super.invoke(proxy, underlying, method, args);
+    } else {
+      // ignore calls to any methods defined on the Statement interface!
+      if( !Statement.class.equals(method.getDeclaringClass()) ) {
+        String name = (String) args[0];
+        Object value = null;
+        if (!method.getName().equals("setNull") && args.length > 1) {
+          value = args[1];
+        }
+        ((CallableStatementInformation)preparedStatementInformation).setParameterValue(name, value);
       }
-      preparedStatementInformation.setParameterValue(position, value);
     }
     return method.invoke(underlying, args);
   }

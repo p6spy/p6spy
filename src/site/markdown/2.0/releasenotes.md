@@ -2,6 +2,10 @@
 
 For the full changelog (since 2.0.0-aplha1), see: [github report](../github-report.html)
 
+## Version 2.0.3 - Unreleased
+
+* Bind variables set by name on a CallableStatement are now logged.  See [issue #221] for details.
+
 ## Version 2.0.2 [3.4.2014]
 
 * significant performance improvements for huge data selects (still a work in progress, see: [issue #84] (https://github.com/p6spy/p6spy/issues/84#issuecomment-38394979))
