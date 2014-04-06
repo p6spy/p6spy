@@ -120,7 +120,7 @@
 <a class="jxr_linenumber" name="110" href="#110">110</a>     call.setString(param2Name, <span class="jxr_string">"hi"</span>);
 <a class="jxr_linenumber" name="111" href="#111">111</a>     call.registerOutParameter(resultParamName, Types.INTEGER);
 <a class="jxr_linenumber" name="112" href="#112">112</a>     call.execute();
-<a class="jxr_linenumber" name="113" href="#113">113</a>     <strong class="jxr_keyword">int</strong> retVal = call.getInt(3);
+<a class="jxr_linenumber" name="113" href="#113">113</a>     <strong class="jxr_keyword">int</strong> retVal = call.getInt(resultParamName);
 <a class="jxr_linenumber" name="114" href="#114">114</a>     assertEquals(2, retVal);
 <a class="jxr_linenumber" name="115" href="#115">115</a>     call.close();
 <a class="jxr_linenumber" name="116" href="#116">116</a> 
