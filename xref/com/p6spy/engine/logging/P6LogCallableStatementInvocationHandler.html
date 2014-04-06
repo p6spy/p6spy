@@ -29,8 +29,8 @@
 <a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">package</strong> com.p6spy.engine.logging;
 <a class="jxr_linenumber" name="21" href="#21">21</a>  
-<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.ConnectionInformation;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.PreparedStatementInformation;
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.CallableStatementInformation;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.common.ConnectionInformation;
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.proxy.GenericInvocationHandler;
 <a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.proxy.MethodNameMatcher;
 <a class="jxr_linenumber" name="26" href="#26">26</a>  
@@ -46,12 +46,12 @@
 <a class="jxr_linenumber" name="36" href="#36">36</a>                                                   String query) {
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
 <a class="jxr_linenumber" name="38" href="#38">38</a>        <strong class="jxr_keyword">super</strong>(underlying);
-<a class="jxr_linenumber" name="39" href="#39">39</a>      <a href="../../../../com/p6spy/engine/common/PreparedStatementInformation.html">PreparedStatementInformation</a> preparedStatementInformation = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/common/PreparedStatementInformation.html">PreparedStatementInformation</a>(connectionInformation);
-<a class="jxr_linenumber" name="40" href="#40">40</a>      preparedStatementInformation.setStatementQuery(query);
+<a class="jxr_linenumber" name="39" href="#39">39</a>      <a href="../../../../com/p6spy/engine/common/CallableStatementInformation.html">CallableStatementInformation</a> callableStatementInformation = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/common/CallableStatementInformation.html">CallableStatementInformation</a>(connectionInformation);
+<a class="jxr_linenumber" name="40" href="#40">40</a>      callableStatementInformation.setStatementQuery(query);
 <a class="jxr_linenumber" name="41" href="#41">41</a>  
-<a class="jxr_linenumber" name="42" href="#42">42</a>      <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementExecuteDelegate.html">P6LogPreparedStatementExecuteDelegate</a> executeDelegate = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementExecuteDelegate.html">P6LogPreparedStatementExecuteDelegate</a>(preparedStatementInformation);
-<a class="jxr_linenumber" name="43" href="#43">43</a>      <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementAddBatchDelegate.html">P6LogPreparedStatementAddBatchDelegate</a> addBatchDelegate = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementAddBatchDelegate.html">P6LogPreparedStatementAddBatchDelegate</a>(preparedStatementInformation);
-<a class="jxr_linenumber" name="44" href="#44">44</a>      <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementSetParameterValueDelegate.html">P6LogPreparedStatementSetParameterValueDelegate</a> setParameterValueDelegate = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementSetParameterValueDelegate.html">P6LogPreparedStatementSetParameterValueDelegate</a>(preparedStatementInformation);
+<a class="jxr_linenumber" name="42" href="#42">42</a>      <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementExecuteDelegate.html">P6LogPreparedStatementExecuteDelegate</a> executeDelegate = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementExecuteDelegate.html">P6LogPreparedStatementExecuteDelegate</a>(callableStatementInformation);
+<a class="jxr_linenumber" name="43" href="#43">43</a>      <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementAddBatchDelegate.html">P6LogPreparedStatementAddBatchDelegate</a> addBatchDelegate = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/logging/P6LogPreparedStatementAddBatchDelegate.html">P6LogPreparedStatementAddBatchDelegate</a>(callableStatementInformation);
+<a class="jxr_linenumber" name="44" href="#44">44</a>      <a href="../../../../com/p6spy/engine/logging/P6LogCallableStatementSetParameterValueDelegate.html">P6LogCallableStatementSetParameterValueDelegate</a> setParameterValueDelegate = <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/logging/P6LogCallableStatementSetParameterValueDelegate.html">P6LogCallableStatementSetParameterValueDelegate</a>(callableStatementInformation);
 <a class="jxr_linenumber" name="45" href="#45">45</a>  
 <a class="jxr_linenumber" name="46" href="#46">46</a>      addDelegate(
 <a class="jxr_linenumber" name="47" href="#47">47</a>          <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/proxy/MethodNameMatcher.html">MethodNameMatcher</a>(<span class="jxr_string">"executeBatch"</span>),
