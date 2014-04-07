@@ -38,12 +38,16 @@ import javax.naming.Reference;
 import javax.naming.Referenceable;
 import javax.naming.StringRefAddr;
 import javax.sql.CommonDataSource;
+import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
+import javax.sql.PooledConnection;
+import javax.sql.XAConnection;
+import javax.sql.XADataSource;
 
 import com.p6spy.engine.common.P6LogQuery;
 
 @SuppressWarnings("serial")
-public class P6DataSource implements DataSource, Referenceable, Serializable {
+public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADataSource, Referenceable, Serializable {
 
   protected CommonDataSource rds;
   protected String rdsName;
@@ -308,4 +312,51 @@ public class P6DataSource implements DataSource, Referenceable, Serializable {
   public Logger getParentLogger() throws SQLFeatureNotSupportedException {
     return rds.getParentLogger();
   }
+  
+  @Override
+  public PooledConnection getPooledConnection() throws SQLException {
+    if (rds == null) {
+      bindDataSource();
+    }
+
+    PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection();
+    return new P6PooledConnection(pc);
+  }
+  
+  @Override
+  public PooledConnection getPooledConnection(String user, String password) throws SQLException {
+    if (rds == null) {
+      bindDataSource();
+    }
+
+    PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection(user, password);
+    return new P6PooledConnection(pc);
+  }
+
+  @Override
+  public XAConnection getXAConnection() throws SQLException {
+    if (rds == null) {
+      bindDataSource();
+    }
+    
+    if (rds instanceof XADataSource) {
+      return new P6XAConnection(((XADataSource) rds).getXAConnection());  
+    }
+    
+    throw new IllegalStateException("realdatasource type not supported: " + rds);
+  }
+
+  @Override
+  public XAConnection getXAConnection(String user, String password) throws SQLException {
+    if (rds == null) {
+      bindDataSource();
+    }
+    
+    if (rds instanceof XADataSource) {
+      return new P6XAConnection(((XADataSource) rds).getXAConnection(user, password));  
+    }
+    
+    throw new IllegalStateException("realdatasource type not supported: " + rds);
+  }
+
 }

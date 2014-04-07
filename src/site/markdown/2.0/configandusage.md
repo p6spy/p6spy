@@ -198,9 +198,8 @@ in section: [Configuration and Usage](#confusage)):
     # DataSource replacement                                        #
     #                                                               #
     # Replace the real DataSource class in your application server  #
-    # configuration with the name com.p6spy.engine.spy.P6DataSource,#
-    # or com.p6spy.engine.spy.P6ConnectionPoolDataSource            #
-    # (that provides connection pooling and xa support).            #
+    # configuration with the name com.p6spy.engine.spy.P6DataSource #
+    # (that provides also connection pooling and xa support).       #
     # then add the JNDI name and class name of the real             #
     # DataSource here                                               #
     #                                                               #

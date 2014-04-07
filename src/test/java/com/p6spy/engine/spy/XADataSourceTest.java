@@ -108,7 +108,7 @@ public class XADataSourceTest extends P6TestFramework {
       jndiResources.add(new Resource("jdbc/realInTestDs", realInTestDs));
 
       final PoolingDataSource inTestDs = new PoolingDataSource();
-      inTestDs.setClassName(P6ConnectionPoolDataSource.class.getName());
+      inTestDs.setClassName(P6DataSource.class.getName());
       inTestDs.setUniqueName("jdbc/inTestDs");
       inTestDs.setMaxPoolSize(10);
       inTestDs.getDriverProperties().setProperty("realDataSource", "jdbc/realInTestDs");
@@ -126,7 +126,7 @@ public class XADataSourceTest extends P6TestFramework {
       jndiResources.add(new Resource("jdbc/realFixedDs", realFixedDs));
 
       final PoolingDataSource fixedDs = new PoolingDataSource();
-      fixedDs.setClassName(P6ConnectionPoolDataSource.class.getName());
+      fixedDs.setClassName(P6DataSource.class.getName());
       fixedDs.setUniqueName("jdbc/fixedDs");
       fixedDs.setMaxPoolSize(10);
       fixedDs.getDriverProperties().setProperty("realDataSource", "jdbc/realFixedDs");

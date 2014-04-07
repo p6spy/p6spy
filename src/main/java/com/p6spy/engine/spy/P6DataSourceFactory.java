@@ -32,25 +32,19 @@ import java.util.Hashtable;
 public class P6DataSourceFactory implements ObjectFactory {
 
 
-  protected static final String dataSourceClassName = P6DataSource.class.getName();
-
-  protected static final String poolDataSourceName = P6ConnectionPoolDataSource.class.getName();
+  protected static final String DATASOURCE_CLASS_NAME = P6DataSource.class.getName();
 
   public Object getObjectInstance(Object refObj,
                                   Name nm,
                                   Context ctx,
                                   Hashtable env) throws Exception {
 
-    Reference ref = (Reference) refObj;
+    final Reference ref = (Reference) refObj;
+    final String className = ref.getClassName();
 
-    String className = ref.getClassName();
-
-    if (className != null &&
-        (className.equals(dataSourceClassName) ||
-            className.equals(poolDataSourceName))) {
+    if (className != null && className.equals(DATASOURCE_CLASS_NAME)) {
 
       P6DataSource dataSource;
-
       try {
         dataSource = (P6DataSource) Class.forName(className).newInstance();
       } catch (Exception ex) {
