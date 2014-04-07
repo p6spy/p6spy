@@ -4,6 +4,7 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 
 ## Version 2.0.3 - Unreleased
 
+* P6ConnectionPoolDataSource merged to P6DataSource (to simplify datasource config)
 * Bind variables set by name on a CallableStatement are now logged.  See [issue #221] for details.
 
 ## Version 2.0.2 [3.4.2014]
