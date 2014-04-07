@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="108" href="#108">108</a>       jndiResources.add(<strong class="jxr_keyword">new</strong> Resource(<span class="jxr_string">"jdbc/realInTestDs"</span>, realInTestDs));
 <a class="jxr_linenumber" name="109" href="#109">109</a> 
 <a class="jxr_linenumber" name="110" href="#110">110</a>       <strong class="jxr_keyword">final</strong> PoolingDataSource inTestDs = <strong class="jxr_keyword">new</strong> PoolingDataSource();
-<a class="jxr_linenumber" name="111" href="#111">111</a>       inTestDs.setClassName(P6ConnectionPoolDataSource.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="111" href="#111">111</a>       inTestDs.setClassName(P6DataSource.<strong class="jxr_keyword">class</strong>.getName());
 <a class="jxr_linenumber" name="112" href="#112">112</a>       inTestDs.setUniqueName(<span class="jxr_string">"jdbc/inTestDs"</span>);
 <a class="jxr_linenumber" name="113" href="#113">113</a>       inTestDs.setMaxPoolSize(10);
 <a class="jxr_linenumber" name="114" href="#114">114</a>       inTestDs.getDriverProperties().setProperty(<span class="jxr_string">"realDataSource"</span>, <span class="jxr_string">"jdbc/realInTestDs"</span>);
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="126" href="#126">126</a>       jndiResources.add(<strong class="jxr_keyword">new</strong> Resource(<span class="jxr_string">"jdbc/realFixedDs"</span>, realFixedDs));
 <a class="jxr_linenumber" name="127" href="#127">127</a> 
 <a class="jxr_linenumber" name="128" href="#128">128</a>       <strong class="jxr_keyword">final</strong> PoolingDataSource fixedDs = <strong class="jxr_keyword">new</strong> PoolingDataSource();
-<a class="jxr_linenumber" name="129" href="#129">129</a>       fixedDs.setClassName(P6ConnectionPoolDataSource.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="129" href="#129">129</a>       fixedDs.setClassName(P6DataSource.<strong class="jxr_keyword">class</strong>.getName());
 <a class="jxr_linenumber" name="130" href="#130">130</a>       fixedDs.setUniqueName(<span class="jxr_string">"jdbc/fixedDs"</span>);
 <a class="jxr_linenumber" name="131" href="#131">131</a>       fixedDs.setMaxPoolSize(10);
 <a class="jxr_linenumber" name="132" href="#132">132</a>       fixedDs.getDriverProperties().setProperty(<span class="jxr_string">"realDataSource"</span>, <span class="jxr_string">"jdbc/realFixedDs"</span>);
