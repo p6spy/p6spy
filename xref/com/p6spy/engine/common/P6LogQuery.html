@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">   * Options that cause re-init of {@link P6LogQuery}.</em>
 <a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="56" href="#56">56</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; ON_CHANGE = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;(Arrays.asList(
-<a class="jxr_linenumber" name="57" href="#57">57</a>        P6SpyOptions.APPENDER, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
+<a class="jxr_linenumber" name="57" href="#57">57</a>        P6SpyOptions.APPENDER_INSTANCE, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
 <a class="jxr_linenumber" name="58" href="#58">58</a>  
 <a class="jxr_linenumber" name="59" href="#59">59</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> optionChanged(<strong class="jxr_keyword">final</strong> String key, <strong class="jxr_keyword">final</strong> Object oldValue, <strong class="jxr_keyword">final</strong> Object newValue) {
 <a class="jxr_linenumber" name="60" href="#60">60</a>      <strong class="jxr_keyword">if</strong> (ON_CHANGE.contains(key)) {
