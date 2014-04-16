@@ -19,25 +19,29 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.spy.appender.MultiLineFormat;
-import com.p6spy.engine.spy.appender.SingleLineFormat;
-import com.p6spy.engine.test.P6TestFramework;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.appender.MultiLineFormat;
+import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.spy.appender.SingleLineFormat;
+import com.p6spy.engine.spy.appender.StdoutLogger;
+import com.p6spy.engine.test.P6TestFramework;
 
 @RunWith(Parameterized.class)
 public class P6TestCommon extends P6TestFramework {
@@ -304,4 +308,34 @@ public class P6TestCommon extends P6TestFramework {
     assertTrue(super.getLastLogStackTrace().contains("Stack"));
   }
 
+  @Test
+  public void testAppenderReconfigurationTakesPlaceImediatelly() throws Exception {
+    final String sql = "select count(*) from customers";
+    P6TestLogger oldAppenderRef = null;
+    
+    // precondition - logging via P6TestLogger works OK
+    {
+      assertEquals(P6TestLogger.class.getName(), P6SpyOptions.getActiveInstance().getAppender());
+      super.clearLogEnties();
+      statement.executeQuery(sql);
+      oldAppenderRef = (P6TestLogger) P6SpyOptions.getActiveInstance().getAppenderInstance();
+      assertNotNull(oldAppenderRef.getLastEntry());
+      assertTrue(oldAppenderRef.getLastEntry().contains(sql));
+    }
+    
+    super.clearLogEnties();
+    
+    // let's log via StdoutLogger 
+    P6SpyOptions.getActiveInstance().setAppender(StdoutLogger.class.getName());
+    assertEquals(StdoutLogger.class.getName(), P6SpyOptions.getActiveInstance().getAppender());
+    statement.executeQuery(sql);
+    
+    // old appender should not be in use any more!
+    assertNull(oldAppenderRef.getLastEntry());
+    
+    // cleanup stuff - go for the default logger
+    {
+      P6SpyOptions.getActiveInstance().setAppender(P6SpyOptions.class.getName());
+    }
+  }
 }
