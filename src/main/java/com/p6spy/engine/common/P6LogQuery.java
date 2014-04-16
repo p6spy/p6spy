@@ -54,7 +54,7 @@ public class P6LogQuery implements P6OptionChangedListener {
    * Options that cause re-init of {@link P6LogQuery}.
    */
   private static final Set<String> ON_CHANGE = new HashSet<String>(Arrays.asList(
-      P6SpyOptions.APPENDER, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
+      P6SpyOptions.APPENDER_INSTANCE, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
 
   public void optionChanged(final String key, final Object oldValue, final Object newValue) {
     if (ON_CHANGE.contains(key)) {
