@@ -19,29 +19,23 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.spy.appender.StdoutLogger;
 import com.p6spy.engine.test.P6TestFramework;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestCommon extends P6TestFramework {
@@ -338,4 +332,23 @@ public class P6TestCommon extends P6TestFramework {
       P6SpyOptions.getActiveInstance().setAppender(P6SpyOptions.class.getName());
     }
   }
+  
+  @Test
+  public void testDisableLogModule() throws SQLException {
+    
+    // Note: This test is expected to fail until issue #227 has been fixed
+    P6SpyLoadableOptions o = P6SpyOptions.getActiveInstance();
+    o.setModulelist("com.p6spy.engine.logging.P6LogFactory");
+
+    clearLogEnties();
+    statement.executeQuery("select 'x' from customers");
+    // one log message should have been written - normal behavior
+    assertEquals("A log message should have been written", 1, getLogEntiesCount());
+    
+    clearLogEnties();
+    o.setModulelist("-com.p6spy.engine.logging.P6LogFactory");
+    statement.executeQuery("select 'x' from customers");
+    assertEquals("A log message should not have been written", 0, getLogEntiesCount());
+  }
+
 }
