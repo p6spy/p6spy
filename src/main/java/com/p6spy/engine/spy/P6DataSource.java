@@ -75,7 +75,12 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     rdsName = inVar;
   }
 
-  protected void bindDataSource() throws SQLException {
+  protected synchronized void bindDataSource() throws SQLException {
+    // we'll check in the synchronized section again (to prevent unnecessary reinitialization)
+    if (null != rds) {
+      return;
+    }
+    
     final P6SpyLoadableOptions options = P6SpyOptions.getActiveInstance();
     
     // can be set when object is bound to JDNI, or
@@ -315,48 +320,37 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
   
   @Override
   public PooledConnection getPooledConnection() throws SQLException {
-    if (rds == null) {
-      bindDataSource();
-    }
-
-    PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection();
-    return new P6PooledConnection(pc);
+    return new P6XAConnection(castRealDS(ConnectionPoolDataSource.class).getPooledConnection());
   }
   
   @Override
   public PooledConnection getPooledConnection(String user, String password) throws SQLException {
-    if (rds == null) {
-      bindDataSource();
-    }
-
-    PooledConnection pc = ((ConnectionPoolDataSource) rds).getPooledConnection(user, password);
-    return new P6PooledConnection(pc);
+    return new P6XAConnection(castRealDS(ConnectionPoolDataSource.class).getPooledConnection(user, password));
   }
 
   @Override
   public XAConnection getXAConnection() throws SQLException {
-    if (rds == null) {
-      bindDataSource();
-    }
-    
-    if (rds instanceof XADataSource) {
-      return new P6XAConnection(((XADataSource) rds).getXAConnection());  
-    }
-    
-    throw new IllegalStateException("realdatasource type not supported: " + rds);
+    return new P6XAConnection(castRealDS(XADataSource.class).getXAConnection());
   }
 
   @Override
   public XAConnection getXAConnection(String user, String password) throws SQLException {
+    return new P6XAConnection(castRealDS(XADataSource.class).getXAConnection(user, password));
+  }
+  
+  @SuppressWarnings("unchecked")
+  <T> T castRealDS(Class<T> iface) throws SQLException {
     if (rds == null) {
       bindDataSource();
     }
     
-    if (rds instanceof XADataSource) {
-      return new P6XAConnection(((XADataSource) rds).getXAConnection(user, password));  
+    if (iface.isInstance(rds)) {
+      return ((T) rds);
+    } else if (isWrapperFor(iface)){
+      return unwrap(iface);
+    } else {
+      throw new IllegalStateException("realdatasource type not supported: " + rds); 
     }
-    
-    throw new IllegalStateException("realdatasource type not supported: " + rds);
   }
 
 }
