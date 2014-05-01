@@ -5,14 +5,16 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 ## Version 2.0.3 - Unreleased
 
 * P6ConnectionPoolDataSource merged to P6DataSource (to simplify datasource config)
-* Bind variables set by name on a CallableStatement are now logged.  See [issue #221] for details.
+* Bind variables set by name on a CallableStatement are now logged. See [issue #221] (https://github.com/p6spy/p6spy/issues/221) for details.
+* `setAppender()` considered in logging properly (see: [issue #226](https://github.com/p6spy/p6spy/issues/226))
+* considering Wrapper for DataSource proxies (bringing support for Glassfish XADataSources)
 
 ## Version 2.0.2 [3.4.2014]
 
 * significant performance improvements for huge data selects (still a work in progress, see: [issue #84] (https://github.com/p6spy/p6spy/issues/84#issuecomment-38394979))
 * fixed PostgreSQL issue: `operator is not unique: date + unknown` (see: [issue #214] (https://github.com/p6spy/p6spy/issues/214)), thanks to [Frank Bregulla] (https://github.com/ffriedrich) for report and fix
 * fixed defect causing ClassCastException when setting bind variables by name on CallableStatement (see [issue #219](https://github.com/p6spy/p6spy/issues/219))
-* fixed defect in P6Leak module causing closed connections not to be recorded properly (see [issue #217](https://github.com/p6spy/p6spy/issues/217))
+* fixed defect in P6Leak module causing closed connections not to be recorded properly (see: [issue #217](https://github.com/p6spy/p6spy/issues/217))
 
 ## Version 2.0.1 [15.03.2014]
 
