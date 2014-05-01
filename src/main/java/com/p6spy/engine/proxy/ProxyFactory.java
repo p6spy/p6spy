@@ -45,14 +45,31 @@ public class ProxyFactory {
    */
   @SuppressWarnings("unchecked")
   public static <T> T createProxy(final T underlying, final GenericInvocationHandler<T> invocationHandler) {
+    // TODO refactor - to get rid of endless try - catch
+    final ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
     try {
-      final Enhancer enhancer = createProxy(underlying, invocationHandler, ProxyNamingPolicy.INSTANCE);
+      final Enhancer enhancer = createProxy(underlying, invocationHandler, ProxyNamingPolicy.INSTANCE, currentThreadClassLoader);
       return (T) enhancer.create();
     } catch (CodeGenerationException e) {
       // fallback, as proxied class might implement non-public interfaces 
       // that have trouble with our ProxyNamingPolicy (for example for SQLite)
-      final Enhancer enhancer = createProxy(underlying, invocationHandler, null);
-      return (T) enhancer.create();
+      try {
+        final Enhancer enhancer = createProxy(underlying, invocationHandler, null, currentThreadClassLoader);
+        return (T) enhancer.create();
+      } catch (CodeGenerationException ex) {
+        // 
+        // well, wildfly (8.1.CR1) just doesn't like currentThreadClassLoader => needs to use the default one
+        //
+        try {
+          final Enhancer enhancer = createProxy(underlying, invocationHandler, ProxyNamingPolicy.INSTANCE, null);
+          return (T) enhancer.create();
+        } catch (CodeGenerationException exc) {
+          // fallback, as proxied class might implement non-public interfaces 
+          // that have trouble with our ProxyNamingPolicy (for example for SQLite)
+            final Enhancer enhancer = createProxy(underlying, invocationHandler, null, null);
+            return (T) enhancer.create();
+        }
+      }
     }
   }
 
@@ -63,17 +80,20 @@ public class ProxyFactory {
    * @param underlying        the object to proxy
    * @param invocationHandler the invocation handler
    * @param namingPolicy      the naming policy
+   * @param classLoader       the class loader to be used
    * @return
    */
   private static <T> Enhancer createProxy(final T underlying,
                                            final GenericInvocationHandler<T> invocationHandler, 
-                                           final NamingPolicy namingPolicy) {
+                                           final NamingPolicy namingPolicy, final ClassLoader classLoader) {
     // noinspection unchecked
     final Enhancer enhancer = new Enhancer();
     enhancer.setCallback(invocationHandler);
     enhancer.setInterfaces(getInterfaces(underlying.getClass()));
     // fix for the https://github.com/p6spy/p6spy/issues/188
-    enhancer.setClassLoader(Thread.currentThread().getContextClassLoader());
+    if (null != classLoader) {
+      enhancer.setClassLoader(classLoader);
+    }
     if (null != namingPolicy) {
       enhancer.setNamingPolicy(namingPolicy);  
     }
