@@ -32,32 +32,74 @@ executed.  You can alter the location of this log file as well as what gets logg
 [Common Property File Settings](configandusage.html#settings) for the various configuration options available.
 
 Application Servers:    
-[JBoss](#jboss)    
+[JBoss/WildFly](#jboss)    
 [Apache Tomcat](#tomcat)    
+[Glassfish](#glassfish)    
 [Generic](#generic)    
 
-## <a name="jboss">JBoss</a>
+## <a name="jboss">JBoss/WildFly</a>
 
-The following sections contain specific information on installing P6Spy on [JBoss 5.x](#jboss5)
+The following sections contain specific information on installing P6Spy on [JBoss 4.2.x-6.1.x](#jboss5) and [JBoss 7.1.x and WildFly 8.x](#jboss71)
 
-### <a name="jboss5">JBoss 5.x</a>
+Please note **XA Datasource proxying IS NOT supported** for these. 
 
-The following instructions were tested with JBoss 5.2.0 EAP. For these instructions,
+### <a name="jboss5">JBoss 4.2.x, 5.1.x, 6.1.x and JBoss 5.x EAP</a>
+
+The following instructions were tested with JBoss 4.2.3.GA, 5.1.0.GA, 6.1.0.Final and JBoss 5.2.0 EAP. For these instructions,
 P6Spy assumes that you are using the default server residing in `$JBOSS_DIST\server\default`, where $JBOSS_DIST
-is the directory in which JBoss is installed. 
+is the directory in which JBoss is installed.
 
 1. Move the **p6spy.jar** file to the `$JBOSS_DIST\server\default\lib` directory.
 1. Move the **spy.properties** file to the `$JBOSS_DIST\server\default\conf` directory.
-1. Configure the class name of the real JDBC driver in **spy.properties**
-   
-       driverlist=com.mysql.jdbc.Driver
-           
 1. Update the connection URL and driver class for your data source in `$JBOSS_DIST\server\default\deploy`.  This file 
-   is normally called `?????-ds.xml'.   An example of the pertinent portions (not the complete XML file) follows:
+   is normally called `?????-ds.xml`.   An example of the pertinent portions (not the complete XML file) follows:
 
         <jndi-name>MySqlDS</jndi-name>
         <connection-url>jdbc:p6spy:mysql://<hostname>:<port>/<database></connection-url>
         <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
+
+1. As a result is (by default) the log file `spy.log` created in dir: `$JBOSS_DIST\bin` 
+
+### <a name="jboss71url">JBoss 7.1.x, WildFly 8.x - modified URL</a>
+The following instructions were tested with JBoss 7.1.0 and Wildfly 8.1.CR1. For these instructions,
+P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory in which JBoss/WildFly is installed. 
+
+1. Deploy **p6spy.jar** as a module:
+	* via moving it to to the `$JBOSS_DIST\modules\system\layers\base\com\p6spy\main` (for Wildfly) or to `$JBOSS_DIST\modules\com\p6spy\main` (for JBoss 7.1) directory
+	* and via providing `module.xml` in the same directory with the contents: 
+		
+        <module xmlns="urn:jboss:module:1.0" name="com.p6spy">
+		    <resources>
+		        <resource-root path="p6spy-2.0.3.jar"/>
+		    </resources>
+		    <dependencies>
+		        <module name="javax.api"/>
+		        <module name="javax.transaction.api"/>
+		        <!-- make sure to refer to module holding real driver -->
+		        <module name="com.h2database.h2"/>
+		    </dependencies>
+		</module>
+		
+	please note, that p6spy-2.0.3 version jar is used in the sample configuration. Moreover the reference to module holding the real (proxied) jdbc driver has to be provided (in the sample case is h2 one used). 
+
+1. Move the **spy.properties** file to the `$JBOSS_DIST\bin` directory.
+1. Update the connection URL and driver section in your `<datasources>` in `$JBOSS_DIST\standalone\configuration\standalone.xml`. An example of the pertinent portions (not the complete XML file) follows:
+
+        <datasources>
+	        <datasource jndi-name="java:/jdbc/p6spy" enabled="true" use-java-context="true" pool-name="p6spyPool">
+				<connection-url>jdbc:p6spy:h2:tcp://<hostname>:<port>/<database></connection-url>
+	            <driver>p6spy</driver>
+				...
+	        </datasource>
+
+			<drivers>
+		        <driver name="p6spy" module="com.p6spy">
+	                <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
+		        </driver>
+		        ...
+            </drivers>
+        </datasources>
+1. As a result is (by default) the log file `spy.log` created in dir: `$JBOSS_DIST\bin` 
 
 ## <a name="tomcat">Apache Tomcat</a>
 
@@ -152,6 +194,103 @@ on tomcat.
                    />
    
 
+## <a name="glassfish">Glassfish</a>
+
+The following section contains specific information on installing P6Spy on [Glassfish 3.1.x and 4.0.x](#glassfish3122_40).
+
+Please note **XA Datasource proxying IS supported** for these. 
+
+### <a name="glassfish3122_40">Glassfish 3.1.2.2 and Glassfish 4.0</a>
+
+The provided instructions were tested with Glassfish OSE 3.1.2.2 and Glassfish OSE 4.0. 
+In later section is `$GLASSFISH_HOME` the directory where Glassfish is installed and `$DOMAIN_X` is the domain name used for deployment (for example, can be: `domain1`).
+
+1. Move the **p6spy.jar** file to the `$GLASSFISH_HOME/domains/$DOMAIN_X/lib/ext` directory.
+1. Move the **spy.properties** file to the `$GLASSFISH_HOME/domains/$DOMAIN_X/config` directory.
+1. Configure new datasource. Please note there are 3 configuration options available:
+
+	* updating JDBC Url if using `java.sql.Driver`
+	
+	using command line:
+			
+	        # create jdbc connection pool			
+	        asadmin create-jdbc-connection-pool --driverclassname=com.p6spy.engine.spy.P6SpyDriver --restype=java.sql.Driver --property=URL='jdbc:p6spy:h2:tcp://<hostname>:<port>/<database>':User='<username>':Password='<password>' p6spyPool
+	        		        			
+	        # ping the pool to prove it works (optionally)
+	        asadmin ping-connection-pool p6spyPool
+	        
+	        # create jdbc resource
+	        asadmin --user=<asadmin_user> --passwordfile=<sample_passworfile.properties> create-jdbc-resource --connectionpoolid=p6spyPool jdbc/p6Spy
+
+	or directly by editing `$GLASSFISH_HOME/domains/$DOMAIN_X/config/domain.xml` (please note the previous commands would lead to similar added to your config file):
+			
+	        <jdbc-connection-pool driver-classname="com.p6spy.engine.spy.P6SpyDriver" res-type="java.sql.Driver" name="p6spyPool">
+	        	<property name="URL" value="jdbc:p6spy:h2:tcp://<hostname>:<port>/<database>"></property>
+	      		<property name="Password" value=""></property>
+		    	<property name="User" value="sa"></property>
+		    </jdbc-connection-pool>
+		    <jdbc-resource pool-name="p6spyPool" jndi-name="jdbc/p6spy"></jdbc-resource>
+				
+	* `javax.sql.ConnectionPoolDataSource` proxying (via additional datasource)
+	
+	using command line:
+			
+			# create jdbc connection pool
+			asadmin create-jdbc-connection-pool --datasourceclassname=com.p6spy.engine.spy.P6DataSource --restype=javax.sql.ConnectionPoolDataSource --property=realDataSource='<realDSJndi>':User='<username>':Password='<password>' p6spyPool
+			
+			# ping the pool to prove it works (optionally)
+			asadmin ping-connection-pool p6spyPool
+			
+			# create jdbc resource			
+			asadmin --user=<asadmin_user> --passwordfile=<sample_passworfile.properties> create-jdbc-resource --connectionpoolid=p6spyPool jdbc/p6Spy
+
+	or directly by editing `$GLASSFISH_HOME/domains/$DOMAIN_X/config/domain.xml` (please note the previous commands would lead to similar added to your config file):
+	
+			<jdbc-connection-pool datasource-classname="com.p6spy.engine.spy.P6DataSource" res-type="javax.sql.ConnectionPoolDataSource" name="p6spyPool">
+		      <property name="realDataSource" value="jdbc/<realDSJndi>"></property>
+		      <property name="Password" value=""></property>
+		      <property name="User" value="sa"></property>
+		    </jdbc-connection-pool>
+			<jdbc-resource pool-name="p6spyPool" jndi-name="jdbc/p6spy"></jdbc-resource>		
+			
+	* `javax.sql.XADataSource` proxying (via additional datasource)
+	
+	using command line:
+			
+			# create jdbc connection pool
+			asadmin create-jdbc-connection-pool --datasourceclassname=com.p6spy.engine.spy.P6DataSource --restype=javax.sql.XADataSource --property=realDataSource='<realDSJndi>':User='<username>':Password='<password>' p6spyPool
+			
+			# ping the pool to prove it works (optionally)
+			asadmin ping-connection-pool p6spyPool
+			
+			# create jdbc resource			
+			asadmin --user=<asadmin_user> --passwordfile=<sample_passworfile.properties> create-jdbc-resource --connectionpoolid=p6spyPool jdbc/p6Spy
+
+	or directly by editing `$GLASSFISH_HOME/domains/$DOMAIN_X/config/domain.xml` (please note the previous commands would lead to similar added to your config file):
+	
+			<jdbc-connection-pool datasource-classname="com.p6spy.engine.spy.P6DataSource" res-type="javax.sql.XADataSource" name="p6spyPool">
+		      <property name="realDataSource" value="jdbc/<realDSJndi>"></property>
+		      <property name="Password" value=""></property>
+		      <property name="User" value="sa"></property>
+		    </jdbc-connection-pool>
+			<jdbc-resource pool-name="p6spyPool" jndi-name="jdbc/p6spy"></jdbc-resource>		
+
+	Please note, you need to replace following:
+	
+	* `<asadmin_user>` - asadmin user name (by default `asadmin`)
+	* `<sample_passworfile.properties>` - is a properties file, that should hold your asadmin password (by default should hold: `AS_ADMIN_ADMINPASSWOD=adminadmin`)
+	* `<username>` - username to be used for the DB access
+	* `<password>` - password to be used for DB access
+	* `<hostname>` - DB server hostname
+	* `<port>` - DB server port
+	* `<database>` - DB server database 
+	* `<realDSJndi>` - jndi-name of the real datasource to be proxied
+		
+	And the jndi name of the created jndi resource in the sample configurations is: `jdbc/p6spy`
+
+1. As a result is (by default) the log file `spy.log` created in dir: `$GLASSFISH_HOME/domains/$DOMAIN_X/config`
+
+
 ## <a name="generic">Generic Instructions</a>
 
 The following installation instructions are intended for use with other application servers and
@@ -181,7 +320,4 @@ above, the JNDI name should be 'jdbc/myds'.
 1. Create one property for the data source called 'RealDataSource'.  The value of this property should be 'jdbc/myds-real'
 1. Set the class or implementation to `com.p6spy.engine.spy.P6DataSource`.
 1. If the application server requires a classpath for the datasource, it should include p6spy.jar and spy.properties.  
-
-
-
 
