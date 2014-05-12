@@ -157,7 +157,7 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
       }
       Hashtable matchedProps = new Hashtable();
       if (props != null) {
-        Class klass = rds.getClass();
+        Class<?> klass = rds.getClass();
 
         // find the setter methods in the class, and
         // see if the datasource properties collected
@@ -182,7 +182,7 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
                   // so find out which supported type the method
                   // expects
                   String value = (String) props.get(key);
-                  Class[] types = method.getParameterTypes();
+                  Class<?>[] types = method.getParameterTypes();
                   if (types[0].getName().equals(value.getClass().getName())) {
                     // the method expects a string
                     String[] args = new String[1];
