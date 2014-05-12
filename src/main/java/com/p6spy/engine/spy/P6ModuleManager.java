@@ -22,10 +22,8 @@ package com.p6spy.engine.spy;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -51,7 +49,7 @@ public class P6ModuleManager {
       new SpyDotProperties(), new EnvironmentVariables(), new SystemProperties() };
   private final Map<Class<? extends P6LoadableOptions>, P6LoadableOptions> allOptions = new HashMap<Class<? extends P6LoadableOptions>, P6LoadableOptions>();
   private final List<P6Factory> factories = new CopyOnWriteArrayList<P6Factory>();
-  private final P6MBeansRegistry mBeansRegistry;
+  private final P6MBeansRegistry mBeansRegistry = new P6MBeansRegistry();
 
   private final P6OptionsRepository optionsRepository = new P6OptionsRepository();
 
@@ -102,9 +100,9 @@ public class P6ModuleManager {
       optionsSource.preDestroy(instance);
     }
 
-    // unregister mbeans first (to prevent naming conflicts)
+    // unregister mbeans (to prevent naming conflicts)
     if (instance.mBeansRegistry != null) {
-      instance.mBeansRegistry.unregisterMBeans();
+      instance.mBeansRegistry.unregisterAllMBeans();
     }
   }
 
@@ -122,74 +120,73 @@ public class P6ModuleManager {
                            MalformedObjectNameException {
     debug(this.getClass().getName() + " re/initiating modules started");
 
-    // hard coded - core module init - as it holds initial config
-    final P6SpyLoadableOptions spyOptions;
-    {
-      P6SpyFactory p6SpyFactory = new P6SpyFactory();
-      spyOptions = (P6SpyLoadableOptions) p6SpyFactory.getOptions(optionsRepository);
-
-      loadOptions(spyOptions);
-    }
-
-    // configured modules init
-    {
-      Set<P6Factory> toProcessFactories = spyOptions.getModuleFactories();
-      for (P6Factory factory : toProcessFactories) {
-        P6LoadableOptions options = factory.getOptions(optionsRepository);
-
-        // we initialized for core already => skip now
-        if (options instanceof P6SpyLoadableOptions) {
-          continue;
-        }
-
-        loadOptions(options);
-      }
-    }
-
     // make sure the proper listener registration happens
-    optionsRepository.registerOptionChangedListener(new P6LogQuery());
+    registerOptionChangedListener(new P6LogQuery());
     
+    // hard coded - core module init - as it holds initial config
+    final P6SpyLoadableOptions spyOptions = (P6SpyLoadableOptions) registerModule(new P6SpyFactory());
+    loadDriversExplicitly(spyOptions);
+    
+    // configured modules init
+    for (P6Factory factory : spyOptions.getModuleFactories()) {
+    	registerModule(factory);
+    }
+
     optionsRepository.initCompleted();
-
-    // init MBeans
-    mBeansRegistry = new P6MBeansRegistry(this.allOptions.values());
-
-    // init factories
-    initFactories(spyOptions);
-
+    
     for (P6OptionsSource optionsSource : optionsSources) {
       optionsSource.postInit(this);
     }
 
     debug(this.getClass().getName() + " re/initiating modules done");
   }
-
+  
+  protected synchronized P6LoadableOptions registerModule(P6Factory factory) throws InstanceAlreadyExistsException, 
+  	MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException {
+	  // re-register is not supported - skip silently
+	  for (P6Factory registeredFactory : factories) {
+		  if (registeredFactory.getClass().equals(factory.getClass())) {
+			  return null;
+		  }
+	  }
+		  
+	  final P6LoadableOptions options = factory.getOptions(optionsRepository);
+      loadOptions(options);
+      
+      allOptions.put(options.getClass(), options);
+	  factories.add(factory);
+      mBeansRegistry.registerMBean(options);
+      
+      debug("Registered factory: " + factory.getClass().getName() + " with options: " + options.getClass().getName());
+      
+      return options;
+  }
+  
   /**
    * Returns loaded options. These are loaded in the right order:
    * <ul>
-   * <li></li>
+   * <li>default values</li>
+   * <li>based on the order defined in the {@link #optionsSources}</li>
    * </ul>
-   * 
-   * 
    * 
    * @param options
    * @return
    */
-  private void loadOptions(final P6LoadableOptions options) {
-    // make sure to load defaults first
-    options.load(options.getDefaults());
+	private void loadOptions(final P6LoadableOptions options) {
+		// make sure to load defaults first
+		options.load(options.getDefaults());
 
-    // load the rest in the right order then
-    for (P6OptionsSource optionsSource : optionsSources) {
-      Map<String, String> toLoad = optionsSource.getOptions();
-      if (null != toLoad) {
-        options.load(toLoad);
-      }
-    }
+		// load the rest in the right order then
+		for (P6OptionsSource optionsSource : optionsSources) {
+			Map<String, String> toLoad = optionsSource.getOptions();
+			if (null != toLoad) {
+				options.load(toLoad);
+			}
+		}
 
-    // register to all the props then
-    allOptions.put(options.getClass(), options);
-  }
+		// register to all the props then
+		allOptions.put(options.getClass(), options);
+	}
 
   public static P6ModuleManager getInstance() {
     return instance;
@@ -199,42 +196,23 @@ public class P6ModuleManager {
     e.printStackTrace(System.err);
   }
 
-  private void initFactories(P6SpyLoadableOptions spyOptions) {
-    // register the core options file with the reloader
-    String className = "no class";
-    String classType = "driver";
-    try {
-      Collection<String> driverNames = spyOptions.getDriverNames();
-
-      // register drivers and wrappers
-      classType = "driver";
-      if (null != driverNames) {
-        for (String driverName : driverNames) {
-          // you really only need to load the driver if it is not a type 4 driver!
-          P6Util.forName(driverName).newInstance();
-        }
-      }
-
-      // instantiate the factories, if nec.
-      if (!spyOptions.getModuleNames().isEmpty()) {
-        classType = "factory";
-
-        for (Iterator<String> i = spyOptions.getModuleNames().iterator(); i.hasNext();) {
-          className = i.next();
-          P6Factory factory = (P6Factory) P6Util.forName(className).newInstance();
-          factories.add(factory);
-
-          debug("Registered factory: " + className + " with options: " + spyOptions);
-        }
-      }
-
-    } catch (Exception e) {
-      String err = "Error registering " + classType + "  [" + className + "]\nCaused By: "
-          + e.toString();
-      P6LogQuery.error(err);
-      throw new P6DriverNotFoundError(err);
-    }
-  }
+	private void loadDriversExplicitly(P6SpyLoadableOptions spyOptions) {
+		final Collection<String> driverNames = spyOptions.getDriverNames();
+		if (null != driverNames) {
+			for (String driverName : driverNames) {
+				try {
+					// you really only need to load the driver if it is not a
+					// type 4 driver!
+					P6Util.forName(driverName).newInstance();
+				} catch (Exception e) {
+					String err = "Error registering driver names: "
+							+ driverNames + " \nCaused By: " + e.toString();
+					P6LogQuery.error(err);
+					throw new P6DriverNotFoundError(err);
+				}
+			}
+		}
+	}
 
   private void debug(String msg) {
     // not initialized yet => nowhere to log yet
@@ -244,7 +222,7 @@ public class P6ModuleManager {
 
     P6LogQuery.debug(msg);
   }
-
+  
   //
   // API methods
   //
@@ -280,4 +258,5 @@ public class P6ModuleManager {
   public void unregisterOptionChangedListener(P6OptionChangedListener listener) {
     optionsRepository.unregisterOptionChangedListener(listener);
   }
+	
 }

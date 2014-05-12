@@ -24,10 +24,10 @@ import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.spy.appender.StdoutLogger;
+import com.p6spy.engine.spy.option.SystemProperties;
 import com.p6spy.engine.test.P6TestFramework;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -336,23 +336,35 @@ public class P6TestCommon extends P6TestFramework {
   }
   
   @Test
-  // let's enable the snaphost releases in the meanwhile
-  @Ignore
   public void testDisableLogModule() throws SQLException {
-    
-    // Note: This test is expected to fail until issue #227 has been fixed
     P6SpyLoadableOptions o = P6SpyOptions.getActiveInstance();
-    o.setModulelist("com.p6spy.engine.logging.P6LogFactory");
+    assertNotNull(P6LogOptions.getActiveInstance());
 
     clearLogEnties();
     statement.executeQuery("select 'x' from customers");
     // one log message should have been written - normal behavior
     assertEquals("A log message should have been written", 1, getLogEntiesCount());
     
-    clearLogEnties();
-    o.setModulelist("-com.p6spy.engine.logging.P6LogFactory");
-    statement.executeQuery("select 'x' from customers");
-    assertEquals("A log message should not have been written", 0, getLogEntiesCount());
+    // hot module unload doesn't work
+    { 
+    	clearLogEnties();
+    	o.setModulelist("-com.p6spy.engine.logging.P6LogFactory");
+    	
+	    statement.executeQuery("select 'x' from customers");
+	    assertEquals("A log message should not have been written", 1, getLogEntiesCount());
+    }
+    
+    // module unload with reload works
+    { 
+    	clearLogEnties();
+    	System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+    			"-com.p6spy.engine.logging.P6LogFactory");
+    	o.reload();
+    	
+	    statement.executeQuery("select 'x' from customers");
+	    assertEquals("A log message should not have been written", 0, getLogEntiesCount());
+	    System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+    }
   }
-
+  
 }
