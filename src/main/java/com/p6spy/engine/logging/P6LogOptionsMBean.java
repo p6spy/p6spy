@@ -51,6 +51,6 @@ public interface P6LogOptionsMBean {
 
   Set<String> getExcludeTables();
 
-  Set<String> getExcludeCategoriesSet();
+  Set<Category> getExcludeCategoriesSet();
 
 }

@@ -41,7 +41,7 @@ class P6LogConnectionCommitDelegate implements Delegate {
     try {
       return method.invoke(underlying, args);
     } finally {
-      P6LogQuery.logElapsed(connectionInformation.getConnectionId(), startTime, "commit", "", "");
+      P6LogQuery.logElapsed(connectionInformation.getConnectionId(), startTime, Category.COMMIT, "", "");
     }
   }
 }

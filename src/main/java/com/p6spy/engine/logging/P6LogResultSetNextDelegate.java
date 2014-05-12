@@ -63,7 +63,7 @@ class P6LogResultSetNextDelegate implements Delegate {
       // the result of the proxied method call will be true or false since this is used to proxy the call to ResultSet.next()
       // we do not need to log the call if the result was false as it means that there were no more results.
       if( Boolean.TRUE.equals(result) ) {
-        P6LogQuery.logElapsed(resultSetInformation.getConnectionId(), startTime, "result", resultSetInformation);
+        P6LogQuery.logElapsed(resultSetInformation.getConnectionId(), startTime, Category.RESULT, resultSetInformation);
       }
     }
   }

@@ -19,6 +19,8 @@
  */
 package com.p6spy.engine.spy.appender;
 
+import com.p6spy.engine.logging.Category;
+
 // log4j, stdout, and file logger all use the same format
 // so we descend from this class.
 public abstract class FormattedLogger {
@@ -32,6 +34,10 @@ public abstract class FormattedLogger {
     logText(strategy.formatMessage(connectionId, now, elapsed, category, prepared, sql));
   }
 
+  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql) {
+	    logText(strategy.formatMessage(connectionId, now, elapsed, category.toString(), prepared, sql));
+  }
+  
   public abstract void logText(String text);
 
   /**

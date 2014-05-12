@@ -24,14 +24,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.p6spy.engine.test.BaseTestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
+import com.p6spy.engine.test.BaseTestCase;
 
 public class P6TestOptionsRepository extends BaseTestCase {
 
@@ -54,6 +55,11 @@ public class P6TestOptionsRepository extends BaseTestCase {
         MultiLineFormat.class.getName()) instanceof MessageFormattingStrategy);
     Assert.assertTrue(optRepo.parse(Pattern.class,
         "somepattern") instanceof Pattern);
+    Assert.assertTrue(optRepo.parse(Category.class,
+            "info") instanceof Category);
+    // enum that can't be parsed
+    Assert.assertNull(optRepo.parse(Category.class,
+            "non_existing_category"));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -90,7 +96,7 @@ public class P6TestOptionsRepository extends BaseTestCase {
 
   @Test
   public void testSetSetAdditionAndRemoval() {
-    optRepo.initCompleted();
+	  optRepo.initCompleted();
 
     optRepo.setSet(String.class, "option1", "value1,value2");
     Assert.assertEquals(new HashSet<String>(Arrays.asList("value1", "value2")),
@@ -100,4 +106,5 @@ public class P6TestOptionsRepository extends BaseTestCase {
     Assert.assertEquals(new HashSet<String>(Arrays.asList("value1", "value3")),
         optRepo.get(String.class, "option1"));
   }
+  
 }

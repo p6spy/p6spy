@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.common;
 
+import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.P6ModuleManager;
@@ -39,10 +40,8 @@ import java.util.regex.Pattern;
 
 public class P6LogQuery implements P6OptionChangedListener {
   
-  private static final String CATEGORY_INFO = "info";
-  private static final String CATEGORY_DEBUG = "debug";
-  private static final Set<String> CATEGORIES_IMPLICITLY_EXCLUDED = new HashSet<String>(
-      Arrays.asList(CATEGORY_DEBUG, CATEGORY_INFO));
+  private static final Set<Category> CATEGORIES_IMPLICITLY_INCLUDED = new HashSet<Category>(
+	      Arrays.asList(Category.ERROR, Category.OUTAGE /* we still want to have outage category enabled! */));
   
   protected static P6Logger logger;
 
@@ -85,23 +84,33 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  static protected void doLog(long elapsed, String category, String prepared, String sql) {
+  static protected void doLog(long elapsed, Category category, String prepared, String sql) {
     doLog(-1, elapsed, category, prepared, sql);
   }
 
   // this is an internal method called by logElapsed
-  static protected void doLogElapsed(int connectionId, long startTime, long endTime, String category, String prepared, String sql) {
+  static protected void doLogElapsed(int connectionId, long startTime, long endTime, Category category, String prepared, String sql) {
     doLog(connectionId, (endTime - startTime), category, prepared, sql);
   }
 
-  // this is an internal procedure used to actually write the log information
-  static protected void doLog(int connectionId, long elapsed, String category, String prepared, String sql) {
-    // giveit one more try if not initialized yet
+/**
+ * Writes log information provided.
+ * 
+ * @param connectionId
+ * @param elapsed
+ * @param category
+ * @param prepared
+ * @param sql
+ */
+static protected void doLog(int connectionId, long elapsed, Category category, String prepared, String sql) {
+    // give it one more try if not initialized yet
     if (logger == null) {
       initialize();
+      if (logger == null) {
+    	  return;
+      }
     }
     
-    if (logger != null) {
       final String format = P6SpyOptions.getActiveInstance().getDateformat();
       final String stringNow;
       if (format == null) {
@@ -113,9 +122,9 @@ public class P6LogQuery implements P6OptionChangedListener {
       logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);
 
       final boolean stackTrace = P6SpyOptions.getActiveInstance().getStackTrace();
-      final String stackTraceClass = P6SpyOptions.getActiveInstance().getStackTraceClass();
       if (stackTrace) {
-        Exception e = new Exception();
+	    final String stackTraceClass = P6SpyOptions.getActiveInstance().getStackTraceClass();
+    	Exception e = new Exception();
         if (stackTraceClass != null) {
           StringWriter sw = new StringWriter();
           PrintWriter pw = new PrintWriter(sw);
@@ -129,20 +138,19 @@ public class P6LogQuery implements P6OptionChangedListener {
           logger.logException(e);
         }
       }
-    }
   }
 
   static boolean isLoggable(String sql) {
     return !P6LogOptions.getActiveInstance().getFilter() || isQueryOk(sql);
   }
 
-  static boolean isCategoryOk(String category) {
+  static boolean isCategoryOk(Category category) {
     final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
     if (null == opts) {
-      return !CATEGORIES_IMPLICITLY_EXCLUDED.contains(category);
+      return CATEGORIES_IMPLICITLY_INCLUDED.contains(category);
     }
     
-    final Set<String> excludeCategories = opts.getExcludeCategoriesSet();
+    final Set<Category> excludeCategories = opts.getExcludeCategoriesSet();
     
     return excludeCategories == null || !excludeCategories.contains(category);
   }
@@ -171,23 +179,23 @@ public class P6LogQuery implements P6OptionChangedListener {
   // public accessor methods for logging and viewing query data
   // ----------------------------------------------------------------------------------------------------------
 
-  static public void log(String category, String prepared, String sql) {
+  static public void log(Category category, String prepared, String sql) {
     if (logger != null && isCategoryOk(category)) {
       doLog(-1, category, prepared, sql);
     }
   }
 
-  static public void log(String category, Loggable loggable) {
+  static public void log(Category category, Loggable loggable) {
     if (logger != null && isCategoryOk(category)) {
       doLog(-1, category, loggable.getSql(), loggable.getSqlWithValues());
     }
   }
 
-  static public void logElapsed(int connectionId, long startTime, String category, String prepared, String sql) {
+  static public void logElapsed(int connectionId, long startTime, Category category, String prepared, String sql) {
     logElapsed(connectionId, startTime, System.currentTimeMillis(), category, prepared, sql);
   }
 
-  static public void logElapsed(int connectionId, long startTime, long endTime, String category, String prepared, String sql) {
+  static public void logElapsed(int connectionId, long startTime, long endTime, Category category, String prepared, String sql) {
     if (logger != null && meetsThresholdRequirement(endTime - startTime) && isCategoryOk(category) && isLoggable(sql) ) {
       doLogElapsed(connectionId, startTime, endTime, category, prepared, sql);
     } else if (isDebugEnabled()) {
@@ -196,11 +204,11 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
   
-  static public void logElapsed(int connectionId, long startTime, String category, Loggable loggable) {
+  static public void logElapsed(int connectionId, long startTime, Category category, Loggable loggable) {
     logElapsed(connectionId, startTime, System.currentTimeMillis(), category, loggable);
   }
 
-  static public void logElapsed(int connectionId, long startTime, long endTime, String category, Loggable loggable) {
+  static public void logElapsed(int connectionId, long startTime, long endTime, Category category, Loggable loggable) {
     // usually an expensive operation => cache where possible
     String sql = null;
     if (logger != null && meetsThresholdRequirement(endTime - startTime) && isCategoryOk(category) && isLoggable(sql = loggable.getSql())) {
@@ -215,7 +223,8 @@ public class P6LogQuery implements P6OptionChangedListener {
   //->JAW: new method that checks to see if this statement should be logged based
   //on whether on not it has taken greater than x amount of time.
   static private boolean meetsThresholdRequirement(long timeTaken) {
-    long executionThreshold = P6LogOptions.getActiveInstance().getExecutionThreshold();
+	final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
+	long executionThreshold = null != opts ? opts.getExecutionThreshold() : 0;
     
     if (executionThreshold <= 0) {
       return true;
@@ -224,19 +233,19 @@ public class P6LogQuery implements P6OptionChangedListener {
   }
 
   static public void info(String sql) {
-    if (logger != null && isCategoryOk(CATEGORY_INFO)) {
-      doLog(-1, CATEGORY_INFO, "", sql);
+    if (logger != null && isCategoryOk(Category.INFO)) {
+      doLog(-1, Category.INFO, "", sql);
     }
   }
 
   static public boolean isDebugEnabled() {
-    return isCategoryOk(CATEGORY_DEBUG);
+    return isCategoryOk(Category.DEBUG);
   }
 
   static public void debug(String sql) {
     if (isDebugEnabled()) {
       if (logger != null) {
-        doLog(-1, CATEGORY_DEBUG, "", sql);
+        doLog(-1, Category.DEBUG, "", sql);
       } else {
         System.err.println(sql);
       }
@@ -246,7 +255,7 @@ public class P6LogQuery implements P6OptionChangedListener {
   static public void error(String sql) {
     System.err.println("Warning: " + sql);
     if (logger != null) {
-      doLog(-1, "error", "", sql);
+      doLog(-1, Category.ERROR, "", sql);
     }
   }
   

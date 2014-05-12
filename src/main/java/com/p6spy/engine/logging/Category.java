@@ -20,8 +20,12 @@
 package com.p6spy.engine.logging;
 
 public enum Category {
-  ERROR("error"), INFO("info"), BATCH("batch"), DEBUG("debug"), STATEMENT("statement"), RESULTSET(
-      "resultset"), COMMIT("commit"), ROLLBACK("rollback"), RESULT("result");
+
+  // order matters here
+  ERROR("error"), INFO("info"), DEBUG("debug"), 
+  
+  BATCH("batch"), STATEMENT("statement"), RESULTSET(
+      "resultset"), COMMIT("commit"), ROLLBACK("rollback"), RESULT("result"), OUTAGE("OUTAGE");
 
   private String name;
 
@@ -37,4 +41,5 @@ public enum Category {
   public String toString() {
     return name;
   }
+  
 }
