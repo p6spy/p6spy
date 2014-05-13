@@ -22,6 +22,7 @@ package com.p6spy.engine.common;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +35,7 @@ import com.p6spy.engine.spy.P6SpyFactory;
 public class CustomHashedHashSetTest {
 
 	private ClassHasher hasher;
-	private CustomHashedHashSet<P6Factory> set;
+	private Set<P6Factory> set;
 	
 	private P6LogFactory fl1 = new P6LogFactory();
 	private P6LogFactory fl2 = new P6LogFactory();
