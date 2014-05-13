@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="63" href="#63">63</a>        <em class="jxr_comment">// the result of the proxied method call will be true or false since this is used to proxy the call to ResultSet.next()</em>
 <a class="jxr_linenumber" name="64" href="#64">64</a>        <em class="jxr_comment">// we do not need to log the call if the result was false as it means that there were no more results.</em>
 <a class="jxr_linenumber" name="65" href="#65">65</a>        <strong class="jxr_keyword">if</strong>( Boolean.TRUE.equals(result) ) {
-<a class="jxr_linenumber" name="66" href="#66">66</a>          P6LogQuery.logElapsed(resultSetInformation.getConnectionId(), startTime, <span class="jxr_string">"result"</span>, resultSetInformation);
+<a class="jxr_linenumber" name="66" href="#66">66</a>          P6LogQuery.logElapsed(resultSetInformation.getConnectionId(), startTime, Category.RESULT, resultSetInformation);
 <a class="jxr_linenumber" name="67" href="#67">67</a>        }
 <a class="jxr_linenumber" name="68" href="#68">68</a>      }
 <a class="jxr_linenumber" name="69" href="#69">69</a>    }

@@ -34,10 +34,10 @@
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.P6TestLogger;
 <a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.SingleLineFormat;
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.StdoutLogger;
-<a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.test.P6TestFramework;
-<a class="jxr_linenumber" name="28" href="#28">28</a>  
-<a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
-<a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.Ignore;
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.SystemProperties;
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.test.P6TestFramework;
+<a class="jxr_linenumber" name="29" href="#29">29</a>  
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
 <a class="jxr_linenumber" name="31" href="#31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> org.junit.runner.RunWith;
 <a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> org.junit.runners.Parameterized;
@@ -346,26 +346,38 @@
 <a class="jxr_linenumber" name="336" href="#336">336</a>   }
 <a class="jxr_linenumber" name="337" href="#337">337</a>   
 <a class="jxr_linenumber" name="338" href="#338">338</a>   @Test
-<a class="jxr_linenumber" name="339" href="#339">339</a>   <em class="jxr_comment">// let's enable the snaphost releases in the meanwhile</em>
-<a class="jxr_linenumber" name="340" href="#340">340</a>   @Ignore
-<a class="jxr_linenumber" name="341" href="#341">341</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDisableLogModule() <strong class="jxr_keyword">throws</strong> SQLException {
-<a class="jxr_linenumber" name="342" href="#342">342</a>     
-<a class="jxr_linenumber" name="343" href="#343">343</a>     <em class="jxr_comment">// Note: This test is expected to fail until issue #227 has been fixed</em>
-<a class="jxr_linenumber" name="344" href="#344">344</a>     P6SpyLoadableOptions o = P6SpyOptions.getActiveInstance();
-<a class="jxr_linenumber" name="345" href="#345">345</a>     o.setModulelist(<span class="jxr_string">"com.p6spy.engine.logging.P6LogFactory"</span>);
-<a class="jxr_linenumber" name="346" href="#346">346</a> 
-<a class="jxr_linenumber" name="347" href="#347">347</a>     clearLogEnties();
-<a class="jxr_linenumber" name="348" href="#348">348</a>     statement.executeQuery(<span class="jxr_string">"select 'x' from customers"</span>);
-<a class="jxr_linenumber" name="349" href="#349">349</a>     <em class="jxr_comment">// one log message should have been written - normal behavior</em>
-<a class="jxr_linenumber" name="350" href="#350">350</a>     assertEquals(<span class="jxr_string">"A log message should have been written"</span>, 1, getLogEntiesCount());
-<a class="jxr_linenumber" name="351" href="#351">351</a>     
-<a class="jxr_linenumber" name="352" href="#352">352</a>     clearLogEnties();
-<a class="jxr_linenumber" name="353" href="#353">353</a>     o.setModulelist(<span class="jxr_string">"-com.p6spy.engine.logging.P6LogFactory"</span>);
-<a class="jxr_linenumber" name="354" href="#354">354</a>     statement.executeQuery(<span class="jxr_string">"select 'x' from customers"</span>);
-<a class="jxr_linenumber" name="355" href="#355">355</a>     assertEquals(<span class="jxr_string">"A log message should not have been written"</span>, 0, getLogEntiesCount());
-<a class="jxr_linenumber" name="356" href="#356">356</a>   }
-<a class="jxr_linenumber" name="357" href="#357">357</a> 
-<a class="jxr_linenumber" name="358" href="#358">358</a> }
+<a class="jxr_linenumber" name="339" href="#339">339</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testDisableLogModule() <strong class="jxr_keyword">throws</strong> SQLException {
+<a class="jxr_linenumber" name="340" href="#340">340</a>     P6SpyLoadableOptions o = P6SpyOptions.getActiveInstance();
+<a class="jxr_linenumber" name="341" href="#341">341</a>     assertNotNull(P6LogOptions.getActiveInstance());
+<a class="jxr_linenumber" name="342" href="#342">342</a> 
+<a class="jxr_linenumber" name="343" href="#343">343</a>     clearLogEnties();
+<a class="jxr_linenumber" name="344" href="#344">344</a>     statement.executeQuery(<span class="jxr_string">"select 'x' from customers"</span>);
+<a class="jxr_linenumber" name="345" href="#345">345</a>     <em class="jxr_comment">// one log message should have been written - normal behavior</em>
+<a class="jxr_linenumber" name="346" href="#346">346</a>     assertEquals(<span class="jxr_string">"A log message should have been written"</span>, 1, getLogEntiesCount());
+<a class="jxr_linenumber" name="347" href="#347">347</a>     
+<a class="jxr_linenumber" name="348" href="#348">348</a>     <em class="jxr_comment">// hot module unload doesn't work</em>
+<a class="jxr_linenumber" name="349" href="#349">349</a>     { 
+<a class="jxr_linenumber" name="350" href="#350">350</a>     	clearLogEnties();
+<a class="jxr_linenumber" name="351" href="#351">351</a>     	o.setModulelist(<span class="jxr_string">"-com.p6spy.engine.logging.P6LogFactory"</span>);
+<a class="jxr_linenumber" name="352" href="#352">352</a>     	
+<a class="jxr_linenumber" name="353" href="#353">353</a> 	    statement.executeQuery(<span class="jxr_string">"select 'x' from customers"</span>);
+<a class="jxr_linenumber" name="354" href="#354">354</a> 	    assertEquals(<span class="jxr_string">"A log message should not have been written"</span>, 1, getLogEntiesCount());
+<a class="jxr_linenumber" name="355" href="#355">355</a>     }
+<a class="jxr_linenumber" name="356" href="#356">356</a>     
+<a class="jxr_linenumber" name="357" href="#357">357</a>     <em class="jxr_comment">// module unload with reload works</em>
+<a class="jxr_linenumber" name="358" href="#358">358</a>     { 
+<a class="jxr_linenumber" name="359" href="#359">359</a>     	clearLogEnties();
+<a class="jxr_linenumber" name="360" href="#360">360</a>     	System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+<a class="jxr_linenumber" name="361" href="#361">361</a>     			<span class="jxr_string">"-com.p6spy.engine.logging.P6LogFactory"</span>);
+<a class="jxr_linenumber" name="362" href="#362">362</a>     	o.reload();
+<a class="jxr_linenumber" name="363" href="#363">363</a>     	
+<a class="jxr_linenumber" name="364" href="#364">364</a> 	    statement.executeQuery(<span class="jxr_string">"select 'x' from customers"</span>);
+<a class="jxr_linenumber" name="365" href="#365">365</a> 	    assertEquals(<span class="jxr_string">"A log message should not have been written"</span>, 0, getLogEntiesCount());
+<a class="jxr_linenumber" name="366" href="#366">366</a> 	    System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+<a class="jxr_linenumber" name="367" href="#367">367</a>     }
+<a class="jxr_linenumber" name="368" href="#368">368</a>   }
+<a class="jxr_linenumber" name="369" href="#369">369</a>   
+<a class="jxr_linenumber" name="370" href="#370">370</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
