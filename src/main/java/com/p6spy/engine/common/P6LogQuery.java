@@ -93,23 +93,23 @@ public class P6LogQuery implements P6OptionChangedListener {
     doLog(connectionId, (endTime - startTime), category, prepared, sql);
   }
 
-/**
- * Writes log information provided.
- * 
- * @param connectionId
- * @param elapsed
- * @param category
- * @param prepared
- * @param sql
- */
-static protected void doLog(int connectionId, long elapsed, Category category, String prepared, String sql) {
-    // give it one more try if not initialized yet
-    if (logger == null) {
-      initialize();
-      if (logger == null) {
-    	  return;
-      }
-    }
+	/**
+	 * Writes log information provided.
+	 * 
+	 * @param connectionId
+	 * @param elapsed
+	 * @param category
+	 * @param prepared
+	 * @param sql
+	 */
+	static protected void doLog(int connectionId, long elapsed, Category category, String prepared, String sql) {
+	    // give it one more try if not initialized yet
+	    if (logger == null) {
+	      initialize();
+	      if (logger == null) {
+	    	  return;
+	      }
+	    }
     
       final String format = P6SpyOptions.getActiveInstance().getDateformat();
       final String stringNow;
@@ -152,7 +152,8 @@ static protected void doLog(int connectionId, long elapsed, Category category, S
     
     final Set<Category> excludeCategories = opts.getExcludeCategoriesSet();
     
-    return excludeCategories == null || !excludeCategories.contains(category);
+    return logger != null && logger.isCategoryEnabled(category) 
+    	&& excludeCategories == null || !excludeCategories.contains(category);
   }
   
   static boolean isQueryOk(final String sql) {
@@ -174,7 +175,7 @@ static protected void doLog(int connectionId, long elapsed, Category category, S
     return (includeTables == null || includeTables.isEmpty() || includePattern.matcher(sqlLowercased).matches()) 
         && (excludeTables == null || excludeTables.isEmpty() || !excludePattern.matcher(sqlLowercased).matches());
   }
-
+  
   // ----------------------------------------------------------------------------------------------------------
   // public accessor methods for logging and viewing query data
   // ----------------------------------------------------------------------------------------------------------
@@ -223,13 +224,10 @@ static protected void doLog(int connectionId, long elapsed, Category category, S
   //->JAW: new method that checks to see if this statement should be logged based
   //on whether on not it has taken greater than x amount of time.
   static private boolean meetsThresholdRequirement(long timeTaken) {
-	final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
-	long executionThreshold = null != opts ? opts.getExecutionThreshold() : 0;
+        final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
+        long executionThreshold = null != opts ? opts.getExecutionThreshold() : 0;
     
-    if (executionThreshold <= 0) {
-      return true;
-    } 
-    return timeTaken > executionThreshold;
+    return executionThreshold <= 0 || timeTaken > executionThreshold;
   }
 
   static public void info(String sql) {
