@@ -208,7 +208,6 @@ public class P6TestCommon extends P6TestFramework {
     testResultAndResultSetCategory(false, true);
     testResultAndResultSetCategory(false, false);
 
-
     // set back, otherwise we have problems in PostgresSQL, statement exec
     // waits for commit
     connection.setAutoCommit(true);
@@ -331,7 +330,7 @@ public class P6TestCommon extends P6TestFramework {
     
     // cleanup stuff - go for the default logger
     {
-      P6SpyOptions.getActiveInstance().setAppender(P6SpyOptions.class.getName());
+      P6SpyOptions.getActiveInstance().setAppender(P6TestLogger.class.getName());
     }
   }
   
