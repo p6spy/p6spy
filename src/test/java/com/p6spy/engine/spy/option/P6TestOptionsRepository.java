@@ -55,11 +55,13 @@ public class P6TestOptionsRepository extends BaseTestCase {
         MultiLineFormat.class.getName()) instanceof MessageFormattingStrategy);
     Assert.assertTrue(optRepo.parse(Pattern.class,
         "somepattern") instanceof Pattern);
+
+    // existing categories work
     Assert.assertTrue(optRepo.parse(Category.class,
             "info") instanceof Category);
-    // enum that can't be parsed
-    Assert.assertNull(optRepo.parse(Category.class,
-            "non_existing_category"));
+    // new categories can be added without restriction
+    Assert.assertTrue(optRepo.parse(Category.class,
+            "new_category") instanceof Category);
   }
 
   @Test(expected = IllegalArgumentException.class)

@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.P6TestLogger;
@@ -181,7 +182,7 @@ public class P6TestCommon extends P6TestFramework {
     assertTrue(super.getLastLogEntry().contains(query));
     statement.close();  // required for sqllite
     connection.rollback();
-    assertTrue(super.getLastLogEntry().contains("rollback"));
+    assertTrue(super.getLastLogEntry().contains(Category.ROLLBACK.toString()));
     statement = connection.createStatement();
 
     // test commit logging
@@ -190,7 +191,7 @@ public class P6TestCommon extends P6TestFramework {
     statement.executeQuery(query);
     assertTrue(super.getLastLogEntry().contains(query));
     connection.commit();
-    assertTrue(super.getLastLogEntry().contains("commit"));
+    assertTrue(super.getLastLogEntry().contains(Category.COMMIT.toString()));
 
     // test debug logging
     super.clearLogEnties();

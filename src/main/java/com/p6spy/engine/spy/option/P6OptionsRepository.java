@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import com.p6spy.engine.common.ClassHasher;
 import com.p6spy.engine.common.CustomHashedHashSet;
 import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.P6Factory;
 
 public class P6OptionsRepository {
@@ -83,16 +84,17 @@ public class P6OptionsRepository {
       throw new IllegalArgumentException("type not supported:" + type.getName());
     } else if (type.isAssignableFrom(Pattern.class)) {
       return Pattern.compile(value.toString());
+    } else if (type.isAssignableFrom(Category.class)) {
+    	return new Category(value.toString());
     } else {
-		if (type.isEnum()) {
-	    	// should be sufficient for our use case (Category)
-	    	// as toString returns the category name
-	    	for (T enumConstant : type.getEnumConstants()) {
-	    	   if (enumConstant.toString().equalsIgnoreCase(value.toString())) {
-	    		   return enumConstant;
-	    	   }
-	    	}
-		}
+//		if (type.isEnum()) {
+//	    	// is sufficient for our use case where toString returns enum name
+//	    	for (T enumConstant : type.getEnumConstants()) {
+//	    	   if (enumConstant.toString().equalsIgnoreCase(value.toString())) {
+//	    		   return enumConstant;
+//	    	   }
+//	    	}
+//		}
         	
       Object instance;
       try {
