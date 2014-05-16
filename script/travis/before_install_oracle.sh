@@ -102,8 +102,11 @@ END
 . /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/oracle_env.sh
 
 # Increase the number of connections.
-echo "ALTER SYSTEM SET PROCESSES=40 SCOPE=SPFILE;" | \
+echo "ALTER SYSTEM SET PROCESSES=80 SCOPE=SPFILE;" | \
 sqlplus -S -L sys/admin AS SYSDBA
+
+# need to restart, to apply connection number update
+sudo /etc/init.d/oracle-xe restart
 
 # Set Oracle environment variables on login.
 cat <<END >>/root/.bashrc
