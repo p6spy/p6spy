@@ -39,7 +39,7 @@ public class Category {
 	public static final Category COMMIT = new Category("commit");
 	public static final Category ROLLBACK = new Category("rollback");
 	public static final Category RESULT = new Category("result");
-	public static final Category OUTAGE = new Category("OUTAGE");
+	public static final Category OUTAGE = new Category("outage");
 
 	private final String name;
 

@@ -19,7 +19,9 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.test.P6TestFramework;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,12 +61,12 @@ public class P6TestOutage extends P6TestFramework {
   public void testOutage() throws SQLException {
     // exec fast query => no outage detected
     callSleep(1);
-    Assert.assertFalse(super.getLastLogEntry().contains("OUTAGE"));
+    Assert.assertFalse(super.getLastLogEntry().contains(Category.OUTAGE.toString()));
     Assert.assertTrue(super.getLastLogEntry().contains("CALL SLEEP"));
 
     // exec slooooow query => outage detected
     callSleep(3000);
-    Assert.assertTrue(super.getLastButOneLogEntry().contains("OUTAGE"));
+    Assert.assertTrue(super.getLastButOneLogEntry().contains(Category.OUTAGE.toString()));
     Assert.assertTrue(super.getLastLogEntry().contains("CALL SLEEP"));
   }
 
