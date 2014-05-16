@@ -19,16 +19,17 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.test.P6TestFramework;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.sql.Driver;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import com.p6spy.engine.test.P6TestFramework;
 
 @RunWith(Parameterized.class)
 public class P6TestDriver extends P6TestFramework {

@@ -22,6 +22,8 @@ package com.p6spy.engine.common;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.p6spy.engine.logging.Category;
+
 /**
  * @author Quinton McCombs
  * @since 09/2013
@@ -39,7 +41,7 @@ public class ResultSetInformation implements Loggable {
   }
 
   public void generateLogMessage() {
-    P6LogQuery.log("resultset", this);
+    P6LogQuery.log(Category.RESULTSET, this);
     resultMap.clear();
   }
 

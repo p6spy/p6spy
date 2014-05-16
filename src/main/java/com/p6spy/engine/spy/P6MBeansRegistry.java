@@ -20,6 +20,7 @@
 package com.p6spy.engine.spy;
 
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -33,44 +34,47 @@ import javax.management.StandardMBean;
 
 public class P6MBeansRegistry {
 
-  private final Collection<P6LoadableOptions> mBeans;
+	private final Collection<ObjectName> mBeans = new ArrayList<ObjectName>();
 
-  public P6MBeansRegistry(Collection<P6LoadableOptions> mBeans)
-                                                               throws InstanceAlreadyExistsException,
-                                                               MBeanRegistrationException,
-                                                               NotCompliantMBeanException,
-                                                               MalformedObjectNameException {
-    if (null == mBeans || mBeans.isEmpty()) {
-      throw new IllegalArgumentException("mBeans is empty!");
-    }
+	public void registerMBean(P6LoadableOptions mBean)
+			throws InstanceAlreadyExistsException, MBeanRegistrationException,
+			NotCompliantMBeanException, MalformedObjectNameException {
+		
+		checkMBean(mBean);
+		
+		final ObjectName mBeanObjectName = getObjectName(mBean);
+		ManagementFactory.getPlatformMBeanServer().registerMBean(mBean, mBeanObjectName);
+		mBeans.add(mBeanObjectName);
+	}
 
-    this.mBeans = mBeans;
-    registerMBeans();
-  }
+	public void unregisterAllMBeans() throws MBeanRegistrationException,
+			InstanceNotFoundException, MalformedObjectNameException {
+		
+		final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+		for (ObjectName mBeanObjectName : mBeans) {
+			mbs.unregisterMBean(mBeanObjectName);
+		}
+		mBeans.clear();
+	}
 
-  private void registerMBeans() throws InstanceAlreadyExistsException, MBeanRegistrationException,
-      NotCompliantMBeanException, MalformedObjectNameException {
-    MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-    for (P6LoadableOptions mBean : mBeans) {
-      if (!(mBean instanceof StandardMBean)) {
-        throw new IllegalArgumentException("mBean has to be instance of the StandardMBean class! But is not: " + mBean);
-      }
-      mbs.registerMBean(mBean, getObjectName(mBean));
-    }
-  }
+	private void checkMBean(P6LoadableOptions mBean) {
+		if (null == mBean) {
+			throw new IllegalArgumentException("mBean is null!");
+		}
 
-  public void unregisterMBeans() throws MBeanRegistrationException, InstanceNotFoundException,
-      MalformedObjectNameException {
-    MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-    for (P6LoadableOptions mBean : mBeans) {
-      mbs.unregisterMBean(getObjectName(mBean));
-    }
-  }
+		if (!(mBean instanceof StandardMBean)) {
+			throw new IllegalArgumentException(
+					"mBean has to be instance of the StandardMBean class! But is not: "
+							+ mBean);
+		}
+	}
 
-  private ObjectName getObjectName(P6LoadableOptions mBean) throws MalformedObjectNameException {
-    String packageName = mBean.getClass().getPackage().getName();
-    packageName = null == packageName ? "com.p6spy" : packageName;
-    return new ObjectName(packageName + ":name=" + mBean.getClass().getSimpleName());
-  }
+	protected ObjectName getObjectName(P6LoadableOptions mBean)
+			throws MalformedObjectNameException {
+		String packageName = mBean.getClass().getPackage().getName();
+		packageName = null == packageName ? "com.p6spy" : packageName;
+		return new ObjectName(packageName + ":name="
+				+ mBean.getClass().getSimpleName());
+	}
 
 }

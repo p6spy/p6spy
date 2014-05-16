@@ -42,9 +42,9 @@ import java.util.Arrays;
  * @since 09/2013
  */
 public class MethodNameAndParameterLikeMatcher extends MethodNameMatcher {
-  private final Class[] methodParameters;
+  private final Class<?>[] methodParameters;
 
-  public MethodNameAndParameterLikeMatcher(final String methodName, final Class... methodParameters) {
+  public MethodNameAndParameterLikeMatcher(final String methodName, final Class<?>... methodParameters) {
     super(methodName);
     this.methodParameters = methodParameters;
   }

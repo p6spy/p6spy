@@ -19,15 +19,16 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.spy.appender.StdoutLogger;
+import com.p6spy.engine.spy.option.SystemProperties;
 import com.p6spy.engine.test.P6TestFramework;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -181,7 +182,7 @@ public class P6TestCommon extends P6TestFramework {
     assertTrue(super.getLastLogEntry().contains(query));
     statement.close();  // required for sqllite
     connection.rollback();
-    assertTrue(super.getLastLogEntry().contains("rollback"));
+    assertTrue(super.getLastLogEntry().contains(Category.ROLLBACK.toString()));
     statement = connection.createStatement();
 
     // test commit logging
@@ -190,7 +191,7 @@ public class P6TestCommon extends P6TestFramework {
     statement.executeQuery(query);
     assertTrue(super.getLastLogEntry().contains(query));
     connection.commit();
-    assertTrue(super.getLastLogEntry().contains("commit"));
+    assertTrue(super.getLastLogEntry().contains(Category.COMMIT.toString()));
 
     // test debug logging
     super.clearLogEnties();
@@ -207,7 +208,6 @@ public class P6TestCommon extends P6TestFramework {
     testResultAndResultSetCategory(true, false);
     testResultAndResultSetCategory(false, true);
     testResultAndResultSetCategory(false, false);
-
 
     // set back, otherwise we have problems in PostgresSQL, statement exec
     // waits for commit
@@ -331,28 +331,40 @@ public class P6TestCommon extends P6TestFramework {
     
     // cleanup stuff - go for the default logger
     {
-      P6SpyOptions.getActiveInstance().setAppender(P6SpyOptions.class.getName());
+      P6SpyOptions.getActiveInstance().setAppender(P6TestLogger.class.getName());
     }
   }
   
   @Test
-  // let's enable the snaphost releases in the meanwhile
-  @Ignore
   public void testDisableLogModule() throws SQLException {
-    
-    // Note: This test is expected to fail until issue #227 has been fixed
     P6SpyLoadableOptions o = P6SpyOptions.getActiveInstance();
-    o.setModulelist("com.p6spy.engine.logging.P6LogFactory");
+    assertNotNull(P6LogOptions.getActiveInstance());
 
     clearLogEnties();
     statement.executeQuery("select 'x' from customers");
     // one log message should have been written - normal behavior
     assertEquals("A log message should have been written", 1, getLogEntiesCount());
     
-    clearLogEnties();
-    o.setModulelist("-com.p6spy.engine.logging.P6LogFactory");
-    statement.executeQuery("select 'x' from customers");
-    assertEquals("A log message should not have been written", 0, getLogEntiesCount());
+    // hot module unload doesn't work
+    { 
+    	clearLogEnties();
+    	o.setModulelist("-com.p6spy.engine.logging.P6LogFactory");
+    	
+	    statement.executeQuery("select 'x' from customers");
+	    assertEquals("A log message should not have been written", 1, getLogEntiesCount());
+    }
+    
+    // module unload with reload works
+    { 
+    	clearLogEnties();
+    	System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+    			"-com.p6spy.engine.logging.P6LogFactory");
+    	o.reload();
+    	
+	    statement.executeQuery("select 'x' from customers");
+	    assertEquals("A log message should not have been written", 0, getLogEntiesCount());
+	    System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+    }
   }
-
+  
 }

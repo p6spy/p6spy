@@ -20,6 +20,7 @@
 package com.p6spy.engine.outage;
 
 import com.p6spy.engine.common.*;
+import com.p6spy.engine.logging.Category;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -152,7 +153,7 @@ public class P6OutageDetector implements Runnable {
     }
 
     private void logOutage(InvocationInfo ii) {
-        P6LogQuery.logElapsed(-1, ii.startTime, "OUTAGE", ii.preparedStmt, ii.sql);
+        P6LogQuery.logElapsed(-1, ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql);
     }
 
 }

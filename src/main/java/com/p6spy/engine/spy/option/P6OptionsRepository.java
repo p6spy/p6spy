@@ -28,7 +28,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.p6spy.engine.common.ClassHasher;
+import com.p6spy.engine.common.CustomHashedHashSet;
 import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.logging.Category;
+import com.p6spy.engine.spy.P6Factory;
 
 public class P6OptionsRepository {
 
@@ -80,7 +84,18 @@ public class P6OptionsRepository {
       throw new IllegalArgumentException("type not supported:" + type.getName());
     } else if (type.isAssignableFrom(Pattern.class)) {
       return Pattern.compile(value.toString());
+    } else if (type.isAssignableFrom(Category.class)) {
+    	return new Category(value.toString());
     } else {
+//		if (type.isEnum()) {
+//	    	// is sufficient for our use case where toString returns enum name
+//	    	for (T enumConstant : type.getEnumConstants()) {
+//	    	   if (enumConstant.toString().equalsIgnoreCase(value.toString())) {
+//	    		   return enumConstant;
+//	    	   }
+//	    	}
+//		}
+        	
       Object instance;
       try {
         instance = P6Util.forName(value.toString()).newInstance();
@@ -128,10 +143,15 @@ public class P6OptionsRepository {
     final Set<T> oldValue = getSet(type, key);
 
     Set<T> newValue;
-    if (oldValue == null) {
-      newValue = new HashSet<T>();
+    if (type.equals(P6Factory.class)) {
+    	// for P6Factories the hashcode is computed based on class
+    	newValue = new CustomHashedHashSet<T>(new ClassHasher());
     } else {
-      newValue = new HashSet<T>(oldValue);
+    	newValue = new HashSet<T>();
+    }
+    
+    if (null != oldValue) {
+    	newValue.addAll(oldValue);	
     }
 
     for (String item : collection) {
@@ -141,11 +161,6 @@ public class P6OptionsRepository {
         newValue.add((T) parse(type, item));
       }
     }
-    // Set<T> newValue = new HashSet<T>();
-    // for (String item : collection) {
-    // newValue.add((T) parse(type, item));
-    // }
-
     map.put(key, newValue);
 
     // propagate the changes

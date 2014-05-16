@@ -51,7 +51,9 @@ in section: [Configuration and Usage](#confusage)):
     # (default is com.p6spy.engine.logging.P6LogFactory and         #
     # com.p6spy.engine.spy.P6SpyFactory)                            #
     # Please note that the core module (P6SpyFactory) can't be		# 
-    # deactivated											        #
+    # deactivated. 													#
+    # Unlike the other properties, activation of the changes on     #
+    # this one requires reload.										#
     #################################################################
     #modulelist=com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
 

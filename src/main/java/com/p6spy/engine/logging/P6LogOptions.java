@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 
 import javax.management.StandardMBean;
 
-import com.p6spy.engine.leak.P6LeakOptionsMBean;
 import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
@@ -138,7 +137,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
   @Override
   public void setExcludecategories(String excludecategories) {
     optionsRepository.set(String.class, EXCLUDECATEGORIES, excludecategories);
-    optionsRepository.setSet(String.class, EXCLUDECATEGORIES_SET, excludecategories);
+    optionsRepository.setSet(Category.class, EXCLUDECATEGORIES_SET, excludecategories);
   }
 
   @Override
@@ -230,7 +229,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
   }
 
   @Override
-  public Set<String> getExcludeCategoriesSet() {
-    return optionsRepository.getSet(String.class, EXCLUDECATEGORIES_SET);
+  public Set<Category> getExcludeCategoriesSet() {
+    return optionsRepository.getSet(Category.class, EXCLUDECATEGORIES_SET);
   }
 }

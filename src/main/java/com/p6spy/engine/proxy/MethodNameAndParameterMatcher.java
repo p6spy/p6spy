@@ -41,9 +41,9 @@ import java.util.Arrays;
  * @since 09/2013
  */
 public class MethodNameAndParameterMatcher extends MethodNameMatcher {
-  private final Class[] methodParameters;
+  private final Class<?>[] methodParameters;
 
-  public MethodNameAndParameterMatcher(final String methodName, final Class... methodParameters) {
+  public MethodNameAndParameterMatcher(final String methodName, final Class<?>... methodParameters) {
     super(methodName);
     this.methodParameters = methodParameters;
   }

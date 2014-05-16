@@ -37,6 +37,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
@@ -159,7 +160,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertEquals(0L, opts.getExecutionThreshold());
     Assert.assertEquals("info,debug,result,resultset,batch", opts.getExcludecategories());
     Assert.assertTrue(opts.getExcludeCategoriesSet().containsAll(
-        Arrays.asList(new String[] { "info", "debug", "result", "resultset", "batch" })));
+        Arrays.asList(Category.INFO, Category.DEBUG, Category.RESULT, Category.RESULTSET, Category.BATCH)));
     Assert.assertFalse(opts.getFilter());
     Assert.assertNull(opts.getIncludeTables());
     Assert.assertNull(opts.getExcludeTables());

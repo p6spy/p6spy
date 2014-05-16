@@ -8,6 +8,7 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 * Bind variables set by name on a CallableStatement are now logged. See [issue #221] (https://github.com/p6spy/p6spy/issues/221) for details.
 * `setAppender()` considered in logging properly (see: [issue #226](https://github.com/p6spy/p6spy/issues/226))
 * considering Wrapper for DataSource proxies (bringing support for Glassfish XADataSources)
+* fixed disabling modules on reload (see [issue #227] (https://github.com/p6spy/p6spy/issues/227))
 
 ## Version 2.0.2 [3.4.2014]
 

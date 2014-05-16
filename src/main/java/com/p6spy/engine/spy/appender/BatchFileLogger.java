@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.P6SpyOptions;
 
 /**
@@ -56,7 +57,7 @@ public class BatchFileLogger extends FileLogger {
     }
 
     @Override
-    public void logSQL(int connectionId, String now, long elapsed, String category, String prepared, String sql) {
+    public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql) {
         if (endOfStatement) {
             qlog.println(BATCH_SEPARATOR);
         }
@@ -64,8 +65,8 @@ public class BatchFileLogger extends FileLogger {
             String actual = null == sql || 0 == sql.length() ? prepared : sql;
             qlog.print(actual);
             endOfStatement = true;
-        } else if ("commit".equalsIgnoreCase(category) || "rollback".equalsIgnoreCase(category)) {
-            qlog.print(category.toUpperCase());
+        } else if (Category.COMMIT.equals(category) || Category.ROLLBACK.equals(category)) {
+            qlog.print(category/*.toUpperCase()*/);
             endOfStatement = true;
         } else {
             qlog.println("-- " + category);
