@@ -70,6 +70,7 @@
       <includes>
         <include>p6spy*-javadoc.jar</include>
         <include>p6spy*-sources.jar</include>
+        <include>p6spy*-nodep.jar</include>
       </includes>
     </fileSet>
   </fileSets>

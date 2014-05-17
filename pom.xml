@@ -118,7 +118,10 @@
   <properties>
     <java-build>1.6</java-build>
     <commons-logging-build>1.1</commons-logging-build>
+    <slf4j-build>1.7.7</slf4j-build>
     <log4j-build>1.2.17</log4j-build>
+    <log4j2-build>2.0-rc1</log4j2-build>
+    <logback-build>1.1.2</logback-build>
     <mysql-connector-java-build>5.1.21</mysql-connector-java-build>
     <!-- please note we use jdbc type 3 here, to prove in tests it works for us, see: https://github.com/p6spy/p6spy/issues/30 -->
     <postgresql-build>9.3-1100-jdbc41</postgresql-build>
@@ -126,7 +129,6 @@
     <h2-build>1.3.173</h2-build>
     <derby-build>10.10.1.1</derby-build>
     <sqlite-build>3.7.2</sqlite-build>
-    <commons-lang-build>2.6</commons-lang-build>
     <cobertura-maven-plugin-build>2.6</cobertura-maven-plugin-build>
     <maven-eclipse-plugin-build>2.9</maven-eclipse-plugin-build>
     <maven-project-info-reports-plugin-build>2.7</maven-project-info-reports-plugin-build>
@@ -356,6 +358,21 @@
         <version>2.4</version>
         <executions>
           <execution>
+            <id>nodep</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <appendAssemblyId>true</appendAssemblyId>
+              <descriptors>
+              	<descriptor>src/main/assembly/log4j2-nodep.xml</descriptor>
+				<descriptor>src/main/assembly/log4j-nodep.xml</descriptor>
+				<descriptor>src/main/assembly/logback-nodep.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+          <execution>
             <id>distribution</id>
             <phase>package</phase>
             <goals>
@@ -417,10 +434,21 @@
     </pluginManagement>
   </build>
     
+  <!-- 
+  for providing misc *-nodep artifacts, please note that order matters here
+  even if slf4j complains about multiple implementations on classpath, it takes the 1.st one
+  and as we use log4j in tests => bridge needs to be the 1.st one specified 
+   -->
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+      <version>${slf4j-build}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
       <version>1.7.5</version>
       <scope>provided</scope>
     </dependency>
@@ -428,7 +456,7 @@
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>${log4j-build}</version>
-      <scope>test</scope>
+      <scope>provided</scope>
       <exclusions>
         <!-- dependencies show up in 1.2.15 -->
         <exclusion>
@@ -449,6 +477,37 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-slf4j-impl</artifactId>
+		<version>${log4j2-build}</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-api</artifactId>
+		<version>${log4j2-build}</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-core</artifactId>
+		<version>${log4j2-build}</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+	  <groupId>ch.qos.logback</groupId>
+	  <artifactId>logback-classic</artifactId>
+	  <version>${logback-build}</version>
+	  <scope>provided</scope>
+	 </dependency>
+	 <dependency>
+	  <groupId>ch.qos.logback</groupId>
+	  <artifactId>logback-core</artifactId>
+	  <version>${logback-build}</version>
+	  <scope>provided</scope>
+	 </dependency>
+	 
     <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib-nodep</artifactId>
@@ -507,12 +566,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
       <version>3.2.4.RELEASE</version>
@@ -536,6 +589,13 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.4</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.3.2</version>
       <scope>test</scope>
     </dependency>
 
