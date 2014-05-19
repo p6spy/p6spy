@@ -58,6 +58,9 @@ public class P6TestOptionDefaults extends BaseTestCase {
 
   private static final File LOG_FILE = new File("spy.log");
   
+  public static final Category[] DEFAULT_CATEGORIES = new Category[] { 
+	  Category.INFO, Category.DEBUG, Category.RESULT, Category.RESULTSET, Category.BATCH };
+  
   @SuppressWarnings("unchecked")
   private static final List<Class<? extends P6Factory>> DEFAULT_FACTORIES = Arrays.asList(
       P6SpyFactory.class, P6LogFactory.class);
@@ -160,7 +163,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertEquals(0L, opts.getExecutionThreshold());
     Assert.assertEquals("info,debug,result,resultset,batch", opts.getExcludecategories());
     Assert.assertTrue(opts.getExcludeCategoriesSet().containsAll(
-        Arrays.asList(Category.INFO, Category.DEBUG, Category.RESULT, Category.RESULTSET, Category.BATCH)));
+        Arrays.asList(DEFAULT_CATEGORIES)));
     Assert.assertFalse(opts.getFilter());
     Assert.assertNull(opts.getIncludeTables());
     Assert.assertNull(opts.getExcludeTables());

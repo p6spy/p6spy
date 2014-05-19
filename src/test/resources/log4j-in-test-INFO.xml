@@ -31,12 +31,17 @@
   </appender>
 
 
-  <category name="com.p6spy">
-    <priority value="DEBUG" />
+  <category name="p6spy">
+    <priority value="INFO" />
+  </category>
+
+  <!-- restrict liquibase logging (to fit travis-ci console output limits) -->
+  <category name="liquibase">
+    <priority value="WARN" />
   </category>
 
   <root>
-    <priority value="INFO" />
+    <priority value="DEBUG" />
     <appender-ref ref="CONSOLE" />
   </root>
 
