@@ -31,7 +31,7 @@
   </appender>
 
 
-  <category name="com.p6spy">
+  <category name="p6spy">
     <priority value="WARN" />
   </category>
 

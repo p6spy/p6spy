@@ -383,6 +383,7 @@ and logging to a file (default). Please note, that all of these output in the CS
 	In general you need to slf4j-api and the appropriate bridge to the actual logging
 implementation as well as the logging implementation itself on your classpath. To simplify setup for those not having any of the additional dependencies already
 on classpath following `*-nodep.jar` bundles are provided as part of p6spy distribution:
+
     * `p6spy-<version>-log4j-nodep.jar` - having [log4j](http://logging.apache.org/log4j/1.2/) included,
     * `p6spy-<version>-log4j2-nodep.jar` - having [log4j2](http://logging.apache.org/log4j/2.x/) included and
     * `p6spy-<version>-logback-nodep.jar` - having [logback](http://logback.qos.ch/) included.
@@ -397,7 +398,11 @@ on classpath following `*-nodep.jar` bundles are provided as part of p6spy distr
 	<tr><td>info/any other category</td><td>info</td></tr>
 	</table>
 	
-	Slf4j logger is retrieved for the class: `com.p6spy.engine.spy.appender.Slf4JLogger`, keep this in mind when configuring your logging implementation.
+	Internally is Slf4j Logger is retrieved for the: `p6spy`, keep this in mind when configuring your logging implementation. So for example for the `log4j` following could be used to restrict the p6spy logging (if using xml-based configuration) to `INFO` level only:
+	
+          <category name="p6spy">
+            <priority value="INFO" />
+          </category>
 	
 	For further instructions on configuring SLF4J, see the [SLF4J documentation](http://www.slf4j.org/manual.html).
 
