@@ -55,17 +55,12 @@ in section: [Configuration and Usage](#confusage)):
     # Unlike the other properties, activation of the changes on     #
     # this one requires reload.										#
     #################################################################
-    #modulelist=com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
+    #modulelist=com.p6spy.engine.outage.P6OutageFactory
 
     ################################################################
     # P6LOG SPECIFIC PROPERTIES                                    #
     ################################################################
-    # no properties currently available
-
-    ################################################################
-    # P6LEAK SPECIFIC PROPERTIES                                   #
-    ################################################################
-    # no properties currently available
+    # no properties currently available  
 
     ################################################################
     # EXECUTION THRESHOLD PROPERTIES                               #
@@ -268,14 +263,13 @@ dynamically loaded/unloaded.
 The following modules come with the p6spy by default:
 
 
-    modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory,com.p6spy.engine.leak.P6LeakFactory
+    modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory
 
 
 Where these are required:
  - com.p6spy.engine.logging.P6LogFactory - for the logging functionality, see [P6Log](#p6log).
  - com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see [P6Outage](#p6outage).
- - com.p6spy.engine.leak.P6LeakFactory - for and leak functionality, see [P6Leak](#p6leak).
-
+ 
 Please note to implement custom module have a look at the implementation of the any of the existing ones.
 
 ### driverlist
@@ -571,29 +565,3 @@ No other statements are logged except the long-running statements.
 2, any statement requiring at least 2 seconds is logged. The same statement will continue to be logged for as
 long as it executes. So, if the interval is set to 2 and a query takes 11 seconds, it is logged 5 times (at
 the 2, 4, 6, 8, 10-second intervals).
-
-### <a name="p6leak">P6Leak</a>
-
-P6Leak helps you to detect any JDBC resources which have not been properly closed.  This includes connections,
-statements, and result sets.
-
-Usage:
-
-1. Uncomment the leak module in spy.properties.
-1. Ensure that P6Spy is configured as per the [installation instructions](install.html)
-1. Copy JDBCLeak.jsp (from distribution) to the root of your web application.
-1. Start application and exercise it thoroughly for a while.
-1. View JDBCLeak.jsp to view a stack trace for any JDBC leaks.
-1. Halt the application and remove the leaks.
-1. Repeat until no more leaks are detected.
-
-The P6Leak module is disabled by default. Disable or enable the P6Outage module by editing the spy.properties
-configuration file. If the module is commented out, it is not loaded, and the functionality is not available. If
-the module is not commented out, the functionality is available.
-
-The applicable portion of the spy.properties file follows:
-
-    module.leak=com.p6spy.engine.leak.P6LeakFactory
-
-
-
