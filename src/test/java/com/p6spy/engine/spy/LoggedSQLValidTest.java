@@ -71,6 +71,32 @@ public class LoggedSQLValidTest extends P6TestFramework {
   }
 
   @Test
+  public void testSingleQuotePresentInValueOneTimeEscaped() throws SQLException {
+    try {
+      final PreparedStatement prep = connection.prepareStatement("select * from valid_sql_logged where col_varchar = ?");
+      prep.setString(1, "foo'value");
+      prep.executeQuery();
+      prep.close();
+    } catch (Exception e) {
+      fail(e.getMessage() + " due to error: " + getStackTrace(e));
+    }
+    reRunStatement(false);
+  }
+  
+  @Test
+  public void testSingleQuotePresentInValueMultipleTimesEscaped() throws SQLException {
+      try {
+      final PreparedStatement prep = connection.prepareStatement("select * from valid_sql_logged where col_varchar = ?");
+      prep.setString(1, "foo''value'");
+      prep.executeQuery();
+      prep.close();
+    } catch (Exception e) {
+      fail(e.getMessage() + " due to error: " + getStackTrace(e));
+    }
+    reRunStatement(false);
+  }
+  
+  @Test
   public void testPreparedStatementExecQuery() throws SQLException {
     try {
       testPreparedStatement(false);
