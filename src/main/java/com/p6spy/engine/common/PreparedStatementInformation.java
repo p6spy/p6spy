@@ -124,8 +124,19 @@ public class PreparedStatementInformation extends StatementInformation implement
         Boolean.class.isAssignableFrom(obj.getClass()) ) {
       return stringValue;
     } else {
-      return "'" + stringValue + "'";
+      return "'" + escape(stringValue) + "'";
     }
+  }
+
+  /**
+   * Escapes special characters in SQL values. Currently is only {@code '} escaped with {@code ''}.
+   * 
+   * @param stringValue
+   *          value to escape
+   * @return escaped value.
+   */
+  private String escape(String stringValue) {
+    return stringValue.replaceAll("'", "''");
   }
 
   private String toHexString(byte[] bytes) {
