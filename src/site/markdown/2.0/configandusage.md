@@ -142,13 +142,6 @@ in section: [Configuration and Usage](#confusage)):
     # (default is info,debug,result,resultset,batch)
     #excludecategories=info,debug,result,resultset,batch
 
-    #allows you to use a regex engine or your own matching engine to determine
-    #which statements to log
-    #
-    #stringmatcher=com.p6spy.engine.common.GnuRegexMatcher
-    #stringmatcher=com.p6spy.engine.common.JakartaRegexMatcher
-    stringmatcher=
-
     # prints a stack trace for every statement logged
     stacktrace=false
     # if stacktrace=true, specifies the stack trace to print
@@ -283,7 +276,7 @@ the classname(s) of the JDBC driver(s) that you want to proxy with P6Spy if any 
 
 ### filter, include, exclude
 
-P6Spy allows you to monitor specific tables or specific statement types. By setting filter=true, P6Spy will perform string matching on each statement to determine if it should be written to the log file.  include accepts a comma-delimited list of expressions which is required to appear in a statement before it can appear in the log. exclude accepts a comma-delimited list to exclude. By default, string matching is performed using a basic substring match. However, RegExp matching can also be used (see stringmatcher (Custom Filtering) below). Exclusion overrides inclusion, so that a statement matching both an include string and an exclude string is excluded.
+P6Spy allows you to monitor specific tables or specific statement types. By setting filter=true, P6Spy will perform string matching on each statement to determine if it should be written to the log file.  include accepts a comma-delimited list of expressions which is required to appear in a statement before it can appear in the log. exclude accepts a comma-delimited list to exclude. String matching is performed using a basic substring match. Exclusion overrides inclusion, so that a statement matching both an include string and an exclude string is excluded.
 
 An example showing capture of all select statements, except the orders table follows:
 
@@ -317,19 +310,6 @@ If you plan on using a RegExp engine, a simple alternative to exclude and includ
     sqlexpression = your expression
 
 If your expression matches the SQL string, it is logged. If the expression does not match, it is not logged. If you use sqlexpression, any values set in include and exclude are ignored.
-
-### stringmatcher (Custom Filtering)
-
-If you want to apply more intelligence to what is logged or not logged by P6Spy, you can specify a custom matching engine. P6Spy comes with support for several RegExp engines, though it is trivial to introduce another engine by implementing the stringmatcher interface. If a stringmatcher engine is specified, P6Spy will pass each statement to the class specified to determine if that statement should be logged.
-
-* Using GNU RegExp—P6Spy comes with support for a regular expression matcher based on the GNU RegExp library. In order to do this, download the GNU Java RexExp library and add it to your classpath so that P6Spy can find it. The following is an example of the implementation:
-        # Use GNU Regex Matching for Filtering
-        stringmatcher =com.p6spy.engine.common.GnuRegexMatcher
-
-
-* Using Jakarta RegExp—P6Spy also includes support for the Apache Jakarta RegExp library. In order to do this, download the Apache Jarkarta RegExp library and add it to your classpath so that P6Spy can find it. The following is an example of the implementation:
-        # Use Apache Jakarta Regex Matching for Filtering
-        stringmatcher =com.p6spy.engine.common.JakartaRegexMatcher
 
 ### autoflush
 
