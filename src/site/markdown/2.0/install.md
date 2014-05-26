@@ -61,7 +61,7 @@ is the directory in which JBoss is installed.
 1. As a result is (by default) the log file `spy.log` created in dir: `$JBOSS_DIST\bin` 
 
 ### <a name="jboss71url">JBoss 7.1.x, WildFly 8.x - modified URL</a>
-The following instructions were tested with JBoss 7.1.0 and Wildfly 8.1.CR1. For these instructions,
+The following instructions were tested with JBoss 7.1.0 and Wildfly 8.1.CR1 (works with p6spy version 2.1.0 or higher). For these instructions,
 P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory in which JBoss/WildFly is installed. 
 
 1. Deploy **p6spy.jar** as a module:
@@ -196,7 +196,7 @@ on tomcat.
 
 ## <a name="glassfish">Glassfish</a>
 
-The following section contains specific information on installing P6Spy on [Glassfish 3.1.x and 4.0.x](#glassfish3122_40).
+The following section contains specific information on installing P6Spy on [Glassfish 3.1.x and 4.0.x](#glassfish3122_40) (works with p6spy version 2.1.0 or higher).
 
 Please note **XA Datasource proxying IS supported** for these. 
 
