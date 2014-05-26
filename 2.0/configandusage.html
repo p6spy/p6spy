@@ -29,7 +29,7 @@
                   <div class="xright">        
                     
                  <span id="publishDate">Last Published: 2014-05-26</span>
-              &nbsp;| <span id="projectVersion">Version: 2.0.3-SNAPSHOT</span>
+              &nbsp;| <span id="projectVersion">Version: 2.1.0-SNAPSHOT</span>
             </div>
       <div class="clear">
         <hr/>
@@ -220,23 +220,20 @@
 # (specifically automatic registration).
 #driverlist=
 
-# filter what is logged
-# please note this is a precondition for usage of: include/exclude/sqlexpression
-# (default is false)
-#filter=false
-
-# comma separated list of strings to include
-# please note that special characters escaping (used in java) has to be done for the provided regular expression
+# comma separated list of tables to include
 # (default is empty)
 #include =
-# comma separated list of strings to exclude
+# comma separated list of tables to exclude
 # (default is empty)
 #exclude =
 
 # sql expression to evaluate if using regex
-# please note that special characters escaping (used in java) has to be done for the provided regular expression
 # (default is empty)
 #sqlexpression = 
+
+# filter what is logged
+# (default is false)
+#filter=false
 
 # for flushing per statement
 # (default is false)
@@ -363,14 +360,7 @@ stacktraceclass=
 <div class="source">
 <pre>modulelist=com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory
 </pre></div>
-<p>Where these are required:</p>
-
-<ul>
-  
-<li>com.p6spy.engine.logging.P6LogFactory - for the logging functionality, see <a href="#p6log">P6Log</a>.</li>
-  
-<li>com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see <a href="#p6outage">P6Outage</a>.</li>
-</ul>
+<p>Where these are required:  - com.p6spy.engine.logging.P6LogFactory - for the logging functionality, see <a href="#p6log">P6Log</a>.  - com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see <a href="#p6outage">P6Outage</a>.</p>
 <p>Please note to implement custom module have a look at the implementation of the any of the existing ones.</p></div>
 <div class="section">
 <h3>driverlist<a name="driverlist"></a></h3>
@@ -384,28 +374,17 @@ stacktraceclass=
 </ol></div>
 <div class="section">
 <h3>filter, include, exclude<a name="filter_include_exclude"></a></h3>
-<p>P6Spy allows you to filter SQL queries by specific strings to be present (<tt>includes</tt> property value) or not present (<tt>excludes</tt> property value). As a precondition, setting <tt>filter=true</tt> has to be provided. P6Spy will perform string matching on each statement to determine if it should be written to the log file. <tt>include</tt> accepts a comma-delimited list of expressions which is required to appear in a statement before it can appear in the log. <tt>exclude</tt> accepts a comma-delimited list to exclude. Exclusion overrides inclusion, so that a statement matching both an include string and an exclude string is excluded.</p>
-<p>Please note that matching mode used in the underlying regex is (achieved via prefix <tt>(?mis)</tt>):</p>
-
-<ul>
-  
-<li><a class="externalLink" href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#MULTILINE">multiline</a>,</li>
-  
-<li><a class="externalLink" href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#DOTALL">dotall</a> and</li>
-  
-<li><a class="externalLink" href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#CASE_INSENSITIVE">case insensitive</a>.</li>
-</ul>
-<p>An example showing capture of all statements having select, except those having order follow:</p>
+<p>P6Spy allows you to monitor specific tables or specific statement types. By setting filter=true, P6Spy will perform string matching on each statement to determine if it should be written to the log file. include accepts a comma-delimited list of expressions which is required to appear in a statement before it can appear in the log. exclude accepts a comma-delimited list to exclude. String matching is performed using a basic substring match. Exclusion overrides inclusion, so that a statement matching both an include string and an exclude string is excluded.</p>
+<p>An example showing capture of all select statements, except the orders table follows:</p>
 
 <div class="source">
 <pre>filter = true
 # comma separated list of tables to include
 include = select
 # comma separated list of tables to exclude
-exclude = order
+exclude = orders
 </pre></div>
-<p>Please note, that internally following regex would be used for particular expression matching: <tt>(?mis)^(?!.*(order).*)(.*(select).*)$</tt></p>
-<p>An example showing only capture statements having any of: order_details, price, and price_history follows:</p>
+<p>An example showing only capture statements against order, order_details, price, and price_history follows:</p>
 
 <div class="source">
 <pre>filter = true
@@ -414,8 +393,7 @@ include = order,order_details,price,price_history
 # comma separated list of tables to exclude
 exclude =
 </pre></div>
-<p>Please note, that internally following regex would be used for particular expression matching: <tt>(?mis)^(.*(order|order_details|price|price_history).*)$</tt></p>
-<p>An example showing the capture of all statements, except statements order string in them follows:</p>
+<p>An example showing the capture of all statements, except statements against the order table follows:</p>
 
 <div class="source">
 <pre>filter = false
@@ -423,49 +401,16 @@ exclude =
 include =
 # comma separated list of tables to exclude
 exclude = order
-</pre></div>
-<p>Please note, that internally following regex would be used for particular expression matching: <tt>(?mis)^(?!.*(order).*)(.*)$</tt></p>
-<p>As you can use full regex syntax, capture of statements having: pri[cz]e follows:</p>
-
-<div class="source">
-<pre>filter = true
-# comma separated list of tables to include
-include = pri[cz]e
-# comma separated list of tables to exclude
-exclude =
-</pre></div>
-<p>Please note, that internally following regex would be used for particular expression matching: <tt>(?mis)^(.*(pri[cz]e).*)$</tt></p>
-<p>Moreover, please note, that special characters escaping (used in java) has to be done for the provided regular expression. As an example, matching for:</p>
-
-<div class="source">
-<pre>from\scustomers
-</pre></div>
-<p>would mean, that following should be specified (please note doubled backslash):</p>
-
-<div class="source">
-<pre>filter=true
-include=from\\scustomers
 </pre></div></div>
 <div class="section">
 <h3>filter, sqlexpression<a name="filter_sqlexpression"></a></h3>
-<p>If you need more control over regular expression for matching, SQL string property <tt>sqlexpression</tt> is to be used as an alternative to <tt>exclude</tt> and <tt>include</tt>. An example follows:</p>
+<p>If you plan on using a RegExp engine, a simple alternative to exclude and include is to use sqlexpression. An example follows:</p>
 
 <div class="source">
 <pre>filter = true
 sqlexpression = your expression
 </pre></div>
-<p>If your expression matches the SQL string, it is logged. If the expression does not match, it is not logged. Please note you can use <tt>sqlexpression</tt> together with <tt>include</tt>/<tt>exclude</tt>, where both would be evaluated.</p>
-<p>Moreover, please note, that special characters escaping (used in java) has to be done for the provided regular expression. As an example, matching for:</p>
-
-<div class="source">
-<pre>^(.*(from\scustomers).*)$
-</pre></div>
-<p>would mean, that following should be specified (please note doubled backslash)::</p>
-
-<div class="source">
-<pre>filter=true
-sqlexpression=^(.*(from\\scustomers).*)$
-</pre></div></div>
+<p>If your expression matches the SQL string, it is logged. If the expression does not match, it is not logged. If you use sqlexpression, any values set in include and exclude are ignored.</p></div>
 <div class="section">
 <h3>autoflush<a name="autoflush"></a></h3>
 <p>For standard development, set the autoflush value to true. When set to true, every time a statement is intercepted, it is immediately written to the log file. In some cases, however, instant feedback on every statement is not a requirement. In those cases, the system performs slightly faster with autoflush set to false.</p>
