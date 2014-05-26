@@ -5,12 +5,15 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 ## Version 2.0.3 - Unreleased
 
 * P6ConnectionPoolDataSource merged to P6DataSource (to simplify datasource config)
-* Bind variables set by name on a CallableStatement are now logged. See [issue #221] (https://github.com/p6spy/p6spy/issues/221) for details.
+* Bind variables set by name on a CallableStatement are now logged (see [issue #221] (https://github.com/p6spy/p6spy/issues/221))
 * `setAppender()` considered in logging properly (see: [issue #226](https://github.com/p6spy/p6spy/issues/226))
 * considering Wrapper for DataSource proxies (bringing support for Glassfish XADataSources)
 * fixed disabling modules on reload (see [issue #227] (https://github.com/p6spy/p6spy/issues/227))
 * `exclude` categories using class `Category` rather than just plain strings (affects `P6Logger` API) 
 * providing additional distribution artifacts - wrapping (slf4j bridged) logging implementations for log4j, log4j2 and logback `p6spy-<version>-*-nodep.jar` (see [issue #131](https://github.com/p6spy/p6spy/issues/131))
+* character `'` escaping in the logged SQL query fixed (see: [issue #242](https://github.com/p6spy/p6spy/issues/242))
+* `include`/`exclude` behavior enabling any substring in SQL string matching (see: [issue #231](https://github.com/p6spy/p6spy/issues/231))
+* `unSet*` API provided for properties (in `com.p6spy.engine.spy.P6SpyOptions` and `com.p6spy.engine.logging.P6LogOptions`) to enable reverting to `null` (default value) 
 
 ## Version 2.0.2 [3.4.2014]
 

@@ -114,20 +114,23 @@ in section: [Configuration and Usage](#confusage)):
     # (specifically automatic registration).
     #driverlist=
 
-    # comma separated list of tables to include
+	# filter what is logged
+    # please note this is a precondition for usage of: include/exclude/sqlexpression
+    # (default is false)
+    #filter=false
+    
+    # comma separated list of strings to include
+    # please note that special characters escaping (used in java) has to be done for the provided regular expression
     # (default is empty)
     #include =
-    # comma separated list of tables to exclude
+    # comma separated list of strings to exclude
     # (default is empty)
     #exclude =
 
     # sql expression to evaluate if using regex
+    # please note that special characters escaping (used in java) has to be done for the provided regular expression
     # (default is empty)
     #sqlexpression = 
-
-    # filter what is logged
-    # (default is false)
-    #filter=false
 
     # for flushing per statement
     # (default is false)
@@ -260,8 +263,9 @@ The following modules come with the p6spy by default:
 
 
 Where these are required:
- - com.p6spy.engine.logging.P6LogFactory - for the logging functionality, see [P6Log](#p6log).
- - com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see [P6Outage](#p6outage).
+
+* com.p6spy.engine.logging.P6LogFactory - for the logging functionality, see [P6Log](#p6log).
+* com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see [P6Outage](#p6outage).
  
 Please note to implement custom module have a look at the implementation of the any of the existing ones.
 
@@ -276,25 +280,39 @@ the classname(s) of the JDBC driver(s) that you want to proxy with P6Spy if any 
 
 ### filter, include, exclude
 
-P6Spy allows you to monitor specific tables or specific statement types. By setting filter=true, P6Spy will perform string matching on each statement to determine if it should be written to the log file.  include accepts a comma-delimited list of expressions which is required to appear in a statement before it can appear in the log. exclude accepts a comma-delimited list to exclude. String matching is performed using a basic substring match. Exclusion overrides inclusion, so that a statement matching both an include string and an exclude string is excluded.
+P6Spy allows you to filter SQL queries by specific strings to be present (`includes` property value) or not present (`excludes` property value). 
+As a precondition, setting `filter=true` has to be provided. 
+P6Spy will perform string matching on each statement to determine if it should be written to the log file. 
+`include` accepts a comma-delimited list of expressions which is required to appear in a statement before it can appear in the log. `exclude` accepts a comma-delimited list to exclude. 
+Exclusion overrides inclusion, so that a statement matching both an include string and an exclude string is excluded.
 
-An example showing capture of all select statements, except the orders table follows:
+Please note that matching mode used in the underlying regex is (achieved via prefix `(?mis)`):
+
+* [multiline](http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#MULTILINE),
+* [dotall](http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#DOTALL) and
+* [case insensitive](http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#CASE_INSENSITIVE).
+
+An example showing capture of all statements having select, except those having order follow:
 
     filter = true
     # comma separated list of tables to include
     include = select
     # comma separated list of tables to exclude
-    exclude = orders
+    exclude = order
 
-An example showing only capture statements against order, order_details, price, and price_history follows:
+Please note, that internally following regex would be used for particular expression matching: `(?mis)^(?!.*(order).*)(.*(select).*)$`
+
+An example showing only capture statements having any of: order_details, price, and price_history follows:
 
     filter = true
     # comma separated list of tables to include
     include = order,order_details,price,price_history
     # comma separated list of tables to exclude
     exclude =
+    
+Please note, that internally following regex would be used for particular expression matching: `(?mis)^(.*(order|order_details|price|price_history).*)$`
 
-An example showing the capture of all statements, except statements against the order table follows:
+An example showing the capture of all statements, except statements order string in them follows:
 
     filter = false
     # comma separated list of tables to include
@@ -302,14 +320,49 @@ An example showing the capture of all statements, except statements against the 
     # comma separated list of tables to exclude
     exclude = order
 
+Please note, that internally following regex would be used for particular expression matching: `(?mis)^(?!.*(order).*)(.*)$`
+
+As you can use full regex syntax, capture of statements having: pri[cz]e follows:
+
+    filter = true
+    # comma separated list of tables to include
+    include = pri[cz]e
+    # comma separated list of tables to exclude
+    exclude =
+    
+Please note, that internally following regex would be used for particular expression matching: `(?mis)^(.*(pri[cz]e).*)$`
+
+Moreover, please note, that special characters escaping (used in java) has to be done for the provided regular expression.
+As an example, matching for:
+
+	from\scustomers
+	
+would mean, that following should be specified (please note doubled backslash):
+	
+	filter=true
+    include=from\\scustomers
+
 ### filter, sqlexpression
 
-If you plan on using a RegExp engine, a simple alternative to exclude and include is to use sqlexpression. An example follows:
+If you need more control over regular expression for matching, SQL string property `sqlexpression` is to be used as an alternative to `exclude` and `include`. 
+An example follows:
 
     filter = true
     sqlexpression = your expression
 
-If your expression matches the SQL string, it is logged. If the expression does not match, it is not logged. If you use sqlexpression, any values set in include and exclude are ignored.
+If your expression matches the SQL string, it is logged. If the expression does not match, it is not logged. 
+Please note you can use `sqlexpression` together with `include`/`exclude`, where both would be evaluated.
+
+Moreover, please note, that special characters escaping (used in java) has to be done for the provided regular expression.
+As an example, matching for:
+
+	^(.*(from\scustomers).*)$
+	
+would mean, that following should be specified (please note doubled backslash)::
+	
+	filter=true
+    sqlexpression=^(.*(from\\scustomers).*)$
+
 
 ### autoflush
 

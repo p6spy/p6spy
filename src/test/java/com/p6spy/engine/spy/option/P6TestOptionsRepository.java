@@ -109,4 +109,57 @@ public class P6TestOptionsRepository extends BaseTestCase {
         optRepo.get(String.class, "option1"));
   }
   
+  @Test
+  public void testSetNullDoesNotModifyValue() {
+    optRepo.initCompleted();
+
+    optRepo.set(String.class, "option1", "foo");
+    Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
+    
+    optRepo.set(String.class, "option1", null);
+    Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
+  }
+  
+  @Test
+  public void testSetReturnsTrueForNonNull() {
+    Assert.assertTrue(optRepo.set(String.class, "option1", "foo"));
+  }
+  
+  @Test
+  public void testSetReturnsFalseForNull() {
+    Assert.assertFalse(optRepo.set(String.class, "option1", null));
+  }
+  
+  @Test
+  public void testUnSetUsesDefaultForNullValue() {
+    optRepo.initCompleted();
+
+    optRepo.set(String.class, "option1", "foo");
+    Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
+    
+    optRepo.setOrUnSet(String.class, "option1", null, "default");
+    Assert.assertEquals("default", optRepo.get(String.class, "option1"));
+  }
+  
+  @Test
+  public void testUnSetIgnoresDefaultForValueNotNull() {
+    optRepo.initCompleted();
+
+    optRepo.set(String.class, "option1", "foo");
+    Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
+    
+    optRepo.setOrUnSet(String.class, "option1", "bar", "default");
+    Assert.assertEquals("bar", optRepo.get(String.class, "option1"));
+  }
+  
+  @Test
+  public void testUnSetSetsToNullForDefaultAndValueNull() {
+    optRepo.initCompleted();
+
+    optRepo.set(String.class, "option1", "foo");
+    Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
+    
+    optRepo.setOrUnSet(String.class, "option1", null, null);
+    Assert.assertNull(optRepo.get(String.class, "option1"));
+  }
 }

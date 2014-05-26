@@ -55,17 +55,16 @@ public class P6TestCommon extends P6TestFramework {
   }
 
   @Test
-  public void testIncludeExcludeTableNames() throws SQLException {
+  public void testIncludeExclude() throws SQLException {
 
     final String query = "select 'x' from customers";
-
 
     // include null && exclude null => logged
     {
       super.clearLogEnties();
 
-      assertNull(P6LogOptions.getActiveInstance().getExcludeTables());
-      assertNull(P6LogOptions.getActiveInstance().getIncludeTables());
+      assertNull(P6LogOptions.getActiveInstance().getExcludeList());
+      assertNull(P6LogOptions.getActiveInstance().getIncludeList());
       statement.executeQuery(query);
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
@@ -81,8 +80,8 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setExclude("non_existing_table");
       P6LogOptions.getActiveInstance().setExclude("-non_existing_table");
 
-      assertEquals(0, P6LogOptions.getActiveInstance().getIncludeTables().size());
-      assertEquals(0, P6LogOptions.getActiveInstance().getExcludeTables().size());
+      assertEquals(0, P6LogOptions.getActiveInstance().getIncludeList().size());
+      assertEquals(0, P6LogOptions.getActiveInstance().getExcludeList().size());
       statement.executeQuery(query);
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
@@ -117,11 +116,47 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setInclude("-non_existing_table");
       assertEquals(0, super.getLogEntiesCount());
     }
+    
+    // excluded - case insensitive => not logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setExclude("SELECT");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().setExclude("-SELECT");
+      assertEquals(0, super.getLogEntiesCount());
+    }
 
+    // included - case insensitive => logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setInclude("SELECT");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().setInclude("-SELECT");
+      assertEquals(1, super.getLogEntiesCount());
+    }
+
+    final String queryMultiline = "select * \nfrom customers";
+    // excluded - multiline => not logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setExclude("customers");
+      statement.executeQuery(queryMultiline);
+      P6LogOptions.getActiveInstance().setExclude("-customers");
+      assertEquals(0, super.getLogEntiesCount());
+    }
+
+    // included - multiline => logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setInclude("customers");
+      statement.executeQuery(queryMultiline);
+      P6LogOptions.getActiveInstance().setInclude("-customers");
+      assertEquals(1, super.getLogEntiesCount());
+    }
   }
 
   @Test
-  public void testIncludeExcludeTableNamesRegexp() throws SQLException {
+  public void testIncludeExcludeRegexp() throws SQLException {
     final String query = "select 'y' from customers";
 
 
@@ -143,8 +178,25 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
+    
+    // backslashes (have to be doubled)
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setExclude("from\\scustomer");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().setExclude("-from\\scustomer");
+      assertEquals(0, super.getLogEntiesCount());
+    }
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setInclude("from\\scustomer");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().setInclude("-from\\scustomer");
+      assertEquals(1, super.getLogEntiesCount());
+      assertTrue(super.getLastLogEntry().contains(query));
+    }
   }
-
+  
   @Test
   public void testSqlExpressionPattern() throws SQLException {
     final String query = "select 'y' from customers";
@@ -154,7 +206,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setSQLExpression("^select[ ]'x'.*$");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setSQLExpression("-^select[ ]'x'.*$");
+      P6LogOptions.getActiveInstance().unSetSQLExpression();
       assertEquals(0, super.getLogEntiesCount());
     }
 
@@ -163,11 +215,104 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setSQLExpression("^select[ ]'y'.*$");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setSQLExpression("-^select[ ]'y'.*$");
+      P6LogOptions.getActiveInstance().unSetSQLExpression();
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
-
+    
+    // multiline + case insensitive + dotall matched => logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setSQLExpression("(?mis)^.*FROM.*$");
+      final String queryMultiline = "select * \nfrom customers";
+      statement.executeQuery(queryMultiline);
+      P6LogOptions.getActiveInstance().unSetSQLExpression();
+      assertEquals(1, super.getLogEntiesCount());
+      assertTrue(super.getLastLogEntry().contains(queryMultiline));
+    }
+    
+    // backslashes (have to be doubled)
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setSQLExpression("^.*from\\scustomer.*$");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().unSetSQLExpression();
+      assertEquals(1, super.getLogEntiesCount());
+      assertTrue(super.getLastLogEntry().contains(query));
+    }
+  }
+  
+  @Test
+  public void testIncludeExcludeWithSqlExpressionPattern() throws SQLException {
+    final String query = "select 'x' from customers";
+    
+    // include/exclude passes AND sqlexpression does NOT pass => NOT logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setInclude("customers");
+      P6LogOptions.getActiveInstance().setExclude("foo");
+      P6LogOptions.getActiveInstance().setSQLExpression("^.*bar\\s.*$");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().setInclude("-customers");
+      P6LogOptions.getActiveInstance().setExclude("-foo");
+      P6LogOptions.getActiveInstance().unSetSQLExpression();
+      assertEquals(0, super.getLogEntiesCount());
+    }
+    
+    // include/exclude does NOT pass AND sqlexpression passes => NOT logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setExclude("customers");
+      P6LogOptions.getActiveInstance().setSQLExpression("^.*from\\s.*$");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().setExclude("-customers");
+      P6LogOptions.getActiveInstance().unSetSQLExpression();
+      assertEquals(0, super.getLogEntiesCount());
+    }
+    
+    // include/exclude passes AND sqlexpression passes => logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setInclude("customers");
+      P6LogOptions.getActiveInstance().setExclude("foo");
+      P6LogOptions.getActiveInstance().setSQLExpression("^.*from\\s.*$");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().setInclude("-customers");
+      P6LogOptions.getActiveInstance().setExclude("-foo");
+      P6LogOptions.getActiveInstance().unSetSQLExpression();
+      assertEquals(1, super.getLogEntiesCount());
+      assertTrue(super.getLastLogEntry().contains(query));
+    }
+    
+    // include/exclude NOT SET AND sqlexpression passes => logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setSQLExpression("^.*from\\s.*$");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().unSetSQLExpression();
+      assertEquals(1, super.getLogEntiesCount());
+      assertTrue(super.getLastLogEntry().contains(query));
+    }
+    
+    // include/exclude passes AND sqlexpression NOT SET => logged
+    {
+      super.clearLogEnties();
+      P6LogOptions.getActiveInstance().setInclude("customers");
+      P6LogOptions.getActiveInstance().setExclude("foo");
+      statement.executeQuery(query);
+      P6LogOptions.getActiveInstance().setInclude("-customers");
+      P6LogOptions.getActiveInstance().setExclude("-foo");
+      assertEquals(1, super.getLogEntiesCount());
+      assertTrue(super.getLastLogEntry().contains(query));
+    }
+    
+    // include/exclude NOT SET AND sqlexpression NOT SET => logged
+    {
+      super.clearLogEnties();
+      statement.executeQuery(query);
+      assertEquals(1, super.getLogEntiesCount());
+      assertTrue(super.getLastLogEntry().contains(query));
+    }
   }
 
   @Test

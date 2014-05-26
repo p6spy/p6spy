@@ -42,14 +42,16 @@ public interface P6LogOptionsMBean {
   String getSQLExpression();
 
   void setSQLExpression(String sqlexpression);
+  
+  void unSetSQLExpression();
 
   void setExecutionThreshold(long executionThreshold);
 
   long getExecutionThreshold();
 
-  Set<String> getIncludeTables();
+  Set<String> getIncludeList();
 
-  Set<String> getExcludeTables();
+  Set<String> getExcludeList();
 
   Set<Category> getExcludeCategoriesSet();
 

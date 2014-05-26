@@ -28,8 +28,6 @@ public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsMBe
   
   public Set<P6Factory> getModuleFactories();
 
-//  void setUsePrefix(String usePrefix);
-
   void setAutoflush(String autoflush);
 
   void setReloadProperties(String reloadproperties);

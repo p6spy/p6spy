@@ -25,6 +25,7 @@ import java.util.Set;
 
 import javax.management.StandardMBean;
 
+import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
@@ -37,7 +38,6 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String USE_PREFIX = "usePrefix";
     public static final String AUTOFLUSH = "autoflush";
     public static final String DRIVERLIST = "driverlist";
-    public static final String DRIVER_NAMES = "driverNames";
     public static final String LOGFILE = "logfile";
     public static final String LOG_MESSAGE_FORMAT = "logMessageFormat";
     public static final String APPEND = "append";
@@ -58,6 +58,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
     
     // those set indirectly (via properties visible from outside)
+    public static final String DRIVER_NAMES = "driverNames";
     public static final String MODULE_FACTORIES = "moduleFactories";
     public static final String MODULE_NAMES = "moduleNames";
     public static final String LOG_MESSAGE_FORMAT_INSTANCE = "logMessageFormatInstance";
@@ -131,21 +132,6 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       return optionsRepository.getSet(P6Factory.class, MODULE_FACTORIES);
     }
     
-//    @Override
-//    public void setUsePrefix(String usePrefix) {
-//      optionsRepository.set(Boolean.class, USE_PREFIX, usePrefix);
-//    }
-//    
-//    @Override
-//    public void setUsePrefix(boolean usePrefix) {
-//      optionsRepository.set(Boolean.class, USE_PREFIX, usePrefix);
-//    }
-//
-//    @Override
-//    public boolean getUsePrefix() {
-//      return optionsRepository.get(Boolean.class, USE_PREFIX);
-//    }
-
     @Override
     public void setAutoflush(String autoflush) {
       optionsRepository.set(Boolean.class, AUTOFLUSH, autoflush);
@@ -168,8 +154,9 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
 
     @Override
     public void setDriverlist(final String driverlist) {
-      optionsRepository.set(String.class, DRIVERLIST, driverlist);
       optionsRepository.setSet(String.class, DRIVER_NAMES, driverlist);
+      // setting effective string
+      optionsRepository.set(String.class, DRIVERLIST, P6Util.joinNullSafe(optionsRepository.getSet(String.class, DRIVER_NAMES), ","));
     }
 
     @Override
@@ -204,46 +191,87 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public void setJNDIContextFactory(String jndicontextfactory) {
       optionsRepository.set(String.class, JNDICONTEXTFACTORY, jndicontextfactory);
     }
+    
+    @Override
+    public void unSetJNDIContextFactory() {
+      optionsRepository.setOrUnSet(String.class, JNDICONTEXTFACTORY, null, defaults.get(JNDICONTEXTFACTORY));
+    }
+    
     @Override
     public String getJNDIContextFactory() {
         return optionsRepository.get(String.class, JNDICONTEXTFACTORY);
     }
+    
+    @Override
+    public void unSetJNDIContextProviderURL() {
+      optionsRepository.setOrUnSet(String.class, JNDICONTEXTPROVIDERURL, null, defaults.get(JNDICONTEXTPROVIDERURL));
+    }
+    
     @Override
     public void setJNDIContextProviderURL(String jndicontextproviderurl) {
       optionsRepository.set(String.class, JNDICONTEXTPROVIDERURL, jndicontextproviderurl);
     }
+    
     @Override
     public String getJNDIContextProviderURL() {
         return optionsRepository.get(String.class, JNDICONTEXTPROVIDERURL);
     }
+    
     @Override
     public void setJNDIContextCustom(String jndicontextcustom) {
       optionsRepository.set(String.class, JNDICONTEXTCUSTOM, jndicontextcustom);
     }
+    
+    @Override
+    public void unSetJNDIContextCustom() {
+      optionsRepository.setOrUnSet(String.class, JNDICONTEXTCUSTOM, null, defaults.get(JNDICONTEXTCUSTOM));
+    }
+    
     @Override
     public String getJNDIContextCustom() {
         return optionsRepository.get(String.class, JNDICONTEXTCUSTOM);
     }
+    
     @Override
     public void setRealDataSource(String realdatasource) {
       optionsRepository.set(String.class, REALDATASOURCE, realdatasource);
     }
+    
+    @Override
+    public void unSetRealDataSource() {
+      optionsRepository.setOrUnSet(String.class, REALDATASOURCE, null, defaults.get(REALDATASOURCE));
+    }
+    
     @Override
     public String getRealDataSource() {
         return optionsRepository.get(String.class, REALDATASOURCE);
     }
+    
     @Override
     public void setRealDataSourceClass(String realdatasourceclass) {
       optionsRepository.set(String.class, REALDATASOURCECLASS, realdatasourceclass);
     }
+    
+    @Override
+    public void unSetRealDataSourceClass() {
+      optionsRepository.setOrUnSet(String.class, REALDATASOURCECLASS, null, defaults.get(REALDATASOURCECLASS));
+    }
+    
     @Override
     public String getRealDataSourceClass() {
       return optionsRepository.get(String.class, REALDATASOURCECLASS);
     }
+    
     @Override
     public void setRealDataSourceProperties(String realdatasourceproperties) {
       optionsRepository.set(String.class, REALDATASOURCEPROPERTIES, realdatasourceproperties);
     }
+    
+    @Override
+    public void unSetRealDataSourceProperties() {
+      optionsRepository.setOrUnSet(String.class, REALDATASOURCEPROPERTIES, null, defaults.get(REALDATASOURCEPROPERTIES));
+    }
+    
     @Override
     public String getRealDataSourceProperties() {
         return optionsRepository.get(String.class, REALDATASOURCEPROPERTIES);
@@ -287,13 +315,10 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       if (modulelist != null && modulelist.contains(P6OptionsRepository.COLLECTION_REMOVAL_PREFIX + P6SpyFactory.class.getName())) {
         throw new IllegalArgumentException(P6SpyFactory.class.getName() + " can't be removed from the module list, as it's considered a core factory!");
       }
-//      if (modulelist != null && !modulelist.contains(P6SpyFactory.class.getName())) {
-//        modulelist += "," + P6SpyFactory.class.getName();
-//      }
       
-      // TODO handle getters for lists represented in csv strings correctly
-      optionsRepository.set(String.class, MODULELIST, modulelist);
       optionsRepository.setSet(String.class, MODULE_NAMES, modulelist);
+      // setting effective string
+      optionsRepository.set(String.class, MODULELIST, P6Util.joinNullSafe(optionsRepository.getSet(String.class, MODULE_NAMES), ","));
       optionsRepository.setSet(P6Factory.class, MODULE_FACTORIES, modulelist);
     }      
 
@@ -398,5 +423,4 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public Map<String, String> getDefaults() {
       return defaults;
     }
-
 }
