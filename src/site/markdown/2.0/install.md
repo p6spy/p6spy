@@ -33,7 +33,7 @@ executed.  You can alter the location of this log file as well as what gets logg
 
 Application Servers:    
 [JBoss/WildFly](#jboss)    
-[Apache Tomcat](#tomcat)    
+[Apache Tomcat and Apache TomEE](#tomcat)    
 [Glassfish](#glassfish)    
 [Generic](#generic)    
 
@@ -57,8 +57,6 @@ is the directory in which JBoss is installed.
         <jndi-name>MySqlDS</jndi-name>
         <connection-url>jdbc:p6spy:mysql://<hostname>:<port>/<database></connection-url>
         <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
-
-1. As a result is (by default) the log file `spy.log` created in dir: `$JBOSS_DIST\bin` 
 
 ### <a name="jboss71url">JBoss 7.1.x, WildFly 8.x - modified URL</a>
 The following instructions were tested with JBoss 7.1.0 and Wildfly 8.1.CR1 (works with p6spy version 2.1.0 or higher). For these instructions,
@@ -99,25 +97,24 @@ P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory
 		        ...
             </drivers>
         </datasources>
-1. As a result is (by default) the log file `spy.log` created in dir: `$JBOSS_DIST\bin` 
 
-## <a name="tomcat">Apache Tomcat</a>
+## <a name="tomcat">Apache Tomcat and Apache TomEE</a>
 
-The following sections contain specific information on installing P6Spy on [Tomcat 6.x, 7.x and 8.x](#tomcat6_8).
+The following sections contain specific information on installing P6Spy on [Tomcat 6.x, 7.x, 8.x and TomEE 1.6.x](#tomcat_tomee).
 
-### <a name="tomcat6_8">Apache Tomcat 6.x, 7.x and 8.x</a>
+### <a name="tomcat_tomee">Apache Tomcat 6.x, 7.x, 8.x and TomEE 1.6.x</a>
 
-The following instructions were tested with Apache Tomcat versions: 6.0.34, 7.0.54 and 8.0.0-RC5. For these instructions, it is assumed that $CATALINA_HOME
-refers to the tomcat installation directory.  Please be aware that there are many ways to configure JNDI data sources
-on tomcat.
+The following instructions were tested with Apache Tomcat versions: 6.0.34, 7.0.54 and 8.0.0-RC5 as well as Apache TomEE 1.6.0.2 Webprofile and Apache TomEE 1.6.0.2 Plus. For these instructions, it is assumed that $CATALINA_HOME
+refers to the tomcat/tomee installation directory.  Please be aware that there are many ways to configure JNDI data sources
+on tomcat/tomee.
 
 1. Move the **p6spy.jar** file to the lib directory. An example of the path to your
    lib directory is `$CATALINA_HOME\lib\`.
-1. Move the **spy.properties** file to the bin directory. An example of the path to your
-   bin directory is `$CATALINA_HOME\bin\`.
+1. Move the **spy.properties** file to the lib directory. An example of the path to your
+   lib directory is `$CATALINA_HOME\lib\`.
 1. Configure the class name of the real JDBC driver in **spy.properties**
    
-       driverlist=com.mysql.jdbc.Driver
+        driverlist=com.mysql.jdbc.Driver
            
 1. Modify the JDBC connection URL and driver class for the data source.  Please be aware that there are several places
    where a JNDI data source may be defined. It is normally defined in a `<Resource/>` element in 
@@ -133,8 +130,6 @@ on tomcat.
                    url="jdbc:p6spy:mysql://<hostname>:<port>/<database>"
                    ...
                    />
-
-1. As a result is (by default) the log file `spy.log` created in dir: `$CATALINA_BASE/bin`   
 
 ## <a name="glassfish">Glassfish</a>
 
@@ -230,9 +225,6 @@ In later section is `$GLASSFISH_HOME` the directory where Glassfish is installed
 		
 	And the jndi name of the created jndi resource in the sample configurations is: `jdbc/p6spy`
 
-1. As a result is (by default) the log file `spy.log` created in dir: `$GLASSFISH_HOME/domains/$DOMAIN_X/config`
-
-
 ## <a name="generic">Generic Instructions</a>
 
 The following installation instructions are intended for use with other application servers and
@@ -244,7 +236,7 @@ applications that do not use application servers. To install P6Spy, complete the
    server will have one as well.
 1. Configure the class name of the real JDBC driver in **spy.properties**
    
-       driverlist=com.mysql.jdbc.Driver
+        driverlist=com.mysql.jdbc.Driver
            
 1. Configure the data source.
 
