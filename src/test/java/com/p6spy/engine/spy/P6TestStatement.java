@@ -87,6 +87,13 @@ public class P6TestStatement extends P6TestFramework {
 
     stmt.close();
   }
+  
+  @Test
+  public void testExecuteEmptyBatch() throws SQLException {
+    Statement stmt = connection.createStatement();
+    stmt.executeBatch();
+    stmt.close();
+  }
 
   @Test
   public void testExecuteQuery() throws SQLException {
