@@ -31,9 +31,7 @@ public interface P6LogLoadableOptions extends P6LoadableOptions, P6LogOptionsMBe
 
   void setExecutionThreshold(String executionThreshold);
   
-  Pattern getIncludeTablesPattern();
-
-  Pattern getExcludeTablesPattern();
+  Pattern getIncludeExcludePattern();
 
   Pattern getSQLExpressionPattern();
 

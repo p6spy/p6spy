@@ -28,10 +28,6 @@ public interface P6SpyOptionsMBean {
    */
   void reload();
   
-//  void setUsePrefix(boolean usePrefix);
-//
-//  boolean getUsePrefix();
-
   void setAutoflush(boolean autoflush);
 
   boolean getAutoflush();
@@ -53,24 +49,36 @@ public interface P6SpyOptionsMBean {
   void setJNDIContextFactory(String jndicontextfactory);
 
   String getJNDIContextFactory();
+  
+  void unSetJNDIContextFactory();
 
   void setJNDIContextProviderURL(String jndicontextproviderurl);
+  
+  void unSetJNDIContextProviderURL();
 
   String getJNDIContextProviderURL();
 
   void setJNDIContextCustom(String jndicontextcustom);
+  
+  void unSetJNDIContextCustom();
 
   String getJNDIContextCustom();
 
   void setRealDataSource(String realdatasource);
+  
+  void unSetRealDataSource();
 
   String getRealDataSource();
 
   void setRealDataSourceClass(String realdatasourceclass);
+  
+  void unSetRealDataSourceClass();
 
   String getRealDataSourceClass();
 
   void setRealDataSourceProperties(String realdatasourceproperties);
+  
+  void unSetRealDataSourceProperties();
 
   String getRealDataSourceProperties();
 
@@ -111,6 +119,4 @@ public interface P6SpyOptionsMBean {
   String getLogMessageFormat();
 
   void setLogMessageFormat(String logMessageFormatter);
-
-
 }

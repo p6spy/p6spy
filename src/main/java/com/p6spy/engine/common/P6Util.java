@@ -23,6 +23,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,7 +151,6 @@ public class P6Util {
    		}
      	return path;
      }
-
     
     public static Map<String, String> getPropertiesMap(Properties properties) {
       if (null == properties) {
@@ -177,5 +177,32 @@ public class P6Util {
       properties.putAll(map);
       return properties;
     }
+    
+  /**
+   * @param collection
+   *          to be joined elements.
+   * @param separator
+   *          used in join.
+   * @return {@code collections} elements joined via {@code separator}.
+   */
+  public static String joinNullSafe(Collection<String> collection, String separator) {
+    if (null == collection || collection.isEmpty()) {
+      return "";
+    }
+
+    if (null == separator) {
+      separator = "";
+    }
+
+    final StringBuilder sb = new StringBuilder();
+    for (String str : collection) {
+      if (sb.length() > 0) {
+        sb.append(separator);
+      }
+      sb.append(str);
+    }
+    return sb.toString();
+  }
+
 }
 

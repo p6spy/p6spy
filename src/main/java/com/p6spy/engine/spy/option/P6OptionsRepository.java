@@ -56,15 +56,27 @@ public class P6OptionsRepository {
   }
 
   public <T> boolean set(Class<T> type, String key, Object value) {
+    if (value == null) {
+      return false;
+    }
+
+    return setOrUnSet(type, key, value, null);
+  }
+  
+  public <T> boolean setOrUnSet(Class<T> type, String key, Object value, Object defaultValue) {
     if (key == null || key.isEmpty()) {
       throw new IllegalArgumentException("key can be neither null nor empty!");
     }
 
     if (value == null) {
-      return false;
+      value = defaultValue;
     }
-
-    setInternal(key, parse(type, value));
+    
+    if (value == null) {
+      setInternal(key, value);
+    } else {
+      setInternal(key, parse(type, value));  
+    }
 
     return true;
   }

@@ -19,10 +19,9 @@
  */
 package com.p6spy.engine.spy.option;
 
-import com.p6spy.engine.test.BaseTestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +31,11 @@ import java.net.URLClassLoader;
 import java.util.Properties;
 import java.util.UUID;
 
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.p6spy.engine.test.BaseTestCase;
 
 /**
  * @author Quinton McCombs

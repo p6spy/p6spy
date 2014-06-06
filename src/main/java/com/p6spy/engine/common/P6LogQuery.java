@@ -141,7 +141,17 @@ public class P6LogQuery implements P6OptionChangedListener {
   }
 
   static boolean isLoggable(String sql) {
-    return !P6LogOptions.getActiveInstance().getFilter() || isQueryOk(sql);
+    final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
+    
+    if (!opts.getFilter()) {
+      return true;
+    }
+
+    final Pattern sqlExpressionPattern = opts.getSQLExpressionPattern();
+    final Pattern includeExcludePattern = opts.getIncludeExcludePattern();
+    
+    return (sqlExpressionPattern == null || sqlExpressionPattern != null && sqlExpressionPattern.matcher(sql).matches()) 
+        && (includeExcludePattern == null || includeExcludePattern != null && includeExcludePattern.matcher(sql).matches());
   }
 
   static boolean isCategoryOk(Category category) {
@@ -154,26 +164,6 @@ public class P6LogQuery implements P6OptionChangedListener {
     
     return logger != null && logger.isCategoryEnabled(category) 
     	&& excludeCategories == null || !excludeCategories.contains(category);
-  }
-  
-  static boolean isQueryOk(final String sql) {
-    final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
-    
-    final Pattern sqlExpressionPattern = opts.getSQLExpressionPattern();
-    if (sqlExpressionPattern != null) {
-      return sqlExpressionPattern.matcher(sql).matches();
-    } 
-    
-    final Pattern includePattern = opts.getIncludeTablesPattern();
-    final Pattern excludePattern = opts.getExcludeTablesPattern();
-    
-    final Set<String> includeTables = opts.getIncludeTables();
-    final Set<String> excludeTables = opts.getExcludeTables();
-    
-    final String sqlLowercased = sql.toLowerCase();
-    
-    return (includeTables == null || includeTables.isEmpty() || includePattern.matcher(sqlLowercased).matches()) 
-        && (excludeTables == null || excludeTables.isEmpty() || !excludePattern.matcher(sqlLowercased).matches());
   }
   
   // ----------------------------------------------------------------------------------------------------------

@@ -56,7 +56,7 @@ import com.p6spy.engine.test.P6TestFramework;
 
 public class P6TestOptionDefaults extends BaseTestCase {
 
-  private static final File LOG_FILE = new File("spy.log");
+  public static final File LOG_FILE = new File("spy.log");
   
   public static final Category[] DEFAULT_CATEGORIES = new Category[] { 
 	  Category.INFO, Category.DEBUG, Category.RESULT, Category.RESULTSET, Category.BATCH };
@@ -93,7 +93,6 @@ public class P6TestOptionDefaults extends BaseTestCase {
   public static void tearDownAll() {
     // post clean up
     LOG_FILE.delete();
-
   }
 
   @Test
@@ -132,7 +131,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertEquals(2, opts.getModuleNames().size());
     Assert.assertTrue(opts.getModuleNames().contains(P6SpyFactory.class.getName()));
     Assert.assertTrue(opts.getModuleNames().contains(P6LogFactory.class.getName()));
-    Assert.assertNull(opts.getDriverlist());
+    Assert.assertEquals("", opts.getDriverlist());
     Assert.assertNull(opts.getDriverNames());
     Assert.assertFalse(opts.getStackTrace());
     Assert.assertNull(opts.getStackTraceClass());
@@ -165,12 +164,11 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertTrue(opts.getExcludeCategoriesSet().containsAll(
         Arrays.asList(DEFAULT_CATEGORIES)));
     Assert.assertFalse(opts.getFilter());
-    Assert.assertNull(opts.getIncludeTables());
-    Assert.assertNull(opts.getExcludeTables());
-    Assert.assertNull(opts.getIncludeTablesPattern());
-    Assert.assertNull(opts.getExcludeTablesPattern());
-    Assert.assertNull(opts.getInclude());
-    Assert.assertNull(opts.getExclude());
+    Assert.assertNull(opts.getIncludeList());
+    Assert.assertNull(opts.getExcludeList());
+    Assert.assertNull(opts.getIncludeExcludePattern());
+    Assert.assertEquals("", opts.getInclude());
+    Assert.assertEquals("", opts.getExclude());
     Assert.assertNull(opts.getSQLExpressionPattern());
   }
 
