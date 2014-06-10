@@ -36,8 +36,6 @@ import com.p6spy.engine.spy.P6Factory;
 
 public class P6OptionsRepository {
 
-  public static final String COLLECTION_REMOVAL_PREFIX = "-";
-
   private final Map<String, Object> map = new HashMap<String, Object>();
 
   private Set<DelayedOptionChange> delayedOptionChanges = new HashSet<DelayedOptionChange>();
@@ -153,28 +151,29 @@ public class P6OptionsRepository {
     }
 
     final Set<T> oldValue = getSet(type, key);
+    Set<T> newValue = null;
 
-    Set<T> newValue;
-    if (type.equals(P6Factory.class)) {
-    	// for P6Factories the hashcode is computed based on class
-    	newValue = new CustomHashedHashSet<T>(new ClassHasher());
-    } else {
-    	newValue = new HashSet<T>();
-    }
+    if (collection.isEmpty()) {
+    	map.remove(key);
+	} else {
+		if (type.equals(P6Factory.class)) {
+	    	// for P6Factories the hashcode is computed based on class
+	    	newValue = new CustomHashedHashSet<T>(new ClassHasher());
+	    } else {
+	    	newValue = new HashSet<T>();
+	    }
+	
+	    for (String item : collection) {
+	    	
+	    	if (item.toString().startsWith("-")) {
+	        	throw new IllegalArgumentException("- prefix has been deprecated for list-like properties! Full overriding happens (see: http://p6spy.github.io/p6spy/2.0/configandusage.html)");
+	        }
+	    	
+	        newValue.add((T) parse(type, item));
+	    }
+	    map.put(key, newValue);	    
+	}
     
-    if (null != oldValue) {
-    	newValue.addAll(oldValue);	
-    }
-
-    for (String item : collection) {
-      if (item.startsWith(COLLECTION_REMOVAL_PREFIX)) {
-        newValue.remove((T) parse(type, item.substring(COLLECTION_REMOVAL_PREFIX.length())));
-      } else {
-        newValue.add((T) parse(type, item));
-      }
-    }
-    map.put(key, newValue);
-
     // propagate the changes
     fireOptionChanged(key, oldValue, newValue);
 

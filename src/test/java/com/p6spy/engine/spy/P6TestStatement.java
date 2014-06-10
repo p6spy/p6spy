@@ -68,7 +68,7 @@ public class P6TestStatement extends P6TestFramework {
 
   @Test
   public void testExecuteBatch() throws SQLException {
-    P6LogOptions.getActiveInstance().setExcludecategories("-batch");
+    P6LogOptions.getActiveInstance().setExcludecategories("");
     // test batch inserts
     Statement stmt = connection.createStatement();
     String sql = "insert into customers(name,id) values ('jim', 101)";

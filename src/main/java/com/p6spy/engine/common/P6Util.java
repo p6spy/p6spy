@@ -24,9 +24,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 public class P6Util {
@@ -152,17 +154,32 @@ public class P6Util {
      	return path;
      }
     
-    public static Map<String, String> getPropertiesMap(Properties properties) {
-      if (null == properties) {
+	/**
+	 * @param properties
+	 *            to be converted to {@link Map}.
+	 * @return {@link Map} of the properties. Please note, that properties that
+	 *         have no value specified are contained in a result map, but with
+	 *         value equal to "" (empty {@link String}).
+	 */
+	public static Map<String, String> getPropertiesMap(final Properties properties) {
+		if (null == properties) {
+			return null;
+		}
+
+		final HashMap<String, String> map = new HashMap<String, String>();
+		for (Entry<Object, Object> entry : properties.entrySet()) {
+			map.put((String) entry.getKey(), (String) entry.getValue());
+		}
+		return map;
+	}
+    
+    public static List<String> parseCSVList(String csv) {
+      if (csv == null) {
         return null;
       }
       
-      return new HashMap<String, String>((Map) properties);
-    }
-    
-    public static List<String> parseCSVList(String csv) {
-      if (csv == null || csv.isEmpty()) {
-        return null;
+      if (csv.isEmpty()) {
+    	  return Collections.emptyList();
       }
       
       return new ArrayList<String>(Arrays.asList(csv.split(",")));

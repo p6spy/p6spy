@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -126,12 +127,15 @@ public class P6ModuleManager {
     // hard coded - core module init - as it holds initial config
     final P6SpyLoadableOptions spyOptions = (P6SpyLoadableOptions) registerModule(new P6SpyFactory());
     loadDriversExplicitly(spyOptions);
-    
-    // configured modules init
-    for (P6Factory factory : spyOptions.getModuleFactories()) {
-    	registerModule(factory);
-    }
 
+    // configured modules init
+    final Set<P6Factory> moduleFactories = spyOptions.getModuleFactories();
+    if (null != moduleFactories) {
+	    for (P6Factory factory : spyOptions.getModuleFactories()) {
+	    	registerModule(factory);
+	    }
+  	}
+  
     optionsRepository.initCompleted();
     
     for (P6OptionsSource optionsSource : optionsSources) {

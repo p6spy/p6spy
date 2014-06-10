@@ -312,9 +312,9 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     @Override
     public void setModulelist(String modulelist) {
       // no mather what P6SpyOptions is a must
-      if (modulelist != null && modulelist.contains(P6OptionsRepository.COLLECTION_REMOVAL_PREFIX + P6SpyFactory.class.getName())) {
-        throw new IllegalArgumentException(P6SpyFactory.class.getName() + " can't be removed from the module list, as it's considered a core factory!");
-      }
+//      if (modulelist != null && modulelist.contains(P6OptionsRepository.COLLECTION_REMOVAL_PREFIX + P6SpyFactory.class.getName())) {
+//        throw new IllegalArgumentException(P6SpyFactory.class.getName() + " can't be removed from the module list, as it's considered a core factory!");
+//      }
       
       optionsRepository.setSet(String.class, MODULE_NAMES, modulelist);
       // setting effective string

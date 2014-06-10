@@ -96,16 +96,26 @@ public class P6TestOptionsRepository extends BaseTestCase {
     Assert.assertEquals("value1", optRepo.get(String.class, "option1"));
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testSetSetForDeprecatedMinusPrefixOnFirstValueFails() {
+	  optRepo.setSet(String.class, "option1", "-value1,value2");
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void testSetSetForDeprecatedMinusPrefixOnNextValueFails() {
+	  optRepo.setSet(String.class, "option1", "value1,-value2");
+  }
+  
   @Test
-  public void testSetSetAdditionAndRemoval() {
+  public void testSetSetOverride() {
 	  optRepo.initCompleted();
 
     optRepo.setSet(String.class, "option1", "value1,value2");
     Assert.assertEquals(new HashSet<String>(Arrays.asList("value1", "value2")),
         optRepo.get(String.class, "option1"));
 
-    optRepo.setSet(String.class, "option1", "value3,-value2");
-    Assert.assertEquals(new HashSet<String>(Arrays.asList("value1", "value3")),
+    optRepo.setSet(String.class, "option1", "value3,value4");
+    Assert.assertEquals(new HashSet<String>(Arrays.asList("value3", "value4")),
         optRepo.get(String.class, "option1"));
   }
   
@@ -118,6 +128,18 @@ public class P6TestOptionsRepository extends BaseTestCase {
     
     optRepo.set(String.class, "option1", null);
     Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
+  }
+  
+  @Test
+  public void testSetSetEmptyStringNullsValue() {
+    optRepo.initCompleted();
+
+    optRepo.setSet(String.class, "option1", "foo");
+    Assert.assertEquals(new HashSet<String>(Arrays.asList("foo")), 
+    		optRepo.get(String.class, "option1"));
+    
+    optRepo.setSet(String.class, "option1", "");
+    Assert.assertNull(optRepo.get(String.class, "option1"));
   }
   
   @Test
