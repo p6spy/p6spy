@@ -35,7 +35,6 @@ import com.p6spy.engine.spy.option.P6OptionsRepository;
 
 public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions {
 
-    public static final String USE_PREFIX = "usePrefix";
     public static final String AUTOFLUSH = "autoflush";
     public static final String DRIVERLIST = "driverlist";
     public static final String LOGFILE = "logfile";
@@ -54,7 +53,6 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String REALDATASOURCE = "realdatasource";
     public static final String REALDATASOURCECLASS = "realdatasourceclass";
     public static final String REALDATASOURCEPROPERTIES = "realdatasourceproperties";
-    // TODO not documented!
     public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
     
     // those set indirectly (via properties visible from outside)
@@ -98,7 +96,6 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setDriverlist(options.get(DRIVERLIST));
       setStackTrace(options.get(STACKTRACE));
       setStackTraceClass(options.get(STACKTRACECLASS));
-//      setUsePrefix(options.get(USE_PREFIX));
       setAutoflush(options.get(AUTOFLUSH));
       setReloadProperties(options.get(RELOADPROPERTIES));
       setReloadPropertiesInterval(options.get(RELOADPROPERTIESINTERVAL));
@@ -311,11 +308,6 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
 
     @Override
     public void setModulelist(String modulelist) {
-      // no mather what P6SpyOptions is a must
-//      if (modulelist != null && modulelist.contains(P6OptionsRepository.COLLECTION_REMOVAL_PREFIX + P6SpyFactory.class.getName())) {
-//        throw new IllegalArgumentException(P6SpyFactory.class.getName() + " can't be removed from the module list, as it's considered a core factory!");
-//      }
-      
       optionsRepository.setSet(String.class, MODULE_NAMES, modulelist);
       // setting effective string
       optionsRepository.set(String.class, MODULELIST, P6Util.joinNullSafe(optionsRepository.getSet(String.class, MODULE_NAMES), ","));
