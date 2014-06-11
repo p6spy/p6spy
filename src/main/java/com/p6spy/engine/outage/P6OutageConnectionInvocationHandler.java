@@ -34,7 +34,7 @@ public class P6OutageConnectionInvocationHandler extends GenericInvocationHandle
     super(underlying);
     ConnectionInformation connectionInformation = new ConnectionInformation();
 
-    P6OutageConnectionCommitDelegate commitDelegate = new P6OutageConnectionCommitDelegate(connectionInformation);
+    P6OutageConnectionCommitDelegate commitDelegate = new P6OutageConnectionCommitDelegate();
     P6OutageConnectionRollbackDelegate rollbackDelegate = new P6OutageConnectionRollbackDelegate(connectionInformation);
     P6OutageConnectionCreateStatementDelegate createStatementDelegate = new P6OutageConnectionCreateStatementDelegate(connectionInformation);
     P6OutageConnectionPrepareStatementDelegate prepareStatementDelegate = new P6OutageConnectionPrepareStatementDelegate(connectionInformation);

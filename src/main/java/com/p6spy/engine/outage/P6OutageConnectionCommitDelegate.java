@@ -19,19 +19,11 @@
  */
 package com.p6spy.engine.outage;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.proxy.Delegate;
-
 import java.lang.reflect.Method;
 
-/**
- */
-class P6OutageConnectionCommitDelegate implements Delegate {
-  private final ConnectionInformation connectionInformation;
+import com.p6spy.engine.proxy.Delegate;
 
-  public P6OutageConnectionCommitDelegate(ConnectionInformation connectionInformation) {
-    this.connectionInformation = connectionInformation;
-  }
+class P6OutageConnectionCommitDelegate implements Delegate {
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
