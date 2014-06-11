@@ -9,7 +9,7 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 * `setAppender()` considered in logging properly (see: [issue #226](https://github.com/p6spy/p6spy/issues/226))
 * considering Wrapper for DataSource proxies (bringing support for Glassfish XADataSources)
 * fixed disabling modules on reload (see [issue #227] (https://github.com/p6spy/p6spy/issues/227))
-* `exclude` categories using class `Category` rather than just plain strings (affects `P6Logger` API) 
+* `excludecategories` using class `Category` rather than just plain strings (affects `P6Logger` API) 
 * providing additional distribution artifacts - wrapping (slf4j bridged) logging implementations for log4j, log4j2 and logback `p6spy-<version>-*-nodep.jar` (see [issue #131](https://github.com/p6spy/p6spy/issues/131))
 * character `'` escaping in the logged SQL query fixed (see: [issue #242](https://github.com/p6spy/p6spy/issues/242))
 * `include`/`exclude` behavior enabling any substring in SQL string matching (see: [issue #231](https://github.com/p6spy/p6spy/issues/231))
