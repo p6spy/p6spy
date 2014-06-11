@@ -1,6 +1,6 @@
 # <a name="confusage">Configuration and Usage</a>
 
-Configuration follows layered approach, where each layer overrides the values set by the lower ones 
+Configuration follows **layered approach**, where **each layer overrides the values set by the lower ones** 
 (leaving those not provided unchanged):
 
 * JMX set properties (please note, that these are reset on next reload)
@@ -13,13 +13,13 @@ For the full list of available options, see the section [Common Property File Se
 Please note that providing any of these via System properties/Environment variables is possible, using the particular 
 property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;
 
-To enable full overriding capabilities, all those options considering lists (comma separated) values follow the rules:
-
-* "-"&lt;property value&gt; - causes removal of particular value from the list
-* &lt;property value&gt; - causes adding of particular value to the list
-
 Please be aware of the restriction. In fact this also means you need to be aware of values set by the lower 
-configuration layers (including defaults) to properly override.modify those.
+configuration layers (including defaults) to properly override/modify those.
+
+There are **two cases one needs to distinguish when overriding**:
+
+* don't override the property on the current level (can be achieved by specifying neither key nor value) and 
+* clear the property value (can be achieved by specifying the key empty string value, could be for specified in `spy.properties` like this: `excludecategories=`)
 
 The `spy.properties` configuration file can be located in various places.  The following locations are searched
 to locate the file.  
@@ -46,7 +46,7 @@ in section: [Configuration and Usage](#confusage)):
     #################################################################
     # MODULES                                                       #
     #                                                               #
-    # Modulelist addapts the modular functionality of P6Spy.		#
+    # Module list adapts the modular functionality of P6Spy.		#
     # Only modules listed are active.						        #
     # (default is com.p6spy.engine.logging.P6LogFactory and         #
     # com.p6spy.engine.spy.P6SpyFactory)                            #
@@ -146,9 +146,9 @@ in section: [Configuration and Usage](#confusage)):
     #excludecategories=info,debug,result,resultset,batch
 
     # prints a stack trace for every statement logged
-    stacktrace=false
+    #stacktrace=false
     # if stacktrace=true, specifies the stack trace to print
-    stacktraceclass=
+    #stacktraceclass=
 
     # determines if property file should be reloaded
     # Please note: reload means forgetting all the previously set
@@ -295,9 +295,9 @@ Please note that matching mode used in the underlying regex is (achieved via pre
 An example showing capture of all statements having select, except those having order follow:
 
     filter = true
-    # comma separated list of tables to include
+    # comma separated list of strings to include
     include = select
-    # comma separated list of tables to exclude
+    # comma separated list of strings to exclude
     exclude = order
 
 Please note, that internally following regex would be used for particular expression matching: `(?mis)^(?!.*(order).*)(.*(select).*)$`
@@ -305,9 +305,9 @@ Please note, that internally following regex would be used for particular expres
 An example showing only capture statements having any of: order_details, price, and price_history follows:
 
     filter = true
-    # comma separated list of tables to include
+    # comma separated list of strings to include
     include = order,order_details,price,price_history
-    # comma separated list of tables to exclude
+    # comma separated list of strings to exclude
     exclude =
     
 Please note, that internally following regex would be used for particular expression matching: `(?mis)^(.*(order|order_details|price|price_history).*)$`
@@ -315,9 +315,9 @@ Please note, that internally following regex would be used for particular expres
 An example showing the capture of all statements, except statements order string in them follows:
 
     filter = false
-    # comma separated list of tables to include
+    # comma separated list of strings to include
     include =
-    # comma separated list of tables to exclude
+    # comma separated list of strings to exclude
     exclude = order
 
 Please note, that internally following regex would be used for particular expression matching: `(?mis)^(?!.*(order).*)(.*)$`
@@ -325,9 +325,9 @@ Please note, that internally following regex would be used for particular expres
 As you can use full regex syntax, capture of statements having: pri[cz]e follows:
 
     filter = true
-    # comma separated list of tables to include
+    # comma separated list of strings to include
     include = pri[cz]e
-    # comma separated list of tables to exclude
+    # comma separated list of strings to exclude
     exclude =
     
 Please note, that internally following regex would be used for particular expression matching: `(?mis)^(.*(pri[cz]e).*)$`
@@ -539,7 +539,7 @@ The log file format of spy.log follows:
 
 ## P6Spy Modules
 
-P6Spy consists of two modules that provide various types of functionality which can be modified to suit your needs. These modules, P6Log and P6Outage, are explained in this section of the documentation. Though they have distinct functions, they share some [Common Property File Settings](#settings) that allow you to specify which tables to log, the log file name, the log file location, whether to show the stacktrace (where the JDBC statement is being executed), and more. Refer to the [Common Property File Settings](#settings) documentation for details.
+P6Spy consists of two modules that provide various types of functionality which can be modified to suit your needs. These modules, P6Log and P6Outage, are explained in this section of the documentation. Though they have distinct functions, they share some [Common Property File Settings](#settings) that allow you to specify which substrings to include when logging, the log file name, the log file location, whether to show the stacktrace (where the JDBC statement is being executed), and more. Refer to the [Common Property File Settings](#settings) documentation for details.
 
 ### <a name="p6log">P6Log</a>
 

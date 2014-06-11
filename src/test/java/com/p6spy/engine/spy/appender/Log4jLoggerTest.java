@@ -65,8 +65,7 @@ public class Log4jLoggerTest extends BaseTestCase {
 
 	if (removeDefaultExcludedCategories) {
 		// we test slf4j filtering here rather than categories one
-		P6LogOptions.getActiveInstance().setExcludecategories("-" 
-				+ StringUtils.join(P6TestOptionDefaults.DEFAULT_CATEGORIES, ",-"));
+		P6LogOptions.getActiveInstance().setExcludecategories("");
 	}
 	
     // reset log4j

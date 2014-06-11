@@ -19,6 +19,23 @@
  */
 package com.p6spy.engine.spy;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.appender.MultiLineFormat;
@@ -27,18 +44,6 @@ import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.spy.appender.StdoutLogger;
 import com.p6spy.engine.spy.option.SystemProperties;
 import com.p6spy.engine.test.P6TestFramework;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestCommon extends P6TestFramework {
@@ -74,14 +79,14 @@ public class P6TestCommon extends P6TestFramework {
     {
       super.clearLogEnties();
 
-      // adding and removing afterwards causes empty set
+      // adding and clearing afterwards causes nulled sets
       P6LogOptions.getActiveInstance().setInclude("non_existing_table");
-      P6LogOptions.getActiveInstance().setInclude("-non_existing_table");
+      P6LogOptions.getActiveInstance().setInclude("");
       P6LogOptions.getActiveInstance().setExclude("non_existing_table");
-      P6LogOptions.getActiveInstance().setExclude("-non_existing_table");
+      P6LogOptions.getActiveInstance().setExclude("");
 
-      assertEquals(0, P6LogOptions.getActiveInstance().getIncludeList().size());
-      assertEquals(0, P6LogOptions.getActiveInstance().getExcludeList().size());
+      assertNull(P6LogOptions.getActiveInstance().getIncludeList());
+      assertNull(P6LogOptions.getActiveInstance().getExcludeList());
       statement.executeQuery(query);
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
@@ -93,8 +98,7 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setExclude(
           "non_existing_table1,customers,non_existing_table2,non_existing_table3");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setExclude(
-          "-non_existing_table1,-customers,-non_existing_table2,-non_existing_table3");
+      P6LogOptions.getActiveInstance().setExclude("");
       assertEquals(0, super.getLogEntiesCount());
     }
 
@@ -103,7 +107,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setInclude("customers");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setInclude("-customers");
+      P6LogOptions.getActiveInstance().setInclude("");
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
@@ -113,7 +117,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setInclude("non_existing_table");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setInclude("-non_existing_table");
+      P6LogOptions.getActiveInstance().setInclude("");
       assertEquals(0, super.getLogEntiesCount());
     }
     
@@ -122,7 +126,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setExclude("SELECT");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setExclude("-SELECT");
+      P6LogOptions.getActiveInstance().setExclude("");
       assertEquals(0, super.getLogEntiesCount());
     }
 
@@ -131,7 +135,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setInclude("SELECT");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setInclude("-SELECT");
+      P6LogOptions.getActiveInstance().setInclude("");
       assertEquals(1, super.getLogEntiesCount());
     }
 
@@ -141,7 +145,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setExclude("customers");
       statement.executeQuery(queryMultiline);
-      P6LogOptions.getActiveInstance().setExclude("-customers");
+      P6LogOptions.getActiveInstance().setExclude("");
       assertEquals(0, super.getLogEntiesCount());
     }
 
@@ -150,7 +154,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setInclude("customers");
       statement.executeQuery(queryMultiline);
-      P6LogOptions.getActiveInstance().setInclude("-customers");
+      P6LogOptions.getActiveInstance().setInclude("");
       assertEquals(1, super.getLogEntiesCount());
     }
   }
@@ -165,7 +169,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setExclude("[a-z]ustomers");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setExclude("-[a-z]ustomers");
+      P6LogOptions.getActiveInstance().setExclude("");
       assertEquals(0, super.getLogEntiesCount());
     }
 
@@ -174,7 +178,7 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setExclude("[0-9]tmt_test");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setExclude("-[0-9]tmt_test");
+      P6LogOptions.getActiveInstance().setExclude("");
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
@@ -184,14 +188,14 @@ public class P6TestCommon extends P6TestFramework {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setExclude("from\\scustomer");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setExclude("-from\\scustomer");
+      P6LogOptions.getActiveInstance().setExclude("");
       assertEquals(0, super.getLogEntiesCount());
     }
     {
       super.clearLogEnties();
       P6LogOptions.getActiveInstance().setInclude("from\\scustomer");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setInclude("-from\\scustomer");
+      P6LogOptions.getActiveInstance().setInclude("");
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
@@ -253,8 +257,8 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setExclude("foo");
       P6LogOptions.getActiveInstance().setSQLExpression("^.*bar\\s.*$");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setInclude("-customers");
-      P6LogOptions.getActiveInstance().setExclude("-foo");
+      P6LogOptions.getActiveInstance().setInclude("");
+      P6LogOptions.getActiveInstance().setExclude("");
       P6LogOptions.getActiveInstance().unSetSQLExpression();
       assertEquals(0, super.getLogEntiesCount());
     }
@@ -265,7 +269,7 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setExclude("customers");
       P6LogOptions.getActiveInstance().setSQLExpression("^.*from\\s.*$");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setExclude("-customers");
+      P6LogOptions.getActiveInstance().setExclude("");
       P6LogOptions.getActiveInstance().unSetSQLExpression();
       assertEquals(0, super.getLogEntiesCount());
     }
@@ -277,8 +281,8 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setExclude("foo");
       P6LogOptions.getActiveInstance().setSQLExpression("^.*from\\s.*$");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setInclude("-customers");
-      P6LogOptions.getActiveInstance().setExclude("-foo");
+      P6LogOptions.getActiveInstance().setInclude("");
+      P6LogOptions.getActiveInstance().setExclude("");
       P6LogOptions.getActiveInstance().unSetSQLExpression();
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
@@ -300,8 +304,8 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setInclude("customers");
       P6LogOptions.getActiveInstance().setExclude("foo");
       statement.executeQuery(query);
-      P6LogOptions.getActiveInstance().setInclude("-customers");
-      P6LogOptions.getActiveInstance().setExclude("-foo");
+      P6LogOptions.getActiveInstance().setInclude("");
+      P6LogOptions.getActiveInstance().setExclude("");
       assertEquals(1, super.getLogEntiesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
@@ -341,10 +345,10 @@ public class P6TestCommon extends P6TestFramework {
     // test debug logging
     super.clearLogEnties();
     P6LogOptions.getActiveInstance().setExclude("customers");
-    P6LogOptions.getActiveInstance().setExcludecategories("-debug");
+    P6LogOptions.getActiveInstance().setExcludecategories("");
     query = "select 'y' from customers";
     statement.executeQuery(query);
-    P6LogOptions.getActiveInstance().setExclude("-customers");
+    P6LogOptions.getActiveInstance().setExclude("");
     P6LogOptions.getActiveInstance().setExcludecategories("debug");
     assertTrue(super.getLastLogEntry().contains("intentionally"));
 
@@ -363,9 +367,17 @@ public class P6TestCommon extends P6TestFramework {
                                               final boolean resultsetCategoryNotExcluded)
       throws SQLException {
     final String query = "select id, name from customers where id in (1,2)";
-    P6LogOptions.getActiveInstance().setExcludecategories(
-        (resultCategoryNotExcluded ? "-" : "") + "result," + (resultsetCategoryNotExcluded ? "-" : "")
-            + "resultset");
+    
+    // debug would corrupt count checks here
+    final StringBuilder sb = new StringBuilder(Category.DEBUG.toString());
+    if (!resultCategoryNotExcluded) {
+    	sb.append(",").append(Category.RESULT.toString());
+    }
+    if (!resultsetCategoryNotExcluded) {
+    	sb.append(",").append(Category.RESULTSET.toString());
+    }
+    P6LogOptions.getActiveInstance().setExcludecategories(sb.toString());
+    
     final ResultSet resultSet = statement.executeQuery(query);
     super.clearLogEnties();
 
@@ -376,7 +388,7 @@ public class P6TestCommon extends P6TestFramework {
     int resultCount = 0;
     int resultSetCount = 0;
     for (String logMessage : getLogEnties()) {
-      if (logMessage.contains("result") && !logMessage.contains("resultset")) {
+      if (logMessage.contains(Category.RESULT.toString()) && !logMessage.contains(Category.RESULTSET.toString())) {
         resultCount++;
       } else {
         resultSetCount++;
@@ -387,7 +399,7 @@ public class P6TestCommon extends P6TestFramework {
 
     resultSet.close();
     // reset back to original setup
-    P6LogOptions.getActiveInstance().setExcludecategories("resultset,result");
+//    P6LogOptions.getActiveInstance().setExcludecategories("resultset,result");
 
     if (!resultCategoryNotExcluded && !resultsetCategoryNotExcluded) {
       assertEquals(
@@ -493,7 +505,7 @@ public class P6TestCommon extends P6TestFramework {
     // hot module unload doesn't work
     { 
     	clearLogEnties();
-    	o.setModulelist("-com.p6spy.engine.logging.P6LogFactory");
+    	o.setModulelist("");
     	
 	    statement.executeQuery("select 'x' from customers");
 	    assertEquals("A log message should not have been written", 1, getLogEntiesCount());
@@ -503,7 +515,7 @@ public class P6TestCommon extends P6TestFramework {
     { 
     	clearLogEnties();
     	System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
-    			"-com.p6spy.engine.logging.P6LogFactory");
+    			"");
     	o.reload();
     	
 	    statement.executeQuery("select 'x' from customers");

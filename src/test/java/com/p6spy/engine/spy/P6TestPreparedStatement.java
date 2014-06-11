@@ -19,16 +19,10 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.proxy.ProxyFactory;
-import com.p6spy.engine.test.P6TestFramework;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -36,7 +30,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.proxy.ProxyFactory;
+import com.p6spy.engine.test.P6TestFramework;
 
 @RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
@@ -117,7 +119,8 @@ public class P6TestPreparedStatement extends P6TestFramework {
         super.clearLogEnties();
   
         // let's check that returned data are reported correctly
-        P6LogOptions.getActiveInstance().setExcludecategories("-result,-resultset");
+        // => don't filter 'result' and 'resultset'
+        P6LogOptions.getActiveInstance().setExcludecategories("");
   
         final String query = "select prepstmt_test.col1, prepstmt_test2.col1, prepstmt_test.col2, prepstmt_test2.col2 from prepstmt_test, prepstmt_test2 where prepstmt_test.col2 = prepstmt_test2.col2 and prepstmt_test.col1 = ? and prepstmt_test2.col1 = ?";
         final PreparedStatement prep = getPreparedStatement(query);

@@ -163,7 +163,7 @@ public class P6LogQuery implements P6OptionChangedListener {
     final Set<Category> excludeCategories = opts.getExcludeCategoriesSet();
     
     return logger != null && logger.isCategoryEnabled(category) 
-    	&& excludeCategories == null || !excludeCategories.contains(category);
+    	&& (excludeCategories == null || !excludeCategories.contains(category));
   }
   
   // ----------------------------------------------------------------------------------------------------------

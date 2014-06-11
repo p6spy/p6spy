@@ -15,6 +15,7 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 * `include`/`exclude` behavior enabling any substring in SQL string matching (see: [issue #231](https://github.com/p6spy/p6spy/issues/231))
 * `unSet*` API provided for properties (in `com.p6spy.engine.spy.P6SpyOptions` and `com.p6spy.engine.logging.P6LogOptions`) to enable reverting to `null` (default value) 
 * `NullPointerException` fixed for empty batch execution (see [issue #246](https://github.com/p6spy/p6spy/issues/246))
+* `-` prefixed syntax for list-like properties deprecated, in favor of full overriding (see [issue #247](https://github.com/p6spy/p6spy/issues/247))
 
 ## Version 2.0.2 [3.4.2014]
 

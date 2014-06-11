@@ -86,7 +86,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
   
   @After
   public void tearDown() throws SQLException, IOException {
-    System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST, "");
+    System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
   }
   
   @AfterClass
@@ -188,20 +188,18 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertEquals(30L, opts.getOutageDetectionInterval());
     Assert.assertEquals(30000L, opts.getOutageDetectionIntervalMS());
     
-    // cleanup - make sure to have relevant module unloaded
+    // cleanup - make sure go back to default modules
     {
-      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
-          "-" + P6LogFactory.class.getName());
+      System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
       P6SpyOptions.getActiveInstance().reload();
     }
   }
 
   @Test
   public void testImplicitlyDisabledLogCategories() {
-    // let's explicitly remove P6LogFactory
+    // let's explicitly remove P6LogFactory (by not including it to list)
     {
-      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
-          "-" + P6LogFactory.class.getName());
+      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST, "");
       P6SpyOptions.getActiveInstance().reload();
     }
     
@@ -210,6 +208,12 @@ public class P6TestOptionDefaults extends BaseTestCase {
     } catch(IOException e) {
       e.printStackTrace();
       Assert.fail();
+    }
+    
+    // cleanup - make sure go back to default modules
+    {
+      System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+      P6SpyOptions.getActiveInstance().reload();
     }
   }
   
