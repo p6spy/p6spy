@@ -89,11 +89,25 @@ public class P6TestStatement extends P6TestFramework {
   }
   
   @Test
-  public void testExecuteEmptyBatch() throws SQLException {
+  public void testExecuteEmptyBatchWithIncludeExcludeEmpty() throws SQLException {
     Statement stmt = connection.createStatement();
     stmt.executeBatch();
     stmt.close();
   }
+  
+	@Test
+	public void testExecuteEmptyBatchWithIncludeExcludeNonEmpty()
+			throws SQLException {
+		P6LogOptions.getActiveInstance().setExclude("foo");
+		P6LogOptions.getActiveInstance().setInclude("foo");
+		
+		Statement stmt = connection.createStatement();
+		stmt.executeBatch();
+		stmt.close();
+		
+		P6LogOptions.getActiveInstance().setExclude("");
+		P6LogOptions.getActiveInstance().setInclude("");
+	}
 
   @Test
   public void testExecuteQuery() throws SQLException {

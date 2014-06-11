@@ -141,6 +141,10 @@ public class P6LogQuery implements P6OptionChangedListener {
   }
 
   static boolean isLoggable(String sql) {
+	if (null == sql) {
+		return false;
+	}
+	
     final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
     
     if (!opts.getFilter()) {
