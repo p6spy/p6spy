@@ -133,7 +133,7 @@
     <maven-eclipse-plugin-build>2.9</maven-eclipse-plugin-build>
     <maven-project-info-reports-plugin-build>2.7</maven-project-info-reports-plugin-build>
     <maven-site-plugin-build>3.3</maven-site-plugin-build>
-    <maven-surefire-plugin-build>2.16</maven-surefire-plugin-build>
+    <maven-surefire-plugin-build>2.17</maven-surefire-plugin-build>
     <commons-digester-build>1.8.1</commons-digester-build>
     <pmd-build>4.2.5</pmd-build>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -166,6 +166,7 @@
         <configuration>
           <systemPropertyVariables>
             <user.language>en_US</user.language>
+            <derby.stream.error.file>target/derby.log</derby.stream.error.file>
           </systemPropertyVariables>
           <!-- to enable remote JMX testing, 
             	see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
@@ -179,13 +180,6 @@
              <include>**/P6Test*.java</include>
              <include>**/*Test.java</include>
           </includes>
-
-          <systemProperties>
-            <property>
-              <name>derby.stream.error.file</name>
-              <value>target/derby.log</value>
-            </property>
-          </systemProperties>
         </configuration>
       </plugin>
       <plugin>
