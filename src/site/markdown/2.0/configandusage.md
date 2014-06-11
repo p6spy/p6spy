@@ -33,14 +33,33 @@ to locate the file.
 Please note that all the properties are exposed via JMX. So you can use your tool of choice (e.g.,JConsole) to view/change them. 
 Moreover reload operation is exposed as well. To provide on-demand reload option.
 
+In the JConsole p6spy related JMX attributes might look like this:
+
+![JConsole](../images/jconsole.png)
+
+## Command Line Options
+
+Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag (system property), adding the the prefix: 
+
+    p6spy.config.
+
+An example follows:
+
+    java -Dp6spy.config.logfile=my.log -Dp6spy.config.append=true
+
+Moreover to set different file to be used as the properties file (as an example: another_spy.properties), it should be specified using system property "spy.properties" as:
+
+    java -Dspy.properties=c:\jboss\lib\another_spy.properties
+
 ## <a name="settings">Common Property File Settings</a>
 
-An example spy.properties file follows (please note default values mentioned as these refer to defaults mentioned 
+An example `spy.properties` file follows (please note default values mentioned as these refer to defaults mentioned 
 in section: [Configuration and Usage](#confusage)):
 
     #################################################################
     # P6Spy Options File                                            #
     # See documentation for detailed instructions                   #
+    # http://p6spy.github.io/p6spy/2.0/configandusage.html          #
     #################################################################
 
     #################################################################
@@ -55,54 +74,10 @@ in section: [Configuration and Usage](#confusage)):
     # Unlike the other properties, activation of the changes on     #
     # this one requires reload.										#
     #################################################################
-    #modulelist=com.p6spy.engine.outage.P6OutageFactory
+    #modulelist=com.p6spy.engine.spy.P6SpyFactory,com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory
 
     ################################################################
-    # P6LOG SPECIFIC PROPERTIES                                    #
-    ################################################################
-    # no properties currently available  
-
-    ################################################################
-    # EXECUTION THRESHOLD PROPERTIES                               #
-    ################################################################
-    # This feature applies to the standard logging of P6Spy.       
-    # While the standard logging logs out every statement          
-    # regardless of its execution time, this feature puts a time   
-    # condition on that logging. Only statements that have taken   
-    # longer than the time specified (in milliseconds) will be     
-    # logged. This way it is possible to see only statements that  
-    # have exceeded some high water mark.                          
-    # This time is reloadable.                                     
-    #
-    # executionthreshold=integer time (milliseconds)
-    # (default is 0)
-    #executionthreshold=
-
-    ################################################################
-    # P6OUTAGE SPECIFIC PROPERTIES                                 #
-    ################################################################
-    # Outage Detection
-    #
-    # This feature detects long-running statements that may be indicative of
-    # a database outage problem. If this feature is turned on, it will log any
-    # statement that surpasses the configurable time boundary during its execution.
-    # When this feature is enabled, no other statements are logged except the long
-    # running statements. The interval property is the boundary time set in seconds.
-    # For example, if this is set to 2, then any statement requiring at least 2
-    # seconds will be logged. Note that the same statement will continue to be logged
-    # for as long as it executes. So if the interval is set to 2, and the query takes
-    # 11 seconds, it will be logged 5 times (at the 2, 4, 6, 8, 10 second intervals).
-    #
-    # outagedetection=true|false
-    # outagedetectioninterval=integer time (seconds)
-    #
-    # (default is false)
-    #outagedetection=false
-    # (default is 60)
-    #outagedetectioninterval=30
-  
-    ################################################################
-    # COMMON PROPERTIES                                            #
+    # CORE (P6SPY) PROPERTIES                                      #
     ################################################################
 
     # A comma separated list of JDBC drivers to load and register.
@@ -114,24 +89,6 @@ in section: [Configuration and Usage](#confusage)):
     # (specifically automatic registration).
     #driverlist=
 
-	# filter what is logged
-    # please note this is a precondition for usage of: include/exclude/sqlexpression
-    # (default is false)
-    #filter=false
-    
-    # comma separated list of strings to include
-    # please note that special characters escaping (used in java) has to be done for the provided regular expression
-    # (default is empty)
-    #include =
-    # comma separated list of strings to exclude
-    # (default is empty)
-    #exclude =
-
-    # sql expression to evaluate if using regex
-    # please note that special characters escaping (used in java) has to be done for the provided regular expression
-    # (default is empty)
-    #sqlexpression = 
-
     # for flushing per statement
     # (default is false)
     #autoflush = false
@@ -139,11 +96,6 @@ in section: [Configuration and Usage](#confusage)):
     # sets the date format using Java's SimpleDateFormat routine. 
     # In case property is not set, miliseconds since 1.1.1970 (unix time) is used (default is empty)
     #dateformat=
-
-    #list of categories to exclude: error, info, batch, debug, statement,
-    #commit, rollback and result are valid values
-    # (default is info,debug,result,resultset,batch)
-    #excludecategories=info,debug,result,resultset,batch
 
     # prints a stack trace for every statement logged
     #stacktrace=false
@@ -171,7 +123,8 @@ in section: [Configuration and Usage](#confusage)):
     #appender=com.p6spy.engine.spy.appender.StdoutLogger
     #appender=com.p6spy.engine.spy.appender.FileLogger
 
-    # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) (used for file logger only)
+    # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) 
+    # (used for com.p6spy.engine.spy.appender.FileLogger only)
     # (default is spy.log)
     #logfile = spy.log
 
@@ -249,7 +202,69 @@ in section: [Configuration and Usage](#confusage)):
     #jndicontextfactory=com.ibm.websphere.naming.WsnInitialContextFactory
     #jndicontextproviderurl=iiop://localhost:900
 
+	################################################################
+    # P6 LOGGING SPECIFIC PROPERTIES                               #
+    ################################################################
 
+	# filter what is logged
+    # please note this is a precondition for usage of: include/exclude/sqlexpression
+    # (default is false)
+    #filter=false
+    
+    # comma separated list of strings to include
+    # please note that special characters escaping (used in java) has to be done for the provided regular expression
+    # (default is empty)
+    #include =
+    # comma separated list of strings to exclude
+    # (default is empty)
+    #exclude =
+
+    # sql expression to evaluate if using regex
+    # please note that special characters escaping (used in java) has to be done for the provided regular expression
+    # (default is empty)
+    #sqlexpression = 
+    
+    #list of categories to exclude: error, info, batch, debug, statement,
+    #commit, rollback and result are valid values
+    # (default is info,debug,result,resultset,batch)
+    #excludecategories=info,debug,result,resultset,batch
+    
+    # Execution threshold applies to the standard logging of P6Spy.       
+    # While the standard logging logs out every statement          
+    # regardless of its execution time, this feature puts a time   
+    # condition on that logging. Only statements that have taken   
+    # longer than the time specified (in milliseconds) will be     
+    # logged. This way it is possible to see only statements that  
+    # have exceeded some high water mark.                          
+    # This time is reloadable.                                     
+    #
+    # executionthreshold=integer time (milliseconds)
+    # (default is 0)
+    #executionthreshold=
+    
+    ################################################################
+    # P6 OUTAGE SPECIFIC PROPERTIES                                #
+    ################################################################
+    # Outage Detection
+    #
+    # This feature detects long-running statements that may be indicative of
+    # a database outage problem. If this feature is turned on, it will log any
+    # statement that surpasses the configurable time boundary during its execution.
+    # When this feature is enabled, no other statements are logged except the long
+    # running statements. The interval property is the boundary time set in seconds.
+    # For example, if this is set to 2, then any statement requiring at least 2
+    # seconds will be logged. Note that the same statement will continue to be logged
+    # for as long as it executes. So if the interval is set to 2, and the query takes
+    # 11 seconds, it will be logged 5 times (at the 2, 4, 6, 8, 10 second intervals).
+    #
+    # outagedetection=true|false
+    # outagedetectioninterval=integer time (seconds)
+    #
+    # (default is false)
+    #outagedetection=false
+    # (default is 60)
+    #outagedetectioninterval=30
+    
 ### modulelist
 
 modulelist holds the list of p6spy modules activated. A module contains a group of functionality. If none are specified only core
@@ -271,12 +286,151 @@ Please note to implement custom module have a look at the implementation of the 
 
 ### driverlist
 
-This is a comma separated list of JDBC driver classes to load and register with DriverManager.  You should list
+This is a comma separated list of JDBC driver classes to load and register with DriverManager. You should list
 the classname(s) of the JDBC driver(s) that you want to proxy with P6Spy if any of the following conditions are met.
 
 1. The JDBC driver does not implement the JDBC 4.0 API 
-1. You are using a JNDI Data Source - Some application servers will prevent the automatic registration feature
-    from working.  
+1. You are using a JNDI Data Source - Some application servers will prevent the automatic registration feature from working.  
+
+### autoflush
+
+For standard development, set the autoflush value to true. When set to true, every time a statement is intercepted, it
+is immediately written to the log file. In some cases, however, instant feedback on every statement is not a
+requirement. In those cases, the system performs slightly faster with autoflush set to false.
+
+An example follows:
+
+    autoflush = true
+
+### dateformat
+
+Setting a value for dateformat changes the date format value printed in the log file. No value prints the current time
+in milliseconds (unix time), a useful feature for parsing the log. The date format engine is Java's SimpleDateFormat class.
+Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
+
+    dateformat=MM-dd-yy HH:mm:ss:SS
+
+### stacktrace
+
+If stacktrace is set, the log prints out the stack trace for each SQL statement logged.
+
+### stacktraceclass
+
+Limits the stack traces printed to those that contain the value set in stacktraceclass. For example, specifying stacktraceclass=com.mycompany.myclass limits the printing of stack traces to the specified class value. The stack trace is converted to a String and string.indexOf(stacktraceclass) is performed.
+
+### reloadproperties and reloadpropertiesinterval
+
+If reloadproperties is set to true, the property file is reloaded every n seconds, where n is defined by the value set by reloadpropertiesinterval. For example, if reloadproperties=true and reloadpropertiesinterval=10, the system checks the File.lastModified() property of the property file every 10 seconds, and if the file has been modified, it will be reloaded.
+
+If you set append=true, the log will be suddenly truncated when you change your properties. This is because using reloadproperties is intended to be the equivalent of restarting your application server. Restarting your application server truncates your log file.
+
+reloadproperties will not reload any driver information (such as realdriver, realdriver2, and realdriver3) and will not change the modules that are in memory.
+
+### appender
+
+Appenders allow you to specify where and how log information is output. Appenders are a flexible architecture
+allowing anyone to write their own output class for P6Spy. To use an appender, specify the classname of the
+appender to use. The current release comes with three options which are slf4j, stdout,
+and logging to a file (default). Please note, that all of these output in the CSV format (where separator is: "|").
+
+* **Using the File output**: Uncomment the `FileLogger` appender and specify a `logfile` and
+  whether or not to `append` to the file or to clear the file each time:
+
+        #appender=com.p6spy.engine.spy.appender.Slf4JLogger
+        #appender=com.p6spy.engine.spy.appender.StdoutLogger
+        appender=com.p6spy.engine.spy.appender.FileLogger
+
+        # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) 
+	    # (used for com.p6spy.engine.spy.appender.FileLogger only)
+	    # (default is spy.log)
+	    #logfile = spy.log
+
+        # append to the p6spy log file. if this is set to false the
+        # log file is truncated every time. (file logger only)
+        append=true
+
+* **Using StdOut**: Uncomment the `StdoutLogger` as follows:
+
+        #appender=com.p6spy.engine.spy.appender.Slf4JLogger
+        appender=com.p6spy.engine.spy.appender.StdoutLogger
+        #appender=com.p6spy.engine.spy.appender.FileLogger
+
+* **Using SLF4J**: Uncomment the `Slf4JLogger` as follows:
+
+        appender=com.p6spy.engine.spy.appender.Slf4JLogger
+        #appender=com.p6spy.engine.spy.appender.StdoutLogger
+        #appender=com.p6spy.engine.spy.appender.FileLogger
+
+	In general you need to slf4j-api and the appropriate bridge to the actual logging
+implementation as well as the logging implementation itself on your classpath. To simplify setup for those not having any of the additional dependencies already
+on classpath following `*-nodep.jar` bundles are provided as part of p6spy distribution:
+
+    * `p6spy-<version>-log4j-nodep.jar` - having [log4j](http://logging.apache.org/log4j/1.2/) included,
+    * `p6spy-<version>-log4j2-nodep.jar` - having [log4j2](http://logging.apache.org/log4j/2.x/) included and
+    * `p6spy-<version>-logback-nodep.jar` - having [logback](http://logback.qos.ch/) included.
+
+    Mapping to SLF4J levels is provided in the following way:
+    
+	<table>
+	<tr><th>P6Spy category</th><th>SLF4J level</th></tr>
+	<tr><td>error</td><td>error</td></tr>
+	<tr><td>warn</td><td>warn</td></tr>
+	<tr><td>debug</td><td>debug</td></tr>
+	<tr><td>info/any other category</td><td>info</td></tr>
+	</table>
+	
+	Internally is Slf4j Logger is retrieved for the: `p6spy`, keep this in mind when configuring your logging implementation. So for example for the `log4j` following could be used to restrict the p6spy logging (if using xml-based configuration) to `INFO` level only:
+	
+          <category name="p6spy">
+            <priority value="INFO" />
+          </category>
+	
+	For further instructions on configuring SLF4J, see the [SLF4J documentation](http://www.slf4j.org/manual.html).
+
+### logMessageFormat
+
+The log message format is selected by specifying the class to use to format the log messages.  The following
+classes are available with P6Spy.
+
+* `com.p6spy.engine.spy.appender.SingleLineFormat` which results in log messages in format:
+
+		current time|execution time|category|statement SQL String|effective SQL string
+		
+* `com.p6spy.engine.spy.appender.MultiLineFormat`, which results in log messages in format: 
+		
+		current time|execution time|category|statement SQL String
+		effective SQL string
+
+Where:
+
+* `current time` - the current time is obtained through System.getCurrentTimeMillis() and represents
+  the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT.
+  (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().)
+  To change the format, use the dateformat property described in
+  [Common Property File Settings](#settings).
+* `execution time` - the time it takes for a particular method to execute. (This is
+  not the total cost for the SQL statement.) For example, a statement
+  `SELECT * FROM MYTABLE WHERE THISCOL = ?` might be executed as a prepared
+  statement, in which the .execute() function will be measured. This is recorded as
+  the statement category. Further, as you call .next() on the ResultSet, each .next()
+  call is recorded in the result category.
+* `category` - You can manage your log by including and excluding categories,
+  which is described in [Common Property File Settings](#settings).
+* `statement SQL string` - This is the SQL string passed to the statement object.
+  If it is a prepared statement, it is the prepared statement that existed prior to
+  the parameters being set. To see the complete statement, refer to effective SQL string.
+* `effective SQL string` - If you are not using a prepared statement, this contains no
+  value. Otherwise, it fills in the values of the Prepared Statement so you can see
+  the effective SQL statement that is passed to the database. Of course, the database
+  still sees the prepared statement, but this string is a convenient way to see the
+  actual values being sent to the database.
+
+The `com.p6spy.engine.spy.appender.MultiLineFormat` might be better from a readability perspective.  Because it will place the effective SQL statement
+on a separate line.  However, the SingleLineFormat might be better if you have a need to parse the log messages.
+The default is `com.p6spy.engine.spy.appender.SingleLineFormat` for backward compatibility.
+
+You can also supply your own log message formatter to customize the format.  Simply create a class which implements
+the `com.p6spy.engine.spy.appender.MessageFormattingStrategy` interface and place it on the classpath.
 
 ### filter, include, exclude
 
@@ -363,76 +517,6 @@ would mean, that following should be specified (please note doubled backslash)::
 	filter=true
     sqlexpression=^(.*(from\\scustomers).*)$
 
-
-### autoflush
-
-For standard development, set the autoflush value to true. When set to true, every time a statement is intercepted, it
-is immediately written to the log file. In some cases, however, instant feedback on every statement is not a
-requirement. In those cases, the system performs slightly faster with autoflush set to false.
-
-An example follows:
-
-    autoflush = true
-
-### appender
-
-Appenders allow you to specify where and how log information is output. Appenders are a flexible architecture
-allowing anyone to write their own output class for P6Spy. To use an appender, specify the classname of the
-appender to use. The current release comes with three options which are slf4j, stdout,
-and logging to a file (default). Please note, that all of these output in the CSV format (where separator is: "|").
-
-* **Using the File output**: Uncomment the `FileLogger` appender and specify a `logfile` and
-  whether or not to `append` to the file or to clear the file each time:
-
-        #appender=com.p6spy.engine.spy.appender.Slf4JLogger
-        #appender=com.p6spy.engine.spy.appender.StdoutLogger
-        appender=com.p6spy.engine.spy.appender.FileLogger
-
-        # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname(e:/test/spy.log) (used for file logger only)
-        logfile = spy.log
-
-        # append to the p6spy log file. if this is set to false the
-        # log file is truncated every time. (file logger only)
-        append=true
-
-* **Using StdOut**: Uncomment the `StdoutLogger` as follows:
-
-        #appender=com.p6spy.engine.spy.appender.Slf4JLogger
-        appender=com.p6spy.engine.spy.appender.StdoutLogger
-        #appender=com.p6spy.engine.spy.appender.FileLogger
-
-* **Using SLF4J**: Uncomment the `Slf4JLogger` as follows:
-
-        appender=com.p6spy.engine.spy.appender.Slf4JLogger
-        #appender=com.p6spy.engine.spy.appender.StdoutLogger
-        #appender=com.p6spy.engine.spy.appender.FileLogger
-
-	In general you need to slf4j-api and the appropriate bridge to the actual logging
-implementation as well as the logging implementation itself on your classpath. To simplify setup for those not having any of the additional dependencies already
-on classpath following `*-nodep.jar` bundles are provided as part of p6spy distribution:
-
-    * `p6spy-<version>-log4j-nodep.jar` - having [log4j](http://logging.apache.org/log4j/1.2/) included,
-    * `p6spy-<version>-log4j2-nodep.jar` - having [log4j2](http://logging.apache.org/log4j/2.x/) included and
-    * `p6spy-<version>-logback-nodep.jar` - having [logback](http://logback.qos.ch/) included.
-
-    Mapping to SLF4J levels is provided in the following way:
-    
-	<table>
-	<tr><th>P6Spy category</th><th>SLF4J level</th></tr>
-	<tr><td>error</td><td>error</td></tr>
-	<tr><td>warn</td><td>warn</td></tr>
-	<tr><td>debug</td><td>debug</td></tr>
-	<tr><td>info/any other category</td><td>info</td></tr>
-	</table>
-	
-	Internally is Slf4j Logger is retrieved for the: `p6spy`, keep this in mind when configuring your logging implementation. So for example for the `log4j` following could be used to restrict the p6spy logging (if using xml-based configuration) to `INFO` level only:
-	
-          <category name="p6spy">
-            <priority value="INFO" />
-          </category>
-	
-	For further instructions on configuring SLF4J, see the [SLF4J documentation](http://www.slf4j.org/manual.html).
-
 ### excludecategories
 
 The log includes category information that describes the type of statement. This property excludes the listed categories. Valid options include the following:
@@ -448,153 +532,15 @@ The log includes category information that describes the type of statement. This
 
 Enter a comma-delimited list of categories to exclude from your log file. See filter, include, exclude for more details on how this process works.
 
-### dateformat
+### outagedetection
 
-Setting a value for dateformat changes the date format value printed in the log file. No value prints the current time
-in milliseconds (unix time), a useful feature for parsing the log. The date format engine is Java's SimpleDateFormat class.
-Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
-
-    dateformat=MM-dd-yy HH:mm:ss:SS
-
-### stacktrace
-
-If stacktrace is set, the log prints out the stack trace for each SQL statement logged.
-
-### stacktraceclass
-
-Limits the stack traces printed to those that contain the value set in stacktraceclass. For example, specifying stacktraceclass=com.mycompany.myclass limits the printing of stack traces to the specified class value. The stack trace is converted to a String and string.indexOf(stacktraceclass) is performed.
-
-### reloadproperties and reloadpropertiesinterval
-
-If reloadproperties is set to true, the property file is reloaded every n seconds, where n is defined by the value set by reloadpropertiesinterval. For example, if reloadproperties=true and reloadpropertiesinterval=10, the system checks the File.lastModified() property of the property file every 10 seconds, and if the file has been modified, it will be reloaded.
-
-If you set append=true, the log will be suddenly truncated when you change your properties. This is because using reloadproperties is intended to be the equivalent of restarting your application server. Restarting your application server truncates your log file.
-
-reloadproperties will not reload any driver information (such as realdriver, realdriver2, and realdriver3) and will not change the modules that are in memory.
-
-### logMessageFormat
-
-The log message format is selected by specifying the class to use to format the log messages.  The following
-classes are available with P6Spy.
-
-`com.p6spy.engine.spy.appender.SingleLineFormat`
-
-`com.p6spy.engine.spy.appender.MultiLineFormat`
-
-The MultiLineFormat might be better from a readability perspective.  Because it will place the effective SQL statement
-on a separate line.  However, the SingleLineFormat might be better if you have a need to parse the log messages.
-The default is SingleLineFormat for backward compatibility.
-
-You can also supply your own log message formatter to customize the format.  Simply create a class which implements
-the `com.p6spy.engine.spy.appender.MessageFormattingStrategy` interface and place it on the classpath.
-
-## Command Line Options
-
-Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag (system property), adding the the prefix: 
-
-    p6spy.config.
-
-An example follows:
-
-    java -Dp6spy.config.logfile=my.log -Dp6spy.config.append=true
-
-Moreover to set different file to be used as the properties file (as an example: another_spy.properties), it should be specified using system property "spy.properties" as:
-
-    java -Dspy.properties=c:\jboss\lib\another_spy.properties
-
-## Log File Format
-
-The log file format of spy.log follows:
-
-  SingleLineFormat -
-
-    current time|execution time|category|statement SQL String|effective SQL string
-
-  MultiLineFormat -
-
-    current time|execution time|category|statement SQL String
-    effective SQL string
-
-* current time—The current time is obtained through System.getCurrentTimeMillis() and represents
-  the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT.
-  (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().)
-  To change the format, use the dateformat property described in
-  [Common Property File Settings](#settings).
-* execution time—The time it takes for a particular method to execute. (This is
-  not the total cost for the SQL statement.) For example, a statement
-  `SELECT * FROM MYTABLE WHERE THISCOL = ?` might be executed as a prepared
-  statement, in which the .execute() function will be measured. This is recorded as
-  the statement category. Further, as you call .next() on the ResultSet, each .next()
-  call is recorded in the result category.
-* category—You can manage your log by including and excluding categories,
-  which is described in [Common Property File Settings](#settings).
-* statement SQL string—This is the SQL string passed to the statement object.
-  If it is a prepared statement, it is the prepared statement that existed prior to
-  the parameters being set. To see the complete statement, refer to effective SQL string.
-* effective SQL string—If you are not using a prepared statement, this contains no
-  value. Otherwise, it fills in the values of the Prepared Statement so you can see
-  the effective SQL statement that is passed to the database. Of course, the database
-  still sees the prepared statement, but this string is a convenient way to see the
-  actual values being sent to the database.
-
-## P6Spy Modules
-
-P6Spy consists of two modules that provide various types of functionality which can be modified to suit your needs. These modules, P6Log and P6Outage, are explained in this section of the documentation. Though they have distinct functions, they share some [Common Property File Settings](#settings) that allow you to specify which substrings to include when logging, the log file name, the log file location, whether to show the stacktrace (where the JDBC statement is being executed), and more. Refer to the [Common Property File Settings](#settings) documentation for details.
-
-### <a name="p6log">P6Log</a>
-
-P6Log is an open-source application included in the P6Spy distribution that intercepts and logs the database statements of any application that uses JDBC. This application monitors the SQL statements produced by EJB servers, enabling developers to write code that achieves maximum efficiency on the server. The P6Log module is enabled by default. Disable or enable the P6Log module by editing the spy.properties configuration file. If the module is commented out, it is not loaded, and the functionality is not available. If the module is not commented out, the functionality is available. The applicable portion of the spy.properties file follows:
-
-    #################################################################
-    # MODULES
-    #
-    # Modules provide the P6Spy functionality. If a module, such
-    # as module_log is commented out, that functionality will not
-    # be available. If it is not commented out (if it is active),
-    # the functionality will be active.
-    #
-    # Values set in Modules cannot be reloaded using the
-    # reloadproperties variable. Once they are loaded, they remain
-    # in memory until the application is restarted.
-    #
-    #################################################################
-    module.log=com.p6spy.engine.logging.P6LogSpyDriver
-
-    #module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
-
-
-### <a name="p6outage">P6Outage</a>
-
-P6Outage is an open-source application included in the P6Spy distribution. P6Outage minimizes any logging performance overhead by logging only long-running statements. The P6Outage module is disabled by default. Disable or enable the P6Outage module by editing the spy.properties configuration file. If the module is commented out, it is not loaded, and the functionality is not available. If the module is not commented out, the functionality is available.
-
-The applicable portion of the spy.properties file follows:
-
-    #################################################################
-    # MODULES
-    #
-    # Modules provide the P6Spy functionality. If a module, such
-    # as module_log is commented out, that functionality will not
-    # be available. If it is not commented out (if it is active),
-    # the functionality will be active.
-    #
-    # Values set in Modules cannot be reloaded using the
-    # reloadproperties variable. Once they are loaded, they remain
-    # in memory until the application is restarted.
-    #
-    #################################################################
-    #module.log=com.p6spy.engine.logging.P6LogSpyDriver
-
-    module.outage=com.p6spy.engine.outage.P6OutageSpyDriver
-
-
-The following are P6Outage-specific properties:
-
-* outagedetection - This feature detects long-running statements that may be indicative of a database outage
+This feature detects long-running statements that may be indicative of a database outage
 problem. When enabled, it logs any statement that surpasses the configurable time boundary during its execution.
 No other statements are logged except the long-running statements.
 
+### outagedetectioninterval 
 
-* outagedetectioninterval - The interval property is the boundary time set in seconds. For example, if set to
+The interval property is the boundary time set in seconds. For example, if set to
 2, any statement requiring at least 2 seconds is logged. The same statement will continue to be logged for as
 long as it executes. So, if the interval is set to 2 and a query takes 11 seconds, it is logged 5 times (at
 the 2, 4, 6, 8, 10-second intervals).
