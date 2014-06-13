@@ -122,7 +122,7 @@ public class P6OptionsRepository {
       }
 
       try {
-        T typedInstance = (T) instance;
+		T typedInstance = (T) instance;
         return typedInstance;
       } catch (ClassCastException e) {
         System.err.println("Value " + value + ", is not of expected type. Error: " + e);
@@ -207,19 +207,16 @@ public class P6OptionsRepository {
     delayedOptionChanges = null;
   }
 
+  @SuppressWarnings("unchecked")
   public <T> T get(Class<T> type, String key) {
     if (!initCompleted) {
       throw new IllegalStateException("Options didn't load completely, yet!");
     }
-
     return (T) map.get(key);
   }
 
+  @SuppressWarnings("unchecked")
   public <T> Set<T> getSet(Class<T> type, String key) {
-    // if (!initCompleted) {
-    // throw new IllegalStateException("Options didn't load completely, yet!");
-    // }
-
     return (Set<T>) map.get(key);
   }
 
@@ -241,23 +238,48 @@ public class P6OptionsRepository {
 
   class DelayedOptionChange {
 
-    private final String key;
+	private final String key;
     private final Object oldValue;
     private final Object newValue;
 
     public DelayedOptionChange(String key, Object oldValue, Object newValue) {
       super();
+      
+      if (null == key || key.isEmpty()) {
+    	  throw new IllegalArgumentException("key can be neither null nor empty!");
+      }
+      
       this.key = key;
       this.oldValue = oldValue;
       this.newValue = newValue;
     }
 
+    
     @Override
     public int hashCode() {
       // this is important part!
       return key.hashCode();
     }
-
+    
+    @Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DelayedOptionChange other = (DelayedOptionChange) obj;
+		if (!getOuterType().equals(other.getOuterType()))
+			return false;
+		if (key == null) {
+			if (other.key != null)
+				return false;
+		} else if (!key.equals(other.key))
+			return false;
+		return true;
+	}
+    
     public String getKey() {
       return key;
     }
@@ -269,5 +291,9 @@ public class P6OptionsRepository {
     public Object getNewValue() {
       return newValue;
     }
+
+	private P6OptionsRepository getOuterType() {
+		return P6OptionsRepository.this;
+	}
   }
 }

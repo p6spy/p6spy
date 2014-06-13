@@ -34,7 +34,7 @@ import java.util.Properties;
 public class P6Util {
 
     public static int parseInt(String i, int defaultValue) {
-        if (i == null || i.equals("")) {
+        if (i == null || i.isEmpty()) {
             return defaultValue;
         }
         try {
@@ -50,7 +50,7 @@ public class P6Util {
         if (s == null) {
             return defaultValue;
         }
-        return(s.equals("1") || s.trim().equalsIgnoreCase("true"));
+        return("1".equals(s) || "true".equalsIgnoreCase(s.trim()));
     }
 
   /**

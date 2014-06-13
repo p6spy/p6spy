@@ -190,7 +190,7 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
                     P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
                     method.invoke(rds, args);
                     matchedProps.put(key, value);
-                  } else if (types[0].isPrimitive() && types[0].getName().equals("int")) {
+                  } else if (types[0].isPrimitive() && "int".equals(types[0].getName())) {
                     // the method expects an int, so we pass an Integer
                     Integer[] args = new Integer[1];
                     args[0] = Integer.valueOf(value);
@@ -237,12 +237,9 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
    */
   @Override
   public Reference getReference() throws NamingException {
-    String FactoryName = "com.p6spy.engine.spy.P6DataSourceFactory";
-
-    Reference Ref = new Reference(getClass().getName(), FactoryName, null);
-
-    Ref.add(new StringRefAddr("dataSourceName", getRealDataSource()));
-    return Ref;
+    final Reference reference = new Reference(getClass().getName(), P6DataSourceFactory.class.getName(), null);
+    reference.add(new StringRefAddr("dataSourceName", getRealDataSource()));
+    return reference;
   }
 
   @Override

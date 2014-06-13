@@ -84,13 +84,13 @@ public class SpyDotProperties implements P6OptionsSource {
   }
   
   private long lastModified() {
-    long lastModified = -1;
+    long lastMod = -1;
     URLConnection con = null;
     URL url = locate();
     if( url != null ) {
       try {
         con = url.openConnection(); 
-        lastModified = con.getLastModified();
+        lastMod = con.getLastModified();
       } catch (IOException e) {
         // ignore
       } finally {
@@ -111,7 +111,7 @@ public class SpyDotProperties implements P6OptionsSource {
         }
       }
     }
-    return lastModified;
+    return lastMod;
   }
 
   private URL locate() {
