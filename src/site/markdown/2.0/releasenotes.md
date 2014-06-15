@@ -2,7 +2,7 @@
 
 For the full changelog (since 2.0.0-aplha1), see: [github report](../github-report.html)
 
-## Version 2.1.0 - Unreleased
+## Version 2.1.0 - [15.6.2014]
 
 * P6ConnectionPoolDataSource merged to P6DataSource (to simplify datasource config)
 * Bind variables set by name on a CallableStatement are now logged (see [issue #221] (https://github.com/p6spy/p6spy/issues/221))
