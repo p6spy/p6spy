@@ -238,9 +238,9 @@ in section: [Configuration and Usage](#confusage)):
     # have exceeded some high water mark.                          
     # This time is reloadable.                                     
     #
-    # executionthreshold=integer time (milliseconds)
+    # executionThreshold=integer time (milliseconds)
     # (default is 0)
-    #executionthreshold=
+    #executionThreshold=
     
     ################################################################
     # P6 OUTAGE SPECIFIC PROPERTIES                                #
