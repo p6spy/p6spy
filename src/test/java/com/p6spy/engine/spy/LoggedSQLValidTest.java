@@ -67,7 +67,7 @@ public class LoggedSQLValidTest extends P6TestFramework {
             + ")");
 
     statement.close();
-    super.clearLogEnties();
+    super.clearLogEntries();
   }
 
   @Test
@@ -202,7 +202,7 @@ public class LoggedSQLValidTest extends P6TestFramework {
     final String sql = loggedStmt.substring(loggedStmt.lastIndexOf("|") + 1);
 
     // re-run the logged statement => to prove it's valid
-    super.clearLogEnties();
+    super.clearLogEntries();
     final Statement stmt = connection.createStatement();
     if (isUpdate) {
       stmt.executeUpdate(sql);

@@ -141,17 +141,17 @@ public abstract class P6TestFramework extends BaseTestCase {
     return ((P6TestLogger) P6LogQuery.getLogger()).getLastEntry();
   }
 
-  protected void clearLogEnties() {
+  protected void clearLogEntries() {
     failOnNonP6TestLoggerUsage();
     ((P6TestLogger) P6LogQuery.getLogger()).clearLogEntries();
   }
 
-  protected int getLogEntiesCount() {
+  protected int getLogEntriesCount() {
     failOnNonP6TestLoggerUsage();
     return ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size();
   }
 
-  protected List<String> getLogEnties() {
+  protected List<String> getLogEntries() {
     failOnNonP6TestLoggerUsage();
     return ((P6TestLogger) P6LogQuery.getLogger()).getLogs();
   }

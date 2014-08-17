@@ -116,7 +116,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
           prep.close();
         }
   
-        super.clearLogEnties();
+        super.clearLogEntries();
   
         // let's check that returned data are reported correctly
         // => don't filter 'result' and 'resultset'

@@ -68,7 +68,7 @@ public class P6TestCallableStatement extends P6TestFramework {
   
   @Test
   public void testStoredProcedureNoResultSet() throws SQLException {
-    this.clearLogEnties();
+    this.clearLogEntries();
 
     // execute the statement
     String query = "{call test_proc(?,?,?)}";
@@ -90,7 +90,7 @@ public class P6TestCallableStatement extends P6TestFramework {
 
   @Test
   public void testNamedParameters() throws SQLException {
-    this.clearLogEnties();
+    this.clearLogEntries();
     
     String param1Name = "param1";
     String param2Name = "param2";
@@ -124,7 +124,7 @@ public class P6TestCallableStatement extends P6TestFramework {
 
   @Test
   public void testStoredProcedureWithNullInputParameter() throws SQLException {
-    this.clearLogEnties();
+    this.clearLogEntries();
 
     // execute the statement
     String query = "{call test_proc(?,?,?)}";
