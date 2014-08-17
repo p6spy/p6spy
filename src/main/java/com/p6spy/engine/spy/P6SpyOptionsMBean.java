@@ -119,4 +119,12 @@ public interface P6SpyOptionsMBean {
   String getLogMessageFormat();
 
   void setLogMessageFormat(String logMessageFormatter);
+  
+  boolean getJmx();
+  
+  void setJmx(boolean jmx);
+  
+  String getJmxPrefix();
+  
+  void setJmxPrefix(String jmxPrefix);
 }

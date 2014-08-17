@@ -2,6 +2,9 @@
 
 For the full changelog (since 2.0.0-aplha1), see: [github report](../github-report.html)
 
+## Version 2.1.1 - [release pending]
+* jmx exposing becomes optional (enabled/disabled via flag) + jmx prefix introduced (see [issue #256] (https://github.com/p6spy/p6spy/issues/256))
+
 ## Version 2.1.0 - [15.6.2014]
 
 * P6ConnectionPoolDataSource merged to P6DataSource (to simplify datasource config)

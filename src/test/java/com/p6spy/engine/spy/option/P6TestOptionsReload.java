@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import javax.management.JMException;
 
 import com.p6spy.engine.test.BaseTestCase;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -36,6 +37,7 @@ import org.junit.Test;
 
 import com.j256.simplejmx.client.JmxClient;
 import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.P6MBeansRegistry;
 import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.spy.P6TestMBean;
@@ -69,8 +71,8 @@ public class P6TestOptionsReload extends BaseTestCase {
    */
   @Test
   public void testJmxSetPropertyDiscartedOnExplicitJmxReload() throws Exception {
-    final String domainName = P6SpyOptions.class.getPackage().getName();
-    final String beanName = P6SpyOptions.class.getSimpleName();
+    final String domainName = P6MBeansRegistry.PACKAGE_NAME;
+    final String beanName = P6SpyOptions.class.getName();
     final String attributeName = "StackTrace";
 
     // precondition
@@ -81,8 +83,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     assertTrue((Boolean) jmxClient.getAttribute(domainName, beanName, attributeName));
 
     // props reload
-    jmxClient.invokeOperation(P6SpyOptions.class.getPackage().getName(),
-        P6SpyOptions.class.getSimpleName(), "reload");
+    jmxClient.invokeOperation(domainName, beanName, "reload");
 
     // jmx value modification discarted
     assertFalse((Boolean) jmxClient.getAttribute(domainName, beanName, attributeName));
@@ -228,8 +229,8 @@ public class P6TestOptionsReload extends BaseTestCase {
       System
           .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
 
-      final String domainName = P6SpyOptions.class.getPackage().getName();
-      final String beanName = P6SpyOptions.class.getSimpleName();
+      final String domainName = P6MBeansRegistry.PACKAGE_NAME;
+      final String beanName = P6SpyOptions.class.getName();
       final String attributeName = "StackTrace";
 
       // jmx value modification

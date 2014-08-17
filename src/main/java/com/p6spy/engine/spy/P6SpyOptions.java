@@ -54,6 +54,8 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String REALDATASOURCECLASS = "realdatasourceclass";
     public static final String REALDATASOURCEPROPERTIES = "realdatasourceproperties";
     public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
+    public static final String JMX = "jmx";
+    public static final String JMX_PREFIX = "jmxPrefix";
     
     // those set indirectly (via properties visible from outside)
     public static final String DRIVER_NAMES = "driverNames";
@@ -76,6 +78,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       defaults.put(RELOADPROPERTIES, Boolean.FALSE.toString());
       defaults.put(RELOADPROPERTIESINTERVAL, Long.toString(60));
       defaults.put(DATABASE_DIALECT_DATE_FORMAT, "dd-MMM-yy");
+      defaults.put(JMX, Boolean.TRUE.toString());
     }
 
     private final P6OptionsRepository optionsRepository;
@@ -106,6 +109,8 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setRealDataSourceClass(options.get(REALDATASOURCECLASS));
       setRealDataSourceProperties(options.get(REALDATASOURCEPROPERTIES));
       setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
+      setJmx(options.get(JMX));
+      setJmxPrefix(options.get(JMX_PREFIX));
     }
     
     /**
@@ -414,5 +419,30 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     @Override
     public Map<String, String> getDefaults() {
       return defaults;
+    }
+
+    @Override
+    public boolean getJmx() {
+      return optionsRepository.get(Boolean.class, JMX);
+    }
+
+    @Override
+    public void setJmx(String string) {
+      optionsRepository.set(Boolean.class, JMX, string);
+    }
+    
+    @Override
+    public void setJmx(boolean string) {
+      optionsRepository.set(Boolean.class, JMX, string);
+    }
+
+    @Override
+    public String getJmxPrefix() {
+      return optionsRepository.get(String.class, JMX_PREFIX);
+    }
+
+    @Override
+    public void setJmxPrefix(String jmxPrefix) {
+      optionsRepository.set(String.class, JMX_PREFIX, jmxPrefix);
     }
 }

@@ -19,22 +19,25 @@
  */
 package com.p6spy.engine.spy;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Set;
+
+import javax.management.JMException;
+import javax.management.ObjectName;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.j256.simplejmx.client.JmxClient;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.outage.P6OutageOptions;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import javax.management.JMException;
-import javax.management.ObjectName;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Set;
-
-import static org.junit.Assert.*;
 
 public class P6TestMBean extends BaseTestCase {
 
@@ -48,8 +51,8 @@ public class P6TestMBean extends BaseTestCase {
     // make sure to reinit properly
     new P6TestFramework("mbean") {};
 
-    String jmxPortProperty = System.getProperty(COM_SUN_MANAGEMENT_JMXREMOTE_PORT);
-    int jmxPort = P6Util.parseInt(jmxPortProperty, JMXREMOTE_PORT_DEFAULT);
+    final String jmxPortProperty = System.getProperty(COM_SUN_MANAGEMENT_JMXREMOTE_PORT);
+    final int jmxPort = P6Util.parseInt(jmxPortProperty, JMXREMOTE_PORT_DEFAULT);
     jmxClient = new JmxClient(jmxPort);
   }
   
@@ -61,21 +64,21 @@ public class P6TestMBean extends BaseTestCase {
     }
     
     {
-      final Boolean filterJmxApi = (Boolean) jmxClient.getAttribute(P6LogOptions.class.getPackage().getName(), P6LogOptions.class.getSimpleName(), "Filter");
+      final Boolean filterJmxApi = (Boolean) jmxClient.getAttribute(P6MBeansRegistry.PACKAGE_NAME, P6LogOptions.class.getName(), "Filter");
       final Boolean filterApi = P6LogOptions.getActiveInstance().getFilter();
       assertNotNull(filterJmxApi);
       assertEquals(filterApi, filterJmxApi);
     }
 
     {
-      final String moduleListJmxApi = (String) jmxClient.getAttribute(P6SpyOptions.class.getPackage().getName(), P6SpyOptions.class.getSimpleName(), "Modulelist");
+      final String moduleListJmxApi = (String) jmxClient.getAttribute(P6MBeansRegistry.PACKAGE_NAME, P6SpyOptions.class.getName(), "Modulelist");
       final String moduleListApi = P6SpyOptions.getActiveInstance().getModulelist();
       assertNotNull(moduleListJmxApi);
       assertEquals(moduleListApi, moduleListJmxApi);
     }
   
     {
-      final Boolean outageDetectionJmxApi = (Boolean) jmxClient.getAttribute(P6OutageOptions.class.getPackage().getName(), P6OutageOptions.class.getSimpleName(), "OutageDetection");
+      final Boolean outageDetectionJmxApi = (Boolean) jmxClient.getAttribute(P6MBeansRegistry.PACKAGE_NAME, P6OutageOptions.class.getName(), "OutageDetection");
       final Boolean outageDetectionApi = P6OutageOptions.getActiveInstance().getOutageDetection();
       assertNotNull(outageDetectionJmxApi);
       assertEquals(outageDetectionApi, outageDetectionJmxApi);

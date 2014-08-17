@@ -41,4 +41,6 @@ public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsMBe
   P6Logger getAppenderInstance();
 
   MessageFormattingStrategy getLogMessageFormatInstance();
+  
+  void setJmx(String jmx);
 }

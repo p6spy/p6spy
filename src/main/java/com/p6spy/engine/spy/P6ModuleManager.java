@@ -101,9 +101,11 @@ public class P6ModuleManager {
       optionsSource.preDestroy(instance);
     }
 
-    // unregister mbeans (to prevent naming conflicts)
-    if (instance.mBeansRegistry != null) {
-      instance.mBeansRegistry.unregisterAllMBeans();
+    if (P6SpyOptions.getActiveInstance().getJmx()) {
+      // unregister mbeans (to prevent naming conflicts)
+      if (instance.mBeansRegistry != null) {
+        instance.mBeansRegistry.unregisterAllMBeans(P6SpyOptions.getActiveInstance().getJmxPrefix());
+      }
     }
   }
 
@@ -115,10 +117,11 @@ public class P6ModuleManager {
    * @throws MBeanRegistrationException
    * @throws InstanceAlreadyExistsException
    * @throws MalformedObjectNameException
+   * @throws InstanceNotFoundException 
    */
   private P6ModuleManager() throws IOException, InstanceAlreadyExistsException,
                            MBeanRegistrationException, NotCompliantMBeanException,
-                           MalformedObjectNameException {
+                           MalformedObjectNameException, InstanceNotFoundException {
     debug(this.getClass().getName() + " re/initiating modules started");
 
     // make sure the proper listener registration happens
@@ -138,6 +141,8 @@ public class P6ModuleManager {
   
     optionsRepository.initCompleted();
     
+    mBeansRegistry.registerMBeans(allOptions.values());
+    
     for (P6OptionsSource optionsSource : optionsSources) {
       optionsSource.postInit(this);
     }
@@ -145,8 +150,11 @@ public class P6ModuleManager {
     debug(this.getClass().getName() + " re/initiating modules done");
   }
   
-  protected synchronized P6LoadableOptions registerModule(P6Factory factory) throws InstanceAlreadyExistsException, 
-  	MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException {
+  
+
+  protected synchronized P6LoadableOptions registerModule(P6Factory factory) /*throws InstanceAlreadyExistsException, 
+  	MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException*/ {
+    
 	  // re-register is not supported - skip silently
 	  for (P6Factory registeredFactory : factories) {
 		  if (registeredFactory.getClass().equals(factory.getClass())) {
@@ -158,8 +166,7 @@ public class P6ModuleManager {
       loadOptions(options);
       
       allOptions.put(options.getClass(), options);
-	  factories.add(factory);
-      mBeansRegistry.registerMBean(options);
+      factories.add(factory);
       
       debug("Registered factory: " + factory.getClass().getName() + " with options: " + options.getClass().getName());
       

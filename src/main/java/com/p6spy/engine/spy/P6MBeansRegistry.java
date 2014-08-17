@@ -34,47 +34,89 @@ import javax.management.StandardMBean;
 
 public class P6MBeansRegistry {
 
-	private final Collection<ObjectName> mBeans = new ArrayList<ObjectName>();
+  private final Collection<ObjectName> mBeans = new ArrayList<ObjectName>();
 
-	public void registerMBean(P6LoadableOptions mBean)
-			throws InstanceAlreadyExistsException, MBeanRegistrationException,
-			NotCompliantMBeanException, MalformedObjectNameException {
-		
-		checkMBean(mBean);
-		
-		final ObjectName mBeanObjectName = getObjectName(mBean);
-		ManagementFactory.getPlatformMBeanServer().registerMBean(mBean, mBeanObjectName);
-		mBeans.add(mBeanObjectName);
-	}
+  public static final String PACKAGE_NAME = "com.p6spy";
+  
+  public void registerMBeans(Collection<P6LoadableOptions> allOptions) throws MBeanRegistrationException, InstanceNotFoundException, MalformedObjectNameException, InstanceAlreadyExistsException, NotCompliantMBeanException {
+    boolean jmx = true; 
+    String jmxPrefix = "";
+    
+    for (P6LoadableOptions options : allOptions) {
+      if (options instanceof P6SpyOptions) {
+        jmx = ((P6SpyOptions) options).getJmx();
+        jmxPrefix = ((P6SpyOptions) options).getJmxPrefix();
+        break;
+      }
+    }
+       
+    if (!jmx) {
+      return;
+    }
+    
+    // unreg possible conflicting ones first
+    unregisterAllMBeans(jmxPrefix);
+    
+    // reg all
+    for (P6LoadableOptions options : allOptions) {
+      registerMBean(options, jmxPrefix);
+    }
+  }
 
-	public void unregisterAllMBeans() throws MBeanRegistrationException,
-			InstanceNotFoundException, MalformedObjectNameException {
-		
-		final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-		for (ObjectName mBeanObjectName : mBeans) {
-			mbs.unregisterMBean(mBeanObjectName);
-		}
-		mBeans.clear();
-	}
+  protected void registerMBean(P6LoadableOptions mBean, String jmxPrefix) throws InstanceAlreadyExistsException,
+      MBeanRegistrationException, NotCompliantMBeanException, MalformedObjectNameException {
 
-	private void checkMBean(P6LoadableOptions mBean) {
-		if (null == mBean) {
-			throw new IllegalArgumentException("mBean is null!");
-		}
+    checkMBean(mBean);
 
-		if (!(mBean instanceof StandardMBean)) {
-			throw new IllegalArgumentException(
-					"mBean has to be instance of the StandardMBean class! But is not: "
-							+ mBean);
-		}
-	}
+    final ObjectName mBeanObjectName = getObjectName(mBean, jmxPrefix);
+    ManagementFactory.getPlatformMBeanServer().registerMBean(mBean, mBeanObjectName);
+    mBeans.add(mBeanObjectName);
+  }
 
-	protected ObjectName getObjectName(P6LoadableOptions mBean)
-			throws MalformedObjectNameException {
-		String packageName = mBean.getClass().getPackage().getName();
-		packageName = null == packageName ? "com.p6spy" : packageName;
-		return new ObjectName(packageName + ":name="
-				+ mBean.getClass().getSimpleName());
-	}
+  public void unregisterAllMBeans(String jmxPrefix) throws MBeanRegistrationException, MalformedObjectNameException {
 
+    // those we have reference to 
+    final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+    for (ObjectName mBeanObjectName : mBeans) {
+      try {
+        mbs.unregisterMBean(mBeanObjectName);
+      } catch (InstanceNotFoundException e) {
+        // this just means someone unregistered our beans already
+        // but we're OK with that and it can't cause failure
+      }
+    }
+    mBeans.clear();
+
+    // to prevent naming conflicts: let's unreg also possible leftovers (with the same prefix)
+    for (ObjectName objectName : mbs.queryNames(new ObjectName(getPackageName(jmxPrefix) + ":name=com.p6spy.*"), null)) {
+      try {
+        mbs.unregisterMBean(objectName);
+      } catch (InstanceNotFoundException e) {
+        // this just means someone unregistered the bean earlier than us
+        // (quite unprobable, but parallel unreg could happen)
+        // but we're OK with that and it can't cause failure
+      }
+      
+    }
+  }
+
+  private void checkMBean(P6LoadableOptions mBean) {
+    if (null == mBean) {
+      throw new IllegalArgumentException("mBean is null!");
+    }
+
+    if (!(mBean instanceof StandardMBean)) {
+      throw new IllegalArgumentException(
+          "mBean has to be instance of the StandardMBean class! But is not: " + mBean);
+    }
+  }
+
+  protected ObjectName getObjectName(P6LoadableOptions mBean, String jmxPrefix) throws MalformedObjectNameException {
+    return new ObjectName(getPackageName(jmxPrefix) + ":name=" + mBean.getClass().getName());
+  }
+  
+  protected static String getPackageName(String jmxPrefix) {
+    return PACKAGE_NAME +  (null == jmxPrefix || jmxPrefix.isEmpty() ? "" : "." + jmxPrefix);
+  }
+  
 }
