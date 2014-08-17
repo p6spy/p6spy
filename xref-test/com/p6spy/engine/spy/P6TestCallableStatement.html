@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="68" href="#68">68</a>    
 <a class="jxr_linenumber" name="69" href="#69">69</a>    @Test
 <a class="jxr_linenumber" name="70" href="#70">70</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testStoredProcedureNoResultSet() <strong class="jxr_keyword">throws</strong> SQLException {
-<a class="jxr_linenumber" name="71" href="#71">71</a>      <strong class="jxr_keyword">this</strong>.clearLogEnties();
+<a class="jxr_linenumber" name="71" href="#71">71</a>      <strong class="jxr_keyword">this</strong>.clearLogEntries();
 <a class="jxr_linenumber" name="72" href="#72">72</a>  
 <a class="jxr_linenumber" name="73" href="#73">73</a>      <em class="jxr_comment">// execute the statement</em>
 <a class="jxr_linenumber" name="74" href="#74">74</a>      String query = <span class="jxr_string">"{call test_proc(?,?,?)}"</span>;
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="90" href="#90">90</a>  
 <a class="jxr_linenumber" name="91" href="#91">91</a>    @Test
 <a class="jxr_linenumber" name="92" href="#92">92</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testNamedParameters() <strong class="jxr_keyword">throws</strong> SQLException {
-<a class="jxr_linenumber" name="93" href="#93">93</a>      <strong class="jxr_keyword">this</strong>.clearLogEnties();
+<a class="jxr_linenumber" name="93" href="#93">93</a>      <strong class="jxr_keyword">this</strong>.clearLogEntries();
 <a class="jxr_linenumber" name="94" href="#94">94</a>      
 <a class="jxr_linenumber" name="95" href="#95">95</a>      String param1Name = <span class="jxr_string">"param1"</span>;
 <a class="jxr_linenumber" name="96" href="#96">96</a>      String param2Name = <span class="jxr_string">"param2"</span>;
@@ -134,7 +134,7 @@
 <a class="jxr_linenumber" name="124" href="#124">124</a> 
 <a class="jxr_linenumber" name="125" href="#125">125</a>   @Test
 <a class="jxr_linenumber" name="126" href="#126">126</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testStoredProcedureWithNullInputParameter() <strong class="jxr_keyword">throws</strong> SQLException {
-<a class="jxr_linenumber" name="127" href="#127">127</a>     <strong class="jxr_keyword">this</strong>.clearLogEnties();
+<a class="jxr_linenumber" name="127" href="#127">127</a>     <strong class="jxr_keyword">this</strong>.clearLogEntries();
 <a class="jxr_linenumber" name="128" href="#128">128</a> 
 <a class="jxr_linenumber" name="129" href="#129">129</a>     <em class="jxr_comment">// execute the statement</em>
 <a class="jxr_linenumber" name="130" href="#130">130</a>     String query = <span class="jxr_string">"{call test_proc(?,?,?)}"</span>;
