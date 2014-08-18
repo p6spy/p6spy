@@ -84,8 +84,6 @@ public class P6ModuleManager {
       handleInitEx(e);
     } catch (MalformedObjectNameException e) {
       handleInitEx(e);
-    } catch (InstanceAlreadyExistsException e) {
-      handleInitEx(e);
     } catch (NotCompliantMBeanException e) {
       handleInitEx(e);
     }
@@ -119,7 +117,7 @@ public class P6ModuleManager {
    * @throws MalformedObjectNameException
    * @throws InstanceNotFoundException 
    */
-  private P6ModuleManager() throws IOException, InstanceAlreadyExistsException,
+  private P6ModuleManager() throws IOException, 
                            MBeanRegistrationException, NotCompliantMBeanException,
                            MalformedObjectNameException, InstanceNotFoundException {
     debug(this.getClass().getName() + " re/initiating modules started");

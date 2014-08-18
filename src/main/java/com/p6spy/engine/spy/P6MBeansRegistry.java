@@ -38,7 +38,7 @@ public class P6MBeansRegistry {
 
   public static final String PACKAGE_NAME = "com.p6spy";
   
-  public void registerMBeans(Collection<P6LoadableOptions> allOptions) throws MBeanRegistrationException, InstanceNotFoundException, MalformedObjectNameException, InstanceAlreadyExistsException, NotCompliantMBeanException {
+  public void registerMBeans(Collection<P6LoadableOptions> allOptions) throws MBeanRegistrationException, InstanceNotFoundException, MalformedObjectNameException, NotCompliantMBeanException {
     boolean jmx = true; 
     String jmxPrefix = "";
     
@@ -59,7 +59,13 @@ public class P6MBeansRegistry {
     
     // reg all
     for (P6LoadableOptions options : allOptions) {
-      registerMBean(options, jmxPrefix);
+      try {
+        registerMBean(options, jmxPrefix);
+      } catch (InstanceAlreadyExistsException e) {
+        // sounds like someone registered beans already (before we had a chance to do so)
+        // so let's just make things consistent and re-register again
+        registerMBeans(allOptions);
+      }
     }
   }
 
