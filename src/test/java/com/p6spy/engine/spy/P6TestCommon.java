@@ -158,6 +158,42 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntriesCount());
     }
   }
+  
+  @Test
+  public void testIncludeOtherTableShouldLogResultSet() throws SQLException {
+      final String query = "select 'x' from customers";
+      super.clearLogEntries();
+      P6SpyOptions.getActiveInstance().setStackTrace("true");
+
+      // other table is included => resultset is still logged
+      P6LogOptions.getActiveInstance().setInclude("non_existing_table1");
+      P6LogOptions.getActiveInstance().setExcludecategories("info,debug,batch");
+      ResultSet rs = statement.executeQuery(query);
+      while (rs.next()) {
+          @SuppressWarnings("unused")
+          String value = rs.getString(1);
+      }
+      P6LogOptions.getActiveInstance().setInclude("");
+      assertEquals(0, super.getLogEntriesCount());
+  }
+
+  @Test
+  public void testExcludeThisTableShouldLogResultSet() throws SQLException {
+      super.clearLogEntries();
+      final String query = "select 'x' from customers";
+
+      // table is excluded => resultset is still logged
+      P6LogOptions.getActiveInstance().setExclude("customers");
+      P6LogOptions.getActiveInstance().setExcludecategories("info,debug,batch");
+      ResultSet rs = statement.executeQuery(query);
+      if (rs.next()) {
+          @SuppressWarnings("unused")
+          String value = rs.getString(1);
+      }
+      P6LogOptions.getActiveInstance().setExclude("");
+      assertEquals(0, super.getLogEntriesCount());
+  }
+
 
   @Test
   public void testIncludeExcludeRegexp() throws SQLException {

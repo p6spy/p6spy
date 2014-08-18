@@ -181,7 +181,7 @@ public class P6LogQuery implements P6OptionChangedListener {
   }
 
   static public void log(Category category, Loggable loggable) {
-    if (logger != null && isCategoryOk(category)) {
+    if (logger != null && isCategoryOk(category) && isLoggable(loggable.getSql())) {
       doLog(-1, category, loggable.getSql(), loggable.getSqlWithValues());
     }
   }
