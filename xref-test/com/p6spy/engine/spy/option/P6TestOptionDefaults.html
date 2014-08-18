@@ -154,114 +154,116 @@
 <a class="jxr_linenumber" name="144" href="#144">144</a>     Assert.assertNull(opts.getRealDataSource());
 <a class="jxr_linenumber" name="145" href="#145">145</a>     Assert.assertNull(opts.getRealDataSourceClass());
 <a class="jxr_linenumber" name="146" href="#146">146</a>     Assert.assertEquals(<span class="jxr_string">"dd-MMM-yy"</span>, opts.getDatabaseDialectDateFormat());
-<a class="jxr_linenumber" name="147" href="#147">147</a>   }
-<a class="jxr_linenumber" name="148" href="#148">148</a> 
-<a class="jxr_linenumber" name="149" href="#149">149</a>   @Test
-<a class="jxr_linenumber" name="150" href="#150">150</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testP6LogOptionDefaults() {
-<a class="jxr_linenumber" name="151" href="#151">151</a>     <em class="jxr_comment">// make sure to have relevant module loaded</em>
-<a class="jxr_linenumber" name="152" href="#152">152</a>     {
-<a class="jxr_linenumber" name="153" href="#153">153</a>       System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
-<a class="jxr_linenumber" name="154" href="#154">154</a>           P6LogFactory.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="155" href="#155">155</a>       P6SpyOptions.getActiveInstance().reload();
-<a class="jxr_linenumber" name="156" href="#156">156</a>     }
-<a class="jxr_linenumber" name="157" href="#157">157</a> 
-<a class="jxr_linenumber" name="158" href="#158">158</a>     <strong class="jxr_keyword">final</strong> P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
-<a class="jxr_linenumber" name="159" href="#159">159</a>     Assert.assertNotNull(opts);
-<a class="jxr_linenumber" name="160" href="#160">160</a> 
-<a class="jxr_linenumber" name="161" href="#161">161</a>     Assert.assertNull(opts.getSQLExpression());
-<a class="jxr_linenumber" name="162" href="#162">162</a>     Assert.assertEquals(0L, opts.getExecutionThreshold());
-<a class="jxr_linenumber" name="163" href="#163">163</a>     Assert.assertEquals(<span class="jxr_string">"info,debug,result,resultset,batch"</span>, opts.getExcludecategories());
-<a class="jxr_linenumber" name="164" href="#164">164</a>     Assert.assertTrue(opts.getExcludeCategoriesSet().containsAll(
-<a class="jxr_linenumber" name="165" href="#165">165</a>         Arrays.asList(DEFAULT_CATEGORIES)));
-<a class="jxr_linenumber" name="166" href="#166">166</a>     Assert.assertFalse(opts.getFilter());
-<a class="jxr_linenumber" name="167" href="#167">167</a>     Assert.assertNull(opts.getIncludeList());
-<a class="jxr_linenumber" name="168" href="#168">168</a>     Assert.assertNull(opts.getExcludeList());
-<a class="jxr_linenumber" name="169" href="#169">169</a>     Assert.assertNull(opts.getIncludeExcludePattern());
-<a class="jxr_linenumber" name="170" href="#170">170</a>     Assert.assertEquals(<span class="jxr_string">""</span>, opts.getInclude());
-<a class="jxr_linenumber" name="171" href="#171">171</a>     Assert.assertEquals(<span class="jxr_string">""</span>, opts.getExclude());
-<a class="jxr_linenumber" name="172" href="#172">172</a>     Assert.assertNull(opts.getSQLExpressionPattern());
-<a class="jxr_linenumber" name="173" href="#173">173</a>   }
-<a class="jxr_linenumber" name="174" href="#174">174</a> 
-<a class="jxr_linenumber" name="175" href="#175">175</a>   @Test
-<a class="jxr_linenumber" name="176" href="#176">176</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testP6OutageOptionDefaults() {
-<a class="jxr_linenumber" name="177" href="#177">177</a>     <em class="jxr_comment">// make sure to have relevant module loaded</em>
-<a class="jxr_linenumber" name="178" href="#178">178</a>     {
-<a class="jxr_linenumber" name="179" href="#179">179</a>       System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
-<a class="jxr_linenumber" name="180" href="#180">180</a>           P6OutageFactory.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="181" href="#181">181</a>       P6SpyOptions.getActiveInstance().reload();
-<a class="jxr_linenumber" name="182" href="#182">182</a>     }
-<a class="jxr_linenumber" name="183" href="#183">183</a> 
-<a class="jxr_linenumber" name="184" href="#184">184</a>     <strong class="jxr_keyword">final</strong> P6OutageLoadableOptions opts = P6OutageOptions.getActiveInstance();
-<a class="jxr_linenumber" name="185" href="#185">185</a>     Assert.assertNotNull(opts);
-<a class="jxr_linenumber" name="186" href="#186">186</a> 
-<a class="jxr_linenumber" name="187" href="#187">187</a>     Assert.assertFalse(opts.getOutageDetection());
-<a class="jxr_linenumber" name="188" href="#188">188</a>     Assert.assertEquals(30L, opts.getOutageDetectionInterval());
-<a class="jxr_linenumber" name="189" href="#189">189</a>     Assert.assertEquals(30000L, opts.getOutageDetectionIntervalMS());
-<a class="jxr_linenumber" name="190" href="#190">190</a>     
-<a class="jxr_linenumber" name="191" href="#191">191</a>     <em class="jxr_comment">// cleanup - make sure go back to default modules</em>
-<a class="jxr_linenumber" name="192" href="#192">192</a>     {
-<a class="jxr_linenumber" name="193" href="#193">193</a>       System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
-<a class="jxr_linenumber" name="194" href="#194">194</a>       P6SpyOptions.getActiveInstance().reload();
-<a class="jxr_linenumber" name="195" href="#195">195</a>     }
-<a class="jxr_linenumber" name="196" href="#196">196</a>   }
-<a class="jxr_linenumber" name="197" href="#197">197</a> 
-<a class="jxr_linenumber" name="198" href="#198">198</a>   @Test
-<a class="jxr_linenumber" name="199" href="#199">199</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testImplicitlyDisabledLogCategories() {
-<a class="jxr_linenumber" name="200" href="#200">200</a>     <em class="jxr_comment">// let's explicitly remove P6LogFactory (by not including it to list)</em>
-<a class="jxr_linenumber" name="201" href="#201">201</a>     {
-<a class="jxr_linenumber" name="202" href="#202">202</a>       System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="203" href="#203">203</a>       P6SpyOptions.getActiveInstance().reload();
-<a class="jxr_linenumber" name="204" href="#204">204</a>     }
-<a class="jxr_linenumber" name="205" href="#205">205</a>     
-<a class="jxr_linenumber" name="206" href="#206">206</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="207" href="#207">207</a>       assertDefaultDisabledLogCategories();
-<a class="jxr_linenumber" name="208" href="#208">208</a>     } <strong class="jxr_keyword">catch</strong>(IOException e) {
-<a class="jxr_linenumber" name="209" href="#209">209</a>       e.printStackTrace();
-<a class="jxr_linenumber" name="210" href="#210">210</a>       Assert.fail();
-<a class="jxr_linenumber" name="211" href="#211">211</a>     }
-<a class="jxr_linenumber" name="212" href="#212">212</a>     
-<a class="jxr_linenumber" name="213" href="#213">213</a>     <em class="jxr_comment">// cleanup - make sure go back to default modules</em>
-<a class="jxr_linenumber" name="214" href="#214">214</a>     {
-<a class="jxr_linenumber" name="215" href="#215">215</a>       System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
-<a class="jxr_linenumber" name="216" href="#216">216</a>       P6SpyOptions.getActiveInstance().reload();
-<a class="jxr_linenumber" name="217" href="#217">217</a>     }
-<a class="jxr_linenumber" name="218" href="#218">218</a>   }
-<a class="jxr_linenumber" name="219" href="#219">219</a>   
-<a class="jxr_linenumber" name="220" href="#220">220</a>   @Test
-<a class="jxr_linenumber" name="221" href="#221">221</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testWithP6LogOptionDefaultsDefaultDisabledLogCategories() {
-<a class="jxr_linenumber" name="222" href="#222">222</a>     <em class="jxr_comment">// P6LogFactory is present by default</em>
-<a class="jxr_linenumber" name="223" href="#223">223</a> 
-<a class="jxr_linenumber" name="224" href="#224">224</a>     <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="225" href="#225">225</a>       assertDefaultDisabledLogCategories();
-<a class="jxr_linenumber" name="226" href="#226">226</a>     } <strong class="jxr_keyword">catch</strong>(IOException e) {
-<a class="jxr_linenumber" name="227" href="#227">227</a>       e.printStackTrace();
-<a class="jxr_linenumber" name="228" href="#228">228</a>       Assert.fail();
-<a class="jxr_linenumber" name="229" href="#229">229</a>     }
-<a class="jxr_linenumber" name="230" href="#230">230</a>   }
-<a class="jxr_linenumber" name="231" href="#231">231</a> 
-<a class="jxr_linenumber" name="232" href="#232">232</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertDefaultDisabledLogCategories() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="233" href="#233">233</a>     {
-<a class="jxr_linenumber" name="234" href="#234">234</a>       <strong class="jxr_keyword">final</strong> String msg = <span class="jxr_string">"debug logged test msg"</span>;
-<a class="jxr_linenumber" name="235" href="#235">235</a>       P6LogQuery.debug(msg);
-<a class="jxr_linenumber" name="236" href="#236">236</a>       <strong class="jxr_keyword">final</strong> String logged = FileUtils.readFileToString(LOG_FILE, <span class="jxr_string">"UTF-8"</span>);
-<a class="jxr_linenumber" name="237" href="#237">237</a>       Assert.assertFalse(logged.contains(msg));
-<a class="jxr_linenumber" name="238" href="#238">238</a>     }
-<a class="jxr_linenumber" name="239" href="#239">239</a>     
-<a class="jxr_linenumber" name="240" href="#240">240</a>     {
-<a class="jxr_linenumber" name="241" href="#241">241</a>       <strong class="jxr_keyword">final</strong> String msg = <span class="jxr_string">"info logged test msg"</span>;
-<a class="jxr_linenumber" name="242" href="#242">242</a>       P6LogQuery.info(msg);
-<a class="jxr_linenumber" name="243" href="#243">243</a>       <strong class="jxr_keyword">final</strong> String logged = FileUtils.readFileToString(LOG_FILE, <span class="jxr_string">"UTF-8"</span>);
-<a class="jxr_linenumber" name="244" href="#244">244</a>       Assert.assertFalse(logged.contains(msg));
-<a class="jxr_linenumber" name="245" href="#245">245</a>     }
-<a class="jxr_linenumber" name="246" href="#246">246</a>     
-<a class="jxr_linenumber" name="247" href="#247">247</a>     {
-<a class="jxr_linenumber" name="248" href="#248">248</a>       <strong class="jxr_keyword">final</strong> String msg = <span class="jxr_string">"error logged test msg"</span>;
-<a class="jxr_linenumber" name="249" href="#249">249</a>       P6LogQuery.error(msg);
-<a class="jxr_linenumber" name="250" href="#250">250</a>       <strong class="jxr_keyword">final</strong> String logged = FileUtils.readFileToString(LOG_FILE, <span class="jxr_string">"UTF-8"</span>);
-<a class="jxr_linenumber" name="251" href="#251">251</a>       Assert.assertTrue(logged.contains(msg));
-<a class="jxr_linenumber" name="252" href="#252">252</a>     }
-<a class="jxr_linenumber" name="253" href="#253">253</a>   }
-<a class="jxr_linenumber" name="254" href="#254">254</a> }
+<a class="jxr_linenumber" name="147" href="#147">147</a>     Assert.assertTrue(opts.getJmx());
+<a class="jxr_linenumber" name="148" href="#148">148</a>     Assert.assertNull(opts.getJmxPrefix());
+<a class="jxr_linenumber" name="149" href="#149">149</a>   }
+<a class="jxr_linenumber" name="150" href="#150">150</a> 
+<a class="jxr_linenumber" name="151" href="#151">151</a>   @Test
+<a class="jxr_linenumber" name="152" href="#152">152</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testP6LogOptionDefaults() {
+<a class="jxr_linenumber" name="153" href="#153">153</a>     <em class="jxr_comment">// make sure to have relevant module loaded</em>
+<a class="jxr_linenumber" name="154" href="#154">154</a>     {
+<a class="jxr_linenumber" name="155" href="#155">155</a>       System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+<a class="jxr_linenumber" name="156" href="#156">156</a>           P6LogFactory.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="157" href="#157">157</a>       P6SpyOptions.getActiveInstance().reload();
+<a class="jxr_linenumber" name="158" href="#158">158</a>     }
+<a class="jxr_linenumber" name="159" href="#159">159</a> 
+<a class="jxr_linenumber" name="160" href="#160">160</a>     <strong class="jxr_keyword">final</strong> P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
+<a class="jxr_linenumber" name="161" href="#161">161</a>     Assert.assertNotNull(opts);
+<a class="jxr_linenumber" name="162" href="#162">162</a> 
+<a class="jxr_linenumber" name="163" href="#163">163</a>     Assert.assertNull(opts.getSQLExpression());
+<a class="jxr_linenumber" name="164" href="#164">164</a>     Assert.assertEquals(0L, opts.getExecutionThreshold());
+<a class="jxr_linenumber" name="165" href="#165">165</a>     Assert.assertEquals(<span class="jxr_string">"info,debug,result,resultset,batch"</span>, opts.getExcludecategories());
+<a class="jxr_linenumber" name="166" href="#166">166</a>     Assert.assertTrue(opts.getExcludeCategoriesSet().containsAll(
+<a class="jxr_linenumber" name="167" href="#167">167</a>         Arrays.asList(DEFAULT_CATEGORIES)));
+<a class="jxr_linenumber" name="168" href="#168">168</a>     Assert.assertFalse(opts.getFilter());
+<a class="jxr_linenumber" name="169" href="#169">169</a>     Assert.assertNull(opts.getIncludeList());
+<a class="jxr_linenumber" name="170" href="#170">170</a>     Assert.assertNull(opts.getExcludeList());
+<a class="jxr_linenumber" name="171" href="#171">171</a>     Assert.assertNull(opts.getIncludeExcludePattern());
+<a class="jxr_linenumber" name="172" href="#172">172</a>     Assert.assertEquals(<span class="jxr_string">""</span>, opts.getInclude());
+<a class="jxr_linenumber" name="173" href="#173">173</a>     Assert.assertEquals(<span class="jxr_string">""</span>, opts.getExclude());
+<a class="jxr_linenumber" name="174" href="#174">174</a>     Assert.assertNull(opts.getSQLExpressionPattern());
+<a class="jxr_linenumber" name="175" href="#175">175</a>   }
+<a class="jxr_linenumber" name="176" href="#176">176</a> 
+<a class="jxr_linenumber" name="177" href="#177">177</a>   @Test
+<a class="jxr_linenumber" name="178" href="#178">178</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testP6OutageOptionDefaults() {
+<a class="jxr_linenumber" name="179" href="#179">179</a>     <em class="jxr_comment">// make sure to have relevant module loaded</em>
+<a class="jxr_linenumber" name="180" href="#180">180</a>     {
+<a class="jxr_linenumber" name="181" href="#181">181</a>       System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+<a class="jxr_linenumber" name="182" href="#182">182</a>           P6OutageFactory.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="183" href="#183">183</a>       P6SpyOptions.getActiveInstance().reload();
+<a class="jxr_linenumber" name="184" href="#184">184</a>     }
+<a class="jxr_linenumber" name="185" href="#185">185</a> 
+<a class="jxr_linenumber" name="186" href="#186">186</a>     <strong class="jxr_keyword">final</strong> P6OutageLoadableOptions opts = P6OutageOptions.getActiveInstance();
+<a class="jxr_linenumber" name="187" href="#187">187</a>     Assert.assertNotNull(opts);
+<a class="jxr_linenumber" name="188" href="#188">188</a> 
+<a class="jxr_linenumber" name="189" href="#189">189</a>     Assert.assertFalse(opts.getOutageDetection());
+<a class="jxr_linenumber" name="190" href="#190">190</a>     Assert.assertEquals(30L, opts.getOutageDetectionInterval());
+<a class="jxr_linenumber" name="191" href="#191">191</a>     Assert.assertEquals(30000L, opts.getOutageDetectionIntervalMS());
+<a class="jxr_linenumber" name="192" href="#192">192</a>     
+<a class="jxr_linenumber" name="193" href="#193">193</a>     <em class="jxr_comment">// cleanup - make sure go back to default modules</em>
+<a class="jxr_linenumber" name="194" href="#194">194</a>     {
+<a class="jxr_linenumber" name="195" href="#195">195</a>       System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+<a class="jxr_linenumber" name="196" href="#196">196</a>       P6SpyOptions.getActiveInstance().reload();
+<a class="jxr_linenumber" name="197" href="#197">197</a>     }
+<a class="jxr_linenumber" name="198" href="#198">198</a>   }
+<a class="jxr_linenumber" name="199" href="#199">199</a> 
+<a class="jxr_linenumber" name="200" href="#200">200</a>   @Test
+<a class="jxr_linenumber" name="201" href="#201">201</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testImplicitlyDisabledLogCategories() {
+<a class="jxr_linenumber" name="202" href="#202">202</a>     <em class="jxr_comment">// let's explicitly remove P6LogFactory (by not including it to list)</em>
+<a class="jxr_linenumber" name="203" href="#203">203</a>     {
+<a class="jxr_linenumber" name="204" href="#204">204</a>       System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="205" href="#205">205</a>       P6SpyOptions.getActiveInstance().reload();
+<a class="jxr_linenumber" name="206" href="#206">206</a>     }
+<a class="jxr_linenumber" name="207" href="#207">207</a>     
+<a class="jxr_linenumber" name="208" href="#208">208</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="209" href="#209">209</a>       assertDefaultDisabledLogCategories();
+<a class="jxr_linenumber" name="210" href="#210">210</a>     } <strong class="jxr_keyword">catch</strong>(IOException e) {
+<a class="jxr_linenumber" name="211" href="#211">211</a>       e.printStackTrace();
+<a class="jxr_linenumber" name="212" href="#212">212</a>       Assert.fail();
+<a class="jxr_linenumber" name="213" href="#213">213</a>     }
+<a class="jxr_linenumber" name="214" href="#214">214</a>     
+<a class="jxr_linenumber" name="215" href="#215">215</a>     <em class="jxr_comment">// cleanup - make sure go back to default modules</em>
+<a class="jxr_linenumber" name="216" href="#216">216</a>     {
+<a class="jxr_linenumber" name="217" href="#217">217</a>       System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+<a class="jxr_linenumber" name="218" href="#218">218</a>       P6SpyOptions.getActiveInstance().reload();
+<a class="jxr_linenumber" name="219" href="#219">219</a>     }
+<a class="jxr_linenumber" name="220" href="#220">220</a>   }
+<a class="jxr_linenumber" name="221" href="#221">221</a>   
+<a class="jxr_linenumber" name="222" href="#222">222</a>   @Test
+<a class="jxr_linenumber" name="223" href="#223">223</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testWithP6LogOptionDefaultsDefaultDisabledLogCategories() {
+<a class="jxr_linenumber" name="224" href="#224">224</a>     <em class="jxr_comment">// P6LogFactory is present by default</em>
+<a class="jxr_linenumber" name="225" href="#225">225</a> 
+<a class="jxr_linenumber" name="226" href="#226">226</a>     <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="227" href="#227">227</a>       assertDefaultDisabledLogCategories();
+<a class="jxr_linenumber" name="228" href="#228">228</a>     } <strong class="jxr_keyword">catch</strong>(IOException e) {
+<a class="jxr_linenumber" name="229" href="#229">229</a>       e.printStackTrace();
+<a class="jxr_linenumber" name="230" href="#230">230</a>       Assert.fail();
+<a class="jxr_linenumber" name="231" href="#231">231</a>     }
+<a class="jxr_linenumber" name="232" href="#232">232</a>   }
+<a class="jxr_linenumber" name="233" href="#233">233</a> 
+<a class="jxr_linenumber" name="234" href="#234">234</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertDefaultDisabledLogCategories() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="235" href="#235">235</a>     {
+<a class="jxr_linenumber" name="236" href="#236">236</a>       <strong class="jxr_keyword">final</strong> String msg = <span class="jxr_string">"debug logged test msg"</span>;
+<a class="jxr_linenumber" name="237" href="#237">237</a>       P6LogQuery.debug(msg);
+<a class="jxr_linenumber" name="238" href="#238">238</a>       <strong class="jxr_keyword">final</strong> String logged = FileUtils.readFileToString(LOG_FILE, <span class="jxr_string">"UTF-8"</span>);
+<a class="jxr_linenumber" name="239" href="#239">239</a>       Assert.assertFalse(logged.contains(msg));
+<a class="jxr_linenumber" name="240" href="#240">240</a>     }
+<a class="jxr_linenumber" name="241" href="#241">241</a>     
+<a class="jxr_linenumber" name="242" href="#242">242</a>     {
+<a class="jxr_linenumber" name="243" href="#243">243</a>       <strong class="jxr_keyword">final</strong> String msg = <span class="jxr_string">"info logged test msg"</span>;
+<a class="jxr_linenumber" name="244" href="#244">244</a>       P6LogQuery.info(msg);
+<a class="jxr_linenumber" name="245" href="#245">245</a>       <strong class="jxr_keyword">final</strong> String logged = FileUtils.readFileToString(LOG_FILE, <span class="jxr_string">"UTF-8"</span>);
+<a class="jxr_linenumber" name="246" href="#246">246</a>       Assert.assertFalse(logged.contains(msg));
+<a class="jxr_linenumber" name="247" href="#247">247</a>     }
+<a class="jxr_linenumber" name="248" href="#248">248</a>     
+<a class="jxr_linenumber" name="249" href="#249">249</a>     {
+<a class="jxr_linenumber" name="250" href="#250">250</a>       <strong class="jxr_keyword">final</strong> String msg = <span class="jxr_string">"error logged test msg"</span>;
+<a class="jxr_linenumber" name="251" href="#251">251</a>       P6LogQuery.error(msg);
+<a class="jxr_linenumber" name="252" href="#252">252</a>       <strong class="jxr_keyword">final</strong> String logged = FileUtils.readFileToString(LOG_FILE, <span class="jxr_string">"UTF-8"</span>);
+<a class="jxr_linenumber" name="253" href="#253">253</a>       Assert.assertTrue(logged.contains(msg));
+<a class="jxr_linenumber" name="254" href="#254">254</a>     }
+<a class="jxr_linenumber" name="255" href="#255">255</a>   }
+<a class="jxr_linenumber" name="256" href="#256">256</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
