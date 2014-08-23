@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # outputs "." in every $1 secs
 function dots {
@@ -16,6 +15,8 @@ function wrapWithDots() {
     pid=$!
     # run wrapped cmd
     eval $(printf "%q " "$@")
+	status=$?
     # kill dots
     kill -9 $pid 2>/dev/null
+	return $status
 }
