@@ -26,9 +26,7 @@ before_script:
  - script/travis/before_script_oracle.sh
 
 install: 
- - mvn -q -B dependency:resolve --settings ~/.m2/p6spySettings.xml
- - mvn -q -B dependency:resolve-plugins --settings ~/.m2/p6spySettings.xml
-
+ - . script/travis/wrap_with_dots.sh && wrapWithDots mvn -q -B dependency:resolve dependency:resolve-plugins --settings ~/.m2/p6spySettings.xml
   
 script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B clean test site:site site:stage -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; mvn -N ghSite:site; else mvn -B clean test -P travis --settings ~/.m2/p6spySettings.xml; fi;
 
