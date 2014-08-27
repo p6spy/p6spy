@@ -1,6 +1,8 @@
 p6spy
 =====
-[![Build Status](https://secure.travis-ci.org/p6spy/p6spy.png?branch=master)](http://travis-ci.org/p6spy/p6spy)   
+[![Build Status](https://secure.travis-ci.org/p6spy/p6spy.png?branch=master)](http://travis-ci.org/p6spy/p6spy)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/p6spy/p6spy/badge.svg)](https://maven-badges.herokuapp.com/maven-central/p6spy/p6spy)
+
 
 P6Spy is a framework that enables database data to be seamlessly intercepted and logged with no code changes to existing application. The P6Spy distribution includes P6Log, an application which logs all JDBC transactions for any Java application.
 
