@@ -32,7 +32,7 @@
 
 
   <category name="com.p6spy">
-    <priority value="DEBUG" />
+    <priority value="INFO" />
   </category>
   
   <!-- restrict liquibase logging (to fit travis-ci console output limits) -->

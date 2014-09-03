@@ -104,7 +104,9 @@ public abstract class P6TestFramework extends BaseTestCase {
     }
 
     Driver driver = DriverManager.getDriver(url);
-    log.info("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
+    if (log.isDebugEnabled()) {
+      log.debug("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
+    }
     connection = DriverManager.getConnection(url, user, password);
 
     P6TestUtil.printAllDrivers();
