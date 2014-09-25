@@ -404,11 +404,11 @@ classes are available with P6Spy.
 
 * `com.p6spy.engine.spy.appender.SingleLineFormat` which results in log messages in format:
 
-		current time|execution time|category|statement SQL String|effective SQL string
+		current time|execution time|category|connection id|statement SQL String|effective SQL string
 		
 * `com.p6spy.engine.spy.appender.MultiLineFormat`, which results in log messages in format: 
 		
-		current time|execution time|category|statement SQL String
+		current time|execution time|category|connection id|statement SQL String
 		effective SQL string
 
 Where:
@@ -418,7 +418,7 @@ Where:
   (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().)
   To change the format, use the dateformat property described in
   [Common Property File Settings](#settings).
-* `execution time` - the time it takes for a particular method to execute. (This is
+* `execution time` - the time it takes in milliseconds for a particular method to execute. (This is
   not the total cost for the SQL statement.) For example, a statement
   `SELECT * FROM MYTABLE WHERE THISCOL = ?` might be executed as a prepared
   statement, in which the .execute() function will be measured. This is recorded as
@@ -426,6 +426,8 @@ Where:
   call is recorded in the result category.
 * `category` - You can manage your log by including and excluding categories,
   which is described in [Common Property File Settings](#settings).
+* `connection id` - Indicates the connection on which the activity was logged.  The connection id is a sequentially
+  generated identifier.  
 * `statement SQL string` - This is the SQL string passed to the statement object.
   If it is a prepared statement, it is the prepared statement that existed prior to
   the parameters being set. To see the complete statement, refer to effective SQL string.
