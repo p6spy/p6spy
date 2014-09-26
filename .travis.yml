@@ -25,17 +25,10 @@ before_script:
  - script/travis/before_script_db2.sh
  - script/travis/before_script_oracle.sh
 
-<<<<<<< HEAD
 install: 
  - mvn -q -B dependency:resolve-plugins --settings ~/.m2/p6spySettings.xml
  - mvn -q -B dependency:resolve --settings ~/.m2/p6spySettings.xml
-  
-=======
-install:
- - mvn -q -B dependency:resolve-plugins --settings ~/.m2/p6spySettings.xml
- - mvn -q -B dependency:resolve --settings ~/.m2/p6spySettings.xml
-
->>>>>>> travis_output_verbosity
+ 
 script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B clean test site:site site:stage -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; mvn -N ghSite:site; else mvn -B clean test -P travis --settings ~/.m2/p6spySettings.xml; fi;
 
 after_script:
