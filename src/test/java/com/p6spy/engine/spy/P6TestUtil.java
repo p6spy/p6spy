@@ -86,8 +86,10 @@ public class P6TestUtil {
 
 
   public static void printAllDrivers() {
-    for (Enumeration e = DriverManager.getDrivers(); e.hasMoreElements(); ) {
-      log.info("1 DRIVER FOUND == " + e.nextElement());
+    if (log.isDebugEnabled()) {
+      for (Enumeration e = DriverManager.getDrivers(); e.hasMoreElements(); ) {
+        log.debug("1 DRIVER FOUND == " + e.nextElement());
+      }
     }
   }
 

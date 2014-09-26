@@ -30,3 +30,6 @@ reload.log
 dependency-reduced-pom.xml
 .vagrant
 Berksfile.lock
+
+# bitronix transaction logs
+btm*.tlog
