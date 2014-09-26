@@ -7,7 +7,9 @@
 # addaptions for P6Spy purposes done by Peter Butkovic <butkvic@gmail.com>
 
 sudo bash -c 'echo "deb http://archive.canonical.com/ubuntu precise partner" >> /etc/apt/sources.list'
+echo "sudo apt-get update -qq"
 sudo apt-get update -qq
+echo "sudo apt-get install -qq -y bc db2exc"
 sudo apt-get install -qq -y bc db2exc
 
 echo "Running db2profile and db2rmln"
