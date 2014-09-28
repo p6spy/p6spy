@@ -69,6 +69,27 @@ profiles[0].append(NodeBuilder.newInstance().profile {
   }
 })
 
+println "Appending profile for Eclipse egit"
+profiles[0].append(NodeBuilder.newInstance().profile {
+  id('eclipse-egit')
+  activation {
+    activeByDefault(true)
+  }
+  repositories {
+    repository {
+      id('eclipse-egit')
+      snapshots {
+        enabled('true')
+      }
+      releases {
+        enabled('true')
+      }
+      name('eclipse-egit')
+      url('https://repo.eclipse.org/content/repositories/egit-releases/')
+    }
+  }
+})
+
 // write out new settings.xml file
 def targetFile = new File(originalSettingsFile.parentFile, 'p6spySettings.xml')
 println "Writing ${targetFile.absolutePath}"
