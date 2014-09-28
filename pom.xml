@@ -277,7 +277,7 @@
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
-        <version>0.8</version>
+        <version>0.10</version>
         <configuration>
           <message>Creating site for ${project.name} v${project.version}</message>
           <oauth2Token>3644419c9515fff26a97516a565594a5b4b58c89</oauth2Token>
