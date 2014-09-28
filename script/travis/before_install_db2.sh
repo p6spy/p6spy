@@ -6,11 +6,14 @@
 # 
 # addaptions for P6Spy purposes done by Peter Butkovic <butkvic@gmail.com>
 
-sudo bash -c 'echo "deb http://archive.canonical.com/ubuntu precise partner" >> /etc/apt/sources.list'
-echo "sudo apt-get update -qq"
-sudo apt-get update -qq
-echo "sudo apt-get install -qq -y bc db2exc"
-sudo apt-get install -qq -y bc db2exc
+# add canonical partner repository
+sudo bash -c 'echo "deb http://archive.canonical.com/ubuntu precise partner" >> /etc/apt/sources.list.d/canonical_parter.list'
+
+# update package list after adding new source
+sudo apt-fast update -qq -y
+
+# install db2
+sudo apt-fast install -qq -y bc db2exc
 
 echo "Running db2profile and db2rmln"
 sudo /bin/sh -c '. ~db2inst1/sqllib/db2profile ; $DB2DIR/cfg/db2rmln'

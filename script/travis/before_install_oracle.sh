@@ -50,23 +50,23 @@ sudo chmod 755 /usr/bin/free
 #
 
 # Install the Oracle 10g dependant packages
-sudo apt-get install -qq --force-yes libc6:i386
+sudo apt-fast install -qq -y --force-yes libc6:i386
 # travis needs the "apt-transport-https" to enable https transport
-sudo apt-get install -qq bc apt-transport-https
+sudo apt-fast install -qq -y bc apt-transport-https
 
 # add Oracle repo + key (please note https is a must here, otherwise "apt-get update" fails for this repo with the "Undetermined error")
 sudo bash -c 'echo "deb https://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
 wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
-sudo apt-get update -qq
+sudo apt-fast update -qq -y
 
 # only download the package, to manually install afterwards
-sudo apt-get install -qq --force-yes -d oracle-xe-universal:i386
-sudo apt-get install -qq --force-yes libaio:i386
+sudo apt-fast install -qq -y --force-yes -d oracle-xe-universal:i386
+sudo apt-fast install -qq -y --force-yes libaio:i386
 
 # remove key + repo (to prevent failures on next updates)
 sudo apt-key del B38A8516
 sudo bash -c 'rm -rf /etc/apt/sources.list.d/oracle.list'
-sudo apt-get update -qq
+sudo apt-fast update -qq -y
 sudo apt-get autoremove -qq
 
 # remove bc from the dependencies of the oracle-xe-universal package (to keep 64bit one installed)

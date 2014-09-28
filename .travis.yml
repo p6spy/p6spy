@@ -12,7 +12,8 @@ env:
     - LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/
 
 before_install:
- - "sudo apt-get update -qq"
+ - script/travis/before_install_apt-fast.sh
+ - sudo apt-fast update -qq -y
  - script/travis/before_install_firebird.sh
  - script/travis/before_install_db2.sh
  - script/travis/before_install_oracle.sh

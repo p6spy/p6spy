@@ -4,7 +4,7 @@
 # Copyright (c) 2013 Mateusz Loskot <mateusz@loskot.net>
 #
 
-sudo apt-get install -qq firebird2.5-super firebird2.5-dev
+sudo apt-fast install -qq -y firebird2.5-super firebird2.5-dev
 
 # Configure Firebird server
 # See: Non-interactive setup for travis-ci.org 
