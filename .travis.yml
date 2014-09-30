@@ -3,7 +3,7 @@ language: java
 jdk:
   - oraclejdk7
   - openjdk7
-  - oraclejdk8
+#  - oraclejdk8
 
 env:
   global:
@@ -30,10 +30,10 @@ install:
  - mvn -q -B dependency:resolve-plugins --settings ~/.m2/p6spySettings.xml
  - mvn -q -B dependency:resolve --settings ~/.m2/p6spySettings.xml
  
-script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B clean test site:site site:stage -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; mvn -N com.github.github:site-maven-plugin:site; else mvn -B test -P travis --settings ~/.m2/p6spySettings.xml; fi;
+script: mvn -version; if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B verify site:site site:stage -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; mvn -N com.github.github:site-maven-plugin:site; else mvn -B verify -P travis --settings ~/.m2/p6spySettings.xml; fi;
 
 after_script:
- - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B clean deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
+ - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
 
 notifications:
  email:
