@@ -801,7 +801,8 @@
             <configuration>
               <systemPropertyVariables>
                 <!-- all the DBs we want to test with -->
-                <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,DB2,Oracle</DB>
+                <!-- <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,DB2,Oracle</DB> -->
+                <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle</DB>
               </systemPropertyVariables>
               
               <!-- signed jar proxing -->
@@ -835,7 +836,7 @@
       </build>
       <dependencies>
       	<!-- please note these are manually imported to local maven repo in scripts/travis/before_install_db2.sh -->
- 		<dependency>
+<!--  		<dependency>
 			<groupId>com.ibm.db2</groupId>
 	        <artifactId>db2jcc4</artifactId>
 	        <version>9.7</version>
@@ -847,7 +848,7 @@
 	        <version>9.7</version>
 	        <scope>test</scope>
 		</dependency>
-
+ -->
 		<!-- fetched from the cloudbees maven repo -->
  		<dependency>
 			<groupId>com.oracle</groupId>
