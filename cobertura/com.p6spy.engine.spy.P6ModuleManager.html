@@ -283,25 +283,25 @@
 <tr>  <td class="numLine">&nbsp;156</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;          <span class="comment">// re-register is not supported - skip silently</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;157</td>  <td class="nbHitsCovered"><a title="Line 157: Conditional coverage 100% (2/2).">&nbsp;1039</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 157: Conditional coverage 100% (2/2).">          <span class="keyword">for</span> (P6Factory registeredFactory : factories) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsCovered"><a title="Line 158: Conditional coverage 100% (2/2).">&nbsp;1045</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 158: Conditional coverage 100% (2/2).">                  <span class="keyword">if</span> (registeredFactory.getClass().equals(factory.getClass())) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;159</td>  <td class="nbHitsCovered">&nbsp;22</td>  <td class="src"><pre class="src">&nbsp;                          <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;158</td>  <td class="nbHitsCovered"><a title="Line 158: Conditional coverage 100% (2/2).">&nbsp;1044</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 158: Conditional coverage 100% (2/2).">                  <span class="keyword">if</span> (registeredFactory.getClass().equals(factory.getClass())) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;159</td>  <td class="nbHitsCovered">&nbsp;23</td>  <td class="src"><pre class="src">&nbsp;                          <span class="keyword">return</span> <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;160</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                  }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsCovered">&nbsp;1023</td>  <td class="src"><pre class="src">&nbsp;          }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsCovered">&nbsp;1021</td>  <td class="src"><pre class="src">&nbsp;          }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;162</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                  </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;163</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;          <span class="keyword">final</span> P6LoadableOptions options = factory.getOptions(optionsRepository);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;      loadOptions(options);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;163</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;          <span class="keyword">final</span> P6LoadableOptions options = factory.getOptions(optionsRepository);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;      loadOptions(options);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;165</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;      allOptions.put(options.getClass(), options);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;      factories.add(factory);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;      allOptions.put(options.getClass(), options);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;      factories.add(factory);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;168</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;169</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;      debug(<span class="string">"Registered factory: "</span> + factory.getClass().getName() + <span class="string">" with options: "</span> + options.getClass().getName());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;169</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;      debug(<span class="string">"Registered factory: "</span> + factory.getClass().getName() + <span class="string">" with options: "</span> + options.getClass().getName());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;170</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;      </pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;171</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">return</span> options;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;171</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">return</span> options;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;172</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;173</td>  <td class="nbHits">&nbsp;</td>
@@ -330,15 +330,15 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> <span class="keyword">void</span> loadOptions(<span class="keyword">final</span> P6LoadableOptions options) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;185</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// make sure to load defaults first</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;186</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;                options.load(options.getDefaults());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;186</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;                options.load(options.getDefaults());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;187</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;188</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// load the rest in the right order then</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;189</td>  <td class="nbHitsCovered"><a title="Line 189: Conditional coverage 100% (2/2).">&nbsp;4068</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 189: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (P6OptionsSource optionsSource : optionsSources) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;190</td>  <td class="nbHitsCovered">&nbsp;3051</td>  <td class="src"><pre class="src">&nbsp;                        Map&lt;String, String&gt; toLoad = optionsSource.getOptions();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;191</td>  <td class="nbHitsCovered"><a title="Line 191: Conditional coverage 100% (2/2).">&nbsp;3051</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 191: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (<span class="keyword">null</span> != toLoad) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsCovered">&nbsp;3047</td>  <td class="src"><pre class="src">&nbsp;                                options.load(toLoad);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;189</td>  <td class="nbHitsCovered"><a title="Line 189: Conditional coverage 100% (2/2).">&nbsp;4064</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 189: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (P6OptionsSource optionsSource : optionsSources) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;190</td>  <td class="nbHitsCovered">&nbsp;3048</td>  <td class="src"><pre class="src">&nbsp;                        Map&lt;String, String&gt; toLoad = optionsSource.getOptions();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;191</td>  <td class="nbHitsCovered"><a title="Line 191: Conditional coverage 100% (2/2).">&nbsp;3048</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 191: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (<span class="keyword">null</span> != toLoad) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsCovered">&nbsp;3042</td>  <td class="src"><pre class="src">&nbsp;                                options.load(toLoad);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;193</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;194</td>  <td class="nbHits">&nbsp;</td>
@@ -347,13 +347,13 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;196</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// register to all the props then</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;197</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;                allOptions.put(options.getClass(), options);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsCovered">&nbsp;1017</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;197</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;                allOptions.put(options.getClass(), options);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;198</td>  <td class="nbHitsCovered">&nbsp;1016</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;199</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;200</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> <span class="keyword">static</span> P6ModuleManager getInstance() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;201</td>  <td class="nbHitsCovered">&nbsp;701282496</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> instance;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;201</td>  <td class="nbHitsCovered">&nbsp;899825093</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> instance;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;202</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;203</td>  <td class="nbHits">&nbsp;</td>
@@ -393,8 +393,8 @@
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">private</span> <span class="keyword">void</span> debug(String msg) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;227</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    <span class="comment">// not initialized yet =&gt; nowhere to log yet</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsCovered"><a title="Line 228: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;1711</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 228: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">    <span class="keyword">if</span> (instance == <span class="keyword">null</span> || factories.isEmpty()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;229</td>  <td class="nbHitsCovered">&nbsp;351</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">return</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;228</td>  <td class="nbHitsCovered"><a title="Line 228: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;1710</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 228: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">    <span class="keyword">if</span> (instance == <span class="keyword">null</span> || factories.isEmpty()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;229</td>  <td class="nbHitsCovered">&nbsp;350</td>  <td class="src"><pre class="src">&nbsp;      <span class="keyword">return</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;230</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;    }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;231</td>  <td class="nbHits">&nbsp;</td>
@@ -425,7 +425,7 @@
   <td class="src"><pre class="src">&nbsp;  @SuppressWarnings(<span class="string">"unchecked"</span>)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;245</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  <span class="keyword">public</span> &lt;T <span class="keyword">extends</span> P6LoadableOptions&gt; T getOptions(Class&lt;T&gt; optionsClass) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;246</td>  <td class="nbHitsCovered">&nbsp;701282188</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> (T) allOptions.get(optionsClass);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;246</td>  <td class="nbHitsCovered">&nbsp;899826642</td>  <td class="src"><pre class="src">&nbsp;    <span class="keyword">return</span> (T) allOptions.get(optionsClass);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;247</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;  }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;248</td>  <td class="nbHits">&nbsp;</td>
@@ -471,6 +471,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 9/30/14 5:33 PM.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 2.0.3 on 10/1/14 2:32 AM.</div>
 </body>
 </html>
