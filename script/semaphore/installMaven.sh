@@ -20,5 +20,5 @@ fi
 tar -zvxf $SEMAPHORE_CACHE_DIR/apache-maven-3.2.2-bin.tar.gz -C /home/runner/maven
 mv /home/runner/maven/apache-maven-3.2.2/* /home/runner/maven
 
-ln -s /usr/local/bin/mvn /home/runner/maven
+ln -s /usr/local/bin/mvn /home/runner/maven/bin/mvn
 
