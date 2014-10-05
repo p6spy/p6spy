@@ -4,7 +4,6 @@
 # exist on first failure
 set -e
 
-export GROOVY_HOME=/home/runner/groovy/groovy-2.3.7
 
 # download to cache directory if needed
 if [ ! -e $SEMAPHORE_CACHE_DIR/groovy-2.3.7.zip ] ; then
@@ -13,8 +12,10 @@ if [ ! -e $SEMAPHORE_CACHE_DIR/groovy-2.3.7.zip ] ; then
 fi
 
 echo "Installing groovy"
-mkdir -p $GROOVY_HOME
-unzip $SEMAPHORE_CACHE_DIR/groovy-2.3.7.zip -d $GROOVY_HOME
+mkdir -p /home/runner/groovy
+unzip $SEMAPHORE_CACHE_DIR/groovy-2.3.7.zip -d /home/runner/groovy
+
+export GROOVY_HOME=/home/runner/groovy/groovy-2.3.7
 export PATH=$PATH:$GROOVY_HOME/bin
 ls -la $GROOVY_HOME/bin
 
