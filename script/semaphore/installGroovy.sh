@@ -16,4 +16,4 @@ mkdir -p /home/runner/groovy
 unzip $SEMAPHORE_CACHE_DIR/groovy-2.3.7.zip -d /home/runner/groovy
 mv /home/runner/groovy/*/* /home/runner/groovy
 
-ln -s /home/runner/groovy/bin/groovy /usr/local/bin/groovy 
+sudo ln -s /home/runner/groovy/bin/groovy /usr/local/bin/groovy 
