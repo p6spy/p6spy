@@ -4,6 +4,8 @@
 # exist on first failure
 set -e
 
+rm $SEMAPHORE_CACHE_DIR/jdk-6u45-linux-x64.bin
+
 # download to cache directory if needed
 if [ ! -e $SEMAPHORE_CACHE_DIR/jdk-6u45-linux-x64.bin ] ; then
   echo "Downloading Java 1.6u45 to $SEMAPHORE_CACHE_DIR"
