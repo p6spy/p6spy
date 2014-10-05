@@ -20,3 +20,4 @@ export PATH=$PATH:$GROOVY_HOME/bin
 ls -la $GROOVY_HOME/bin
 
 groovy -version
+whoami
