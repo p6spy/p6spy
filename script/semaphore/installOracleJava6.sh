@@ -24,5 +24,3 @@ cd /home/runner/java
 chmod +x $SEMAPHORE_CACHE_DIR/jdk-6u45-linux-x64.bin
 $SEMAPHORE_CACHE_DIR/jdk-6u45-linux-x64.bin -noregister
 
-ls -la /home/runner/java
-

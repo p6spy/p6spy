@@ -20,4 +20,3 @@ if [ ! -d /home/runner/java ] ; then
 fi   
 tar -xvzf $SEMAPHORE_CACHE_DIR/jdk-8u20-linux-x64.tar.gz -C /home/runner/java
 
-ls -la /home/runner/java
