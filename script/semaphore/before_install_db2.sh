@@ -50,4 +50,4 @@ mvn -q install:install-file -Dfile=/opt/ibm/db2/V9.7/java/db2jcc_license_cu.jar 
 # fix for:
 # Failure in loading native library db2jcct2, java.lang.UnsatisfiedLinkError: no db2jcct2 in java.library.path:  ERRORCODE=-4472, SQLSTATE=null
 # see: https://stackoverflow.com/questions/3957131/java-lang-unsatisfiedlinkerror-while-loading-db2-jdbc-driver
-echo 'export LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/;' >> /home/vagrant/.bashrc
+#echo 'export LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/;' >> /home/vagrant/.bashrc
