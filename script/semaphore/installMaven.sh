@@ -14,7 +14,7 @@ fi
 ls -la $SEMAPHORE_CACHE_DIR
 
 echo "Installing Maven 3.2.2"
-if [ ! -d /home/runner/java ] ; then
+if [ ! -d /home/runner/maven ] ; then
   mkdir -p /home/runner/maven
 fi   
 tar -zvxf $SEMAPHORE_CACHE_DIR/apache-maven-3.2.2-bin.tar.gz -C /home/runner/maven
