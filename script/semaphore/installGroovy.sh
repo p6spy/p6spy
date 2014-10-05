@@ -14,10 +14,6 @@ fi
 echo "Installing groovy"
 mkdir -p /home/runner/groovy
 unzip $SEMAPHORE_CACHE_DIR/groovy-2.3.7.zip -d /home/runner/groovy
+mv /home/runner/groovy/*/* /home/runner/groovy
 
-export GROOVY_HOME=/home/runner/groovy/groovy-2.3.7
-export PATH=$PATH:$GROOVY_HOME/bin
-ls -la $GROOVY_HOME/bin
-
-groovy -version
-whoami
+ln -s /usr/local/bin/groovy /home/runner/groovy/bin/groovy
