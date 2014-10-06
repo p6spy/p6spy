@@ -1,3 +1,0 @@
-# make sure to cache m2 on local machine, rather than in git repo
-repository
-deploySettings.xml

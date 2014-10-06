@@ -109,7 +109,7 @@ sqlplus -S -L sys/admin AS SYSDBA
 sudo /etc/init.d/oracle-xe restart
 
 # Set Oracle environment variables on login.
-cat <<END >>/root/.bashrc
+sudo cat <<END >>/root/.bashrc
 
 . /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/oracle_env.sh
 END

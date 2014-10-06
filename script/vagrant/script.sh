@@ -4,15 +4,9 @@
 # Copyright (c) 2013 Peter Butkovic <butkovic@gmail.com>
 #
 
-#
-# vagrant-cachier maven support pending (see status of: https://github.com/fgrehm/vagrant-cachier/issues/57)
-# => let's do it kind of manually for now
-# if you want even more caching, make sure you make link in the host system to your maven repo
-# moreover we prepare settings.xml here as well
-rm -rf /home/vagrant/.m2
-sudo rm -rf /root/.m2
-ln -s /vagrant/script/vagrant/m2_cached /home/vagrant/.m2
-sudo ln -s /vagrant/script/vagrant/m2_cached /root/.m2
+# make sure to share maven config across root as well as vagrant user
+ln -s /vagrant/script/vagrant/settings.xml /home/vagrant/.m2/settings.xml
+sudo ln -s /home/vagrant/.m2 /root/.m2
 
 # in VM current dir is accesible in the: /vagrant
 pushd /vagrant/script/vagrant
@@ -25,7 +19,21 @@ popd
 # in VM current dir is accesible in the: /vagrant
 pushd /vagrant/script/travis
 
-./before_install_firebird.sh 
+# to prevent: sudo: add-apt-repository: command not found
+# sudo apt-get install -qq -y software-properties-common python-software-properties
+
+# apt-fast fails with garbled chars in the console for me (in vagrant) => let's just keep using apt-get in vagrant for now
+# ./before_install_apt-fast.sh
+sudo tee /usr/bin/apt-fast <<EOF > /dev/null
+#!/bin/bash
+apt-get "\$@"
+exit
+EOF
+sudo chmod 755 /usr/bin/apt-fast
+
+sudo apt-fast update -qq -y
+
+./before_install_firebird.sh
 ./before_install_db2.sh
 ./before_install_oracle.sh
 
@@ -38,4 +46,3 @@ pushd /vagrant/script/travis
 groovy generateMavenSettings.groovy
 
 popd
-

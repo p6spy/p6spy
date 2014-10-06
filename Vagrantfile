@@ -13,6 +13,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
+  # increasing memory
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+  end
+
   #
   # Plugins
   #
@@ -27,8 +32,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # to ensure usage of the latest revision of chef
   config.omnibus.chef_version = :latest
 
-  # vagrant-cachier: package cache (reducing redownloads)
-  config.cache.auto_detect = true
+  if Vagrant.has_plugin?("vagrant-cachier")
+    # Configure cached packages to be shared between instances of the same base box.
+    # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
+    config.cache.scope = :box   
+    
+    # use the generic cache bucket for Maven
+	config.cache.enable :generic, {
+ 		"maven" => { cache_dir: "/home/vagrant/.m2/repository" }
+	}
+  end
   
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
@@ -141,6 +154,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		  # PostgreSQL
 		  "postgresql" => {
 		  "version" => "9.2",
+		  "enable_pgdg_apt" => "true",
 		  "password" => { "postgres" => "123" },
 		  # otherwise certificate error on restart
 		  config: { 
