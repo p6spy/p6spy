@@ -45,6 +45,7 @@ class P6LogResultSetInvocationHandler extends GenericInvocationHandler<ResultSet
 
     ResultSetInformation resultSetInformation = new ResultSetInformation(statementInformation);
     P6LogResultSetNextDelegate nextDelegate = new P6LogResultSetNextDelegate(resultSetInformation);
+    P6LogResultSetCloseDelegate closeDelegate = new P6LogResultSetCloseDelegate(resultSetInformation);
     P6LogResultSetGetColumnValueDelegate getColumnValueDelegate = new P6LogResultSetGetColumnValueDelegate(resultSetInformation);
 
     addDelegate(
@@ -52,7 +53,10 @@ class P6LogResultSetInvocationHandler extends GenericInvocationHandler<ResultSet
         nextDelegate
     );
 
-    // TODO: create proxy for Array object returned from getArray()?
+    addDelegate(
+        new MethodNameMatcher("close"),
+        closeDelegate
+    );
 
     // add delegates for the basic getXXXX(int) and getXXXX(String) methods
     addDelegate(
