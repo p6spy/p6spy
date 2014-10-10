@@ -19,10 +19,10 @@
  */
 package com.p6spy.engine.common;
 
+import com.p6spy.engine.logging.Category;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import com.p6spy.engine.logging.Category;
 
 /**
  * @author Quinton McCombs
@@ -34,15 +34,22 @@ public class ResultSetInformation implements Loggable {
   private String query;
   private final Map<String, Object> resultMap= new LinkedHashMap<String, Object>();
   private int currRow = -1;
+  private int lastRowLogged = -1;
 
   public ResultSetInformation(final StatementInformation statementInformation) {
     this.statementInformation = statementInformation;
     this.query = statementInformation.getStatementQuery();
   }
 
+  /**
+   * Generates log message with column values accessed if the row's column values have not already been logged.
+   */
   public void generateLogMessage() {
-    P6LogQuery.log(Category.RESULTSET, this);
-    resultMap.clear();
+    if( lastRowLogged != currRow ) {
+      P6LogQuery.log(Category.RESULTSET, this);
+      resultMap.clear();
+      lastRowLogged = currRow;
+    }
   }
 
   public int getConnectionId() {
