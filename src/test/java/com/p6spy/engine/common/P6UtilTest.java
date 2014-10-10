@@ -30,7 +30,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class P6UtilTest {
-
+  @Test
+  public void testSingleLine() {
+      Assert.assertEquals("abc efg", P6Util.singleLine("abc\nefg"));
+      Assert.assertEquals("abc efg", P6Util.singleLine("abc\n\nefg"));
+      Assert.assertEquals("abc efg", P6Util.singleLine("abc\r\n\nefg"));
+  }
   @Test 
   public void testJoinNullSafe() {
     Assert.assertEquals("", P6Util.joinNullSafe(null, null));
