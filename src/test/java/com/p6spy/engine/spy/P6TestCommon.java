@@ -31,6 +31,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.p6spy.engine.common.P6Util;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -268,7 +269,7 @@ public class P6TestCommon extends P6TestFramework {
       statement.executeQuery(queryMultiline);
       P6LogOptions.getActiveInstance().unSetSQLExpression();
       assertEquals(1, super.getLogEntriesCount());
-      assertTrue(super.getLastLogEntry().contains(queryMultiline));
+      assertTrue(super.getLastLogEntry().contains(P6Util.singleLine(queryMultiline)));
     }
     
     // backslashes (have to be doubled)
