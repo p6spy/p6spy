@@ -19,6 +19,8 @@
  */
 package com.p6spy.engine.proxy;
 
+import com.p6spy.engine.common.P6ObjectEqualsDelegate;
+import com.p6spy.engine.common.P6ProxyUnwrapDelegate;
 import com.p6spy.engine.common.P6WrapperIsWrapperDelegate;
 import com.p6spy.engine.common.P6WrapperUnwrapDelegate;
 import com.p6spy.engine.proxy.cache.Cache;
@@ -35,6 +37,9 @@ import java.util.Map;
  * Base class for invocation handlers.  This class is designed to be a generic implementation
  * of the {@link InvocationHandler} interface which delegates the invocation of {@link Delegate} objects
  * based on pattern matching against the method.
+ * <p/>
+ * Note: Delegates for methods defined in the {@link java.sql.Wrapper} and @{@link com.p6spy.engine.proxy.P6Proxy}
+ * interfaces as well as {@link Object#equals(Object)} are automatically added.
  *
  * @param <T> The class of the object which will be proxied
  */
@@ -43,8 +48,8 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   
   private final T underlying;
   
-  final static Cache<MethodMatcherCacheKey, MethodMatcher> cache = CacheFactory
-      .<MethodMatcherCacheKey, MethodMatcher> newCache();
+  final static Cache<MethodMatcherCacheKey, MethodMatcher> cache =
+      CacheFactory.<MethodMatcherCacheKey, MethodMatcher> newCache();
 
   /**
    * Creates a new invocation handler for the given object.
@@ -54,13 +59,20 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   public GenericInvocationHandler(T underlying) {
     this.underlying = underlying;
     this.delegateMap = new HashMap<MethodMatcher, Delegate>();
-    addDelegatesForWrapperInterface();
+    addCommonDelegates();
   }
 
-  private void addDelegatesForWrapperInterface() {
+  private void addCommonDelegates() {
     // This covers the implementation of the java.sql.Wrapper interface
     delegateMap.put(new MethodNameMatcher("isWrapperFor"), new P6WrapperIsWrapperDelegate());
     delegateMap.put(new MethodNameMatcher("unwrap"), new P6WrapperUnwrapDelegate());
+
+    // Implementation of Object.equals(Object)
+    delegateMap.put(new MethodNameMatcher("equals"), new P6ObjectEqualsDelegate());
+
+    // Implementation of P6Proxy.unwrapP6SpyProxy()
+    delegateMap.put(new MethodNameMatcher("unwrapP6SpyProxy"), new P6ProxyUnwrapDelegate());
+
   }
 
   /**
@@ -99,11 +111,13 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
       
     try {
       if (null != methodMatcher) {
+        // invoke the delegate
         final Delegate delegate = delegateMap.get(methodMatcher);
         return delegate.invoke(proxy, underlying, method, args);
+      } else {
+        // invoke method on proxied object
+        return method.invoke(underlying, args);
       }
-          
-      return method.invoke(underlying, args);
     } catch (InvocationTargetException e) {
       throw e.getCause();
     }
