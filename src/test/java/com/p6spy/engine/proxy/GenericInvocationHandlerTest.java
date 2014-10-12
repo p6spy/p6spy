@@ -143,6 +143,17 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
     }
   }
 
+  @Test
+  public void testEqualsDelegate() {
+    TestObject underlying = new TestObject().setId(1);
+    GenericInvocationHandler<TestObject> invocationHandler = new GenericInvocationHandler<TestObject>(underlying);
+    Object proxy = ProxyFactory.createProxy(underlying, invocationHandler);
+
+    assertTrue(proxy.equals(proxy));
+    assertTrue(proxy.equals(underlying));
+
+  }
+
   public static class TestDelegate implements Delegate {
     private Boolean invokedFlag;
     private Throwable exceptionToThrow = null;
@@ -178,6 +189,26 @@ public class GenericInvocationHandlerTest extends BaseTestCase {
     public TestDelegate2() {
     }
   }
+
+
+  public static class TestObject {
+    int id;
+    TestObject setId(int id) {
+      this.id = id;
+      return this;
+    }
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      TestObject that = (TestObject) o;
+      if (id != that.id) return false;
+      return true;
+    }
+  }
+  public static class TestObjectSubclass extends TestObject {
+  }
+
 
   public static interface ExceptionHandling {
     void methodA() throws SQLException;
