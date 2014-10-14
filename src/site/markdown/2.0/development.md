@@ -41,7 +41,7 @@ By default, tests run against H2 database. To enable other databases, make sure 
   * or comma separated list of these
 
 
-### Custom maven repository
+### Custom maven repositories
 
 For some specific database tests (not using default - H2 dabase), the P6Spy maven repo should be added as a repository in the maven settings.xml file. This should be done
 by adding the p6spy profile as shown in the example below.
@@ -55,7 +55,8 @@ Sample settings.xml:
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
   <profiles>
     <profile>
-    <id>p6spy-it-mvnrepo</id>
+      <!-- This profile adds repositories needed for integration tests in the p6spy-it project -->
+      <id>p6spy-it-mvnrepo</id>
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
@@ -64,6 +65,22 @@ Sample settings.xml:
           <id>p6spy-it-mvnrepo</id>
           <name>p6spy-it-mvnrepo</name>
           <url>https://github.com/p6spy/p6spy-it-mvnrepo/raw/master</url>
+          <snapshots><enabled>true</enabled></snapshots>
+          <releases><enabled>true</enabled></releases>
+        </repository>
+      </repositories>
+    </profile>
+    <profile>
+      <!-- This profile adds repositories for site generation -->
+      <id>eclipse-egit</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <repositories>
+        <repository>
+          <id>eclipse-egit</id>
+          <name>eclipse-egit</name>
+          <url>https://repo.eclipse.org/content/repositories/egit-releases/</url>
           <snapshots><enabled>true</enabled></snapshots>
           <releases><enabled>true</enabled></releases>
         </repository>
