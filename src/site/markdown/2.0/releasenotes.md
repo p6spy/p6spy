@@ -1,12 +1,18 @@
 # Release Notes
 
-For the full changelog (since 2.0.0-aplha1), see: [github report](../github-report.html)
+## Version 2.1.2 - [TBD]
+* SingleLineFormat updated to remove CR and LF characters from the log file (see [issue #268] (https://github.com/p6spy/p6spy/issues/268)), thanks to [bingoohuang] (https://github.com/bingoohuang) for report and fix
+* The equals(Object) method on all proxied objects now unwraps the argument passed in (if it is a p6spy proxy) before 
+  invoking the method on the proxied object.  This fixes a problem with c3p0 and statement caching.
+  (see [issue #267] (https://github.com/p6spy/p6spy/issues/267)), thanks to [jezekpa] (https://github.com/jezekpa) for bug report
+* Fixed a defect causing the last row read of a result set to not be logged unless all rows were read.
+  (see [issue #264] (https://github.com/p6spy/p6spy/issues/264)), thanks to [jezekpa] (https://github.com/jezekpa) for bug report
 
-## Version 2.1.1 - [3.9.2014]
+## Version 2.1.1 - [Sep 9, 2014]
 * jmx exposing becomes optional (enabled/disabled via flag) + jmx prefix introduced (see [issue #256] (https://github.com/p6spy/p6spy/issues/256))
 * resultset logging filtering fixed (see [issue #254] (https://github.com/p6spy/p6spy/issues/254))
 
-## Version 2.1.0 - [15.6.2014]
+## Version 2.1.0 - [Jun 15, 2014]
 
 * P6ConnectionPoolDataSource merged to P6DataSource (to simplify datasource config)
 * Bind variables set by name on a CallableStatement are now logged (see [issue #221] (https://github.com/p6spy/p6spy/issues/221))
@@ -21,19 +27,19 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 * `NullPointerException` fixed for empty batch execution (see [issue #246](https://github.com/p6spy/p6spy/issues/246))
 * `-` prefixed syntax for list-like properties deprecated, in favor of full overriding (see [issue #247](https://github.com/p6spy/p6spy/issues/247))
 
-## Version 2.0.2 [3.4.2014]
+## Version 2.0.2 [Apr 3,2014]
 
 * significant performance improvements for huge data selects (still a work in progress, see: [issue #84] (https://github.com/p6spy/p6spy/issues/84#issuecomment-38394979))
 * fixed PostgreSQL issue: `operator is not unique: date + unknown` (see: [issue #214] (https://github.com/p6spy/p6spy/issues/214)), thanks to [Frank Bregulla] (https://github.com/ffriedrich) for report and fix
 * fixed defect causing ClassCastException when setting bind variables by name on CallableStatement (see [issue #219](https://github.com/p6spy/p6spy/issues/219))
 * fixed defect in P6Leak module causing closed connections not to be recorded properly (see: [issue #217](https://github.com/p6spy/p6spy/issues/217))
 
-## Version 2.0.1 [15.03.2014]
+## Version 2.0.1 [Mar 15, 2014]
 
 * fixed usage with signed jdbc jars (see: [issue #200] (https://github.com/p6spy/p6spy/issues/200))
 * internal logs not printed out any more (see: [issue #201] (https://github.com/p6spy/p6spy/issues/201))
 
-## Version 2.0.0-alpha1 [13.11.2013] and 2.0.0 [04.03.2014]
+## Version 2.0.0-alpha1 [Nov 13, 2013] and 2.0.0 [Mar 3, 2014]
 
 * project hosting was moved from [sourceforge](http://sourceforge.net/projects/p6spy/) to [github](https://github.com/p6spy/p6spy)
 * major part of the legacy code was refactored
@@ -62,7 +68,7 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
      * DB systems (namely: Oracle, DB2, PostgreSQL, MySQL, H2, HSQLDB, SQLite, Firebird, and Derby), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy) as well as 
      * application servers (namely: Wildfly 8, JBoss 4.2, 5.1, 6.1, 7.1, Glassfish 3.1, 4.0, Jetty 7.6, 8.1, 9.1, Tomcat 6, 7, 8, Resin 4, Jonas 5.3 and Geronimo 2.1, 2.2), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy-it).
 
-## Version 1.3 [27.12.2005]
+## Version 1.3 [Dec 27, 2005]
 
 * release notes not provided
 
@@ -177,3 +183,6 @@ For the full changelog (since 2.0.0-aplha1), see: [github report](../github-repo
 
 * Fixed a bug in which null connections were not returning null, but rather empty connections. This was a problem for some applications that were expecting a null connection.
 * Added an option to allow the truncation/non-truncation of the log file, which can be specified within spy.options.
+
+For the full changelog (since 2.0.0-aplha1), see: [github report](../github-report.html)
+
