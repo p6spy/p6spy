@@ -164,7 +164,7 @@
 <li>or comma separated list of these</li>
 </ul>
 <div class="section">
-<h3>Custom maven repository<a name="Custom_maven_repository"></a></h3>
+<h3>Custom maven repositories<a name="Custom_maven_repositories"></a></h3>
 <p>For some specific database tests (not using default - H2 dabase), the P6Spy maven repo should be added as a repository in the maven settings.xml file. This should be done by adding the p6spy profile as shown in the example below.</p>
 <p>Sample settings.xml:</p>
 
@@ -175,7 +175,8 @@
           xsi:schemaLocation=&quot;http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd&quot;&gt;
   &lt;profiles&gt;
     &lt;profile&gt;
-    &lt;id&gt;p6spy-it-mvnrepo&lt;/id&gt;
+      &lt;!-- This profile adds repositories needed for integration tests in the p6spy-it project --&gt;
+      &lt;id&gt;p6spy-it-mvnrepo&lt;/id&gt;
       &lt;activation&gt;
         &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
       &lt;/activation&gt;
@@ -184,6 +185,22 @@
           &lt;id&gt;p6spy-it-mvnrepo&lt;/id&gt;
           &lt;name&gt;p6spy-it-mvnrepo&lt;/name&gt;
           &lt;url&gt;https://github.com/p6spy/p6spy-it-mvnrepo/raw/master&lt;/url&gt;
+          &lt;snapshots&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/snapshots&gt;
+          &lt;releases&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/releases&gt;
+        &lt;/repository&gt;
+      &lt;/repositories&gt;
+    &lt;/profile&gt;
+    &lt;profile&gt;
+      &lt;!-- This profile adds repositories for site generation --&gt;
+      &lt;id&gt;eclipse-egit&lt;/id&gt;
+      &lt;activation&gt;
+        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
+      &lt;/activation&gt;
+      &lt;repositories&gt;
+        &lt;repository&gt;
+          &lt;id&gt;eclipse-egit&lt;/id&gt;
+          &lt;name&gt;eclipse-egit&lt;/name&gt;
+          &lt;url&gt;https://repo.eclipse.org/content/repositories/egit-releases/&lt;/url&gt;
           &lt;snapshots&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/snapshots&gt;
           &lt;releases&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/releases&gt;
         &lt;/repository&gt;
