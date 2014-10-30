@@ -17,8 +17,7 @@
   </organization>
   <inceptionYear>2002</inceptionYear>
   <description>
-    P6Spy is an open source framework for applications that intercept and optionally modify database
-    statements.
+    P6Spy is a framework that enables database activity to be seamlessly intercepted and logged with no code changes to existing applications.
   </description>
 
   <url>http://p6spy.github.io/p6spy/</url>
