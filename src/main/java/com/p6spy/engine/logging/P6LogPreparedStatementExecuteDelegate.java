@@ -48,6 +48,7 @@ class P6LogPreparedStatementExecuteDelegate implements Delegate {
       return result;
       
     } finally {
+      P6DelayHandler.delay(startTime, preparedStatementInformation);
       P6LogQuery.logElapsed(preparedStatementInformation.getConnectionId(), startTime, Category.STATEMENT, preparedStatementInformation);
     }
   }
