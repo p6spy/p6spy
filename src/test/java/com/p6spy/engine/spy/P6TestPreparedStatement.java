@@ -94,7 +94,26 @@ public class P6TestPreparedStatement extends P6TestFramework {
       fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }
   }
-  
+
+    @Test
+    public void testExecuteDelayed() {
+        try {
+            // insert test data
+            P6SpyOptions.getActiveInstance().setFixedDelay("5000");
+            String sql = "select x from system_range(?,?)";
+            PreparedStatement prep = getPreparedStatement(sql);
+            prep.setInt(1, 1);
+            prep.setInt(2, 1);
+            super.clearLogEntries();
+            ResultSet rs = prep.executeQuery();
+            assertEquals(2,super.getLogEntries().size());
+
+            rs.close();
+            prep.close();
+        } catch (Exception e) {
+            fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
+        }
+    }
   @Test
   public void testSameColumnNameInMultipleTables() throws SQLException {
     try {
@@ -115,19 +134,19 @@ public class P6TestPreparedStatement extends P6TestFramework {
           prep.executeUpdate();
           prep.close();
         }
-  
+
         super.clearLogEntries();
-  
+
         // let's check that returned data are reported correctly
         // => don't filter 'result' and 'resultset'
         P6LogOptions.getActiveInstance().setExcludecategories("");
-  
+
         final String query = "select prepstmt_test.col1, prepstmt_test2.col1, prepstmt_test.col2, prepstmt_test2.col2 from prepstmt_test, prepstmt_test2 where prepstmt_test.col2 = prepstmt_test2.col2 and prepstmt_test.col1 = ? and prepstmt_test2.col1 = ?";
         final PreparedStatement prep = getPreparedStatement(query);
         prep.setString(1, "prepstmt_test_col1");
         prep.setString(2, "prepstmt_test_col2");
         final ResultSet rs = prep.executeQuery();
-  
+
         // check "statement" logged properly
         assertNotNull(super.getLastLogEntry());
         assertTrue("prepared statement not logged properly",
@@ -138,7 +157,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
             super.getLastLogEntry().contains(
                 query.replaceFirst("\\?", "\'prepstmt_test_col1\'").replaceFirst("\\?",
                     "\'prepstmt_test_col2\'")));
-  
+
         // check returned (real) data not messed up
         while (rs.next()) {
           assertEquals("returned values messed up", "prepstmt_test_col1", rs.getString(1));
@@ -148,7 +167,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
         }
         rs.close();
         prep.close();
-  
+
         // check "resultset" logged properly
         assertNotNull(super.getLastLogEntry());
         assertTrue("resultset not logged", super.getLastLogEntry().contains("resultset"));
@@ -156,9 +175,9 @@ public class P6TestPreparedStatement extends P6TestFramework {
             "logged resultset holds incorrect values",
             super.getLastLogEntry().endsWith(
                 "1 = prepstmt_test_col1, 2 = prepstmt_test_col2, 3 = 1, 4 = 1"));
-  
+
         P6LogOptions.getActiveInstance().setExcludecategories("result,resultset");
-      
+
     } catch (Exception e) {
       fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }
@@ -189,13 +208,13 @@ public class P6TestPreparedStatement extends P6TestFramework {
         bigSelect.append(" col2=?");
       }
       prep.close();
-      
+
       prep = getPreparedStatement(bigSelect.toString());
       for (int i = 1; i <= MaxFields; i++) {
         prep.setInt(i, i);
       }
       prep.close();
-      
+
       // test batch inserts
       update = "insert into prepstmt_test values (?,?)";
       prep = getPreparedStatement(update);
@@ -213,20 +232,20 @@ public class P6TestPreparedStatement extends P6TestFramework {
       assertTrue(super.getLastLogEntry().contains("aspen"));
       assertTrue(super.getLastLogEntry().contains("4"));
       prep.close();
-      
+
       String query = "select count(*) from prepstmt_test";
       prep = getPreparedStatement(query);
       ResultSet rs = prep.executeQuery();
       rs.next();
       assertEquals(4, rs.getInt(1));
-      
+
       rs.close();
       prep.close();
     } catch (Exception e) {
       fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }
   }
-  
+
   @Test
   public void testCallingSetMethodsOnStatementInterface() throws SQLException {
     String sql = "select * from prepstmt_test where col1 = ?";
@@ -234,11 +253,11 @@ public class P6TestPreparedStatement extends P6TestFramework {
 
     prep.setMaxRows(1);
     assertEquals(1, prep.getMaxRows());
-    
+
     prep.setQueryTimeout(12);
     // The SQLLite driver returns the value in ms
     assertEquals(("SQLite".equals(db) ? 12000 : 12), prep.getQueryTimeout());
-    
+
     prep.close();
   }
 
@@ -258,7 +277,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
     try {
       Statement statement = connection.createStatement();
       dropPrepared(statement);
-      statement.close();  
+      statement.close();
     } catch (Exception e) {
       fail(e.getMessage() + " due to error:\n" + getStackTrace(e));
     }

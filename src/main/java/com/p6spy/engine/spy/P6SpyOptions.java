@@ -56,6 +56,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
     public static final String JMX = "jmx";
     public static final String JMX_PREFIX = "jmxPrefix";
+    public static final String FIXED_DELAY = "fixedDelay";
     
     // those set indirectly (via properties visible from outside)
     public static final String DRIVER_NAMES = "driverNames";
@@ -79,6 +80,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       defaults.put(RELOADPROPERTIESINTERVAL, Long.toString(60));
       defaults.put(DATABASE_DIALECT_DATE_FORMAT, "dd-MMM-yy");
       defaults.put(JMX, Boolean.TRUE.toString());
+      defaults.put(FIXED_DELAY, Long.toString(0));
     }
 
     private final P6OptionsRepository optionsRepository;
@@ -111,6 +113,9 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
       setJmx(options.get(JMX));
       setJmxPrefix(options.get(JMX_PREFIX));
+      setFixedDelay(options.get(FIXED_DELAY));
+
+
     }
     
     /**
@@ -426,6 +431,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       return optionsRepository.get(Boolean.class, JMX);
     }
 
+
     @Override
     public void setJmx(String string) {
       optionsRepository.set(Boolean.class, JMX, string);
@@ -445,4 +451,10 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public void setJmxPrefix(String jmxPrefix) {
       optionsRepository.set(String.class, JMX_PREFIX, jmxPrefix);
     }
+
+    @Override
+    public void setFixedDelay(String fixedDelay) { optionsRepository.set(Long.class, FIXED_DELAY, fixedDelay);}
+
+    @Override
+    public long getFixedDelay() {return optionsRepository.get(Long.class, FIXED_DELAY);}
 }

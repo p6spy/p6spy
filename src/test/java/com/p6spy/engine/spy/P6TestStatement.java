@@ -172,4 +172,30 @@ public class P6TestStatement extends P6TestFramework {
     }
   }
 
+    @Test
+    public void testFixedDelayed() throws SQLException {
+        Statement statement = connection.createStatement();
+
+        try {
+            // set the execution threshold very low
+            P6SpyOptions.getActiveInstance().setFixedDelay("5000");
+
+            // test a basic select
+            String query = "select x from system_range(1,1)";
+            ResultSet rs = statement.executeQuery(query);
+            assertEquals(2,super.getLogEntries().size());
+            assertTrue(super.getLastLogEntry().contains(query));
+            // finally just make sure the query executed!
+            rs.next();
+            assertEquals(1, rs.getInt(1));
+            rs.close();
+
+
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
+    }
+
 }
