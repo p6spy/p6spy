@@ -31,17 +31,12 @@ import org.objectweb.util.monolog.wrapper.p6spy.P6SpyLogger;
 public class P6DelayHandler {
     public static void delay(long startTime, StatementInformation statementInformation) {
         long delay = P6SpyOptions.getActiveInstance().getFixedDelay();
-        if (delay > 0 && ((System.currentTimeMillis() - startTime) < delay)) {
+        if (delay > 0) {
             P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, Category.STATEMENT, statementInformation);
-
-            long time = System.currentTimeMillis() - startTime;
-            //Close enough, can't be completely exact
             try {
-                if ((delay - time) > 0) {
-                    Thread.sleep(delay - time);
-                }
+                Thread.sleep(delay);
             } catch(InterruptedException e){
-                    P6LogQuery.error("ERROR");
+                P6LogQuery.error("ERROR");
             }
 
         }
