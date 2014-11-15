@@ -59,7 +59,7 @@ is the directory in which JBoss is installed.
         <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
 
 ### <a name="jboss71url">JBoss 7.1.x, WildFly 8.x - modified URL</a>
-The following instructions were tested with JBoss 7.1.0 and Wildfly 8.1.CR1 (works with p6spy version 2.1.0 or higher). For these instructions,
+The following instructions were tested with JBoss 7.1.0 and Wildfly 8.1.Final (works with p6spy version 2.1.0 or higher). For these instructions,
 P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory in which JBoss/WildFly is installed. 
 
 1. Deploy **p6spy.jar** as a module:
@@ -104,7 +104,7 @@ The following sections contain specific information on installing P6Spy on [Tomc
 
 ### <a name="tomcat_tomee">Apache Tomcat 6.x, 7.x, 8.x and TomEE 1.6.x</a>
 
-The following instructions were tested with Apache Tomcat versions: 6.0.34, 7.0.54 and 8.0.0-RC5 as well as Apache TomEE 1.6.0.2 Webprofile and Apache TomEE 1.6.0.2 Plus. For these instructions, it is assumed that $CATALINA_HOME
+The following instructions were tested with Apache Tomcat versions: 6.0.34, 7.0.54 and 8.0.15 as well as Apache TomEE 1.6.0.2 Webprofile and Apache TomEE 1.6.0.2 Plus. For these instructions, it is assumed that $CATALINA_HOME
 refers to the tomcat/tomee installation directory.  Please be aware that there are many ways to configure JNDI data sources
 on tomcat/tomee.
 
