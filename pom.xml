@@ -501,6 +501,13 @@
 	  <scope>provided</scope>
 	 </dependency>
 	 
+	 <dependency>
+	  <groupId>org.tinylog</groupId>
+	  <artifactId>tinylog</artifactId>
+	  <version>1.0-rc-1</version>
+	  <scope>provided</scope>
+	</dependency>
+	
     <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib-nodep</artifactId>

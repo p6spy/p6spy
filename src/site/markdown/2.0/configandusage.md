@@ -122,6 +122,7 @@ in section: [Configuration and Usage](#confusage)):
     #appender=com.p6spy.engine.spy.appender.Slf4JLogger
     #appender=com.p6spy.engine.spy.appender.StdoutLogger
     #appender=com.p6spy.engine.spy.appender.FileLogger
+    #appender=com.p6spy.engine.spy.appender.TinyLogLogger
 
     # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) 
     # (used for com.p6spy.engine.spy.appender.FileLogger only)
@@ -349,6 +350,7 @@ and logging to a file (default). Please note, that all of these output in the CS
         #appender=com.p6spy.engine.spy.appender.Slf4JLogger
         #appender=com.p6spy.engine.spy.appender.StdoutLogger
         appender=com.p6spy.engine.spy.appender.FileLogger
+        #appender=com.p6spy.engine.spy.appender.TinyLogLogger
 
         # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) 
 	    # (used for com.p6spy.engine.spy.appender.FileLogger only)
@@ -364,12 +366,14 @@ and logging to a file (default). Please note, that all of these output in the CS
         #appender=com.p6spy.engine.spy.appender.Slf4JLogger
         appender=com.p6spy.engine.spy.appender.StdoutLogger
         #appender=com.p6spy.engine.spy.appender.FileLogger
+        #appender=com.p6spy.engine.spy.appender.TinyLogLogger
 
 * **Using SLF4J**: Uncomment the `Slf4JLogger` as follows:
 
         appender=com.p6spy.engine.spy.appender.Slf4JLogger
         #appender=com.p6spy.engine.spy.appender.StdoutLogger
         #appender=com.p6spy.engine.spy.appender.FileLogger
+        #appender=com.p6spy.engine.spy.appender.TinyLogLogger
 
 	In general you need to slf4j-api and the appropriate bridge to the actual logging
 implementation as well as the logging implementation itself on your classpath. To simplify setup for those not having any of the additional dependencies already
@@ -396,6 +400,27 @@ on classpath following `*-nodep.jar` bundles are provided as part of p6spy distr
           </category>
 	
 	For further instructions on configuring SLF4J, see the [SLF4J documentation](http://www.slf4j.org/manual.html).
+	
+* **Using TinyLog**: Uncomment the `TinyLogLogger` as follows:
+
+        #appender=com.p6spy.engine.spy.appender.Slf4JLogger
+        #appender=com.p6spy.engine.spy.appender.StdoutLogger
+        #appender=com.p6spy.engine.spy.appender.FileLogger
+        appender=com.p6spy.engine.spy.appender.TinyLogLogger
+
+	You'll need to include [TinyLog](http://www.tinylog.org/) on your classpath.
+	  
+    Mapping to TinyLog levels is provided in the following way:
+    
+	<table>
+	<tr><th>P6Spy category</th><th>TinyLog level</th></tr>
+	<tr><td>error</td><td>error</td></tr>
+	<tr><td>warn</td><td>warning</td></tr>
+	<tr><td>debug</td><td>debug</td></tr>
+	<tr><td>info/any other category</td><td>info</td></tr>
+	</table>	
+	
+	For further instructions on configuring SLF4J, see the [TinyLog documentation](http://www.tinylog.org/).
 
 ### logMessageFormat
 
