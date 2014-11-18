@@ -31,11 +31,13 @@ directory when the application runs.  This log file will contain a list of the v
 executed.  You can alter the location of this log file as well as what gets logged by editing **spy.properties**.  See
 [Common Property File Settings](configandusage.html#settings) for the various configuration options available.
 
-Application Servers:    
-[JBoss/WildFly](#jboss)    
-[Apache Tomcat and Apache TomEE](#tomcat)    
-[Glassfish](#glassfish)    
-[Generic](#generic)    
+Application Servers:
+    
+* [JBoss/WildFly](#jboss)    
+* [Apache Tomcat and Apache TomEE](#tomcat)    
+* [Glassfish](#glassfish)    
+* [Weblogic](#weblogic)
+* [Generic](#generic)    
 
 ## <a name="jboss">JBoss/WildFly</a>
 
@@ -224,6 +226,21 @@ In later section is `$GLASSFISH_HOME` the directory where Glassfish is installed
 	* `<realDSJndi>` - jndi-name of the real datasource to be proxied
 		
 	And the jndi name of the created jndi resource in the sample configurations is: `jdbc/p6spy`
+
+## <a name="weblogic">Weblogic</a>
+
+The following section contains specific information on installing P6Spy on [Weblogic 12.1.x](#weblogic121x) (works with p6spy version 2.1.0 or higher).
+
+### <a name="weblogic121x">Weblogic 12.1.3</a>
+
+The provided instructions were tested with Weblogic 12.1.3 (for developers). 
+In later section is `$WLS_HOME` the directory where Weblogic is installed and `$DOMAIN_X` is the domain name used for deployment (for example, can be: `mydomain`).
+
+1. Move the **p6spy.jar** file to the `$WLS_HOME/user_projects/domains/$DOMAIN_X/lib` directory.
+1. Move the **spy.properties** file to the `$WLS_HOME/user_projects/domains/$DOMAIN_X` directory.
+1. Update JDBC URL in the datasource to something like:
+
+        jdbc:p6spy:mysql://<hostname>:<port>/<database>
 
 ## <a name="generic">Generic Instructions</a>
 
