@@ -22,7 +22,7 @@ package com.p6spy.engine.spy;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 /**
  * p6factory exists to make extending the spy core easier when making a new module. Since there are
@@ -33,8 +33,8 @@ import com.p6spy.engine.spy.option.P6OptionsRepository;
 public interface P6Factory {
   // OK this is not a typical factory, but to keep P6Factory an interface
   // getOptions can't be static, we'll live with it I guess
-  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository);
+  public P6LoadableOptions getOptions(OptionsRepository optionsRepository);
 
-  public Connection getConnection(Connection conn) throws SQLException;
+  public Connection getConnection(Connection conn, OptionsRepository optionsRepository) throws SQLException;
 
 }

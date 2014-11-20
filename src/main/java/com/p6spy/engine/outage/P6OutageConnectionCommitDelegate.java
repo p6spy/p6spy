@@ -21,16 +21,23 @@ package com.p6spy.engine.outage;
 
 import java.lang.reflect.Method;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.proxy.Delegate;
 
 class P6OutageConnectionCommitDelegate implements Delegate {
 
+  private final ConnectionInformation connectionInformation;
+  
+  public P6OutageConnectionCommitDelegate(ConnectionInformation connectionInformation) {
+    this.connectionInformation = connectionInformation; 
+  }
+  
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     long startTime = System.currentTimeMillis();
     
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, startTime, "commit", "", "");
+      P6OutageDetector.getInstance().registerInvocation(connectionInformation, this, startTime, "commit", "", "");
     }
 
     try {

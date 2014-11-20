@@ -25,18 +25,25 @@ import java.util.Map.Entry;
 
 import com.p6spy.engine.spy.P6ModuleManager;
 
-public class SystemProperties implements P6OptionsSource {
-
-  public static final String P6SPY_PREFIX = "p6spy.config.";
+/**
+ * {@link OptionsSource} implementation providing options from the environment variables. <br/>
+ * <br/>
+ * Please note: Only those variables are considered, which have specific prefix, namely:
+ * {@link SystemPropertiesOptionsSource#P6SPY_PREFIX}.
+ * 
+ * @author peterb
+ */
+public class EnvironmentVariablesOptionsSource implements OptionsSource {
 
   @Override
   public Map<String, String> getOptions() {
     final Map<String, String> result = new HashMap<String, String>();
 
-    for (Entry<Object, Object> entry : System.getProperties().entrySet()) {
-      final String key = entry.getKey().toString();
-      if (key.startsWith(P6SPY_PREFIX)) {
-        result.put(key.substring(P6SPY_PREFIX.length()), (String) entry.getValue());
+    for (Entry<String, String> entry : System.getenv().entrySet()) {
+      final String key = entry.getKey();
+      if (key.startsWith(SystemPropertiesOptionsSource.P6SPY_PREFIX)) {
+        result.put(key.substring(SystemPropertiesOptionsSource.P6SPY_PREFIX.length()),
+            (String) entry.getValue());
       }
     }
 

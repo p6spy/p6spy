@@ -19,7 +19,26 @@
  */
 package com.p6spy.engine.spy.option;
 
-public interface P6OptionChangedListener {
+/**
+ * Listener interested in recieving option change events from the {@code OptionChangePropagator}. <br/>
+ * <br/>
+ * Please note: Manual registration (via API:
+ * {@link OptionChangePropagator#registerOptionChangedListener(OptionChangedListener)}) is required
+ * to get option changed events propagated.
+ * 
+ * @author peterb
+ */
+public interface OptionChangeListener {
 
+  /**
+   * Event indicator that option has been changed.
+   * 
+   * @param key
+   *          the name of the option
+   * @param oldValue
+   *          the old value of the option
+   * @param newValue
+   *          the new value of the option
+   */
   public void optionChanged(final String key, final Object oldValue, final Object newValue);
 }

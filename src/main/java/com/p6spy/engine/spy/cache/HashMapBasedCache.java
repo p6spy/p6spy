@@ -17,23 +17,38 @@
  * limitations under the License.
  * #L%
  */
-package com.p6spy.engine.proxy.cache;
+package com.p6spy.engine.spy.cache;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Cache based on the underlying {@link HashMap}. <br/>
+ * <br/>
+ * Please note: there is a capacity that can limit size of cache. For simplicity, once capacity
+ * limit is reached, cache is cleared (=> no fifo/...). It's there just to prevent related out-of
+ * memory problems.
+ * 
  * @author Peter Butkovic
  */
 public class HashMapBasedCache<K, V> implements Cache<K, V> {
 
-  private Map<K, V> map;
+  /**
+   * Cached entries holder.
+   */
+  private final Map<K, V> map;
 
-  public HashMapBasedCache() {
+  /**
+   * Capacity of the cache. Cache is limited only if it's > 0.
+   */
+  private final int capacity;
+
+  public HashMapBasedCache(int capacity) {
     super();
-    this.map = new HashMap<K,V>();
+    this.capacity = capacity;
+    this.map = new HashMap<K, V>();
   }
-  
+
   @Override
   public V get(K key) {
     return map.get(key);
@@ -47,6 +62,14 @@ public class HashMapBasedCache<K, V> implements Cache<K, V> {
   @Override
   public void put(K key, V value) {
     map.put(key, value);
+
+    // clear on capacity limit reached
+    if (capacity > 0 && capacity < map.size()) {
+      clear();
+
+      // put once again, as it has been removed in the last clear
+      map.put(key, value);
+    }
   }
 
   @Override

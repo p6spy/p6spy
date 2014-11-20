@@ -43,7 +43,7 @@ import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.spy.appender.StdoutLogger;
-import com.p6spy.engine.spy.option.SystemProperties;
+import com.p6spy.engine.spy.option.SystemPropertiesOptionsSource;
 import com.p6spy.engine.test.P6TestFramework;
 
 @RunWith(Parameterized.class)
@@ -551,13 +551,13 @@ public class P6TestCommon extends P6TestFramework {
     // module unload with reload works
     { 
     	clearLogEntries();
-    	System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+    	System.setProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
     			"");
     	o.reload();
     	
 	    statement.executeQuery("select 'x' from customers");
 	    assertEquals("A log message should not have been written", 0, getLogEntriesCount());
-	    System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+	    System.clearProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
     }
   }
   

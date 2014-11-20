@@ -17,10 +17,13 @@
  * limitations under the License.
  * #L%
  */
-package com.p6spy.engine.proxy.cache;
+package com.p6spy.engine.spy.cache;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.p6spy.engine.spy.cache.Cache;
+import com.p6spy.engine.spy.cache.CacheFactory;
 
 /**
  * @author Peter Butkovic
@@ -61,4 +64,20 @@ public class CacheTest {
     Assert.assertFalse(cache.contains("key1"));
   }
 
+  @Test
+  public void testCapacityNotExceeded() {
+    Cache<String, String> cache = CacheFactory.<String, String> newCache(2);
+
+    cache.put("1", "1");
+    cache.put("2", "2");
+    Assert.assertTrue(cache.contains("1"));
+    Assert.assertTrue(cache.contains("2"));
+
+    // capacity reached => clear
+    
+    cache.put("3", "3");
+    Assert.assertFalse(cache.contains("1"));
+    Assert.assertFalse(cache.contains("2"));
+    Assert.assertTrue(cache.contains("3"));
+  }
 }

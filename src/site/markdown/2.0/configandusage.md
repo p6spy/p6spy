@@ -3,6 +3,7 @@
 Configuration follows **layered approach**, where **each layer overrides the values set by the lower ones** 
 (leaving those not provided unchanged):
 
+* Connection specific properties (see: [Connection specific properties](#connectionproperties))
 * JMX set properties (please note, that these are reset on next reload)
 * System properties
 * Environment variables
@@ -10,8 +11,8 @@ Configuration follows **layered approach**, where **each layer overrides the val
 * defaults
 
 For the full list of available options, see the section [Common Property File Settings](#settings). 
-Please note that providing any of these via System properties/Environment variables is possible, using the particular 
-property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;
+Please note that providing any of these via System properties/Environment variables/[Connection specific properties](#connectionproperties) is possible, using the particular 
+property name following naming rule: `p6spy.config.<property name>=<property value>`
 
 Please be aware of the restriction. In fact this also means you need to be aware of values set by the lower 
 configuration layers (including defaults) to properly override/modify those.
@@ -28,9 +29,23 @@ to locate the file.
 1. The current working directory (for relative path) or any directory (for absolute path)
 1. The classpath
 
+## <a name="connectionproperties">Connection specific properties</a>
+
+Properties can be specific for particular connection. To provide multiple via JDBC URL, use ';' as a separator.
+
+So following would be valid JDBC URLs: 
+
+* `jdbc:p6spy:mysql://<hostname>:<port>/<database>`
+* `jdbc:p6spy:p6spy.config.<property name>=<property value>:mysql://<hostname>:<port>/<database>`
+* `jdbc:p6spy:p6spy.config.<property name>=<property value>;p6spy.config.<property name2>=<property value2>:mysql://<hostname>:<port>/<database>`
+
+Please note, that all the properties that support connection specific overriding have it explicitly mentioned in the config file (as well as in the [Common Property File Settings](#settings) section), stating: `(available as a connection specific property)`.
+
+If you need yet unsupported properties to be set on this level, feel free to [raise a bug](https://github.com/p6spy/p6spy/issues/new) indicating that.
+
 ## Properties exposal via JMX
 
-Please note that all the properties are exposed via JMX. So you can use your tool of choice (e.g.,JConsole) to view/change them. 
+Please note that all the properties are exposed via JMX (With one exception, namely: [Connection specific properties](#connectionproperties)). So you can use your tool of choice (e.g.,JConsole) to view/change them. 
 Moreover reload operation is exposed as well. To provide on-demand reload option.
 
 In the JConsole p6spy related JMX attributes might look like this:
@@ -149,6 +164,13 @@ in section: [Configuration and Usage](#confusage)):
 	# please note, if there is already such a name in use it would be unregistered first (the last registered wins)
 	# (default is none)
 	#jmxPrefix=
+	
+	# string id intended to be used for unique identification of connection
+	# it makes sence for the case that more connections are proxied via p6spy and 
+	# user tries to group log messages by connection.  
+	# (available as a connection specific property)
+	# (default is none)
+	#instanceId=
 
     #################################################################
     # DataSource replacement                                        #
@@ -404,11 +426,11 @@ classes are available with P6Spy.
 
 * `com.p6spy.engine.spy.appender.SingleLineFormat` which results in log messages in format:
 
-		current time|execution time|category|connection id|statement SQL String|effective SQL string
+		current time|execution time|category|instance id|connection id|statement SQL String|effective SQL string
 		
 * `com.p6spy.engine.spy.appender.MultiLineFormat`, which results in log messages in format: 
 		
-		current time|execution time|category|connection id|statement SQL String
+		current time|execution time|category|instance id|connection id|statement SQL String
 		effective SQL string
 
 Where:
@@ -426,6 +448,8 @@ Where:
   call is recorded in the result category.
 * `category` - You can manage your log by including and excluding categories,
   which is described in [Common Property File Settings](#settings).
+* `instance id` - Value of `instanceId` property. It makes sence for the case that more connections are proxied via p6spy and 
+	user tries to group log messages by connection. (If `instanceId` property value is not provided => empty string is logged in the position.)
 * `connection id` - Indicates the connection on which the activity was logged.  The connection id is a sequentially
   generated identifier.  
 * `statement SQL string` - This is the SQL string passed to the statement object.

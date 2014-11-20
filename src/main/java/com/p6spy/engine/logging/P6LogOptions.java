@@ -28,7 +28,7 @@ import javax.management.StandardMBean;
 
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.P6ModuleManager;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions {
 
@@ -56,9 +56,9 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
     defaults.put(EXECUTION_THRESHOLD, Long.toString(0));
   }
 
-  private final P6OptionsRepository optionsRepository;
+  private final OptionsRepository optionsRepository;
 
-  public P6LogOptions(final P6OptionsRepository optionsRepository) {
+  public P6LogOptions(final OptionsRepository optionsRepository) {
     super(P6LogOptionsMBean.class, false);
     this.optionsRepository = optionsRepository;
   }

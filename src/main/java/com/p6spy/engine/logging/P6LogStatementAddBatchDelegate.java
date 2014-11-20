@@ -42,7 +42,7 @@ class P6LogStatementAddBatchDelegate implements Delegate {
       return method.invoke(underlying, args);
     }
     finally {
-      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, Category.BATCH, statementInformation);
+      P6LogQuery.logElapsed(statementInformation.getConnectionInformation(), startTime, Category.BATCH, statementInformation);
     }
   }
 }

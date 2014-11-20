@@ -71,8 +71,8 @@ public class SpyDotPropertiesTest extends BaseTestCase {
     Thread.currentThread().setContextClassLoader(tempLoader);
 
     // configure the file to load
-    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, "SpyDotPropertiesTest.properties");
-    SpyDotProperties props = new SpyDotProperties();
+    System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, "SpyDotPropertiesTest.properties");
+    SpyDotPropertiesOptionsSource props = new SpyDotPropertiesOptionsSource();
     assertNotNull("properties not loaded!", props.getOptions());
   }
 
@@ -84,9 +84,9 @@ public class SpyDotPropertiesTest extends BaseTestCase {
     PrintWriter pw = new PrintWriter(testFile);
     pw.println("modulelist=testModule");
     pw.close();
-    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, testFile.getName());
+    System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, testFile.getName());
 
-    SpyDotProperties props = new SpyDotProperties();
+    SpyDotPropertiesOptionsSource props = new SpyDotPropertiesOptionsSource();
     assertNotNull("properties not loaded!", props.getOptions());
     
     if( !testFile.delete() ) {      
@@ -98,9 +98,9 @@ public class SpyDotPropertiesTest extends BaseTestCase {
   @Test
   public void testMissingSpyDotProperties() throws Exception {
     
-    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, UUID.randomUUID().toString());
+    System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, UUID.randomUUID().toString());
 
-    SpyDotProperties props = new SpyDotProperties();
+    SpyDotPropertiesOptionsSource props = new SpyDotPropertiesOptionsSource();
     assertNull("properties loaded!", props.getOptions());
   }
 

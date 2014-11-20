@@ -36,23 +36,24 @@ import javax.management.NotCompliantMBeanException;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
-import com.p6spy.engine.spy.option.EnvironmentVariables;
-import com.p6spy.engine.spy.option.P6OptionChangedListener;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
-import com.p6spy.engine.spy.option.P6OptionsSource;
-import com.p6spy.engine.spy.option.SpyDotProperties;
-import com.p6spy.engine.spy.option.SystemProperties;
+import com.p6spy.engine.spy.option.EnvironmentVariablesOptionsSource;
+import com.p6spy.engine.spy.option.OptionChangeListener;
+import com.p6spy.engine.spy.option.OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepositoryFactory;
+import com.p6spy.engine.spy.option.OptionsSource;
+import com.p6spy.engine.spy.option.SpyDotPropertiesOptionsSource;
+import com.p6spy.engine.spy.option.SystemPropertiesOptionsSource;
 
 public class P6ModuleManager {
 
   // recreated on each reload
-  private final P6OptionsSource[] optionsSources = new P6OptionsSource[] {
-      new SpyDotProperties(), new EnvironmentVariables(), new SystemProperties() };
+  private final OptionsSource[] optionsSources = new OptionsSource[] {
+      new SpyDotPropertiesOptionsSource(), new EnvironmentVariablesOptionsSource(), new SystemPropertiesOptionsSource() };
   private final Map<Class<? extends P6LoadableOptions>, P6LoadableOptions> allOptions = new HashMap<Class<? extends P6LoadableOptions>, P6LoadableOptions>();
   private final List<P6Factory> factories = new CopyOnWriteArrayList<P6Factory>();
   private final P6MBeansRegistry mBeansRegistry = new P6MBeansRegistry();
 
-  private final P6OptionsRepository optionsRepository = new P6OptionsRepository();
+  private final OptionsRepository optionsRepository = OptionsRepositoryFactory.getRepository(true);
 
   // singleton
   private static P6ModuleManager instance;
@@ -74,7 +75,9 @@ public class P6ModuleManager {
       P6LogQuery.initialize();
       
       // get rid of old cached stuff
+      // TODO registry concept?
       GenericInvocationHandler.clearCache();
+      P6JdbcUrlFactory.clearCache();
       
     } catch (IOException e) {
       handleInitEx(e);
@@ -95,7 +98,7 @@ public class P6ModuleManager {
       return;
     }
 
-    for (P6OptionsSource optionsSource : instance.optionsSources) {
+    for (OptionsSource optionsSource : instance.optionsSources) {
       optionsSource.preDestroy(instance);
     }
 
@@ -137,11 +140,11 @@ public class P6ModuleManager {
 	    }
   	}
   
-    optionsRepository.initCompleted();
+    optionsRepository.getOptionChangePropagator().fireDelayedOptionChanges();;
     
     mBeansRegistry.registerMBeans(allOptions.values());
     
-    for (P6OptionsSource optionsSource : optionsSources) {
+    for (OptionsSource optionsSource : optionsSources) {
       optionsSource.postInit(this);
     }
 
@@ -186,7 +189,7 @@ public class P6ModuleManager {
 		options.load(options.getDefaults());
 
 		// load the rest in the right order then
-		for (P6OptionsSource optionsSource : optionsSources) {
+		for (OptionsSource optionsSource : optionsSources) {
 			Map<String, String> toLoad = optionsSource.getOptions();
 			if (null != toLoad) {
 				options.load(toLoad);
@@ -260,12 +263,12 @@ public class P6ModuleManager {
     return factories;
   }
 
-  public void registerOptionChangedListener(P6OptionChangedListener listener) {
-    optionsRepository.registerOptionChangedListener(listener);
+  public void registerOptionChangedListener(OptionChangeListener listener) {
+    optionsRepository.getOptionChangePropagator().registerOptionChangedListener(listener);
   }
 
-  public void unregisterOptionChangedListener(P6OptionChangedListener listener) {
-    optionsRepository.unregisterOptionChangedListener(listener);
+  public void unregisterOptionChangedListener(OptionChangeListener listener) {
+    optionsRepository.getOptionChangePropagator().unregisterOptionChangedListener(listener);
   }
 	
 }

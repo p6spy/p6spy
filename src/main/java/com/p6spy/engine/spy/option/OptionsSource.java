@@ -23,8 +23,16 @@ import java.util.Map;
 
 import com.p6spy.engine.spy.P6ModuleManager;
 
-public interface P6OptionsSource {
+/**
+ * Source of the options usable for p6spy configuration.
+ * 
+ * @author peterb
+ */
+public interface OptionsSource {
 
+  /**
+   * @return the options loaded from source.
+   */
   public Map<String, String> getOptions();
 
   /**

@@ -23,9 +23,10 @@ import com.p6spy.engine.common.P6ObjectEqualsDelegate;
 import com.p6spy.engine.common.P6ProxyUnwrapDelegate;
 import com.p6spy.engine.common.P6WrapperIsWrapperDelegate;
 import com.p6spy.engine.common.P6WrapperUnwrapDelegate;
-import com.p6spy.engine.proxy.cache.Cache;
-import com.p6spy.engine.proxy.cache.CacheFactory;
 import com.p6spy.engine.proxy.cache.MethodMatcherCacheKey;
+import com.p6spy.engine.spy.cache.Cache;
+import com.p6spy.engine.spy.cache.CacheFactory;
+
 import net.sf.cglib.proxy.InvocationHandler;
 
 import java.lang.reflect.InvocationTargetException;

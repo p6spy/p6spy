@@ -60,7 +60,7 @@ public class P6TestOptionsReload extends BaseTestCase {
   @After
   public void tearDown() {
     // cleanup to make sure other tests work as expected
-    System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.STACKTRACE);
+    System.getProperties().remove(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.STACKTRACE);
   }
 
   /**
@@ -121,7 +121,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
 
     // no explicit props reload, just modify timestamp and wait till autoreload happens
-    FileUtils.touch(new File(System.getProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY)));
+    FileUtils.touch(new File(System.getProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY)));
     Thread.sleep(2000);
 
     // jmx value modification discarted
@@ -139,7 +139,7 @@ public class P6TestOptionsReload extends BaseTestCase {
 
     // disable auto reload
     P6SpyOptions.getActiveInstance().setReloadProperties(false);
-    FileUtils.touch(new File(System.getProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY)));
+    FileUtils.touch(new File(System.getProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY)));
     Thread.sleep(2000);
 
     // reload didn't happen
@@ -147,7 +147,7 @@ public class P6TestOptionsReload extends BaseTestCase {
 
     // enable auto reload
     P6SpyOptions.getActiveInstance().setReloadProperties(true);
-    FileUtils.touch(new File(System.getProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY)));
+    FileUtils.touch(new File(System.getProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY)));
     Thread.sleep(2000);
 
     // reload did happen
@@ -160,7 +160,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     // # no properties file at all
     // => false (+ survives across reloads)
     {
-      System.getProperties().remove(SpyDotProperties.OPTIONS_FILE_PROPERTY);
+      System.getProperties().remove(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY);
 
       P6SpyOptions.getActiveInstance().reload();
 
@@ -177,7 +177,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     {
       File p6TestProperties = new File(P6TestFramework.TEST_FILE_PATH, "P6Test_reload.properties");
       System
-          .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
+          .setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
       P6SpyOptions.getActiveInstance().reload();
 
       assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
@@ -193,7 +193,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     {
       File p6TestProperties = new File(P6TestFramework.TEST_FILE_PATH, "P6Test_reload_2.properties");
       System
-          .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
+          .setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
       P6SpyOptions.getActiveInstance().reload();
 
       assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
@@ -208,7 +208,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     // [SystemProperties] stacktrace=false
     // => false (+ survives across reloads)
     {
-      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.STACKTRACE,
+      System.setProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.STACKTRACE,
           Boolean.toString(false));
       P6SpyOptions.getActiveInstance().reload();
 
@@ -227,7 +227,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     {
       File p6TestProperties = new File(P6TestFramework.TEST_FILE_PATH, "P6Test_reload_2.properties");
       System
-          .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
+          .setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
 
       final String domainName = P6MBeansRegistry.PACKAGE_NAME;
       final String beanName = P6SpyOptions.class.getName();
@@ -275,7 +275,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     // [default] stacktrace=false
     // [SpyDotProperties] stacktrace=true
     // => true
-    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
+    System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY,
         spyDotPropertiesWithSpaceInPath.getAbsolutePath());
     P6SpyOptions.getActiveInstance().reload();
 

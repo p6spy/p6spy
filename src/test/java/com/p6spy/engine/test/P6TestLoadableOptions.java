@@ -54,4 +54,16 @@ public interface P6TestLoadableOptions extends P6LoadableOptions, P6TestOptionsM
 
   void setXaDataSource(String xaDataSource);
 
+  String getUrl3();
+
+  void setUrl3(String url3);
+
+  String getUser3();
+
+  void setUser3(String user3);
+
+  String getPassword3();
+
+  void setPassword3(String password3);
+
 }

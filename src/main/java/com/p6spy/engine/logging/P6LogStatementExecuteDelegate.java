@@ -48,7 +48,7 @@ class P6LogStatementExecuteDelegate implements Delegate {
       return result;
     }
     finally {
-      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, Category.STATEMENT, statementInformation);
+      P6LogQuery.logElapsed(statementInformation.getConnectionInformation(), startTime, Category.STATEMENT, statementInformation);
     }
   }
 }

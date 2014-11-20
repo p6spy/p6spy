@@ -33,7 +33,8 @@ import org.junit.Test;
 
 import com.j256.simplejmx.client.JmxClient;
 import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepositoryFactory;
 
 public class P6MBeanRegistryTest {
 
@@ -107,12 +108,12 @@ public class P6MBeanRegistryTest {
       mBeansRegistry = new P6MBeansRegistry();
     }
 
-    final P6OptionsRepository repo = new P6OptionsRepository();
+    final OptionsRepository repo = OptionsRepositoryFactory.getRepository(true);
     final P6SpyOptions opts = new P6SpyOptions(repo);
     opts.load(opts.getDefaults());
     opts.setAppend(appendProperty);
     opts.setJmxPrefix(jmxPrefix);
-    repo.initCompleted();
+    repo.getOptionChangePropagator().fireDelayedOptionChanges();
 
     mBeansRegistry.registerMBeans(new ArrayList<P6LoadableOptions>(Arrays.asList(opts)));
 

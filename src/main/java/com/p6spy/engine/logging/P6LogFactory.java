@@ -22,7 +22,7 @@ package com.p6spy.engine.logging;
 import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.spy.P6Factory;
 import com.p6spy.engine.spy.P6LoadableOptions;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -30,13 +30,13 @@ import java.sql.SQLException;
 public class P6LogFactory implements P6Factory {
 
   @Override
-  public Connection getConnection(Connection conn) throws SQLException {
-    P6LogConnectionInvocationHandler invocationHandler = new P6LogConnectionInvocationHandler(conn);
+  public Connection getConnection(Connection conn, OptionsRepository optionsRepository) throws SQLException {
+    P6LogConnectionInvocationHandler invocationHandler = new P6LogConnectionInvocationHandler(conn, optionsRepository);
     return ProxyFactory.createProxy(conn, invocationHandler);
   }
 
   @Override
-  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
+  public P6LoadableOptions getOptions(OptionsRepository optionsRepository) {
     return new P6LogOptions(optionsRepository);
   }
 

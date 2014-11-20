@@ -25,7 +25,7 @@ import java.util.Map;
 import javax.management.StandardMBean;
 
 import com.p6spy.engine.spy.P6ModuleManager;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 public class P6OutageOptions extends StandardMBean implements P6OutageLoadableOptions {
 
@@ -40,9 +40,9 @@ public class P6OutageOptions extends StandardMBean implements P6OutageLoadableOp
     defaults.put(OUTAGEDETECTIONINTERVAL, Long.toString(30));
   }
 
-  private final P6OptionsRepository optionsRepository;
+  private final OptionsRepository optionsRepository;
 
-  public P6OutageOptions(final P6OptionsRepository optionsRepository) {
+  public P6OutageOptions(final OptionsRepository optionsRepository) {
     super(P6OutageOptionsMBean.class, false);
     this.optionsRepository = optionsRepository;
   }

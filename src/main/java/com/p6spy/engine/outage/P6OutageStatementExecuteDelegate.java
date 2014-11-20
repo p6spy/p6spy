@@ -41,7 +41,7 @@ class P6OutageStatementExecuteDelegate implements Delegate {
     }
 
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, startTime, "statement", "", statementInformation.getStatementQuery());
+      P6OutageDetector.getInstance().registerInvocation(statementInformation.getConnectionInformation(), this, startTime, "statement", "", statementInformation.getStatementQuery());
     }
 
     try {

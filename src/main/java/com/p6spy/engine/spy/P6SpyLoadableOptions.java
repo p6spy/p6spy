@@ -23,6 +23,7 @@ import java.util.Set;
 
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsMBean {
   
@@ -43,4 +44,9 @@ public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsMBe
   MessageFormattingStrategy getLogMessageFormatInstance();
   
   void setJmx(String jmx);
+
+  // 
+  // API for higher priority options repository
+  //
+  String getInstanceId(OptionsRepository highPriorityOptionsRepository);
 }

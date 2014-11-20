@@ -36,14 +36,16 @@ import java.util.List;
 public class P6TestLogger extends StdoutLogger {
 
   private ArrayList<String> logs = new ArrayList<String>();
+  private ArrayList<String> instanceIds = new ArrayList<String>();
   private String lastStacktrace;
 
   @Override
-  public void logText(String text) {
+  public void logText(final String instanceId, String text) {
     if (null != text) {
       logs.add(text);
+      instanceIds.add(instanceId);
     }
-    super.logText(text);
+    super.logText(instanceId, text);
   }
 
   public List<String> getLogs() {
@@ -52,10 +54,15 @@ public class P6TestLogger extends StdoutLogger {
 
   public void clearLogs() {
     logs.clear();
+    instanceIds.clear();
   }
 
   public String getLastEntry() {
     return logs.isEmpty() ? null : logs.get(logs.size() - 1);
+  }
+  
+  public String getLastInstanceId() {
+    return instanceIds.isEmpty() ? null : instanceIds.get(instanceIds.size() - 1);
   }
 
   public String getLastButOneEntry() {
@@ -67,12 +74,12 @@ public class P6TestLogger extends StdoutLogger {
   }
 
   @Override
-  public void logException(Exception e) {
+  public void logException(String instanceId, Exception e) {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
     e.printStackTrace(pw);
     lastStacktrace = sw.toString();
-    super.logException(e);
+    super.logException(instanceId, e);
   }
 
   public void clearLastStacktrace() {

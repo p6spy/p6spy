@@ -23,6 +23,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.p6spy.engine.spy.option.OptionsRepository;
+
 /**
  * @author Quinton McCombs
  * @since 09/2013
@@ -31,12 +33,12 @@ public class P6Core {
 
   private static boolean initialized;
 
-  public static Connection wrapConnection(Connection realConnection) throws SQLException {
+  public static Connection wrapConnection(Connection realConnection, OptionsRepository optionsRepository) throws SQLException {
     Connection con = realConnection;
     List<P6Factory> factories = P6ModuleManager.getInstance().getFactories();
     if (factories != null) {
       for (P6Factory factory : factories) {
-        con = factory.getConnection(con);
+        con = factory.getConnection(con, optionsRepository);
       }
     }
     return con;

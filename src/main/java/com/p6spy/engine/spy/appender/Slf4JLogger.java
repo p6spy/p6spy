@@ -37,19 +37,19 @@ public class Slf4JLogger extends FormattedLogger {
 	}
 
 	@Override
-	public void logException(Exception e) {
+	public void logException(final String instanceId, Exception e) {
 		log.info("", e);
 	}
 
 	@Override
-	public void logText(String text) {
+	public void logText(final String instanceId, String text) {
 		log.info(text);
 	}
 
 	@Override
-	public void logSQL(int connectionId, String now, long elapsed,
+	public void logSQL(final String instanceId, final int connectionId, String now, long elapsed,
 			Category category, String prepared, String sql) {
-		final String msg = strategy.formatMessage(connectionId, now, elapsed,
+		final String msg = strategy.formatMessage(instanceId, connectionId, now, elapsed,
 				category.toString(), prepared, sql);
 
 		if (Category.ERROR.equals(category)) {

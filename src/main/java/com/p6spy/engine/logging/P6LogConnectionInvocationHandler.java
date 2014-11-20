@@ -22,6 +22,7 @@ package com.p6spy.engine.logging;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameMatcher;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 import java.sql.Connection;
 
@@ -30,9 +31,9 @@ import java.sql.Connection;
  */
 public class P6LogConnectionInvocationHandler extends GenericInvocationHandler<Connection> {
 
-  public P6LogConnectionInvocationHandler(Connection underlying) {
+  public P6LogConnectionInvocationHandler(Connection underlying, final OptionsRepository optionsRepository) {
     super(underlying);
-    ConnectionInformation connectionInformation = new ConnectionInformation();
+    ConnectionInformation connectionInformation = new ConnectionInformation(optionsRepository);
 
     P6LogConnectionCommitDelegate commitDelegate = new P6LogConnectionCommitDelegate(connectionInformation);
     P6LogConnectionRollbackDelegate rollbackDelegate = new P6LogConnectionRollbackDelegate(connectionInformation);

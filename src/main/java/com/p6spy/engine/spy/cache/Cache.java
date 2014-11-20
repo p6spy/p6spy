@@ -2,7 +2,7 @@
  * #%L
  * P6Spy
  * %%
- * Copyright (C) 2013 P6Spy
+ * Copyright (C) 2002 - 2014 P6Spy
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,21 @@
  * limitations under the License.
  * #L%
  */
-package com.p6spy.engine.spy;
+package com.p6spy.engine.spy.cache;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 
-import com.p6spy.engine.spy.option.OptionsRepository;
+/**
+ * Simple cache.
+ * 
+ * @author Peter Butkovic
+ */
+public interface Cache<K, V> {
 
-public class P6SpyFactory implements P6Factory {
+  V get(K key);
 
-  @Override
-  public P6LoadableOptions getOptions(OptionsRepository optionsRepository) {
-    return new P6SpyOptions(optionsRepository);
-  }
+  boolean contains(K key);
 
-  @Override
-  public Connection getConnection(Connection conn, OptionsRepository optionsRepository) throws SQLException {
-    // no wrapping required here
-    return conn;
-  }
+  void put(K key, V value);
 
+  void clear();
 }

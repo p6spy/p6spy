@@ -31,7 +31,7 @@ import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions {
 
@@ -56,6 +56,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
     public static final String JMX = "jmx";
     public static final String JMX_PREFIX = "jmxPrefix";
+    public static final String INSTANCE_ID = "instanceId";
     
     // those set indirectly (via properties visible from outside)
     public static final String DRIVER_NAMES = "driverNames";
@@ -81,9 +82,9 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       defaults.put(JMX, Boolean.TRUE.toString());
     }
 
-    private final P6OptionsRepository optionsRepository;
+    private final OptionsRepository optionsRepository;
 
-    public P6SpyOptions(final P6OptionsRepository optionsRepository) {
+    public P6SpyOptions(final OptionsRepository optionsRepository) {
       super(P6SpyOptionsMBean.class, false);
       this.optionsRepository = optionsRepository;
     }
@@ -111,6 +112,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
       setJmx(options.get(JMX));
       setJmxPrefix(options.get(JMX_PREFIX));
+      setInstanceId(options.get(INSTANCE_ID));
     }
     
     /**
@@ -444,5 +446,20 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     @Override
     public void setJmxPrefix(String jmxPrefix) {
       optionsRepository.set(String.class, JMX_PREFIX, jmxPrefix);
+    }
+    
+    @Override
+    public String getInstanceId() {
+      return optionsRepository.get(String.class, INSTANCE_ID);
+    }
+    
+    @Override
+    public String getInstanceId(OptionsRepository highPriorityOptionsRepository) {
+      return optionsRepository.get(highPriorityOptionsRepository, String.class, INSTANCE_ID);
+    }
+    
+    @Override
+    public void setInstanceId(String instanceId) {
+      optionsRepository.set(String.class, INSTANCE_ID, instanceId);
     }
 }

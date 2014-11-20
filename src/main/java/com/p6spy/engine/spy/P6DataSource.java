@@ -276,7 +276,7 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (rds == null) {
       bindDataSource();
     }
-    return P6Core.wrapConnection(((DataSource) rds).getConnection());
+    return P6Core.wrapConnection(((DataSource) rds).getConnection(), null);
   }
 
   @Override
@@ -284,7 +284,7 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (rds == null) {
       bindDataSource();
     }
-    return P6Core.wrapConnection(((DataSource) rds).getConnection(username, password));
+    return P6Core.wrapConnection(((DataSource) rds).getConnection(username, password), null);
   }
 
   /**

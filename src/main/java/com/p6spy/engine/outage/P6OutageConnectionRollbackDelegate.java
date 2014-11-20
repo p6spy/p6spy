@@ -37,7 +37,7 @@ class P6OutageConnectionRollbackDelegate implements Delegate {
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     long startTime = System.currentTimeMillis();
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, startTime, "rollback", "", "");
+      P6OutageDetector.getInstance().registerInvocation(connectionInformation, this, startTime, "rollback", "", "");
     }
 
     try {

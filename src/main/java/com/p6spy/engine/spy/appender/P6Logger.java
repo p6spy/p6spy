@@ -26,6 +26,8 @@ public interface P6Logger {
         /**
          * Logs the {@code SQL}.
          * 
+         * @param instanceId
+         *            instance identifier. 
          * @param connectionId
          *            connection identifier.
          * @param now
@@ -38,24 +40,28 @@ public interface P6Logger {
          * @param sql
          *            the {@code SQL} to be logged.
          */
-        public void logSQL(int connectionId, String now, long elapsed,
+        public void logSQL(final String instanceId, int connectionId, String now, long elapsed,
                         Category category, String prepared, String sql);
 
         /**
          * Logs the stacktrace of the exception.
          * 
+         * @param instanceId
+         *            instance identifier.
          * @param e
          *            exception holding the stacktrace to be logged.
          */
-        public void logException(Exception e);
+        public void logException(final String instanceId, Exception e);
 
         /**
          * Logs the text.
          * 
+         * @param instanceId
+         *            instance identifier.
          * @param text
          *            to be logged
          */
-        public void logText(String text);
+        public void logText(final String instanceId, String text);
 
         /**
          * @param category

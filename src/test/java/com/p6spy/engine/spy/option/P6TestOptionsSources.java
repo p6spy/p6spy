@@ -48,7 +48,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 	public void tearDown() {
 		// cleanup to make sure other tests work as expected
 		System.getProperties().remove(
-				SystemProperties.P6SPY_PREFIX + P6LogOptions.EXCLUDECATEGORIES);
+				SystemPropertiesOptionsSource.P6SPY_PREFIX + P6LogOptions.EXCLUDECATEGORIES);
 	}
 
 	@Test
@@ -91,7 +91,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 	public void testSysPropertyEmptyStringValueClearsSetOption() throws SQLException,
 			IOException {
 		System.getProperties().setProperty(
-				SystemProperties.P6SPY_PREFIX + P6LogOptions.EXCLUDECATEGORIES,
+				SystemPropertiesOptionsSource.P6SPY_PREFIX + P6LogOptions.EXCLUDECATEGORIES,
 				"");
 
 		new P6TestFramework("blank") {

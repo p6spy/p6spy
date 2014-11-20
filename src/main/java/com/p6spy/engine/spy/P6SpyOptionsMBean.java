@@ -127,4 +127,8 @@ public interface P6SpyOptionsMBean {
   String getJmxPrefix();
   
   void setJmxPrefix(String jmxPrefix);
+  
+  String getInstanceId();
+  
+  void setInstanceId(String instanceId);
 }

@@ -31,19 +31,19 @@ public class StdoutLogger extends FormattedLogger {
     }
     
     @Override
-    public void logException(Exception e) {
+    public void logException(final String instanceId, Exception e) {
       e.printStackTrace(qlog);
     }
 
     @Override
-    public void logText(String text) {
+    public void logText(final String instanceId, String text) {
       qlog.println(text);
     }
 
-        @Override
-        public boolean isCategoryEnabled(Category category) {
-                // no restrictions on logger side
-                return true;
-        }
+    @Override
+    public boolean isCategoryEnabled(Category category) {
+            // no restrictions on logger side
+            return true;
+    }
 }
 
