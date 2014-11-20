@@ -39,7 +39,7 @@ public class P6JdbcUrl {
    * Pattern indivating whether particular jdbc url is to be accepted by {@link P6SpyDriver}.
    */
   public static final Pattern PATTERN_URL = Pattern
-      .compile("^jdbc:p6spy(:p6spy[^:]*)?(:[^p6spy].*)$");
+      .compile("^jdbc:p6spy(:p6spy[^:]*)?(:.*)$");
   
   private final boolean accepted;
   private final String proxiedUrl;

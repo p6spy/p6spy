@@ -41,6 +41,7 @@ public class P6JdbcUrlTest extends BaseTestCase {
   
   @Test
   public void testIsAcceptedForAcceptedUrls() throws SQLException {
+    Assert.assertTrue(new P6JdbcUrl("jdbc:p6spy:sqlite:target/p6spy.db").isAccepted());
     Assert.assertTrue(new P6JdbcUrl("jdbc:p6spy:mysql:localhost:123").isAccepted());
     Assert.assertTrue(new P6JdbcUrl("jdbc:p6spy:p6spy.config.jmx=true:mysql:localhost:123").isAccepted());
     Assert.assertTrue(new P6JdbcUrl("jdbc:p6spy:p6spy.config.jmx=true;:mysql:localhost:123").isAccepted());
