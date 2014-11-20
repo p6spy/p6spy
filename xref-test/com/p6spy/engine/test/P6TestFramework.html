@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.P6SpyOptions;
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.P6TestUtil;
 <a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.P6TestLogger;
-<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.SpyDotProperties;
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.SpyDotPropertiesOptionsSource;
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.log4j.Logger;
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.After;
 <a class="jxr_linenumber" name="31" href="#31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.Before;
@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="63" href="#63">63</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/test/P6TestFramework.html">P6TestFramework</a>(String db) <strong class="jxr_keyword">throws</strong> SQLException, IOException {
 <a class="jxr_linenumber" name="64" href="#64">64</a>      <strong class="jxr_keyword">this</strong>.db = db;
 <a class="jxr_linenumber" name="65" href="#65">65</a>      <strong class="jxr_keyword">final</strong> File p6TestProperties = <strong class="jxr_keyword">new</strong> File(TEST_FILE_PATH, <span class="jxr_string">"P6Test_"</span> + db + <span class="jxr_string">".properties"</span>);
-<a class="jxr_linenumber" name="66" href="#66">66</a>      System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
+<a class="jxr_linenumber" name="66" href="#66">66</a>      System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
 <a class="jxr_linenumber" name="67" href="#67">67</a>      log.info(<span class="jxr_string">"P6Spy will be configured using "</span> + p6TestProperties.getName());
 <a class="jxr_linenumber" name="68" href="#68">68</a>  
 <a class="jxr_linenumber" name="69" href="#69">69</a>      <em class="jxr_comment">// make sure to reinit for each Driver run as we run parametrized builds</em>

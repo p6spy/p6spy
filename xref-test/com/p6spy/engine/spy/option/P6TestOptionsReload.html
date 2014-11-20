@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="60" href="#60">60</a>    @After
 <a class="jxr_linenumber" name="61" href="#61">61</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> tearDown() {
 <a class="jxr_linenumber" name="62" href="#62">62</a>      <em class="jxr_comment">// cleanup to make sure other tests work as expected</em>
-<a class="jxr_linenumber" name="63" href="#63">63</a>      System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.STACKTRACE);
+<a class="jxr_linenumber" name="63" href="#63">63</a>      System.getProperties().remove(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.STACKTRACE);
 <a class="jxr_linenumber" name="64" href="#64">64</a>    }
 <a class="jxr_linenumber" name="65" href="#65">65</a>  
 <a class="jxr_linenumber" name="66" href="#66">66</a>    <em class="jxr_javadoccomment">/**</em>
@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="121" href="#121">121</a>     assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
 <a class="jxr_linenumber" name="122" href="#122">122</a> 
 <a class="jxr_linenumber" name="123" href="#123">123</a>     <em class="jxr_comment">// no explicit props reload, just modify timestamp and wait till autoreload happens</em>
-<a class="jxr_linenumber" name="124" href="#124">124</a>     FileUtils.touch(<strong class="jxr_keyword">new</strong> File(System.getProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY)));
+<a class="jxr_linenumber" name="124" href="#124">124</a>     FileUtils.touch(<strong class="jxr_keyword">new</strong> File(System.getProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY)));
 <a class="jxr_linenumber" name="125" href="#125">125</a>     Thread.sleep(2000);
 <a class="jxr_linenumber" name="126" href="#126">126</a> 
 <a class="jxr_linenumber" name="127" href="#127">127</a>     <em class="jxr_comment">// jmx value modification discarted</em>
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="139" href="#139">139</a> 
 <a class="jxr_linenumber" name="140" href="#140">140</a>     <em class="jxr_comment">// disable auto reload</em>
 <a class="jxr_linenumber" name="141" href="#141">141</a>     P6SpyOptions.getActiveInstance().setReloadProperties(false);
-<a class="jxr_linenumber" name="142" href="#142">142</a>     FileUtils.touch(<strong class="jxr_keyword">new</strong> File(System.getProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY)));
+<a class="jxr_linenumber" name="142" href="#142">142</a>     FileUtils.touch(<strong class="jxr_keyword">new</strong> File(System.getProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY)));
 <a class="jxr_linenumber" name="143" href="#143">143</a>     Thread.sleep(2000);
 <a class="jxr_linenumber" name="144" href="#144">144</a> 
 <a class="jxr_linenumber" name="145" href="#145">145</a>     <em class="jxr_comment">// reload didn't happen</em>
@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="147" href="#147">147</a> 
 <a class="jxr_linenumber" name="148" href="#148">148</a>     <em class="jxr_comment">// enable auto reload</em>
 <a class="jxr_linenumber" name="149" href="#149">149</a>     P6SpyOptions.getActiveInstance().setReloadProperties(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="150" href="#150">150</a>     FileUtils.touch(<strong class="jxr_keyword">new</strong> File(System.getProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY)));
+<a class="jxr_linenumber" name="150" href="#150">150</a>     FileUtils.touch(<strong class="jxr_keyword">new</strong> File(System.getProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY)));
 <a class="jxr_linenumber" name="151" href="#151">151</a>     Thread.sleep(2000);
 <a class="jxr_linenumber" name="152" href="#152">152</a> 
 <a class="jxr_linenumber" name="153" href="#153">153</a>     <em class="jxr_comment">// reload did happen</em>
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="160" href="#160">160</a>     <em class="jxr_comment">// # no properties file at all</em>
 <a class="jxr_linenumber" name="161" href="#161">161</a>     <em class="jxr_comment">// =&gt; false (+ survives across reloads)</em>
 <a class="jxr_linenumber" name="162" href="#162">162</a>     {
-<a class="jxr_linenumber" name="163" href="#163">163</a>       System.getProperties().remove(SpyDotProperties.OPTIONS_FILE_PROPERTY);
+<a class="jxr_linenumber" name="163" href="#163">163</a>       System.getProperties().remove(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY);
 <a class="jxr_linenumber" name="164" href="#164">164</a> 
 <a class="jxr_linenumber" name="165" href="#165">165</a>       P6SpyOptions.getActiveInstance().reload();
 <a class="jxr_linenumber" name="166" href="#166">166</a> 
@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="177" href="#177">177</a>     {
 <a class="jxr_linenumber" name="178" href="#178">178</a>       File p6TestProperties = <strong class="jxr_keyword">new</strong> File(P6TestFramework.TEST_FILE_PATH, <span class="jxr_string">"P6Test_reload.properties"</span>);
 <a class="jxr_linenumber" name="179" href="#179">179</a>       System
-<a class="jxr_linenumber" name="180" href="#180">180</a>           .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
+<a class="jxr_linenumber" name="180" href="#180">180</a>           .setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
 <a class="jxr_linenumber" name="181" href="#181">181</a>       P6SpyOptions.getActiveInstance().reload();
 <a class="jxr_linenumber" name="182" href="#182">182</a> 
 <a class="jxr_linenumber" name="183" href="#183">183</a>       assertFalse(P6SpyOptions.getActiveInstance().getStackTrace());
@@ -203,7 +203,7 @@
 <a class="jxr_linenumber" name="193" href="#193">193</a>     {
 <a class="jxr_linenumber" name="194" href="#194">194</a>       File p6TestProperties = <strong class="jxr_keyword">new</strong> File(P6TestFramework.TEST_FILE_PATH, <span class="jxr_string">"P6Test_reload_2.properties"</span>);
 <a class="jxr_linenumber" name="195" href="#195">195</a>       System
-<a class="jxr_linenumber" name="196" href="#196">196</a>           .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
+<a class="jxr_linenumber" name="196" href="#196">196</a>           .setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
 <a class="jxr_linenumber" name="197" href="#197">197</a>       P6SpyOptions.getActiveInstance().reload();
 <a class="jxr_linenumber" name="198" href="#198">198</a> 
 <a class="jxr_linenumber" name="199" href="#199">199</a>       assertTrue(P6SpyOptions.getActiveInstance().getStackTrace());
@@ -218,7 +218,7 @@
 <a class="jxr_linenumber" name="208" href="#208">208</a>     <em class="jxr_comment">// [SystemProperties] stacktrace=false</em>
 <a class="jxr_linenumber" name="209" href="#209">209</a>     <em class="jxr_comment">// =&gt; false (+ survives across reloads)</em>
 <a class="jxr_linenumber" name="210" href="#210">210</a>     {
-<a class="jxr_linenumber" name="211" href="#211">211</a>       System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.STACKTRACE,
+<a class="jxr_linenumber" name="211" href="#211">211</a>       System.setProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.STACKTRACE,
 <a class="jxr_linenumber" name="212" href="#212">212</a>           Boolean.toString(false));
 <a class="jxr_linenumber" name="213" href="#213">213</a>       P6SpyOptions.getActiveInstance().reload();
 <a class="jxr_linenumber" name="214" href="#214">214</a> 
@@ -237,7 +237,7 @@
 <a class="jxr_linenumber" name="227" href="#227">227</a>     {
 <a class="jxr_linenumber" name="228" href="#228">228</a>       File p6TestProperties = <strong class="jxr_keyword">new</strong> File(P6TestFramework.TEST_FILE_PATH, <span class="jxr_string">"P6Test_reload_2.properties"</span>);
 <a class="jxr_linenumber" name="229" href="#229">229</a>       System
-<a class="jxr_linenumber" name="230" href="#230">230</a>           .setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
+<a class="jxr_linenumber" name="230" href="#230">230</a>           .setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
 <a class="jxr_linenumber" name="231" href="#231">231</a> 
 <a class="jxr_linenumber" name="232" href="#232">232</a>       <strong class="jxr_keyword">final</strong> String domainName = P6MBeansRegistry.PACKAGE_NAME;
 <a class="jxr_linenumber" name="233" href="#233">233</a>       <strong class="jxr_keyword">final</strong> String beanName = P6SpyOptions.<strong class="jxr_keyword">class</strong>.getName();
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="275" href="#275">275</a>     <em class="jxr_comment">// [default] stacktrace=false</em>
 <a class="jxr_linenumber" name="276" href="#276">276</a>     <em class="jxr_comment">// [SpyDotProperties] stacktrace=true</em>
 <a class="jxr_linenumber" name="277" href="#277">277</a>     <em class="jxr_comment">// =&gt; true</em>
-<a class="jxr_linenumber" name="278" href="#278">278</a>     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY,
+<a class="jxr_linenumber" name="278" href="#278">278</a>     System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY,
 <a class="jxr_linenumber" name="279" href="#279">279</a>         spyDotPropertiesWithSpaceInPath.getAbsolutePath());
 <a class="jxr_linenumber" name="280" href="#280">280</a>     P6SpyOptions.getActiveInstance().reload();
 <a class="jxr_linenumber" name="281" href="#281">281</a> 

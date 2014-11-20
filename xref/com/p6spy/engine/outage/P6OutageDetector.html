@@ -122,8 +122,8 @@
 <a class="jxr_linenumber" name="112" href="#112">112</a> <em class="jxr_javadoccomment">     * Registers the execution of a statement. This should be called just before the statement is</em>
 <a class="jxr_linenumber" name="113" href="#113">113</a> <em class="jxr_javadoccomment">     * passed to the real driver.</em>
 <a class="jxr_linenumber" name="114" href="#114">114</a> <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="115" href="#115">115</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> registerInvocation(Object jdbcObject, <strong class="jxr_keyword">long</strong> startTime, String category, String ps, String sql) {
-<a class="jxr_linenumber" name="116" href="#116">116</a>         pendingMessages.put(jdbcObject, <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/outage/P6OutageDetector.html">InvocationInfo</a>(startTime, category, ps, sql));
+<a class="jxr_linenumber" name="115" href="#115">115</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> registerInvocation(<a href="../../../../com/p6spy/engine/common/ConnectionInformation.html">ConnectionInformation</a> connectionInformation, Object jdbcObject, <strong class="jxr_keyword">long</strong> startTime, String category, String ps, String sql) {
+<a class="jxr_linenumber" name="116" href="#116">116</a>         pendingMessages.put(jdbcObject, <strong class="jxr_keyword">new</strong> <a href="../../../../com/p6spy/engine/outage/P6OutageDetector.html">InvocationInfo</a>(connectionInformation, startTime, category, ps, sql));
 <a class="jxr_linenumber" name="117" href="#117">117</a>     }
 <a class="jxr_linenumber" name="118" href="#118">118</a> 
 <a class="jxr_linenumber" name="119" href="#119">119</a>     <em class="jxr_javadoccomment">/**</em>
@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="145" href="#145">145</a>             }
 <a class="jxr_linenumber" name="146" href="#146">146</a> 
 <a class="jxr_linenumber" name="147" href="#147">147</a>             <em class="jxr_comment">// has this statement exceeded the threshold?</em>
-<a class="jxr_linenumber" name="148" href="#148">148</a>             <strong class="jxr_keyword">if</strong> ((currentTime - ii.startTime) &gt; threshold) {
+<a class="jxr_linenumber" name="148" href="#148">148</a>             <strong class="jxr_keyword">if</strong> ((currentTime - ii.getStartTime()) &gt; threshold) {
 <a class="jxr_linenumber" name="149" href="#149">149</a>                 P6LogQuery.debug(<span class="jxr_string">"P6Spy - statement exceeded threshold - check log."</span>);
 <a class="jxr_linenumber" name="150" href="#150">150</a>                 logOutage(ii);
 <a class="jxr_linenumber" name="151" href="#151">151</a>             }
@@ -163,28 +163,51 @@
 <a class="jxr_linenumber" name="153" href="#153">153</a>     }
 <a class="jxr_linenumber" name="154" href="#154">154</a> 
 <a class="jxr_linenumber" name="155" href="#155">155</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> logOutage(<a href="../../../../com/p6spy/engine/outage/P6OutageDetector.html">InvocationInfo</a> ii) {
-<a class="jxr_linenumber" name="156" href="#156">156</a>         P6LogQuery.logElapsed(-1, ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql);
+<a class="jxr_linenumber" name="156" href="#156">156</a>         P6LogQuery.logElapsed(ii.getConnectionInformation(), ii.getStartTime(), Category.OUTAGE, ii.getPreparedStmt(), ii.getSql());
 <a class="jxr_linenumber" name="157" href="#157">157</a>     }
 <a class="jxr_linenumber" name="158" href="#158">158</a> 
 <a class="jxr_linenumber" name="159" href="#159">159</a> }
 <a class="jxr_linenumber" name="160" href="#160">160</a> 
 <a class="jxr_linenumber" name="161" href="#161">161</a> <em class="jxr_comment">// inner class to hold the info about a specific statement invocation</em>
 <a class="jxr_linenumber" name="162" href="#162">162</a> <strong class="jxr_keyword">class</strong> <a href="../../../../com/p6spy/engine/outage/P6OutageDetector.html">InvocationInfo</a> {
-<a class="jxr_linenumber" name="163" href="#163">163</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> startTime;
+<a class="jxr_linenumber" name="163" href="#163">163</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> startTime;
 <a class="jxr_linenumber" name="164" href="#164">164</a> 
-<a class="jxr_linenumber" name="165" href="#165">165</a>     <strong class="jxr_keyword">public</strong> String category;
+<a class="jxr_linenumber" name="165" href="#165">165</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String category;
 <a class="jxr_linenumber" name="166" href="#166">166</a> 
-<a class="jxr_linenumber" name="167" href="#167">167</a>     <strong class="jxr_keyword">public</strong> String preparedStmt;
+<a class="jxr_linenumber" name="167" href="#167">167</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String preparedStmt;
 <a class="jxr_linenumber" name="168" href="#168">168</a> 
-<a class="jxr_linenumber" name="169" href="#169">169</a>     <strong class="jxr_keyword">public</strong> String sql;
-<a class="jxr_linenumber" name="170" href="#170">170</a> 
-<a class="jxr_linenumber" name="171" href="#171">171</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/outage/P6OutageDetector.html">InvocationInfo</a>(<strong class="jxr_keyword">long</strong> startTime, String category, String ps, String sql) {
-<a class="jxr_linenumber" name="172" href="#172">172</a>         <strong class="jxr_keyword">this</strong>.startTime = startTime;
-<a class="jxr_linenumber" name="173" href="#173">173</a>         <strong class="jxr_keyword">this</strong>.category = category;
-<a class="jxr_linenumber" name="174" href="#174">174</a>         <strong class="jxr_keyword">this</strong>.preparedStmt = ps;
-<a class="jxr_linenumber" name="175" href="#175">175</a>         <strong class="jxr_keyword">this</strong>.sql = sql;
-<a class="jxr_linenumber" name="176" href="#176">176</a>     }
-<a class="jxr_linenumber" name="177" href="#177">177</a> }
+<a class="jxr_linenumber" name="169" href="#169">169</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String sql;
+<a class="jxr_linenumber" name="170" href="#170">170</a>     
+<a class="jxr_linenumber" name="171" href="#171">171</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../com/p6spy/engine/common/ConnectionInformation.html">ConnectionInformation</a> connectionInformation;
+<a class="jxr_linenumber" name="172" href="#172">172</a> 
+<a class="jxr_linenumber" name="173" href="#173">173</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/outage/P6OutageDetector.html">InvocationInfo</a>(<a href="../../../../com/p6spy/engine/common/ConnectionInformation.html">ConnectionInformation</a> connectionInformation, <strong class="jxr_keyword">long</strong> startTime, String category, String ps, String sql) {
+<a class="jxr_linenumber" name="174" href="#174">174</a>         <strong class="jxr_keyword">this</strong>.connectionInformation = connectionInformation;
+<a class="jxr_linenumber" name="175" href="#175">175</a>         <strong class="jxr_keyword">this</strong>.startTime = startTime;
+<a class="jxr_linenumber" name="176" href="#176">176</a>         <strong class="jxr_keyword">this</strong>.category = category;
+<a class="jxr_linenumber" name="177" href="#177">177</a>         <strong class="jxr_keyword">this</strong>.preparedStmt = ps;
+<a class="jxr_linenumber" name="178" href="#178">178</a>         <strong class="jxr_keyword">this</strong>.sql = sql;
+<a class="jxr_linenumber" name="179" href="#179">179</a>     }
+<a class="jxr_linenumber" name="180" href="#180">180</a> 
+<a class="jxr_linenumber" name="181" href="#181">181</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getStartTime() {
+<a class="jxr_linenumber" name="182" href="#182">182</a>       <strong class="jxr_keyword">return</strong> startTime;
+<a class="jxr_linenumber" name="183" href="#183">183</a>     }
+<a class="jxr_linenumber" name="184" href="#184">184</a> 
+<a class="jxr_linenumber" name="185" href="#185">185</a>     <strong class="jxr_keyword">public</strong> String getCategory() {
+<a class="jxr_linenumber" name="186" href="#186">186</a>       <strong class="jxr_keyword">return</strong> category;
+<a class="jxr_linenumber" name="187" href="#187">187</a>     }
+<a class="jxr_linenumber" name="188" href="#188">188</a> 
+<a class="jxr_linenumber" name="189" href="#189">189</a>     <strong class="jxr_keyword">public</strong> String getPreparedStmt() {
+<a class="jxr_linenumber" name="190" href="#190">190</a>       <strong class="jxr_keyword">return</strong> preparedStmt;
+<a class="jxr_linenumber" name="191" href="#191">191</a>     }
+<a class="jxr_linenumber" name="192" href="#192">192</a> 
+<a class="jxr_linenumber" name="193" href="#193">193</a>     <strong class="jxr_keyword">public</strong> String getSql() {
+<a class="jxr_linenumber" name="194" href="#194">194</a>       <strong class="jxr_keyword">return</strong> sql;
+<a class="jxr_linenumber" name="195" href="#195">195</a>     }
+<a class="jxr_linenumber" name="196" href="#196">196</a> 
+<a class="jxr_linenumber" name="197" href="#197">197</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/common/ConnectionInformation.html">ConnectionInformation</a> getConnectionInformation() {
+<a class="jxr_linenumber" name="198" href="#198">198</a>       <strong class="jxr_keyword">return</strong> connectionInformation;
+<a class="jxr_linenumber" name="199" href="#199">199</a>     }
+<a class="jxr_linenumber" name="200" href="#200">200</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

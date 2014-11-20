@@ -81,8 +81,8 @@
 <a class="jxr_linenumber" name="71" href="#71">71</a>      Thread.currentThread().setContextClassLoader(tempLoader);
 <a class="jxr_linenumber" name="72" href="#72">72</a>  
 <a class="jxr_linenumber" name="73" href="#73">73</a>      <em class="jxr_comment">// configure the file to load</em>
-<a class="jxr_linenumber" name="74" href="#74">74</a>      System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, <span class="jxr_string">"SpyDotPropertiesTest.properties"</span>);
-<a class="jxr_linenumber" name="75" href="#75">75</a>      SpyDotProperties props = <strong class="jxr_keyword">new</strong> SpyDotProperties();
+<a class="jxr_linenumber" name="74" href="#74">74</a>      System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, <span class="jxr_string">"SpyDotPropertiesTest.properties"</span>);
+<a class="jxr_linenumber" name="75" href="#75">75</a>      SpyDotPropertiesOptionsSource props = <strong class="jxr_keyword">new</strong> SpyDotPropertiesOptionsSource();
 <a class="jxr_linenumber" name="76" href="#76">76</a>      assertNotNull(<span class="jxr_string">"properties not loaded!"</span>, props.getOptions());
 <a class="jxr_linenumber" name="77" href="#77">77</a>    }
 <a class="jxr_linenumber" name="78" href="#78">78</a>  
@@ -94,9 +94,9 @@
 <a class="jxr_linenumber" name="84" href="#84">84</a>      PrintWriter pw = <strong class="jxr_keyword">new</strong> PrintWriter(testFile);
 <a class="jxr_linenumber" name="85" href="#85">85</a>      pw.println(<span class="jxr_string">"modulelist=testModule"</span>);
 <a class="jxr_linenumber" name="86" href="#86">86</a>      pw.close();
-<a class="jxr_linenumber" name="87" href="#87">87</a>      System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, testFile.getName());
+<a class="jxr_linenumber" name="87" href="#87">87</a>      System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, testFile.getName());
 <a class="jxr_linenumber" name="88" href="#88">88</a>  
-<a class="jxr_linenumber" name="89" href="#89">89</a>      SpyDotProperties props = <strong class="jxr_keyword">new</strong> SpyDotProperties();
+<a class="jxr_linenumber" name="89" href="#89">89</a>      SpyDotPropertiesOptionsSource props = <strong class="jxr_keyword">new</strong> SpyDotPropertiesOptionsSource();
 <a class="jxr_linenumber" name="90" href="#90">90</a>      assertNotNull(<span class="jxr_string">"properties not loaded!"</span>, props.getOptions());
 <a class="jxr_linenumber" name="91" href="#91">91</a>      
 <a class="jxr_linenumber" name="92" href="#92">92</a>      <strong class="jxr_keyword">if</strong>( !testFile.delete() ) {      
@@ -108,9 +108,9 @@
 <a class="jxr_linenumber" name="98" href="#98">98</a>    @Test
 <a class="jxr_linenumber" name="99" href="#99">99</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMissingSpyDotProperties() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="100" href="#100">100</a>     
-<a class="jxr_linenumber" name="101" href="#101">101</a>     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, UUID.randomUUID().toString());
+<a class="jxr_linenumber" name="101" href="#101">101</a>     System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, UUID.randomUUID().toString());
 <a class="jxr_linenumber" name="102" href="#102">102</a> 
-<a class="jxr_linenumber" name="103" href="#103">103</a>     SpyDotProperties props = <strong class="jxr_keyword">new</strong> SpyDotProperties();
+<a class="jxr_linenumber" name="103" href="#103">103</a>     SpyDotPropertiesOptionsSource props = <strong class="jxr_keyword">new</strong> SpyDotPropertiesOptionsSource();
 <a class="jxr_linenumber" name="104" href="#104">104</a>     assertNull(<span class="jxr_string">"properties loaded!"</span>, props.getOptions());
 <a class="jxr_linenumber" name="105" href="#105">105</a>   }
 <a class="jxr_linenumber" name="106" href="#106">106</a> 
