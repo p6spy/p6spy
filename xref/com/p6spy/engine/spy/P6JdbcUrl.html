@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">   * Pattern indivating whether particular jdbc url is to be accepted by {@link P6SpyDriver}.</em>
 <a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">   */</em>
 <a class="jxr_linenumber" name="41" href="#41">41</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern PATTERN_URL = Pattern
-<a class="jxr_linenumber" name="42" href="#42">42</a>        .compile(<span class="jxr_string">"^jdbc:p6spy(:p6spy[^:]*)?(:[^p6spy].*)$"</span>);
+<a class="jxr_linenumber" name="42" href="#42">42</a>        .compile(<span class="jxr_string">"^jdbc:p6spy(:p6spy[^:]*)?(:.*)$"</span>);
 <a class="jxr_linenumber" name="43" href="#43">43</a>    
 <a class="jxr_linenumber" name="44" href="#44">44</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> accepted;
 <a class="jxr_linenumber" name="45" href="#45">45</a>    <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String proxiedUrl;
