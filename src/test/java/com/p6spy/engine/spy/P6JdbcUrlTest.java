@@ -20,10 +20,13 @@
 package com.p6spy.engine.spy;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.p6spy.engine.spy.option.JdbcUrlOptionsSource;
 import com.p6spy.engine.test.BaseTestCase;
 
 public class P6JdbcUrlTest extends BaseTestCase {
@@ -63,9 +66,23 @@ public class P6JdbcUrlTest extends BaseTestCase {
     Assert.assertEquals(realURL, new P6JdbcUrl("jdbc:p6spy:p6spy.config.jmx=true;p6spy.config.jmxprefix=foo;:mysql:localhost:123").getProxiedUrl());
     Assert.assertEquals(realURL, new P6JdbcUrl("jdbc:p6spy:p6spy.config.jmx=true;foo=true:mysql:localhost:123").getProxiedUrl());
     Assert.assertEquals(realURL, new P6JdbcUrl("jdbc:p6spy:p6spy.config.jmx=true;p6spy.config.jmxprefix=foo;foo=true:mysql:localhost:123").getProxiedUrl());
+
+    Assert.assertEquals("jdbc:sqlite:target/p6spy.db", new P6JdbcUrl("jdbc:p6spy:p6spy.config.jmx=true;p6spy.config.jmxprefix=foo;foo=true:sqlite:target/p6spy.db").getProxiedUrl());
     
     // invalid ones - no point of testing these, as they won't be accepted by driver at all!
     //Assert.assertEquals("???", new P6JdbcUrl("jdbc:p6spy:foo=true;p6spy.config.jmx=true:mysql:localhost:123"));
     //Assert.assertEquals("???", new P6JdbcUrl("jdbc:p6spy:jmx=true:mysql:localhost:123"));
+  }
+  
+  @Test
+  public void testGetOptions() throws SQLException {
+    final Map<String, String> expected = new HashMap<String, String>();
+    
+    expected.clear();
+    expected.put("jmx", "true");
+    expected.put("jmxprefix", "foo");
+    Assert.assertEquals(expected, new JdbcUrlOptionsSource("jdbc:p6spy:p6spy.config.jmx=true;p6spy.config.jmxprefix=foo;foo=true:sqlite:target/p6spy.db").getOptions());
+    
+    // more tests available in: JdbcUrlOptionsSourceTest
   }
 }
