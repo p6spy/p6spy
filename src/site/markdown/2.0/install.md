@@ -242,6 +242,11 @@ In later section is `$WLS_HOME` the directory where Weblogic is installed and `$
 
         jdbc:p6spy:mysql://<hostname>:<port>/<database>
 
+1. Change driver in the datasource to:
+
+        com.p6spy.engine.spy.P6SpyDriver
+
+
 ## <a name="generic">Generic Instructions</a>
 
 The following installation instructions are intended for use with other application servers and
