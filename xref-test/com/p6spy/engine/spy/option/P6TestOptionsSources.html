@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="48" href="#48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> tearDown() {
 <a class="jxr_linenumber" name="49" href="#49">49</a>  		<em class="jxr_comment">// cleanup to make sure other tests work as expected</em>
 <a class="jxr_linenumber" name="50" href="#50">50</a>  		System.getProperties().remove(
-<a class="jxr_linenumber" name="51" href="#51">51</a>  				SystemPropertiesOptionsSource.P6SPY_PREFIX + P6LogOptions.EXCLUDECATEGORIES);
+<a class="jxr_linenumber" name="51" href="#51">51</a>  				SystemProperties.P6SPY_PREFIX + P6LogOptions.EXCLUDECATEGORIES);
 <a class="jxr_linenumber" name="52" href="#52">52</a>  	}
 <a class="jxr_linenumber" name="53" href="#53">53</a>  
 <a class="jxr_linenumber" name="54" href="#54">54</a>  	@Test
@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="91" href="#91">91</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSysPropertyEmptyStringValueClearsSetOption() <strong class="jxr_keyword">throws</strong> SQLException,
 <a class="jxr_linenumber" name="92" href="#92">92</a>  			IOException {
 <a class="jxr_linenumber" name="93" href="#93">93</a>  		System.getProperties().setProperty(
-<a class="jxr_linenumber" name="94" href="#94">94</a>  				SystemPropertiesOptionsSource.P6SPY_PREFIX + P6LogOptions.EXCLUDECATEGORIES,
+<a class="jxr_linenumber" name="94" href="#94">94</a>  				SystemProperties.P6SPY_PREFIX + P6LogOptions.EXCLUDECATEGORIES,
 <a class="jxr_linenumber" name="95" href="#95">95</a>  				<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="96" href="#96">96</a>  
 <a class="jxr_linenumber" name="97" href="#97">97</a>  		<strong class="jxr_keyword">new</strong> <a href="../../../../../com/p6spy/engine/test/P6TestFramework.html">P6TestFramework</a>(<span class="jxr_string">"blank"</span>) {

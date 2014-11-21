@@ -38,14 +38,14 @@
 <a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment">   * Formats a log message for the logging module</em>
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">   *</em>
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment">   * @param connectionId the id of the connection</em>
-<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">   * @param now          the current ime expressing in milliseconds</em>
-<a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment">   * @param elapsed      the time in milliseconds that the operation took to complete</em>
-<a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_javadoccomment">   * @param category     the category of the operation</em>
-<a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment">   * @param prepared     the SQL statement with all bind variables replaced with actual values</em>
-<a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment">   * @param sql          the sql statement executed</em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">   * @param now the current ime expressing in milliseconds</em>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment">   * @param elapsed the time in milliseconds that the operation took to complete</em>
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_javadoccomment">   * @param category the category of the operation</em>
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment">   * @param prepared the SQL statement with all bind variables replaced with actual values</em>
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment">   * @param sql the sql statement executed</em>
 <a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment">   * @return the formatted log message</em>
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment">   */</em>
-<a class="jxr_linenumber" name="38" href="#38">38</a>    String formatMessage(<strong class="jxr_keyword">final</strong> String instanceId, <strong class="jxr_keyword">int</strong> connectionId, String now, <strong class="jxr_keyword">long</strong> elapsed, String category, String prepared, String sql);
+<a class="jxr_linenumber" name="38" href="#38">38</a>    String formatMessage(<strong class="jxr_keyword">int</strong> connectionId, String now, <strong class="jxr_keyword">long</strong> elapsed, String category, String prepared, String sql);
 <a class="jxr_linenumber" name="39" href="#39">39</a>  
 <a class="jxr_linenumber" name="40" href="#40">40</a>  }
 </pre>

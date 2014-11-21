@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> java.sql.Connection;
 <a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> java.sql.SQLException;
 <a class="jxr_linenumber" name="24" href="#24">24</a>  
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.OptionsRepository;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.P6OptionsRepository;
 <a class="jxr_linenumber" name="26" href="#26">26</a>  
 <a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> * p6factory exists to make extending the spy core easier when making a new module. Since there are</em>
@@ -43,9 +43,9 @@
 <a class="jxr_linenumber" name="33" href="#33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../com/p6spy/engine/spy/P6Factory.html">P6Factory</a> {
 <a class="jxr_linenumber" name="34" href="#34">34</a>    <em class="jxr_comment">// OK this is not a typical factory, but to keep P6Factory an interface</em>
 <a class="jxr_linenumber" name="35" href="#35">35</a>    <em class="jxr_comment">// getOptions can't be static, we'll live with it I guess</em>
-<a class="jxr_linenumber" name="36" href="#36">36</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/P6LoadableOptions.html">P6LoadableOptions</a> getOptions(<a href="../../../../com/p6spy/engine/spy/option/OptionsRepository.html">OptionsRepository</a> optionsRepository);
+<a class="jxr_linenumber" name="36" href="#36">36</a>    <strong class="jxr_keyword">public</strong> <a href="../../../../com/p6spy/engine/spy/P6LoadableOptions.html">P6LoadableOptions</a> getOptions(<a href="../../../../com/p6spy/engine/spy/option/P6OptionsRepository.html">P6OptionsRepository</a> optionsRepository);
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
-<a class="jxr_linenumber" name="38" href="#38">38</a>    <strong class="jxr_keyword">public</strong> Connection getConnection(Connection conn, <a href="../../../../com/p6spy/engine/spy/option/OptionsRepository.html">OptionsRepository</a> optionsRepository) <strong class="jxr_keyword">throws</strong> SQLException;
+<a class="jxr_linenumber" name="38" href="#38">38</a>    <strong class="jxr_keyword">public</strong> Connection getConnection(Connection conn) <strong class="jxr_keyword">throws</strong> SQLException;
 <a class="jxr_linenumber" name="39" href="#39">39</a>  
 <a class="jxr_linenumber" name="40" href="#40">40</a>  }
 </pre>

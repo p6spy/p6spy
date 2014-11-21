@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="38" href="#38">38</a>      statementInformation.setStatementQuery((String) args[0]);
 <a class="jxr_linenumber" name="39" href="#39">39</a>  
 <a class="jxr_linenumber" name="40" href="#40">40</a>      <strong class="jxr_keyword">if</strong> (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-<a class="jxr_linenumber" name="41" href="#41">41</a>          P6OutageDetector.getInstance().registerInvocation(statementInformation.getConnectionInformation(), <strong class="jxr_keyword">this</strong>, startTime, <span class="jxr_string">"batch"</span>, <span class="jxr_string">""</span>, statementInformation.getStatementQuery());
+<a class="jxr_linenumber" name="41" href="#41">41</a>          P6OutageDetector.getInstance().registerInvocation(<strong class="jxr_keyword">this</strong>, startTime, <span class="jxr_string">"batch"</span>, <span class="jxr_string">""</span>, statementInformation.getStatementQuery());
 <a class="jxr_linenumber" name="42" href="#42">42</a>      }
 <a class="jxr_linenumber" name="43" href="#43">43</a>  
 <a class="jxr_linenumber" name="44" href="#44">44</a>      <strong class="jxr_keyword">try</strong> {

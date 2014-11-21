@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="44" href="#44">44</a>        <strong class="jxr_keyword">return</strong> method.invoke(underlying, args);
 <a class="jxr_linenumber" name="45" href="#45">45</a>      } <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="46" href="#46">46</a>        P6LogQuery.logElapsed(connectionInformation, startTime, Category.ROLLBACK, <span class="jxr_string">""</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="46" href="#46">46</a>        P6LogQuery.logElapsed(connectionInformation.getConnectionId(), startTime, Category.ROLLBACK, <span class="jxr_string">""</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="47" href="#47">47</a>      }
 <a class="jxr_linenumber" name="48" href="#48">48</a>    }
 <a class="jxr_linenumber" name="49" href="#49">49</a>  }

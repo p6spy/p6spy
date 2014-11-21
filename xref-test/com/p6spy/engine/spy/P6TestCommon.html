@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="43" href="#43">43</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.P6TestLogger;
 <a class="jxr_linenumber" name="44" href="#44">44</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.SingleLineFormat;
 <a class="jxr_linenumber" name="45" href="#45">45</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.appender.StdoutLogger;
-<a class="jxr_linenumber" name="46" href="#46">46</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.SystemPropertiesOptionsSource;
+<a class="jxr_linenumber" name="46" href="#46">46</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.spy.option.SystemProperties;
 <a class="jxr_linenumber" name="47" href="#47">47</a>  <strong class="jxr_keyword">import</strong> com.p6spy.engine.test.P6TestFramework;
 <a class="jxr_linenumber" name="48" href="#48">48</a>  
 <a class="jxr_linenumber" name="49" href="#49">49</a>  @RunWith(Parameterized.<strong class="jxr_keyword">class</strong>)
@@ -561,13 +561,13 @@
 <a class="jxr_linenumber" name="551" href="#551">551</a>     <em class="jxr_comment">// module unload with reload works</em>
 <a class="jxr_linenumber" name="552" href="#552">552</a>     { 
 <a class="jxr_linenumber" name="553" href="#553">553</a>     	clearLogEntries();
-<a class="jxr_linenumber" name="554" href="#554">554</a>     	System.setProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+<a class="jxr_linenumber" name="554" href="#554">554</a>     	System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
 <a class="jxr_linenumber" name="555" href="#555">555</a>     			<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="556" href="#556">556</a>     	o.reload();
 <a class="jxr_linenumber" name="557" href="#557">557</a>     	
 <a class="jxr_linenumber" name="558" href="#558">558</a> 	    statement.executeQuery(<span class="jxr_string">"select 'x' from customers"</span>);
 <a class="jxr_linenumber" name="559" href="#559">559</a> 	    assertEquals(<span class="jxr_string">"A log message should not have been written"</span>, 0, getLogEntriesCount());
-<a class="jxr_linenumber" name="560" href="#560">560</a> 	    System.clearProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+<a class="jxr_linenumber" name="560" href="#560">560</a> 	    System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
 <a class="jxr_linenumber" name="561" href="#561">561</a>     }
 <a class="jxr_linenumber" name="562" href="#562">562</a>   }
 <a class="jxr_linenumber" name="563" href="#563">563</a>   

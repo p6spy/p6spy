@@ -46,8 +46,8 @@
 <a class="jxr_linenumber" name="36" href="#36">36</a>      <strong class="jxr_keyword">long</strong> startTime = System.currentTimeMillis();
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
 <a class="jxr_linenumber" name="38" href="#38">38</a>      <strong class="jxr_keyword">if</strong> (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-<a class="jxr_linenumber" name="39" href="#39">39</a>          P6OutageDetector.getInstance().registerInvocation(preparedStatementInformation.getConnectionInformation(), <strong class="jxr_keyword">this</strong>, startTime,
-<a class="jxr_linenumber" name="40" href="#40">40</a>              <span class="jxr_string">"statement"</span>, preparedStatementInformation.getStatementQuery(), preparedStatementInformation.getSqlWithValues());
+<a class="jxr_linenumber" name="39" href="#39">39</a>          P6OutageDetector.getInstance().registerInvocation(<strong class="jxr_keyword">this</strong>, startTime, <span class="jxr_string">"statement"</span>,
+<a class="jxr_linenumber" name="40" href="#40">40</a>              preparedStatementInformation.getStatementQuery(), preparedStatementInformation.getSqlWithValues());
 <a class="jxr_linenumber" name="41" href="#41">41</a>      }
 <a class="jxr_linenumber" name="42" href="#42">42</a>  
 <a class="jxr_linenumber" name="43" href="#43">43</a>      <strong class="jxr_keyword">try</strong> {

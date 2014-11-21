@@ -43,8 +43,8 @@
 <a class="jxr_linenumber" name="33" href="#33">33</a>    }
 <a class="jxr_linenumber" name="34" href="#34">34</a>  
 <a class="jxr_linenumber" name="35" href="#35">35</a>    @Override
-<a class="jxr_linenumber" name="36" href="#36">36</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logSQL(<strong class="jxr_keyword">final</strong> String instanceId, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> connectionId, String now, <strong class="jxr_keyword">long</strong> elapsed, <a href="../../../../../com/p6spy/engine/logging/Category.html">Category</a> category, String prepared, String sql) {
-<a class="jxr_linenumber" name="37" href="#37">37</a>      logText(instanceId, strategy.formatMessage(instanceId, connectionId, now, elapsed, category.toString(), prepared, sql));
+<a class="jxr_linenumber" name="36" href="#36">36</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> logSQL(<strong class="jxr_keyword">int</strong> connectionId, String now, <strong class="jxr_keyword">long</strong> elapsed, <a href="../../../../../com/p6spy/engine/logging/Category.html">Category</a> category, String prepared, String sql) {
+<a class="jxr_linenumber" name="37" href="#37">37</a>      logText(strategy.formatMessage(connectionId, now, elapsed, category.toString(), prepared, sql));
 <a class="jxr_linenumber" name="38" href="#38">38</a>    }
 <a class="jxr_linenumber" name="39" href="#39">39</a>  
 <a class="jxr_linenumber" name="40" href="#40">40</a>    <em class="jxr_javadoccomment">/**</em>
