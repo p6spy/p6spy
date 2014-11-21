@@ -29,7 +29,7 @@ public class ConnectionInformation {
 
   private static int counter = 0;
   
-  private final int connectionId = (counter == Integer.MAX_VALUE) ? counter++ : (counter = 0);
+  private final int connectionId = (counter == Integer.MAX_VALUE) ? counter = 0 : counter++;
   
   private final OptionsRepository optionsRepository;
   
