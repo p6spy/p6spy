@@ -35,7 +35,7 @@ Application Servers:
     
 * [JBoss/WildFly](#jboss)    
 * [Apache Tomcat and Apache TomEE](#tomcat)    
-* [Glassfish](#glassfish)    
+* [Glassfish and Payara](#glassfish)    
 * [Weblogic](#weblogic)
 * [Generic](#generic)    
 
@@ -133,16 +133,16 @@ on tomcat/tomee.
                    ...
                    />
 
-## <a name="glassfish">Glassfish</a>
+## <a name="glassfish">Glassfish and Payara</a>
 
-The following section contains specific information on installing P6Spy on [Glassfish 3.1.x and 4.0.x](#glassfish3122_40) (works with p6spy version 2.1.0 or higher).
+The following section contains specific information on installing P6Spy on [Glassfish 3.1.2.2, 4.0 and Payara 4.1.144](#glassfish3122_40) (works with p6spy version 2.1.0 or higher).
 
 Please note **XA Datasource proxying IS supported** for these. 
 
-### <a name="glassfish3122_40">Glassfish 3.1.2.2 and Glassfish 4.0</a>
+### <a name="glassfish3122_40">Glassfish 3.1.2.2, 4.0 and Payara 4.1.144</a>
 
-The provided instructions were tested with Glassfish OSE 3.1.2.2 and Glassfish OSE 4.0. 
-In later section is `$GLASSFISH_HOME` the directory where Glassfish is installed and `$DOMAIN_X` is the domain name used for deployment (for example, can be: `domain1`).
+The provided instructions were tested with Glassfish OSE 3.1.2.2, Glassfish OSE 4.0 and Payara 4.1.144. 
+In later section is `$GLASSFISH_HOME` the directory where Glassfish/Payara is installed and `$DOMAIN_X` is the domain name used for deployment (for example, can be: `domain1`).
 
 1. Move the **p6spy.jar** file to the `$GLASSFISH_HOME/domains/$DOMAIN_X/lib/ext` directory.
 1. Move the **spy.properties** file to the `$GLASSFISH_HOME/domains/$DOMAIN_X/config` directory.
