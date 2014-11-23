@@ -28,6 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # for managing cookbook dependencies
   config.berkshelf.enabled = true
+  config.berkshelf.berksfile_path = "./Berksfile"
 
   # to ensure usage of the latest revision of chef
   config.omnibus.chef_version = :latest
