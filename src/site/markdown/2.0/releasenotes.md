@@ -1,5 +1,10 @@
 # Release Notes
 
+## Version 2.1.3 - [TBD]
+* ArrayIndexOutOfBoundsException when calling PreparedStatement.setMaxRows(int) with outage module enabled 
+  (see [issue #275] (https://github.com/p6spy/p6spy/issues/275)), thanks to 
+  [oysteinhagenpettersen](https://github.com/oysteinhagenpettersen) for bug report
+
 ## Version 2.1.2 - [Oct 13, 2014]
 * SingleLineFormat updated to remove CR and LF characters from the log file (see [issue #268] (https://github.com/p6spy/p6spy/issues/268)), thanks to [bingoohuang] (https://github.com/bingoohuang) for report and fix
 * The equals(Object) method on all proxied objects now unwraps the argument passed in (if it is a p6spy proxy) before 
