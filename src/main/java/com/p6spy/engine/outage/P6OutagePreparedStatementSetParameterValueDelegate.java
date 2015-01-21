@@ -24,6 +24,7 @@ import com.p6spy.engine.proxy.Delegate;
 import com.p6spy.engine.spy.P6SpyOptions;
 
 import java.lang.reflect.Method;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 
 class P6OutagePreparedStatementSetParameterValueDelegate implements Delegate {
@@ -36,12 +37,15 @@ class P6OutagePreparedStatementSetParameterValueDelegate implements Delegate {
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    int position = (Integer) args[0];
-    Object value = null;
-    if( !method.getName().equals("setNull")) {
-      value = args[1];
+    // ignore calls to any methods defined on the Statement interface!
+    if (!Statement.class.equals(method.getDeclaringClass())) {
+      int position = (Integer) args[0];
+      Object value = null;
+      if (!method.getName().equals("setNull") && args.length > 1) {
+        value = args[1];
+      }
+      preparedStatementInformation.setParameterValue(position, convertToString(value));
     }
-    preparedStatementInformation.setParameterValue(position, convertToString(value));
     return method.invoke(underlying, args);
   }
 
