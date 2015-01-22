@@ -29,10 +29,13 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class P6TestOutage extends P6TestFramework {
@@ -56,7 +59,6 @@ public class P6TestOutage extends P6TestFramework {
     return DBS_IN_TEST;
   }
 
-
   @Test
   public void testOutage() throws SQLException {
     // exec fast query => no outage detected
@@ -68,6 +70,20 @@ public class P6TestOutage extends P6TestFramework {
     callSleep(3000);
     Assert.assertTrue(super.getLastButOneLogEntry().contains(Category.OUTAGE.toString()));
     Assert.assertTrue(super.getLastLogEntry().contains("CALL SLEEP"));
+  }
+
+  @Test
+  public void testCallingSetMethodsOnStatementInterface() throws SQLException {
+
+    // not a great test - just protecting against regression for issue #275
+
+    String sql = "select * from customers where id = ?";
+    PreparedStatement prep = connection.prepareStatement(sql);
+
+    prep.setMaxRows(1);
+    assertEquals(1, prep.getMaxRows());
+
+    prep.close();
   }
 
   private void callSleep(long miliseconds) throws SQLException {
