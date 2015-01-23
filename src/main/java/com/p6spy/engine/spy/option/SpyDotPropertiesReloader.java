@@ -94,6 +94,9 @@ public class SpyDotPropertiesReloader implements P6OptionChangedListener {
       reschedule(Boolean.valueOf(newValue.toString()), P6SpyOptions.getActiveInstance().getReloadPropertiesInterval());
     } else if (key.equals(P6SpyOptions.RELOADPROPERTIESINTERVAL)) {
       reschedule(P6SpyOptions.getActiveInstance().getReloadProperties(), (Long) newValue);
+    } else if (key.equals(P6SpyOptions.FIXED_DELAY)) {
+        reschedule(P6SpyOptions.getActiveInstance().getReloadProperties(),(Long)newValue);
+
     }
   }
 

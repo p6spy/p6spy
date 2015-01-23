@@ -274,6 +274,15 @@ in section: [Configuration and Usage](#confusage)):
     #outagedetection=false
     # (default is 60)
     #outagedetectioninterval=30
+    #
+    # Statement execution delay
+    #
+    # This allows you to arbitrary slow down processing of statements by a fixed amount of time.
+    # It can be used to detect problems caused by database slowdowns.
+    #
+    #fixedDelay=500
+    #(Slow down each statement by an additional 500ms
+    #
     
 ### modulelist
 

@@ -23,6 +23,8 @@ import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.Delegate;
 import com.p6spy.engine.proxy.ProxyFactory;
+import com.p6spy.engine.spy.P6SpyOptions;
+import com.p6spy.engine.spy.appender.P6Logger;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -48,7 +50,9 @@ class P6LogStatementExecuteDelegate implements Delegate {
       return result;
     }
     finally {
+      P6DelayHandler.delay(startTime, statementInformation);
       P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, Category.STATEMENT, statementInformation);
+
     }
   }
 }
