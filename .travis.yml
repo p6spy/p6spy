@@ -7,8 +7,6 @@ jdk:
 
 env:
   global:
-    - SONATYPE_USERNAME=p6spy
-    - secure: "Eaot/cONtJUyLb0Gw8b75hzSEQEK3gl34mMe6hH+fQBOm7x6YcCx+6Cx3hmQvFVwpb1Q5+VHj9xE3Vk3wMrcaj0R6g4xHVMSSS7CZKbKIqgQlyIDgGTSuil94GGmwpJ9lGu71Re4b6p45K1RUIeW7VPZS+MpY3wNgmSBbozkH40="
     - LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/
 
 before_install:
