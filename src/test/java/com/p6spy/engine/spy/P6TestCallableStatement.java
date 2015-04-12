@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.test.P6TestFramework;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -27,6 +28,7 @@ import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class P6TestCallableStatement extends P6TestFramework {
   public P6TestCallableStatement(String db) throws SQLException, IOException {
     super(db);
   }
-  
+
   @Test
   public void testStoredProcedureNoResultSet() throws SQLException {
     this.clearLogEntries();
@@ -86,6 +88,37 @@ public class P6TestCallableStatement extends P6TestFramework {
 
     // verify that the bind parameters are resolved in the log message
     assertTrue(getLastLogEntry().contains("1,'hi'"));
+  }
+
+  @Test
+  public void testStoredProcedureResultSet() throws SQLException {
+    if( "Oracle".equals(db)) {
+      // Oracle does not support returning a resultset from a store proc via CallableStatement.getResultSet()
+      return;
+    }
+    P6LogOptions.getActiveInstance().setExcludecategories("debug,info,result");
+    this.clearLogEntries();
+
+    // execute the statement
+    String query = "{call test_proc_rs(?)}";
+    CallableStatement call = connection.prepareCall(query);
+    call.setString(1, "a");
+    call.execute();
+    ResultSet rs = call.getResultSet();
+    if( rs == null ) {
+      // HSQLDB requires you to call ResultSet.getMoreResults() before accessing the resultset.
+      call.getMoreResults();
+      rs = call.getResultSet();
+    }
+    while(rs.next()) {
+      rs.getString("name");
+      rs.getInt("id");
+    }
+    rs.close();
+    call.close();
+
+    // verify that the result set was logged
+    assertTrue(getLastLogEntry().contains("resultset"));
   }
 
   @Test
