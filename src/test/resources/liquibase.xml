@@ -72,7 +72,7 @@
       end;      
     </createProcedure>
   </changeSet>
-  
+
   <changeSet id="create-test-proc-mysql" author="quintonm">
     <!-- used by P6TestCallableStatement -->
     <preConditions onFail="CONTINUE">
@@ -83,13 +83,30 @@
       drop procedure if exists test_proc
     </sql>
     <createProcedure>
-      create procedure test_proc(param1 int, param2 varchar(100), out result_param int) 
+      create procedure test_proc(param1 int, param2 varchar(100), out result_param int)
       begin
         set result_param = 2;
-      end      
+      end
     </createProcedure>
   </changeSet>
-  
+
+  <changeSet id="create-test-proc-rs-mysql" author="quintonm">
+    <!-- used by P6TestCallableStatement -->
+    <preConditions onFail="CONTINUE">
+      <dbms type="MySQL"/>
+    </preConditions>
+    <!-- liquibase does not drop stored procedures automatically -->
+    <sql>
+      drop procedure if exists test_proc_rs
+    </sql>
+    <createProcedure>
+      create procedure test_proc_rs(cust_name varchar(100))
+      begin
+      select * from customers where name like concat('%',cust_name,'%');
+      end
+    </createProcedure>
+  </changeSet>
+
   <changeSet id="create-test-proc-hsqldb" author="quintonm">
     <!-- used by P6TestCallableStatement -->
     <preConditions onFail="CONTINUE">
@@ -99,15 +116,29 @@
       DROP procedure TEST_PROC IF EXISTS;
     </sql>
     <createProcedure>
-      CREATE PROCEDURE TEST_PROC(param1 numeric, param2 varchar(100), out result_param numeric)
-      begin atomic
-        set result_param = 2;
-      end
+      CREATE PROCEDURE TEST_PROC(param1 int, param2 varchar(100), out result_param int)
+      LANGUAGE JAVA
+      DETERMINISTIC NO SQL
+      EXTERNAL NAME 'CLASSPATH:com.p6spy.engine.test.HsqlProcedures.testProc'
     </createProcedure>
   </changeSet>
-  
-  
-  
+
+  <changeSet id="create-test-proc-rs-hsqldb" author="quintonm">
+    <!-- used by P6TestCallableStatement -->
+    <preConditions onFail="CONTINUE">
+      <dbms type="HSQLDB"/>
+    </preConditions>
+    <sql>
+      DROP procedure TEST_PROC_RS IF EXISTS;
+    </sql>
+    <createProcedure>
+      CREATE PROCEDURE TEST_PROC_RS(cust_name varchar(100))
+      LANGUAGE JAVA
+      READS SQL DATA DYNAMIC RESULT SETS 1
+      EXTERNAL NAME 'CLASSPATH:com.p6spy.engine.test.HsqlProcedures.testProcRs'
+    </createProcedure>
+  </changeSet>
+
   <changeSet id="create-sleep-proc" author="quintonm">
     <!-- used by P6TestOutage -->
     <preConditions onFail="CONTINUE">

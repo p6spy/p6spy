@@ -35,13 +35,14 @@ class P6LogCallableStatementInvocationHandler extends GenericInvocationHandler<C
                                                  ConnectionInformation connectionInformation,
                                                  String query) {
 
-      super(underlying);
+    super(underlying);
     CallableStatementInformation callableStatementInformation = new CallableStatementInformation(connectionInformation);
     callableStatementInformation.setStatementQuery(query);
 
     P6LogPreparedStatementExecuteDelegate executeDelegate = new P6LogPreparedStatementExecuteDelegate(callableStatementInformation);
     P6LogPreparedStatementAddBatchDelegate addBatchDelegate = new P6LogPreparedStatementAddBatchDelegate(callableStatementInformation);
     P6LogCallableStatementSetParameterValueDelegate setParameterValueDelegate = new P6LogCallableStatementSetParameterValueDelegate(callableStatementInformation);
+    P6LogCallableStatementGetResultSetDelegate getResultSetDelegate = new P6LogCallableStatementGetResultSetDelegate(callableStatementInformation);
 
     addDelegate(
         new MethodNameMatcher("executeBatch"),
@@ -66,6 +67,10 @@ class P6LogCallableStatementInvocationHandler extends GenericInvocationHandler<C
     addDelegate(
         new MethodNameMatcher("set*"),
         setParameterValueDelegate
+    );
+    addDelegate(
+        new MethodNameMatcher("getResultSet"),
+        getResultSetDelegate
     );
 
 

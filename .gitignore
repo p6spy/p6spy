@@ -33,3 +33,6 @@ Berksfile.lock
 
 # bitronix transaction logs
 btm*.tlog
+
+# hsql
+mem.h2.db
