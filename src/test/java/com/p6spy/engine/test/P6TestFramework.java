@@ -25,7 +25,7 @@ import com.p6spy.engine.spy.P6Core;
 import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.P6TestUtil;
 import com.p6spy.engine.spy.appender.P6TestLogger;
-import com.p6spy.engine.spy.option.SpyDotProperties;
+import com.p6spy.engine.spy.option.SpyDotPropertiesOptionsSource;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -63,7 +63,7 @@ public abstract class P6TestFramework extends BaseTestCase {
   public P6TestFramework(String db) throws SQLException, IOException {
     this.db = db;
     final File p6TestProperties = new File(TEST_FILE_PATH, "P6Test_" + db + ".properties");
-    System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
+    System.setProperty(SpyDotPropertiesOptionsSource.OPTIONS_FILE_PROPERTY, p6TestProperties.getAbsolutePath());
     log.info("P6Spy will be configured using " + p6TestProperties.getName());
 
     // make sure to reinit for each Driver run as we run parametrized builds

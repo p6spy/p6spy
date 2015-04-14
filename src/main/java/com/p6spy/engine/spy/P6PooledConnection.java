@@ -36,7 +36,7 @@ public class P6PooledConnection implements PooledConnection {
 
   @Override
   public Connection getConnection() throws SQLException {
-    return P6Core.wrapConnection(passthru.getConnection());
+    return P6Core.wrapConnection(passthru.getConnection(), null);
   }
 
   @Override

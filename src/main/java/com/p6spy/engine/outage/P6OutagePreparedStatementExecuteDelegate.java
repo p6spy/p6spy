@@ -36,8 +36,8 @@ class P6OutagePreparedStatementExecuteDelegate implements Delegate {
     long startTime = System.currentTimeMillis();
 
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-        P6OutageDetector.getInstance().registerInvocation(this, startTime, "statement",
-            preparedStatementInformation.getStatementQuery(), preparedStatementInformation.getSqlWithValues());
+        P6OutageDetector.getInstance().registerInvocation(preparedStatementInformation.getConnectionInformation(), this, startTime,
+            "statement", preparedStatementInformation.getStatementQuery(), preparedStatementInformation.getSqlWithValues());
     }
 
     try {

@@ -29,7 +29,13 @@ import java.net.URLConnection;
 import java.util.Map;
 import java.util.Properties;
 
-public class SpyDotProperties implements P6OptionsSource {
+/**
+ * {@link OptionsSource} implementation providing options from the spy.properties (or whatever name
+ * it has) config file.
+ * 
+ * @author peterb
+ */
+public class SpyDotPropertiesOptionsSource implements OptionsSource {
 
   public static final String OPTIONS_FILE_PROPERTY = "spy.properties";
   public static final String DEFAULT_OPTIONS_FILE = OPTIONS_FILE_PROPERTY;
@@ -45,7 +51,7 @@ public class SpyDotProperties implements P6OptionsSource {
    * 
    * @throws IOException
    */
-  public SpyDotProperties() throws IOException {
+  public SpyDotPropertiesOptionsSource() throws IOException {
     URL url = locate();
     
     if (null == url) {

@@ -19,6 +19,8 @@
  */
 package com.p6spy.engine.common;
 
+import com.p6spy.engine.spy.option.OptionsRepository;
+
 /**
  * @author Quinton McCombs
  * @since 09/2013
@@ -26,9 +28,20 @@ package com.p6spy.engine.common;
 public class ConnectionInformation {
 
   private static int counter = 0;
-  private final int connectionId = counter++;
-
+  
+  private final int connectionId = (counter == Integer.MAX_VALUE) ? counter = 0 : counter++;
+  
+  private final OptionsRepository optionsRepository;
+  
+  public ConnectionInformation(final OptionsRepository optionsRepository) {
+    this.optionsRepository = optionsRepository;
+  }
+  
   public int getConnectionId() {
     return connectionId;
+  }
+  
+  public OptionsRepository getOptionsRepository() {
+    return optionsRepository;
   }
 }

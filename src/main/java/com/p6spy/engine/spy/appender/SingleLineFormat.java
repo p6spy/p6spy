@@ -27,19 +27,11 @@ import com.p6spy.engine.common.P6Util;
  */
 public class SingleLineFormat implements MessageFormattingStrategy {
 
-  /**
-   * Formats a log message for the logging module
-   *
-   * @param connectionId the id of the connection
-   * @param now          the current ime expressing in milliseconds
-   * @param elapsed      the time in milliseconds that the operation took to complete
-   * @param category     the category of the operation
-   * @param prepared     the SQL statement with all bind variables replaced with actual values
-   * @param sql          the sql statement executed
-   * @return the formatted log message
+  /* (non-Javadoc)
+   * @see com.p6spy.engine.spy.appender.MessageFormattingStrategy#formatMessage(java.lang.String, int, java.lang.String, long, java.lang.String, java.lang.String, java.lang.String)
    */
   @Override
-  public String formatMessage(final int connectionId, final String now, final long elapsed, final String category, final String prepared, final String sql) {
-    return now + "|" + elapsed + "|" + category + "|connection " + connectionId + "|" + P6Util.singleLine(prepared) + "|" + P6Util.singleLine(sql);
+  public String formatMessage(final String instanceId, final int connectionId, final String now, final long elapsed, final String category, final String prepared, final String sql) {
+    return now + "|" + elapsed + "|" + category + "|" + (null == instanceId ? "" : instanceId) + "|connection " + connectionId + "|" + P6Util.singleLine(prepared) + "|" + P6Util.singleLine(sql);
   }
 }

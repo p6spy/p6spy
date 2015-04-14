@@ -26,13 +26,16 @@ import javax.management.StandardMBean;
 import javax.sql.XADataSource;
 
 import com.p6spy.engine.spy.P6ModuleManager;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 public class P6TestOptions extends StandardMBean implements P6TestLoadableOptions {
 
   public static final String PASSWORD2 = "password2";
   public static final String USER2 = "user2";
   public static final String URL2 = "url2";
+  public static final String PASSWORD3 = "password3";
+  public static final String USER3 = "user3";
+  public static final String URL3 = "url3";
   public static final String PASSWORD = "password";
   public static final String USER = "user";
   public static final String URL = "url";
@@ -40,9 +43,9 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
 
   private static final Map<String, String> defaults = new HashMap<String, String>();
 
-  private final P6OptionsRepository optionsRepository;
+  private final OptionsRepository optionsRepository;
 
-  public P6TestOptions(final P6OptionsRepository optionsRepository) {
+  public P6TestOptions(final OptionsRepository optionsRepository) {
     super(P6TestOptionsMBean.class, false);
     this.optionsRepository = optionsRepository;
   }
@@ -55,6 +58,9 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
     setUrl2(properties.get(URL2));
     setUser2(properties.get(USER2));
     setPassword2(properties.get(PASSWORD2));
+    setUrl3(properties.get(URL3));
+    setUser3(properties.get(USER3));
+    setPassword3(properties.get(PASSWORD3));
     setXaDataSource(properties.get(XA_DATASOURCE));
   }
 
@@ -141,5 +147,34 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
   public XADataSource getXaDataSource() {
     return optionsRepository.get(XADataSource.class, XA_DATASOURCE);
   }
+  
+  @Override
+  public String getUrl3() {
+    return optionsRepository.get(String.class, URL3);
+  }
 
+  @Override
+  public void setUrl3(String url3) {
+    optionsRepository.set(String.class, URL3, url3);
+  }
+
+  @Override
+  public String getUser3() {
+    return optionsRepository.get(String.class, USER3);
+  }
+
+  @Override
+  public void setUser3(String user3) {
+    optionsRepository.set(String.class, USER3, user3);
+  }
+
+  @Override
+  public String getPassword3() {
+    return optionsRepository.get(String.class, PASSWORD3);
+  }
+
+  @Override
+  public void setPassword3(String password3) {
+    optionsRepository.set(String.class, PASSWORD2, password3);
+  }
 }

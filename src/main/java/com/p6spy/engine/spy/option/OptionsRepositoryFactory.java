@@ -17,19 +17,26 @@
  * limitations under the License.
  * #L%
  */
-package com.p6spy.engine.proxy.cache;
-
+package com.p6spy.engine.spy.option;
 
 /**
- * @author Peter Butkovic
+ * Factory creating {@link OptionsRepository} instances.
+ * 
+ * @author peterb
  */
-public class CacheFactory {
-  
-  public static final <K,V> Cache<K,V> newCache() {
-    // TODO we'd be able to use any other caching solution here
-    // any 3.rd party chache (ehcache,...) or some simple LRUMap from apache commons
-    // based on class availability on classpath OR some config switch,...
-    return new HashMapBasedCache<K,V>();
-  }
+public class OptionsRepositoryFactory {
 
+  /**
+   * @param changePropagating
+   *          whether change propagation is to be supported by repo or not.
+   * @return
+   */
+  public static OptionsRepository getRepository(boolean changePropagating) {
+    final OptionsRepository repo = new OptionsRepositoryImpl();
+
+    repo.setOptionChangePropagator(changePropagating ? new DelayedOptionChangePropagatorImpl()
+        : new NonPropagatingDelayedOptionChangePropagator());
+
+    return repo;
+  }
 }

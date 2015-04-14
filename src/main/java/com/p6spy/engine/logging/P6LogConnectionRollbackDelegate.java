@@ -43,7 +43,7 @@ class P6LogConnectionRollbackDelegate implements Delegate {
     try {
       return method.invoke(underlying, args);
     } finally {
-      P6LogQuery.logElapsed(connectionInformation.getConnectionId(), startTime, Category.ROLLBACK, "", "");
+      P6LogQuery.logElapsed(connectionInformation, startTime, Category.ROLLBACK, "", "");
     }
   }
 }

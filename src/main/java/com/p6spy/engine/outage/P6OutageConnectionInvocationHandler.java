@@ -22,6 +22,7 @@ package com.p6spy.engine.outage;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameMatcher;
+import com.p6spy.engine.spy.option.OptionsRepository;
 
 import java.sql.Connection;
 
@@ -30,11 +31,11 @@ import java.sql.Connection;
  */
 public class P6OutageConnectionInvocationHandler extends GenericInvocationHandler<Connection> {
 
-  public P6OutageConnectionInvocationHandler(Connection underlying) {
+  public P6OutageConnectionInvocationHandler(Connection underlying, OptionsRepository optionsRepository) {
     super(underlying);
-    ConnectionInformation connectionInformation = new ConnectionInformation();
+    ConnectionInformation connectionInformation = new ConnectionInformation(optionsRepository);
 
-    P6OutageConnectionCommitDelegate commitDelegate = new P6OutageConnectionCommitDelegate();
+    P6OutageConnectionCommitDelegate commitDelegate = new P6OutageConnectionCommitDelegate(connectionInformation);
     P6OutageConnectionRollbackDelegate rollbackDelegate = new P6OutageConnectionRollbackDelegate(connectionInformation);
     P6OutageConnectionCreateStatementDelegate createStatementDelegate = new P6OutageConnectionCreateStatementDelegate(connectionInformation);
     P6OutageConnectionPrepareStatementDelegate prepareStatementDelegate = new P6OutageConnectionPrepareStatementDelegate(connectionInformation);

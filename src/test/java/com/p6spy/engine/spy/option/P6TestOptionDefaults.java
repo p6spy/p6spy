@@ -79,14 +79,14 @@ public class P6TestOptionDefaults extends BaseTestCase {
   public void setUp() {
     // make sure to have no modules explicitly loaded by default
     {
-      System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+      System.clearProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
       P6SpyOptions.getActiveInstance().reload();
     }
   }
   
   @After
   public void tearDown() throws SQLException, IOException {
-    System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+    System.getProperties().remove(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
   }
   
   @AfterClass
@@ -146,13 +146,14 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertEquals("dd-MMM-yy", opts.getDatabaseDialectDateFormat());
     Assert.assertTrue(opts.getJmx());
     Assert.assertNull(opts.getJmxPrefix());
+    Assert.assertNull(opts.getInstanceId());
   }
 
   @Test
   public void testP6LogOptionDefaults() {
     // make sure to have relevant module loaded
     {
-      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+      System.setProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
           P6LogFactory.class.getName());
       P6SpyOptions.getActiveInstance().reload();
     }
@@ -178,7 +179,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
   public void testP6OutageOptionDefaults() {
     // make sure to have relevant module loaded
     {
-      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+      System.setProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
           P6OutageFactory.class.getName());
       P6SpyOptions.getActiveInstance().reload();
     }
@@ -192,7 +193,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     
     // cleanup - make sure go back to default modules
     {
-      System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+      System.getProperties().remove(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
       P6SpyOptions.getActiveInstance().reload();
     }
   }
@@ -201,7 +202,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
   public void testImplicitlyDisabledLogCategories() {
     // let's explicitly remove P6LogFactory (by not including it to list)
     {
-      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST, "");
+      System.setProperty(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST, "");
       P6SpyOptions.getActiveInstance().reload();
     }
     
@@ -214,7 +215,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     
     // cleanup - make sure go back to default modules
     {
-      System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+      System.getProperties().remove(SystemPropertiesOptionsSource.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
       P6SpyOptions.getActiveInstance().reload();
     }
   }

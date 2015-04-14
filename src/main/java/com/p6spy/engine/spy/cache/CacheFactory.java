@@ -17,19 +17,28 @@
  * limitations under the License.
  * #L%
  */
-package com.p6spy.engine.proxy.cache;
+package com.p6spy.engine.spy.cache;
 
 
 /**
+ * Factory prividing {@link Cache}s.
+ * 
  * @author Peter Butkovic
  */
-public interface Cache<K, V> {
+public class CacheFactory {
 
-  V get(K key);
-
-  boolean contains(K key);
-
-  void put(K key, V value);
-
-  void clear();
+  //TODO we'd be able to use any other caching solution here
+  // any 3.rd party chache (ehcache,...) or some simple LRUMap from apache commons
+  // based on class availability on classpath OR some config switch,...
+  /**
+   * @param capacity capacity of the cache. In case -1 provided cache capacity is not limited.
+   * @return the cache.
+   */
+  public static final <K,V> Cache<K,V> newCache(int capacity) {
+    return new HashMapBasedCache<K,V>(capacity);
+  }
+  
+  public static final <K,V> Cache<K,V> newCache() {
+    return newCache(-1);
+  }
 }

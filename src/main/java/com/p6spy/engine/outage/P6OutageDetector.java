@@ -112,8 +112,8 @@ public class P6OutageDetector implements Runnable {
      * Registers the execution of a statement. This should be called just before the statement is
      * passed to the real driver.
      */
-    public void registerInvocation(Object jdbcObject, long startTime, String category, String ps, String sql) {
-        pendingMessages.put(jdbcObject, new InvocationInfo(startTime, category, ps, sql));
+    public void registerInvocation(ConnectionInformation connectionInformation, Object jdbcObject, long startTime, String category, String ps, String sql) {
+        pendingMessages.put(jdbcObject, new InvocationInfo(connectionInformation, startTime, category, ps, sql));
     }
 
     /**
@@ -145,7 +145,7 @@ public class P6OutageDetector implements Runnable {
             }
 
             // has this statement exceeded the threshold?
-            if ((currentTime - ii.startTime) > threshold) {
+            if ((currentTime - ii.getStartTime()) > threshold) {
                 P6LogQuery.debug("P6Spy - statement exceeded threshold - check log.");
                 logOutage(ii);
             }
@@ -153,25 +153,48 @@ public class P6OutageDetector implements Runnable {
     }
 
     private void logOutage(InvocationInfo ii) {
-        P6LogQuery.logElapsed(-1, ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql);
+        P6LogQuery.logElapsed(ii.getConnectionInformation(), ii.getStartTime(), Category.OUTAGE, ii.getPreparedStmt(), ii.getSql());
     }
 
 }
 
 // inner class to hold the info about a specific statement invocation
 class InvocationInfo {
-    public long startTime;
+    private final long startTime;
 
-    public String category;
+    private final String category;
 
-    public String preparedStmt;
+    private final String preparedStmt;
 
-    public String sql;
+    private final String sql;
+    
+    private final ConnectionInformation connectionInformation;
 
-    public InvocationInfo(long startTime, String category, String ps, String sql) {
+    public InvocationInfo(ConnectionInformation connectionInformation, long startTime, String category, String ps, String sql) {
+        this.connectionInformation = connectionInformation;
         this.startTime = startTime;
         this.category = category;
         this.preparedStmt = ps;
         this.sql = sql;
+    }
+
+    public long getStartTime() {
+      return startTime;
+    }
+
+    public String getCategory() {
+      return category;
+    }
+
+    public String getPreparedStmt() {
+      return preparedStmt;
+    }
+
+    public String getSql() {
+      return sql;
+    }
+
+    public ConnectionInformation getConnectionInformation() {
+      return connectionInformation;
     }
 }

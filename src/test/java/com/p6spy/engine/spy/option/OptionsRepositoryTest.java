@@ -34,17 +34,12 @@ import com.p6spy.engine.spy.appender.MultiLineFormat;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.test.BaseTestCase;
 
-public class P6TestOptionsRepository extends BaseTestCase {
-
-  private P6OptionsRepository optRepo;
-
-  @Before
-  public void setUp() {
-    optRepo = new P6OptionsRepository();
-  }
+public class OptionsRepositoryTest extends BaseTestCase {
 
   @Test
   public void testParse() {
+    OptionsRepositoryImpl optRepo = (OptionsRepositoryImpl) OptionsRepositoryFactory.getRepository(false);
+    
     Assert.assertEquals("", optRepo.parse(String.class, ""));
     Assert.assertEquals(100, optRepo.parse(Integer.class, 100));
     Assert.assertEquals(100L, optRepo.parse(Long.class, 100L));
@@ -66,49 +61,69 @@ public class P6TestOptionsRepository extends BaseTestCase {
 
   @Test(expected = IllegalArgumentException.class)
   public void testParseForCollectionFails() {
+    OptionsRepositoryImpl optRepo = (OptionsRepositoryImpl) OptionsRepositoryFactory.getRepository(false);
+    
     optRepo.parse(Set.class, new HashSet<String>());
     Assert.fail();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testParseForListFails() {
+    OptionsRepositoryImpl optRepo = (OptionsRepositoryImpl) OptionsRepositoryFactory.getRepository(false);
+    
     optRepo.parse(Set.class, new HashSet<String>());
     Assert.fail();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testParseForSetFails() {
+    OptionsRepositoryImpl optRepo = (OptionsRepositoryImpl) OptionsRepositoryFactory.getRepository(false);
+    
     optRepo.parse(Set.class, new HashSet<String>());
     Assert.fail();
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testGetPrioToInitCompletedFails() {
+  public void testGetPrioToInitCompletedForPropagatingFails() {
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(true);
+    
+    optRepo.set(String.class, "option1", "");
+    Assert.assertEquals("", optRepo.get(String.class, "option1"));
+  }
+  
+  @Test
+  public void testGetPrioToInitCompletedForNonPropagatingSucceeds() {
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
     optRepo.set(String.class, "option1", "");
     Assert.assertEquals("", optRepo.get(String.class, "option1"));
   }
 
   @Test
   public void testSetGetSimple() {
-    optRepo.initCompleted();
-
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
     optRepo.set(String.class, "option1", "value1");
     Assert.assertEquals("value1", optRepo.get(String.class, "option1"));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testSetSetForDeprecatedMinusPrefixOnFirstValueFails() {
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
 	  optRepo.setSet(String.class, "option1", "-value1,value2");
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void testSetSetForDeprecatedMinusPrefixOnNextValueFails() {
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
 	  optRepo.setSet(String.class, "option1", "value1,-value2");
   }
   
   @Test
   public void testSetSetOverride() {
-	  optRepo.initCompleted();
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
 
     optRepo.setSet(String.class, "option1", "value1,value2");
     Assert.assertEquals(new HashSet<String>(Arrays.asList("value1", "value2")),
@@ -121,7 +136,7 @@ public class P6TestOptionsRepository extends BaseTestCase {
   
   @Test
   public void testSetNullDoesNotModifyValue() {
-    optRepo.initCompleted();
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
 
     optRepo.set(String.class, "option1", "foo");
     Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
@@ -132,7 +147,9 @@ public class P6TestOptionsRepository extends BaseTestCase {
   
   @Test
   public void testSetSetEmptyStringNullsValue() {
-    optRepo.initCompleted();
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
+    optRepo.getOptionChangePropagator().fireDelayedOptionChanges();
 
     optRepo.setSet(String.class, "option1", "foo");
     Assert.assertEquals(new HashSet<String>(Arrays.asList("foo")), 
@@ -144,17 +161,23 @@ public class P6TestOptionsRepository extends BaseTestCase {
   
   @Test
   public void testSetReturnsTrueForNonNull() {
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
     Assert.assertTrue(optRepo.set(String.class, "option1", "foo"));
   }
   
   @Test
   public void testSetReturnsFalseForNull() {
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
     Assert.assertFalse(optRepo.set(String.class, "option1", null));
   }
   
   @Test
   public void testUnSetUsesDefaultForNullValue() {
-    optRepo.initCompleted();
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
+    optRepo.getOptionChangePropagator().fireDelayedOptionChanges();
 
     optRepo.set(String.class, "option1", "foo");
     Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
@@ -165,7 +188,9 @@ public class P6TestOptionsRepository extends BaseTestCase {
   
   @Test
   public void testUnSetIgnoresDefaultForValueNotNull() {
-    optRepo.initCompleted();
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
+    optRepo.getOptionChangePropagator().fireDelayedOptionChanges();
 
     optRepo.set(String.class, "option1", "foo");
     Assert.assertEquals("foo", optRepo.get(String.class, "option1"));
@@ -176,7 +201,9 @@ public class P6TestOptionsRepository extends BaseTestCase {
   
   @Test
   public void testUnSetSetsToNullForDefaultAndValueNull() {
-    optRepo.initCompleted();
+    OptionsRepository optRepo = OptionsRepositoryFactory.getRepository(false);
+    
+    optRepo.getOptionChangePropagator().fireDelayedOptionChanges();
 
     optRepo.set(String.class, "option1", "foo");
     Assert.assertEquals("foo", optRepo.get(String.class, "option1"));

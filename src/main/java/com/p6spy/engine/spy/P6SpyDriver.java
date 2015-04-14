@@ -19,8 +19,6 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6LogQuery;
-
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -33,8 +31,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import com.p6spy.engine.common.P6LogQuery;
+
 /**
- * JDBC driver for P6Spy
+ * JDBC driver for P6Spy.
  */
 public class P6SpyDriver implements Driver {
   private static Driver INSTANCE = new P6SpyDriver();
@@ -47,30 +47,15 @@ public class P6SpyDriver implements Driver {
     }
   }
 
-
   @Override
   public boolean acceptsURL(final String url) throws SQLException {
-    if (url != null && url.startsWith("jdbc:p6spy:")) {
-      return true;
-    } else {
-      return false;
-    }
+    return P6JdbcUrlFactory.getP6JdbcUrl(url).isAccepted();
   }
 
   public P6SpyDriver() {
     P6Core.initialize();
   }
-
-  /**
-   * Parses out the real JDBC connection URL by removing "p6spy:".
-   *
-   * @param url the connection URL
-   * @return the parsed URL
-   */
-  private String extractRealUrl(String url) {
-    return url.startsWith("jdbc:p6spy:") ? url.replace("p6spy:", "") : url;
-  }
-
+  
   static List<Driver> registeredDrivers() {
     List<Driver> result = new ArrayList<Driver>();
     for (Enumeration<Driver> driverEnumeration = DriverManager.getDrivers(); driverEnumeration.hasMoreElements(); ) {
@@ -85,30 +70,32 @@ public class P6SpyDriver implements Driver {
     if (url == null) {
       throw new SQLException("url is required");
     }
+    
+    P6JdbcUrl p6JdbcUrl = P6JdbcUrlFactory.getP6JdbcUrl(url); 
 
-    if( !acceptsURL(url) ) {
+    if( !p6JdbcUrl.isAccepted() ) {
       return null;
     }
 
     // find the real driver for the URL
-    Driver passThru = findPassthru(url);
+    Driver passThru = findPassthru(p6JdbcUrl);
 
     P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
 
-    Connection conn = passThru.connect(extractRealUrl(url), properties);
+    Connection conn = passThru.connect(p6JdbcUrl.getProxiedUrl(), properties);
 
     if (conn != null) {
-      conn = P6Core.wrapConnection(conn);
+      conn = P6Core.wrapConnection(conn, p6JdbcUrl.getOptionsRepository());
     }
     return conn;
   }
 
-  protected Driver findPassthru(String url) throws SQLException {
-    String realUrl = extractRealUrl(url);
+  protected Driver findPassthru(P6JdbcUrl p6JdbcUrl) throws SQLException {
+    String realUrl = p6JdbcUrl.getProxiedUrl();
     Driver passthru = null;
     for (Driver driver: registeredDrivers() ) {
       try {
-        if (driver.acceptsURL(extractRealUrl(url))) {
+        if (driver.acceptsURL(p6JdbcUrl.getProxiedUrl())) {
           passthru = driver;
           break;
         }
@@ -123,7 +110,7 @@ public class P6SpyDriver implements Driver {
 
   @Override
   public DriverPropertyInfo[] getPropertyInfo(String url, Properties properties) throws SQLException {
-    return findPassthru(url).getPropertyInfo(url, properties);
+    return findPassthru(P6JdbcUrlFactory.getP6JdbcUrl(url)).getPropertyInfo(url, properties);
   }
 
   @Override

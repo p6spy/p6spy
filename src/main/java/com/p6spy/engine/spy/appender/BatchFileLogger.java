@@ -53,11 +53,11 @@ public class BatchFileLogger extends FileLogger {
     }
 
     @Override
-    public void logException(Exception e) {
+    public void logException(final String instanceId, Exception e) {
     }
 
     @Override
-    public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql) {
+    public void logSQL(final String instanceId, final int connectionId, String now, long elapsed, Category category, String prepared, String sql) {
         if (endOfStatement) {
             qlog.println(BATCH_SEPARATOR);
         }
@@ -76,7 +76,7 @@ public class BatchFileLogger extends FileLogger {
     }
 
     @Override
-    public void logText(String text) {
+    public void logText(final String instanceId, String text) {
     }
 
     @Override
