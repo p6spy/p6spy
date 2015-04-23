@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -13,11 +14,12 @@
   <name>P6Spy</name>
   <version>2.1.4-SNAPSHOT</version>
   <organization>
-	<name>P6Spy</name>
+    <name>P6Spy</name>
   </organization>
   <inceptionYear>2002</inceptionYear>
   <description>
-    P6Spy is a framework that enables database activity to be seamlessly intercepted and logged with no code changes to existing applications.
+    P6Spy is a framework that enables database activity to be seamlessly intercepted and logged with no code changes to
+    existing applications.
   </description>
 
   <url>http://p6spy.github.io/p6spy/</url>
@@ -146,18 +148,6 @@
 
   <build>
     <plugins>
-<!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-repository-plugin</artifactId>
-        <version>2.3.1</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
-      </plugin>
--->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -169,15 +159,16 @@
           </systemPropertyVariables>
           <!-- to enable remote JMX testing, 
             	see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
-		  <!-- to workaround oracle timezone issue: http://stackoverflow.com/questions/9156379/ora-01882-timezone-region-not-found -->
-		  <!-- to get rid of DB2 traces => -Ddb2.jcc.override.traceLevel=0
-		  	see: http://publib.boulder.ibm.com/infocenter/idshelp/v111/index.jsp?topic=/com.ibm.jccids.doc/com.ibm.db2.luw.apdv.java.doc/doc/r0052075.htm -->
+          <!-- to workaround oracle timezone issue: http://stackoverflow.com/questions/9156379/ora-01882-timezone-region-not-found -->
+          <!-- to get rid of DB2 traces => -Ddb2.jcc.override.traceLevel=0
+            see: http://publib.boulder.ibm.com/infocenter/idshelp/v111/index.jsp?topic=/com.ibm.jccids.doc/com.ibm.db2.luw.apdv.java.doc/doc/r0052075.htm -->
           <argLine>-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false
-            -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false -Doracle.jdbc.timezoneAsRegion=false -Ddb2.jcc.override.traceLevel=0
+            -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false
+            -Doracle.jdbc.timezoneAsRegion=false -Ddb2.jcc.override.traceLevel=0
           </argLine>
           <includes>
-             <include>**/P6Test*.java</include>
-             <include>**/*Test.java</include>
+            <include>**/P6Test*.java</include>
+            <include>**/*Test.java</include>
           </includes>
         </configuration>
       </plugin>
@@ -186,20 +177,22 @@
         <artifactId>maven-enforcer-plugin</artifactId>
         <version>1.3.1</version>
         <executions>
-           <execution>
-             <id>enforce-java</id>
-             <goals><goal>enforce</goal></goals>
-             <configuration>
-               <rules>
-                 <requireJavaVersion>
-                   <!-- require Java 1.7 or later for the build -->
-                   <version>(1.7,)</version>
-                 </requireJavaVersion>
-               </rules>    
-             </configuration>
-           </execution>
-         </executions>
-        
+          <execution>
+            <id>enforce-java</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <!-- require Java 1.7 or later for the build -->
+                  <version>(1.7,)</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+
       </plugin>
 
       <plugin>
@@ -218,11 +211,13 @@
         <version>${cobertura-maven-plugin-build}</version>
         <executions>
           <execution>
-            <goals><goal>clean</goal></goals>
+            <goals>
+              <goal>clean</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <!-- 
         The jar plugin is listed simply to force the execution order
@@ -234,17 +229,19 @@
         <executions>
           <execution>
             <phase>package</phase>
-            <goals><goal>jar</goal></goals>
+            <goals>
+              <goal>jar</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.9</version>
         <configuration>
-        	<quiet>true</quiet>
+          <quiet>true</quiet>
         </configuration>
         <executions>
           <execution>
@@ -272,7 +269,7 @@
           </dependency>
         </dependencies>
       </plugin>
-      
+
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
@@ -299,13 +296,13 @@
           </execution>
         </executions>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>${maven-project-info-reports-plugin-build}</version>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -316,7 +313,7 @@
           <mavenExecutorId>forked-path</mavenExecutorId>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -344,7 +341,7 @@
           <shadedArtifactAttached>false</shadedArtifactAttached>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -359,9 +356,9 @@
             <configuration>
               <appendAssemblyId>true</appendAssemblyId>
               <descriptors>
-              	<descriptor>src/main/assembly/log4j2-nodep.xml</descriptor>
-				<descriptor>src/main/assembly/log4j-nodep.xml</descriptor>
-				<descriptor>src/main/assembly/logback-nodep.xml</descriptor>
+                <descriptor>src/main/assembly/log4j2-nodep.xml</descriptor>
+                <descriptor>src/main/assembly/log4j-nodep.xml</descriptor>
+                <descriptor>src/main/assembly/logback-nodep.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
@@ -380,53 +377,53 @@
           </execution>
         </executions>
       </plugin>
-      
-	<plugin>
-		<groupId>org.codehaus.mojo</groupId>
-		<artifactId>license-maven-plugin</artifactId>
-		<executions>
-			<!-- generate license headers automatically -->
-			<execution>
-				<id>update licenses</id>
-				<goals>
-					<goal>update-file-header</goal>
-				</goals>
-				<phase>process-resources</phase>
-				<configuration>
-					<failOnMissingHeader>false</failOnMissingHeader>
-					<failOnNotUptodateHeader>false</failOnNotUptodateHeader>
-				</configuration>
-			</execution>
-		</executions>
-	</plugin>
-      
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <executions>
+          <!-- generate license headers automatically -->
+          <execution>
+            <id>update licenses</id>
+            <goals>
+              <goal>update-file-header</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <failOnMissingHeader>false</failOnMissingHeader>
+              <failOnNotUptodateHeader>false</failOnNotUptodateHeader>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
-    
+
     <pluginManagement>
-    	<plugins>
-	    	<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>1.5</version>
-				<configuration>
-					<addSvnKeyWords>false</addSvnKeyWords>
-					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-					<failOnMissingHeader>true</failOnMissingHeader>
-					<failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-					<licenseName>apache_v2</licenseName>
-					<roots>
-						<root>src/main/assembly</root>
-						<root>src/main/java</root>
-						<root>src/main/resources</root>
-						<root>src/test/java</root>
-						<root>src/test/resources</root>
-					</roots>
-				</configuration>
-			</plugin>
-		</plugins>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.5</version>
+          <configuration>
+            <addSvnKeyWords>false</addSvnKeyWords>
+            <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+            <failOnMissingHeader>true</failOnMissingHeader>
+            <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+            <licenseName>apache_v2</licenseName>
+            <roots>
+              <root>src/main/assembly</root>
+              <root>src/main/java</root>
+              <root>src/main/resources</root>
+              <root>src/test/java</root>
+              <root>src/test/resources</root>
+            </roots>
+          </configuration>
+        </plugin>
+      </plugins>
     </pluginManagement>
   </build>
-    
+
   <!-- 
   for providing misc *-nodep artifacts, please note that order matters here
   even if slf4j complains about multiple implementations on classpath, it takes the 1.st one
@@ -471,36 +468,36 @@
       </exclusions>
     </dependency>
     <dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-slf4j-impl</artifactId>
-		<version>${log4j2-build}</version>
-		<scope>provided</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-api</artifactId>
-		<version>${log4j2-build}</version>
-		<scope>provided</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-core</artifactId>
-		<version>${log4j2-build}</version>
-		<scope>provided</scope>
-	</dependency>
-	<dependency>
-	  <groupId>ch.qos.logback</groupId>
-	  <artifactId>logback-classic</artifactId>
-	  <version>${logback-build}</version>
-	  <scope>provided</scope>
-	 </dependency>
-	 <dependency>
-	  <groupId>ch.qos.logback</groupId>
-	  <artifactId>logback-core</artifactId>
-	  <version>${logback-build}</version>
-	  <scope>provided</scope>
-	 </dependency>
-	 
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>${log4j2-build}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j2-build}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j2-build}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback-build}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <version>${logback-build}</version>
+      <scope>provided</scope>
+    </dependency>
+
     <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib-nodep</artifactId>
@@ -528,11 +525,11 @@
     </dependency>
     <!-- xa datasource testing  -->
     <dependency>
-    	<groupId>org.codehaus.btm</groupId>
-    	<artifactId>btm</artifactId>
-    	<version>2.1.4</version>
-    	<scope>test</scope>
-	</dependency>
+      <groupId>org.codehaus.btm</groupId>
+      <artifactId>btm</artifactId>
+      <version>2.1.4</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-exec</artifactId>
@@ -540,12 +537,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>org.apache.geronimo.specs</groupId>
-    	<artifactId>geronimo-jta_1.1_spec</artifactId>
-    	<version>1.1.1</version>
-    	<scope>test</scope>
-	</dependency>	
-	
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jta_1.1_spec</artifactId>
+      <version>1.1.1</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
@@ -592,7 +589,7 @@
       <scope>test</scope>
     </dependency>
 
-	<!-- needed for testing, let's prevent users from needing modify their settings.xml just for the project build -->
+    <!-- needed for testing, let's prevent users from needing modify their settings.xml just for the project build -->
     <dependency>
       <groupId>p6spy</groupId>
       <artifactId>p6spy-signedjar-test</artifactId>
@@ -602,12 +599,12 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-		<groupId>commons-beanutils</groupId>
-		<artifactId>commons-beanutils</artifactId>
-		<version>1.9.1</version>
-		<scope>test</scope>
-	</dependency>
-	
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>1.9.1</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- all the JDBC drivers tested -->
     <dependency>
       <groupId>mysql</groupId>
@@ -691,7 +688,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.9</version>
         <configuration>
-        	<quiet>true</quiet>
+          <quiet>true</quiet>
         </configuration>
       </plugin>
       <plugin>
@@ -721,11 +718,11 @@
         <version>${maven-surefire-plugin-build}</version>
       </plugin>
 
-	  <plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
         <version>2.9</version>
-         <configuration>
+        <configuration>
           <includeOpenIssues>false</includeOpenIssues>
           <onlyMilestoneIssues>false</onlyMilestoneIssues>
           <onlyCurrentVersion>false</onlyCurrentVersion>
@@ -780,10 +777,11 @@
                 however keep in mind that some tests run with preconfigured drivers (i.e. multidriver, ...)-->
                 <DB>${env.DB}</DB>
               </systemPropertyVariables>
-	          <!-- signed jar proxing -->
+              <!-- signed jar proxing -->
               <additionalClasspathElements>
-	          	<additionalClasspathElement>${project.build.directory}/test-classes/p6spy-signedjar-test-1.0.0.jar</additionalClasspathElement>
-	          </additionalClasspathElements>
+                <additionalClasspathElement>${project.build.directory}/test-classes/p6spy-signedjar-test-1.0.0.jar
+                </additionalClasspathElement>
+              </additionalClasspathElements>
             </configuration>
           </plugin>
         </plugins>
@@ -803,58 +801,60 @@
                 <!-- <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,DB2,Oracle</DB> -->
                 <DB>PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle</DB>
               </systemPropertyVariables>
-              
+
               <!-- signed jar proxing -->
               <additionalClasspathElements>
-	          	<additionalClasspathElement>${project.build.directory}/test-classes/p6spy-signedjar-test-1.0.0.jar</additionalClasspathElement>
-	          </additionalClasspathElements>
+                <additionalClasspathElement>
+                  ${project.build.directory}/test-classes/p6spy-signedjar-test-1.0.0.jar
+                </additionalClasspathElement>
+              </additionalClasspathElements>
             </configuration>
           </plugin>
 
- 		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>license-maven-plugin</artifactId>
-			<executions>
-				<!-- check/force licenses on travis only (too late for modifications)
-					moreover let's do it prior to "process-resources" phase - as that's where we generate these
-					to make sure developer introducing new file, took care of this on his/her local machine -->
-				<execution>
-					<id>check licenses</id>
-					<goals>
-						<goal>check-file-header</goal>
-					</goals>
-					<phase>generate-resources</phase>
-					<configuration>
-						<failOnMissingHeader>true</failOnMissingHeader>
-						<failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>license-maven-plugin</artifactId>
+            <executions>
+              <!-- check/force licenses on travis only (too late for modifications)
+                moreover let's do it prior to "process-resources" phase - as that's where we generate these
+                to make sure developer introducing new file, took care of this on his/her local machine -->
+              <execution>
+                <id>check licenses</id>
+                <goals>
+                  <goal>check-file-header</goal>
+                </goals>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <failOnMissingHeader>true</failOnMissingHeader>
+                  <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
       <dependencies>
-      	<!-- please note these are manually imported to local maven repo in scripts/travis/before_install_db2.sh -->
-<!--  		<dependency>
-			<groupId>com.ibm.db2</groupId>
-	        <artifactId>db2jcc4</artifactId>
-	        <version>9.7</version>
-	        <scope>test</scope>
-		</dependency>
-      	<dependency>
-			<groupId>com.ibm.db2</groupId>
-	        <artifactId>db2jcc_license_cu</artifactId>
-	        <version>9.7</version>
-	        <scope>test</scope>
-		</dependency>
- -->
-		<!-- fetched from the cloudbees maven repo -->
- 		<dependency>
-			<groupId>com.oracle</groupId>
-	        <artifactId>ojdbc6</artifactId>
-	        <version>11.2.0.4</version>
-	        <scope>test</scope>
-		</dependency>
+        <!-- please note these are manually imported to local maven repo in scripts/travis/before_install_db2.sh -->
+        <!--  		<dependency>
+              <groupId>com.ibm.db2</groupId>
+                  <artifactId>db2jcc4</artifactId>
+                  <version>9.7</version>
+                  <scope>test</scope>
+            </dependency>
+                <dependency>
+              <groupId>com.ibm.db2</groupId>
+                  <artifactId>db2jcc_license_cu</artifactId>
+                  <version>9.7</version>
+                  <scope>test</scope>
+            </dependency>
+         -->
+        <!-- fetched from the cloudbees maven repo -->
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc6</artifactId>
+          <version>11.2.0.4</version>
+          <scope>test</scope>
+        </dependency>
       </dependencies>
     </profile>
 
