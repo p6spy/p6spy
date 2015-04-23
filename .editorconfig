@@ -1,0 +1,12 @@
+# EditorConfig - see http://EditorConfig.org for details
+
+# top-most EditorConfig file
+root = true
+
+[*]
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_training_whitespace = false
