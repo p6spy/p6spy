@@ -45,6 +45,9 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+/**
+ * P6Spy {@link DataSource} implementation.
+ */
 @SuppressWarnings("serial")
 public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADataSource, Referenceable, Serializable {
 
@@ -62,18 +65,39 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
   public P6DataSource() {
   }
 
-  public P6DataSource(DataSource source) {
-    realDataSource = source;
+  /**
+   * Create a P6Spy DataSource wrapping another DataSource.  This constructor is primarily used by dependency
+   * injection frameworks.
+   *
+   * @param delegate the DataSource to wrap
+   */
+  public P6DataSource(DataSource delegate) {
+    realDataSource = delegate;
   }
 
+  /**
+   * Returns the JNDI name of the real data source.
+   *
+   * @return the JNDI name of the DataSource to proxy
+   */
   public String getRealDataSource() {
     return rdsName;
   }
 
-  public void setRealDataSource(String inVar) {
-    rdsName = inVar;
+  /**
+   * Sets the JNDI name of the DataSource to proxy.
+   *
+   * @param jndiName
+   */
+  public void setRealDataSource(String jndiName) {
+    rdsName = jndiName;
   }
 
+  /**
+   * Binds the JNDI DataSource to proxy.
+   *
+   * @throws SQLException
+   */
   protected synchronized void bindDataSource() throws SQLException {
     // we'll check in the synchronized section again (to prevent unnecessary reinitialization)
     if (null != realDataSource) {
@@ -223,9 +247,6 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
 
   }
 
-  /**
-   * Required method to support this class as a <CODE>Referenceable</CODE>.
-   */
   @Override
   public Reference getReference() throws NamingException {
     final Reference reference = new Reference(getClass().getName(), P6DataSourceFactory.class.getName(), null);
@@ -278,30 +299,17 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     return P6Core.wrapConnection(((DataSource) realDataSource).getConnection(username, password));
   }
 
-  /**
-   * @param iface
-   * @return
-   * @throws SQLException
-   * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
-   */
   @Override
   public boolean isWrapperFor(Class<?> iface) throws SQLException {
     return ((Wrapper) realDataSource).isWrapperFor(iface);
   }
 
-  /**
-   * @param <T>
-   * @param iface
-   * @return
-   * @throws SQLException
-   * @see java.sql.Wrapper#unwrap(java.lang.Class)
-   */
   @Override
   public <T> T unwrap(Class<T> iface) throws SQLException {
     return ((DataSource) realDataSource).unwrap(iface);
   }
 
-  // since 1.7
+  @Override
   public Logger getParentLogger() throws SQLFeatureNotSupportedException {
     return realDataSource.getParentLogger();
   }
