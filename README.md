@@ -17,11 +17,6 @@ User's mailing list: [Post](mailto:p6spy-users@googlegroups.com) - [Archive](htt
 Developer's mailing list: [Post](p6spy-developers@googlegroups.com) - [Archive](https://groups.google.com/forum/#!forum/p6spy-developers)    
 Issue tracking: [View/Create issues](https://github.com/p6spy/p6spy/issues)    
 
-**Code Quality:**   
-[SonarQube analysis](http://nemo.sonarqube.org/dashboard/index/p6spy:p6spy)
-
 **Related github repos:**   
 [p6spy-it](https://github.com/p6spy/p6spy-it) - for integration testing with misc application servers   
 [p6spy-perf](https://github.com/p6spy/p6spy-perf) - for performance testing (using jmeter)   
-
-**Note: This is NOT a fork of the original project.  This is the new home of this project.**
