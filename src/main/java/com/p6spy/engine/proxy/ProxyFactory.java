@@ -126,7 +126,20 @@ public class ProxyFactory {
     // loop through superclasses adding interfaces
     Class<?> examinedClass = clazz;
     while (examinedClass != null && !examinedClass.equals(Object.class)) {
-      interfaces.addAll(Arrays.asList(examinedClass.getInterfaces()));
+      for( Class<?> intf : examinedClass.getInterfaces() ) {
+        if( !intf.getName().startsWith("org.jboss") ) {
+        /*
+            When P6Spy is added to a connection wrapped by an application server there could be interfaces
+            which can not be loaded by the current classloader.  This affects JBoss 7+ and likely other
+            app servers as well.
+
+            Note: The intent is to implement all of the interfaces supplied by the JDBC driver to provide
+            easy access to vendor specific methods without having to unwrap the proxy.  This behavior will
+            likely be removed in P6Spy 3 (where it will only implement the standard JDBC interfaces).
+         */
+          interfaces.add(intf);
+        }
+      }
       examinedClass = examinedClass.getSuperclass();
     }
 
