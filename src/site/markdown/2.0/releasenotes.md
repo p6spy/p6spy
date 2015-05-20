@@ -1,5 +1,11 @@
 # Release Notes
 
+## Version 2.2.0 [TBD]
+
+Improvements:
+
+* [issue #290](https://github.com/p6spy/p6spy/issues/290): Lazy initialization for FileLogger
+
 ## Version 2.1.4 [May 9, 2015]
 
 Defects resolved:
