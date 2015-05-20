@@ -19,23 +19,6 @@
  */
 package com.p6spy.engine.spy.option;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogFactory;
@@ -53,6 +36,22 @@ import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class P6TestOptionDefaults extends BaseTestCase {
 
@@ -69,7 +68,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
   public static void setUpAll() throws SQLException, IOException {
     // cleanup all
     LOG_FILE.delete();
-    
+
     // make sure to reinit properly
     new P6TestFramework("blank") {
     };
@@ -235,22 +234,30 @@ public class P6TestOptionDefaults extends BaseTestCase {
     {
       final String msg = "debug logged test msg";
       P6LogQuery.debug(msg);
-      final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
-      Assert.assertFalse(logged.contains(msg));
+      if( LOG_FILE.exists() ) {
+        final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
+        Assert.assertFalse(logged.contains(msg));
+      }
     }
     
     {
       final String msg = "info logged test msg";
       P6LogQuery.info(msg);
-      final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
-      Assert.assertFalse(logged.contains(msg));
+      if( LOG_FILE.exists() ) {
+        final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
+        Assert.assertFalse(logged.contains(msg));
+      }
     }
     
     {
       final String msg = "error logged test msg";
       P6LogQuery.error(msg);
-      final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
-      Assert.assertTrue(logged.contains(msg));
+      if( LOG_FILE.exists() ) {
+        final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
+        Assert.assertTrue(logged.contains(msg));
+      } else {
+        Assert.fail("log file not created");
+      }
     }
   }
 }
