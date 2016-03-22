@@ -1,10 +1,14 @@
 # Release Notes
 
-## Version 2.2.0 [TBD]
+## Version 2.2.0 [March 22, 2016]
 
 Improvements:
 
 * [issue #290](https://github.com/p6spy/p6spy/issues/290): Lazy initialization for FileLogger
+
+Defects resolved:
+
+* [issue #330](https://github.com/p6spy/p6spy/issues/330): Unsafe iteration over System.getProperties() 
 
 ## Version 2.1.4 [May 9, 2015]
 
