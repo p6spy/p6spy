@@ -20,8 +20,10 @@
 package com.p6spy.engine.spy.option;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import com.p6spy.engine.spy.P6ModuleManager;
 
@@ -33,7 +35,7 @@ public class SystemProperties implements P6OptionsSource {
   public Map<String, String> getOptions() {
     final Map<String, String> result = new HashMap<String, String>();
 
-    for (Entry<Object, Object> entry : System.getProperties().entrySet()) {
+    for (Entry<Object, Object> entry : new HashSet<Entry>(((Properties) System.getProperties().clone()).entrySet())) {
       final String key = entry.getKey().toString();
       if (key.startsWith(P6SPY_PREFIX)) {
         result.put(key.substring(P6SPY_PREFIX.length()), (String) entry.getValue());
