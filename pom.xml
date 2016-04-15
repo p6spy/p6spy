@@ -116,7 +116,7 @@
   </scm>
 
   <properties>
-    <java-build>1.6</java-build>
+    <java-build>1.7</java-build>
     <commons-logging-build>1.1</commons-logging-build>
     <slf4j-build>1.7.7</slf4j-build>
     <log4j-build>1.2.17</log4j-build>
