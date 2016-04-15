@@ -594,9 +594,7 @@
       <groupId>p6spy</groupId>
       <artifactId>p6spy-signedjar-test</artifactId>
       <version>1.0.0</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/src/test/resources/p6spy-signedjar-test-1.0.0.jar</systemPath>
-      <optional>true</optional>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
@@ -860,4 +858,11 @@
 
   </profiles>
 
+  <repositories>
+    <repository>
+      <id>P6SpyProjectLocalRepo</id>
+      <name>p6spy Project Local Repository</name>
+      <url>file://${project.basedir}/src/test/resources</url>
+    </repository>
+  </repositories>
 </project>
