@@ -36,11 +36,7 @@ public class P6Core {
     List<P6Factory> factories = P6ModuleManager.getInstance().getFactories();
     if (factories != null) {
       for (P6Factory factory : factories) {
-        try {
-          con = factory.getConnection(con);
-        } catch (SQLException e) {
-          throw new RuntimeException(e);
-        }
+        con = factory.getConnection(con);
       }
     }
     return con;

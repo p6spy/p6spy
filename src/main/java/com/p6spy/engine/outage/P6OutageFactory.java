@@ -30,7 +30,7 @@ import java.sql.SQLException;
 public class P6OutageFactory implements P6Factory {
 
   @Override
-  public Connection getConnection(Connection conn) throws SQLException {
+  public Connection getConnection(Connection conn) {
     P6OutageConnectionInvocationHandler invocationHandler = new P6OutageConnectionInvocationHandler(conn);
     return ProxyFactory.createProxy(conn, invocationHandler);
   }

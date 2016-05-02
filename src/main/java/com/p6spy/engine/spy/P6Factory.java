@@ -35,6 +35,6 @@ public interface P6Factory {
   // getOptions can't be static, we'll live with it I guess
   public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository);
 
-  public Connection getConnection(Connection conn) throws SQLException;
+  public Connection getConnection(Connection conn);
 
 }
