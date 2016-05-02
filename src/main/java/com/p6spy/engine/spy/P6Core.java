@@ -31,12 +31,16 @@ public class P6Core {
 
   private static boolean initialized;
 
-  public static Connection wrapConnection(Connection realConnection) throws SQLException {
+  public static Connection wrapConnection(Connection realConnection) {
     Connection con = realConnection;
     List<P6Factory> factories = P6ModuleManager.getInstance().getFactories();
     if (factories != null) {
       for (P6Factory factory : factories) {
-        con = factory.getConnection(con);
+        try {
+          con = factory.getConnection(con);
+        } catch (SQLException e) {
+          throw new RuntimeException(e);
+        }
       }
     }
     return con;
