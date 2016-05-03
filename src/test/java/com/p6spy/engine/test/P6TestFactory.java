@@ -34,7 +34,7 @@ public class P6TestFactory implements P6Factory {
   }
 
   @Override
-  public Connection getConnection(Connection conn) throws SQLException {
+  public Connection getConnection(Connection conn) {
     // no wrapping required here
     return conn;
   }
