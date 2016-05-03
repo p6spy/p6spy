@@ -19,13 +19,14 @@
  */
 package com.p6spy.engine.proxy;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import net.sf.cglib.core.CodeGenerationException;
 import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.proxy.Enhancer;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Factory for creating proxies
@@ -34,6 +35,10 @@ import java.util.Set;
  * @since 09/2013
  */
 public class ProxyFactory {
+
+  // null as fallback, as proxied class might implement non-public interfaces
+  // that have trouble with our ProxyNamingPolicy (for example for SQLite)
+  private static final List<NamingPolicy> namingPolicies = Arrays.asList(ProxyNamingPolicy.INSTANCE, null);
 
   /**
    * Creates a proxy for the given object delegating all method calls to the invocation handler.  The proxy will
@@ -45,32 +50,29 @@ public class ProxyFactory {
    */
   @SuppressWarnings("unchecked")
   public static <T> T createProxy(final T underlying, final GenericInvocationHandler<T> invocationHandler) {
-    // TODO refactor - to get rid of endless try - catch
-    final ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
-    try {
-      final Enhancer enhancer = createProxy(underlying, invocationHandler, ProxyNamingPolicy.INSTANCE, currentThreadClassLoader);
-      return (T) enhancer.create();
-    } catch (CodeGenerationException e) {
-      // fallback, as proxied class might implement non-public interfaces 
-      // that have trouble with our ProxyNamingPolicy (for example for SQLite)
-      try {
-        final Enhancer enhancer = createProxy(underlying, invocationHandler, null, currentThreadClassLoader);
-        return (T) enhancer.create();
-      } catch (CodeGenerationException ex) {
-        // 
-        // well, wildfly (8.1.CR1) just doesn't like currentThreadClassLoader => needs to use the default one
-        //
+    CodeGenerationException exception = null;
+    for (ClassLoader classLoader : getCandidateClassLoaders(underlying)) {
+      for (NamingPolicy namingPolicy : namingPolicies) {
         try {
-          final Enhancer enhancer = createProxy(underlying, invocationHandler, ProxyNamingPolicy.INSTANCE, null);
+          final Enhancer enhancer = createProxy(underlying, invocationHandler, namingPolicy, classLoader);
           return (T) enhancer.create();
-        } catch (CodeGenerationException exc) {
-          // fallback, as proxied class might implement non-public interfaces 
-          // that have trouble with our ProxyNamingPolicy (for example for SQLite)
-            final Enhancer enhancer = createProxy(underlying, invocationHandler, null, null);
-            return (T) enhancer.create();
+        } catch (CodeGenerationException e) {
+          exception = e;
         }
       }
     }
+    throw exception;
+  }
+
+  private static <T> Set<ClassLoader> getCandidateClassLoaders(T underlying) {
+    final Set<ClassLoader> classLoaders = new HashSet<ClassLoader>();
+    classLoaders.add(Thread.currentThread().getContextClassLoader());
+    // well, wildfly (8.1.CR1) just doesn't like currentThreadClassLoader => needs to use the default one
+    classLoaders.add(null);
+    // other class loaders might not be able to access implementation specific interfaces
+    // for example in an OSGi environment, the jdbc driver is encapsulated in its own class loader
+    classLoaders.add(underlying.getClass().getClassLoader());
+    return classLoaders;
   }
 
   /**
