@@ -23,8 +23,6 @@ import com.p6spy.engine.common.P6ObjectEqualsDelegate;
 import com.p6spy.engine.common.P6ProxyUnwrapDelegate;
 import com.p6spy.engine.common.P6WrapperIsWrapperDelegate;
 import com.p6spy.engine.common.P6WrapperUnwrapDelegate;
-import com.p6spy.engine.proxy.cache.Cache;
-import com.p6spy.engine.proxy.cache.CacheFactory;
 import com.p6spy.engine.proxy.cache.MethodMatcherCacheKey;
 import net.sf.cglib.proxy.InvocationHandler;
 
@@ -32,6 +30,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Base class for invocation handlers.  This class is designed to be a generic implementation
@@ -48,8 +48,8 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   
   private final T underlying;
   
-  final static Cache<MethodMatcherCacheKey, MethodMatcher> cache =
-      CacheFactory.<MethodMatcherCacheKey, MethodMatcher> newCache();
+  private final static ConcurrentMap<MethodMatcherCacheKey, MethodMatcher> cache =
+    new ConcurrentHashMap<MethodMatcherCacheKey, MethodMatcher>();
 
   /**
    * Creates a new invocation handler for the given object.
