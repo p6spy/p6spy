@@ -21,6 +21,9 @@ package com.p6spy.engine.spy;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Provides a uniform interface to get the time in different granularities e.g. {@link #MILLIS} and {@link #NANOS}
+ */
 public enum Clock {
 
   MILLIS {
@@ -46,10 +49,31 @@ public enum Clock {
     }
   };
 
+  /**
+   * Returns the current timestamp.
+   * <p/>
+   * The granularity depends on the actual implementation.
+   *
+   * @return the current timestamp
+   */
   public abstract long getTime();
 
+  /**
+   * Converts the provided milliseconds to the implementation specific clock granularity.
+   * <p/>
+   * When using the {@link #NANOS} clock, returns the provided milliseconds in nanoseconds.
+   *
+   * @param millis the duration to convert
+   * @return the provided milliseconds to the implementation specific clock granularity
+   */
   public abstract long fromMillisToClockGranularity(long millis);
 
+  /**
+   * Returns the currently configured clock instance.
+   *
+   * @return the currently configured clock instance
+   * @see P6SpyOptions#getUseNanoTime()
+   */
   public static Clock get() {
     return P6ModuleManager.getInstance().getOptions(P6SpyOptions.class).getUseNanoTime() ? NANOS : MILLIS;
   }

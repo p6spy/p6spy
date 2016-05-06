@@ -139,37 +139,39 @@ public abstract class P6TestFramework extends BaseTestCase {
   }
 
   protected String getLastLogEntry() {
-    failOnNonP6TestLoggerUsage();
-    return ((P6TestLogger) P6LogQuery.getLogger()).getLastEntry();
+    return getP6TestLogger().getLastEntry();
+  }
+
+  protected Long getLastTimeElapsed() {
+    return getP6TestLogger().getLastTimeElapsed();
   }
 
   protected void clearLogEntries() {
-    failOnNonP6TestLoggerUsage();
-    ((P6TestLogger) P6LogQuery.getLogger()).clearLogEntries();
+    getP6TestLogger().clearLogEntries();
   }
 
   protected int getLogEntriesCount() {
-    failOnNonP6TestLoggerUsage();
-    return ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size();
+    return getP6TestLogger().getLogs().size();
   }
 
   protected List<String> getLogEntries() {
-    failOnNonP6TestLoggerUsage();
-    return ((P6TestLogger) P6LogQuery.getLogger()).getLogs();
+    return getP6TestLogger().getLogs();
   }
 
   protected String getLastButOneLogEntry() {
-    failOnNonP6TestLoggerUsage();
-    return ((P6TestLogger) P6LogQuery.getLogger()).getLastButOneEntry();
+    return getP6TestLogger().getLastButOneEntry();
   }
 
   protected String getLastLogStackTrace() {
-    failOnNonP6TestLoggerUsage();
-    return ((P6TestLogger) P6LogQuery.getLogger()).getLastStacktrace();
+    return getP6TestLogger().getLastStacktrace();
   }
 
   protected void clearLastLogStackTrace() {
+    getP6TestLogger().clearLastStacktrace();
+  }
+
+  private P6TestLogger getP6TestLogger() {
     failOnNonP6TestLoggerUsage();
-    ((P6TestLogger) P6LogQuery.getLogger()).clearLastStacktrace();
+    return (P6TestLogger) P6LogQuery.getLogger();
   }
 }
