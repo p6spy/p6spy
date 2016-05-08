@@ -21,59 +21,28 @@ package com.p6spy.engine.logging;
 
 import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.proxy.GenericInvocationHandler;
-import com.p6spy.engine.proxy.MethodNameMatcher;
 
 import java.sql.CallableStatement;
 
 /**
- * Invocation handler for {@link java.sql.PreparedStatement}
+ * Invocation handler for {@link java.sql.CallableStatement}
  */
-class P6LogCallableStatementInvocationHandler extends GenericInvocationHandler<CallableStatement>{
+class P6LogCallableStatementInvocationHandler extends AbstractP6LogPreparedStatementInvocationHandler<CallableStatement, CallableStatementInformation> {
 
   public P6LogCallableStatementInvocationHandler(CallableStatement underlying,
                                                  ConnectionInformation connectionInformation,
                                                  String query) {
+    super(underlying, connectionInformation, query);
+  }
 
-    super(underlying);
-    CallableStatementInformation callableStatementInformation = new CallableStatementInformation(connectionInformation);
-    callableStatementInformation.setStatementQuery(query);
+  @Override
+  protected CallableStatementInformation createStatementInformation(ConnectionInformation connectionInformation) {
+    return new CallableStatementInformation(connectionInformation);
+  }
 
-    P6LogPreparedStatementExecuteDelegate executeDelegate = new P6LogPreparedStatementExecuteDelegate(callableStatementInformation);
-    P6LogPreparedStatementAddBatchDelegate addBatchDelegate = new P6LogPreparedStatementAddBatchDelegate(callableStatementInformation);
-    P6LogCallableStatementSetParameterValueDelegate setParameterValueDelegate = new P6LogCallableStatementSetParameterValueDelegate(callableStatementInformation);
-    P6LogCallableStatementGetResultSetDelegate getResultSetDelegate = new P6LogCallableStatementGetResultSetDelegate(callableStatementInformation);
-
-    addDelegate(
-        new MethodNameMatcher("executeBatch"),
-        executeDelegate
-    );
-    addDelegate(
-        new MethodNameMatcher("addBatch"),
-        addBatchDelegate
-    );
-    addDelegate(
-        new MethodNameMatcher("execute"),
-        executeDelegate
-    );
-    addDelegate(
-        new MethodNameMatcher("executeQuery"),
-        executeDelegate
-    );
-    addDelegate(
-        new MethodNameMatcher("executeUpdate"),
-        executeDelegate
-    );
-    addDelegate(
-        new MethodNameMatcher("set*"),
-        setParameterValueDelegate
-    );
-    addDelegate(
-        new MethodNameMatcher("getResultSet"),
-        getResultSetDelegate
-    );
-
-
+  @Override
+  protected P6LogPreparedStatementSetParameterValueDelegate getSetParameterValueDelegate() {
+    return new P6LogCallableStatementSetParameterValueDelegate(statementInformation);
   }
 
 }

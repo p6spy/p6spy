@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Quinton McCombs
  * @since 09/2013
  */
-public class ConnectionInformation {
+public class ConnectionInformation implements Loggable {
 
   private static final AtomicInteger counter = new AtomicInteger(0);
   private final int connectionId;
@@ -34,7 +34,18 @@ public class ConnectionInformation {
     this.connectionId = counter.getAndIncrement();
   }
 
+  @Override
   public int getConnectionId() {
     return connectionId;
+  }
+
+  @Override
+  public String getSql() {
+    return "";
+  }
+
+  @Override
+  public String getSqlWithValues() {
+    return "";
   }
 }

@@ -34,40 +34,22 @@ public class P6LogConnectionInvocationHandler extends GenericInvocationHandler<C
     super(underlying);
     ConnectionInformation connectionInformation = new ConnectionInformation();
 
-    P6LogConnectionCommitDelegate commitDelegate = new P6LogConnectionCommitDelegate(connectionInformation);
-    P6LogConnectionRollbackDelegate rollbackDelegate = new P6LogConnectionRollbackDelegate(connectionInformation);
+    P6LogElapsedDelegate commitDelegate = new P6LogElapsedDelegate(connectionInformation, Category.COMMIT);
+    P6LogElapsedDelegate rollbackDelegate = new P6LogElapsedDelegate(connectionInformation, Category.ROLLBACK);
     P6LogConnectionPrepareStatementDelegate prepareStatementDelegate = new P6LogConnectionPrepareStatementDelegate(connectionInformation);
     P6LogConnectionCreateStatementDelegate createStatementDelegate = new P6LogConnectionCreateStatementDelegate(connectionInformation);
     P6LogConnectionPrepareCallDelegate prepareCallDelegate = new P6LogConnectionPrepareCallDelegate(connectionInformation);
 
     // add delegates to perform logging on connection methods
-    addDelegate(
-        new MethodNameMatcher("commit"),
-        commitDelegate
-    );
-    addDelegate(
-        new MethodNameMatcher("rollback"),
-        rollbackDelegate
-    );
+    addDelegate(new MethodNameMatcher("commit"), commitDelegate);
+    addDelegate(new MethodNameMatcher("rollback"), rollbackDelegate);
 
     // add delegates to return proxies for other methods
-    addDelegate(
-        new MethodNameMatcher("prepareStatement"),
-        prepareStatementDelegate
-    );
-
-    addDelegate(
-        new MethodNameMatcher("createStatement"),
-        createStatementDelegate
-    );
-
-    addDelegate(
-        new MethodNameMatcher("prepareCall"),
-        prepareCallDelegate
-    );
+    addDelegate(new MethodNameMatcher("prepareStatement"), prepareStatementDelegate);
+    addDelegate(new MethodNameMatcher("createStatement"), createStatementDelegate);
+    addDelegate(new MethodNameMatcher("prepareCall"), prepareCallDelegate);
 
     // TODO add proxy for getDatabaseMetaData - but not used for logging module?
-
   }
 
 }

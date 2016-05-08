@@ -41,6 +41,7 @@ public class StatementInformation implements Loggable {
     this.statementQuery = statementQuery;
   }
 
+  @Override
   public int getConnectionId() {
     return connectionInformation.getConnectionId();
   }

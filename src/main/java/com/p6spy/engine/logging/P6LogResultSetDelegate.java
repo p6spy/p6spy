@@ -27,28 +27,33 @@ import com.p6spy.engine.proxy.ProxyFactory;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 
-class P6LogStatementExecuteDelegate implements Delegate {
+class P6LogResultSetDelegate implements Delegate {
   private final StatementInformation statementInformation;
+  private final boolean setStatementQuery;
+  private final Category category;
 
-  public P6LogStatementExecuteDelegate(final StatementInformation statementInformation) {
+  public P6LogResultSetDelegate(final StatementInformation statementInformation, boolean setStatementQuery, Category category) {
     this.statementInformation = statementInformation;
+    this.setStatementQuery = setStatementQuery;
+    this.category = category;
   }
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    statementInformation.setStatementQuery((String) args[0]);
+    if (setStatementQuery) {
+      statementInformation.setStatementQuery((String) args[0]);
+    }
     long startTime = System.currentTimeMillis();
 
     try {
       Object result = method.invoke(underlying, args);
-      if( result != null && result instanceof ResultSet) {
-        P6LogResultSetInvocationHandler resultSetInvocationHandler = new P6LogResultSetInvocationHandler((ResultSet)result, statementInformation);
-        result = ProxyFactory.createProxy((ResultSet)result, resultSetInvocationHandler);
+      if (result != null && result instanceof ResultSet) {
+        P6LogResultSetInvocationHandler resultSetInvocationHandler = new P6LogResultSetInvocationHandler((ResultSet) result, statementInformation);
+        result = ProxyFactory.createProxy((ResultSet) result, resultSetInvocationHandler);
       }
       return result;
-    }
-    finally {
-      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, Category.STATEMENT, statementInformation);
+    } finally {
+      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, category, statementInformation);
     }
   }
 }
