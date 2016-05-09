@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.p6spy.engine.logging.Category;
+
 /**
  * {@link FileLogger} extension capable of keeping history of log messages as well as the last
  * Stacktrace.<br/>
@@ -35,7 +37,8 @@ import java.util.List;
  */
 public class P6TestLogger extends StdoutLogger {
 
-  private ArrayList<String> logs = new ArrayList<String>();
+  private List<String> logs = new ArrayList<String>();
+  private List<Long> times = new ArrayList<Long>();
   private String lastStacktrace;
 
   @Override
@@ -46,16 +49,26 @@ public class P6TestLogger extends StdoutLogger {
     super.logText(text);
   }
 
+  @Override
+  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql) {
+    super.logSQL(connectionId, now, elapsed, category, prepared, sql);
+    times.add(elapsed);
+  }
+
   public List<String> getLogs() {
     return Collections.unmodifiableList(logs);
   }
 
   public void clearLogs() {
-    logs.clear();
+    clearLogEntries();
   }
 
   public String getLastEntry() {
     return logs.isEmpty() ? null : logs.get(logs.size() - 1);
+  }
+
+  public Long getLastTimeElapsed() {
+    return times.isEmpty() ? null : times.get(times.size() - 1);
   }
 
   public String getLastButOneEntry() {
@@ -81,6 +94,7 @@ public class P6TestLogger extends StdoutLogger {
 
   public void clearLogEntries() {
     this.logs.clear();
+    this.times.clear();
   }
 
 }

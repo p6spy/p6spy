@@ -22,6 +22,7 @@ package com.p6spy.engine.logging;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.proxy.Delegate;
+import com.p6spy.engine.spy.Clock;
 
 import java.lang.reflect.Method;
 
@@ -34,7 +35,7 @@ class P6LogPreparedStatementAddBatchDelegate implements Delegate {
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    long startTime = System.currentTimeMillis();
+    long startTime = Clock.get().getTime();
 
     try {
       return method.invoke(underlying, args);

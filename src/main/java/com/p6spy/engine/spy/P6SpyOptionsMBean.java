@@ -127,4 +127,8 @@ public interface P6SpyOptionsMBean {
   String getJmxPrefix();
   
   void setJmxPrefix(String jmxPrefix);
+
+  void setUseNanoTime(boolean useNanoTime);
+
+  boolean getUseNanoTime();
 }

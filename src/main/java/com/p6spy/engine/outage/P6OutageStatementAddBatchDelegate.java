@@ -21,6 +21,7 @@ package com.p6spy.engine.outage;
 
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.Delegate;
+import com.p6spy.engine.spy.Clock;
 
 import java.lang.reflect.Method;
 
@@ -34,7 +35,7 @@ class P6OutageStatementAddBatchDelegate implements Delegate {
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    long startTime = System.currentTimeMillis();
+    long startTime = Clock.get().getTime();
     statementInformation.setStatementQuery((String) args[0]);
 
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
