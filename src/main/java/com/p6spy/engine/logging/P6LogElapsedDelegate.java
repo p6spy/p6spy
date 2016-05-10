@@ -19,32 +19,30 @@
  */
 package com.p6spy.engine.logging;
 
-import com.p6spy.engine.common.ConnectionInformation;
+import java.lang.reflect.Method;
+
+import com.p6spy.engine.common.Loggable;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.proxy.Delegate;
 import com.p6spy.engine.spy.Clock;
 
-import java.lang.reflect.Method;
+class P6LogElapsedDelegate implements Delegate {
 
-/**
- */
-class P6LogConnectionRollbackDelegate implements Delegate {
+  private final Loggable loggable;
+  private final Category category;
 
-
-  private final ConnectionInformation connectionInformation;
-
-  public P6LogConnectionRollbackDelegate(final ConnectionInformation connectionInformation) {
-    this.connectionInformation = connectionInformation;
+  public P6LogElapsedDelegate(final Loggable loggable, Category category) {
+    this.loggable = loggable;
+    this.category = category;
   }
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
     long startTime = Clock.get().getTime();
-
     try {
       return method.invoke(underlying, args);
     } finally {
-      P6LogQuery.logElapsed(connectionInformation.getConnectionId(), startTime, Category.ROLLBACK, "", "");
+      P6LogQuery.logElapsed(loggable.getConnectionId(), startTime, category, loggable);
     }
   }
 }

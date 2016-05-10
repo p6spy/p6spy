@@ -22,27 +22,39 @@ package com.p6spy.engine.logging;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.Delegate;
+import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.spy.Clock;
 
 import java.lang.reflect.Method;
+import java.sql.ResultSet;
 
-class P6LogStatementExecuteBatchDelegate implements Delegate {
-
+class P6LogResultSetDelegate implements Delegate {
   private final StatementInformation statementInformation;
+  private final boolean setStatementQuery;
+  private final Category category;
 
-  public P6LogStatementExecuteBatchDelegate(final StatementInformation statementInformation) {
+  public P6LogResultSetDelegate(final StatementInformation statementInformation, boolean setStatementQuery, Category category) {
     this.statementInformation = statementInformation;
+    this.setStatementQuery = setStatementQuery;
+    this.category = category;
   }
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
+    if (setStatementQuery) {
+      statementInformation.setStatementQuery((String) args[0]);
+    }
     long startTime = Clock.get().getTime();
 
     try {
-      return method.invoke(underlying, args);
-    }
-    finally {
-      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, Category.STATEMENT, statementInformation);
+      Object result = method.invoke(underlying, args);
+      if (result != null && result instanceof ResultSet) {
+        P6LogResultSetInvocationHandler resultSetInvocationHandler = new P6LogResultSetInvocationHandler((ResultSet) result, statementInformation);
+        result = ProxyFactory.createProxy((ResultSet) result, resultSetInvocationHandler);
+      }
+      return result;
+    } finally {
+      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, category, statementInformation);
     }
   }
 }

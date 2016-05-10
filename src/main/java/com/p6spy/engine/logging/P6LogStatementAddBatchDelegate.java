@@ -19,31 +19,24 @@
  */
 package com.p6spy.engine.logging;
 
-import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.StatementInformation;
-import com.p6spy.engine.proxy.Delegate;
-import com.p6spy.engine.spy.Clock;
 
 import java.lang.reflect.Method;
 
-class P6LogStatementAddBatchDelegate implements Delegate {
+class P6LogStatementAddBatchDelegate extends P6LogElapsedDelegate {
 
   private final StatementInformation statementInformation;
 
   public P6LogStatementAddBatchDelegate(final StatementInformation statementInformation) {
+    super(statementInformation, Category.BATCH);
     this.statementInformation = statementInformation;
   }
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    statementInformation.setStatementQuery((String) args[0]);
-    long startTime = Clock.get().getTime();
-
-    try {
-      return method.invoke(underlying, args);
+    if (args.length > 0) {
+      statementInformation.setStatementQuery((String) args[0]);
     }
-    finally {
-      P6LogQuery.logElapsed(statementInformation.getConnectionId(), startTime, Category.BATCH, statementInformation);
-    }
+    return super.invoke(proxy, underlying, method, args);
   }
 }

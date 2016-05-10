@@ -49,6 +49,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
 
   @Before
   public void setUpPreparedStatement() {
+    P6LogOptions.getActiveInstance().setExcludecategories("info,debug,result");
     try {
       {
         Statement statement = connection.createStatement();
@@ -212,6 +213,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
       assertTrue(super.getLastLogEntry().contains(update));
       assertTrue(super.getLastLogEntry().contains("aspen"));
       assertTrue(super.getLastLogEntry().contains("4"));
+      assertTrue(super.getLastLogEntry().contains("batch"));
       prep.close();
       
       String query = "select count(*) from prepstmt_test";
