@@ -1,5 +1,24 @@
 # Release Notes
 
+## Version 2.3.0 [May 10, 2016]
+
+Improvements:
+
+* [issue #295](https://github.com/p6spy/p6spy/issues/295): Add option to report execution time in nanoseconds or milliseconds
+* [issue #313](https://github.com/p6spy/p6spy/issues/313): Remove throws SQLException declaration on P6Core.wrapConnection
+
+Defects resolved:
+
+* [issue #320](https://github.com/p6spy/p6spy/pull/320): Calls to getResultSet() not instrumented on Statement and PreparedStatement
+* [issue #318](https://github.com/p6spy/p6spy/pull/318): Remove unused Cache abstraction and make cache thread safe
+* [issue #317](https://github.com/p6spy/p6spy/pull/317): Make connectionId thread safe
+* [issue #314](https://github.com/p6spy/p6spy/pull/314): ClassNotFoundException loading MySQL Statement interface using OSGi
+
+Other:
+
+* [issue #304](https://github.com/p6spy/p6spy/issues/304): Build failures using openjdk7
+* [issue #300](https://github.com/p6spy/p6spy/issues/300): Maven warning about missing dependency
+
 ## Version 2.2.0 [March 22, 2016]
 
 Improvements:
