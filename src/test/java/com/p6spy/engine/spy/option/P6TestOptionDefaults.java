@@ -145,6 +145,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertEquals("dd-MMM-yy", opts.getDatabaseDialectDateFormat());
     Assert.assertTrue(opts.getJmx());
     Assert.assertNull(opts.getJmxPrefix());
+    Assert.assertFalse(opts.getUseNanoTime());
   }
 
   @Test

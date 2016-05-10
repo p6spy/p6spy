@@ -23,6 +23,7 @@ import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.Delegate;
 import com.p6spy.engine.proxy.ProxyFactory;
+import com.p6spy.engine.spy.Clock;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -43,7 +44,7 @@ class P6LogResultSetDelegate implements Delegate {
     if (setStatementQuery) {
       statementInformation.setStatementQuery((String) args[0]);
     }
-    long startTime = System.currentTimeMillis();
+    long startTime = Clock.get().getTime();
 
     try {
       Object result = method.invoke(underlying, args);

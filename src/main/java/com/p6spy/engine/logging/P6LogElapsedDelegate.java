@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import com.p6spy.engine.common.Loggable;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.proxy.Delegate;
+import com.p6spy.engine.spy.Clock;
 
 class P6LogElapsedDelegate implements Delegate {
 
@@ -37,7 +38,7 @@ class P6LogElapsedDelegate implements Delegate {
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    long startTime = System.currentTimeMillis();
+    long startTime = Clock.get().getTime();
     try {
       return method.invoke(underlying, args);
     } finally {

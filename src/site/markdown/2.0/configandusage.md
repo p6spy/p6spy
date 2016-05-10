@@ -140,15 +140,19 @@ in section: [Configuration and Usage](#confusage)):
     # (default is dd-MMM-yy)
     #databaseDialectDateFormat=dd-MMM-yy
 
-	# whether to expose options via JMX or not
-	# (default is true)
-	#jmx=true
-	
-	# if exposing options via jmx (see option: jmx), what should be the prefix used?
-	# jmx naming pattern constructed is: com.p6spy(.<jmxPrefix>)?:name=<optionsClassName>
-	# please note, if there is already such a name in use it would be unregistered first (the last registered wins)
-	# (default is none)
-	#jmxPrefix=
+    # whether to expose options via JMX or not
+    # (default is true)
+    #jmx=true
+    
+    # if exposing options via jmx (see option: jmx), what should be the prefix used?
+    # jmx naming pattern constructed is: com.p6spy(.<jmxPrefix>)?:name=<optionsClassName>
+    # please note, if there is already such a name in use it would be unregistered first (the last registered wins)
+    # (default is none)
+    #jmxPrefix=
+   
+    # if set to true, the execution time will be measured in nanoseconds as opposed to milliseconds
+    # (default is false)
+    #useNanoTime=false
 
     #################################################################
     # DataSource replacement                                        #
@@ -212,11 +216,11 @@ in section: [Configuration and Usage](#confusage)):
     #jndicontextfactory=com.ibm.websphere.naming.WsnInitialContextFactory
     #jndicontextproviderurl=iiop://localhost:900
 
-	################################################################
+    ################################################################
     # P6 LOGGING SPECIFIC PROPERTIES                               #
     ################################################################
 
-	# filter what is logged
+    # filter what is logged
     # please note this is a precondition for usage of: include/exclude/sqlexpression
     # (default is false)
     #filter=false
@@ -556,3 +560,7 @@ The interval property is the boundary time set in seconds. For example, if set t
 2, any statement requiring at least 2 seconds is logged. The same statement will continue to be logged for as
 long as it executes. So, if the interval is set to 2 and a query takes 11 seconds, it is logged 5 times (at
 the 2, 4, 6, 8, 10-second intervals).
+
+### jmxPrefix
+
+If set to true, the execution time will be measured in nanoseconds as opposed to milliseconds.

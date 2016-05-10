@@ -21,6 +21,7 @@ package com.p6spy.engine.outage;
 
 import com.p6spy.engine.common.*;
 import com.p6spy.engine.logging.Category;
+import com.p6spy.engine.spy.Clock;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -132,8 +133,9 @@ public class P6OutageDetector implements Runnable {
 
         P6LogQuery.debug("P6Spy - detectOutage.pendingMessage.size = " + listSize);
 
-        long currentTime = System.currentTimeMillis();
-        long threshold = P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS();
+        final Clock clock = Clock.get();
+        long currentTime = clock.getTime();
+        long threshold = clock.fromMillisToClockGranularity(P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
 
         for (Object jdbcObject : pendingMessages.keySet()) {
             // here is a thread hazard that we'll be lazy about. Another thread
