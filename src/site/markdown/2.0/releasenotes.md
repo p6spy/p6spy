@@ -1,6 +1,6 @@
 # Release Notes
 
-## Version 2.3.0 [May 10, 2016]
+## Version 2.3.0 [May 11, 2016]
 
 Improvements:
 
