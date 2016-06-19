@@ -19,10 +19,10 @@
  */
 package com.p6spy.engine.common;
 
-import com.p6spy.engine.logging.Category;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.p6spy.engine.logging.Category;
 
 /**
  * @author Quinton McCombs
@@ -32,7 +32,7 @@ public class ResultSetInformation implements Loggable {
 
   private final StatementInformation statementInformation;
   private String query;
-  private final Map<String, Object> resultMap= new LinkedHashMap<String, Object>();
+  private final Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
   private int currRow = -1;
   private int lastRowLogged = -1;
 
@@ -45,7 +45,7 @@ public class ResultSetInformation implements Loggable {
    * Generates log message with column values accessed if the row's column values have not already been logged.
    */
   public void generateLogMessage() {
-    if( lastRowLogged != currRow ) {
+    if (lastRowLogged != currRow) {
       P6LogQuery.log(Category.RESULTSET, this);
       resultMap.clear();
       lastRowLogged = currRow;
@@ -61,8 +61,8 @@ public class ResultSetInformation implements Loggable {
     return currRow;
   }
 
-  public void setCurrRow(final int currRow) {
-    this.currRow = currRow;
+  public void incrementCurrRow() {
+    this.currRow++;
   }
 
   public void setColumnValue(String columnName, Object value) {
@@ -73,7 +73,7 @@ public class ResultSetInformation implements Loggable {
   public String getSql() {
     return query;
   }
-  
+
   @Override
   public String getSqlWithValues() {
     final StringBuilder sb = new StringBuilder();
@@ -85,8 +85,12 @@ public class ResultSetInformation implements Loggable {
       sb.append(" = ");
       sb.append(entry.getValue());
     }
-    
+
     return sb.toString();
   }
-  
+
+  public StatementInformation getStatementInformation() {
+    return statementInformation;
+  }
+
 }

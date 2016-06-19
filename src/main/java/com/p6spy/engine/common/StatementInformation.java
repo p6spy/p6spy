@@ -28,6 +28,7 @@ public class StatementInformation implements Loggable {
 
   private final ConnectionInformation connectionInformation;
   private String statementQuery;
+  private long totalTimeElapsed;
   
   public StatementInformation(final ConnectionInformation connectionInformation) {
     this.connectionInformation = connectionInformation;
@@ -54,5 +55,13 @@ public class StatementInformation implements Loggable {
   @Override
   public String getSql() {
     return statementQuery;
+  }
+
+  public long getTotalTimeElapsed() {
+    return totalTimeElapsed;
+  }
+
+  public void incrementTimeElapsed(long timeElapsedNanos) {
+    totalTimeElapsed += timeElapsedNanos;
   }
 }

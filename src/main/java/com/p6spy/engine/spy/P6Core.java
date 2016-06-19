@@ -23,6 +23,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.p6spy.engine.event.CompoundJdbcEventListener;
+import com.p6spy.engine.event.DefaultEventListener;
+import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
+
 /**
  * @author Quinton McCombs
  * @since 09/2013
@@ -32,14 +37,18 @@ public class P6Core {
   private static boolean initialized;
 
   public static Connection wrapConnection(Connection realConnection) {
-    Connection con = realConnection;
+    final CompoundJdbcEventListener compoundEventListener = new CompoundJdbcEventListener();
+    compoundEventListener.addListender(DefaultEventListener.INSTANCE);
     List<P6Factory> factories = P6ModuleManager.getInstance().getFactories();
     if (factories != null) {
       for (P6Factory factory : factories) {
-        con = factory.getConnection(con);
+        final JdbcEventListener eventListener = factory.getJdbcEventListener();
+        if (eventListener != null) {
+          compoundEventListener.addListender(eventListener);
+        }
       }
     }
-    return con;
+    return new ConnectionWrapper(realConnection, compoundEventListener);
   }
 
   /**

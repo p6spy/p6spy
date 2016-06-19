@@ -19,12 +19,12 @@
  */
 package com.p6spy.engine.outage;
 
+import java.sql.PreparedStatement;
+
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.proxy.GenericInvocationHandler;
 import com.p6spy.engine.proxy.MethodNameMatcher;
-
-import java.sql.PreparedStatement;
 
 /**
  * Invocation handler for {@link java.sql.PreparedStatement}
@@ -36,8 +36,7 @@ class P6OutagePreparedStatementInvocationHandler extends GenericInvocationHandle
                                                     String query) {
 
       super(underlying);
-    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation);
-    preparedStatementInformation.setStatementQuery(query);
+    PreparedStatementInformation preparedStatementInformation = new PreparedStatementInformation(connectionInformation, query);
 
     P6OutagePreparedStatementExecuteDelegate executeDelegate = new P6OutagePreparedStatementExecuteDelegate(preparedStatementInformation);
     P6OutagePreparedStatementAddBatchDelegate addBatchDelegate = new P6OutagePreparedStatementAddBatchDelegate(preparedStatementInformation);

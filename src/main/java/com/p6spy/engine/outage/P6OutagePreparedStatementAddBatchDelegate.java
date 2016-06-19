@@ -34,7 +34,7 @@ class P6OutagePreparedStatementAddBatchDelegate implements Delegate {
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    long startTime = Clock.get().getTime();
+    long startTime = System.nanoTime();
 
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
         P6OutageDetector.getInstance().registerInvocation(this, startTime, "batch",

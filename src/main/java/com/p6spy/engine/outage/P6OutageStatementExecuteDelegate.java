@@ -34,7 +34,7 @@ class P6OutageStatementExecuteDelegate implements Delegate {
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    long startTime = Clock.get().getTime();
+    long startTime = System.nanoTime();
 
     if (!method.getName().equals("executeBatch")) {
       // the execute batch method takes no parameters!
