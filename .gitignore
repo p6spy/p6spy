@@ -31,8 +31,9 @@ dependency-reduced-pom.xml
 .vagrant
 Berksfile.lock
 
-# bitronix transaction logs
+# bitronix transaction stuff
 btm*.tlog
+p6spy_xds
 
 # hsql
 mem.h2.db
