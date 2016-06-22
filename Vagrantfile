@@ -175,7 +175,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		  "server_debian_password" => "123" 
 	  },
 		  # groovy
-		  "groovy" => { "version" => "2.1.9" }
+		  "groovy" => {
+        "version"  => "2.1.9",
+        "url"      => "https://dl.bintray.com/groovy/maven/groovy-binary-2.1.9.zip",
+        "checksum" => "d9cb8d54680d508ac1eb928f8d0cfb1fb1bec7843bb405ea9a7d18f512b10ba6"
+      }
 	  }
   end
 
