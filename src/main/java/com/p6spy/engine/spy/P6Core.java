@@ -20,7 +20,6 @@
 package com.p6spy.engine.spy;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import com.p6spy.engine.event.CompoundJdbcEventListener;
@@ -48,7 +47,7 @@ public class P6Core {
         }
       }
     }
-    return new ConnectionWrapper(realConnection, compoundEventListener);
+    return ConnectionWrapper.wrap(realConnection, compoundEventListener);
   }
 
   /**

@@ -1,3 +1,22 @@
+/*
+ * #%L
+ * P6Spy
+ * %%
+ * Copyright (C) 2002 - 2016 P6Spy
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 package com.p6spy.engine.event;
 
 import java.util.ArrayList;
@@ -25,128 +44,219 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAddBatch(StatementInformation statementInformation, String sql) {
+  public void onBeforeAddBatch(PreparedStatementInformation statementInformation) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAddBatch(statementInformation, sql);
+      eventListener.onBeforeAddBatch(statementInformation);
     }
   }
 
   @Override
-  public void onExecute(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterAddBatch(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onExecute(statementInformation, timeElapsedNanos);
+      eventListener.onAfterAddBatch(statementInformation, timeElapsedNanos);
     }
   }
 
   @Override
-  public void onExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onBeforeAddBatch(StatementInformation statementInformation, String sql) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onExecute(statementInformation, timeElapsedNanos, sql);
+      eventListener.onBeforeAddBatch(statementInformation, sql);
     }
   }
 
   @Override
-  public void onExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onExecuteBatch(statementInformation, timeElapsedNanos);
+      eventListener.onAfterAddBatch(statementInformation, timeElapsedNanos, sql);
     }
   }
 
   @Override
-  public void onExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+  public void onBeforeExecute(PreparedStatementInformation statementInformation) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onExecuteUpdate(statementInformation, timeElapsedNanos);
+      eventListener.onBeforeExecute(statementInformation);
     }
   }
 
   @Override
-  public void onExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecute(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onExecuteUpdate(statementInformation, timeElapsedNanos, sql);
+      eventListener.onAfterExecute(statementInformation, timeElapsedNanos);
     }
   }
 
   @Override
-  public void onExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onBeforeExecute(StatementInformation statementInformation, String sql) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onExecuteQuery(statementInformation, timeElapsedNanos);
+      eventListener.onBeforeExecute(statementInformation, sql);
     }
   }
 
   @Override
-  public void onExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onExecuteQuery(statementInformation, timeElapsedNanos, sql);
+      eventListener.onAfterExecute(statementInformation, timeElapsedNanos, sql);
     }
   }
 
   @Override
-  public void onPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value) {
+  public void onBeforeExecuteBatch(StatementInformation statementInformation) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onPreparedStatementSet(statementInformation, parameterIndex, value);
+      eventListener.onBeforeExecuteBatch(statementInformation);
     }
   }
 
   @Override
-  public void onCallableStatementSet(CallableStatementInformation statementInformation, String parameterName, Object value) {
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onCallableStatementSet(statementInformation, parameterName, value);
+      eventListener.onAfterExecuteBatch(statementInformation, timeElapsedNanos);
     }
   }
 
   @Override
-  public void onGetResultSet(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onBeforeExecuteUpdate(PreparedStatementInformation statementInformation) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onGetResultSet(statementInformation, timeElapsedNanos);
+      eventListener.onBeforeExecuteUpdate(statementInformation);
     }
   }
 
   @Override
-  public void onResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext) {
+  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onResultSetNext(resultSetInformation, timeElapsedNanos, hasNext);
+      eventListener.onAfterExecuteUpdate(statementInformation, timeElapsedNanos);
     }
   }
 
   @Override
-  public void onResultSetClose(ResultSetInformation resultSetInformation) {
+  public void onBeforeExecuteUpdate(StatementInformation statementInformation, String sql) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onResultSetClose(resultSetInformation);
+      eventListener.onBeforeExecuteUpdate(statementInformation, sql);
     }
   }
 
   @Override
-  public void onResultSetGet(ResultSetInformation resultSetInformation, String columnLabel, Object value) {
+  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+      eventListener.onAfterExecuteUpdate(statementInformation, timeElapsedNanos, sql);
     }
   }
 
   @Override
-  public void onResultSetGet(ResultSetInformation resultSetInformation, int columnIndex, Object value) {
+  public void onBeforeExecuteQuery(PreparedStatementInformation statementInformation) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+      eventListener.onBeforeExecuteQuery(statementInformation);
     }
   }
 
   @Override
-  public void onCommit(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+  public void onAfterExecuteQuery(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onCommit(connectionInformation, timeElapsedNanos);
+      eventListener.onAfterExecuteQuery(statementInformation, timeElapsedNanos);
     }
   }
 
   @Override
-  public void onConnectionClose(ConnectionInformation connectionInformation) {
+  public void onBeforeExecuteQuery(StatementInformation statementInformation, String sql) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onConnectionClose(connectionInformation);
+      eventListener.onBeforeExecuteQuery(statementInformation, sql);
     }
   }
 
   @Override
-  public void onRollback(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+  public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onRollback(connectionInformation, timeElapsedNanos);
+      eventListener.onAfterExecuteQuery(statementInformation, timeElapsedNanos, sql);
+    }
+  }
+
+  @Override
+  public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, value);
+    }
+  }
+
+  @Override
+  public void onAfterCallableStatementSet(CallableStatementInformation statementInformation, String parameterName, Object value) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value);
+    }
+  }
+
+  @Override
+  public void onAfterGetResultSet(StatementInformation statementInformation, long timeElapsedNanos) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterGetResultSet(statementInformation, timeElapsedNanos);
+    }
+  }
+
+  @Override
+  public void onBeforeResultSetNext(ResultSetInformation resultSetInformation) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onBeforeResultSetNext(resultSetInformation);
+    }
+  }
+
+  @Override
+  public void onAfterResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterResultSetNext(resultSetInformation, timeElapsedNanos, hasNext);
+    }
+  }
+
+  @Override
+  public void onAfterResultSetClose(ResultSetInformation resultSetInformation) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterResultSetClose(resultSetInformation);
+    }
+  }
+
+  @Override
+  public void onAfterResultSetGet(ResultSetInformation resultSetInformation, String columnLabel, Object value) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
+    }
+  }
+
+  @Override
+  public void onAfterResultSetGet(ResultSetInformation resultSetInformation, int columnIndex, Object value) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
+    }
+  }
+
+  @Override
+  public void onBeforeCommit(ConnectionInformation connectionInformation) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onBeforeCommit(connectionInformation);
+    }
+  }
+
+  @Override
+  public void onAfterCommit(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterCommit(connectionInformation, timeElapsedNanos);
+    }
+  }
+
+  @Override
+  public void onAfterConnectionClose(ConnectionInformation connectionInformation) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterConnectionClose(connectionInformation);
+    }
+  }
+
+  @Override
+  public void onBeforeRollback(ConnectionInformation connectionInformation) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onBeforeRollback(connectionInformation);
+    }
+  }
+
+  @Override
+  public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterRollback(connectionInformation, timeElapsedNanos);
     }
   }
 }

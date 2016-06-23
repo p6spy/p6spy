@@ -34,82 +34,96 @@ public class LoggingEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onExecute(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecute(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.STATEMENT, statementInformation);
   }
 
   @Override
-  public void onExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.STATEMENT, statementInformation);
   }
 
   @Override
-  public void onExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.STATEMENT, statementInformation);
   }
 
   @Override
-  public void onExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.STATEMENT, statementInformation);
   }
 
   @Override
-  public void onExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecuteQuery(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.STATEMENT, statementInformation);
   }
 
   @Override
-  public void onExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.STATEMENT, statementInformation);
   }
 
   @Override
-  public void onExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.BATCH, statementInformation);
   }
 
   @Override
-  public void onGetResultSet(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterGetResultSet(StatementInformation statementInformation, long timeElapsedNanos) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.RESULTSET, statementInformation);
   }
 
   @Override
-  public void onCommit(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+  public void onAfterCommit(ConnectionInformation connectionInformation, long timeElapsedNanos) {
     P6LogQuery.logElapsed(connectionInformation.getConnectionId(), timeElapsedNanos, Category.COMMIT, connectionInformation);
   }
 
   @Override
-  public void onRollback(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+  public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos) {
     P6LogQuery.logElapsed(connectionInformation.getConnectionId(), timeElapsedNanos, Category.ROLLBACK, connectionInformation);
   }
 
   @Override
-  public void onResultSetGet(ResultSetInformation resultSetInformation, int columnIndex, Object value) {
+  public void onAfterResultSetGet(ResultSetInformation resultSetInformation, int columnIndex, Object value) {
     resultSetInformation.setColumnValue(Integer.toString(columnIndex), value);
   }
 
   @Override
-  public void onResultSetGet(ResultSetInformation resultSetInformation, String columnLabel, Object value) {
+  public void onAfterResultSetGet(ResultSetInformation resultSetInformation, String columnLabel, Object value) {
     resultSetInformation.setColumnValue(columnLabel, value);
   }
 
   @Override
-  public void onResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext) {
+  public void onBeforeResultSetNext(ResultSetInformation resultSetInformation) {
     if (resultSetInformation.getCurrRow() > -1) {
       // Log the columns that were accessed except on the first call to ResultSet.next().  The first time it is
       // called it is advancing to the first row.
       resultSetInformation.generateLogMessage();
     }
+  }
+
+  @Override
+  public void onAfterResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext) {
     if (hasNext) {
       P6LogQuery.logElapsed(resultSetInformation.getConnectionId(), timeElapsedNanos, Category.RESULT, resultSetInformation);
     }
   }
 
   @Override
-  public void onResultSetClose(ResultSetInformation resultSetInformation) {
+  public void onAfterResultSetClose(ResultSetInformation resultSetInformation) {
     if (resultSetInformation.getCurrRow() > -1) {
       // If the result set has not been advanced to the first row, there is nothing to log.
       resultSetInformation.generateLogMessage();
     }
+  }
+
+  @Override
+  public void onAfterAddBatch(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+    onAfterAddBatch(statementInformation, timeElapsedNanos, null);
+  }
+
+  @Override
+  public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+    P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.BATCH, statementInformation);
   }
 }

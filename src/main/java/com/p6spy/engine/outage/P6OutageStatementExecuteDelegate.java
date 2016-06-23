@@ -19,11 +19,10 @@
  */
 package com.p6spy.engine.outage;
 
+import java.lang.reflect.Method;
+
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.Delegate;
-import com.p6spy.engine.spy.Clock;
-
-import java.lang.reflect.Method;
 
 class P6OutageStatementExecuteDelegate implements Delegate {
   private final StatementInformation statementInformation;
@@ -34,7 +33,6 @@ class P6OutageStatementExecuteDelegate implements Delegate {
 
   @Override
   public Object invoke(final Object proxy, final Object underlying, final Method method, final Object[] args) throws Throwable {
-    long startTime = System.nanoTime();
 
     if (!method.getName().equals("executeBatch")) {
       // the execute batch method takes no parameters!
@@ -42,7 +40,7 @@ class P6OutageStatementExecuteDelegate implements Delegate {
     }
 
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, startTime, "statement", "", statementInformation.getStatementQuery());
+      P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "statement", "", statementInformation.getStatementQuery());
     }
 
     try {

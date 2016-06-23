@@ -63,7 +63,6 @@ public class GenericInvocationHandler<T> implements InvocationHandler {
   }
 
   private void addCommonDelegates() {
-    // TODO
     // This covers the implementation of the java.sql.Wrapper interface
     delegateMap.put(new MethodNameMatcher("isWrapperFor"), new P6WrapperIsWrapperDelegate());
     delegateMap.put(new MethodNameMatcher("unwrap"), new P6WrapperUnwrapDelegate());

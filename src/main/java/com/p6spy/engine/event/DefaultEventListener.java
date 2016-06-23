@@ -37,55 +37,55 @@ public class DefaultEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAddBatch(StatementInformation statementInformation, String sql) {
+  public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     statementInformation.setStatementQuery(sql);
   }
 
   @Override
-  public void onExecute(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecute(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     statementInformation.incrementTimeElapsed(timeElapsedNanos);
   }
 
   @Override
-  public void onExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
-    statementInformation.setStatementQuery(sql);
-    statementInformation.incrementTimeElapsed(timeElapsedNanos);
-  }
-
-  @Override
-  public void onExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos) {
-    statementInformation.incrementTimeElapsed(timeElapsedNanos);
-  }
-
-  @Override
-  public void onExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
-    statementInformation.incrementTimeElapsed(timeElapsedNanos);
-  }
-
-  @Override
-  public void onExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     statementInformation.setStatementQuery(sql);
     statementInformation.incrementTimeElapsed(timeElapsedNanos);
   }
 
   @Override
-  public void onExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos) {
     statementInformation.incrementTimeElapsed(timeElapsedNanos);
   }
 
   @Override
-  public void onExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+    statementInformation.incrementTimeElapsed(timeElapsedNanos);
+  }
+
+  @Override
+  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
     statementInformation.setStatementQuery(sql);
     statementInformation.incrementTimeElapsed(timeElapsedNanos);
   }
 
   @Override
-  public void onGetResultSet(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecuteQuery(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
     statementInformation.incrementTimeElapsed(timeElapsedNanos);
   }
 
   @Override
-  public void onResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext) {
+  public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+    statementInformation.setStatementQuery(sql);
+    statementInformation.incrementTimeElapsed(timeElapsedNanos);
+  }
+
+  @Override
+  public void onAfterGetResultSet(StatementInformation statementInformation, long timeElapsedNanos) {
+    statementInformation.incrementTimeElapsed(timeElapsedNanos);
+  }
+
+  @Override
+  public void onAfterResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext) {
     resultSetInformation.getStatementInformation().incrementTimeElapsed(timeElapsedNanos);
     if (hasNext) {
       resultSetInformation.incrementCurrRow();
@@ -93,12 +93,12 @@ public class DefaultEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onCallableStatementSet(CallableStatementInformation statementInformation, String parameterName, Object value) {
+  public void onAfterCallableStatementSet(CallableStatementInformation statementInformation, String parameterName, Object value) {
     statementInformation.setParameterValue(parameterName, value);
   }
 
   @Override
-  public void onPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value) {
+  public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value) {
     statementInformation.setParameterValue(parameterIndex, value);
   }
 

@@ -19,6 +19,15 @@
  */
 package com.p6spy.engine.spy.option;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogFactory;
@@ -43,15 +52,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class P6TestOptionDefaults extends BaseTestCase {
 
@@ -145,7 +145,6 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertEquals("dd-MMM-yy", opts.getDatabaseDialectDateFormat());
     Assert.assertTrue(opts.getJmx());
     Assert.assertNull(opts.getJmxPrefix());
-    Assert.assertFalse(opts.getUseNanoTime());
   }
 
   @Test

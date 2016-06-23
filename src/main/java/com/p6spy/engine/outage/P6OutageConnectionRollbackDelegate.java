@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.proxy.Delegate;
-import com.p6spy.engine.spy.Clock;
 
 /**
  */

@@ -43,7 +43,6 @@ import java.util.Map;
 
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.proxy.P6Proxy;
 
 /**
  * Provides a convenient implementation of the ResultSet interface
@@ -54,12 +53,20 @@ import com.p6spy.engine.proxy.P6Proxy;
  *
  * @see ResultSet
  */
-public class ResultSetWrapper implements ResultSet, P6Proxy {
+public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
   private final ResultSet delegate;
   private final ResultSetInformation resultSetInformation;
   private final JdbcEventListener eventListener;
 
+  public static ResultSet wrap(ResultSet delegate, ResultSetInformation resultSetInformation, JdbcEventListener eventListener) {
+    if (delegate == null) {
+      return null;
+    }
+    return new ResultSetWrapper(delegate, resultSetInformation, eventListener);
+  }
+
   public ResultSetWrapper(ResultSet delegate, ResultSetInformation resultSetInformation, JdbcEventListener eventListener) {
+    super(delegate);
     this.delegate = delegate;
     this.resultSetInformation = resultSetInformation;
     this.eventListener = eventListener;
@@ -70,10 +77,11 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
     long start = System.nanoTime();
     boolean next = false;
     try {
+      eventListener.onBeforeResultSetNext(resultSetInformation);
       next = delegate.next();
       return next;
     } finally {
-      eventListener.onResultSetNext(resultSetInformation, System.nanoTime() - start, next);
+      eventListener.onAfterResultSetNext(resultSetInformation, System.nanoTime() - start, next);
     }
   }
 
@@ -82,7 +90,7 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
     try {
       delegate.close();
     } finally {
-      eventListener.onResultSetClose(resultSetInformation);
+      eventListener.onAfterResultSetClose(resultSetInformation);
     }
   }
 
@@ -94,224 +102,224 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
   @Override
   public String getString(int columnIndex) throws SQLException {
     String value = delegate.getString(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public boolean getBoolean(int columnIndex) throws SQLException {
     boolean value = delegate.getBoolean(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public byte getByte(int columnIndex) throws SQLException {
     byte value = delegate.getByte(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public short getShort(int columnIndex) throws SQLException {
     short value = delegate.getShort(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public int getInt(int columnIndex) throws SQLException {
     int value = delegate.getInt(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public long getLong(int columnIndex) throws SQLException {
     long value = delegate.getLong(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public float getFloat(int columnIndex) throws SQLException {
     float value = delegate.getFloat(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public double getDouble(int columnIndex) throws SQLException {
     double value = delegate.getDouble(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
     BigDecimal value = delegate.getBigDecimal(columnIndex, scale);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public byte[] getBytes(int columnIndex) throws SQLException {
     byte[] value = delegate.getBytes(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Date getDate(int columnIndex) throws SQLException {
     Date value = delegate.getDate(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Time getTime(int columnIndex) throws SQLException {
     Time value = delegate.getTime(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Timestamp getTimestamp(int columnIndex) throws SQLException {
     Timestamp value = delegate.getTimestamp(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public InputStream getAsciiStream(int columnIndex) throws SQLException {
     InputStream value = delegate.getAsciiStream(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public InputStream getUnicodeStream(int columnIndex) throws SQLException {
     InputStream value = delegate.getUnicodeStream(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public InputStream getBinaryStream(int columnIndex) throws SQLException {
     InputStream value = delegate.getBinaryStream(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public String getString(String columnLabel) throws SQLException {
     String value = delegate.getString(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public boolean getBoolean(String columnLabel) throws SQLException {
     boolean value = delegate.getBoolean(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public byte getByte(String columnLabel) throws SQLException {
     byte value = delegate.getByte(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public short getShort(String columnLabel) throws SQLException {
     short value = delegate.getShort(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public int getInt(String columnLabel) throws SQLException {
     int value = delegate.getInt(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public long getLong(String columnLabel) throws SQLException {
     long value = delegate.getLong(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public float getFloat(String columnLabel) throws SQLException {
     float value = delegate.getFloat(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public double getDouble(String columnLabel) throws SQLException {
     double value = delegate.getDouble(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
     BigDecimal value = delegate.getBigDecimal(columnLabel, scale);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public byte[] getBytes(String columnLabel) throws SQLException {
     byte[] value = delegate.getBytes(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Date getDate(String columnLabel) throws SQLException {
     Date value = delegate.getDate(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Time getTime(String columnLabel) throws SQLException {
     Time value = delegate.getTime(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Timestamp getTimestamp(String columnLabel) throws SQLException {
     Timestamp value = delegate.getTimestamp(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public InputStream getAsciiStream(String columnLabel) throws SQLException {
     InputStream value = delegate.getAsciiStream(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public InputStream getUnicodeStream(String columnLabel) throws SQLException {
     InputStream value = delegate.getUnicodeStream(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public InputStream getBinaryStream(String columnLabel) throws SQLException {
     InputStream value = delegate.getBinaryStream(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
@@ -338,14 +346,14 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
   @Override
   public Object getObject(int columnIndex) throws SQLException {
     Object value = delegate.getObject(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Object getObject(String columnLabel) throws SQLException {
     Object value = delegate.getObject(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
@@ -357,28 +365,28 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
   @Override
   public Reader getCharacterStream(int columnIndex) throws SQLException {
     Reader value = delegate.getCharacterStream(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Reader getCharacterStream(String columnLabel) throws SQLException {
     Reader value = delegate.getCharacterStream(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
     BigDecimal value = delegate.getBigDecimal(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public BigDecimal getBigDecimal(String columnLabel) throws SQLException {
     BigDecimal value = delegate.getBigDecimal(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
@@ -719,126 +727,126 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
   @Override
   public Object getObject(int columnIndex, Map<String, Class<?>> map) throws SQLException {
     Object value = delegate.getObject(columnIndex, map);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Ref getRef(int columnIndex) throws SQLException {
     Ref value = delegate.getRef(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Blob getBlob(int columnIndex) throws SQLException {
     Blob value = delegate.getBlob(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Clob getClob(int columnIndex) throws SQLException {
     Clob value = delegate.getClob(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Array getArray(int columnIndex) throws SQLException {
     Array value = delegate.getArray(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Object getObject(String columnLabel, Map<String, Class<?>> map) throws SQLException {
     Object value = delegate.getObject(columnLabel, map);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Ref getRef(String columnLabel) throws SQLException {
     Ref value = delegate.getRef(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Blob getBlob(String columnLabel) throws SQLException {
     Blob value = delegate.getBlob(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Clob getClob(String columnLabel) throws SQLException {
     Clob value = delegate.getClob(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Array getArray(String columnLabel) throws SQLException {
     Array value = delegate.getArray(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Date getDate(int columnIndex, Calendar cal) throws SQLException {
     Date value = delegate.getDate(columnIndex, cal);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Date getDate(String columnLabel, Calendar cal) throws SQLException {
     Date value = delegate.getDate(columnLabel, cal);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Time getTime(int columnIndex, Calendar cal) throws SQLException {
     Time value = delegate.getTime(columnIndex, cal);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Time getTime(String columnLabel, Calendar cal) throws SQLException {
     Time value = delegate.getTime(columnLabel, cal);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException {
     Timestamp value = delegate.getTimestamp(columnIndex, cal);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Timestamp getTimestamp(String columnLabel, Calendar cal) throws SQLException {
     Timestamp value = delegate.getTimestamp(columnLabel, cal);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public URL getURL(int columnIndex) throws SQLException {
     URL value = delegate.getURL(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public URL getURL(String columnLabel) throws SQLException {
     URL value = delegate.getURL(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
@@ -885,14 +893,14 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
   @Override
   public RowId getRowId(int columnIndex) throws SQLException {
     RowId value = delegate.getRowId(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public RowId getRowId(String columnLabel) throws SQLException {
     RowId value = delegate.getRowId(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
@@ -939,28 +947,28 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
   @Override
   public NClob getNClob(int columnIndex) throws SQLException {
     NClob value = delegate.getNClob(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public NClob getNClob(String columnLabel) throws SQLException {
     NClob value = delegate.getNClob(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public SQLXML getSQLXML(int columnIndex) throws SQLException {
     SQLXML value = delegate.getSQLXML(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public SQLXML getSQLXML(String columnLabel) throws SQLException {
     SQLXML value = delegate.getSQLXML(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
@@ -977,28 +985,28 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
   @Override
   public String getNString(int columnIndex) throws SQLException {
     String value = delegate.getNString(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public String getNString(String columnLabel) throws SQLException {
     String value = delegate.getNString(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
   @Override
   public Reader getNCharacterStream(int columnIndex) throws SQLException {
     Reader value = delegate.getNCharacterStream(columnIndex);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public Reader getNCharacterStream(String columnLabel) throws SQLException {
     Reader value = delegate.getNCharacterStream(columnLabel);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
@@ -1155,19 +1163,15 @@ public class ResultSetWrapper implements ResultSet, P6Proxy {
   @Override
   public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
     T value = delegate.getObject(columnIndex, type);
-    eventListener.onResultSetGet(resultSetInformation, columnIndex, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
     return value;
   }
 
   @Override
   public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
     T value = delegate.getObject(columnLabel, type);
-    eventListener.onResultSetGet(resultSetInformation, columnLabel, value);
+    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
     return value;
   }
 
-  @Override
-  public Object unwrapP6SpyProxy() {
-    return delegate;
-  }
 }

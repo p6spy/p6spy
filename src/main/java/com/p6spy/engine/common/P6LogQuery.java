@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.spy.Clock;
 import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.appender.FileLogger;
@@ -47,8 +46,6 @@ public class P6LogQuery implements P6OptionChangedListener {
   
   protected static P6Logger logger;
 
-  private static Clock clock;
-
   static {
     initialize();
   }
@@ -57,7 +54,7 @@ public class P6LogQuery implements P6OptionChangedListener {
    * Options that cause re-init of {@link P6LogQuery}.
    */
   private static final Set<String> ON_CHANGE = new HashSet<String>(Arrays.asList(
-      P6SpyOptions.APPENDER_INSTANCE, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE, P6SpyOptions.USE_NANO_TIME));
+      P6SpyOptions.APPENDER_INSTANCE, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
 
   public void optionChanged(final String key, final Object oldValue, final Object newValue) {
     if (ON_CHANGE.contains(key)) {
@@ -86,7 +83,6 @@ public class P6LogQuery implements P6OptionChangedListener {
         }
       }
     }
-    clock = Clock.get();
   }
 
   static protected void doLog(long elapsed, Category category, String prepared, String sql) {
@@ -102,12 +98,12 @@ public class P6LogQuery implements P6OptionChangedListener {
 	 * Writes log information provided.
 	 * 
 	 * @param connectionId
-	 * @param elapsed
+	 * @param elapsedNanos
 	 * @param category
 	 * @param prepared
 	 * @param sql
 	 */
-	static protected void doLog(int connectionId, long elapsed, Category category, String prepared, String sql) {
+	protected static void doLog(int connectionId, long elapsedNanos, Category category, String prepared, String sql) {
 	    // give it one more try if not initialized yet
 	    if (logger == null) {
 	      initialize();
@@ -124,7 +120,7 @@ public class P6LogQuery implements P6OptionChangedListener {
         stringNow = new SimpleDateFormat(format).format(new java.util.Date()).trim();
       }
 
-      logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql);
+      logger.logSQL(connectionId, stringNow, TimeUnit.NANOSECONDS.toMillis(elapsedNanos), category, prepared, sql);
 
       final boolean stackTrace = P6SpyOptions.getActiveInstance().getStackTrace();
       if (stackTrace) {

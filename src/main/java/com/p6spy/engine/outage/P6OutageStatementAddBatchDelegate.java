@@ -19,11 +19,10 @@
  */
 package com.p6spy.engine.outage;
 
+import java.lang.reflect.Method;
+
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.proxy.Delegate;
-import com.p6spy.engine.spy.Clock;
-
-import java.lang.reflect.Method;
 
 class P6OutageStatementAddBatchDelegate implements Delegate {
 
