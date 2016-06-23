@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.test;
 
+import com.p6spy.engine.event.JdbcEventListener;
 import org.apache.log4j.Logger;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
@@ -31,6 +32,7 @@ import org.junit.runner.Description;
  */
 public class BaseTestCase {
   private static final Logger log = Logger.getLogger(BaseTestCase.class);
+  protected JdbcEventListener noOpEventListener = new JdbcEventListener() {};
 
   @Rule
   public TestRule testExecutionLogger = new TestWatcher() {

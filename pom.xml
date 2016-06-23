@@ -316,34 +316,6 @@
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.1</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <artifactSet>
-            <includes>
-              <include>cglib:*</include>
-            </includes>
-          </artifactSet>
-          <relocations>
-            <relocation>
-              <pattern>net.sf.cglib</pattern>
-              <shadedPattern>com.p6spy.cglib</shadedPattern>
-            </relocation>
-          </relocations>
-          <shadedArtifactAttached>false</shadedArtifactAttached>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.4</version>
         <executions>
@@ -496,12 +468,6 @@
       <artifactId>logback-core</artifactId>
       <version>${logback-build}</version>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>cglib</groupId>
-      <artifactId>cglib-nodep</artifactId>
-      <version>3.2.3</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

@@ -19,10 +19,7 @@
  */
 package com.p6spy.engine.outage;
 
-import java.sql.Connection;
-
 import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.spy.P6Factory;
 import com.p6spy.engine.spy.P6LoadableOptions;
 import com.p6spy.engine.spy.option.P6OptionsRepository;

@@ -22,14 +22,32 @@ package com.p6spy.engine.wrapper;
 import java.sql.SQLException;
 import java.sql.Wrapper;
 
-import com.p6spy.engine.proxy.P6Proxy;
-
 public abstract class AbstractWrapper implements Wrapper, P6Proxy {
 
   private final Object delegate;
 
   protected AbstractWrapper(Object delegate) {
     this.delegate = delegate;
+  }
+
+  /**
+   * Used to determine is a given object is a Proxy created by this proxy factory.
+   *
+   * @param obj the object in question
+   * @return true if it is a proxy - false otherwise
+   */
+  public static boolean isProxy(final Object obj) {
+    return (obj != null && isProxy(obj.getClass()));
+  }
+
+  /**
+   * Used to determine if the given class is a proxy class.
+   *
+   * @param clazz the class in question
+   * @return true if proxy - false otherwise
+   */
+  public static boolean isProxy(final Class<?> clazz) {
+    return (clazz != null && P6Proxy.class.isAssignableFrom(clazz));
   }
 
   @Override

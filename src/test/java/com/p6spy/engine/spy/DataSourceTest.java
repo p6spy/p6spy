@@ -21,10 +21,10 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
+import com.p6spy.engine.wrapper.AbstractWrapper;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverConnectionFactory;
@@ -136,7 +136,7 @@ public class DataSourceTest extends BaseTestCase {
     con = ds.getConnection();
 
     // verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", ProxyFactory.isProxy(con));
+    assertTrue("Connection is not a proxy", AbstractWrapper.isProxy(con));
 
     Statement stmt = con.createStatement();
     stmt.execute("select 1 from customers");
@@ -167,7 +167,7 @@ public class DataSourceTest extends BaseTestCase {
     con = ds.getConnection();
 
     // verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", ProxyFactory.isProxy(con));
+    assertTrue("Connection is not a proxy", AbstractWrapper.isProxy(con));
 
   }
 

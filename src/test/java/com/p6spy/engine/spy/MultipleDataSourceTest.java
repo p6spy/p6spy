@@ -31,10 +31,10 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.proxy.ProxyFactory;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
+import com.p6spy.engine.wrapper.AbstractWrapper;
 import org.eclipse.jetty.plus.jndi.Resource;
 import org.h2.jdbcx.JdbcDataSource;
 import org.hsqldb.jdbc.JDBCDataSource;
@@ -134,7 +134,7 @@ public class MultipleDataSourceTest extends BaseTestCase {
     Connection con = ds.getConnection();
 
     // verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", ProxyFactory.isProxy(con.getClass()));
+    assertTrue("Connection is not a proxy", AbstractWrapper.isProxy(con.getClass()));
 
     if (con.getMetaData().getDatabaseProductName().contains("HSQL")) {
       con.createStatement().execute("set database sql syntax ora true");

@@ -19,56 +19,51 @@
  */
 package com.p6spy.engine.common;
 
-import com.p6spy.engine.proxy.GenericInvocationHandler;
-import com.p6spy.engine.proxy.ProxyFactory;
-import com.p6spy.engine.test.AbstractTestConnection;
-import com.p6spy.engine.test.BaseTestCase;
-import com.p6spy.engine.test.TestConnection;
-import com.p6spy.engine.test.TestConnectionImpl;
-import org.apache.commons.dbcp.DelegatingConnection;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Wrapper;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import com.p6spy.engine.test.AbstractTestConnection;
+import com.p6spy.engine.test.BaseTestCase;
+import com.p6spy.engine.test.TestConnection;
+import com.p6spy.engine.test.TestConnectionImpl;
+import com.p6spy.engine.wrapper.AbstractWrapper;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
+import org.apache.commons.dbcp.DelegatingConnection;
+import org.junit.Test;
 
 public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
 
   @Test
   public void testCastableFromProxy() throws SQLException {
     Connection con = new TestConnectionImpl();
-    Connection proxy = ProxyFactory.createProxy(con, new GenericInvocationHandler<Connection>(con));
+    Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener);
 
     // if the proxy implements the interface then the proxy should be returned
     {
       Connection unwrapped = proxy.unwrap(Connection.class);
-      assertTrue(ProxyFactory.isProxy(unwrapped));
-    }
-
-    {
-      TestConnection unwrapped = proxy.unwrap(TestConnection.class);
-      assertTrue(ProxyFactory.isProxy(unwrapped));
+      assertTrue(AbstractWrapper.isProxy(unwrapped));
     }
 
     {
       Wrapper unwrapped = proxy.unwrap(Wrapper.class);
-      assertTrue(ProxyFactory.isProxy(unwrapped));
+      assertTrue(AbstractWrapper.isProxy(unwrapped));
     }
 
     {
       AutoCloseable unwrapped = proxy.unwrap(AutoCloseable.class);
-      assertTrue(ProxyFactory.isProxy(unwrapped));
+      assertTrue(AbstractWrapper.isProxy(unwrapped));
     }
 
     // TestConnectionImpl is not implemented by the proxy - proxy will not be returned
     {
       TestConnectionImpl unwrapped = proxy.unwrap(TestConnectionImpl.class);
-      assertFalse(ProxyFactory.isProxy(unwrapped));
+      assertFalse(AbstractWrapper.isProxy(unwrapped));
     }
 
   }
@@ -76,17 +71,17 @@ public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
   @Test
   public void testCastableFromUnderlying() throws SQLException {
     Connection con = new TestConnectionImpl();
-    Connection proxy = ProxyFactory.createProxy(con, new GenericInvocationHandler<Connection>(con));
+    Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener);
 
     // if the underlying object extends the class (or matches the class) then the underlying object should be returned.
     {
       AbstractTestConnection unwrapped = proxy.unwrap(AbstractTestConnection.class);
-      assertFalse(ProxyFactory.isProxy(unwrapped));
+      assertFalse(AbstractWrapper.isProxy(unwrapped));
     }
 
     {
       TestConnectionImpl unwrapped = proxy.unwrap(TestConnectionImpl.class);
-      assertFalse(ProxyFactory.isProxy(unwrapped));
+      assertFalse(AbstractWrapper.isProxy(unwrapped));
     }
 
   }
@@ -101,13 +96,13 @@ public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
     // is implemented here.
     DelegatingConnection underlying = new DelegatingConnection(con);
 
-    Connection proxy = ProxyFactory.createProxy(underlying, new GenericInvocationHandler<Connection>(underlying));
+    Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener);
 
     // TestConnection is an interface of the actual connection but not of the proxy.  Unwrapping works
     // but a proxy is not returned
     {
       TestConnection unwrapped = proxy.unwrap(TestConnection.class);
-      assertFalse(ProxyFactory.isProxy(unwrapped));
+      assertFalse(AbstractWrapper.isProxy(unwrapped));
     }
 
     // ResultSet is not implemented at all - an exception will be thrown
