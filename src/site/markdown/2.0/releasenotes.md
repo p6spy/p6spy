@@ -1,5 +1,16 @@
 # Release Notes
 
+## Version 2.3.1 [June 23, 2016]
+
+Defects resolved:
+
+* [issue #325](https://github.com/p6spy/p6spy/pull/325): CGLIB lock contention/deadlock
+
+Other:
+
+* [issue #326](https://github.com/p6spy/p6spy/issues/326): Upgraded to CGLIB 3.2.3
+* [issue #329](https://github.com/p6spy/p6spy/issues/329): Use default naming policy for CGLIB generated proxies
+
 ## Version 2.3.0 [May 11, 2016]
 
 Improvements:
