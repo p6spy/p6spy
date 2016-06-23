@@ -19,14 +19,13 @@
  */
 package com.p6spy.engine.proxy;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import net.sf.cglib.core.CodeGenerationException;
+import net.sf.cglib.core.DefaultNamingPolicy;
 import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.proxy.Enhancer;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Factory for creating proxies
@@ -35,10 +34,6 @@ import net.sf.cglib.proxy.Enhancer;
  * @since 09/2013
  */
 public class ProxyFactory {
-
-  // null as fallback, as proxied class might implement non-public interfaces
-  // that have trouble with our ProxyNamingPolicy (for example for SQLite)
-  private static final List<NamingPolicy> namingPolicies = Arrays.asList(ProxyNamingPolicy.INSTANCE, null);
 
   /**
    * Creates a proxy for the given object delegating all method calls to the invocation handler.  The proxy will
@@ -52,13 +47,11 @@ public class ProxyFactory {
   public static <T> T createProxy(final T underlying, final GenericInvocationHandler<T> invocationHandler) {
     CodeGenerationException exception = null;
     for (ClassLoader classLoader : getCandidateClassLoaders(underlying)) {
-      for (NamingPolicy namingPolicy : namingPolicies) {
-        try {
-          final Enhancer enhancer = createProxy(underlying, invocationHandler, namingPolicy, classLoader);
-          return (T) enhancer.create();
-        } catch (CodeGenerationException e) {
-          exception = e;
-        }
+      try {
+        final Enhancer enhancer = createProxy(underlying, invocationHandler, DefaultNamingPolicy.INSTANCE, classLoader);
+        return (T) enhancer.create();
+      } catch (CodeGenerationException e) {
+        exception = e;
       }
     }
     throw exception;
