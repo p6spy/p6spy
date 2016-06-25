@@ -42,8 +42,8 @@ import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 
 /**
- * Provides a convenient implementation of the CallableStatement interface
- * that can be subclassed by developers wishing to adapt implementation.
+ * This implementation wraps a {@link CallableStatement}  and notifies a {@link JdbcEventListener}
+ * about certain method invocations.
  * <p>
  * This class implements the Wrapper or Decorator pattern. Methods default
  * to calling through to the wrapped request object.
@@ -75,272 +75,587 @@ public class CallableStatementWrapper extends PreparedStatementWrapper implement
 
   @Override
   public void setURL(String parameterName, URL val) throws SQLException {
-    delegate.setURL(parameterName, val);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, val);
+    SQLException e = null;
+    try {
+      delegate.setURL(parameterName, val);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, val, e);
+    }
   }
 
   @Override
   public void setNull(String parameterName, int sqlType) throws SQLException {
-    delegate.setNull(parameterName, sqlType);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, null);
+    SQLException e = null;
+    try {
+      delegate.setNull(parameterName, sqlType);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, null, e);
+    }
   }
 
   @Override
   public void setBoolean(String parameterName, boolean x) throws SQLException {
-    delegate.setBoolean(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setBoolean(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setByte(String parameterName, byte x) throws SQLException {
-    delegate.setByte(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setByte(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setShort(String parameterName, short x) throws SQLException {
-    delegate.setShort(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setShort(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setInt(String parameterName, int x) throws SQLException {
-    delegate.setInt(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setInt(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setLong(String parameterName, long x) throws SQLException {
-    delegate.setLong(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setLong(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setFloat(String parameterName, float x) throws SQLException {
-    delegate.setFloat(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setFloat(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setDouble(String parameterName, double x) throws SQLException {
-    delegate.setDouble(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setDouble(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setBigDecimal(String parameterName, BigDecimal x) throws SQLException {
-    delegate.setBigDecimal(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setBigDecimal(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setString(String parameterName, String x) throws SQLException {
-    delegate.setString(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setString(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setBytes(String parameterName, byte[] x) throws SQLException {
-    delegate.setBytes(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setBytes(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setDate(String parameterName, Date x) throws SQLException {
-    delegate.setDate(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setDate(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setTime(String parameterName, Time x) throws SQLException {
-    delegate.setTime(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setTime(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setTimestamp(String parameterName, Timestamp x) throws SQLException {
-    delegate.setTimestamp(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setTimestamp(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setAsciiStream(String parameterName, InputStream x, int length) throws SQLException {
-    delegate.setAsciiStream(parameterName, x, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setAsciiStream(parameterName, x, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setBinaryStream(String parameterName, InputStream x, int length) throws SQLException {
-    delegate.setBinaryStream(parameterName, x, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setBinaryStream(parameterName, x, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setObject(String parameterName, Object x, int targetSqlType, int scale) throws SQLException {
-    delegate.setObject(parameterName, x, targetSqlType, scale);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setObject(parameterName, x, targetSqlType, scale);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setObject(String parameterName, Object x, int targetSqlType) throws SQLException {
-    delegate.setObject(parameterName, x, targetSqlType);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setObject(parameterName, x, targetSqlType);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setObject(String parameterName, Object x) throws SQLException {
-    delegate.setObject(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setObject(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setCharacterStream(String parameterName, Reader reader, int length) throws SQLException {
-    delegate.setCharacterStream(parameterName, reader, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader);
+    SQLException e = null;
+    try {
+      delegate.setCharacterStream(parameterName, reader, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader, e);
+    }
   }
 
   @Override
   public void setDate(String parameterName, Date x, Calendar cal) throws SQLException {
-    delegate.setDate(parameterName, x, cal);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setDate(parameterName, x, cal);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setTime(String parameterName, Time x, Calendar cal) throws SQLException {
-    delegate.setTime(parameterName, x, cal);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setTime(parameterName, x, cal);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setTimestamp(String parameterName, Timestamp x, Calendar cal) throws SQLException {
-    delegate.setTimestamp(parameterName, x, cal);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setTimestamp(parameterName, x, cal);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setNull(String parameterName, int sqlType, String typeName) throws SQLException {
-    delegate.setNull(parameterName, sqlType, typeName);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, null);
+    SQLException e = null;
+    try {
+      delegate.setNull(parameterName, sqlType, typeName);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, null, e);
+    }
   }
 
   @Override
   public void setRowId(String parameterName, RowId x) throws SQLException {
-    delegate.setRowId(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setRowId(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setNString(String parameterName, String value) throws SQLException {
-    delegate.setNString(parameterName, value);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value);
+    SQLException e = null;
+    try {
+      delegate.setNString(parameterName, value);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value, e);
+    }
   }
 
   @Override
   public void setNCharacterStream(String parameterName, Reader value, long length) throws SQLException {
-    delegate.setNCharacterStream(parameterName, value, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value);
+    SQLException e = null;
+    try {
+      delegate.setNCharacterStream(parameterName, value, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value, e);
+    }
   }
 
   @Override
   public void setNClob(String parameterName, NClob value) throws SQLException {
-    delegate.setNClob(parameterName, value);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value);
+    SQLException e = null;
+    try {
+      delegate.setNClob(parameterName, value);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value, e);
+    }
   }
 
   @Override
   public void setClob(String parameterName, Reader reader, long length) throws SQLException {
-    delegate.setClob(parameterName, reader, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader);
+    SQLException e = null;
+    try {
+      delegate.setClob(parameterName, reader, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader, e);
+    }
   }
 
   @Override
   public void setBlob(String parameterName, InputStream inputStream, long length) throws SQLException {
-    delegate.setBlob(parameterName, inputStream, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, inputStream);
+    SQLException e = null;
+    try {
+      delegate.setBlob(parameterName, inputStream, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, inputStream, e);
+    }
   }
 
   @Override
   public void setNClob(String parameterName, Reader reader, long length) throws SQLException {
-    delegate.setNClob(parameterName, reader, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader);
+    SQLException e = null;
+    try {
+      delegate.setNClob(parameterName, reader, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader, e);
+    }
   }
 
   @Override
   public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
-    delegate.setSQLXML(parameterName, xmlObject);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, xmlObject);
+    SQLException e = null;
+    try {
+      delegate.setSQLXML(parameterName, xmlObject);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, xmlObject, e);
+    }
   }
 
   @Override
   public void setBlob(String parameterName, Blob x) throws SQLException {
-    delegate.setBlob(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setBlob(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setClob(String parameterName, Clob x) throws SQLException {
-    delegate.setClob(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setClob(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setAsciiStream(String parameterName, InputStream x, long length) throws SQLException {
-    delegate.setAsciiStream(parameterName, x, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setAsciiStream(parameterName, x, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setBinaryStream(String parameterName, InputStream x, long length) throws SQLException {
-    delegate.setBinaryStream(parameterName, x, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setBinaryStream(parameterName, x, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setCharacterStream(String parameterName, Reader reader, long length) throws SQLException {
-    delegate.setCharacterStream(parameterName, reader, length);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader);
+    SQLException e = null;
+    try {
+      delegate.setCharacterStream(parameterName, reader, length);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader, e);
+    }
   }
 
   @Override
   public void setAsciiStream(String parameterName, InputStream x) throws SQLException {
-    delegate.setAsciiStream(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setAsciiStream(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setBinaryStream(String parameterName, InputStream x) throws SQLException {
-    delegate.setBinaryStream(parameterName, x);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x);
+    SQLException e = null;
+    try {
+      delegate.setBinaryStream(parameterName, x);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, x, e);
+    }
   }
 
   @Override
   public void setCharacterStream(String parameterName, Reader reader) throws SQLException {
-    delegate.setCharacterStream(parameterName, reader);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader);
+    SQLException e = null;
+    try {
+      delegate.setCharacterStream(parameterName, reader);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader, e);
+    }
   }
 
   @Override
   public void setNCharacterStream(String parameterName, Reader value) throws SQLException {
-    delegate.setNCharacterStream(parameterName, value);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value);
+    SQLException e = null;
+    try {
+      delegate.setNCharacterStream(parameterName, value);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value, e);
+    }
   }
 
   @Override
   public void setClob(String parameterName, Reader reader) throws SQLException {
-    delegate.setClob(parameterName, reader);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader);
+    SQLException e = null;
+    try {
+      delegate.setClob(parameterName, reader);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader, e);
+    }
   }
 
   @Override
   public void setBlob(String parameterName, InputStream inputStream) throws SQLException {
-    delegate.setBlob(parameterName, inputStream);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, inputStream);
+    SQLException e = null;
+    try {
+      delegate.setBlob(parameterName, inputStream);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, inputStream, e);
+    }
   }
 
   @Override
   public void setNClob(String parameterName, Reader reader) throws SQLException {
-    delegate.setNClob(parameterName, reader);
-    eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader);
+    SQLException e = null;
+    try {
+      delegate.setNClob(parameterName, reader);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, reader, e);
+    }
   }
 
   @Override

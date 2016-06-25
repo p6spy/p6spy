@@ -44,9 +44,11 @@ import java.util.Map;
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 
+import static javafx.scene.input.KeyCode.T;
+
 /**
- * Provides a convenient implementation of the ResultSet interface
- * that can be subclassed by developers wishing to adapt implementation.
+ * This implementation wraps a {@link ResultSet}  and notifies a {@link JdbcEventListener}
+ * about certain method invocations.
  * <p>
  * This class implements the Wrapper or Decorator pattern. Methods default
  * to calling through to the wrapped request object.
@@ -74,23 +76,31 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public boolean next() throws SQLException {
+    SQLException e = null;
     long start = System.nanoTime();
     boolean next = false;
     try {
       eventListener.onBeforeResultSetNext(resultSetInformation);
       next = delegate.next();
       return next;
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
     } finally {
-      eventListener.onAfterResultSetNext(resultSetInformation, System.nanoTime() - start, next);
+      eventListener.onAfterResultSetNext(resultSetInformation, System.nanoTime() - start, next, e);
     }
   }
 
   @Override
   public void close() throws SQLException {
+    SQLException e = null;
     try {
       delegate.close();
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
     } finally {
-      eventListener.onAfterResultSetClose(resultSetInformation);
+      eventListener.onAfterResultSetClose(resultSetInformation, e);
     }
   }
 
@@ -101,226 +111,418 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public String getString(int columnIndex) throws SQLException {
-    String value = delegate.getString(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      String value = delegate.getString(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public boolean getBoolean(int columnIndex) throws SQLException {
-    boolean value = delegate.getBoolean(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      boolean value = delegate.getBoolean(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public byte getByte(int columnIndex) throws SQLException {
-    byte value = delegate.getByte(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      byte value = delegate.getByte(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public short getShort(int columnIndex) throws SQLException {
-    short value = delegate.getShort(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      short value = delegate.getShort(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public int getInt(int columnIndex) throws SQLException {
-    int value = delegate.getInt(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      int value = delegate.getInt(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public long getLong(int columnIndex) throws SQLException {
-    long value = delegate.getLong(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      long value = delegate.getLong(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public float getFloat(int columnIndex) throws SQLException {
-    float value = delegate.getFloat(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      float value = delegate.getFloat(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public double getDouble(int columnIndex) throws SQLException {
-    double value = delegate.getDouble(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      double value = delegate.getDouble(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
-    BigDecimal value = delegate.getBigDecimal(columnIndex, scale);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      BigDecimal value = delegate.getBigDecimal(columnIndex, scale);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public byte[] getBytes(int columnIndex) throws SQLException {
-    byte[] value = delegate.getBytes(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      byte[] value = delegate.getBytes(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Date getDate(int columnIndex) throws SQLException {
-    Date value = delegate.getDate(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Date value = delegate.getDate(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Time getTime(int columnIndex) throws SQLException {
-    Time value = delegate.getTime(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Time value = delegate.getTime(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Timestamp getTimestamp(int columnIndex) throws SQLException {
-    Timestamp value = delegate.getTimestamp(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Timestamp value = delegate.getTimestamp(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public InputStream getAsciiStream(int columnIndex) throws SQLException {
-    InputStream value = delegate.getAsciiStream(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      InputStream value = delegate.getAsciiStream(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public InputStream getUnicodeStream(int columnIndex) throws SQLException {
-    InputStream value = delegate.getUnicodeStream(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      InputStream value = delegate.getUnicodeStream(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public InputStream getBinaryStream(int columnIndex) throws SQLException {
-    InputStream value = delegate.getBinaryStream(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      InputStream value = delegate.getBinaryStream(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public String getString(String columnLabel) throws SQLException {
-    String value = delegate.getString(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      String value = delegate.getString(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public boolean getBoolean(String columnLabel) throws SQLException {
-    boolean value = delegate.getBoolean(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      boolean value = delegate.getBoolean(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public byte getByte(String columnLabel) throws SQLException {
-    byte value = delegate.getByte(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      byte value = delegate.getByte(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public short getShort(String columnLabel) throws SQLException {
-    short value = delegate.getShort(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      short value = delegate.getShort(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public int getInt(String columnLabel) throws SQLException {
-    int value = delegate.getInt(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      int value = delegate.getInt(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public long getLong(String columnLabel) throws SQLException {
-    long value = delegate.getLong(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      long value = delegate.getLong(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public float getFloat(String columnLabel) throws SQLException {
-    float value = delegate.getFloat(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      float value = delegate.getFloat(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public double getDouble(String columnLabel) throws SQLException {
-    double value = delegate.getDouble(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      double value = delegate.getDouble(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
-    BigDecimal value = delegate.getBigDecimal(columnLabel, scale);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      BigDecimal value = delegate.getBigDecimal(columnLabel, scale);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public byte[] getBytes(String columnLabel) throws SQLException {
-    byte[] value = delegate.getBytes(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      byte[] value = delegate.getBytes(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Date getDate(String columnLabel) throws SQLException {
-    Date value = delegate.getDate(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Date value = delegate.getDate(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Time getTime(String columnLabel) throws SQLException {
-    Time value = delegate.getTime(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Time value = delegate.getTime(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Timestamp getTimestamp(String columnLabel) throws SQLException {
-    Timestamp value = delegate.getTimestamp(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Timestamp value = delegate.getTimestamp(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public InputStream getAsciiStream(String columnLabel) throws SQLException {
-    InputStream value = delegate.getAsciiStream(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      InputStream value = delegate.getAsciiStream(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public InputStream getUnicodeStream(String columnLabel) throws SQLException {
-    InputStream value = delegate.getUnicodeStream(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      InputStream value = delegate.getUnicodeStream(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public InputStream getBinaryStream(String columnLabel) throws SQLException {
-    InputStream value = delegate.getBinaryStream(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      InputStream value = delegate.getBinaryStream(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
@@ -345,16 +547,28 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public Object getObject(int columnIndex) throws SQLException {
-    Object value = delegate.getObject(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Object value = delegate.getObject(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Object getObject(String columnLabel) throws SQLException {
-    Object value = delegate.getObject(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Object value = delegate.getObject(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
@@ -364,30 +578,54 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public Reader getCharacterStream(int columnIndex) throws SQLException {
-    Reader value = delegate.getCharacterStream(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Reader value = delegate.getCharacterStream(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Reader getCharacterStream(String columnLabel) throws SQLException {
-    Reader value = delegate.getCharacterStream(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Reader value = delegate.getCharacterStream(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
-    BigDecimal value = delegate.getBigDecimal(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      BigDecimal value = delegate.getBigDecimal(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public BigDecimal getBigDecimal(String columnLabel) throws SQLException {
-    BigDecimal value = delegate.getBigDecimal(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      BigDecimal value = delegate.getBigDecimal(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
@@ -726,128 +964,236 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public Object getObject(int columnIndex, Map<String, Class<?>> map) throws SQLException {
-    Object value = delegate.getObject(columnIndex, map);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Object value = delegate.getObject(columnIndex, map);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Ref getRef(int columnIndex) throws SQLException {
-    Ref value = delegate.getRef(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Ref value = delegate.getRef(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Blob getBlob(int columnIndex) throws SQLException {
-    Blob value = delegate.getBlob(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Blob value = delegate.getBlob(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Clob getClob(int columnIndex) throws SQLException {
-    Clob value = delegate.getClob(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Clob value = delegate.getClob(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Array getArray(int columnIndex) throws SQLException {
-    Array value = delegate.getArray(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Array value = delegate.getArray(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Object getObject(String columnLabel, Map<String, Class<?>> map) throws SQLException {
-    Object value = delegate.getObject(columnLabel, map);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Object value = delegate.getObject(columnLabel, map);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Ref getRef(String columnLabel) throws SQLException {
-    Ref value = delegate.getRef(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Ref value = delegate.getRef(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Blob getBlob(String columnLabel) throws SQLException {
-    Blob value = delegate.getBlob(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Blob value = delegate.getBlob(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Clob getClob(String columnLabel) throws SQLException {
-    Clob value = delegate.getClob(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Clob value = delegate.getClob(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Array getArray(String columnLabel) throws SQLException {
-    Array value = delegate.getArray(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Array value = delegate.getArray(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Date getDate(int columnIndex, Calendar cal) throws SQLException {
-    Date value = delegate.getDate(columnIndex, cal);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Date value = delegate.getDate(columnIndex, cal);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Date getDate(String columnLabel, Calendar cal) throws SQLException {
-    Date value = delegate.getDate(columnLabel, cal);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Date value = delegate.getDate(columnLabel, cal);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Time getTime(int columnIndex, Calendar cal) throws SQLException {
-    Time value = delegate.getTime(columnIndex, cal);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Time value = delegate.getTime(columnIndex, cal);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Time getTime(String columnLabel, Calendar cal) throws SQLException {
-    Time value = delegate.getTime(columnLabel, cal);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Time value = delegate.getTime(columnLabel, cal);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException {
-    Timestamp value = delegate.getTimestamp(columnIndex, cal);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Timestamp value = delegate.getTimestamp(columnIndex, cal);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Timestamp getTimestamp(String columnLabel, Calendar cal) throws SQLException {
-    Timestamp value = delegate.getTimestamp(columnLabel, cal);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Timestamp value = delegate.getTimestamp(columnLabel, cal);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public URL getURL(int columnIndex) throws SQLException {
-    URL value = delegate.getURL(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      URL value = delegate.getURL(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public URL getURL(String columnLabel) throws SQLException {
-    URL value = delegate.getURL(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      URL value = delegate.getURL(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
@@ -892,16 +1238,28 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public RowId getRowId(int columnIndex) throws SQLException {
-    RowId value = delegate.getRowId(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      RowId value = delegate.getRowId(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public RowId getRowId(String columnLabel) throws SQLException {
-    RowId value = delegate.getRowId(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      RowId value = delegate.getRowId(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
@@ -946,30 +1304,54 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public NClob getNClob(int columnIndex) throws SQLException {
-    NClob value = delegate.getNClob(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      NClob value = delegate.getNClob(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public NClob getNClob(String columnLabel) throws SQLException {
-    NClob value = delegate.getNClob(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      NClob value = delegate.getNClob(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public SQLXML getSQLXML(int columnIndex) throws SQLException {
-    SQLXML value = delegate.getSQLXML(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      SQLXML value = delegate.getSQLXML(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public SQLXML getSQLXML(String columnLabel) throws SQLException {
-    SQLXML value = delegate.getSQLXML(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      SQLXML value = delegate.getSQLXML(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
@@ -984,30 +1366,54 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public String getNString(int columnIndex) throws SQLException {
-    String value = delegate.getNString(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      String value = delegate.getNString(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public String getNString(String columnLabel) throws SQLException {
-    String value = delegate.getNString(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      String value = delegate.getNString(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Reader getNCharacterStream(int columnIndex) throws SQLException {
-    Reader value = delegate.getNCharacterStream(columnIndex);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      Reader value = delegate.getNCharacterStream(columnIndex);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public Reader getNCharacterStream(String columnLabel) throws SQLException {
-    Reader value = delegate.getNCharacterStream(columnLabel);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      Reader value = delegate.getNCharacterStream(columnLabel);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
   @Override
@@ -1162,16 +1568,28 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
-    T value = delegate.getObject(columnIndex, type);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
-    return value;
+    SQLException e = null;
+    try {
+      T value = delegate.getObject(columnIndex, type);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
+      throw e;
+    }
   }
 
   @Override
   public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
-    T value = delegate.getObject(columnLabel, type);
-    eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
-    return value;
+    SQLException e = null;
+    try {
+      T value = delegate.getObject(columnLabel, type);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
+      return value;
+    } catch (SQLException sqle) {
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
+      throw e;
+    }
   }
 
 }

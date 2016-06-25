@@ -45,8 +45,8 @@ import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 
 /**
- * Provides a convenient implementation of the Connection interface
- * that can be subclassed by developers wishing to adapt implementation.
+ * This implementation wraps a {@link Connection}  and notifies a {@link JdbcEventListener}
+ * about certain method invocations.
  * <p>
  * This class implements the Wrapper or Decorator pattern. Methods default
  * to calling through to the wrapped request object.
@@ -135,34 +135,46 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
 
   @Override
   public void commit() throws SQLException {
+    SQLException e = null;
     long start = System.nanoTime();
     try {
       eventListener.onBeforeCommit(connectionInformation);
       delegate.commit();
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
     } finally {
-      eventListener.onAfterCommit(connectionInformation, System.nanoTime() - start);
+      eventListener.onAfterCommit(connectionInformation, System.nanoTime() - start, e);
     }
   }
 
   @Override
   public void rollback() throws SQLException {
+    SQLException e = null;
     long start = System.nanoTime();
     try {
       eventListener.onBeforeRollback(connectionInformation);
       delegate.rollback();
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
     } finally {
-      eventListener.onAfterRollback(connectionInformation, System.nanoTime() - start);
+      eventListener.onAfterRollback(connectionInformation, System.nanoTime() - start, e);
     }
   }
 
   @Override
   public void rollback(Savepoint savepoint) throws SQLException {
+    SQLException e = null;
     long start = System.nanoTime();
     try {
       eventListener.onBeforeRollback(connectionInformation);
       delegate.rollback(savepoint);
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
     } finally {
-      eventListener.onAfterRollback(connectionInformation, System.nanoTime() - start);
+      eventListener.onAfterRollback(connectionInformation, System.nanoTime() - start, e);
     }
   }
 
@@ -183,10 +195,14 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
 
   @Override
   public void close() throws SQLException {
+    SQLException e = null;
     try {
       delegate.close();
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
     } finally {
-      eventListener.onAfterConnectionClose(connectionInformation);
+      eventListener.onAfterConnectionClose(connectionInformation, e);
     }
   }
 

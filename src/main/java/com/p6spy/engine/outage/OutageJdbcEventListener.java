@@ -24,6 +24,11 @@ import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 
+import java.sql.SQLException;
+
+/**
+ * This event listener registers method invocations at {@link P6OutageDetector}
+ */
 public class OutageJdbcEventListener extends JdbcEventListener {
 
   public static final OutageJdbcEventListener INSTANCE = new OutageJdbcEventListener();
@@ -39,7 +44,7 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterCommit(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+  public void onAfterCommit(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().unregisterInvocation(this);
     }
@@ -53,7 +58,7 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+  public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().unregisterInvocation(this);
     }
@@ -68,8 +73,8 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterAddBatch(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
-    onAfterAddBatch(statementInformation, timeElapsedNanos, null);
+  public void onAfterAddBatch(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+    onAfterAddBatch(statementInformation, timeElapsedNanos, null, e);
   }
 
   @Override
@@ -80,7 +85,7 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().unregisterInvocation(this);
     }
@@ -95,7 +100,7 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecute(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecute(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().unregisterInvocation(this);
     }
@@ -109,7 +114,7 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().unregisterInvocation(this);
     }
@@ -121,8 +126,8 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos) {
-    onAfterExecute(statementInformation, timeElapsedNanos, null);
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+    onAfterExecute(statementInformation, timeElapsedNanos, null, e);
   }
 
   @Override
@@ -131,8 +136,8 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
-    onAfterExecute(statementInformation, timeElapsedNanos);
+  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+    onAfterExecute(statementInformation, timeElapsedNanos, e);
   }
 
   @Override
@@ -141,8 +146,8 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
-    onAfterExecute(statementInformation, timeElapsedNanos, sql);
+  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
+    onAfterExecute(statementInformation, timeElapsedNanos, sql, e);
   }
 
   @Override
@@ -151,8 +156,8 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteQuery(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
-    onAfterExecute(statementInformation, timeElapsedNanos);
+  public void onAfterExecuteQuery(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+    onAfterExecute(statementInformation, timeElapsedNanos, e);
   }
 
   @Override
@@ -161,7 +166,7 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
-    onAfterExecute(statementInformation, timeElapsedNanos, sql);
+  public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
+    onAfterExecute(statementInformation, timeElapsedNanos, sql, e);
   }
 }

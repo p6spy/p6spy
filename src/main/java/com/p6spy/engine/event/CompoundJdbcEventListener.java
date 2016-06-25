@@ -19,14 +19,15 @@
  */
 package com.p6spy.engine.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.common.StatementInformation;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CompoundJdbcEventListener extends JdbcEventListener {
   private final List<JdbcEventListener> eventListeners;
@@ -51,9 +52,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterAddBatch(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterAddBatch(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterAddBatch(statementInformation, timeElapsedNanos);
+      eventListener.onAfterAddBatch(statementInformation, timeElapsedNanos, e);
     }
   }
 
@@ -65,9 +66,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterAddBatch(statementInformation, timeElapsedNanos, sql);
+      eventListener.onAfterAddBatch(statementInformation, timeElapsedNanos, sql, e);
     }
   }
 
@@ -79,9 +80,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecute(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecute(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterExecute(statementInformation, timeElapsedNanos);
+      eventListener.onAfterExecute(statementInformation, timeElapsedNanos, e);
     }
   }
 
@@ -93,9 +94,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterExecute(statementInformation, timeElapsedNanos, sql);
+      eventListener.onAfterExecute(statementInformation, timeElapsedNanos, sql, e);
     }
   }
 
@@ -107,9 +108,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterExecuteBatch(statementInformation, timeElapsedNanos);
+      eventListener.onAfterExecuteBatch(statementInformation, timeElapsedNanos, e);
     }
   }
 
@@ -121,9 +122,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterExecuteUpdate(statementInformation, timeElapsedNanos);
+      eventListener.onAfterExecuteUpdate(statementInformation, timeElapsedNanos, e);
     }
   }
 
@@ -135,9 +136,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterExecuteUpdate(statementInformation, timeElapsedNanos, sql);
+      eventListener.onAfterExecuteUpdate(statementInformation, timeElapsedNanos, sql, e);
     }
   }
 
@@ -149,9 +150,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteQuery(PreparedStatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterExecuteQuery(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterExecuteQuery(statementInformation, timeElapsedNanos);
+      eventListener.onAfterExecuteQuery(statementInformation, timeElapsedNanos, e);
     }
   }
 
@@ -163,30 +164,30 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql) {
+  public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterExecuteQuery(statementInformation, timeElapsedNanos, sql);
+      eventListener.onAfterExecuteQuery(statementInformation, timeElapsedNanos, sql, e);
     }
   }
 
   @Override
-  public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value) {
+  public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, value);
+      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, value, e);
     }
   }
 
   @Override
-  public void onAfterCallableStatementSet(CallableStatementInformation statementInformation, String parameterName, Object value) {
+  public void onAfterCallableStatementSet(CallableStatementInformation statementInformation, String parameterName, Object value, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value);
+      eventListener.onAfterCallableStatementSet(statementInformation, parameterName, value, e);
     }
   }
 
   @Override
-  public void onAfterGetResultSet(StatementInformation statementInformation, long timeElapsedNanos) {
+  public void onAfterGetResultSet(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterGetResultSet(statementInformation, timeElapsedNanos);
+      eventListener.onAfterGetResultSet(statementInformation, timeElapsedNanos, e);
     }
   }
 
@@ -198,30 +199,30 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext) {
+  public void onAfterResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterResultSetNext(resultSetInformation, timeElapsedNanos, hasNext);
+      eventListener.onAfterResultSetNext(resultSetInformation, timeElapsedNanos, hasNext, e);
     }
   }
 
   @Override
-  public void onAfterResultSetClose(ResultSetInformation resultSetInformation) {
+  public void onAfterResultSetClose(ResultSetInformation resultSetInformation, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterResultSetClose(resultSetInformation);
+      eventListener.onAfterResultSetClose(resultSetInformation, e);
     }
   }
 
   @Override
-  public void onAfterResultSetGet(ResultSetInformation resultSetInformation, String columnLabel, Object value) {
+  public void onAfterResultSetGet(ResultSetInformation resultSetInformation, String columnLabel, Object value, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, e);
     }
   }
 
   @Override
-  public void onAfterResultSetGet(ResultSetInformation resultSetInformation, int columnIndex, Object value) {
+  public void onAfterResultSetGet(ResultSetInformation resultSetInformation, int columnIndex, Object value, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value);
+      eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, e);
     }
   }
 
@@ -233,16 +234,16 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterCommit(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+  public void onAfterCommit(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterCommit(connectionInformation, timeElapsedNanos);
+      eventListener.onAfterCommit(connectionInformation, timeElapsedNanos, e);
     }
   }
 
   @Override
-  public void onAfterConnectionClose(ConnectionInformation connectionInformation) {
+  public void onAfterConnectionClose(ConnectionInformation connectionInformation, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterConnectionClose(connectionInformation);
+      eventListener.onAfterConnectionClose(connectionInformation, e);
     }
   }
 
@@ -254,9 +255,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos) {
+  public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onAfterRollback(connectionInformation, timeElapsedNanos);
+      eventListener.onAfterRollback(connectionInformation, timeElapsedNanos, e);
     }
   }
 }
