@@ -330,14 +330,17 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
     return delegate.createStruct(typeName, attributes);
   }
 
+  @Override
   public void setSchema(String schema) throws SQLException {
     delegate.setSchema(schema);
   }
 
+  @Override
   public String getSchema() throws SQLException {
     return delegate.getSchema();
   }
 
+  @Override
   public void abort(Executor executor) throws SQLException {
     delegate.abort(executor);
   }
@@ -346,6 +349,7 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
     delegate.setNetworkTimeout(executor, milliseconds);
   }
 
+  @Override
   public int getNetworkTimeout() throws SQLException {
     return delegate.getNetworkTimeout();
   }
