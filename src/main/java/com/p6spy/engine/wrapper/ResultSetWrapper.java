@@ -44,8 +44,6 @@ import java.util.Map;
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 
-import static javafx.scene.input.KeyCode.T;
-
 /**
  * This implementation wraps a {@link ResultSet}  and notifies a {@link JdbcEventListener}
  * about certain method invocations.
