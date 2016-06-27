@@ -19,12 +19,12 @@
  */
 package com.p6spy.engine.outage;
 
-import com.p6spy.engine.common.*;
-import com.p6spy.engine.logging.Category;
-import com.p6spy.engine.spy.Clock;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
+
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.logging.Category;
 
 /**
  * This class is a singleton. Since P6Spy is normally loaded by the system
@@ -133,9 +133,8 @@ public class P6OutageDetector implements Runnable {
 
         P6LogQuery.debug("P6Spy - detectOutage.pendingMessage.size = " + listSize);
 
-        final Clock clock = Clock.get();
-        long currentTime = clock.getTime();
-        long threshold = clock.fromMillisToClockGranularity(P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
+        long currentTime = System.nanoTime();
+        long threshold = TimeUnit.MILLISECONDS.toNanos(P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
 
         for (Object jdbcObject : pendingMessages.keySet()) {
             // here is a thread hazard that we'll be lazy about. Another thread
@@ -155,7 +154,7 @@ public class P6OutageDetector implements Runnable {
     }
 
     private void logOutage(InvocationInfo ii) {
-        P6LogQuery.logElapsed(-1, ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql);
+        P6LogQuery.logElapsed(-1, System.nanoTime() - ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql);
     }
 
 }

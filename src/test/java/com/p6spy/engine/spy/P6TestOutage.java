@@ -61,11 +61,6 @@ public class P6TestOutage extends P6TestFramework {
     return DBS_IN_TEST;
   }
 
-  @After
-  public void setMillisClock() {
-    P6SpyOptions.getActiveInstance().setUseNanoTime(false);
-  }
-
   @Test
   public void testOutage() throws SQLException {
     // exec fast query => no outage detected
@@ -79,20 +74,6 @@ public class P6TestOutage extends P6TestFramework {
     Assert.assertTrue(super.getLastButOneLogEntry().contains(Category.OUTAGE.toString()));
     Assert.assertTrue(super.getLastLogEntry().contains("CALL SLEEP"));
     Assert.assertTrue(getLastTimeElapsed() >= 3000);
-  }
-
-  @Test
-  public void testOutageNanos() throws SQLException {
-    P6SpyOptions.getActiveInstance().setUseNanoTime(true);
-    // exec fast query => no outage detected
-    callSleep(1);
-    Assert.assertFalse(super.getLastLogEntry().contains(Category.OUTAGE.toString()));
-    Assert.assertTrue(getLastTimeElapsed() >= TimeUnit.MILLISECONDS.toNanos(1));
-
-    // exec slooooow query => outage detected
-    callSleep(3000);
-    Assert.assertTrue(super.getLastButOneLogEntry().contains(Category.OUTAGE.toString()));
-    Assert.assertTrue(getLastTimeElapsed() >= TimeUnit.MILLISECONDS.toNanos(3000));
   }
 
   @Test

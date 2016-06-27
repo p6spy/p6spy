@@ -19,29 +19,28 @@
  */
 package com.p6spy.engine.common;
 
-import com.p6spy.engine.proxy.GenericInvocationHandler;
-import com.p6spy.engine.proxy.ProxyFactory;
-import com.p6spy.engine.test.AbstractTestConnection;
-import com.p6spy.engine.test.BaseTestCase;
-import com.p6spy.engine.test.TestConnection;
-import com.p6spy.engine.test.TestConnectionImpl;
-import org.apache.commons.dbcp.DelegatingConnection;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Wrapper;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.p6spy.engine.test.AbstractTestConnection;
+import com.p6spy.engine.test.BaseTestCase;
+import com.p6spy.engine.test.TestConnection;
+import com.p6spy.engine.test.TestConnectionImpl;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
+import org.apache.commons.dbcp.DelegatingConnection;
+import org.junit.Test;
 
 public class P6WrapperIsWrapperDelegateTest extends BaseTestCase {
 
   @Test
   public void testCastableFromProxy() throws SQLException {
     Connection con = new TestConnectionImpl();
-    Connection proxy = ProxyFactory.createProxy(con, new GenericInvocationHandler<Connection>(con));
+    Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener);
 
     // if the proxy implements the interface then true should be returned.
     assertTrue(proxy.isWrapperFor(Connection.class));
@@ -52,7 +51,7 @@ public class P6WrapperIsWrapperDelegateTest extends BaseTestCase {
   @Test
   public void testCastableFromUnderlying() throws SQLException {
     Connection con = new TestConnectionImpl();
-    Connection proxy = ProxyFactory.createProxy(con, new GenericInvocationHandler<Connection>(con));
+    Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener);
 
     // if the underlying object extends the class (or matches the class) then true should be returned.
     assertTrue(proxy.isWrapperFor(TestConnectionImpl.class));
@@ -69,7 +68,7 @@ public class P6WrapperIsWrapperDelegateTest extends BaseTestCase {
     // is implemented here.
     DelegatingConnection underlying = new DelegatingConnection(con);
 
-    Connection proxy = ProxyFactory.createProxy(underlying, new GenericInvocationHandler<Connection>(underlying));
+    Connection proxy = ConnectionWrapper.wrap(underlying, noOpEventListener);
 
     // TestConnection is an interface of the wrapped underlying object.
     assertTrue(proxy.isWrapperFor(TestConnection.class));

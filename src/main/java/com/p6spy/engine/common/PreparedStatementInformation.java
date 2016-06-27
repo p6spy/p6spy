@@ -19,11 +19,11 @@
  */
 package com.p6spy.engine.common;
 
-import com.p6spy.engine.spy.P6SpyOptions;
-
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.p6spy.engine.spy.P6SpyOptions;
 
 /**
  * Stores information about the prepared statement and bind variables.
@@ -35,9 +35,10 @@ public class PreparedStatementInformation extends StatementInformation implement
   private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
   private final Map<Integer, Object> parameterValues = new HashMap<Integer, Object>();
 
-    public PreparedStatementInformation(final ConnectionInformation connectionInformation) {
-        super(connectionInformation);
-    }
+  public PreparedStatementInformation(final ConnectionInformation connectionInformation, String query) {
+    super(connectionInformation);
+    setStatementQuery(query);
+  }
 
   /**
    * Generates the query for the prepared statement with all parameter placeholders

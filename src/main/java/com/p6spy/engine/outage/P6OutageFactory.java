@@ -19,20 +19,16 @@
  */
 package com.p6spy.engine.outage;
 
-import com.p6spy.engine.proxy.ProxyFactory;
+import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.spy.P6Factory;
 import com.p6spy.engine.spy.P6LoadableOptions;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 public class P6OutageFactory implements P6Factory {
 
   @Override
-  public Connection getConnection(Connection conn) {
-    P6OutageConnectionInvocationHandler invocationHandler = new P6OutageConnectionInvocationHandler(conn);
-    return ProxyFactory.createProxy(conn, invocationHandler);
+  public JdbcEventListener getJdbcEventListener() {
+    return OutageJdbcEventListener.INSTANCE;
   }
 
   @Override
