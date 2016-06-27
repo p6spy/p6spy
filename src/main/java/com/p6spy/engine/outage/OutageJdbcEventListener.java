@@ -20,16 +20,15 @@
 package com.p6spy.engine.outage;
 
 import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.common.StatementInformation;
-import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.event.SimpleJdbcEventListener;
 
 import java.sql.SQLException;
 
 /**
  * This event listener registers method invocations at {@link P6OutageDetector}
  */
-public class OutageJdbcEventListener extends JdbcEventListener {
+public class OutageJdbcEventListener extends SimpleJdbcEventListener {
 
   public static final OutageJdbcEventListener INSTANCE = new OutageJdbcEventListener();
 
@@ -65,108 +64,32 @@ public class OutageJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onBeforeAddBatch(PreparedStatementInformation statementInformation) {
+  public void onBeforeAnyAddBatch(StatementInformation statementInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "batch",
-        statementInformation.getStatementQuery(), statementInformation.getSqlWithValues());
+        statementInformation.getSqlWithValues(), statementInformation.getStatementQuery());
     }
   }
 
   @Override
-  public void onAfterAddBatch(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
-    onAfterAddBatch(statementInformation, timeElapsedNanos, null, e);
-  }
-
-  @Override
-  public void onBeforeAddBatch(StatementInformation statementInformation, String sql) {
-    if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "batch", "", statementInformation.getStatementQuery());
-    }
-  }
-
-  @Override
-  public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
+  public void onAfterAnyAddBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().unregisterInvocation(this);
     }
   }
 
   @Override
-  public void onBeforeExecute(PreparedStatementInformation statementInformation) {
+  public void onBeforeAnyExecute(StatementInformation statementInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "statement",
-        statementInformation.getStatementQuery(), statementInformation.getSqlWithValues());
+        statementInformation.getSqlWithValues(), statementInformation.getStatementQuery());
     }
   }
 
   @Override
-  public void onAfterExecute(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+  public void onAfterAnyExecute(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.getInstance().unregisterInvocation(this);
     }
-  }
-
-  @Override
-  public void onBeforeExecute(StatementInformation statementInformation, String sql) {
-    if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "statement", "", statementInformation.getStatementQuery());
-    }
-  }
-
-  @Override
-  public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
-    if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().unregisterInvocation(this);
-    }
-  }
-
-  @Override
-  public void onBeforeExecuteBatch(StatementInformation statementInformation) {
-    onBeforeExecute(statementInformation, null);
-  }
-
-  @Override
-  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
-    onAfterExecute(statementInformation, timeElapsedNanos, null, e);
-  }
-
-  @Override
-  public void onBeforeExecuteUpdate(PreparedStatementInformation statementInformation) {
-    onBeforeExecute(statementInformation);
-  }
-
-  @Override
-  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
-    onAfterExecute(statementInformation, timeElapsedNanos, e);
-  }
-
-  @Override
-  public void onBeforeExecuteUpdate(StatementInformation statementInformation, String sql) {
-    onBeforeExecute(statementInformation, sql);
-  }
-
-  @Override
-  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
-    onAfterExecute(statementInformation, timeElapsedNanos, sql, e);
-  }
-
-  @Override
-  public void onBeforeExecuteQuery(PreparedStatementInformation statementInformation) {
-    onBeforeExecute(statementInformation);
-  }
-
-  @Override
-  public void onAfterExecuteQuery(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
-    onAfterExecute(statementInformation, timeElapsedNanos, e);
-  }
-
-  @Override
-  public void onBeforeExecuteQuery(StatementInformation statementInformation, String sql) {
-    onBeforeExecute(statementInformation, sql);
-  }
-
-  @Override
-  public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
-    onAfterExecute(statementInformation, timeElapsedNanos, sql, e);
   }
 }
