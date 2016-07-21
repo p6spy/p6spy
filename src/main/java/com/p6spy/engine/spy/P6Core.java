@@ -19,13 +19,15 @@
  */
 package com.p6spy.engine.spy;
 
-import java.sql.Connection;
-import java.util.List;
-
 import com.p6spy.engine.event.CompoundJdbcEventListener;
 import com.p6spy.engine.event.DefaultEventListener;
 import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
+
+import java.sql.Connection;
+import java.util.List;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 
 /**
  * @author Quinton McCombs
@@ -34,10 +36,17 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
 public class P6Core {
 
   private static boolean initialized;
+  private static ServiceLoader<JdbcEventListener> jdbcEventListenerServiceLoader = ServiceLoader.load(JdbcEventListener.class, P6Core.class.getClassLoader());
 
   public static Connection wrapConnection(Connection realConnection) {
     final CompoundJdbcEventListener compoundEventListener = new CompoundJdbcEventListener();
     compoundEventListener.addListender(DefaultEventListener.INSTANCE);
+    registerEventListenersFromFactories(compoundEventListener);
+    registerEventListenersFromServiceLoader(compoundEventListener);
+    return ConnectionWrapper.wrap(realConnection, compoundEventListener);
+  }
+
+  private static void registerEventListenersFromFactories(CompoundJdbcEventListener compoundEventListener) {
     List<P6Factory> factories = P6ModuleManager.getInstance().getFactories();
     if (factories != null) {
       for (P6Factory factory : factories) {
@@ -47,7 +56,16 @@ public class P6Core {
         }
       }
     }
-    return ConnectionWrapper.wrap(realConnection, compoundEventListener);
+  }
+
+  private static void registerEventListenersFromServiceLoader(CompoundJdbcEventListener compoundEventListener) {
+    try {
+      for (JdbcEventListener jdbcEventListener : jdbcEventListenerServiceLoader) {
+        compoundEventListener.addListender(jdbcEventListener);
+      }
+    } catch (ServiceConfigurationError e) {
+      e.printStackTrace();
+    }
   }
 
   /**

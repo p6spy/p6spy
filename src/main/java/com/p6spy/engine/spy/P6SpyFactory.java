@@ -19,9 +19,6 @@
  */
 package com.p6spy.engine.spy;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
