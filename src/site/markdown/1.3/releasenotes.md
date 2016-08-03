@@ -1,8 +1,8 @@
 # Release Notes
 
-## Version 1.3
+## Version 1.3 [Dec 27, 2005]
 
-???
+* release notes not provided
 
 ## Version 1.2
 

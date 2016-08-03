@@ -22,9 +22,17 @@
         <item name="Configuration and Usage" href="2.0/configandusage.html"/>
         <item name="Release Notes" href="2.0/releasenotes.html"/>
         <item name="Known Issues" href="2.0/knownissues.html"/>
-        <!--<item name="Migration from 1.3" href="2.0/migration.html"/>-->
         <item name="FAQ" href="2.0/faq.html"/>
         <item name="Development" href="2.0/development.html"/>
+      </item>
+      <item name="3.x" collapse="true" href="3.0/install.html">
+        <item name="Installation" href="3.0/install.html"/>
+        <item name="Integration" href="3.0/integration.html"/>
+        <item name="Configuration and Usage" href="3.0/configandusage.html"/>
+        <item name="Release Notes" href="3.0/releasenotes.html"/>
+        <item name="Known Issues" href="3.0/knownissues.html"/>
+        <item name="FAQ" href="3.0/faq.html"/>
+        <item name="Development" href="3.0/development.html"/>
       </item>
     </menu>
     <menu name="Other">
