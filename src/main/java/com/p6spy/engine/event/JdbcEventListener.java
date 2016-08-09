@@ -35,8 +35,14 @@ import java.sql.Statement;
 
 /**
  * Implementations of this class receive notifications for interesting JDBC events.
- * <p>
+ * <p/>
  * This class intentionally is not an interface so that methods can be added without breaking existing implementations.
+ * <p/>
+ * There are two ways to register your custom implementation of this class.
+ * The fist way is to add the fully qualified class name of your implementation to
+ * <code>src/main/resources/META-INF/services/com.p6spy.engine.event.JdbcEventListener</code>.
+ * <p/>
+ * The second way is to implement a {@link com.p6spy.engine.spy.P6Factory}
  */
 public abstract class JdbcEventListener {
 

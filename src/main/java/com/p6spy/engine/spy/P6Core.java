@@ -25,6 +25,7 @@ import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 import java.sql.Connection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
@@ -59,12 +60,12 @@ public class P6Core {
   }
 
   private static void registerEventListenersFromServiceLoader(CompoundJdbcEventListener compoundEventListener) {
-    try {
-      for (JdbcEventListener jdbcEventListener : jdbcEventListenerServiceLoader) {
-        compoundEventListener.addListender(jdbcEventListener);
+    for (Iterator<JdbcEventListener> iterator = jdbcEventListenerServiceLoader.iterator(); iterator.hasNext(); ) {
+      try {
+        compoundEventListener.addListender(iterator.next());
+      } catch (ServiceConfigurationError e) {
+        e.printStackTrace();
       }
-    } catch (ServiceConfigurationError e) {
-      e.printStackTrace();
     }
   }
 

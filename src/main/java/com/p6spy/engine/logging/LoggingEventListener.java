@@ -30,6 +30,9 @@ import java.sql.SQLException;
 
 /**
  * This event listener is responsible for logging the SQL statements and the execution time
+ * <p/>
+ * To use a custom implementation for logging, extend this class and add the fully qualified class name of your
+ * implementation to <code>src/main/resources/META-INF/services/com.p6spy.engine.logging.LoggingEventListener</code>.
  */
 public class LoggingEventListener extends SimpleJdbcEventListener {
 
