@@ -17,7 +17,6 @@ before_install:
  #- script/travis/before_install_db2.sh
  - script/travis/before_install_oracle.sh
  - groovy script/travis/generateMavenSettings.groovy
- - sudo hostname "$(hostname | cut -c1-63)" && sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts # https://github.com/travis-ci/travis-ci/issues/5227
 
 before_script:
  - script/travis/before_script_firebird.sh
