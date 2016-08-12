@@ -43,7 +43,7 @@ public class LoggingEventListener extends SimpleJdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, int[] updateCounts, SQLException e) {
     P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.BATCH, statementInformation);
   }
 

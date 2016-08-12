@@ -19,9 +19,13 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.common.StatementInformation;
+import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.wrapper.AbstractWrapper;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -31,6 +35,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -54,23 +59,39 @@ public class P6TestStatement extends P6TestFramework {
     assertEquals(1, P6TestUtil.queryForInt(connection, "select count(*) from customers where id=100"));
   }
 
+  @Test
   public void testExecuteUpdate() throws SQLException {
-    String query= "update customers set name='xyz' where id=1";
-    int rowCount = P6TestUtil.executeUpdate(connection, query);
+    String query = "update customers set name='xyz' where id=1";
+    final int[] eventListenerRowCount = {0};
+    final ConnectionWrapper connectionWrapper = new ConnectionWrapper(this.connection, new JdbcEventListener() {
+      @Override
+      public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, int rowCount, SQLException e) {
+        eventListenerRowCount[0] = rowCount;
+      }
+    });
+    int rowCount = P6TestUtil.executeUpdate(connectionWrapper, query);
     assertEquals(1, rowCount);
+    assertEquals(1, eventListenerRowCount[0]);
 
     // validate logging
     assertTrue(super.getLastLogEntry().contains(query));
 
     // validate that the sql executed against the db
-    assertEquals(1, P6TestUtil.queryForInt(connection, "select count(*) from customers where id=100"));
+    assertEquals(1, P6TestUtil.queryForInt(this.connection, "select count(*) from customers where id=1 and name='xyz'"));
   }
 
   @Test
   public void testExecuteBatch() throws SQLException {
     P6LogOptions.getActiveInstance().setExcludecategories("");
     // test batch inserts
-    Statement stmt = connection.createStatement();
+    final int[] eventListenerUpdateCounts = new int[2];
+    Statement stmt = new ConnectionWrapper(connection, new JdbcEventListener() {
+      @Override
+      public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, int[] updateCounts, SQLException e) {
+        eventListenerUpdateCounts[0] = updateCounts[0];
+        eventListenerUpdateCounts[1] = updateCounts[1];
+      }
+    }).createStatement();
     String sql = "insert into customers(name,id) values ('jim', 101)";
     stmt.addBatch(sql);
     assertTrue(super.getLastLogEntry().contains(sql));
@@ -80,8 +101,10 @@ public class P6TestStatement extends P6TestFramework {
     assertTrue(super.getLastLogEntry().contains(sql));
     assertTrue(super.getLastLogEntry().contains("|batch|"));
 
-    stmt.executeBatch();
+    final int[] updateCounts = stmt.executeBatch();
     assertTrue(super.getLastLogEntry().contains(sql));
+    assertArrayEquals(new int[]{1, 1}, updateCounts);
+    assertArrayEquals(new int[]{1, 1}, eventListenerUpdateCounts);
 
     assertEquals(2, P6TestUtil.queryForInt(connection,"select count(*) from customers where id > 100"));
 

@@ -138,10 +138,11 @@ public abstract class JdbcEventListener {
    *
    * @param statementInformation The meta information about the {@link Statement} being invoked
    * @param timeElapsedNanos     The execution time of the execute call
+   * @param updateCounts         An array of update counts or null if an exception was thrown
    * @param e                    The {@link SQLException} which may be triggered by the call (<code>null</code> if
    *                             there was no exception).
    */
-  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, int[] updateCounts, SQLException e) {
   }
 
 
@@ -158,10 +159,12 @@ public abstract class JdbcEventListener {
    *
    * @param statementInformation The meta information about the {@link Statement} being invoked
    * @param timeElapsedNanos     The execution time of the execute call
+   * @param rowCount             Either the row count for SQL Data Manipulation Language (DML) statements or 0 for SQL
+   *                             statements that return nothing or if an exception was thrown
    * @param e                    The {@link SQLException} which may be triggered by the call (<code>null</code> if
    *                             there was no exception).
    */
-  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos, int rowCount, SQLException e) {
   }
 
   /**
@@ -179,10 +182,12 @@ public abstract class JdbcEventListener {
    * @param statementInformation The meta information about the {@link Statement} being invoked
    * @param timeElapsedNanos     The execution time of the execute call
    * @param sql                  The SQL string provided to the execute method
+   * @param rowCount             Either the row count for SQL Data Manipulation Language (DML) statements or 0 for SQL
+   *                             statements that return nothing or if an exception was thrown
    * @param e                    The {@link SQLException} which may be triggered by the call (<code>null</code> if
    *                             there was no exception).
    */
-  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
+  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, int rowCount, SQLException e) {
   }
 
 
