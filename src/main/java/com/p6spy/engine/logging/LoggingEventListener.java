@@ -20,6 +20,7 @@
 package com.p6spy.engine.logging;
 
 import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.common.Loggable;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.common.StatementInformation;
@@ -29,6 +30,9 @@ import java.sql.SQLException;
 
 /**
  * This event listener is responsible for logging the SQL statements and the execution time
+ * <p/>
+ * To use a custom implementation for logging, extend this class and add the fully qualified class name of your
+ * implementation to <code>src/main/resources/META-INF/services/com.p6spy.engine.logging.LoggingEventListener</code>.
  */
 public class LoggingEventListener extends SimpleJdbcEventListener {
 
@@ -39,32 +43,32 @@ public class LoggingEventListener extends SimpleJdbcEventListener {
 
   @Override
   public void onAfterAnyExecute(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
-    P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.STATEMENT, statementInformation);
+    logElapsed(statementInformation, timeElapsedNanos, Category.STATEMENT, e);
   }
 
   @Override
   public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, int[] updateCounts, SQLException e) {
-    P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.BATCH, statementInformation);
+    logElapsed(statementInformation, timeElapsedNanos, Category.BATCH, e);
   }
 
   @Override
   public void onAfterCommit(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
-    P6LogQuery.logElapsed(connectionInformation.getConnectionId(), timeElapsedNanos, Category.COMMIT, connectionInformation);
+    logElapsed(connectionInformation, timeElapsedNanos, Category.COMMIT, e);
   }
 
   @Override
   public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
-    P6LogQuery.logElapsed(connectionInformation.getConnectionId(), timeElapsedNanos, Category.ROLLBACK, connectionInformation);
+    logElapsed(connectionInformation, timeElapsedNanos, Category.ROLLBACK, e);
   }
 
   @Override
   public void onAfterAnyAddBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
-    P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.BATCH, statementInformation);
+    logElapsed(statementInformation, timeElapsedNanos, Category.BATCH, e);
   }
 
   @Override
   public void onAfterGetResultSet(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
-    P6LogQuery.logElapsed(statementInformation.getConnectionId(), timeElapsedNanos, Category.RESULTSET, statementInformation);
+    logElapsed(statementInformation, timeElapsedNanos, Category.RESULTSET, e);
   }
 
   @Override
@@ -89,7 +93,7 @@ public class LoggingEventListener extends SimpleJdbcEventListener {
   @Override
   public void onAfterResultSetNext(ResultSetInformation resultSetInformation, long timeElapsedNanos, boolean hasNext, SQLException e) {
     if (hasNext) {
-      P6LogQuery.logElapsed(resultSetInformation.getConnectionId(), timeElapsedNanos, Category.RESULT, resultSetInformation);
+      logElapsed(resultSetInformation, timeElapsedNanos, Category.RESULT, e);
     }
   }
 
@@ -99,5 +103,9 @@ public class LoggingEventListener extends SimpleJdbcEventListener {
       // If the result set has not been advanced to the first row, there is nothing to log.
       resultSetInformation.generateLogMessage();
     }
+  }
+
+  protected void logElapsed(Loggable loggable, long timeElapsedNanos, Category category, SQLException e) {
+    P6LogQuery.logElapsed(loggable.getConnectionId(), timeElapsedNanos, category, loggable);
   }
 }

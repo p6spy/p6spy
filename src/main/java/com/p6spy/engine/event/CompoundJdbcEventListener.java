@@ -27,6 +27,7 @@ import com.p6spy.engine.common.StatementInformation;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CompoundJdbcEventListener extends JdbcEventListener {
@@ -42,6 +43,15 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
 
   public void addListender(JdbcEventListener listener) {
     eventListeners.add(listener);
+  }
+
+  /**
+   * Returns a read only view of the registered {@link JdbcEventListener}s
+   *
+   * @return a read only view of the registered {@link JdbcEventListener}s
+   */
+  public List<JdbcEventListener> getEventListeners() {
+    return Collections.unmodifiableList(eventListeners);
   }
 
   @Override

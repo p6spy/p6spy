@@ -2,7 +2,7 @@
  * #%L
  * P6Spy
  * %%
- * Copyright (C) 2013 P6Spy
+ * Copyright (C) 2002 - 2016 P6Spy
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,12 @@
  * limitations under the License.
  * #L%
  */
-package com.p6spy.engine.spy;
+package com.p6spy.engine.test;
 
 import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
 
-public class P6SpyFactory implements P6Factory {
-
-  @Override
-  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
-    return new P6SpyOptions(optionsRepository);
-  }
-
-  @Override
-  public JdbcEventListener getJdbcEventListener() {
-    return null;
-  }
+/**
+ * A No-Op implementation just used for testing purposes
+ */
+public class TestJdbcEventListener extends JdbcEventListener {
 }

@@ -73,6 +73,10 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
     connectionInformation = new ConnectionInformation();
   }
 
+  public JdbcEventListener getEventListener() {
+    return eventListener;
+  }
+
   @Override
   public Statement createStatement() throws SQLException {
     return StatementWrapper.wrap(delegate.createStatement(), new StatementInformation(connectionInformation), eventListener);
