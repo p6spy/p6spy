@@ -90,14 +90,16 @@ public class PreparedStatementWrapper extends StatementWrapper implements Prepar
   public int executeUpdate() throws SQLException {
     SQLException e = null;
     long start = System.nanoTime();
+    int rowCount = 0;
     try {
       eventListener.onBeforeExecuteUpdate(statementInformation);
-      return delegate.executeUpdate();
+      rowCount = delegate.executeUpdate();
+      return rowCount;
     } catch (SQLException sqle) {
       e = sqle;
       throw e;
     } finally {
-      eventListener.onAfterExecuteUpdate(statementInformation, System.nanoTime() - start, e);
+      eventListener.onAfterExecuteUpdate(statementInformation, System.nanoTime() - start, rowCount, e);
     }
   }
 

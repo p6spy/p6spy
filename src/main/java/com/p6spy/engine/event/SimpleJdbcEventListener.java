@@ -114,17 +114,17 @@ public abstract class SimpleJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, int[] updateCounts, SQLException e) {
     onAfterAnyExecute(statementInformation, timeElapsedNanos, e);
   }
 
   @Override
-  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
+  public void onAfterExecuteUpdate(PreparedStatementInformation statementInformation, long timeElapsedNanos, int rowCount, SQLException e) {
     onAfterAnyExecute(statementInformation, timeElapsedNanos, e);
   }
 
   @Override
-  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
+  public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, int rowCount, SQLException e) {
     onAfterAnyExecute(statementInformation, timeElapsedNanos, e);
   }
 
