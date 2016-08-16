@@ -19,6 +19,15 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.option.EnvironmentVariables;
+import com.p6spy.engine.spy.option.P6OptionChangedListener;
+import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.P6OptionsSource;
+import com.p6spy.engine.spy.option.SpyDotProperties;
+import com.p6spy.engine.spy.option.SystemProperties;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,15 +42,6 @@ import javax.management.MBeanRegistrationException;
 import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.option.EnvironmentVariables;
-import com.p6spy.engine.spy.option.P6OptionChangedListener;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
-import com.p6spy.engine.spy.option.P6OptionsSource;
-import com.p6spy.engine.spy.option.SpyDotProperties;
-import com.p6spy.engine.spy.option.SystemProperties;
-
 public class P6ModuleManager {
 
   // recreated on each reload
@@ -53,18 +53,13 @@ public class P6ModuleManager {
 
   private final P6OptionsRepository optionsRepository = new P6OptionsRepository();
 
-  // singleton
+  // current instance (not a singleton, hence no final modifier)
   private static P6ModuleManager instance;
 
   static {
     initMe();
   }
 
-  /**
-   * 
-   * @param spyPropertiesJMX
-   *          manually (via JMX) set properties to be kept across auto-reloads.
-   */
   private synchronized static void initMe() {
     try {
       cleanUp();

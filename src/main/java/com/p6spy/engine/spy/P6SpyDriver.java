@@ -57,10 +57,6 @@ public class P6SpyDriver implements Driver {
     }
   }
 
-  public P6SpyDriver() {
-    P6Core.initialize();
-  }
-
   /**
    * Parses out the real JDBC connection URL by removing "p6spy:".
    *

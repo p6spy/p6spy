@@ -21,11 +21,12 @@ package com.p6spy.engine.test;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.P6Core;
+import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.P6TestUtil;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.option.SpyDotProperties;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -68,7 +69,7 @@ public abstract class P6TestFramework extends BaseTestCase {
 
     // make sure to reinit for each Driver run as we run parametrized builds
     // and need to have fresh stuff for every specific driver
-    P6Core.reinit();
+    P6ModuleManager.getInstance().reload();
   }
 
   @Parameters(name = "{index}: {0}")

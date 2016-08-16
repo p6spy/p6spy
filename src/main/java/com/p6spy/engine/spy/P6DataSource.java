@@ -54,11 +54,6 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
   protected CommonDataSource realDataSource;
   protected String rdsName;
 
-  static {
-    // make sure that the core has been initialized
-    P6Core.initialize();
-  }
-
   /**
    * Default no-arg constructor for Serialization
    */
