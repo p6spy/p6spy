@@ -36,7 +36,6 @@ import java.util.ServiceLoader;
  */
 public class P6Core {
 
-  private static boolean initialized;
   private static ServiceLoader<JdbcEventListener> jdbcEventListenerServiceLoader = ServiceLoader.load(JdbcEventListener.class, P6Core.class.getClassLoader());
 
   public static Connection wrapConnection(Connection realConnection) {
@@ -69,33 +68,4 @@ public class P6Core {
     }
   }
 
-  /**
-   * Initializes the P6Spy framework
-   */
-  public static void initialize() {
-    try {
-      if (!initialized) {
-        synchronized (P6Core.class) {
-          if( !initialized) {
-            // just make sure to cause module initialization (if not done yet)
-            P6ModuleManager.getInstance();
-          }
-        }
-      }
-    } catch (Throwable t) {
-      t.printStackTrace();
-    }
-  }
-
-  /**
-   * Used by tests to reinitialize the framework.  This method should not be used by production code!
-   */
-  public static synchronized void reinit() {
-    initialized = false;
-    // force modules to be reloaded
-    P6ModuleManager.getInstance().reload();
-    
-    initialize();
-    initialized = true;
-  }
 }
