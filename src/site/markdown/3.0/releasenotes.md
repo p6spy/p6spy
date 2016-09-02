@@ -1,5 +1,13 @@
 # Release Notes
 
+## Version 3.0.0-rc-1 [Sept 2, 2016]
+
+Improvements:
+
+* [issue #332](https://github.com/p6spy/p6spy/issues/332): Add event listeners via service loader mechanism
+* [issue #323](https://github.com/p6spy/p6spy/issues/323): log row count and SQLException
+* [issue #297](https://github.com/p6spy/p6spy/issues/297): Allow for lazy initialization of P6Spy
+
 ## Version 3.0.0-alpha-1 [July 29, 2016]
 
 Improvements:
