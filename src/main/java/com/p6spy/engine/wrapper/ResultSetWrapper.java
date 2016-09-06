@@ -115,6 +115,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -128,6 +129,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -141,6 +143,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -154,6 +157,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -167,6 +171,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -180,6 +185,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -193,6 +199,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -206,6 +213,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -219,6 +227,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -232,6 +241,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -245,6 +255,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -258,6 +269,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -271,6 +283,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -284,6 +297,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -297,6 +311,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -310,6 +325,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -323,6 +339,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -336,6 +353,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -349,6 +367,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -362,6 +381,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -375,6 +395,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -388,6 +409,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -401,6 +423,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -414,6 +437,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -427,6 +451,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -440,6 +465,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -453,6 +479,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -466,6 +493,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -479,6 +507,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -492,6 +521,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -505,6 +535,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -518,6 +549,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -551,6 +583,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -564,6 +597,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -582,6 +616,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -595,6 +630,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -608,6 +644,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -621,6 +658,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -968,6 +1006,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -981,6 +1020,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -994,6 +1034,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1007,6 +1048,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1020,6 +1062,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1033,6 +1076,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1046,6 +1090,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1059,6 +1104,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1072,6 +1118,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1085,6 +1132,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1098,6 +1146,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1111,6 +1160,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1124,6 +1174,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1137,6 +1188,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1150,6 +1202,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1163,6 +1216,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1176,6 +1230,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1189,6 +1244,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1242,6 +1298,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1255,6 +1312,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1308,6 +1366,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1321,6 +1380,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1334,6 +1394,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1347,6 +1408,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1370,6 +1432,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1383,6 +1446,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1396,6 +1460,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1409,6 +1474,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
@@ -1572,6 +1638,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnIndex, null, e);
       throw e;
     }
@@ -1585,6 +1652,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, value, null);
       return value;
     } catch (SQLException sqle) {
+      e = sqle;
       eventListener.onAfterResultSetGet(resultSetInformation, columnLabel, null, e);
       throw e;
     }
