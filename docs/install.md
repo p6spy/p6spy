@@ -1,7 +1,7 @@
 # P6Spy Installation
 
 This section will document the steps to install P6Spy on various application servers.  In additional, it 
-contains generic instructions for applications servers not listed as well as applications that do not use
+contains [Generic Instructions](#generic-instructions) for applications servers not listed as well as applications that do not use
 an application server.  If you create instructions for other application servers, 
 [send us a copy](http://p6spy.github.io/p6spy/mail-lists.html) for possible publication in the documentation.
 
@@ -33,19 +33,19 @@ executed.  You can alter the location of this log file as well as what gets logg
 
 Application Servers:
     
-* [JBoss/WildFly](#jboss)    
-* [Apache Tomcat and Apache TomEE](#tomcat)    
-* [Glassfish and Payara](#glassfish)    
+* [JBoss/WildFly](#jboss-wildfly)    
+* [Apache Tomcat and Apache TomEE](#apache-tomcat-and-apache-tomee)    
+* [Glassfish and Payara](#glassfish-and-payara)    
 * [Weblogic](#weblogic)
-* [Generic](#generic)    
+* [Generic Instructions](#generic-instructions)    
 
-## <a name="jboss">JBoss/WildFly</a>
+## JBoss/WildFly
 
-The following sections contain specific information on installing P6Spy on [JBoss 4.2.x-6.1.x](#jboss5) and [JBoss 7.1.x and WildFly 8.x](#jboss71)
+The following sections contain specific information on installing P6Spy on [JBoss 4.2.x, 5.1.x, 6.1.x and JBoss 5.x EAP](#jboss-4-2-x-5-1-x-6-1-x-and-jboss-5-x-eap) and [JBoss 7.1.x, WildFly 8.x](#jboss-7-1-x-wildfly-8-x)
 
 Please note **XA Datasource proxying IS NOT supported** for these. 
 
-### <a name="jboss5">JBoss 4.2.x, 5.1.x, 6.1.x and JBoss 5.x EAP</a>
+### JBoss 4.2.x, 5.1.x, 6.1.x and JBoss 5.x EAP
 
 The following instructions were tested with JBoss 4.2.3.GA, 5.1.0.GA, 6.1.0.Final and JBoss 5.2.0 EAP. For these instructions,
 P6Spy assumes that you are using the default server residing in `$JBOSS_DIST\server\default`, where $JBOSS_DIST
@@ -60,7 +60,7 @@ is the directory in which JBoss is installed.
         <connection-url>jdbc:p6spy:mysql://<hostname>:<port>/<database></connection-url>
         <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
 
-### <a name="jboss71url">JBoss 7.1.x, WildFly 8.x - modified URL</a>
+### JBoss 7.1.x, WildFly 8.x
 The following instructions were tested with JBoss 7.1.0 and Wildfly 8.1.Final (works with p6spy version 2.1.0 or higher). For these instructions,
 P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory in which JBoss/WildFly is installed. 
 
@@ -100,11 +100,11 @@ P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory
             </drivers>
         </datasources>
 
-## <a name="tomcat">Apache Tomcat and Apache TomEE</a>
+## Apache Tomcat and Apache TomEE
 
-The following sections contain specific information on installing P6Spy on [Tomcat 6.x, 7.x, 8.x and TomEE 1.6.x](#tomcat_tomee).
+The following sections contain specific information on installing P6Spy on [Tomcat 6.x, 7.x, 8.x and TomEE 1.6.x](#apache-tomcat-6-x-7-x-8-x-and-tomee-1-6-x).
 
-### <a name="tomcat_tomee">Apache Tomcat 6.x, 7.x, 8.x and TomEE 1.6.x</a>
+### Apache Tomcat 6.x, 7.x, 8.x and TomEE 1.6.x
 
 The following instructions were tested with Apache Tomcat versions: 6.0.34, 7.0.54 and 8.0.15 as well as Apache TomEE 1.6.0.2 Webprofile and Apache TomEE 1.6.0.2 Plus. For these instructions, it is assumed that $CATALINA_HOME
 refers to the tomcat/tomee installation directory.  Please be aware that there are many ways to configure JNDI data sources
@@ -133,13 +133,13 @@ on tomcat/tomee.
                    ...
                    />
 
-## <a name="glassfish">Glassfish and Payara</a>
+## Glassfish and Payara
 
-The following section contains specific information on installing P6Spy on [Glassfish 3.1.2.2, 4.0 and Payara 4.1.144](#glassfish3122_40) (works with p6spy version 2.1.0 or higher).
+The following section contains specific information on installing P6Spy on [Glassfish 3.1.2.2, 4.0 and Payara 4.1.144](#glassfish-3-1-2-2-4-0-and-payara-4-1-144) (works with p6spy version 2.1.0 or higher).
 
 Please note **XA Datasource proxying IS supported** for these. 
 
-### <a name="glassfish3122_40">Glassfish 3.1.2.2, 4.0 and Payara 4.1.144</a>
+### Glassfish 3.1.2.2, 4.0 and Payara 4.1.144
 
 The provided instructions were tested with Glassfish OSE 3.1.2.2, Glassfish OSE 4.0 and Payara 4.1.144. 
 In later section is `$GLASSFISH_HOME` the directory where Glassfish/Payara is installed and `$DOMAIN_X` is the domain name used for deployment (for example, can be: `domain1`).
@@ -227,11 +227,11 @@ In later section is `$GLASSFISH_HOME` the directory where Glassfish/Payara is in
 		
 	And the jndi name of the created jndi resource in the sample configurations is: `jdbc/p6spy`
 
-## <a name="weblogic">Weblogic</a>
+## Weblogic
 
-The following section contains specific information on installing P6Spy on [Weblogic 12.1.x](#weblogic121x) (works with p6spy version 2.1.0 or higher).
+The following section contains specific information on installing P6Spy on [Weblogic 12.1.3](#weblogic-12-1-3) (works with p6spy version 2.1.0 or higher).
 
-### <a name="weblogic121x">Weblogic 12.1.3</a>
+### Weblogic 12.1.3
 
 The provided instructions were tested with Weblogic 12.1.3 (for developers). 
 In later section is `$WLS_HOME` the directory where Weblogic is installed and `$DOMAIN_X` is the domain name used for deployment (for example, can be: `mydomain`).
@@ -247,7 +247,7 @@ In later section is `$WLS_HOME` the directory where Weblogic is installed and `$
         com.p6spy.engine.spy.P6SpyDriver
 
 
-## <a name="generic">Generic Instructions</a>
+## Generic Instructions
 
 The following installation instructions are intended for use with other application servers and
 applications that do not use application servers. To install P6Spy, complete the following steps:

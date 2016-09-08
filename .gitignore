@@ -37,3 +37,6 @@ p6spy_xds
 
 # hsql
 mem.h2.db
+
+# build artifacts
+_build/

@@ -30,11 +30,13 @@ install:
  - mvn -q -B dependency:resolve --settings ~/.m2/p6spySettings.xml
  
 script:
-# - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B test site:site site:stage com.github.github:site-maven-plugin:site -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; else mvn -B test -P travis --settings ~/.m2/p6spySettings.xml; fi;
-- mvn -B test -P travis --settings ~/.m2/p6spySettings.xml;
+ - mvn -B test -P travis --settings ~/.m2/p6spySettings.xml
 
 after_success:
  - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
+# once !WIP => should be:
+# if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn coveralls:report; fi 
+ - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn coveralls:report; fi
 
 notifications:
  email:

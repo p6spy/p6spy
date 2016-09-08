@@ -130,6 +130,7 @@
     <derby-build>10.10.1.1</derby-build>
     <sqlite-build>3.7.2</sqlite-build>
     <cobertura-maven-plugin-build>2.6</cobertura-maven-plugin-build>
+    <coveralls-maven-plugin-build>4.2.0</coveralls-maven-plugin-build>
     <maven-eclipse-plugin-build>2.9</maven-eclipse-plugin-build>
     <maven-project-info-reports-plugin-build>2.7</maven-project-info-reports-plugin-build>
     <maven-site-plugin-build>3.3</maven-site-plugin-build>
@@ -208,6 +209,12 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
         <version>${cobertura-maven-plugin-build}</version>
+         <configuration>
+            <format>xml</format>
+            <maxmem>256m</maxmem>
+            <!-- aggregated reports for multi-module projects -->
+            <aggregate>true</aggregate>
+        </configuration>
         <executions>
           <execution>
             <goals>
@@ -215,6 +222,12 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+          <groupId>org.eluder.coveralls</groupId>
+          <artifactId>coveralls-maven-plugin</artifactId>
+          <version>${coveralls-maven-plugin-build}</version>
       </plugin>
 
       <plugin>

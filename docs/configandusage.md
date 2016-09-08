@@ -1,4 +1,4 @@
-# <a name="confusage">Configuration and Usage</a>
+# Configuration and Usage
 
 Configuration follows **layered approach**, where **each layer overrides the values set by the lower ones** 
 (leaving those not provided unchanged):
@@ -9,9 +9,9 @@ Configuration follows **layered approach**, where **each layer overrides the val
 * spy.properties
 * defaults
 
-For the full list of available options, see the section [Common Property File Settings](#settings). 
+For the full list of available options, see the section [Common Property File Settings](#common-property-file-settings). 
 Please note that providing any of these via System properties/Environment variables is possible, using the particular 
-property name following naming rule: p6spy.config.&lt;property name&gt;=&lt;property value&gt;
+property name following naming rule: `p6spy.config.<property name><property value>`;
 
 Please be aware of the restriction. In fact this also means you need to be aware of values set by the lower 
 configuration layers (including defaults) to properly override/modify those.
@@ -35,7 +35,7 @@ Moreover reload operation is exposed as well. To provide on-demand reload option
 
 In the JConsole p6spy related JMX attributes might look like this:
 
-![JConsole](../images/jconsole.png)
+![JConsole](/img/jconsole.png)
 
 ## Command Line Options
 
@@ -51,10 +51,10 @@ Moreover to set different file to be used as the properties file (as an example:
 
     java -Dspy.properties=c:\jboss\lib\another_spy.properties
 
-## <a name="settings">Common Property File Settings</a>
+## Common Property File Settings
 
 An example `spy.properties` file follows (please note default values mentioned as these refer to defaults mentioned 
-in section: [Configuration and Usage](#confusage)):
+in section: [Configuration and Usage](#configuration-and-usage)):
 
     #################################################################
     # P6Spy Options File                                            #
@@ -421,7 +421,7 @@ Where:
   the number of milliseconds that have passed since January 1, 1970 00:00:00.000 GMT.
   (Refer to the J2SE documentation for further details on System.getCurrentTimeMillis().)
   To change the format, use the dateformat property described in
-  [Common Property File Settings](#settings).
+  [Common Property File Settings](#common-property-file-settings).
 * `execution time` - the time it takes in milliseconds for a particular method to execute. (This is
   not the total cost for the SQL statement.) For example, a statement
   `SELECT * FROM MYTABLE WHERE THISCOL = ?` might be executed as a prepared
@@ -429,7 +429,7 @@ Where:
   the statement category. Further, as you call .next() on the ResultSet, each .next()
   call is recorded in the result category.
 * `category` - You can manage your log by including and excluding categories,
-  which is described in [Common Property File Settings](#settings).
+  which is described in [Common Property File Settings](#common-property-file-settings).
 * `connection id` - Indicates the connection on which the activity was logged.  The connection id is a sequentially
   generated identifier.  
 * `statement SQL string` - This is the SQL string passed to the statement object.
