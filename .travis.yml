@@ -36,7 +36,7 @@ after_success:
  - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
 # once !WIP => should be:
 # if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn coveralls:report; fi 
- - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn coveralls:report; fi
+ - if [[ $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn coveralls:report; fi
 
 notifications:
  email:
