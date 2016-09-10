@@ -42,6 +42,9 @@ public class P6SpyDriver implements Driver {
   static {
     try {
       DriverManager.registerDriver(INSTANCE);
+      
+      // registers the passthru drivers, if configured s
+  	  P6ModuleManager.getInstance();
     } catch (SQLException e) {
       throw new IllegalStateException("Could not register P6SpyDriver with DriverManager", e);
     }
