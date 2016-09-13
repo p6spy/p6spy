@@ -16,16 +16,16 @@ to build binaries:
 
     mvn site
 
- to run the JUnit tests Refer to the [Running the tests](#tests) section
+ to run the JUnit tests Refer to the [Running the tests](#running-the-tests-in-eclipse) section
 
-## <a name="tests">Running the tests</a>
+## Running the tests
 
 To run the JUnit tests against specific database(s):
 
 1. Make sure to have Java installed.
 1. Download and install [Apache Maven](http://maven.apache.org).
-1. Please note, that PostgreSQL, MySQL, Firebird, DB2 and Oracle specific tests require to have the detabase servers running with the specific databases, users and permissions setup (see: [Integration tests-like environment with Vagrant](#vagrant) section).
-1. Moreover as the DB2 and Oracle jdbc drivers are not publicly available in maven repositories, these are enabled in travis profile only (see: [Integration tests-like environment with Vagrant](#vagrant) section).
+1. Please note, that PostgreSQL, MySQL, Firebird, DB2 and Oracle specific tests require to have the detabase servers running with the specific databases, users and permissions setup (see: [Integration tests-like environment with Vagrant](#integration-tests-like-environment-with-vagrant) section).
+1. Moreover as the DB2 and Oracle jdbc drivers are not publicly available in maven repositories, these are enabled in travis profile only (see: [Integration tests-like environment with Vagrant](#integration-tests-like-environment-with-vagrant) section).
 
 By default, tests run against H2 database. To enable other databases, make sure to setup environment variable DB to one of the:
 
@@ -106,7 +106,7 @@ where &lt;DB_NAMES&gt; would hold the value of `DB` environment variable describ
 
 The `DB` environment variable can be set using Arguments tab -&gt; VM Argument of the JUnit Run Configuration.
 
-### <a name="vagrant">Integration tests-like environment with Vagrant</a>
+### Integration tests-like environment with Vagrant
 
 It might be tricky to run full batery of tests on developer machine (especially due to need of DB servers setup).
 To make things easier, [Vagrant] (http://www.vagrantup.com/) is used to create environment close to the one running on our integration test servers ([travis-ci] (https://travis-ci.org/)).

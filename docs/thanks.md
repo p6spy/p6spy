@@ -2,7 +2,7 @@
 
 We'd like to thank everyone supporting the project in a various ways, namely:
 
- * [contributors](team-list.html), users, testers - without your contribution the project could not exist
+ * [contributors](https://github.com/p6spy/p6spy/graphs/contributors), users, testers - without your contribution the project could not exist
  
  * [GitHub, Inc](https://github.com/) - for enabling the collaborative development
  
