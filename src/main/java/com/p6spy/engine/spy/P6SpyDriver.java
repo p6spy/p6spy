@@ -100,6 +100,9 @@ public class P6SpyDriver implements Driver {
   }
 
   protected Driver findPassthru(String url) throws SQLException {
+    // registers the passthru drivers, if configured s
+    P6ModuleManager.getInstance();
+    
     String realUrl = extractRealUrl(url);
     Driver passthru = null;
     for (Driver driver: registeredDrivers() ) {
