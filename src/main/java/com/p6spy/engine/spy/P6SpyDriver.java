@@ -42,9 +42,6 @@ public class P6SpyDriver implements Driver {
   static {
     try {
       DriverManager.registerDriver(INSTANCE);
-      
-      // registers the passthru drivers, if configured s
-  	  P6ModuleManager.getInstance();
     } catch (SQLException e) {
       throw new IllegalStateException("Could not register P6SpyDriver with DriverManager", e);
     }
@@ -103,6 +100,9 @@ public class P6SpyDriver implements Driver {
   }
 
   protected Driver findPassthru(String url) throws SQLException {
+    // registers the passthru drivers, if configured s
+    P6ModuleManager.getInstance();
+    
     String realUrl = extractRealUrl(url);
     Driver passthru = null;
     for (Driver driver: registeredDrivers() ) {
