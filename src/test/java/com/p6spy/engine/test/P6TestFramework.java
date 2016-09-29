@@ -26,6 +26,7 @@ import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.P6TestUtil;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.spy.option.SpyDotProperties;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -36,7 +37,6 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -59,7 +59,7 @@ public abstract class P6TestFramework extends BaseTestCase {
 
   protected final String db;
 
-  protected Connection connection = null;
+  protected ConnectionWrapper connection = null;
 
   public P6TestFramework(String db) throws SQLException, IOException {
     this.db = db;
@@ -108,12 +108,10 @@ public abstract class P6TestFramework extends BaseTestCase {
     if (log.isDebugEnabled()) {
       log.debug("FRAMEWORK USING DRIVER == " + driver.getClass().getName() + " FOR URL " + url);
     }
-    connection = DriverManager.getConnection(url, user, password);
+    connection = DriverManager.getConnection(url, user, password).unwrap(ConnectionWrapper.class);
 
     P6TestUtil.printAllDrivers();
     P6TestUtil.setupTestData(url, user, password);
-
-
   }
 
   @After

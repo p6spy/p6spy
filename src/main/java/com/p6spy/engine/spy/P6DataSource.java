@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.P6LogQuery;
 
 import javax.naming.Context;
@@ -283,7 +284,9 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (realDataSource == null) {
       bindDataSource();
     }
-    return P6Core.wrapConnection(((DataSource) realDataSource).getConnection());
+    final long start = System.nanoTime();
+    final Connection connection = ((DataSource) realDataSource).getConnection();
+    return P6Core.wrapConnection(connection, ConnectionInformation.fromDataSource(realDataSource, connection, System.nanoTime() - start));
   }
 
   @Override
@@ -291,7 +294,9 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (realDataSource == null) {
       bindDataSource();
     }
-    return P6Core.wrapConnection(((DataSource) realDataSource).getConnection(username, password));
+    final long start = System.nanoTime();
+    final Connection connection = ((DataSource) realDataSource).getConnection(username, password);
+    return P6Core.wrapConnection(connection, ConnectionInformation.fromDataSource(realDataSource, connection, System.nanoTime() - start));
   }
 
   @Override

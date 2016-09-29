@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.event;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.logging.LoggingEventListener;
 import com.p6spy.engine.spy.P6Core;
 import com.p6spy.engine.test.TestJdbcEventListener;
@@ -38,7 +39,8 @@ public class EventListenerServiceLoaderTest {
 
   @Test
   public void testServiceLoader() throws Exception {
-    final Connection connection = P6Core.wrapConnection(mock(Connection.class));
+    final Connection connectionMock = mock(Connection.class);
+    final Connection connection = P6Core.wrapConnection(connectionMock, ConnectionInformation.fromTestConnection(connectionMock));
     assertTrue(connection instanceof ConnectionWrapper);
     ConnectionWrapper connectionWrapper = (ConnectionWrapper) connection;
     final JdbcEventListener eventListener = connectionWrapper.getEventListener();

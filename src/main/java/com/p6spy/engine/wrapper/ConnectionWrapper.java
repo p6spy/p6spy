@@ -59,22 +59,30 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
   private final JdbcEventListener eventListener;
   private final ConnectionInformation connectionInformation;
 
-  public static Connection wrap(Connection delegate, JdbcEventListener eventListener) {
+  public static Connection wrap(Connection delegate, JdbcEventListener eventListener, ConnectionInformation connectionInformation) {
     if (delegate == null) {
       return null;
     }
-    return new ConnectionWrapper(delegate, eventListener);
+    return new ConnectionWrapper(delegate, eventListener, connectionInformation);
   }
 
-  public ConnectionWrapper(Connection delegate, JdbcEventListener eventListener) {
+  private ConnectionWrapper(Connection delegate, JdbcEventListener eventListener, ConnectionInformation connectionInformation) {
     super(delegate);
     this.delegate = delegate;
     this.eventListener = eventListener;
-    connectionInformation = new ConnectionInformation();
+    this.connectionInformation = connectionInformation;
   }
 
   public JdbcEventListener getEventListener() {
     return eventListener;
+  }
+
+  public Connection getDelegate() {
+    return delegate;
+  }
+
+  public ConnectionInformation getConnectionInformation() {
+    return connectionInformation;
   }
 
   @Override
