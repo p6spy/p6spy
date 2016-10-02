@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.logging.P6LogOptions;
@@ -31,6 +32,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -63,12 +65,12 @@ public class P6TestStatement extends P6TestFramework {
   public void testExecuteUpdate() throws SQLException {
     String query = "update customers set name='xyz' where id=1";
     final int[] eventListenerRowCount = {0};
-    final ConnectionWrapper connectionWrapper = new ConnectionWrapper(this.connection, new JdbcEventListener() {
+    final Connection connectionWrapper = ConnectionWrapper.wrap(this.connection, new JdbcEventListener() {
       @Override
       public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, int rowCount, SQLException e) {
         eventListenerRowCount[0] = rowCount;
       }
-    });
+    }, ConnectionInformation.fromTestConnection(this.connection));
     int rowCount = P6TestUtil.executeUpdate(connectionWrapper, query);
     assertEquals(1, rowCount);
     assertEquals(1, eventListenerRowCount[0]);
@@ -85,13 +87,13 @@ public class P6TestStatement extends P6TestFramework {
     P6LogOptions.getActiveInstance().setExcludecategories("");
     // test batch inserts
     final int[] eventListenerUpdateCounts = new int[2];
-    Statement stmt = new ConnectionWrapper(connection, new JdbcEventListener() {
+    Statement stmt = ConnectionWrapper.wrap(connection, new JdbcEventListener() {
       @Override
       public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, int[] updateCounts, SQLException e) {
         eventListenerUpdateCounts[0] = updateCounts[0];
         eventListenerUpdateCounts[1] = updateCounts[1];
       }
-    }).createStatement();
+    }, ConnectionInformation.fromTestConnection(connection)).createStatement();
     String sql = "insert into customers(name,id) values ('jim', 101)";
     stmt.addBatch(sql);
     assertTrue(super.getLastLogEntry().contains(sql));

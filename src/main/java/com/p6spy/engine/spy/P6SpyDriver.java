@@ -19,6 +19,7 @@
  */
 package com.p6spy.engine.spy;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.P6LogQuery;
 
 import java.sql.Connection;
@@ -91,12 +92,9 @@ public class P6SpyDriver implements Driver {
 
     P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
 
+    final long start = System.nanoTime();
     Connection conn = passThru.connect(extractRealUrl(url), properties);
-
-    if (conn != null) {
-      conn = P6Core.wrapConnection(conn);
-    }
-    return conn;
+    return P6Core.wrapConnection(conn, ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start));
   }
 
   protected Driver findPassthru(String url) throws SQLException {

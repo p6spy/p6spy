@@ -19,12 +19,14 @@
  */
 package com.p6spy.engine.spy;
 
-import javax.sql.ConnectionEventListener;
-import javax.sql.PooledConnection;
-import javax.sql.StatementEventListener;
+import com.p6spy.engine.common.ConnectionInformation;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.sql.ConnectionEventListener;
+import javax.sql.PooledConnection;
+import javax.sql.StatementEventListener;
 
 public class P6PooledConnection implements PooledConnection {
 
@@ -36,7 +38,9 @@ public class P6PooledConnection implements PooledConnection {
 
   @Override
   public Connection getConnection() throws SQLException {
-    return P6Core.wrapConnection(passthru.getConnection());
+    long start = System.nanoTime();
+    final Connection connection = passthru.getConnection();
+    return P6Core.wrapConnection(connection, ConnectionInformation.fromPooledConnection(passthru, connection, System.nanoTime() - start));
   }
 
   @Override
