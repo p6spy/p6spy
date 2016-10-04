@@ -55,6 +55,13 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
+  public void onConnectionWrapped(ConnectionInformation connectionInformation) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onConnectionWrapped(connectionInformation);
+    }
+  }
+
+  @Override
   public void onBeforeAddBatch(PreparedStatementInformation statementInformation) {
     for (JdbcEventListener eventListener : eventListeners) {
       eventListener.onBeforeAddBatch(statementInformation);

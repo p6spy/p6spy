@@ -63,7 +63,9 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
     if (delegate == null) {
       return null;
     }
-    return new ConnectionWrapper(delegate, eventListener, connectionInformation);
+    final ConnectionWrapper connectionWrapper = new ConnectionWrapper(delegate, eventListener, connectionInformation);
+    eventListener.onConnectionWrapped(connectionInformation);
+    return connectionWrapper;
   }
 
   private ConnectionWrapper(Connection delegate, JdbcEventListener eventListener, ConnectionInformation connectionInformation) {
