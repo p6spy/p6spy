@@ -43,8 +43,24 @@ import java.sql.Statement;
  * <code>src/main/resources/META-INF/services/com.p6spy.engine.event.JdbcEventListener</code>.
  * <p/>
  * The second way is to implement a {@link com.p6spy.engine.spy.P6Factory}
+ * <p/>
+ * <b>NOTE:</b> Exceptions thrown in this event listener won't be caught. So you have to make sure that your event
+ * listener does not throw exceptions. For example, if your {@link #onConnectionWrapped} method throws an exception
+ * your application won't be able to create any {@link Connection}.
  */
 public abstract class JdbcEventListener {
+
+  /**
+   * This callback method is executed after a wrapped {@link Connection} has been created.
+   * <p/>
+   * The {@link ConnectionInformation} holds information about the creator of the connection which is either
+   * {@link ConnectionInformation#dataSource}, {@link ConnectionInformation#driver} or
+   * {@link ConnectionInformation#pooledConnection}.
+   *
+   * @param connectionInformation The meta information about the wrapped {@link Connection}
+   */
+  public void onConnectionWrapped(ConnectionInformation connectionInformation) {
+  }
 
   /**
    * This callback method is executed before the {@link PreparedStatement#addBatch()} method is invoked.
