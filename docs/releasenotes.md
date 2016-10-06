@@ -1,13 +1,25 @@
 # Release Notes
 
-## Version 3.0.0-rc-2 [Sept 8, 2016]
+## Version 3.0.0-rc3 [Oct 6, 2016]
+
+Improvements:
+
+* [issue #359](https://github.com/p6spy/p6spy/pull/359): Add getConnectionInformation to StatementInformation
+* [issue #358](https://github.com/p6spy/p6spy/pull/358): Add JdbcEventListener.onConnectionWrapped method
+* [issue #356](https://github.com/p6spy/p6spy/pull/356): Store the creator of a connection and the connection itself in ConnectionInformation
+
+Defects resolved:
+
+* [issue #348](https://github.com/p6spy/p6spy/issues/348): tomcat 6x-8x integration
+
+## Version 3.0.0-rc2 [Sept 8, 2016]
 
 Defects resolved:
 
 * [issue #347](https://github.com/p6spy/p6spy/pull/347): The real exception is never thrown
 * [issue #346](https://github.com/p6spy/p6spy/pull/346): Fixes NPE on static initializer order
 
-## Version 3.0.0-rc-1 [Sept 2, 2016]
+## Version 3.0.0-rc1 [Sept 2, 2016]
 
 Improvements:
 
