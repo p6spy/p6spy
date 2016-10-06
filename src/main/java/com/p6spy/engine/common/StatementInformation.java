@@ -47,6 +47,10 @@ public class StatementInformation implements Loggable {
     return connectionInformation.getConnectionId();
   }
 
+  public ConnectionInformation getConnectionInformation() {
+    return connectionInformation;
+  }
+
   @Override
   public String getSqlWithValues() {
     return "";
