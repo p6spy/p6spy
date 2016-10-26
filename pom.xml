@@ -11,7 +11,7 @@
   <groupId>p6spy</groupId>
   <artifactId>p6spy</artifactId>
   <name>P6Spy</name>
-  <version>3.0.0-rc4-SNAPSHOT</version>
+  <version>3.0.0</version>
   <organization>
     <name>P6Spy</name>
   </organization>
