@@ -301,7 +301,9 @@ public class XADataSourceTest extends P6TestFramework {
       Assert.fail();
     } finally {
       try {
-        connection.close();
+        if (connection != null) {
+          connection.close();	  
+        }
       } catch (SQLException e) {
         e.printStackTrace();
       }
@@ -320,7 +322,9 @@ public class XADataSourceTest extends P6TestFramework {
       Assert.fail();
     } finally {
       try {
-        connection.close();
+        if (connection != null) {
+          connection.close();     
+        }
       } catch (SQLException e) {
         e.printStackTrace();
       }
