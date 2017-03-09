@@ -53,7 +53,7 @@ public class StatementInformation implements Loggable {
 
   @Override
   public String getSqlWithValues() {
-    return "";
+    return getSql();
   }
 
   @Override
