@@ -14,7 +14,7 @@ P6Spy is a framework that enables database data to be seamlessly intercepted and
 [Configuration](http://p6spy.readthedocs.io/en/latest/configandusage.html)    
 [Javadoc](http://www.javadoc.io/doc/p6spy/p6spy)
 
-For full documentation refer to format of your choice: [html](http://p6spy.readthedocs.io/), [pdf] (https://media.readthedocs.org/pdf/p6spy/latest/p6spy.pdf) or [epub] (https://media.readthedocs.org/epub/p6spy/latest/p6spy.epub).
+For full documentation refer to format of your choice: [html](http://p6spy.readthedocs.io/), [pdf](https://media.readthedocs.org/pdf/p6spy/latest/p6spy.pdf) or [epub](https://media.readthedocs.org/epub/p6spy/latest/p6spy.epub).
 
 **Need help?**    
 User's mailing list: [Post](mailto:p6spy-users@googlegroups.com) - [Archive](https://groups.google.com/forum/#!forum/p6spy-users)    
