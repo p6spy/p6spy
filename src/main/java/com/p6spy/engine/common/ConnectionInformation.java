@@ -169,4 +169,10 @@ public class ConnectionInformation implements Loggable {
   public long getTimeToGetConnectionNs() {
     return timeToGetConnectionNs;
   }
+
+  /** {@inheritDoc} */
+  @Override
+  public ConnectionInformation getConnectionInformation() {
+    return this;
+  }
 }

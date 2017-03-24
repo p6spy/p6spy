@@ -47,8 +47,10 @@ public class StatementInformation implements Loggable {
     return connectionInformation.getConnectionId();
   }
 
+  /** {@inheritDoc} */
+  @Override
   public ConnectionInformation getConnectionInformation() {
-    return connectionInformation;
+    return this.connectionInformation;
   }
 
   @Override
@@ -68,4 +70,5 @@ public class StatementInformation implements Loggable {
   public void incrementTimeElapsed(long timeElapsedNanos) {
     totalTimeElapsed += timeElapsedNanos;
   }
+
 }

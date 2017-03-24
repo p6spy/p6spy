@@ -93,4 +93,9 @@ public class ResultSetInformation implements Loggable {
     return statementInformation;
   }
 
+  /** {@inheritDoc} */
+  @Override
+  public ConnectionInformation getConnectionInformation() {
+    return this.statementInformation.getConnectionInformation();
+  }
 }
