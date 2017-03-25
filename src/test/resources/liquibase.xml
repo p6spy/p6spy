@@ -157,4 +157,31 @@
     </createProcedure>
   </changeSet>
 
+  <changeSet id="create-img-table" author="butkovic">
+    <!-- table holding binary data -->
+    <createTable tableName="img">
+      <column name="id" type="int"/>
+      <column name="val" type="blob"/>
+      <column name="val2" type="blob"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-test-proc-binary-hsqldb" author="butkovic">
+    <!-- used by P6TestCallableStatement -->
+    <preConditions onFail="CONTINUE">
+      <dbms type="HSQLDB"/>
+    </preConditions>
+    <sql>
+      DROP procedure TEST_PROC_BINARY IF EXISTS;
+    </sql>
+    <createProcedure>
+      CREATE PROCEDURE TEST_PROC_BINARY(param_val blob, param_id int, out result_param blob)
+      MODIFIES SQL DATA DYNAMIC RESULT SETS 1
+      BEGIN ATOMIC
+        DECLARE result CURSOR FOR SELECT VAL FROM IMG WHERE ID = param_id;
+        OPEN result;
+      END
+    </createProcedure>
+  </changeSet>
+ 
 </databaseChangeLog>

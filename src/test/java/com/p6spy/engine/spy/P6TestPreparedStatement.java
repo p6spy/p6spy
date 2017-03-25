@@ -24,13 +24,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.p6spy.engine.wrapper.AbstractWrapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +41,7 @@ import org.junit.runners.Parameterized;
 
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.test.P6TestFramework;
+import com.p6spy.engine.wrapper.AbstractWrapper;
 
 @RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
@@ -272,6 +275,56 @@ public class P6TestPreparedStatement extends P6TestFramework {
     dropPreparedStatement("drop table prepstmt_test3", statement);
   }
 
+  @Test
+  public void binaryExcludedTrue() throws SQLException {
+    boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
+
+    try {
+      // given
+      P6LogOptions.getActiveInstance().setExcludebinary(true);
+
+      // when
+      String update = "insert into img values (?, ?, ?)";
+      PreparedStatement prep = getPreparedStatement(update);
+      prep.setInt(1, 1);
+      prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
+      Blob data = connection.createBlob();
+      data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
+      prep.setBlob(3, data);
+      prep.execute();
+      
+      // then
+      assertTrue(super.getLastLogEntry().contains("insert into img values (1, '[binary]', "));
+    } finally {
+      P6LogOptions.getActiveInstance().setExcludebinary(original);
+    }
+  }
+  
+  @Test
+  public void binaryExcludedFalse() throws SQLException {
+    boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
+
+    try {
+      // given
+      P6LogOptions.getActiveInstance().setExcludebinary(false);
+
+      // when
+      String update = "insert into img values (?, ?, ?)";
+      PreparedStatement prep = getPreparedStatement(update);
+      prep.setInt(1, 1);
+      prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
+      Blob data = connection.createBlob();
+      data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
+      prep.setBlob(3, data);
+      prep.execute();
+      
+      // then
+      assertTrue(super.getLastLogEntry().contains("insert into img values (1, '666F6F',"));
+    } finally {
+      P6LogOptions.getActiveInstance().setExcludebinary(original);
+    }
+  }
+  
   protected void dropPreparedStatement(String sql, Statement statement) {
     try {
       statement.execute(sql);

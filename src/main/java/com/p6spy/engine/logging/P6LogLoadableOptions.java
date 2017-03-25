@@ -27,6 +27,8 @@ public interface P6LogLoadableOptions extends P6LoadableOptions, P6LogOptionsMBe
 
   // these we don't need to be exposed via JMX
   
+  void setExcludebinary(String excludebinary);
+  
   void setFilter(String filter);
 
   void setExecutionThreshold(String executionThreshold);

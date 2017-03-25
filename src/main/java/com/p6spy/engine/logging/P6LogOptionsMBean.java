@@ -31,6 +31,10 @@ public interface P6LogOptionsMBean {
 
   String getExcludecategories();
 
+  void setExcludebinary(boolean excludebinary);
+
+  boolean getExcludebinary();
+  
   void setFilter(boolean filter);
 
   boolean getFilter();

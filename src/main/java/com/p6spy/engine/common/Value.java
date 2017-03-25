@@ -1,0 +1,152 @@
+package com.p6spy.engine.common;
+
+import java.sql.Blob;
+import java.text.SimpleDateFormat;
+
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.P6SpyOptions;
+
+/**
+ * Value holder of the data passed to DB as well as of those retrieved capable
+ * of binary data logging depending on the configuration property
+ * {@code excludebinary}.
+ * 
+ * @author Peter Butkovic
+ *
+ */
+public class Value {
+
+  private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
+      'F' };
+
+  /**
+   * Value itself.
+   */
+  private Object value;
+
+  public Value(Object valueToSet) {
+    this.value = valueToSet;
+  }
+
+  public Object getValue() {
+    return value;
+  }
+
+  public void setValue(Object value) {
+    this.value = value;
+  }
+
+  @Override
+  public String toString() {
+    return convertToString(this.value);
+  }
+
+  /**
+   * Returns the {@link String} representation of the given value depending on
+   * the value type. Formats:
+   * <ul>
+   * <li>{@link java.util.Date} values it in a way configured via configuration
+   * property: {@code dateformat},</li>
+   * <li>{@code byte[]} values are converted to {@link String} Hexadecimal
+   * representation, unless configuration property {@code exclidebinary=true} is
+   * set.</li>
+   * <li>for other types string representation is simply returned.</li>
+   * </ul>
+   * 
+   * @param value
+   * @return
+   */
+  public String convertToString(Object value) {
+    String result;
+    if (value == null) {
+      result = "NULL";
+    } else {
+
+      if (value instanceof java.util.Date) {
+        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
+      } else if (value instanceof byte[]) {
+        if (P6LogOptions.getActiveInstance().getExcludebinary()) {
+          result = "[binary]";
+        } else {
+          result = toHexString((byte[]) value);
+        }
+        
+        // we should not do ((Blob) value).getBinaryStream(). ...
+        // as inputstream might not be re-rea
+//      } else  if (value instanceof Blob) {
+//        if (P6LogOptions.getActiveInstance().getExcludebinary()) {
+//          result = "[binary]";
+//        } else {
+//          result = value.toString();
+//        }
+      } else {
+        result = value.toString();
+      }
+
+      result = quoteIfNeeded(result, value);
+    }
+
+    return result;
+  }
+
+  /**
+   * @param bytes
+   *          the bytes value to convert to {@link String}
+   * @return the hexadecimal {@link String} representation of the given
+   *         {@code bytes}.
+   */
+  private String toHexString(byte[] bytes) {
+    StringBuilder sb = new StringBuilder();
+    for (byte b : bytes) {
+      int temp = (int) b & 0xFF;
+      sb.append(HEX_CHARS[temp / 16]);
+      sb.append(HEX_CHARS[temp % 16]);
+    }
+    return sb.toString();
+  }
+
+  /**
+   * Qoutes the passed {@code stringValue} if it's needed.
+   * 
+   * @param stringValue
+   * @param obj
+   * @return
+   */
+  private String quoteIfNeeded(String stringValue, Object obj) {
+    if (stringValue == null) {
+      return null;
+    }
+
+    /*
+     * The following types do not get quoted: numeric, boolean
+     * 
+     * It is tempting to use ParameterMetaData.getParameterType() for this
+     * purpose as it would be safer. However, this method will fail with some
+     * JDBC drivers.
+     * 
+     * Oracle: Not supported until ojdbc7 which was released with Oracle 12c.
+     * https://forums.oracle.com/thread/2584886
+     * 
+     * MySQL: The method call only works if service side prepared statements are
+     * enabled. The URL parameter 'useServerPrepStmts=true' enables.
+     */
+    if (Number.class.isAssignableFrom(obj.getClass()) || Boolean.class.isAssignableFrom(obj.getClass())) {
+      return stringValue;
+    } else {
+      return "'" + escape(stringValue) + "'";
+    }
+  }
+
+  /**
+   * Escapes special characters in SQL values. Currently is only {@code '}
+   * escaped with {@code ''}.
+   * 
+   * @param stringValue
+   *          value to escape
+   * @return escaped value.
+   */
+  private String escape(String stringValue) {
+    return stringValue.replaceAll("'", "''");
+  }
+
+}

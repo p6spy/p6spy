@@ -29,7 +29,7 @@ import java.util.Map;
  * @since 09/2013
  */
 public class CallableStatementInformation extends PreparedStatementInformation {
-  private final Map<String, Object> namedParameterValues = new HashMap<String, Object>();
+  private final Map<String, Value> namedParameterValues = new HashMap<String, Value>();
 
   public CallableStatementInformation(ConnectionInformation connectionInformation, String query) {
     super(connectionInformation, query);
@@ -85,14 +85,14 @@ public class CallableStatementInformation extends PreparedStatementInformation {
     return result.toString();
   }
 
-  private void appendParameter(StringBuilder parameters, String name, Object value) {
+  private void appendParameter(StringBuilder parameters, String name, Value value) {
     if( parameters.length() > 0 ) {
       parameters.append(", ");
     }
 
     parameters.append(name);
     parameters.append(":");
-    parameters.append(convertToString(value));
+    parameters.append(value.toString());
   }
 
   /**
@@ -102,6 +102,6 @@ public class CallableStatementInformation extends PreparedStatementInformation {
    * @param value the value of the parameter
    */
   public void setParameterValue(final String name, final Object value) {
-    namedParameterValues.put(name, value);
+    namedParameterValues.put(name, new Value(value));
   }
 }
