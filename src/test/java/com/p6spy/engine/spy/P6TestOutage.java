@@ -19,15 +19,7 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.logging.Category;
-import com.p6spy.engine.test.P6TestFramework;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -35,9 +27,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+import com.p6spy.engine.logging.Category;
+import com.p6spy.engine.test.P6TestFramework;
+import com.p6spy.engine.test.P6TestOptions;
 
 @RunWith(Parameterized.class)
 public class P6TestOutage extends P6TestFramework {
