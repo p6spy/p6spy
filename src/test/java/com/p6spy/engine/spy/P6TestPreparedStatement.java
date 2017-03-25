@@ -159,7 +159,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
         assertTrue(
             "logged resultset holds incorrect values",
             super.getLastLogEntry().endsWith(
-                "1 = prepstmt_test_col1, 2 = prepstmt_test_col2, 3 = 1, 4 = 1"));
+                "1 = 'prepstmt_test_col1', 2 = 'prepstmt_test_col2', 3 = 1, 4 = 1"));
   
         P6LogOptions.getActiveInstance().setExcludecategories("result,resultset");
       
