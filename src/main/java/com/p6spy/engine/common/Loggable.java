@@ -37,11 +37,6 @@ public interface Loggable {
   String getSqlWithValues();
 
   /**
-   * @return A connection id which is unique for each {@link java.sql.Connection}
-   */
-  int getConnectionId();
-  
-  /**
    * @return the connection information.
    */
   ConnectionInformation getConnectionInformation();

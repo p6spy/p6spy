@@ -107,7 +107,6 @@ public class ConnectionInformation implements Loggable {
     return connectionInformation;
   }
 
-  @Override
   public int getConnectionId() {
     return connectionId;
   }

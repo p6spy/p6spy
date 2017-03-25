@@ -52,11 +52,6 @@ public class ResultSetInformation implements Loggable {
     }
   }
 
-  @Override
-  public int getConnectionId() {
-    return statementInformation.getConnectionId();
-  }
-
   public int getCurrRow() {
     return currRow;
   }
