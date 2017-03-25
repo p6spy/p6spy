@@ -92,7 +92,7 @@ public class CallableStatementInformation extends PreparedStatementInformation {
 
     parameters.append(name);
     parameters.append(":");
-    parameters.append(value.toString());
+    parameters.append(value != null ? value.toString() : new Value().toString());
   }
 
   /**

@@ -54,7 +54,8 @@ public class PreparedStatementInformation extends StatementInformation implement
       char character = statementQuery.charAt(pos);
       if( statementQuery.charAt(pos) == '?' && currentParameter <= parameterValues.size()) {
         // replace with parameter value
-        sb.append(parameterValues.get(currentParameter).toString());
+        Value value = parameterValues.get(currentParameter);
+        sb.append(value != null ? value.toString() : new Value().toString());
         currentParameter++;
       } else {
         sb.append(character);

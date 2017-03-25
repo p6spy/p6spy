@@ -174,14 +174,19 @@
     <sql>
       DROP procedure TEST_PROC_BINARY IF EXISTS;
     </sql>
-    <createProcedure>
+    <!--
       CREATE PROCEDURE TEST_PROC_BINARY(param_val blob, param_id int, out result_param blob)
-      MODIFIES SQL DATA DYNAMIC RESULT SETS 1
-      BEGIN ATOMIC
+        MODIFIES SQL DATA DYNAMIC RESULT SETS 1s 
         DECLARE result CURSOR FOR SELECT VAL FROM IMG WHERE ID = param_id;
         OPEN result;
+     -->
+    <createProcedure>
+      CREATE PROCEDURE TEST_PROC_BINARY(param_val blob, param_id int, out result_param int)
+      BEGIN ATOMIC
+        set result_param = 2;
       END
     </createProcedure>
+    
   </changeSet>
  
 </databaseChangeLog>

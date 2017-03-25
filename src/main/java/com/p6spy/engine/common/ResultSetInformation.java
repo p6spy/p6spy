@@ -83,7 +83,7 @@ public class ResultSetInformation implements Loggable {
       }
       sb.append(entry.getKey());
       sb.append(" = ");
-      sb.append(entry.getValue().toString());
+      sb.append(entry.getValue() != null ? entry.getValue().toString() : new Value().toString());
     }
 
     return sb.toString();
