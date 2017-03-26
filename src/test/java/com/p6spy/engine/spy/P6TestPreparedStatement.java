@@ -296,8 +296,11 @@ public class P6TestPreparedStatement extends P6TestFramework {
     PreparedStatement prep = getPreparedStatement(update);
     prep.setInt(1, 1);
     prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
-    if( "PostgreSQL".equals(db) ) {
-      // java.sql.SQLFeatureNotSupportedException: Method org.postgresql.jdbc4.Jdbc4Connection.createBlob() is not yet implemented.
+    if( // java.sql.SQLFeatureNotSupportedException: Method org.postgresql.jdbc4.Jdbc4Connection.createBlob() is not yet implemented.
+        "PostgreSQL".equals(db) //
+        // org.firebirdsql.jdbc.FBDriverNotCapableException: Not yet implemented.
+        // at org.firebirdsql.jdbc.FBBlob.setBytes(FBBlob.java:472)
+        || "Firebird".equals(db)) {
       prep.setBytes(3, "foo".getBytes(StandardCharsets.UTF_8));
     } else {
       Blob data = connection.createBlob();
@@ -320,8 +323,11 @@ public class P6TestPreparedStatement extends P6TestFramework {
     PreparedStatement prep = getPreparedStatement(update);
     prep.setInt(1, 1);
     prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
-    if( "PostgreSQL".equals(db) ) {
-      // java.sql.SQLFeatureNotSupportedException: Method org.postgresql.jdbc4.Jdbc4Connection.createBlob() is not yet implemented.
+    if( // java.sql.SQLFeatureNotSupportedException: Method org.postgresql.jdbc4.Jdbc4Connection.createBlob() is not yet implemented.
+        "PostgreSQL".equals(db) //
+        // org.firebirdsql.jdbc.FBDriverNotCapableException: Not yet implemented.
+        // at org.firebirdsql.jdbc.FBBlob.setBytes(FBBlob.java:472)
+        || "Firebird".equals(db)) {
       prep.setBytes(3, "foo".getBytes(StandardCharsets.UTF_8));
     } else {
       Blob data = connection.createBlob();
