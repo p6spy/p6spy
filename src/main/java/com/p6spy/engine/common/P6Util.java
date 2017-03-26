@@ -61,12 +61,11 @@ public class P6Util {
   /**
    * Locates a file on the file system or on the classpath.  
    * <p>
-   *   Search order:
-   *   <ol>
-   *     <li>current working directory (for relative path) or any directory (for absolute path)</li>
-   *     <li>class path</li>
-   *   </ol>
-   * </p>
+   * Search order:
+   * <ol>
+   *   <li>current working directory (for relative path) or any directory (for absolute path)</li>
+   *   <li>class path</li>
+   * </ol>
    * 
    * @param file the relative path of the file to locate
    * @return A URL to the file or null if not found
