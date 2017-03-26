@@ -212,7 +212,7 @@ public class P6TestCallableStatement extends P6TestFramework {
       call.close();
   
       // then
-      assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p2:2000, @p1:'[binary]'"));
+        assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p1:'[binary]', @p2:2000"));
     } finally {
       P6LogOptions.getActiveInstance().setExcludebinary(original);
     }
@@ -251,7 +251,7 @@ public class P6TestCallableStatement extends P6TestFramework {
       call.close();
   
       // then
-      assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p2:2000, @p1:'666F6F'"));
+      assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p1:'666F6F', @p2:2000"));
     } finally {
       P6LogOptions.getActiveInstance().setExcludebinary(original);
     }
