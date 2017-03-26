@@ -210,7 +210,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     }
 
     // execute the statement
-    String query = "{call TEST_PROC_BINARY(?,?,?)}";
+    String query = "{call test_proc_binary(?,?,?)}";
     CallableStatement call = connection.prepareCall(query);
     call.setBytes(paramValName, "foo".getBytes(StandardCharsets.UTF_8));
     call.setInt(paramIntName, TEST_IMG_ID);
@@ -222,7 +222,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     call.close();
 
     // then
-    assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p1:'[binary]', @p2:2000"));
+    assertTrue(getLastLogEntry().contains("{call test_proc_binary(?,?,?)} @p1:'[binary]', @p2:2000"));
   }
   
   @Test
@@ -243,7 +243,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     }
 
     // execute the statement
-    String query = "{call TEST_PROC_BINARY(?,?,?)}";
+    String query = "{call test_proc_binary(?,?,?)}";
     CallableStatement call = connection.prepareCall(query);
     call.setBytes(paramValName, "foo".getBytes(StandardCharsets.UTF_8));
     call.setInt(paramIntName, TEST_IMG_ID);
@@ -255,7 +255,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     call.close();
 
     // then
-    assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p1:'666F6F', @p2:2000"));
+    assertTrue(getLastLogEntry().contains("{call test_proc_binary(?,?,?)} @p1:'666F6F', @p2:2000"));
   }
 
   protected PreparedStatement getPreparedStatement(String query) throws SQLException {
