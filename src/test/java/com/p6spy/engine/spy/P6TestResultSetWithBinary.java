@@ -67,9 +67,14 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
     PreparedStatement prep = getPreparedStatement(update);
     prep.setInt(1, 1000);
     prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
-    Blob data = connection.createBlob();
-    data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
-    prep.setBlob(3, data);
+    if( "PostgreSQL".equals(db) ) {
+      // java.sql.SQLFeatureNotSupportedException: Method org.postgresql.jdbc4.Jdbc4Connection.createBlob() is not yet implemented.
+      prep.setBytes(3, "foo".getBytes(StandardCharsets.UTF_8));
+    } else {
+      Blob data = connection.createBlob();
+      data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
+      prep.setBlob(3, data);
+    }
     prep.execute();
 
     resultSet = executeQuery("select val from img where id=1000");
