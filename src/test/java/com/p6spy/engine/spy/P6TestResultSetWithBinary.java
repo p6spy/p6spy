@@ -71,7 +71,10 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
         "PostgreSQL".equals(db) //
         // org.firebirdsql.jdbc.FBDriverNotCapableException: Not yet implemented.
         // at org.firebirdsql.jdbc.FBBlob.setBytes(FBBlob.java:472)
-        || "Firebird".equals(db)) {
+        || "Firebird".equals(db) //
+        // java.lang.AbstractMethodError
+        // at com.p6spy.engine.wrapper.ConnectionWrapper.createBlob(ConnectionWrapper.java:315)
+        || "SQLite".equals(db)) {
       prep.setBytes(3, "foo".getBytes(StandardCharsets.UTF_8));
     } else {
       Blob data = connection.createBlob();
