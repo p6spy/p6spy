@@ -1,5 +1,17 @@
 # Release Notes
 
+## Version next [???]
+
+Improvements:
+* [issue #373](https://github.com/p6spy/p6spy/pull/373): Introduced Loggable.getConnectionInformation() while removed Loggable.getConnectionId()
+* [issue #367](https://github.com/p6spy/p6spy/pull/367): StatementInformation.getSqlWithValues() returns getSql() rather than "" 
+
+Defects resolved:
+
+## Version 3.0.0 [Oct 26, 2016]
+
+Identical to 3.0.0-rc3
+
 ## Version 3.0.0-rc3 [Oct 6, 2016]
 
 Improvements:
