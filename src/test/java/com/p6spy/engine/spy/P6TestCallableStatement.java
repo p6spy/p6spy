@@ -214,7 +214,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     CallableStatement call = connection.prepareCall(query);
     call.setBytes(paramValName, "foo".getBytes(StandardCharsets.UTF_8));
     call.setInt(paramIntName, TEST_IMG_ID);
-    call.registerOutParameter(resultParamName, Types.BLOB);
+    call.registerOutParameter(resultParamName, Types.INTEGER);
     call.execute();
     // out vals not logged anyway https://github.com/p6spy/p6spy/issues/133
 //      byte[] retVal = call.getBytes(resultParamName);
@@ -247,7 +247,7 @@ public class P6TestCallableStatement extends P6TestFramework {
     CallableStatement call = connection.prepareCall(query);
     call.setBytes(paramValName, "foo".getBytes(StandardCharsets.UTF_8));
     call.setInt(paramIntName, TEST_IMG_ID);
-    call.registerOutParameter(resultParamName, Types.BLOB);
+    call.registerOutParameter(resultParamName, Types.INTEGER);
     call.execute();
     // out vals not logged anyway https://github.com/p6spy/p6spy/issues/133
 //      byte[] retVal = call.getBytes(resultParamName);
