@@ -27,7 +27,7 @@ public interface P6Proxy {
 
   /**
    * Returns the underlying object for the proxy.
-   * <p/>
+   * <p>
    * WARNING: This is an internal method for P6Spy.  This method should not be called directly.  Use the methods
    * on the {@link java.sql.Wrapper} interface instead!
    * @return the underlying object being proxied

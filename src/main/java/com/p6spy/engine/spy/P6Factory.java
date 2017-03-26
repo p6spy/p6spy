@@ -27,7 +27,7 @@ import com.p6spy.engine.spy.option.P6OptionsRepository;
  * so many methods that return a NEW object of some type (connection, etc) either you would be
  * forced to overload them all, or we could use this factory method to handle that situation. not
  * perfect, but should make extending and maintaining the code far easier.
- * <p/>
+ * <p>
  * In order to enable the module, append the full class name to the configuration key {@link P6SpyOptions#MODULELIST}.
  */
 public interface P6Factory {

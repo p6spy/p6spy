@@ -25,7 +25,7 @@ import java.sql.SQLException;
 
 /**
  * Extends {@link LoggingEventListener} and only logs if an exception has occurred.
- * <p/>
+ * <p>
  * To activate this class, add <code>com.p6spy.engine.logging.ErrorLoggingEventListener</code> to the file
  * <code>src/main/resources/META-INF/services/com.p6spy.engine.logging.LoggingEventListener</code>.
  */
