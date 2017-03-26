@@ -29,6 +29,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,10 +43,22 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
 
   ResultSet resultSet = null;
 
+  private boolean originalExcludeBinaryFlag;
+  
   public P6TestResultSetWithBinary(String db) throws SQLException, IOException {
     super(db);
   }
 
+  @Before
+  public void before() {
+    this.originalExcludeBinaryFlag = P6LogOptions.getActiveInstance().getExcludebinary();
+  }
+  
+  @After
+  public void after() {
+    P6LogOptions.getActiveInstance().setExcludebinary(this.originalExcludeBinaryFlag);
+  }
+  
   @Before
   public void setup() throws SQLException {
     P6LogOptions.getActiveInstance().setExcludebinary(true);
@@ -113,6 +126,6 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
   }
   
   protected PreparedStatement getPreparedStatement(String query) throws SQLException {
-    return (connection.prepareStatement(query));
+    return connection.prepareStatement(query);
   }
 }

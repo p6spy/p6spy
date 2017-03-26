@@ -24,7 +24,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
@@ -46,10 +45,12 @@ import com.p6spy.engine.wrapper.AbstractWrapper;
 @RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
 
+  private boolean originalExcludeBinaryFlag;
+ 
   public P6TestPreparedStatement(String db) throws SQLException, IOException {
     super(db);
   }
-
+ 
   @Before
   public void setUpPreparedStatement() {
     P6LogOptions.getActiveInstance().setExcludecategories("info,debug,result");
@@ -67,6 +68,16 @@ public class P6TestPreparedStatement extends P6TestFramework {
     }
   }
 
+  @Before
+  public void before() {
+    this.originalExcludeBinaryFlag = P6LogOptions.getActiveInstance().getExcludebinary();
+  }
+  
+  @After
+  public void after() {
+    P6LogOptions.getActiveInstance().setExcludebinary(this.originalExcludeBinaryFlag);
+  }
+  
   @Test
   public void testExecuteQuery() {
     try {
@@ -277,52 +288,40 @@ public class P6TestPreparedStatement extends P6TestFramework {
 
   @Test
   public void binaryExcludedTrue() throws SQLException {
-    boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
+    // given
+    P6LogOptions.getActiveInstance().setExcludebinary(true);
 
-    try {
-      // given
-      P6LogOptions.getActiveInstance().setExcludebinary(true);
-
-      // when
-      String update = "insert into img values (?, ?, ?)";
-      PreparedStatement prep = getPreparedStatement(update);
-      prep.setInt(1, 1);
-      prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
-      Blob data = connection.createBlob();
-      data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
-      prep.setBlob(3, data);
-      prep.execute();
-      
-      // then
-      assertTrue(super.getLastLogEntry().contains("insert into img values (1, '[binary]', "));
-    } finally {
-      P6LogOptions.getActiveInstance().setExcludebinary(original);
-    }
+    // when
+    String update = "insert into img values (?, ?, ?)";
+    PreparedStatement prep = getPreparedStatement(update);
+    prep.setInt(1, 1);
+    prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
+    Blob data = connection.createBlob();
+    data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
+    prep.setBlob(3, data);
+    prep.execute();
+    
+    // then
+    assertTrue(super.getLastLogEntry().contains("insert into img values (1, '[binary]', "));
   }
   
   @Test
   public void binaryExcludedFalse() throws SQLException {
-    boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
+    // given
+    P6LogOptions.getActiveInstance().setExcludebinary(false);
 
-    try {
-      // given
-      P6LogOptions.getActiveInstance().setExcludebinary(false);
-
-      // when
-      String update = "insert into img values (?, ?, ?)";
-      PreparedStatement prep = getPreparedStatement(update);
-      prep.setInt(1, 1);
-      prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
-      Blob data = connection.createBlob();
-      data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
-      prep.setBlob(3, data);
-      prep.execute();
-      
-      // then
-      assertTrue(super.getLastLogEntry().contains("insert into img values (1, '666F6F',"));
-    } finally {
-      P6LogOptions.getActiveInstance().setExcludebinary(original);
-    }
+    // when
+    String update = "insert into img values (?, ?, ?)";
+    PreparedStatement prep = getPreparedStatement(update);
+    prep.setInt(1, 1);
+    prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
+    Blob data = connection.createBlob();
+    data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
+    prep.setBlob(3, data);
+    prep.execute();
+    
+    // then
+    assertTrue(super.getLastLogEntry().contains("insert into img values (1, '666F6F',"));
   }
   
   protected void dropPreparedStatement(String sql, Statement statement) {
@@ -334,7 +333,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
   }
 
   protected PreparedStatement getPreparedStatement(String query) throws SQLException {
-    return (connection.prepareStatement(query));
+    return connection.prepareStatement(query);
   }
 
 }

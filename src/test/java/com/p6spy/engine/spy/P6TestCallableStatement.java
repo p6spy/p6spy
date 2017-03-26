@@ -19,17 +19,11 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.test.P6TestFramework;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,13 +34,32 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.test.P6TestFramework;
 
 @RunWith(Parameterized.class)
 public class P6TestCallableStatement extends P6TestFramework {
   private static final int TEST_IMG_ID = 2000;
   private static final Logger log = Logger.getLogger(P6TestCallableStatement.class);
-
+  private boolean originalExcludeBinaryFlag;
+  
+  @Before
+  public void before() {
+    this.originalExcludeBinaryFlag = P6LogOptions.getActiveInstance().getExcludebinary();
+  }
+  
+  @After
+  public void after() {
+    P6LogOptions.getActiveInstance().setExcludebinary(this.originalExcludeBinaryFlag);
+  }
+  
   @Parameterized.Parameters(name = "{index}: {0}")
   public static Collection<Object[]> dbs() {
     Collection<Object[]> result;
@@ -181,84 +194,72 @@ public class P6TestCallableStatement extends P6TestFramework {
 
   @Test
   public void binaryExcludedTrue() throws SQLException {
-    boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
+    // given
+    P6LogOptions.getActiveInstance().setExcludebinary(true);
 
-    try {
-      // given
-      P6LogOptions.getActiveInstance().setExcludebinary(true);
+    // when
+    String paramValName = "param_val";
+    String paramIntName = "param_id";
+    String resultParamName = "result_param";
+    
+    if( "HSQLDB".equals(db) ) {
+      // HSQLDB uses @p1, @p2, etc...  as the "names" of the parameters
+      paramValName = "@p1";
+      paramIntName = "@p2";
+      resultParamName = "@p3";
+    }
 
-      // when
-      String paramValName = "param_val";
-      String paramIntName = "param_id";
-      String resultParamName = "result_param";
-      
-      if( "HSQLDB".equals(db) ) {
-        // HSQLDB uses @p1, @p2, etc...  as the "names" of the parameters
-        paramValName = "@p1";
-        paramIntName = "@p2";
-        resultParamName = "@p3";
-      }
-  
-      // execute the statement
-      String query = "{call TEST_PROC_BINARY(?,?,?)}";
-      CallableStatement call = connection.prepareCall(query);
-      call.setBytes(paramValName, "foo".getBytes(StandardCharsets.UTF_8));
-      call.setInt(paramIntName, TEST_IMG_ID);
-      call.registerOutParameter(resultParamName, Types.BLOB);
-      call.execute();
-      // out vals not logged anyway https://github.com/p6spy/p6spy/issues/133
+    // execute the statement
+    String query = "{call TEST_PROC_BINARY(?,?,?)}";
+    CallableStatement call = connection.prepareCall(query);
+    call.setBytes(paramValName, "foo".getBytes(StandardCharsets.UTF_8));
+    call.setInt(paramIntName, TEST_IMG_ID);
+    call.registerOutParameter(resultParamName, Types.BLOB);
+    call.execute();
+    // out vals not logged anyway https://github.com/p6spy/p6spy/issues/133
 //      byte[] retVal = call.getBytes(resultParamName);
 //      assertEquals("foo", retVal);
-      call.close();
-  
-      // then
-        assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p1:'[binary]', @p2:2000"));
-    } finally {
-      P6LogOptions.getActiveInstance().setExcludebinary(original);
-    }
+    call.close();
+
+    // then
+    assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p1:'[binary]', @p2:2000"));
   }
   
   @Test
   public void binaryExcludedFalse() throws SQLException {
-    boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
+    // given
+    P6LogOptions.getActiveInstance().setExcludebinary(false);
 
-    try {
-      // given
-      P6LogOptions.getActiveInstance().setExcludebinary(false);
+    // when
+    String paramValName = "param_val";
+    String paramIntName = "param_id";
+    String resultParamName = "result_param";
+    
+    if( "HSQLDB".equals(db) ) {
+      // HSQLDB uses @p1, @p2, etc...  as the "names" of the parameters
+      paramValName = "@p1";
+      paramIntName = "@p2";
+      resultParamName = "@p3";
+    }
 
-      // when
-      String paramValName = "param_val";
-      String paramIntName = "param_id";
-      String resultParamName = "result_param";
-      
-      if( "HSQLDB".equals(db) ) {
-        // HSQLDB uses @p1, @p2, etc...  as the "names" of the parameters
-        paramValName = "@p1";
-        paramIntName = "@p2";
-        resultParamName = "@p3";
-      }
-  
-      // execute the statement
-      String query = "{call TEST_PROC_BINARY(?,?,?)}";
-      CallableStatement call = connection.prepareCall(query);
-      call.setBytes(paramValName, "foo".getBytes(StandardCharsets.UTF_8));
-      call.setInt(paramIntName, TEST_IMG_ID);
-      call.registerOutParameter(resultParamName, Types.BLOB);
-      call.execute();
-      // out vals not logged anyway https://github.com/p6spy/p6spy/issues/133
+    // execute the statement
+    String query = "{call TEST_PROC_BINARY(?,?,?)}";
+    CallableStatement call = connection.prepareCall(query);
+    call.setBytes(paramValName, "foo".getBytes(StandardCharsets.UTF_8));
+    call.setInt(paramIntName, TEST_IMG_ID);
+    call.registerOutParameter(resultParamName, Types.BLOB);
+    call.execute();
+    // out vals not logged anyway https://github.com/p6spy/p6spy/issues/133
 //      byte[] retVal = call.getBytes(resultParamName);
 //      assertEquals("foo", retVal);
-      call.close();
-  
-      // then
-      assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p1:'666F6F', @p2:2000"));
-    } finally {
-      P6LogOptions.getActiveInstance().setExcludebinary(original);
-    }
+    call.close();
+
+    // then
+    assertTrue(getLastLogEntry().contains("{call TEST_PROC_BINARY(?,?,?)} @p1:'666F6F', @p2:2000"));
   }
 
   protected PreparedStatement getPreparedStatement(String query) throws SQLException {
-    return (connection.prepareStatement(query));
+    return connection.prepareStatement(query);
   }
 }
 
