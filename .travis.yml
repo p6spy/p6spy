@@ -10,12 +10,12 @@ env:
     - LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/
 
 before_install:
- - mvn -version
  - script/travis/before_install_apt-fast.sh
  - sudo apt-fast update -qq -y
  - script/travis/before_install_firebird.sh
  #- script/travis/before_install_db2.sh
  - script/travis/before_install_oracle.sh
+ # TODO use gradle for pushing elems
  - groovy script/travis/generateMavenSettings.groovy
 
 before_script:
@@ -25,16 +25,14 @@ before_script:
  #- script/travis/before_script_db2.sh
  - script/travis/before_script_oracle.sh
 
-install: 
- - mvn -q -B dependency:resolve-plugins --settings ~/.m2/p6spySettings.xml
- - mvn -q -B dependency:resolve --settings ~/.m2/p6spySettings.xml
- 
 script:
- - mvn -B test -P travis --settings ~/.m2/p6spySettings.xml
+#  - mvn -B test -P travis --settings ~/.m2/p6spySettings.xml
+ - ./gradlew test --info
 
 after_success:
- - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
- - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B jacoco:report coveralls:report; fi
+# - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
+# TODO deploy + coveralls
+ - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then ./gradlew jacocoTestReport coveralls uploadArchives; fi
 
 notifications:
  email:

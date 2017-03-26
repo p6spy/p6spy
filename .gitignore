@@ -40,3 +40,6 @@ mem.h2.db
 
 # build artifacts
 _build/
+
+# gradle
+.gradle
