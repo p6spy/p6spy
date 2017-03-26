@@ -222,7 +222,8 @@ public class P6TestCallableStatement extends P6TestFramework {
     call.close();
 
     // then
-    assertTrue(getLastLogEntry().contains("{call test_proc_binary(?,?,?)} " + paramValName + ":'[binary]', " + paramIntName + ":2000"));
+    assertTrue( getLastLogEntry().contains("{call test_proc_binary(?,?,?)} " + paramIntName + ":2000, " + paramValName + ":'[binary]'") // 
+        || getLastLogEntry().contains("{call test_proc_binary(?,?,?)} " + paramValName + ":'[binary]', " + paramIntName + ":2000"));
   }
   
   @Test
@@ -255,7 +256,8 @@ public class P6TestCallableStatement extends P6TestFramework {
     call.close();
 
     // then
-    assertTrue(getLastLogEntry().contains("{call test_proc_binary(?,?,?)} " + paramValName + ":'666F6F', " + paramIntName + ":2000"));
+    assertTrue( getLastLogEntry().contains("{call test_proc_binary(?,?,?)} " + paramIntName + ":2000, " + paramValName + ":'666F6F'") // 
+        || getLastLogEntry().contains("{call test_proc_binary(?,?,?)} " + paramValName + ":'666F6F', " + paramIntName + ":2000"));
   }
 
   protected PreparedStatement getPreparedStatement(String query) throws SQLException {
