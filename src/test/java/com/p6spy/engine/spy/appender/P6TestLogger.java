@@ -29,8 +29,8 @@ import com.p6spy.engine.logging.Category;
 
 /**
  * {@link FileLogger} extension capable of keeping history of log messages as well as the last
- * Stacktrace.<br/>
- * <br/>
+ * Stacktrace.<br>
+ * <br>
  * 
  * 
  * @author peterb

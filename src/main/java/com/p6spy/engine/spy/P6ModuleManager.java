@@ -238,8 +238,8 @@ public class P6ModuleManager {
   }
 
   /**
-   * Reloads the {@link P6ModuleManager}. <br/>
-   * <br/>
+   * Reloads the {@link P6ModuleManager}. <br>
+   * <br>
    * The idea is that whoever initiates this one causes it to start with the clean table. No
    * previously set values are kept (even those set manually - via jmx will be forgotten).
    */
