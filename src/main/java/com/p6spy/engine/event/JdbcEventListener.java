@@ -393,4 +393,15 @@ public abstract class JdbcEventListener {
    */
   public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
   }
+  
+  /**
+   * This callback method is executed after the {@link Statement#close()} method is invoked.
+   *
+   * @param statementInformation The meta information about the {@link Statement} being invoked
+   * @param e                    The {@link SQLException} which may be triggered by the call (<code>null</code> if
+   *                             there was no exception).
+   */
+  public void onAfterStatementClose(StatementInformation statementInformation, SQLException e) {
+  }
+
 }
