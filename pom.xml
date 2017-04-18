@@ -132,8 +132,8 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <!-- require Java 1.7 or later for the build -->
-                  <version>(1.7,)</version>
+                  <!-- require Java 1.6 or later for the build -->
+                  <version>(1.6,)</version>
                 </requireJavaVersion>
               </rules>
             </configuration>
