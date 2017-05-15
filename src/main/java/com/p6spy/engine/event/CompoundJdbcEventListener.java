@@ -277,4 +277,11 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
       eventListener.onAfterRollback(connectionInformation, timeElapsedNanos, e);
     }
   }
+  
+  @Override
+  public void onAfterStatementClose(StatementInformation statementInformation, SQLException e) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterStatementClose(statementInformation, e);
+    }
+  }
 }

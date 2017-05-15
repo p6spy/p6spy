@@ -250,7 +250,15 @@ public class StatementWrapper extends AbstractWrapper implements Statement {
 
   @Override
   public void close() throws SQLException {
-    delegate.close();
+    SQLException e = null;
+    try {
+      delegate.close();
+    } catch (SQLException sqle) {
+      e = sqle;
+      throw e;
+    } finally {
+      eventListener.onAfterStatementClose(statementInformation, e);
+    }
   }
 
   @Override
