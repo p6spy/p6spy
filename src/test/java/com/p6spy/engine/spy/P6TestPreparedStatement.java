@@ -25,12 +25,13 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.p6spy.engine.wrapper.AbstractWrapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,14 +40,17 @@ import org.junit.runners.Parameterized;
 
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.test.P6TestFramework;
+import com.p6spy.engine.wrapper.AbstractWrapper;
 
 @RunWith(Parameterized.class)
 public class P6TestPreparedStatement extends P6TestFramework {
 
+  private boolean originalExcludeBinaryFlag;
+ 
   public P6TestPreparedStatement(String db) throws SQLException, IOException {
     super(db);
   }
-
+ 
   @Before
   public void setUpPreparedStatement() {
     P6LogOptions.getActiveInstance().setExcludecategories("info,debug,result");
@@ -64,6 +68,16 @@ public class P6TestPreparedStatement extends P6TestFramework {
     }
   }
 
+  @Before
+  public void before() {
+    this.originalExcludeBinaryFlag = P6LogOptions.getActiveInstance().getExcludebinary();
+  }
+  
+  @After
+  public void after() {
+    P6LogOptions.getActiveInstance().setExcludebinary(this.originalExcludeBinaryFlag);
+  }
+  
   @Test
   public void testExecuteQuery() {
     try {
@@ -156,7 +170,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
         assertTrue(
             "logged resultset holds incorrect values",
             super.getLastLogEntry().endsWith(
-                "1 = prepstmt_test_col1, 2 = prepstmt_test_col2, 3 = 1, 4 = 1"));
+                "1 = 'prepstmt_test_col1', 2 = 'prepstmt_test_col2', 3 = 1, 4 = 1"));
   
         P6LogOptions.getActiveInstance().setExcludecategories("result,resultset");
       
@@ -272,6 +286,66 @@ public class P6TestPreparedStatement extends P6TestFramework {
     dropPreparedStatement("drop table prepstmt_test3", statement);
   }
 
+  @Test
+  public void binaryExcludedTrue() throws SQLException {
+    // given
+    P6LogOptions.getActiveInstance().setExcludebinary(true);
+
+    // when
+    String update = "insert into img values (?, ?, ?)";
+    PreparedStatement prep = getPreparedStatement(update);
+    prep.setInt(1, 1);
+    prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
+    if( // java.sql.SQLFeatureNotSupportedException: Method org.postgresql.jdbc4.Jdbc4Connection.createBlob() is not yet implemented.
+        "PostgreSQL".equals(db) //
+        // org.firebirdsql.jdbc.FBDriverNotCapableException: Not yet implemented.
+        // at org.firebirdsql.jdbc.FBBlob.setBytes(FBBlob.java:472)
+        || "Firebird".equals(db) //
+        // java.lang.AbstractMethodError
+        // at com.p6spy.engine.wrapper.ConnectionWrapper.createBlob(ConnectionWrapper.java:315)
+        || "SQLite".equals(db)) {
+      prep.setBytes(3, "foo".getBytes(StandardCharsets.UTF_8));
+    } else {
+      Blob data = connection.createBlob();
+      data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
+      prep.setBlob(3, data);
+    }
+    prep.execute();
+    
+    // then
+    assertTrue(super.getLastLogEntry().contains("insert into img values (1, '[binary]', "));
+  }
+  
+  @Test
+  public void binaryExcludedFalse() throws SQLException {
+    // given
+    P6LogOptions.getActiveInstance().setExcludebinary(false);
+
+    // when
+    String update = "insert into img values (?, ?, ?)";
+    PreparedStatement prep = getPreparedStatement(update);
+    prep.setInt(1, 1);
+    prep.setBytes(2, "foo".getBytes(StandardCharsets.UTF_8));
+    if( // java.sql.SQLFeatureNotSupportedException: Method org.postgresql.jdbc4.Jdbc4Connection.createBlob() is not yet implemented.
+        "PostgreSQL".equals(db) //
+        // org.firebirdsql.jdbc.FBDriverNotCapableException: Not yet implemented.
+        // at org.firebirdsql.jdbc.FBBlob.setBytes(FBBlob.java:472)
+        || "Firebird".equals(db) //
+        // java.lang.AbstractMethodError
+        // at com.p6spy.engine.wrapper.ConnectionWrapper.createBlob(ConnectionWrapper.java:315)
+        || "SQLite".equals(db)) {
+      prep.setBytes(3, "foo".getBytes(StandardCharsets.UTF_8));
+    } else {
+      Blob data = connection.createBlob();
+      data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
+      prep.setBlob(3, data);
+    }
+    prep.execute();
+    
+    // then
+    assertTrue(super.getLastLogEntry().contains("insert into img values (1, '666F6F',"));
+  }
+  
   protected void dropPreparedStatement(String sql, Statement statement) {
     try {
       statement.execute(sql);
@@ -281,7 +355,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
   }
 
   protected PreparedStatement getPreparedStatement(String query) throws SQLException {
-    return (connection.prepareStatement(query));
+    return connection.prepareStatement(query);
   }
 
 }

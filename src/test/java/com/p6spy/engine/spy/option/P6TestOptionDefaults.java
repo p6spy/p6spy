@@ -162,6 +162,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertNull(opts.getSQLExpression());
     Assert.assertEquals(0L, opts.getExecutionThreshold());
     Assert.assertEquals("info,debug,result,resultset,batch", opts.getExcludecategories());
+    Assert.assertFalse(opts.getExcludebinary());
     Assert.assertTrue(opts.getExcludeCategoriesSet().containsAll(
         Arrays.asList(DEFAULT_CATEGORIES)));
     Assert.assertFalse(opts.getFilter());
