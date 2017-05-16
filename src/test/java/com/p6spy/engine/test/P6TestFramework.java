@@ -55,7 +55,7 @@ import java.util.List;
 public abstract class P6TestFramework extends BaseTestCase {
   private static final Logger log = Logger.getLogger(P6TestFramework.class);
 
-  public static final String TEST_FILE_PATH = "target/test-classes/com/p6spy/engine/spy";
+  public static final String TEST_FILE_PATH = "src/test/resources/com/p6spy/engine/spy";
 
   protected final String db;
 

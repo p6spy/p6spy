@@ -91,11 +91,11 @@ public class Log4jLoggerTest extends BaseTestCase {
   }
 
   private void configureLog4J() {
-    DOMConfigurator.configure("target/test-classes/log4j.xml");
+    DOMConfigurator.configure("src/test/resources/log4j.xml");
   }
   
   private void configureLog4JInTest(String log4jConfSuffix) {
-    DOMConfigurator.configure("target/test-classes/log4j-in-test-" + log4jConfSuffix + ".xml");
+    DOMConfigurator.configure("src/test/resources/log4j-in-test-" + log4jConfSuffix + ".xml");
   }
 
   @Test

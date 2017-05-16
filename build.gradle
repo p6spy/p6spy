@@ -5,11 +5,11 @@ plugins {
     id 'signing'
 
 
-    id "com.fizzpod.sweeney" version "1.1.0"
-    id "com.github.hierynomus.license" version "0.13.1"    
-    id "com.github.johnrengelman.shadow" version "1.2.4"
+    id 'com.fizzpod.sweeney' version '1.1.0'
+    id 'com.github.hierynomus.license' version '0.13.1'    
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
     id 'com.github.kt3k.coveralls' version '2.8.1'
-    id "io.codearte.nexus-staging" version "0.6.1"
+    id 'io.codearte.nexus-staging' version '0.6.1'
 }
 
 repositories {
@@ -24,53 +24,55 @@ javadoc.options.encoding = 'UTF8'
 
 dependencies {
 
-  testCompile "p6spy:p6spy-signedjar-test:1.0.0"
+  testCompile 'p6spy:p6spy-signedjar-test:1.0.0'
 
   // for providing misc *-nodep artifacts, please note that order matters here
   // even if slf4j complains about multiple implementations on classpath, it takes the 1.st one
   // and as we use log4j in tests => bridge needs to be the 1.st one specified 
-  compileOnly "org.slf4j:slf4j-api:1.7.7"
-  compileOnly "org.slf4j:slf4j-log4j12:1.7.7"
-  compileOnly "log4j:log4j:1.2.17"
-  testCompile "log4j:log4j:1.2.17"
+  compileOnly 'org.slf4j:slf4j-api:1.7.7'
+  compileOnly 'org.slf4j:slf4j-log4j12:1.7.7'
+  compileOnly 'log4j:log4j:1.2.17'
+  testCompile 'org.slf4j:slf4j-api:1.7.7'
+  testCompile 'org.slf4j:slf4j-log4j12:1.7.7'
+  testCompile 'log4j:log4j:1.2.17'
 
-  compileOnly "org.apache.logging.log4j:log4j-slf4j-impl:2.0-rc1"
-  compileOnly "org.apache.logging.log4j:log4j-api:2.0-rc1"
-  compileOnly "org.apache.logging.log4j:log4j-core:2.0-rc1"
-  
-  compileOnly "ch.qos.logback:logback-classic:1.1.2" 
-  compileOnly "ch.qos.logback:logback-core:1.1.2" 
+  compileOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.0-rc1'
+  compileOnly 'org.apache.logging.log4j:log4j-api:2.0-rc1'
+  compileOnly 'org.apache.logging.log4j:log4j-core:2.0-rc1'
 
-  testCompile "junit:junit:4.11"
-  testCompile "org.eclipse.jetty:jetty-plus:8.1.7.v20120910" // datasource testing through JNDI
-  testCompile "commons-dbcp:commons-dbcp:1.4" // datasource testing
-  testCompile "org.codehaus.btm:btm:2.1.4" // xa datasource testing
-  testCompile "org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1"
-  testCompile "org.liquibase:liquibase-core:3.0.8"
-  testCompile "com.mattbertolini:liquibase-slf4j:1.2.1"
-  testCompile "org.springframework:spring-jdbc:3.2.4.RELEASE"
-  testCompile "org.springframework:spring-context:3.2.4.RELEASE"
-  testCompile "com.j256.simplejmx:simplejmx:1.1"
-  testCompile "commons-io:commons-io:2.4"
-  testCompile "org.apache.commons:commons-exec:1.2"
-  testCompile "org.apache.commons:commons-lang3:3.3.2"
-  testCompile "commons-beanutils:commons-beanutils:1.9.1"
-  testCompile "org.mockito:mockito-core:1.10.19"
+  compileOnly 'ch.qos.logback:logback-classic:1.1.2' 
+  compileOnly 'ch.qos.logback:logback-core:1.1.2'
+
+  testCompile 'junit:junit:4.11'
+  testCompile 'org.eclipse.jetty:jetty-plus:8.1.7.v20120910' // datasource testing through JNDI
+  testCompile 'commons-dbcp:commons-dbcp:1.4' // datasource testing
+  testCompile 'org.codehaus.btm:btm:2.1.4' // xa datasource testing
+  testCompile 'org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1'
+  testCompile 'org.liquibase:liquibase-core:3.0.8'
+  testCompile 'com.mattbertolini:liquibase-slf4j:1.2.1'
+  testCompile 'org.springframework:spring-jdbc:3.2.4.RELEASE'
+  testCompile 'org.springframework:spring-context:3.2.4.RELEASE'
+  testCompile 'com.j256.simplejmx:simplejmx:1.1'
+  testCompile 'commons-io:commons-io:2.4'
+  testCompile 'org.apache.commons:commons-exec:1.2'
+  testCompile 'org.apache.commons:commons-lang3:3.3.2'
+  testCompile 'commons-beanutils:commons-beanutils:1.9.1'
+  testCompile 'org.mockito:mockito-core:1.10.19'
 
   // all the JDBC drivers tested
-  testRuntime "mysql:mysql-connector-java:5.1.21"
-  testRuntime "org.postgresql:postgresql:9.3-1100-jdbc41"
-  testCompile "org.hsqldb:hsqldb:2.3.1"
-  testCompile "com.h2database:h2:1.4.194"
-  testRuntime "org.xerial:sqlite-jdbc:3.7.2" // type 3 driver
-  testRuntime "org.apache.derby:derby:10.10.1.1"
-  testRuntime "org.firebirdsql.jdbc:jaybird-jdk17:2.2.3" // type 4.1 driver
+  testRuntime 'mysql:mysql-connector-java:5.1.21'
+  testRuntime 'org.postgresql:postgresql:9.3-1100-jdbc41'
+  testCompile 'org.hsqldb:hsqldb:2.3.1'
+  testCompile 'com.h2database:h2:1.3.173'
+  testRuntime 'org.xerial:sqlite-jdbc:3.7.2' // type 3 driver
+  testRuntime 'org.apache.derby:derby:10.10.1.1'
+  testRuntime 'org.firebirdsql.jdbc:jaybird-jdk17:2.2.3' // type 4.1 driver
   
 }
 
 sweeney {
     // require Java 1.7 or later for the build
-    enforce type: "range", expect: "[1.7,)", value: {System.getProperty('java.version')}
+    enforce type: 'range', expect: '[1.7,)', value: {System.getProperty('java.version')}
 }
 
 jacocoTestReport {
@@ -81,36 +83,38 @@ jacocoTestReport {
 }
 
 license {
-    header rootProject.file('codequality/HEADER')
-    strictCheck true
+    ext.year = Calendar.getInstance().get(Calendar.YEAR)
+    ext.name = 'P6Spy'
+
+    header rootProject.file('./script/qa/license_header.txt')
 }
 
 test {
-    systemProperty "user.language", "en_US"
-    systemProperty "derby.stream.error.file", "target/derby.log"
+    systemProperty 'user.language', 'en_US'
+    systemProperty 'derby.stream.error.file', 'target/derby.log'
 
-    if (System.getProperty("env")?.equals("travis")) { //  travis-ci
-      systemProperty "DB", "PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle"
-    } else if (System.getProperty("DB") != null) { // explicit DBs
-      systemProperty "DB", System.getProperty("DB")
+    if (System.getProperty('env')?.equals('travis')) { //  travis-ci
+      systemProperty 'DB', 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle'
+    } else if (System.getProperty('DB') != null) { // explicit DBs
+      systemProperty 'DB', System.getProperty('DB')
     } else { // defaults
-      systemProperty "DB", "H2"
+      systemProperty 'DB', 'H2'
     }
     
-    // <!-- to enable remote JMX testing, 
-    //     see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx -->
-    // <!-- to workaround oracle timezone issue: http://stackoverflow.com/questions/9156379/ora-01882-timezone-region-not-found -->
-    // <!-- to get rid of DB2 traces => -Ddb2.jcc.override.traceLevel=0
+    // to enable remote JMX testing, 
+    // see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx
+    // to workaround oracle timezone issue: http://stackoverflow.com/questions/9156379/ora-01882-timezone-region-not-found
+    // to get rid of DB2 traces => -Ddb2.jcc.override.traceLevel=0
     // see: http://publib.boulder.ibm.com/infocenter/idshelp/v111/index.jsp?topic=/com.ibm.jccids.doc/com.ibm.db2.luw.apdv.java.doc/doc/r0052075.htm -->
-    jvmArgs "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.port=1234 -Dcom.sun.management.jmxremote.ssl=false -Doracle.jdbc.timezoneAsRegion=false -Ddb2.jcc.override.traceLevel=0"
+    jvmArgs '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.authenticate=false', '-Dcom.sun.management.jmxremote.port=1234', '-Dcom.sun.management.jmxremote.ssl=false', '-Doracle.jdbc.timezoneAsRegion=false', '-Ddb2.jcc.override.traceLevel=0'
 }
 
 // [BEGIN] central repo publishing
 // see: http://central.sonatype.org/pages/gradle.html
 
-group = "p6spy"
-archivesBaseName = "p6spy"
-version = "3.0.1-SNAPSHOT"
+group = 'p6spy'
+archivesBaseName = 'p6spy'
+version = '3.0.1-SNAPSHOT'
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
@@ -136,11 +140,11 @@ uploadArchives {
       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
       // TODO
-      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+      repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
         authentication(userName: ossrhUsername, password: ossrhPassword)
       }
 
-      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+      snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
         authentication(userName: ossrhUsername, password: ossrhPassword)
       }
 
@@ -169,13 +173,13 @@ uploadArchives {
 }
 // [END] central repo publishing
 
-shadowJar {
-  configurations = [project.configurations.compile]
-}
+// shadowJar {
+//   configurations = [project.configurations.compile]
+// }
 
-task shadowLog4jJar(type: ShadowJar) {
-  // archiveName = 'p6spy-lojg.jar'
-  baseName = 'p6spy-log4j'
-  from sourceSets.main.output //tells the task to include the project code
-  configurations = [ configurations.runtime ] //tells the task to shadow in the jars files in the 'runtime' scope
-}
+// task shadowLog4jJar(type: ShadowJar) {
+//   // archiveName = 'p6spy-lojg.jar'
+//   baseName = 'p6spy-log4j'
+//   from sourceSets.main.output //tells the task to include the project code
+//   configurations = [ configurations.runtime ] //tells the task to shadow in the jars files in the 'runtime' scope
+// }
