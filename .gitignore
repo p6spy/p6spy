@@ -16,7 +16,7 @@ javadocs
 /atlassian-ide-plugin.xml
 
 # Log files
-spy.log
+*.log
 
 # Other files
 /test-output
@@ -26,13 +26,12 @@ testspy.forms
 *.swp
 .DS_Store
 /pom.xml.versionsBackup
-reload.log
 dependency-reduced-pom.xml
 .vagrant
 Berksfile.lock
 
 # bitronix transaction stuff
-btm*.tlog
+*.tlog
 p6spy_xds
 
 # hsql
