@@ -1,0 +1,79 @@
+version: "2"
+
+services:   
+    
+  postgresql:
+    build:  ./script/docker/postgres
+    environment:
+        POSTGRES_USER: travis
+        POSTGRES_PASSWORD:  
+        POSTGRES_DB: p6spy
+    ports:
+      - "5433:5432"
+ 
+  mysql:
+    image: mysql:5.7.18
+    environment:
+        MYSQL_USER: travis
+        MYSQL_PASSWORD: travis
+        MYSQL_DATABASE: p6spy
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+    ports:
+      - "3307:3306"
+    volumes:
+    - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+  
+  mariadb:
+    image: mariadb:10.1.23
+    environment:
+        MYSQL_USER: travis
+        MYSQL_PASSWORD: travis
+        MYSQL_DATABASE: p6spy
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+    ports:
+      - "3308:3306"
+    volumes:
+    - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+
+  percona:
+    image: percona:5.7.17
+    environment:
+        MYSQL_USER: travis
+        MYSQL_PASSWORD: travis
+        MYSQL_DATABASE: p6spy
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+    ports:
+      - "3309:3306"
+    volumes:
+    - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+
+  firebird:
+    build: ./script/docker/firebird
+    ports:
+      - "3050:3050"
+
+  mssqlserver:
+    image: microsoft/mssql-server-linux:latest
+    environment:
+        ACCEPT_EULA: Y
+        SA_PASSWORD: P6spyTravis
+    ports:
+      - "1434:1433"
+
+  # db2:
+  #   image: ibmcom/db2express-c:10.5.0.5-3.10.0
+  #   environment:
+  #       DB2INST1_PASSWORD: travis
+  #       LICENSE: accept
+  #   ports:
+  #     - "3051:3050"
+  #     - "50000:50000"
+  #   command: ["db2start"]
+
+  oracle:
+    image: sath89/oracle-12c:latest
+    ports:
+      - "1522:1521"
+      - "8081:8080"
+    volumes:
+      - ./script/docker/oracle/create_user.sql:/docker-entrypoint-initdb.d/create_user.sql

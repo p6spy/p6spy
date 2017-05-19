@@ -1,3 +1,5 @@
+sudo: required
+
 language: java
 
 jdk:
@@ -8,32 +10,61 @@ jdk:
 env:
   global:
     - LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/
+    - DOCKER_COMPOSE_VERSION: 1.13.0
+    - ORG_GRADLE_PROJECT_env: travis
+
+# https://docs.travis-ci.com/user/languages/java/#Caching
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 
 before_install:
- - script/travis/before_install_apt-fast.sh
- - sudo apt-fast update -qq -y
- - script/travis/before_install_firebird.sh
- #- script/travis/before_install_db2.sh
- - script/travis/before_install_oracle.sh
- # TODO use gradle for pushing elems
- - groovy script/travis/generateMavenSettings.groovy
+ # latest docker 
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+  - docker --version
+ # docker compose
+ - sudo rm /usr/local/bin/docker-compose
+ - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+ - chmod +x docker-compose
+ - sudo mv docker-compose /usr/local/bin
 
-before_script:
- - script/travis/before_script_firebird.sh
- - script/travis/before_script_mysql.sh
- - script/travis/before_script_postgres.sh
- #- script/travis/before_script_db2.sh
- - script/travis/before_script_oracle.sh
+install:
+  - docker-compose up & # using rather than 'docker-compose up -d' to see log msgs in console
 
-script:
-#  - mvn -B test -P travis --settings ~/.m2/p6spySettings.xml
- - ./gradlew test --info
+ before_script:
+  - wget -O /tmp/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && chmod +x /tmp/wait-for-it.sh
+  - /tmp/wait-for-it.sh -t 0 localhost:5433 -- echo "PostgreSQL is up"
+  - /tmp/wait-for-it.sh -t 0 localhost:3307 -- echo "MySQL is up"
+  - /tmp/wait-for-it.sh -t 0 localhost:3308 -- echo "MariaDB is up"
+  - /tmp/wait-for-it.sh -t 0 localhost:3309 -- echo "Percona is up"
+  - /tmp/wait-for-it.sh -t 0 localhost:3050 -- echo "Firebird is up"
+  - /tmp/wait-for-it.sh -t 0 localhost:1434 -- echo "MSSQLServer is up"
+  - /tmp/wait-for-it.sh -t 0 localhost:1522 -- echo "Oracle is up"
+  - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle-product/12.1.0/xe/sqldeveloper/jdbc/lib/ojdbc6.jar /tmp/repo
+  
+# install: 
+#  - mvn -q -B dependency:resolve-plugins --settings ~/.m2/p6spySettings.xml
+#  - mvn -q -B dependency:resolve --settings ~/.m2/p6spySettings.xml
+ 
+# script:
+# - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B test site:site site:stage com.github.github:site-maven-plugin:site -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; else mvn -B test -P travis --settings ~/.m2/p6spySettings.xml; fi;
+# - mvn -B test -P travis --settings ~/.m2/p6spySettings.xml;
 
-after_success:
-# - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
-# TODO deploy + coveralls
- - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then ./gradlew jacocoTestReport coveralls uploadArchives; fi
+# jobs:
+#   include:
+#     - stage: deploy
+#       script: [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]] 
+#       # Keep in mind to overwrite these here
+#       jdk: oraclejdk7
 
-notifications:
- email:
-   - p6spy-developers@googlegroups.com
+# after_success:
+# #  - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
+
+# notifications:
+#  email:
+#    - p6spy-developers@googlegroups.com

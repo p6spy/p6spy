@@ -12,9 +12,22 @@ plugins {
     id 'io.codearte.nexus-staging' version '0.6.1'
 }
 
+// sys property (-Denv) or env var (ORG_GRADLE_PROJECT_env) as a fallback
+def isTravis = System.getProperty('env', env) != null && System.getProperty('env', env)?.equals('travis')
+if (isTravis) {
+  DB = 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle,MSSQLServer,MariaDB,Percona'
+}
+// sys property (-DDB) or env var (ORG_GRADLE_PROJECT_DB) as a fallback
+def envDB = System.getProperty('DB', DB)
+
 repositories {
     mavenCentral()
     flatDir dirs: 'src/test/repo' // holds p6spy-signedjar-test
+
+    if (envDB.contains('Oracle')) {
+      assert new File('/tmp/repo/ojdbc6.jar').exists()
+      flatDir dirs: '/tmp/repo' // holds copied oracle jdbc driver
+    }
 }
 
 sourceCompatibility = 1.7
@@ -67,7 +80,9 @@ dependencies {
   testRuntime 'org.xerial:sqlite-jdbc:3.7.2' // type 3 driver
   testRuntime 'org.apache.derby:derby:10.10.1.1'
   testRuntime 'org.firebirdsql.jdbc:jaybird-jdk17:2.2.3' // type 4.1 driver
-  
+  testRuntime 'com.microsoft.sqlserver:mssql-jdbc:6.1.0.jre7'
+  testRuntime name: 'ojdbc6' // oracle copied from docker oracle container
+
 }
 
 sweeney {
@@ -90,16 +105,10 @@ license {
 }
 
 test {
-    systemProperty 'user.language', 'en_US'
+    systemProperty 'user.language', 'en'
+    systemProperty 'user.country', 'US'
     systemProperty 'derby.stream.error.file', 'target/derby.log'
-
-    if (System.getProperty('env')?.equals('travis')) { //  travis-ci
-      systemProperty 'DB', 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle'
-    } else if (System.getProperty('DB') != null) { // explicit DBs
-      systemProperty 'DB', System.getProperty('DB')
-    } else { // defaults
-      systemProperty 'DB', 'H2'
-    }
+    systemProperty 'DB', envDB
     
     // to enable remote JMX testing, 
     // see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx

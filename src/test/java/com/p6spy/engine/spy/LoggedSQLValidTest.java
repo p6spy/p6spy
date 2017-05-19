@@ -231,8 +231,8 @@ public class LoggedSQLValidTest extends P6TestFramework {
   // holds rather workarounds, to keep effort low
   // volunteers for fixing welcome
   private boolean isDateTimeSupported() {
-    return !"HSQLDB".equals(db) /*
-                                 * could not figure out the correct date format for this one
+    return !"HSQLDB".equals(db) && !"MSSQLServer".equals(db) /*
+                                 * could not figure out the correct date format for these
                                  * skipping, to keep effort low
                                  */;
   }
@@ -247,7 +247,8 @@ public class LoggedSQLValidTest extends P6TestFramework {
                               * http://publib.boulder.ibm.com/infocenter/db2luw/v9/index.jsp?topic=%2F
                               * com.ibm.db2.udb.apdv.java.doc%2Fdoc%2Frjvjdata.htm
                               */
-        && !"SQLite".equals(db) /* https://www.sqlite.org/datatype3.html */;
+        && !"SQLite".equals(db) /* https://www.sqlite.org/datatype3.html */
+        && !"MSSQLServer".equals(db) /* https://docs.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql */;
   }
 
   protected void drop(Statement statement) {
