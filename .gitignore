@@ -15,6 +15,9 @@ javadocs
 *.iml
 /atlassian-ide-plugin.xml
 
+# vscode
+.vscode
+
 # Log files
 *.log
 
