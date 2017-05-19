@@ -28,7 +28,7 @@ cache:
 before_install:
   # latest docker 
   - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine realpath # realpath required by wait-for-it.sh 
   - docker --version
   # docker compose
   - sudo rm /usr/local/bin/docker-compose
