@@ -10,8 +10,8 @@ jdk:
 env:
   global:
     - LD_LIBRARY_PATH=/home/db2inst1/sqllib/lib64/
-    - DOCKER_COMPOSE_VERSION: 1.13.0
-    - ORG_GRADLE_PROJECT_env: travis
+    - DOCKER_COMPOSE_VERSION=1.13.0
+    - ORG_GRADLE_PROJECT_env=travis
 
 # https://docs.travis-ci.com/user/languages/java/#Caching
 before_cache:
@@ -23,20 +23,20 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
- # latest docker 
+  # latest docker 
   - sudo apt-get update
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
   - docker --version
- # docker compose
- - sudo rm /usr/local/bin/docker-compose
- - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
- - chmod +x docker-compose
- - sudo mv docker-compose /usr/local/bin
+  # docker compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 install:
   - docker-compose up & # using rather than 'docker-compose up -d' to see log msgs in console
 
- before_script:
+before_script:
   - wget -O /tmp/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && chmod +x /tmp/wait-for-it.sh
   - /tmp/wait-for-it.sh -t 0 localhost:5433 -- echo "PostgreSQL is up"
   - /tmp/wait-for-it.sh -t 0 localhost:3307 -- echo "MySQL is up"
