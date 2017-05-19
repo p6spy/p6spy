@@ -38,7 +38,7 @@ Berksfile.lock
 p6spy_xds
 
 # hsql
-mem.h2.db
+/mem.*
 
 # build artifacts
 _build/
