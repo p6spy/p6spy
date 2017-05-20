@@ -12,13 +12,15 @@ plugins {
     id 'io.codearte.nexus-staging' version '0.6.1'
 }
 
+def envDB
 // sys property (-Denv) or env var (ORG_GRADLE_PROJECT_env) as a fallback
 def isTravis = System.getProperty('env', env) != null && System.getProperty('env', env)?.equals('travis')
 if (isTravis) {
-  DB = 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle,MSSQLServer,MariaDB,Percona'
+  envDB = 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle,MSSQLServer,MariaDB,Percona'
+} else {
+  // sys property (-DDB) or env var (ORG_GRADLE_PROJECT_DB) as a fallback
+  envDB = System.getProperty('DB', DB)
 }
-// sys property (-DDB) or env var (ORG_GRADLE_PROJECT_DB) as a fallback
-def envDB = System.getProperty('DB', DB)
 
 repositories {
     mavenCentral()
@@ -81,8 +83,10 @@ dependencies {
   testRuntime 'org.apache.derby:derby:10.10.1.1'
   testRuntime 'org.firebirdsql.jdbc:jaybird-jdk17:2.2.3' // type 4.1 driver
   testRuntime 'com.microsoft.sqlserver:mssql-jdbc:6.1.0.jre7'
-  testRuntime name: 'ojdbc6' // oracle copied from docker oracle container
 
+  if (envDB.contains('Oracle')) {
+    testRuntime name: 'ojdbc6' // oracle copied from docker oracle container
+  }
 }
 
 sweeney {

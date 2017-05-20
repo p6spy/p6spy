@@ -48,7 +48,12 @@ services:
     - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
 
   firebird:
-    build: ./script/docker/firebird
+    image: jacobalberty/firebird:2.5-sc
+    environment:
+      ISC_PASSWORD: masterkey
+      FIREBIRD_USER: travis
+      FIREBIRD_PASSWORD: travis
+      FIREBIRD_DATABASE: p6spy.gdb
     ports:
       - "3050:3050"
 
