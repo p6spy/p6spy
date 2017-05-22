@@ -1,4 +1,4 @@
-version: "2"
+version: "3.0"
 
 services:   
     
@@ -6,10 +6,15 @@ services:
     build:  ./script/docker/postgres
     environment:
         POSTGRES_USER: travis
-        POSTGRES_PASSWORD:  
+        POSTGRES_PASSWORD: '' 
         POSTGRES_DB: p6spy
     ports:
       - "5433:5432"
+    healthcheck:
+      test: psql -lqt "dbname=p6spy user=travis password=''" | cut -d \| -f 1 | grep -qw p6spy
+      interval: 5s
+      timeout: 10s
+      retries: 360 # 5s*360 = 1800s = 30min 
  
   mysql:
     image: mysql:5.7.18
@@ -21,7 +26,12 @@ services:
     ports:
       - "3307:3306"
     volumes:
-    - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+      - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+    healthcheck:
+      test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
+      interval: 5s
+      timeout: 10s
+      retries: 360 # 5s*360 = 1800s = 30min 
   
   mariadb:
     image: mariadb:10.1.23
@@ -33,7 +43,12 @@ services:
     ports:
       - "3308:3306"
     volumes:
-    - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+      - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+    healthcheck:
+      test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
+      interval: 5s
+      timeout: 10s
+      retries: 360 # 5s*360 = 1800s = 30min 
 
   percona:
     image: percona:5.7.17
@@ -45,7 +60,12 @@ services:
     ports:
       - "3309:3306"
     volumes:
-    - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+      - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+    healthcheck:
+      test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
+      interval: 5s
+      timeout: 10s
+      retries: 360 # 5s*360 = 1800s = 30min
 
   firebird:
     image: jacobalberty/firebird:2.5-sc
@@ -56,7 +76,12 @@ services:
       FIREBIRD_DATABASE: p6spy.gdb
     ports:
       - "3050:3050"
-
+    healthcheck:
+      test: /bin/sh -c "[ -f /databases/p6spy.gdb ]"
+      interval: 5s
+      timeout: 10s
+      retries: 360 # 5s*360 = 1800s = 30min
+      
   mssqlserver:
     image: microsoft/mssql-server-linux:latest
     environment:
@@ -64,7 +89,12 @@ services:
         SA_PASSWORD: P6spyTravis
     ports:
       - "1434:1433"
-
+    healthcheck:
+      test: /bin/sh -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P6spyTravis  -Q "SELECT 12345" | grep -wq 12345'
+      interval: 5s
+      timeout: 10s
+      retries: 360 # 5s*360 = 1800s = 30min
+      
   # db2:
   #   image: ibmcom/db2express-c:10.5.0.5-3.10.0
   #   environment:
@@ -82,3 +112,8 @@ services:
       - "8081:8080"
     volumes:
       - ./script/docker/oracle/create_user.sql:/docker-entrypoint-initdb.d/create_user.sql
+    healthcheck:
+      test: /bin/sh -c 'echo "SELECT 12345 FROM DUAL;" | sqlplus -S -L travis/travis@localhost:1521/xe.oracle.docker | grep -wq 12345'
+      interval: 5s
+      timeout: 10s
+      retries: 360 # 5s*360 = 1800s = 30min
