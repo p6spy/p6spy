@@ -25,16 +25,18 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+# let's try default docker + docker compose
 before_install:
-  # latest docker 
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine realpath # realpath required by wait-for-it.sh 
+#   # latest docker 
+#   - sudo apt-get update
+#   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine realpath # realpath required by wait-for-it.sh 
   - docker --version
-  # docker compose
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+#   # docker compose
+#   - sudo rm /usr/local/bin/docker-compose
+#   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+#   - chmod +x docker-compose
+#   - sudo mv docker-compose /usr/local/bin
+  - docker-compose --version
 
 install:
   - docker-compose up & # using rather than 'docker-compose up -d' to see log msgs in console
