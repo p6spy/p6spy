@@ -2,13 +2,6 @@ sudo: required
 
 dist: trusty
 
-addons:
-  apt:
-    sources:
-      - travis-ci/sqlite3
-    packages:
-      - sqlite3
-
 services:
   - docker
 
