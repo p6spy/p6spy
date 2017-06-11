@@ -45,3 +45,6 @@ _build/
 
 # gradle
 .gradle
+
+# zsh gradle plugin
+.gradletasknamecache
