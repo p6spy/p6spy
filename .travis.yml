@@ -2,10 +2,16 @@ sudo: required
 
 dist: trusty
 
+addons:
+  apt:
+    sources:
+      - travis-ci/sqlite3
+    packages:
+      - sqlite3
+
 services:
-  - sqlite
   - docker
-  
+
 language: java
 
 jdk:
@@ -30,9 +36,6 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
-  # latest docker (due to need for healthcheck)
-  # - sudo apt-get update
-  # - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce realpath # realpath required by wait-for-it.sh 
   - docker --version
   # docker compose (due to need for healthcheck)
   - sudo rm /usr/local/bin/docker-compose
