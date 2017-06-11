@@ -35,6 +35,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
   public static final String INCLUDE = "include";
   public static final String FILTER = "filter";
   public static final String EXCLUDECATEGORIES = "excludecategories";
+  public static final String EXCLUDEBINARY = "exludebinary";
   public static final String EXECUTION_THRESHOLD = "executionThreshold";
   public static final String SQLEXPRESSION = "sqlexpression";
 
@@ -52,6 +53,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
     
     defaults.put(FILTER, Boolean.toString(false));
     defaults.put(EXCLUDECATEGORIES, "info,debug,result,resultset,batch");
+    defaults.put(EXCLUDEBINARY, Boolean.toString(false));
     defaults.put(EXECUTION_THRESHOLD, Long.toString(0));
   }
 
@@ -73,6 +75,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
     setFilter(options.get(FILTER));
     setInclude(options.get(INCLUDE));
     setExclude(options.get(EXCLUDE));
+    setExcludebinary(options.get(EXCLUDEBINARY));
   }
 
   /**
@@ -127,7 +130,22 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
   public String getExclude() {
     return optionsRepository.get(String.class, EXCLUDE);
   }
+  
+  @Override
+  public void setExcludebinary(boolean excludebinary) {
+    optionsRepository.set(Boolean.class, EXCLUDEBINARY, excludebinary);
+  }
 
+  @Override
+  public void setExcludebinary(String excludebinary) {
+    optionsRepository.set(Boolean.class, EXCLUDEBINARY, excludebinary);
+  }
+  
+  @Override
+  public boolean getExcludebinary() {
+    return optionsRepository.get(Boolean.class, EXCLUDEBINARY);
+  }
+  
   @Override
   public void setExcludecategories(String excludecategories) {
     optionsRepository.set(String.class, EXCLUDECATEGORIES, excludecategories);

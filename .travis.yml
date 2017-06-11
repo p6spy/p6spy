@@ -7,6 +7,9 @@ services:
 
 language: java
 
+# for now we depend upon deprecated CI infrastructure (to keep builds green): https://blog.travis-ci.com/2017-05-04-precise-image-updates
+group: deprecated-2017Q1
+
 jdk:
   - oraclejdk7
   - openjdk7

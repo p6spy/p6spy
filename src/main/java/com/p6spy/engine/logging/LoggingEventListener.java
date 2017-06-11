@@ -105,6 +105,6 @@ public class LoggingEventListener extends SimpleJdbcEventListener {
   }
 
   protected void logElapsed(Loggable loggable, long timeElapsedNanos, Category category, SQLException e) {
-    P6LogQuery.logElapsed(loggable.getConnectionId(), timeElapsedNanos, category, loggable);
+    P6LogQuery.logElapsed(loggable.getConnectionInformation().getConnectionId(), timeElapsedNanos, category, loggable);
   }
 }

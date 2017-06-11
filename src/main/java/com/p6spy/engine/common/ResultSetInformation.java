@@ -31,7 +31,7 @@ public class ResultSetInformation implements Loggable {
 
   private final StatementInformation statementInformation;
   private String query;
-  private final Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+  private final Map<String, Value> resultMap = new LinkedHashMap<String, Value>();
   private int currRow = -1;
   private int lastRowLogged = -1;
 
@@ -51,11 +51,6 @@ public class ResultSetInformation implements Loggable {
     }
   }
 
-  @Override
-  public int getConnectionId() {
-    return statementInformation.getConnectionId();
-  }
-
   public int getCurrRow() {
     return currRow;
   }
@@ -65,7 +60,7 @@ public class ResultSetInformation implements Loggable {
   }
 
   public void setColumnValue(String columnName, Object value) {
-    resultMap.put(columnName, value);
+    resultMap.put(columnName, new Value(value));
   }
 
   @Override
@@ -76,13 +71,13 @@ public class ResultSetInformation implements Loggable {
   @Override
   public String getSqlWithValues() {
     final StringBuilder sb = new StringBuilder();
-    for (Map.Entry<String, Object> entry : resultMap.entrySet()) {
+    for (Map.Entry<String, Value> entry : resultMap.entrySet()) {
       if (sb.length() > 0) {
         sb.append(", ");
       }
       sb.append(entry.getKey());
       sb.append(" = ");
-      sb.append(entry.getValue());
+      sb.append(entry.getValue() != null ? entry.getValue().toString() : new Value().toString());
     }
 
     return sb.toString();
@@ -92,4 +87,9 @@ public class ResultSetInformation implements Loggable {
     return statementInformation;
   }
 
+  /** {@inheritDoc} */
+  @Override
+  public ConnectionInformation getConnectionInformation() {
+    return this.statementInformation.getConnectionInformation();
+  }
 }
