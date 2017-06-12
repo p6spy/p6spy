@@ -72,7 +72,7 @@ dependencies {
   testCompile 'org.apache.commons:commons-exec:1.2'
   testCompile 'org.apache.commons:commons-lang3:3.3.2'
   testCompile 'commons-beanutils:commons-beanutils:1.9.1'
-  testCompile 'org.mockito:mockito-core:1.10.19'
+  testCompile 'org.mockito:mockito-core:2.7.22'
 
   // all the JDBC drivers tested
   testRuntime 'mysql:mysql-connector-java:5.1.21'
