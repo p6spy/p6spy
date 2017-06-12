@@ -45,14 +45,14 @@ install:
   - docker-compose up & # using rather than 'docker-compose up -d' to see log msgs in console
 
 before_script:
-  - wget -O /tmp/wtfc.sh https://raw.githubusercontent.com/typekpb/wtfc/v0.0.1/wtfc.sh && chmod +x /tmp/wtfc.sh
-  - /tmp/wtfc.sh -T 0 'docker inspect -f "{{.State.Health.Status}}" p6spy_postgresql_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 'docker inspect -f "{{.State.Health.Status}}" p6spy_mysql_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 'docker inspect -f "{{.State.Health.Status}}" p6spy_mariadb_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 'docker inspect -f "{{.State.Health.Status}}" p6spy_percona_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 'docker inspect -f "{{.State.Health.Status}}" p6spy_mssqlserver_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
+  - wget -O /tmp/wtfc.sh https://raw.githubusercontent.com/typekpb/wtfc/v0.0.2/wtfc.sh && chmod +x /tmp/wtfc.sh
+  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_postgresql_1 | grep -qw healthy'
+  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mysql_1 | grep -qw healthy'
+  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mariadb_1 | grep -qw healthy'
+  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_percona_1 | grep -qw healthy'
+  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
+  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mssqlserver_1 | grep -qw healthy'
+  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
   - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle-product/12.1.0/xe/sqldeveloper/jdbc/lib/ojdbc6.jar /tmp/repo
 
 # install: 
