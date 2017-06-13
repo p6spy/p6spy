@@ -7,9 +7,6 @@ services:
 
 language: java
 
-# for now we depend upon deprecated CI infrastructure (to keep builds green): https://blog.travis-ci.com/2017-05-04-precise-image-updates
-group: deprecated-2017Q1
-
 jdk:
   - oraclejdk7
   - openjdk7
@@ -35,6 +32,7 @@ cache:
 before_install:
   - docker --version
   # docker compose (due to need for healthcheck)
+  - docker-compose --version
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
