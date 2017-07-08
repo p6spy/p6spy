@@ -34,7 +34,6 @@ cache:
 
 before_install:
   - ./script/travis/before_install_apt-fast.sh
-  - ./script/travis/before_install_firebird.sh
   # latest docker
   - sudo apt-fast update
   - sudo apt-fast -y -o Dpkg::Options::="--force-confnew" install docker-ce
@@ -53,11 +52,11 @@ before_script:
   # travis provided DBs
   - ./script/travis/before_script_mysql.sh
   - ./script/travis/before_script_postgres.sh
-  - ./script/travis/before_script_firebird.sh
   # docker-compose driven DBs
   - wget -O /tmp/wtfc.sh https://raw.githubusercontent.com/typekpb/wtfc/v0.0.2/wtfc.sh && chmod +x /tmp/wtfc.sh
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mssqlserver_1 | grep -qw healthy'
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
+  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
   - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle-product/12.1.0/xe/sqldeveloper/jdbc/lib/ojdbc6.jar /tmp/repo
 
 # install: 
