@@ -36,7 +36,7 @@ before_install:
   - ./script/travis/before_install_apt-fast.sh
   # latest docker
   - sudo apt-fast update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+  - sudo apt-fast -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - docker --version
   # docker compose (due to need for healthcheck)
   - sudo rm /usr/local/bin/docker-compose
