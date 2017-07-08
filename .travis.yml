@@ -5,10 +5,13 @@ dist: trusty
 services:
   - docker
 
+# addons:
+#   mariadb: '10.0'
+
 language: java
 
 jdk:
-  - oraclejdk7
+  # - oraclejdk7 # seems to be unsupported by travis
   - openjdk7
   - oraclejdk8
   - openjdk8
@@ -30,27 +33,28 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
+  - ./script/travis/before_install_apt-fast.sh
   # latest docker
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+  - sudo apt-fast update
+  - sudo apt-fast -y -o Dpkg::Options::="--force-confnew" install docker-engine
   - docker --version
   # docker compose (due to need for healthcheck)
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - docker-compose --version
+  - docker-compose --version  
 
 install:
-  - docker-compose up & # using rather than 'docker-compose up -d' to see log msgs in console
+  - docker-compose -f docker-compose.travis.yml up & # using rather than 'docker-compose up -d' to see log msgs in console
 
 before_script:
+  # travis provided DBs
+  - ./script/travis/before_script_mysql.sh
+  - ./script/travis/before_script_firebird.sh
+  - ./script/travis/before_script_postgres.sh
+  # docker-compose driven DBs
   - wget -O /tmp/wtfc.sh https://raw.githubusercontent.com/typekpb/wtfc/v0.0.2/wtfc.sh && chmod +x /tmp/wtfc.sh
-  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_postgresql_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mysql_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mariadb_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_percona_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mssqlserver_1 | grep -qw healthy'
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
   - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle-product/12.1.0/xe/sqldeveloper/jdbc/lib/ojdbc6.jar /tmp/repo

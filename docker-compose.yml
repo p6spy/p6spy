@@ -22,7 +22,7 @@ services:
         POSTGRES_PASSWORD: '' 
         POSTGRES_DB: p6spy
     ports:
-      - "5433:5432"
+      - "5432:5432"
     healthcheck:
       test: psql -lqt "dbname=p6spy user=travis password=''" | cut -d \| -f 1 | grep -qw p6spy
       interval: 2s
@@ -37,7 +37,7 @@ services:
         MYSQL_DATABASE: p6spy
         MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
     healthcheck:
@@ -54,7 +54,7 @@ services:
         MYSQL_DATABASE: p6spy
         MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
     ports:
-      - "3308:3306"
+      - "3307:3306"
     volumes:
       - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
     healthcheck:
