@@ -58,16 +58,13 @@ install:
 
 before_script:
   # travis provided DBs
-  # - ./script/travis/before_script_mysql.sh
+  - ./script/travis/before_script_mysql.sh
   - ./script/travis/before_script_postgres.sh
-  # - ./script/travis/before_install_oracle.sh
-  # - ./script/travis/before_script_oracle.sh
   # docker-compose driven DBs
   - wget -O /tmp/wtfc.sh https://raw.githubusercontent.com/typekpb/wtfc/v0.0.2/wtfc.sh && chmod +x /tmp/wtfc.sh
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mssqlserver_1 | grep -qw healthy'
   # - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
-  # - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mysql_1 | grep -qw healthy'
   - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /tmp/repo
 
 # install: 
