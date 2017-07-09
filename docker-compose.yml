@@ -3,14 +3,16 @@ version: "3.0"
 services:   
 
   oracle:
-    image: sath89/oracle-12c:latest
+  #   image: sath89/oracle-12c:latest
+    image: wnameless/oracle-xe-11g:latest
     ports:
       - "1522:1521"
       - "8081:8080"
     volumes:
       - ./script/docker/oracle/create_user.sql:/docker-entrypoint-initdb.d/create_user.sql
     healthcheck:
-      test: /bin/sh -c 'echo "SELECT 12345 FROM DUAL;" | sqlplus -S -L travis/travis@localhost:1521/xe.oracle.docker | grep -wq 12345'
+ #     test: /bin/sh -c 'echo "SELECT 12345 FROM DUAL;" | sqlplus -S -L travis/travis@localhost:1521/xe.oracle.docker | grep -wq 12345'
+      test: /bin/sh -c 'echo "SELECT 12345 FROM DUAL;" | sqlplus -S -L travis/travis@localhost:1521/xe | grep -wq 12345'
       interval: 2s
       timeout: 10s
       retries: 1800 # 2s*1800 = 3600s = 60min
