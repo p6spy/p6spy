@@ -39,7 +39,7 @@ services:
         MYSQL_DATABASE: p6spy
         MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
     healthcheck:

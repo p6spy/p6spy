@@ -42,3 +42,20 @@ services:
         interval: 2s
         timeout: 10s
         retries: 1800 # 2s*1800 = 3600s = 60min
+
+  mysql:
+    image: mysql:5.7.18
+    environment:
+        MYSQL_USER: travis
+        MYSQL_PASSWORD: travis
+        MYSQL_DATABASE: p6spy
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+    healthcheck:
+      test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
+      interval: 2s
+      timeout: 10s
+      retries: 1800 # 2s*1800 = 3600s = 60min
