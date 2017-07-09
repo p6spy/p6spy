@@ -4,6 +4,8 @@ dist: trusty
 
 services:
   - docker
+  - mysql
+  - postgresql
 
 # addons:
 #   mariadb: '10.0'
@@ -65,7 +67,7 @@ before_script:
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mssqlserver_1 | grep -qw healthy'
   # - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
-  - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mysql_1 | grep -qw healthy'
+  # - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mysql_1 | grep -qw healthy'
   - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /tmp/repo
 
 # install: 
@@ -74,7 +76,7 @@ before_script:
 
 script:
   - ./gradlew check --info
-  
+
 # script:
 # - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B test site:site site:stage com.github.github:site-maven-plugin:site -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; else mvn -B test -P travis --settings ~/.m2/p6spySettings.xml; fi;
 # - mvn -B test -P travis --settings ~/.m2/p6spySettings.xml;
