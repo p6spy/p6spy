@@ -2,19 +2,6 @@ version: "3.0"
 
 services:   
 
-  # mssqlserver:
-  #   image: microsoft/mssql-server-linux:latest
-  #   environment:
-  #       ACCEPT_EULA: Y
-  #       SA_PASSWORD: P6spyTravis
-  #   ports:
-  #     - "1434:1433"
-  #   healthcheck:
-  #     test: /bin/sh -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P6spyTravis  -Q "SELECT 12345" | grep -wq 12345'
-  #     interval: 2s
-  #     timeout: 10s
-  #     retries: 1800 # 2s*1800 = 3600s = 60min
-
   oracle:
     image: wnameless/oracle-xe-11g:latest
     ports:
@@ -24,6 +11,36 @@ services:
       - ./script/docker/oracle/create_user.sql:/docker-entrypoint-initdb.d/create_user.sql
     healthcheck:
       test: /bin/sh -c 'echo "SELECT 12345 FROM DUAL;" | sqlplus -S -L travis/travis@localhost:1521/xe | grep -wq 12345'
+      interval: 2s
+      timeout: 10s
+      retries: 1800 # 2s*1800 = 3600s = 60min
+
+  mssqlserver:
+    image: microsoft/mssql-server-linux:latest
+    environment:
+        ACCEPT_EULA: Y
+        SA_PASSWORD: P6spyTravis
+    ports:
+      - "1434:1433"
+    healthcheck:
+      test: /bin/sh -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P6spyTravis  -Q "SELECT 12345" | grep -wq 12345'
+      interval: 2s
+      timeout: 10s
+      retries: 1800 # 2s*1800 = 3600s = 60min
+
+  mysql:
+    image: mysql:5.7.18
+    environment:
+        MYSQL_USER: travis
+        MYSQL_PASSWORD: travis
+        MYSQL_DATABASE: p6spy
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
+    healthcheck:
+      test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
       interval: 2s
       timeout: 10s
       retries: 1800 # 2s*1800 = 3600s = 60min
@@ -42,20 +59,3 @@ services:
         interval: 2s
         timeout: 10s
         retries: 1800 # 2s*1800 = 3600s = 60min
-
-  mysql:
-    image: mysql:5.7.18
-    environment:
-        MYSQL_USER: travis
-        MYSQL_PASSWORD: travis
-        MYSQL_DATABASE: p6spy
-        MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
-    ports:
-      - "3307:3306"
-    volumes:
-      - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
-    healthcheck:
-      test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
-      interval: 2s
-      timeout: 10s
-      retries: 1800 # 2s*1800 = 3600s = 60min

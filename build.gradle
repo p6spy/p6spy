@@ -17,7 +17,7 @@ def envDB
 def isTravis = System.getProperty('env', env) != null && System.getProperty('env', env)?.equals('travis')
 if (isTravis) {
   // envDB = 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle,MSSQLServer,MariaDB,Percona'
-  envDB = 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle'
+  envDB = 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle,MSSQLServer'
 } else {
   // sys property (-DDB) or env var (ORG_GRADLE_PROJECT_DB) as a fallback
   envDB = System.getProperty('DB', DB)
