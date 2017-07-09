@@ -1,6 +1,6 @@
 sudo: required
 
-dist: trusty
+# dist: trusty
 
 services:
   - docker
@@ -11,7 +11,7 @@ services:
 language: java
 
 jdk:
-  # - oraclejdk7 # seems to be unsupported by travis
+  - oraclejdk7 # seems to be unsupported by trusty: https://github.com/travis-ci/travis-ci/issues/7884#issuecomment-308451879
   - openjdk7
   - oraclejdk8
   - openjdk8
