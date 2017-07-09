@@ -11,8 +11,14 @@ services:
 language: java
 
 jdk:
-  # - oraclejdk7 # seems to be unsupported by trusty: https://github.com/travis-ci/travis-ci/issues/7884#issuecomment-308451879
-  - openjdk7
+  # seems to be unsupported by trusty: https://github.com/travis-ci/travis-ci/issues/7884#issuecomment-308451879
+  # - oraclejdk7 
+  # unresolved problem on trusty: https://travis-ci.org/p6spy/p6spy/jobs/251801157
+  # failing with: Exception in thread "main" javax.net.ssl.SSLException: java.security.ProviderException: java.security.InvalidKeyException: EC parameters error
+  # ...
+  # Caused by: java.security.NoSuchProviderException: no such provider: SunEC
+  # ...
+  # - openjdk7 
   - oraclejdk8
   - openjdk8
 
