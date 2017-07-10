@@ -47,8 +47,8 @@ services:
   mysql:
     image: mysql:5.7.18
     environment:
-        MYSQL_USER: travis
-        MYSQL_PASSWORD: travis
+        MYSQL_USER: root
+        MYSQL_PASSWORD: root
         MYSQL_DATABASE: p6spy
         MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
     ports:
@@ -64,8 +64,8 @@ services:
   # mariadb:
   #   image: mariadb:10.1.23
   #   environment:
-  #       MYSQL_USER: travis
-  #       MYSQL_PASSWORD: travis
+  #       MYSQL_USER: root
+  #       MYSQL_PASSWORD: root
   #       MYSQL_DATABASE: p6spy
   #       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
   #   ports:
@@ -81,8 +81,8 @@ services:
   # percona:
   #   image: percona:5.7.17
   #   environment:
-  #       MYSQL_USER: travis
-  #       MYSQL_PASSWORD: travis
+  #       MYSQL_USER: root
+  #       MYSQL_PASSWORD: root
   #       MYSQL_DATABASE: p6spy
   #       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
   #   ports:
