@@ -17,18 +17,18 @@ services:
       timeout: 10s
       retries: 1800 # 2s*1800 = 3600s = 60min
 
-  mssqlserver:
-    image: microsoft/mssql-server-linux:latest
-    environment:
-        ACCEPT_EULA: Y
-        SA_PASSWORD: P6spyTravis
-    ports:
-      - "1434:1433"
-    healthcheck:
-      test: /bin/sh -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P6spyTravis  -Q "SELECT 12345" | grep -wq 12345'
-      interval: 2s
-      timeout: 10s
-      retries: 1800 # 2s*1800 = 3600s = 60min
+  # mssqlserver:
+  #   image: microsoft/mssql-server-linux:latest
+  #   environment:
+  #       ACCEPT_EULA: Y
+  #       SA_PASSWORD: P6spyTravis
+  #   ports:
+  #     - "1434:1433"
+  #   healthcheck:
+  #     test: /bin/sh -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P6spyTravis  -Q "SELECT 12345" | grep -wq 12345'
+  #     interval: 2s
+  #     timeout: 10s
+  #     retries: 1800 # 2s*1800 = 3600s = 60min
 
   postgresql:
     build:  ./script/docker/postgres
