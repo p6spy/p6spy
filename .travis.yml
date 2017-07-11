@@ -41,10 +41,9 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
-  - ./script/travis/before_install_apt-fast.sh
   # latest docker
-  - sudo apt-fast update
-  - sudo apt-fast -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - docker --version
   # docker compose (due to need for healthcheck)
   - sudo rm /usr/local/bin/docker-compose
@@ -62,14 +61,9 @@ before_script:
   - ./script/travis/before_script_postgres.sh
   # docker-compose driven DBs
   - wget -O /tmp/wtfc.sh https://raw.githubusercontent.com/typekpb/wtfc/v0.0.2/wtfc.sh && chmod +x /tmp/wtfc.sh
-  # - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_mssqlserver_1 | grep -qw healthy'
   # - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
   - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /tmp/repo
-
-# install: 
-#  - mvn -q -B dependency:resolve-plugins --settings ~/.m2/p6spySettings.xml
-#  - mvn -q -B dependency:resolve --settings ~/.m2/p6spySettings.xml
 
 script:
   - ./gradlew check --info
@@ -78,15 +72,24 @@ script:
 # - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B test site:site site:stage com.github.github:site-maven-plugin:site -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; else mvn -B test -P travis --settings ~/.m2/p6spySettings.xml; fi;
 # - mvn -B test -P travis --settings ~/.m2/p6spySettings.xml;
 
-# jobs:
-#   include:
-#     - stage: deploy
-#       script: [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]] 
-#       # Keep in mind to overwrite these here
-#       jdk: oraclejdk7
+jobs:
+  include:
+    - stage: deploy
+      script: 
+        - |
+          if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
+            ./gradlew jacocoTestReport coveralls
+          fi
+      # Keep in mind to overwrite these here
+      jdk: oraclejdk8
 
-# after_success:
-# #  - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B deploy -DskipTests --settings ~/.m2/p6spySettings.xml; fi
+deploy:
+  provider: bintray
+  file: "descriptor.json"
+  user: $BINTRAY_API_USER
+  key: $BINTRAY_API_KEY
+  dry-run: false
+  on: master
 
 # notifications:
 #  email:
