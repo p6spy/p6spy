@@ -409,6 +409,12 @@
       <version>1.4</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-jdbc</artifactId>
+      <version>8.5.6</version>
+      <scope>test</scope>
+    </dependency>
     <!-- xa datasource testing  -->
     <dependency>
       <groupId>org.codehaus.btm</groupId>
