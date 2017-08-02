@@ -36,7 +36,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
   public static final String INCLUDE = "include";
   public static final String FILTER = "filter";
   public static final String EXCLUDECATEGORIES = "excludecategories";
-  public static final String EXCLUDEBINARY = "exludebinary";
+  public static final String EXCLUDEBINARY = "excludebinary";
   public static final String EXECUTION_THRESHOLD = "executionThreshold";
   public static final String SQLEXPRESSION = "sqlexpression";
 
