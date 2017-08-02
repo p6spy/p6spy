@@ -68,28 +68,28 @@ before_script:
 script:
   - ./gradlew check --info
 
-# script:
-# - if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk7" ]]; then mvn -B test site:site site:stage com.github.github:site-maven-plugin:site -P travis -Dmaven.test.failure.ignore=true --settings ~/.m2/p6spySettings.xml; else mvn -B test -P travis --settings ~/.m2/p6spySettings.xml; fi;
-# - mvn -B test -P travis --settings ~/.m2/p6spySettings.xml;
+after_success:
+  - |
+      # coveralls publishing
+      if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8"  ]]; then
+        ./gradlew jacocoTestReport coveralls --info
+      fi
 
-jobs:
-  include:
-    - stage: deploy
-      script: 
-        - |
-          if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
-            ./gradlew jacocoTestReport coveralls
-          fi
-      # Keep in mind to overwrite these here
-      jdk: oraclejdk8
+      # nexus staging publishing (snapshots)
+      # uses env vars: SONATYPE_USERNAME and SONATYPE_PASSWORD
+      # if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8"  ]]; then
+      #   ./gradlew uploadArchives closeAndReleaseRepository --info
+      # fi
 
-deploy:
-  provider: bintray
-  file: "descriptor.json"
-  user: $BINTRAY_API_USER
-  key: $BINTRAY_API_KEY
-  dry-run: false
-  on: master
+      # TODO bintray publishing (snapshots)
+
+      # bintray publishing (releases)
+      # publishing done via com.jfrog.bintray plugin, rather than travis bintray integration => independant on CI env
+      # uses env vars: BINTRAY_USER and BINTRAY_API_KEY
+      if [[ ! -z "$TRAVIS_TAG" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+        # ./gradlew generatePomFileForMavenPublication bintrayUpload --info
+        ./gradlew bintrayUpload --info
+      fi
 
 # notifications:
 #  email:
