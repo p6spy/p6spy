@@ -104,7 +104,7 @@ public class XADataSourceTest extends P6TestFramework {
     {
       final XADataSource realInTestDs = (XADataSource) P6Util.forName(
           testOptions.getXaDataSource().getClass().getName()).newInstance();
-      setXADSProperties(realInTestDs, testOptions.getUrl().replace(":p6spy", ""),
+      setXADSProperties(realInTestDs, testOptions.getUrl().replace("p6spy:", ""),
           testOptions.getUser(), testOptions.getPassword());
       jndiResources.add(new Resource("jdbc/realInTestDs", realInTestDs));
 
