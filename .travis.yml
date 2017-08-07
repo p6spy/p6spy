@@ -75,6 +75,12 @@ after_success:
         ./gradlew jacocoTestReport coveralls --info
       fi
 
+      # github release notes sync (via chandler)
+      if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8"  ]]; then
+        gem install --no-ri --no-rdoc chandler
+        chandler --changelog=$(pwd)/docs/releasenotes.md --github=p6spy/p6spy push
+      fi
+
       # nexus staging publishing (snapshots)
       # uses env vars: SONATYPE_USERNAME and SONATYPE_PASSWORD
       # if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8"  ]]; then
