@@ -20,10 +20,15 @@
 package com.p6spy.engine.spy;
 
 import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.event.SimpleJdbcEventListener;
 import com.p6spy.engine.test.P6TestFramework;
+import com.p6spy.engine.test.P6TestLoadableOptions;
+import com.p6spy.engine.test.P6TestOptions;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
+
+import org.eclipse.jetty.plus.jndi.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -31,6 +36,8 @@ import org.junit.runners.Parameterized;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import javax.sql.XADataSource;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -42,15 +49,20 @@ public class P6TestPool extends P6TestFramework {
   public P6TestPool(String db) throws SQLException, IOException {
     super(db);
 
+    final P6TestLoadableOptions testOptions = P6TestOptions.getActiveInstance();
 
     org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
-    ds.setDriverClassName("com.p6spy.engine.spy.P6SpyDriver");
-    ds.setUsername("sa");
-    ds.setPassword("");
-    ds.setUrl("jdbc:p6spy:h2:mem:p6spy");
+    ds.setDriverClassName(P6SpyDriver.class.getName());
+    ds.setUsername(testOptions.getUser());
+    ds.setPassword(testOptions.getPassword());
+    ds.setUrl(testOptions.getUrl());
     ds.setTestOnBorrow(true);
     ds.setTestOnConnect(true);
-    ds.setValidationQuery("SELECT 1");
+    if ("Oracle".equals(db)) {
+      ds.setValidationQuery("SELECT 1 FROM DUAL");
+    } else {
+      ds.setValidationQuery("SELECT 1");
+    }
 
     connection = ds.getConnection().unwrap(ConnectionWrapper.class);
   }
