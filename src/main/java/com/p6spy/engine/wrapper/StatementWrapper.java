@@ -40,6 +40,7 @@ import com.p6spy.engine.event.JdbcEventListener;
  */
 public class StatementWrapper extends AbstractWrapper implements Statement {
 
+  private static final String LINE_SEPARATOR = System.getProperty("line.separator");
   private final Statement delegate;
   protected final JdbcEventListener eventListener;
   private final StatementInformation statementInformation;
@@ -246,7 +247,7 @@ public class StatementWrapper extends AbstractWrapper implements Statement {
     if (statementInformation.getStatementQuery() == null) {
       statementInformation.setStatementQuery(sql);
     } else {
-      statementInformation.setStatementQuery(sql + System.lineSeparator() + statementInformation.getStatementQuery());
+      statementInformation.setStatementQuery(sql + LINE_SEPARATOR + statementInformation.getStatementQuery());
     }
     
     SQLException e = null;
