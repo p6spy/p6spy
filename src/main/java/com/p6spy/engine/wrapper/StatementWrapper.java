@@ -246,7 +246,7 @@ public class StatementWrapper extends AbstractWrapper implements Statement {
     if (statementInformation.getStatementQuery() == null) {
       statementInformation.setStatementQuery(sql);
     } else {
-      statementInformation.setStatementQuery(sql + statementInformation.getStatementQuery());
+      statementInformation.setStatementQuery(sql + System.lineSeparator() + statementInformation.getStatementQuery());
     }
     
     SQLException e = null;
