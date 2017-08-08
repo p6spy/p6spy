@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'maven'
-    // id 'signing'
     id 'maven-publish'
 
     id 'com.fizzpod.sweeney' version '2.1.2'
@@ -11,12 +10,9 @@ plugins {
     // to publish code coverage to coveralls
     // ./gradlew jacocoTestReport coveralls
     id 'com.github.kt3k.coveralls' version '2.8.1'
-    // to publish release to bintray
+    // to publish to bintray
     // ./gradlew bintrayUpload
     id 'com.jfrog.bintray' version '1.7.3'
-    // to close and promote/release staged repositories 
-    // ./gradlew closeAndReleaseRepository
-    id 'io.codearte.nexus-staging' version '0.9.0'
 }
 
 def envDB
