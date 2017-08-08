@@ -9,12 +9,13 @@ services:
       - "8081:8080"
     volumes:
       - ./script/docker/oracle/create_user.sql:/docker-entrypoint-initdb.d/create_user.sql
+      - ./script/docker/oracle/healthcheck.sh:/tmp/healthcheck.sh
     healthcheck:
-      test: /bin/sh -c 'echo "SELECT 12345 FROM DUAL;" | sqlplus -S -L travis/travis@localhost:1521/xe | grep -wq 12345'
+      test: /bin/bash /tmp/healthcheck.sh
       interval: 2s
       timeout: 10s
       retries: 1800 # 2s*1800 = 3600s = 60min
-
+    
   # mssqlserver:
   #   image: microsoft/mssql-server-linux:latest
   #   environment:
@@ -40,7 +41,7 @@ services:
   #   volumes:
   #     - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
   #   healthcheck:
-  #     test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
+  #     test: [ -d /var/lib/mysql/p6spy ]
   #     interval: 2s
   #     timeout: 10s
   #     retries: 1800 # 2s*1800 = 3600s = 60min
@@ -55,7 +56,7 @@ services:
       ports:
         - "3050:3050"
       healthcheck:
-        test: /bin/sh -c "[ -f /databases/p6spy.gdb ]"
+        test: [ -f /databases/p6spy.gdb ]
         interval: 2s
         timeout: 10s
         retries: 1800 # 2s*1800 = 3600s = 60min
