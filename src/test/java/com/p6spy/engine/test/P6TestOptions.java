@@ -37,6 +37,7 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
   public static final String USER = "user";
   public static final String URL = "url";
   public static final String XA_DATASOURCE = "xaDataSource";
+  public static final String VALIDATION_QUERY = "validationQuery";
 
   private static final Map<String, String> defaults = new HashMap<String, String>();
 
@@ -56,6 +57,7 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
     setUser2(properties.get(USER2));
     setPassword2(properties.get(PASSWORD2));
     setXaDataSource(properties.get(XA_DATASOURCE));
+    setValidationQuery(properties.get(VALIDATION_QUERY));
   }
 
   /**
@@ -141,5 +143,15 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
   public XADataSource getXaDataSource() {
     return optionsRepository.get(XADataSource.class, XA_DATASOURCE);
   }
+  
+  @Override
+  public void setValidationQuery(String validationQuery) {
+    optionsRepository.set(String.class, VALIDATION_QUERY, validationQuery);
+  }
 
+  @Override
+  public String getValidationQuery() {
+    return optionsRepository.get(String.class, VALIDATION_QUERY);
+  }
+  
 }

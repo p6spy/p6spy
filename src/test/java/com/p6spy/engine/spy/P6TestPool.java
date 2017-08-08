@@ -19,29 +19,25 @@
  */
 package com.p6spy.engine.spy;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
 import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.event.SimpleJdbcEventListener;
 import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.test.P6TestLoadableOptions;
 import com.p6spy.engine.test.P6TestOptions;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
-
-import org.eclipse.jetty.plus.jndi.Resource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import javax.sql.XADataSource;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class P6TestPool extends P6TestFramework {
@@ -58,11 +54,7 @@ public class P6TestPool extends P6TestFramework {
     ds.setUrl(testOptions.getUrl());
     ds.setTestOnBorrow(true);
     ds.setTestOnConnect(true);
-    if ("Oracle".equals(db)) {
-      ds.setValidationQuery("SELECT 1 FROM DUAL");
-    } else {
-      ds.setValidationQuery("SELECT 1");
-    }
+    ds.setValidationQuery(testOptions.getValidationQuery());
 
     connection = ds.getConnection().unwrap(ConnectionWrapper.class);
   }
@@ -70,7 +62,7 @@ public class P6TestPool extends P6TestFramework {
 
   @Test
   public void testExecute() throws SQLException {
-    String query = "select 2";
+    String query = "select * from customers";
 
     final Connection connectionWrapper = ConnectionWrapper.wrap(this.connection, new SimpleJdbcEventListener() {
       @Override
