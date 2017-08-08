@@ -32,7 +32,7 @@ repositories {
 
     if (envDB.contains('Oracle')) {
       assert new File("${buildDir}/repo/ojdbc6.jar").exists()
-      flatDir dirs: "${buildDir}/repo/ojdbc6.jar" // holds copied oracle jdbc driver
+      flatDir dirs: "${buildDir}/repo" // holds copied oracle jdbc driver
     }
 }
 
