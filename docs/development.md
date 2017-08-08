@@ -65,7 +65,7 @@ To have tests running please follow these steps:
         # start databases in dockerized environment, please note SQLite installation would still have to be done on the machine manually
         docker-compose up
         # once oracle container is started, run:
-        mkdir -p ${PWD}/build/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar ${PWD}/build/repo
+        mkdir -p ./build/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar ./build/repo
         # run tests
         ./gradlew test -P travis
 

@@ -63,7 +63,7 @@ before_script:
   - wget -O /tmp/wtfc.sh https://raw.githubusercontent.com/typekpb/wtfc/v0.0.2/wtfc.sh && chmod +x /tmp/wtfc.sh
   # - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
-  - mkdir -p ${PWD}/build/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar ${PWD}/build/repo
+  - mkdir -p ./build/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar ./build/repo
 
 script:
   - ./gradlew check --info
