@@ -55,7 +55,7 @@ services:
     volumes:
       - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
     healthcheck:
-      test: [ -d /var/lib/mysql/p6spy ]
+      test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
       interval: 2s
       timeout: 10s
       retries: 1800 # 2s*1800 = 3600s = 60min
@@ -72,7 +72,7 @@ services:
   #   volumes:
   #     - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
   #   healthcheck:
-  #     test: [ -d /var/lib/mysql/p6spy ]
+  #     test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
   #     interval: 2s
   #     timeout: 10s
   #     retries: 1800 # 2s*1800 = 3600s = 60min
@@ -89,7 +89,7 @@ services:
   #   volumes:
   #     - ./script/docker/mysql/change_user_pwd.sql:/docker-entrypoint-initdb.d/change_user_pwd.sql
   #   healthcheck:
-  #     test: [ -d /var/lib/mysql/p6spy ]
+  #     test: /bin/sh -c "[ -d /var/lib/mysql/p6spy ]"
   #     interval: 2s
   #     timeout: 10s
   #     retries: 1800 # 2s*1800 = 3600s = 60min
@@ -104,7 +104,7 @@ services:
     ports:
       - "3050:3050"
     healthcheck:
-      test: [ -f /databases/p6spy.gdb ]
+      test: /bin/sh -c "[ -f /databases/p6spy.gdb ]"
       interval: 2s
       timeout: 10s
       retries: 1800 # 2s*1800 = 3600s = 60min
