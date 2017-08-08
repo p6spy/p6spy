@@ -35,8 +35,8 @@ repositories {
     flatDir dirs: 'src/test/repo' // holds p6spy-signedjar-test
 
     if (envDB.contains('Oracle')) {
-      assert new File('/tmp/repo/ojdbc6.jar').exists()
-      flatDir dirs: '/tmp/repo' // holds copied oracle jdbc driver
+      assert new File("${buildDir}/repo/ojdbc6.jar").exists()
+      flatDir dirs: "${buildDir}/repo/ojdbc6.jar" // holds copied oracle jdbc driver
     }
 }
 
@@ -130,9 +130,6 @@ test {
     jvmArgs '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.authenticate=false', '-Dcom.sun.management.jmxremote.port=1234', '-Dcom.sun.management.jmxremote.ssl=false', '-Doracle.jdbc.timezoneAsRegion=false', '-Ddb2.jcc.override.traceLevel=0'
 }
 
-// [BEGIN] central repo publishing
-// see: http://central.sonatype.org/pages/gradle.html
-
 group = 'p6spy'
 archivesBaseName = 'p6spy'
 version = '3.0.1-SNAPSHOT'
@@ -150,52 +147,6 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives javadocJar, sourcesJar
 }
-
-// signing {
-//     sign configurations.archives
-// }
-
-// def ossrhUsername = project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : System.getenv('SONATYPE_USERNAME')
-// def ossrhPassword = project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : System.getenv('SONATYPE_PASSWORD')
-
-// uploadArchives {
-//   repositories {
-//     mavenDeployer {
-//       beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-//       // done over bintray
-//       // // TODO
-//       // repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-//       //   authentication(userName: ossrhUsername, password: ossrhPassword)
-//       // }
-
-//       snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-//         authentication(userName: ossrhUsername, password: ossrhPassword)
-//       }
-
-//       pom.project {
-//         name 'P6Spy'
-//         packaging 'jar'
-//         description 'P6Spy is a framework that enables database data to be seamlessly intercepted and logged with no code changes to the application.'
-//         url 'https://github.com/p6spy/p6spy'
-
-//         scm {
-//           connection 'scm:git:https://github.com/p6spy/p6spy.git'
-//           developerConnection 'scm:git:https://github.com/p6spy/p6spy.git'
-//           url 'https://github.com/p6spy/p6spy'
-//         }
-
-//         licenses {
-//           license {
-//             name 'The Apache License, Version 2.0'
-//             url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
-// [END] central repo publishing
 
 publishing {
 	publications {
@@ -234,9 +185,7 @@ bintray {
 		// attributes= ['a': ['ay1', 'ay2'], 'b': ['bee'], c: 'cee'] //Optional package-level attributes
 		version {
 			name = project.version
-			// desc = 'Gradle Bintray Plugin 1.0 final'
 			vcsTag = "p6spy-${project.version}"
-			// attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
 		}
 	}
 }

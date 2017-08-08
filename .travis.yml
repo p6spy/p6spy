@@ -63,7 +63,7 @@ before_script:
   - wget -O /tmp/wtfc.sh https://raw.githubusercontent.com/typekpb/wtfc/v0.0.2/wtfc.sh && chmod +x /tmp/wtfc.sh
   # - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_oracle_1 | grep -qw healthy'
   - /tmp/wtfc.sh -T 0 -P 'docker inspect -f "{{.State.Health.Status}}" p6spy_firebird_1 | grep -qw healthy'
-  - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /tmp/repo
+  - mkdir /tmp/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar ${PWD}/build/repo
 
 script:
   - ./gradlew check --info
@@ -80,14 +80,6 @@ after_success:
         gem install --no-ri --no-rdoc chandler
         chandler --changelog=$(pwd)/docs/releasenotes.md --github=p6spy/p6spy push
       fi
-
-      # nexus staging publishing (snapshots)
-      # uses env vars: SONATYPE_USERNAME and SONATYPE_PASSWORD
-      # if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8"  ]]; then
-      #   ./gradlew uploadArchives closeAndReleaseRepository --info
-      # fi
-
-      # TODO bintray publishing (snapshots)
 
       # bintray publishing (releases)
       # publishing done via com.jfrog.bintray plugin, rather than travis bintray integration => independant on CI env
