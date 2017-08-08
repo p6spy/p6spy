@@ -6,7 +6,7 @@ plugins {
 
     id 'com.fizzpod.sweeney' version '2.1.2'
     id 'com.github.hierynomus.license' version '0.14.0'    
-    id 'com.github.johnrengelman.shadow' version '2.0.0'
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
     // to publish code coverage to coveralls
     // ./gradlew jacocoTestReport coveralls
     id 'com.github.kt3k.coveralls' version '2.8.1'
