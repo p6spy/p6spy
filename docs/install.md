@@ -60,8 +60,8 @@ is the directory in which JBoss is installed.
         <connection-url>jdbc:p6spy:mysql://<hostname>:<port>/<database></connection-url>
         <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
 
-### JBoss 7.1.x, WildFly 8.x
-The following instructions were tested with JBoss 7.1.0 and Wildfly 8.1.Final (works with p6spy version 2.1.0 or higher). For these instructions,
+### JBoss 7.1.x, WildFly 8.x, WildFly 10.x
+The following instructions were tested with JBoss 7.1.0, WildFly 8.1.Final and WildFly 10.0.0.Final (works with p6spy version 2.1.0 or higher). For these instructions,
 P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory in which JBoss/WildFly is installed. 
 
 1. Deploy **p6spy.jar** as a module:
@@ -96,9 +96,15 @@ P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory
 		        <driver name="p6spy" module="com.p6spy">
 	                <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
 		        </driver>
-		        ...
+		        <!-- make sure that you also include the real driver -->
+		        <driver name="h2" module="com.h2database.h2">
+                <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+            </driver>
             </drivers>
         </datasources>
+
+	Please note that you have to include both drivers in the corresponding section, the real driver (here the H2 driver) and the p6spy driver,
+	although only the p6spy driver is referenced after the connection URL.
 
 ## Apache Tomcat and Apache TomEE
 
