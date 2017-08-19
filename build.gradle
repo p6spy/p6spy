@@ -234,13 +234,21 @@ publishing {
 }
 
 bintray {
-	user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-	key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-	publications = ['maven']
-  //dryRun = true
+	user = System.getenv('BINTRAY_USER')
+	key = System.getenv('BINTRAY_API_KEY')
+  if (!version.endsWith("-SNAPSHOT")) {
+    publications = ['maven']
+  } else {
+    publications = ['maven-snapshots']
+  }
+  // dryRun = true
   // publish = true
 	pkg {
-		repo = 'maven'
+    if (!version.endsWith("-SNAPSHOT")) {
+		  repo = 'maven'
+    } else {
+      repo = 'maven-snapshots'
+    }
 		name = projectName.toLowerCase()
 		userOrg = group
     desc = description
@@ -248,14 +256,25 @@ bintray {
     issueTrackerUrl = 'https://github.com/p6spy/p6spy/issues'
     vcsUrl = 'https://github.com/p6spy/p6spy.git'
 		licenses = ['Apache-2.0']
-		labels = []
 		publicDownloadNumbers = true
     githubRepo = 'p6spy/p6spy'
     githubReleaseNotesFile = 'docs/releasenotes.md'
 		version {
 			released = new Date()
       name = project.version
-			vcsTag = "p6spy-${project.version}"
+
+      if (!version.endsWith("-SNAPSHOT")) {
+        vcsTag = "p6spy-${project.version}"
+        
+          // Optional configuration for Maven Central sync of the version
+          mavenCentralSync {
+              sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+              user = System.getenv('SONATYPE_USERNAME') //OSS user token: mandatory
+              password = System.getenv('SONATYPE_PASSWORD') //OSS user password: mandatory
+              close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+          }
+        }
+      }
 		}
 	}
 }
