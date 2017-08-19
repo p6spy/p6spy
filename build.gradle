@@ -136,8 +136,46 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+task shadowLog4jJar(type: ShadowJar) {
+  classifier = 'log4j-nodep'
+  from sourceSets.main.output //tells the task to include the project code
+  configurations = [ project.configurations.compileOnly ]
+  dependencies {
+    include(dependency( group: 'log4j', name: 'log4j')) 
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
+    include(dependency( group: 'org.slf4j', name: 'slf4j-log4j')) 
+  }
+}
+
+task shadowLog4j2Jar(type: ShadowJar) {
+  classifier = 'log4j2-nodep'
+  from sourceSets.main.output //tells the task to include the project code
+  configurations = [ project.configurations.compileOnly ]
+  dependencies {
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl')) 
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-api')) 
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-core')) 
+  }
+}
+
+task shadowLogbackJar(type: ShadowJar) {
+  classifier = 'logback-nodep'
+  from sourceSets.main.output //tells the task to include the project code
+  configurations = [ project.configurations.compileOnly ]
+  dependencies {
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
+    include(dependency( group: 'ch.qos.logback', name: 'logback-classic')) 
+    include(dependency( group: 'ch.qos.logback', name: 'logback-core')) 
+  }
+}
+
+assemble.dependsOn('shadowLog4jJar', 'shadowLog4j2Jar', 'shadowLogbackJar')
+
 artifacts {
-    archives javadocJar, sourcesJar
+    archives javadocJar, sourcesJar, shadowLog4jJar, shadowLog4j2Jar, shadowLogbackJar
 }
 
 publishing {
@@ -154,6 +192,18 @@ publishing {
 
       artifact javadocJar {
         classifier 'javadoc'
+      }
+
+      artifact shadowLog4jJar {
+        classifier 'log4j-nodep'
+      }
+
+      artifact shadowLog4j2Jar {
+        classifier 'log4j2-nodep'
+      }
+
+      artifact shadowLogbackJar {
+        classifier 'logback-nodep'
       }
 
       pom.withXml {
@@ -209,41 +259,3 @@ bintray {
 		}
 	}
 }
-
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-task shadowLog4jJar(type: ShadowJar) {
-  classifier = 'log4j-nodep'
-  from sourceSets.main.output //tells the task to include the project code
-  configurations = [ project.configurations.compileOnly ]
-  dependencies {
-    include(dependency( group: 'log4j', name: 'log4j')) 
-    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
-    include(dependency( group: 'org.slf4j', name: 'slf4j-log4j')) 
-  }
-}
-
-task shadowLog4j2Jar(type: ShadowJar) {
-  classifier = 'log4j2-nodep'
-  from sourceSets.main.output //tells the task to include the project code
-  configurations = [ project.configurations.compileOnly ]
-  dependencies {
-    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
-    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl')) 
-    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-api')) 
-    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-core')) 
-  }
-}
-
-task shadowLogbackJar(type: ShadowJar) {
-  classifier = 'logback-nodep'
-  from sourceSets.main.output //tells the task to include the project code
-  configurations = [ project.configurations.compileOnly ]
-  dependencies {
-    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
-    include(dependency( group: 'ch.qos.logback', name: 'logback-classic')) 
-    include(dependency( group: 'ch.qos.logback', name: 'logback-core')) 
-  }
-}
-
-assemble.dependsOn('shadowLog4jJar', 'shadowLog4j2Jar', 'shadowLogbackJar')
