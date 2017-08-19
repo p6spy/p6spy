@@ -172,8 +172,6 @@ task shadowLogbackJar(type: ShadowJar) {
   }
 }
 
-assemble.dependsOn('shadowLog4jJar', 'shadowLog4j2Jar', 'shadowLogbackJar')
-
 artifacts {
     archives javadocJar, sourcesJar, shadowLog4jJar, shadowLog4j2Jar, shadowLogbackJar
 }
