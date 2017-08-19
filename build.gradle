@@ -244,7 +244,7 @@ bintray {
   // dryRun = true
   // publish = true
 	pkg {
-    if (!version.endsWith("-SNAPSHOT")) {
+    if (!project.version.endsWith("-SNAPSHOT")) {
 		  repo = 'maven'
     } else {
       repo = 'maven-snapshots'
@@ -263,17 +263,21 @@ bintray {
 			released = new Date()
       name = project.version
 
-      if (!version.endsWith("-SNAPSHOT")) {
+      if (!project.version.endsWith("-SNAPSHOT")) {
         vcsTag = "p6spy-${project.version}"
+      } 
         
-          // Optional configuration for Maven Central sync of the version
-          mavenCentralSync {
-              sync = true //[Default: true] Determines whether to sync the version to Maven Central.
-              user = System.getenv('SONATYPE_USERNAME') //OSS user token: mandatory
-              password = System.getenv('SONATYPE_PASSWORD') //OSS user password: mandatory
-              close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+      // Optional configuration for Maven Central sync of the version
+      mavenCentralSync {
+          if (!project.version.endsWith("-SNAPSHOT")) {
+            sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+            close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+          } else {
+            sync = false
+            close = '0'
           }
-        }
+          user = System.getenv('SONATYPE_USERNAME') //OSS user token: mandatory
+          password = System.getenv('SONATYPE_PASSWORD') //OSS user password: mandatory
       }
 		}
 	}
