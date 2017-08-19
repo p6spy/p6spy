@@ -212,7 +212,7 @@ publishing {
 
           builder.name project.name
           builder.description description
-          builder.url 'https://github.com/p6xpy/p6xpy'
+          builder.url 'https://github.com/p6spy/p6spy'
 
           builder.licenses {
               builder.license {
@@ -223,9 +223,9 @@ publishing {
           }
 
           builder.scm {
-              builder.url 'scm:git@github.com:p6xpy/p6spy.git'
-              builder.connection 'git@github.com:p6xpy/p6spy.git'
-              builder.developerConnection 'git@github.com:p6xpy/p6spy.git'
+              builder.url 'scm:git@github.com:p6spy/p6spy.git'
+              builder.connection 'git@github.com:p6spy/p6spy.git'
+              builder.developerConnection 'git@github.com:p6spy/p6spy.git'
           }
         }
       }
