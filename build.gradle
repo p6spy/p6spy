@@ -10,9 +10,11 @@ plugins {
     // to publish code coverage to coveralls
     // ./gradlew jacocoTestReport coveralls
     id 'com.github.kt3k.coveralls' version '2.8.1'
-    // to publish to bintray
+    // to publish !SNAPSHOTs to bintray
     // ./gradlew bintrayUpload
     id 'com.jfrog.bintray' version '1.7.3'
+    // to publish SNAPSHOTs to oss.jfrog.org
+    id 'com.jfrog.artifactory' version '4.5.2'
 }
 
 def envDB
@@ -231,22 +233,37 @@ publishing {
 	}
 }
 
+// to publish SNAPSHOTs to oss.jfrog.org
+artifactory {
+    contextUrl = 'https://oss.jfrog.org'
+    resolve {
+        repository {
+            repoKey = 'libs-release'
+        }
+    }
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
+            // when using oss.jfrog.org the credentials are from Bintray.
+            username = System.getenv('BINTRAY_USER')
+            password = System.getenv('BINTRAY_API_KEY')
+        }
+        defaults {
+            publications 'mavenJava'
+            properties = [ 'bintray.repo': 'jfrog/jfrog-jars', 'bintray.package': projectName.toLowerCase(), 'bintray.version': version.toString() ]
+        }
+    }
+}
+
+// to publish !SNAPSHOTs to bintray
 bintray {
 	user = System.getenv('BINTRAY_USER')
 	key = System.getenv('BINTRAY_API_KEY')
-  if (!version.endsWith("-SNAPSHOT")) {
-    publications = ['maven']
-  } else {
-    publications = ['maven-snapshots']
-  }
+  publications = ['maven']
   // dryRun = true
   // publish = true
 	pkg {
-    if (!project.version.endsWith("-SNAPSHOT")) {
-		  repo = 'maven'
-    } else {
-      repo = 'maven-snapshots'
-    }
+    repo = 'maven'
 		name = projectName.toLowerCase()
 		userOrg = group
     desc = description
@@ -260,23 +277,19 @@ bintray {
 		version {
 			released = new Date()
       name = project.version
-
-      if (!project.version.endsWith("-SNAPSHOT")) {
-        vcsTag = "p6spy-${project.version}"
-      } 
+      vcsTag = "p6spy-${project.version}"
         
       // Optional configuration for Maven Central sync of the version
       mavenCentralSync {
-          if (!project.version.endsWith("-SNAPSHOT")) {
-            sync = true //[Default: true] Determines whether to sync the version to Maven Central.
-            close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
-          } else {
-            sync = false
-            close = '0'
-          }
+          sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+          close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
           user = System.getenv('SONATYPE_USERNAME') //OSS user token: mandatory
           password = System.getenv('SONATYPE_PASSWORD') //OSS user password: mandatory
       }
 		}
 	}
+}
+
+task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
+    gradleVersion = '4.1'
 }

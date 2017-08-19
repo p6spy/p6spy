@@ -71,12 +71,12 @@ script:
 after_success:
   - |
       # coveralls publishing
-      if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8"  ]]; then
+      if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
         ./gradlew jacocoTestReport coveralls --info
       fi
 
       # github release notes sync (via chandler)
-      if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8"  ]]; then
+      if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
         gem install --no-ri --no-rdoc chandler
         chandler --changelog=$(pwd)/docs/releasenotes.md --github=p6spy/p6spy push
       fi
@@ -85,8 +85,9 @@ after_success:
       # publishing done via com.jfrog.bintray plugin, rather than travis bintray integration => independant on CI env
       # uses env vars: BINTRAY_USER and BINTRAY_API_KEY
       if [[ ! -z "$TRAVIS_TAG" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
-        # ./gradlew generatePomFileForMavenPublication bintrayUpload --info
         ./gradlew bintrayUpload --info
+      elif [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+        ./gradlew artifactoryPublish --info
       fi
 
 # notifications:
