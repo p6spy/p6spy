@@ -109,8 +109,7 @@ jacocoTestReport {
 
 license {
     ext.year = Calendar.getInstance().get(Calendar.YEAR)
-    ext.name = projectName
-
+    ext.name = 'P6Spy'
     header file('./script/qa/license_header.txt')
 }
 
@@ -250,7 +249,7 @@ artifactory {
         }
         defaults {
             publications 'mavenJava'
-            properties = [ 'bintray.repo': 'jfrog/jfrog-jars', 'bintray.package': projectName.toLowerCase(), 'bintray.version': version.toString() ]
+            properties = [ 'bintray.repo': 'p6spy/maven', 'bintray.package': 'p6spy:p6spy', 'bintray.version': project.version.toString() ]
         }
     }
 }
@@ -264,7 +263,7 @@ bintray {
   // publish = true
 	pkg {
     repo = 'maven'
-		name = projectName.toLowerCase()
+		name = 'p6spy'
 		userOrg = group
     desc = description
     websiteUrl = 'https://github.com/p6spy/p6spy'
