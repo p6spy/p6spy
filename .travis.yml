@@ -81,15 +81,18 @@ after_success:
         chandler --changelog=$(pwd)/docs/releasenotes.md --github=p6spy/p6spy push
       fi
 
-      # bintray publishing (releases)
-      # publishing done via com.jfrog.bintray plugin, rather than travis bintray integration => independant on CI env
-      # uses env vars: BINTRAY_USER and BINTRAY_API_KEY
+      # jars publishing
       if [[ ! -z "$TRAVIS_TAG" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+        # releases to bintray
+        # publishing done via com.jfrog.bintray plugin, rather than travis bintray integration => independant on CI env
+        # relevant env vars: BINTRAY_USER and BINTRAY_API_KEY
         ./gradlew bintrayUpload --info
       elif [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+        # snapshots to oss.jfrog.org
+        # relevant env vars: BINTRAY_USER and BINTRAY_API_KEY
         ./gradlew artifactoryPublish --info
       fi
 
-# notifications:
-#  email:
-#    - p6spy-developers@googlegroups.com
+notifications:
+ email:
+   - p6spy-developers@googlegroups.com
