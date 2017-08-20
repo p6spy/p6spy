@@ -249,7 +249,7 @@ artifactory {
             password = System.getenv('BINTRAY_API_KEY')
         }
         defaults {
-            publications 'mavenJava'
+            publications 'maven'
             properties = [ 'bintray.repo': 'p6spy/maven', 'bintray.package': 'p6spy:p6spy', 'bintray.version': project.version.toString() ]
         }
     }
