@@ -1,22 +1,21 @@
-/*
- * #%L
+/**
  * P6Spy
- * %%
- * Copyright (C) 2002 - 2016 P6Spy
- * %%
+ *
+ * Copyright (C) 2002 - 2017 P6Spy
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * #L%
  */
+
 package com.p6spy.engine.event;
 
 import com.p6spy.engine.common.CallableStatementInformation;
@@ -35,15 +34,15 @@ import java.sql.Statement;
 
 /**
  * Implementations of this class receive notifications for interesting JDBC events.
- * <p/>
+ * <p>
  * This class intentionally is not an interface so that methods can be added without breaking existing implementations.
- * <p/>
+ * <p>
  * There are two ways to register your custom implementation of this class.
  * The fist way is to add the fully qualified class name of your implementation to
  * <code>src/main/resources/META-INF/services/com.p6spy.engine.event.JdbcEventListener</code>.
- * <p/>
+ * <p>
  * The second way is to implement a {@link com.p6spy.engine.spy.P6Factory}
- * <p/>
+ * <p>
  * <b>NOTE:</b> Exceptions thrown in this event listener won't be caught. So you have to make sure that your event
  * listener does not throw exceptions. For example, if your {@link #onConnectionWrapped} method throws an exception
  * your application won't be able to create any {@link Connection}.
@@ -52,7 +51,7 @@ public abstract class JdbcEventListener {
 
   /**
    * This callback method is executed after a wrapped {@link Connection} has been created.
-   * <p/>
+   * <p>
    * The {@link ConnectionInformation} holds information about the creator of the connection which is either
    * {@link ConnectionInformation#dataSource}, {@link ConnectionInformation#driver} or
    * {@link ConnectionInformation#pooledConnection}.

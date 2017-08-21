@@ -1,0 +1,296 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'maven'
+    id 'maven-publish'
+
+    id 'com.fizzpod.sweeney' version '2.1.2'
+    id 'com.github.hierynomus.license' version '0.14.0'    
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
+    // to publish code coverage to coveralls
+    // ./gradlew jacocoTestReport coveralls
+    id 'com.github.kt3k.coveralls' version '2.8.1'
+    // to publish !SNAPSHOTs to bintray
+    // ./gradlew bintrayUpload
+    id 'com.jfrog.bintray' version '1.7.3'
+    // to publish SNAPSHOTs to oss.jfrog.org
+    // ./gradlew artifactoryPublish
+    id 'com.jfrog.artifactory' version '4.5.2'
+}
+
+def envDB
+// sys property (-Denv) or env var (ORG_GRADLE_PROJECT_env) as a fallback
+def isTravis = System.getProperty('env', env) != null && System.getProperty('env', env)?.equals('travis')
+if (isTravis) {
+  // envDB = 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle,MSSQLServer,MariaDB,Percona'
+  envDB = 'PostgreSQL,MySQL,H2,HSQLDB,SQLite,Firebird,Derby,Oracle'
+} else {
+  // sys property (-DDB) or env var (ORG_GRADLE_PROJECT_DB) as a fallback
+  envDB = System.getProperty('DB', DB)
+}
+
+repositories {
+    mavenCentral()
+    flatDir dirs: 'src/test/repo' // holds p6spy-signedjar-test
+
+    if (envDB.contains('Oracle')) {
+      assert new File("${buildDir}/repo/ojdbc6.jar").exists()
+      flatDir dirs: "${buildDir}/repo" // holds copied oracle jdbc driver
+    }
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+compileJava.options.encoding = 'UTF8'
+javadoc.options.encoding = 'UTF8'
+
+dependencies {
+
+  testCompile 'p6spy:p6spy-signedjar-test:1.0.0'
+
+  // for providing misc *-nodep artifacts, please note that order matters here
+  // even if slf4j complains about multiple implementations on classpath, it takes the 1.st one
+  // and as we use log4j in tests => bridge needs to be the 1.st one specified 
+  compileOnly 'org.slf4j:slf4j-api:1.7.7'
+  compileOnly 'org.slf4j:slf4j-log4j12:1.7.7'
+  compileOnly 'log4j:log4j:1.2.17'
+  testCompile 'org.slf4j:slf4j-api:1.7.7'
+  testCompile 'org.slf4j:slf4j-log4j12:1.7.7'
+  testCompile 'log4j:log4j:1.2.17'
+
+  compileOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.0-rc1'
+  compileOnly 'org.apache.logging.log4j:log4j-api:2.0-rc1'
+  compileOnly 'org.apache.logging.log4j:log4j-core:2.0-rc1'
+
+  compileOnly 'ch.qos.logback:logback-classic:1.1.2' 
+  compileOnly 'ch.qos.logback:logback-core:1.1.2'
+
+  testCompile 'junit:junit:4.11'
+  testCompile 'org.eclipse.jetty:jetty-plus:8.1.7.v20120910' // datasource testing through JNDI
+  testCompile 'commons-dbcp:commons-dbcp:1.4' // datasource testing
+  testCompile 'org.codehaus.btm:btm:2.1.4' // xa datasource testing
+  testCompile 'org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1'
+  testCompile 'org.liquibase:liquibase-core:3.0.8'
+  testCompile 'com.mattbertolini:liquibase-slf4j:1.2.1'
+  testCompile 'org.springframework:spring-jdbc:3.2.4.RELEASE'
+  testCompile 'org.springframework:spring-context:3.2.4.RELEASE'
+  testCompile 'com.j256.simplejmx:simplejmx:1.1'
+  testCompile 'commons-io:commons-io:2.4'
+  testCompile 'org.apache.commons:commons-exec:1.2'
+  testCompile 'org.apache.commons:commons-lang3:3.3.2'
+  testCompile 'commons-beanutils:commons-beanutils:1.9.1'
+  testCompile 'org.mockito:mockito-core:2.7.22'
+  testCompile 'org.apache.tomcat:tomcat-jdbc:8.5.6' // tomcat pooled datasource testing
+
+  // all the JDBC drivers tested
+  testRuntime 'mysql:mysql-connector-java:5.1.21'
+  testRuntime 'org.postgresql:postgresql:9.3-1100-jdbc41'
+  testCompile 'org.hsqldb:hsqldb:2.3.1'
+  testCompile 'com.h2database:h2:1.4.196'
+  testRuntime 'org.xerial:sqlite-jdbc:3.7.2' // type 3 driver
+  testRuntime 'org.apache.derby:derby:10.10.1.1'
+  testRuntime 'org.firebirdsql.jdbc:jaybird-jdk17:2.2.3' // type 4.1 driver
+  testRuntime 'com.microsoft.sqlserver:mssql-jdbc:6.1.0.jre7'
+
+  if (envDB.contains('Oracle')) {
+    testRuntime name: 'ojdbc6' // oracle copied from docker oracle container
+  }
+}
+
+sweeney {
+    // require Java 1.7 or later for the build
+    enforce type: 'range', expect: '[1.7,)', value: {System.getProperty('java.version')}
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
+
+license {
+    ext.year = Calendar.getInstance().get(Calendar.YEAR)
+    ext.name = 'P6Spy'
+    header file('./script/qa/license_header.txt')
+}
+
+test {
+    systemProperty 'user.language', 'en'
+    systemProperty 'user.country', 'US'
+    systemProperty 'derby.stream.error.file', 'target/derby.log'
+    systemProperty 'DB', envDB
+    
+    // to enable remote JMX testing, 
+    // see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx
+    // to workaround oracle timezone issue: http://stackoverflow.com/questions/9156379/ora-01882-timezone-region-not-found
+    // to get rid of DB2 traces => -Ddb2.jcc.override.traceLevel=0
+    // see: http://publib.boulder.ibm.com/infocenter/idshelp/v111/index.jsp?topic=/com.ibm.jccids.doc/com.ibm.db2.luw.apdv.java.doc/doc/r0052075.htm -->
+    jvmArgs '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.authenticate=false', '-Dcom.sun.management.jmxremote.port=1234', '-Dcom.sun.management.jmxremote.ssl=false', '-Doracle.jdbc.timezoneAsRegion=false', '-Ddb2.jcc.override.traceLevel=0'
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+task shadowLog4jJar(type: ShadowJar) {
+  classifier = 'log4j-nodep'
+  from sourceSets.main.output //tells the task to include the project code
+  configurations = [ project.configurations.compileOnly ]
+  dependencies {
+    include(dependency( group: 'log4j', name: 'log4j')) 
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
+    include(dependency( group: 'org.slf4j', name: 'slf4j-log4j')) 
+  }
+}
+
+task shadowLog4j2Jar(type: ShadowJar) {
+  classifier = 'log4j2-nodep'
+  from sourceSets.main.output //tells the task to include the project code
+  configurations = [ project.configurations.compileOnly ]
+  dependencies {
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl')) 
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-api')) 
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-core')) 
+  }
+}
+
+task shadowLogbackJar(type: ShadowJar) {
+  classifier = 'logback-nodep'
+  from sourceSets.main.output //tells the task to include the project code
+  configurations = [ project.configurations.compileOnly ]
+  dependencies {
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
+    include(dependency( group: 'ch.qos.logback', name: 'logback-classic')) 
+    include(dependency( group: 'ch.qos.logback', name: 'logback-core')) 
+  }
+}
+
+artifacts {
+    archives javadocJar, sourcesJar, shadowLog4jJar, shadowLog4j2Jar, shadowLogbackJar
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from components.java
+			groupId project.group
+      artifactId project.archivesBaseName
+      version project.version
+
+      artifact sourcesJar {
+        classifier 'sources'
+      }
+
+      artifact javadocJar {
+        classifier 'javadoc'
+      }
+
+      artifact shadowLog4jJar {
+        classifier 'log4j-nodep'
+      }
+
+      artifact shadowLog4j2Jar {
+        classifier 'log4j2-nodep'
+      }
+
+      artifact shadowLogbackJar {
+        classifier 'logback-nodep'
+      }
+
+      pom.withXml {
+        asNode().children().last() + {
+          def builder = delegate
+
+          builder.name project.name
+          builder.description description
+          builder.url 'https://github.com/p6spy/p6spy'
+
+          builder.licenses {
+              builder.license {
+                  builder.name 'The Apache Software License, Version 2.0'
+                  builder.url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                  builder.distribution 'repo'
+              }
+          }
+
+          builder.scm {
+              builder.url 'scm:git@github.com:p6spy/p6spy.git'
+              builder.connection 'git@github.com:p6spy/p6spy.git'
+              builder.developerConnection 'git@github.com:p6spy/p6spy.git'
+          }
+        }
+      }
+		}
+	}
+}
+
+// to publish SNAPSHOTs to oss.jfrog.org
+artifactory {
+    contextUrl = 'https://oss.jfrog.org'
+    resolve {
+        repository {
+            repoKey = 'libs-release'
+        }
+    }
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
+            // when using oss.jfrog.org the credentials are from Bintray.
+            username = System.getenv('BINTRAY_USER')
+            password = System.getenv('BINTRAY_API_KEY')
+        }
+        defaults {
+            publications 'maven'
+            properties = [ 'bintray.repo': 'p6spy/maven', 'bintray.package': 'p6spy:p6spy', 'bintray.version': project.version.toString() ]
+        }
+    }
+}
+
+// to publish !SNAPSHOTs to bintray
+bintray {
+	user = System.getenv('BINTRAY_USER')
+	key = System.getenv('BINTRAY_API_KEY')
+  publications = ['maven']
+  // dryRun = true
+  // publish = true
+	pkg {
+    repo = 'maven'
+		name = 'p6spy'
+		userOrg = group
+    desc = description
+    websiteUrl = 'https://github.com/p6spy/p6spy'
+    issueTrackerUrl = 'https://github.com/p6spy/p6spy/issues'
+    vcsUrl = 'https://github.com/p6spy/p6spy.git'
+		licenses = ['Apache-2.0']
+		publicDownloadNumbers = true
+    githubRepo = 'p6spy/p6spy'
+    githubReleaseNotesFile = 'docs/releasenotes.md'
+		version {
+			released = new Date()
+      name = project.version
+      vcsTag = "p6spy-${project.version}"
+        
+      // Optional configuration for Maven Central sync of the version
+      mavenCentralSync {
+          sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+          close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+          user = System.getenv('SONATYPE_USERNAME') //OSS user token: mandatory
+          password = System.getenv('SONATYPE_PASSWORD') //OSS user password: mandatory
+      }
+		}
+	}
+}
+
+task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
+    gradleVersion = '4.1'
+}
