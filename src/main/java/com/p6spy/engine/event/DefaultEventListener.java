@@ -40,7 +40,6 @@ public class DefaultEventListener extends JdbcEventListener {
 
   @Override
   public void onAfterAddBatch(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
-    statementInformation.setStatementQuery(sql);
   }
 
   @Override
@@ -50,7 +49,6 @@ public class DefaultEventListener extends JdbcEventListener {
 
   @Override
   public void onAfterExecute(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
-    statementInformation.setStatementQuery(sql);
     statementInformation.incrementTimeElapsed(timeElapsedNanos);
   }
 
@@ -66,7 +64,6 @@ public class DefaultEventListener extends JdbcEventListener {
 
   @Override
   public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, int rowCount, SQLException e) {
-    statementInformation.setStatementQuery(sql);
     statementInformation.incrementTimeElapsed(timeElapsedNanos);
   }
 
@@ -77,7 +74,6 @@ public class DefaultEventListener extends JdbcEventListener {
 
   @Override
   public void onAfterExecuteQuery(StatementInformation statementInformation, long timeElapsedNanos, String sql, SQLException e) {
-    statementInformation.setStatementQuery(sql);
     statementInformation.incrementTimeElapsed(timeElapsedNanos);
   }
 
