@@ -80,6 +80,7 @@ dependencies {
   testCompile 'org.apache.commons:commons-lang3:3.3.2'
   testCompile 'commons-beanutils:commons-beanutils:1.9.1'
   testCompile 'org.mockito:mockito-core:2.7.22'
+  testCompile 'org.apache.tomcat:tomcat-jdbc:8.5.6' // tomcat pooled datasource testing
 
   // all the JDBC drivers tested
   testRuntime 'mysql:mysql-connector-java:5.1.21'
