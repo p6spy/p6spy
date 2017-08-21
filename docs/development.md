@@ -13,6 +13,15 @@ to build binaries:
 
  to run the JUnit tests Refer to the [Running the tests](#running-the-tests-in-eclipse) section
 
+## License headers
+There is a license check done for the source file headers (as part of the CI build), invoked as part of the:
+
+  ./gradlew check
+
+Once new files is introduced, make sure to run (and push the updated files):
+
+  ./gradlew licenseFormat
+
 ## Running the tests
 
 To run the JUnit tests against specific database(s):
