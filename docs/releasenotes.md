@@ -5,14 +5,20 @@
 Improvements:
 
 * [issue #369](https://github.com/p6spy/p6spy/pull/373): Introduced `excludebinary=true|false` flag (causing `[binary]` instead of binary data logged)
-* [issue #373](https://github.com/p6spy/p6spy/pull/373): Introduced Loggable.getConnectionInformation() while removed Loggable.getConnectionId()
-* [issue #367](https://github.com/p6spy/p6spy/pull/367): StatementInformation.getSqlWithValues() returns getSql() rather than "" 
+* [issue #373](https://github.com/p6spy/p6spy/pull/373): Introduced `Loggable.getConnectionInformation()` while removed `Loggable.getConnectionId()`
+* [issue #367](https://github.com/p6spy/p6spy/pull/367): `StatementInformation.getSqlWithValues()` returns `getSql()` rather than ""
 
 Defects resolved:
 
 * [issue #369](https://github.com/p6spy/p6spy/pull/373): Fixed `excludecategories` docs
+* [issue #387](https://github.com/p6spy/p6spy/pull/387): Fixed `StatementInformation.getSql()` null for connection-pool validation queries
 
-Defects resolved:
+Other:
+
+* [issue #292](https://github.com/p6spy/p6spy/pull/292): migrated from maven to gradle for build
+* [issue #372](https://github.com/p6spy/p6spy/pull/372): integrated release process with travis-ci
+* [issue #377](https://github.com/p6spy/p6spy/pull/377): release notes synced to github releases
+* [issue #377](https://github.com/p6spy/p6spy/pull/377): local dev env moved from vagrant to docker
 
 ## 3.0.0 [Oct 26, 2016]
 
