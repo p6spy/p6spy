@@ -53,4 +53,8 @@ public interface P6TestLoadableOptions extends P6LoadableOptions, P6TestOptionsM
 
   void setXaDataSource(String xaDataSource);
 
+  String getValidationQuery();
+
+  void setValidationQuery(String validationQuery);
+
 }
