@@ -1,6 +1,6 @@
 # Release Notes
 
-## 3.1 [Upcomming]
+## [3.1.0](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0...master) [Upcomming]
 
 Improvements:
 
@@ -20,11 +20,11 @@ Other:
 * [issue #377](https://github.com/p6spy/p6spy/pull/377): release notes synced to github releases
 * [issue #377](https://github.com/p6spy/p6spy/pull/377): local dev env moved from vagrant to docker
 
-## 3.0.0 [Oct 26, 2016]
+## [3.0.0](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0-rc3...p6spy-3.0.0) [Oct 26, 2016]
 
 Identical to 3.0.0-rc3
 
-## 3.0.0-rc3 [Oct 6, 2016]
+## [3.0.0-rc3](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0-rc2...p6spy-3.0.0-rc3) [Oct 6, 2016]
 
 Improvements:
 
@@ -36,14 +36,14 @@ Defects resolved:
 
 * [issue #348](https://github.com/p6spy/p6spy/issues/348): tomcat 6x-8x integration
 
-## 3.0.0-rc2 [Sept 8, 2016]
+## [3.0.0-rc2](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0-rc1...p6spy-3.0.0-rc2) [Sept 8, 2016]
 
 Defects resolved:
 
 * [issue #347](https://github.com/p6spy/p6spy/pull/347): The real exception is never thrown
 * [issue #346](https://github.com/p6spy/p6spy/pull/346): Fixes NPE on static initializer order
 
-## 3.0.0-rc1 [Sept 2, 2016]
+## [3.0.0-rc1](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0-alpha-1...p6spy-3.0.0-rc1) [Sept 2, 2016]
 
 Improvements:
 
@@ -51,7 +51,7 @@ Improvements:
 * [issue #323](https://github.com/p6spy/p6spy/issues/323): log row count and SQLException
 * [issue #297](https://github.com/p6spy/p6spy/issues/297): Allow for lazy initialization of P6Spy
 
-## 3.0.0-alpha-1 [July 29, 2016]
+## [3.0.0-alpha-1](https://github.com/p6spy/p6spy/compare/p6spy-2.3.1...p6spy-3.0.0-alpha-1) [July 29, 2016]
 
 Improvements:
 
@@ -64,7 +64,7 @@ Other:
 
 * [issue #333](https://github.com/p6spy/p6spy/issues/333): Remove org.objectweb.util.monolog.wrapper.p6spy.P6SpyLogger
 
-## 2.3.1 [June 23, 2016]
+## [2.3.1](https://github.com/p6spy/p6spy/compare/p6spy-2.3.0...p6spy-2.3.1) [June 23, 2016]
 
 Defects resolved:
 
@@ -75,7 +75,7 @@ Other:
 * [issue #326](https://github.com/p6spy/p6spy/issues/326): Upgraded to CGLIB 3.2.3
 * [issue #329](https://github.com/p6spy/p6spy/issues/329): Use default naming policy for CGLIB generated proxies
 
-## 2.3.0 [May 11, 2016]
+## [2.3.0](https://github.com/p6spy/p6spy/compare/p6spy-2.2.0...p6spy-2.3.0) [May 11, 2016]
 
 Improvements:
 
@@ -94,7 +94,7 @@ Other:
 * [issue #304](https://github.com/p6spy/p6spy/issues/304): Build failures using openjdk7
 * [issue #300](https://github.com/p6spy/p6spy/issues/300): Maven warning about missing dependency
 
-## 2.2.0 [March 22, 2016]
+## [2.2.0](https://github.com/p6spy/p6spy/compare/p6spy-2.1.4...p6spy-2.2.0) [March 22, 2016]
 
 Improvements:
 
@@ -104,21 +104,21 @@ Defects resolved:
 
 * [issue #330](https://github.com/p6spy/p6spy/issues/330): Unsafe iteration over System.getProperties() 
 
-## 2.1.4 [May 9, 2015]
+## [2.1.4](https://github.com/p6spy/p6spy/compare/p6spy-2.1.3...p6spy-2.1.4) [May 9, 2015]
 
 Defects resolved:
 
 * [issue #286](https://github.com/p6spy/p6spy/issues/286): P6Spy proxy creation fails when JDBC object is wrapped by JBoss 7+
 * [issue #282](https://github.com/p6spy/p6spy/issues/282): No resultset logged when executing a stored procedure 
 
-## 2.1.3 [Jan 24, 2015]
+## [2.1.3](https://github.com/p6spy/p6spy/compare/p6spy-2.1.2...p6spy-2.1.3) [Jan 24, 2015]
 
 Defects resolved:
 
 * [issue #275](https://github.com/p6spy/p6spy/issues/275): ArrayIndexOutOfBoundsException when calling 
   PreparedStatement.setMaxRows(int) with outage module enabled 
 
-## 2.1.2 [Oct 13, 2014]
+## [2.1.2](https://github.com/p6spy/p6spy/compare/p6spy-2.1.1...p6spy-2.1.2) [Oct 13, 2014]
 
 Defects resolved:
 
@@ -130,14 +130,14 @@ Defects resolved:
 * [issue #264] (https://github.com/p6spy/p6spy/issues/264): Fixed a defect causing the last row read of a result set 
   to not be logged unless all rows were read.
 
-## 2.1.1 [Sep 9, 2014]
+## [2.1.1](https://github.com/p6spy/p6spy/compare/p6spy-2.1.0...p6spy-2.1.1) [Sep 9, 2014]
 
 Defects resolved:
 
 * [issue #256] (https://github.com/p6spy/p6spy/issues/256): jmx exposing becomes optional (enabled/disabled via flag) + jmx prefix introduced (see )
 * [issue #254] (https://github.com/p6spy/p6spy/issues/254): resultset logging filtering fixed 
 
-## 2.1.0 [Jun 15, 2014]
+## [2.1.0](https://github.com/p6spy/p6spy/compare/p6spy-2.0.2...p6spy-2.1.0) [Jun 15, 2014]
 
 Improvements:
 
@@ -157,7 +157,7 @@ Defects resolved:
 * [issue #242](https://github.com/p6spy/p6spy/issues/242): character `'` escaping in the logged SQL query fixed 
 * [issue #246](https://github.com/p6spy/p6spy/issues/246): `NullPointerException` fixed for empty batch execution
 
-## 2.0.2 [Apr 3, 2014]
+## [2.0.2](https://github.com/p6spy/p6spy/compare/p6spy-2.0.1...p6spy-2.0.2) [Apr 3, 2014]
 
 Improvements:
 
@@ -169,14 +169,14 @@ Defects resolved:
 * [issue #219](https://github.com/p6spy/p6spy/issues/219): fixed defect causing ClassCastException when setting bind variables by name on CallableStatement
 * [issue #217](https://github.com/p6spy/p6spy/issues/217): fixed defect in P6Leak module causing closed connections not to be recorded properly
 
-## 2.0.1 [Mar 15, 2014]
+## [2.0.1](https://github.com/p6spy/p6spy/compare/p6spy-2.0.0...p6spy-2.0.1) [Mar 15, 2014]
 
 Defects resolved: 
 
 * [issue #200] (https://github.com/p6spy/p6spy/issues/200): fixed usage with signed jdbc jars
 * [issue #201] (https://github.com/p6spy/p6spy/issues/201): internal logs not printed out any more
 
-## 2.0.0 [Mar 3, 2014]
+## [2.0.0](https://github.com/p6spy/p6spy/compare/537507f1ff982f0f5e17e84e2cc26dbf826625e0...p6spy-2.0.0) [Mar 3, 2014]
 
 Improvements:
 
