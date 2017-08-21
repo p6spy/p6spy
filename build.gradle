@@ -244,8 +244,14 @@ artifactory {
     }
     publish {
         repository {
-            repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
+            // The Artifactory repository key to publish to
             // when using oss.jfrog.org the credentials are from Bintray.
+            if (project.version.endsWith("-SNAPSHOT")) {
+              repoKey = 'oss-snapshot-local'
+            } else {
+              repoKey = 'oss-release-local' 
+            }
+            
             username = System.getenv('BINTRAY_USER')
             password = System.getenv('BINTRAY_API_KEY')
         }

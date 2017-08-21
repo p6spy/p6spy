@@ -86,7 +86,7 @@ after_success:
         # releases to bintray
         # publishing done via com.jfrog.bintray plugin, rather than travis bintray integration => independant on CI env
         # relevant env vars: BINTRAY_USER and BINTRAY_API_KEY
-        ./gradlew bintrayUpload --info
+        ./gradlew artifactoryPublish bintrayUpload --info
       elif [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
         # snapshots to oss.jfrog.org
         # relevant env vars: BINTRAY_USER and BINTRAY_API_KEY
