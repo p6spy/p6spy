@@ -271,7 +271,7 @@ bintray {
   // publish = true
 	pkg {
     repo = 'maven'
-		name = 'p6spy'
+		name = 'p6spy:p6spy'
 		userOrg = group
     desc = description
     websiteUrl = 'https://github.com/p6spy/p6spy'
