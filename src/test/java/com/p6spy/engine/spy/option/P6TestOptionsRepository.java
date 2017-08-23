@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.p6spy.engine.spy.appender.CustomLineFormat;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,6 +53,8 @@ public class P6TestOptionsRepository extends BaseTestCase {
         SingleLineFormat.class.getName()) instanceof MessageFormattingStrategy);
     Assert.assertTrue(optRepo.parse(MessageFormattingStrategy.class,
         MultiLineFormat.class.getName()) instanceof MessageFormattingStrategy);
+    Assert.assertTrue(optRepo.parse(MessageFormattingStrategy.class,
+        CustomLineFormat.class.getName()) instanceof MessageFormattingStrategy);
     Assert.assertTrue(optRepo.parse(Pattern.class,
         "somepattern") instanceof Pattern);
 

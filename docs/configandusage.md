@@ -135,6 +135,19 @@ in section: [Configuration and Usage](#configuration-and-usage)):
 
     # class to use for formatting log messages (default is: com.p6spy.engine.spy.appender.SingleLineFormat)
     #logMessageFormat=com.p6spy.engine.spy.appender.SingleLineFormat
+    
+    # Custom log message format used ONLY IF logMessageFormat is set to com.p6spy.engine.spy.appender.CustomLineFormat
+    # default is %(currentTime)|%(executionTime)|%(category)|connection%(connectionId)|%(sqlSingleLine)
+    # Available placeholders are:
+    #   %(connectionId)           the id of the connection
+    #   %(currentTime)                    the current time expressing in milliseconds
+    #   %(executionTime)          the time in milliseconds that the operation took to complete
+    #   %(category)               the category of the operation
+    #   %(effectiveSql)           the SQL statement as submitted to the driver
+    #   %(effectiveSqlSingleLine) the SQL statement as submitted to the driver, with all new lines removed
+    #   %(sql)                    the SQL statement with all bind variables replaced with actual values
+    #   %(sqlSingleLine)          the SQL statement with all bind variables replaced with actual values, with all new lines removed
+    #customLogMessageFormat=%(currentTime)|%(executionTime)|%(category)|connection%(connectionId)|%(sqlSingleLine)
 
     # format that is used for logging of the date/time/... (has to be compatible with java.text.SimpleDateFormat)
     # (default is dd-MMM-yy)
@@ -414,6 +427,9 @@ classes are available with P6Spy.
 
 		current time|execution time|category|connection id|statement SQL String|effective SQL string
 		
+* `com.p6spy.engine.spy.appender.CustomLineFormat`, which allows log messages to be full customized, in a separate
+    property called `customLogMessageFormat`. See below for details.
+		
 * `com.p6spy.engine.spy.appender.MultiLineFormat`, which results in log messages in format: 
 		
 		current time|execution time|category|connection id|statement SQL String
@@ -451,6 +467,22 @@ The default is `com.p6spy.engine.spy.appender.SingleLineFormat` for backward com
 
 You can also supply your own log message formatter to customize the format.  Simply create a class which implements
 the `com.p6spy.engine.spy.appender.MessageFormattingStrategy` interface and place it on the classpath.
+
+### customLogMessageFormat
+
+The custom log message format to use when 'logMessageFormat' is set to `com.p6spy.engine.spy.appender.CustomLineFormat`
+
+The message is build out of the format string, with the all the Java special characters supported (`\n`, `\t` etc) 
+and the following placeholders being resolved to the appropriate values:
+
+* `%(connectionId)`           the id of the connection
+* `%(currentTime)`                    the current time expressing in milliseconds
+* `%(executionTime)`          the time in milliseconds that the operation took to complete
+* `%(category)`               the category of the operation
+* `%(effectiveSql)`           the SQL statement as submitted to the driver
+* `%(effectiveSqlSingleLine)` the SQL statement as submitted to the driver, with all new lines removed
+* `%(sql)`                    the SQL statement with all bind variables replaced with actual values
+* `%(sqlSingleLine)`          the SQL statement with all bind variables replaced with actual values, with all new lines removed
 
 ### filter, include, exclude
 

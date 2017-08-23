@@ -91,6 +91,10 @@ public interface P6SpyOptionsMBean {
 
   void setDatabaseDialectDateFormat(String databaseDialectDateFormat);
 
+  String getCustomLogMessageFormat();
+
+  void setCustomLogMessageFormat(String customLogMessageFormat);
+
   void setAppend(boolean append);
 
   boolean getAppend();
