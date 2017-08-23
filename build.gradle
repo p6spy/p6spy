@@ -16,6 +16,7 @@ plugins {
     // to publish SNAPSHOTs to oss.jfrog.org
     // ./gradlew artifactoryPublish
     id 'com.jfrog.artifactory' version '4.5.2'
+    id "org.sonarqube" version "2.2"
 }
 
 def envDB

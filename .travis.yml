@@ -7,8 +7,11 @@ services:
   - mysql
   - postgresql
 
-# addons:
-#   mariadb: '10.0'
+addons:
+  sonarcloud:
+    organization: "p6spy"
+    token:
+      secure: "e58ZcHgvejYlEGki2uxy1b4LuQiFKnULEpUUUWALfM0NV/JZAyxLMjrUYeSiJkinMs/yA7bxjGzXIpEu6eRgCCZhzolBvs6QbRzrkhAhaZXVnEbYojFkPGUc6QFsU6V30mI0I2k7O9FoUiwoyZwWVV3HT2phn4s+ebLFgN+Krvg="
 
 language: java
 
@@ -39,6 +42,7 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.sonar/cache
 
 before_install:
   # latest docker
@@ -73,6 +77,13 @@ after_success:
       # coveralls publishing
       if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
         ./gradlew jacocoTestReport coveralls --info
+      fi
+
+      # sonarcloud.io publishing 
+      # TMP to test in pull request
+      # if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+      if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+        ./gradlew sonarqube
       fi
 
       # github release notes sync (via chandler)
