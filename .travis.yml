@@ -80,8 +80,7 @@ after_success:
       fi
 
       # sonarcloud.io publishing 
-      # TMP to test in pull request
-      # if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+      # by default, the SonarCloud add-on only analyzes the master branch, see https://docs.travis-ci.com/user/sonarcloud/
       if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
         ./gradlew sonarqube --info --stacktrace
       fi
