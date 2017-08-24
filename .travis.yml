@@ -7,8 +7,11 @@ services:
   - mysql
   - postgresql
 
-# addons:
-#   mariadb: '10.0'
+addons:
+  sonarcloud:
+    organization: "p6spy-github"
+    token:
+      secure: "e58ZcHgvejYlEGki2uxy1b4LuQiFKnULEpUUUWALfM0NV/JZAyxLMjrUYeSiJkinMs/yA7bxjGzXIpEu6eRgCCZhzolBvs6QbRzrkhAhaZXVnEbYojFkPGUc6QFsU6V30mI0I2k7O9FoUiwoyZwWVV3HT2phn4s+ebLFgN+Krvg="
 
 language: java
 
@@ -39,6 +42,7 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.sonar/cache
 
 before_install:
   # latest docker
@@ -66,13 +70,19 @@ before_script:
   - mkdir -p ./build/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar ./build/repo
 
 script:
-  - ./gradlew check --info
+  - ./gradlew check --info --stacktrace
 
 after_success:
   - |
       # coveralls publishing
       if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
-        ./gradlew jacocoTestReport coveralls --info
+        ./gradlew jacocoTestReport coveralls --info --stacktrace
+      fi
+
+      # sonarcloud.io publishing 
+      # by default, the SonarCloud add-on only analyzes the master branch, see https://docs.travis-ci.com/user/sonarcloud/
+      if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+        ./gradlew sonarqube --info --stacktrace
       fi
 
       # github release notes sync (via chandler)
@@ -86,11 +96,11 @@ after_success:
         # releases to bintray
         # publishing done via com.jfrog.bintray plugin, rather than travis bintray integration => independant on CI env
         # relevant env vars: BINTRAY_USER and BINTRAY_API_KEY
-        ./gradlew artifactoryPublish bintrayUpload --info
+        ./gradlew artifactoryPublish bintrayUpload --info --stacktrace
       elif [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" && $(grep version=[-._0-9a-zA-Z]*-SNAPSHOT$ gradle.properties | wc -l) -eq 1 ]]; then
         # snapshots to oss.jfrog.org
         # relevant env vars: BINTRAY_USER and BINTRAY_API_KEY
-        ./gradlew artifactoryPublish --info
+        ./gradlew artifactoryPublish --info --stacktrace
       fi
 
 notifications:
