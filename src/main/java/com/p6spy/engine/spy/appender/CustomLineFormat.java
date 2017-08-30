@@ -62,7 +62,7 @@ public class CustomLineFormat implements MessageFormattingStrategy {
     }
 
     return customLogMessageFormat
-      .replace(Pattern.quote(CONNECTION_ID), Integer.toString(connectionId))
+      .replaceAll(Pattern.quote(CONNECTION_ID), Integer.toString(connectionId))
       .replaceAll(Pattern.quote(CURRENT_TIME), now)
       .replaceAll(Pattern.quote(EXECUTION_TIME), Long.toString(elapsed))
       .replaceAll(Pattern.quote(CATEGORY), category)
