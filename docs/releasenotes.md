@@ -1,5 +1,15 @@
 # Release Notes
 
+## [3.2.0](https://github.com/p6spy/p6spy/compare/p6spy-3.1.0...master) (Unreleased)
+
+Improvements:
+
+* [issue #391](https://github.com/p6spy/p6spy/pull/391): Introduced support for specifying log message format from configuration file
+
+Defects resolved:
+
+* [issue #397](https://github.com/p6spy/p6spy/pull/397): Fixed `%(connectionId)` not replaced in custom format
+
 ## [3.1.0](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0...master) (2017-08-22)
 
 Improvements:
@@ -19,6 +29,10 @@ Other:
 * [issue #372](https://github.com/p6spy/p6spy/pull/372): integrated release process with travis-ci
 * [issue #377](https://github.com/p6spy/p6spy/pull/377): release notes synced to github releases
 * [issue #377](https://github.com/p6spy/p6spy/pull/377): local dev env moved from vagrant to docker
+
+Known issues:
+
+* [issue #372](https://github.com/p6spy/p6spy/pull/372): 3.1.0 version never made it to maven central (due to incomplete `pom.xml`), only available in bintray 
 
 ## [3.0.0](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0-rc3...p6spy-3.0.0) (2016-10-26)
 
