@@ -62,6 +62,7 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
+  @Deprecated
   public void onConnectionWrapped(ConnectionInformation connectionInformation) {
     for (JdbcEventListener eventListener : eventListeners) {
       eventListener.onConnectionWrapped(connectionInformation);

@@ -59,6 +59,7 @@ import com.p6spy.engine.spy.P6PooledConnection;
 import com.p6spy.engine.test.P6TestFactory;
 import com.p6spy.engine.test.P6TestFramework;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -155,10 +156,12 @@ public class CompoundJdbcEventListenerTest {
 
     try {
       wrappedDataSource.getConnection();
+      Assert.fail("exception should be thrown");
     } catch (SQLException expected) {
     }
     try {
       wrappedDataSource.getConnection("test", "test");
+      Assert.fail("exception should be thrown");
     } catch (SQLException expected) {
     }
     verify(mockedJdbcListener, times(2)).onAfterGetConnection(connectionInformationWithoutConnection(), eq(sqle));
@@ -174,6 +177,7 @@ public class CompoundJdbcEventListenerTest {
   public void testConnectionOnAfterGetConnectionAfterGettingFromDriverWithThrowingSQLException() throws SQLException {
     try {
       DriverManager.getConnection("jdbc:p6spy:h2:tcp://dev/null/", "sa", null);
+      Assert.fail("exception should be thrown");
     } catch (SQLException expected) {
     }
     verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithoutConnection(), any(SQLException.class));
@@ -192,6 +196,7 @@ public class CompoundJdbcEventListenerTest {
 
     try {
       wrappedPooledConnection.getConnection();
+      Assert.fail("exception should be thrown");
     } catch (SQLException expected) {
     }
     verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithoutConnection(), eq(sqle));
