@@ -6,7 +6,7 @@ Improvements:
 
 Defects resolved:
 
-## [3.2.0](https://github.com/p6spy/p6spy/compare/p6spy-3.1.0...master) (2017-09-01)
+## [3.2.0](https://github.com/p6spy/p6spy/compare/p6spy-3.1.0...p6spy-3.2.0) (2017-09-01)
 
 Improvements:
 
@@ -16,7 +16,7 @@ Defects resolved:
 
 * [issue #397](https://github.com/p6spy/p6spy/pull/397): Fixed `%(connectionId)` not replaced in custom format
 
-## [3.1.0](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0...master) (2017-08-22)
+## [3.1.0](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0...p6spy-3.1.0) (2017-08-22)
 
 Improvements:
 
