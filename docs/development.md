@@ -22,6 +22,22 @@ Once new files is introduced, make sure to run (and push the updated files):
 
   ./gradlew licenseFormat
 
+## Releasing the version
+The project follows [semantic versioning](http://semver.org/) concept.
+To release the version follow these steps:
+
+* change: `version` in `gradle.properties` to desired one (non-snapshot, to be released one),
+* update: `docs/releasenotes.md` to reflect next version, it's release date and release notes,
+* change: `version` as well as `release` in `docs/conf.py` to desired version to be released,
+* push the changes to master branch of the p6spy repo,
+* wait for the green build (in Travis CI), fix problems if necessary,
+* perform release (via github pages `releases` -> `Draft new release`), for tag version, use prefix `p6spy-` the version should be named without the prefix,
+* after green build performed by Travis CI on tag update the `version` in `gradle.properties` to next snapshot one,
+* change: `version` in `docs/conf.py` to next snapshot one and
+* push the changes to master branch of the p6spy repo.
+
+Released artifacts should be afterwards present in the [bintray](https://bintray.com/p6spy/maven/p6spy%3Ap6spy) and with a delay of approximatelly 24 hours also in the: [maven central](https://mvnrepository.com/artifact/p6spy/p6spy).
+
 ## Running the tests
 
 To run the JUnit tests against specific database(s):
