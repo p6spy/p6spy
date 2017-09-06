@@ -18,16 +18,15 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.wrapper.ConnectionWrapper;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.sql.ConnectionEventListener;
 import javax.sql.PooledConnection;
 import javax.sql.StatementEventListener;
+
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 public class P6PooledConnection implements PooledConnection {
 
@@ -39,17 +38,22 @@ public class P6PooledConnection implements PooledConnection {
 
   @Override
   public Connection getConnection() throws SQLException {
-    JdbcEventListener jdbcEventListener = P6Core.getJdbcEventListener();
     final long start = System.nanoTime();
+    final Connection conn;
     try {
-      final Connection conn = passthru.getConnection();
-      ConnectionInformation connectionInformation = ConnectionInformation.fromPooledConnection(passthru, conn, System.nanoTime() - start);
-      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
-      return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+      conn = passthru.getConnection();
     } catch (SQLException e) {
-      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromPooledConnection(passthru, null, System.nanoTime() - start), e);
+      @SuppressWarnings("resource")
+      ConnectionWrapper connectionWrapper = new ConnectionWrapper(null, null);
+      connectionWrapper.getJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromPooledConnection(passthru, null, System.nanoTime() - start), e);
       throw e;
     }
+    
+    ConnectionInformation connectionInformation = ConnectionInformation.fromPooledConnection(passthru, conn, System.nanoTime() - start);
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, connectionInformation);
+    connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
+    return connectionWrapper.wrap();
   }
 
   @Override

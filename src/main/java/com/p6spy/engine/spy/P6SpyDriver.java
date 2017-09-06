@@ -93,17 +93,24 @@ public class P6SpyDriver implements Driver {
 
     P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
 
-    JdbcEventListener jdbcEventListener = P6Core.getJdbcEventListener();
+    
+    
     final long start = System.nanoTime();
+    final Connection conn;
     try {
-      final Connection conn =  passThru.connect(extractRealUrl(url), properties);
-      ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
-      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
-      return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+      conn =  passThru.connect(extractRealUrl(url), properties);
     } catch (SQLException e) {
-      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
+      @SuppressWarnings("resource")
+      ConnectionWrapper connectionWrapper = new ConnectionWrapper(null, null);
+      connectionWrapper.getJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
       throw e;
     }
+    
+    ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, connectionInformation);
+    connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
+    return connectionWrapper.wrap();
   }
 
   protected Driver findPassthru(String url) throws SQLException {

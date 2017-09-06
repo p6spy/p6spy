@@ -63,22 +63,30 @@ public class P6TestStatement extends P6TestFramework {
   @Test
   public void testExecuteUpdate() throws SQLException {
     String query = "update customers set name='xyz' where id=1";
-    final int[] eventListenerRowCount = {0};
-    final Connection connectionWrapper = ConnectionWrapper.wrap(this.connection, new JdbcEventListener() {
-      @Override
-      public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos, String sql, int rowCount, SQLException e) {
-        eventListenerRowCount[0] = rowCount;
-      }
-    }, ConnectionInformation.fromTestConnection(this.connection));
-    int rowCount = P6TestUtil.executeUpdate(connectionWrapper, query);
-    assertEquals(1, rowCount);
-    assertEquals(1, eventListenerRowCount[0]);
+    final int[] eventListenerRowCount = { 0 };
+    try (ConnectionWrapper connectionWrapper = //
+        new ConnectionWrapper( //
+            this.connection, new JdbcEventListener() {
+              @Override
+              public void onAfterExecuteUpdate(StatementInformation statementInformation, long timeElapsedNanos,
+                  String sql, int rowCount, SQLException e) {
+                eventListenerRowCount[0] = rowCount;
+              }
+            }, //
+            ConnectionInformation.fromTestConnection(this.connection))
+        ) {
+      final Connection connectionWrapped = connectionWrapper.wrap();
+      int rowCount = P6TestUtil.executeUpdate(connectionWrapped, query);
+      assertEquals(1, rowCount);
+      assertEquals(1, eventListenerRowCount[0]);
 
-    // validate logging
-    assertTrue(super.getLastLogEntry().contains(query));
+      // validate logging
+      assertTrue(super.getLastLogEntry().contains(query));
 
-    // validate that the sql executed against the db
-    assertEquals(1, P6TestUtil.queryForInt(this.connection, "select count(*) from customers where id=1 and name='xyz'"));
+      // validate that the sql executed against the db
+      assertEquals(1,
+          P6TestUtil.queryForInt(this.connection, "select count(*) from customers where id=1 and name='xyz'"));
+    }
   }
 
   @Test
@@ -86,30 +94,35 @@ public class P6TestStatement extends P6TestFramework {
     P6LogOptions.getActiveInstance().setExcludecategories("");
     // test batch inserts
     final int[] eventListenerUpdateCounts = new int[2];
-    Statement stmt = ConnectionWrapper.wrap(connection, new JdbcEventListener() {
-      @Override
-      public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos, int[] updateCounts, SQLException e) {
-        eventListenerUpdateCounts[0] = updateCounts[0];
-        eventListenerUpdateCounts[1] = updateCounts[1];
-      }
-    }, ConnectionInformation.fromTestConnection(connection)).createStatement();
-    String sql = "insert into customers(name,id) values ('jim', 101)";
-    stmt.addBatch(sql);
-    assertTrue(super.getLastLogEntry().contains(sql));
-    assertTrue(super.getLastLogEntry().contains("|batch|"));
-    sql = "insert into customers(name,id) values ('billy', 102)";
-    stmt.addBatch(sql);
-    assertTrue(super.getLastLogEntry().contains(sql));
-    assertTrue(super.getLastLogEntry().contains("|batch|"));
+    try (ConnectionWrapper connectionWrapper = //
+        new ConnectionWrapper( //
+            this.connection, new JdbcEventListener() {
+              @Override
+              public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos,
+                  int[] updateCounts, SQLException e) {
+                eventListenerUpdateCounts[0] = updateCounts[0];
+                eventListenerUpdateCounts[1] = updateCounts[1];
+              }
+            }, //
+            ConnectionInformation.fromTestConnection(this.connection) //
+        ); Statement stmt = connectionWrapper.wrap().createStatement() //
+    ) {
+      String sql = "insert into customers(name,id) values ('jim', 101)";
+      stmt.addBatch(sql);
+      assertTrue(super.getLastLogEntry().contains(sql));
+      assertTrue(super.getLastLogEntry().contains("|batch|"));
+      sql = "insert into customers(name,id) values ('billy', 102)";
+      stmt.addBatch(sql);
+      assertTrue(super.getLastLogEntry().contains(sql));
+      assertTrue(super.getLastLogEntry().contains("|batch|"));
 
-    final int[] updateCounts = stmt.executeBatch();
-    assertTrue(super.getLastLogEntry().contains(sql));
-    assertArrayEquals(new int[]{1, 1}, updateCounts);
-    assertArrayEquals(new int[]{1, 1}, eventListenerUpdateCounts);
+      final int[] updateCounts = stmt.executeBatch();
+      assertTrue(super.getLastLogEntry().contains(sql));
+      assertArrayEquals(new int[] { 1, 1 }, updateCounts);
+      assertArrayEquals(new int[] { 1, 1 }, eventListenerUpdateCounts);
 
-    assertEquals(2, P6TestUtil.queryForInt(connection,"select count(*) from customers where id > 100"));
-
-    stmt.close();
+      assertEquals(2, P6TestUtil.queryForInt(connection, "select count(*) from customers where id > 100"));
+    }
   }
   
   @Test

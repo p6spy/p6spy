@@ -33,15 +33,22 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ServiceConfigurationError;
+import java.util.ServiceLoader;
 import java.util.concurrent.Executor;
 
 import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.common.StatementInformation;
+import com.p6spy.engine.event.CompoundJdbcEventListener;
+import com.p6spy.engine.event.DefaultEventListener;
 import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.spy.P6Factory;
+import com.p6spy.engine.spy.P6ModuleManager;
 
 /**
  * This implementation wraps a {@link Connection}  and notifies a {@link JdbcEventListener}
@@ -55,27 +62,70 @@ import com.p6spy.engine.event.JdbcEventListener;
 public class ConnectionWrapper extends AbstractWrapper implements Connection {
 
   private final Connection delegate;
-  private final JdbcEventListener eventListener;
+  private final JdbcEventListener jdbcEventListener;
   private final ConnectionInformation connectionInformation;
 
-  public static Connection wrap(Connection delegate, JdbcEventListener eventListener, ConnectionInformation connectionInformation) {
-    if (delegate == null) {
-      return null;
-    }
-    final ConnectionWrapper connectionWrapper = new ConnectionWrapper(delegate, eventListener, connectionInformation);
-    eventListener.onConnectionWrapped(connectionInformation);
-    return connectionWrapper;
-  }
-
-  private ConnectionWrapper(Connection delegate, JdbcEventListener eventListener, ConnectionInformation connectionInformation) {
+  private static ServiceLoader<JdbcEventListener> jdbcEventListenerServiceLoader = ServiceLoader.load(JdbcEventListener.class, ConnectionWrapper.class.getClassLoader());
+  
+  public ConnectionWrapper(Connection delegate, ConnectionInformation connectionInformation) {
     super(delegate);
     this.delegate = delegate;
-    this.eventListener = eventListener;
     this.connectionInformation = connectionInformation;
+    this.jdbcEventListener = getDefaultJdbcEventListener();
+  }
+  
+  public ConnectionWrapper(Connection delegate, JdbcEventListener jdbcEventListener, ConnectionInformation connectionInformation) {
+    super(delegate);
+    this.delegate = delegate;
+    this.connectionInformation = connectionInformation;
+    this.jdbcEventListener = jdbcEventListener;
+  }
+  
+  private JdbcEventListener getDefaultJdbcEventListener() {
+    CompoundJdbcEventListener compoundEventListener = new CompoundJdbcEventListener();
+    compoundEventListener.addListender(DefaultEventListener.INSTANCE);
+    registerEventListenersFromFactories(compoundEventListener);
+    registerEventListenersFromServiceLoader(compoundEventListener);
+    return compoundEventListener;
+  }
+  
+  public Connection wrap() {
+    if (this.delegate == null) {
+      return null;
+    }
+    this.jdbcEventListener.onConnectionWrapped(this.connectionInformation);
+    return this;
   }
 
+  public JdbcEventListener getJdbcEventListener() {
+    return this.jdbcEventListener;
+  }
+
+  private void registerEventListenersFromFactories(CompoundJdbcEventListener compoundEventListener) {
+    List<P6Factory> factories = P6ModuleManager.getInstance().getFactories();
+    if (factories != null) {
+      for (P6Factory factory : factories) {
+        final JdbcEventListener eventListener = factory.getJdbcEventListener();
+        if (eventListener != null) {
+          compoundEventListener.addListender(eventListener);
+        }
+      }
+    }
+  }
+
+  private void registerEventListenersFromServiceLoader(CompoundJdbcEventListener compoundEventListener) {
+    for (JdbcEventListener jdbcEventListeners : jdbcEventListenerServiceLoader) {
+      try {
+        compoundEventListener.addListender(jdbcEventListeners);
+      } catch (ServiceConfigurationError e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+
   public JdbcEventListener getEventListener() {
-    return eventListener;
+    return jdbcEventListener;
   }
 
   public Connection getDelegate() {
@@ -88,62 +138,62 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
 
   @Override
   public Statement createStatement() throws SQLException {
-    return StatementWrapper.wrap(delegate.createStatement(), new StatementInformation(connectionInformation), eventListener);
+    return StatementWrapper.wrap(delegate.createStatement(), new StatementInformation(connectionInformation), jdbcEventListener);
   }
 
   @Override
   public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-    return StatementWrapper.wrap(delegate.createStatement(resultSetType, resultSetConcurrency), new StatementInformation(connectionInformation), eventListener);
+    return StatementWrapper.wrap(delegate.createStatement(resultSetType, resultSetConcurrency), new StatementInformation(connectionInformation), jdbcEventListener);
   }
 
   @Override
   public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-    return StatementWrapper.wrap(delegate.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability), new StatementInformation(connectionInformation), eventListener);
+    return StatementWrapper.wrap(delegate.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability), new StatementInformation(connectionInformation), jdbcEventListener);
   }
 
   @Override
   public PreparedStatement prepareStatement(String sql) throws SQLException {
-    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql), new PreparedStatementInformation(connectionInformation, sql), eventListener);
+    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql), new PreparedStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
   public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, resultSetType, resultSetConcurrency), new PreparedStatementInformation(connectionInformation, sql), eventListener);
+    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, resultSetType, resultSetConcurrency), new PreparedStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
   public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability), new PreparedStatementInformation(connectionInformation, sql), eventListener);
+    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability), new PreparedStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
   public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, autoGeneratedKeys), new PreparedStatementInformation(connectionInformation, sql), eventListener);
+    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, autoGeneratedKeys), new PreparedStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
   public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, columnIndexes), new PreparedStatementInformation(connectionInformation, sql), eventListener);
+    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, columnIndexes), new PreparedStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
   public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, columnNames), new PreparedStatementInformation(connectionInformation, sql), eventListener);
+    return PreparedStatementWrapper.wrap(delegate.prepareStatement(sql, columnNames), new PreparedStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
   public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-    return CallableStatementWrapper.wrap(delegate.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability), new CallableStatementInformation(connectionInformation, sql), eventListener);
+    return CallableStatementWrapper.wrap(delegate.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability), new CallableStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
   public CallableStatement prepareCall(String sql) throws SQLException {
-    return CallableStatementWrapper.wrap(delegate.prepareCall(sql), new CallableStatementInformation(connectionInformation, sql), eventListener);
+    return CallableStatementWrapper.wrap(delegate.prepareCall(sql), new CallableStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
   public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-    return CallableStatementWrapper.wrap(delegate.prepareCall(sql, resultSetType, resultSetConcurrency), new CallableStatementInformation(connectionInformation, sql), eventListener);
+    return CallableStatementWrapper.wrap(delegate.prepareCall(sql, resultSetType, resultSetConcurrency), new CallableStatementInformation(connectionInformation, sql), jdbcEventListener);
   }
 
   @Override
@@ -151,13 +201,13 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
     SQLException e = null;
     long start = System.nanoTime();
     try {
-      eventListener.onBeforeCommit(connectionInformation);
+      jdbcEventListener.onBeforeCommit(connectionInformation);
       delegate.commit();
     } catch (SQLException sqle) {
       e = sqle;
       throw e;
     } finally {
-      eventListener.onAfterCommit(connectionInformation, System.nanoTime() - start, e);
+      jdbcEventListener.onAfterCommit(connectionInformation, System.nanoTime() - start, e);
     }
   }
 
@@ -166,13 +216,13 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
     SQLException e = null;
     long start = System.nanoTime();
     try {
-      eventListener.onBeforeRollback(connectionInformation);
+      jdbcEventListener.onBeforeRollback(connectionInformation);
       delegate.rollback();
     } catch (SQLException sqle) {
       e = sqle;
       throw e;
     } finally {
-      eventListener.onAfterRollback(connectionInformation, System.nanoTime() - start, e);
+      jdbcEventListener.onAfterRollback(connectionInformation, System.nanoTime() - start, e);
     }
   }
 
@@ -181,13 +231,13 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
     SQLException e = null;
     long start = System.nanoTime();
     try {
-      eventListener.onBeforeRollback(connectionInformation);
+      jdbcEventListener.onBeforeRollback(connectionInformation);
       delegate.rollback(savepoint);
     } catch (SQLException sqle) {
       e = sqle;
       throw e;
     } finally {
-      eventListener.onAfterRollback(connectionInformation, System.nanoTime() - start, e);
+      jdbcEventListener.onAfterRollback(connectionInformation, System.nanoTime() - start, e);
     }
   }
 
@@ -215,7 +265,7 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
       e = sqle;
       throw e;
     } finally {
-      eventListener.onAfterConnectionClose(connectionInformation, e);
+      jdbcEventListener.onAfterConnectionClose(connectionInformation, e);
     }
   }
 

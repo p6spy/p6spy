@@ -38,13 +38,23 @@ public class ConnectionWrapperTest {
   @Test
   public void testOnConnectionWrapped() throws Exception {
     final Connection connection = mock(Connection.class);
-    ConnectionWrapper.wrap(connection, new JdbcEventListener() {
-      @Override
-      public void onConnectionWrapped(ConnectionInformation connectionInformation) {
-        onConnectionWrappedCalled = true;
-        assertEquals(42, connectionInformation.getTimeToGetConnectionNs());
-      }
-    }, ConnectionInformation.fromDataSource(mock(DataSource.class), connection, 42));
-    assertTrue(onConnectionWrappedCalled);
+    try (ConnectionWrapper connectionWrapper = //
+        new ConnectionWrapper( //
+            connection, //
+            new JdbcEventListener() {
+              @Override
+              public void onConnectionWrapped(ConnectionInformation connectionInformation) {
+                onConnectionWrappedCalled = true;
+                assertEquals(42, connectionInformation.getTimeToGetConnectionNs());
+              }
+            }, //
+            ConnectionInformation.fromDataSource( //
+                mock(DataSource.class), // 
+                connection, //
+                42))
+        ) {
+      connectionWrapper.wrap();
+      assertTrue(onConnectionWrappedCalled);
+    }
   }
 }

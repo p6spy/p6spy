@@ -125,7 +125,9 @@ public class CompoundJdbcEventListenerTest {
     preparedStatementInformation = new PreparedStatementInformation(connectionInformation, "SELECT * FROM DUAL");
     callableStatementInformation = new CallableStatementInformation(connectionInformation, "SELECT * FROM DUAL");
 
-    wrappedConnection = ConnectionWrapper.wrap(mockedConnection, mockedJdbcListener, connectionInformation);
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(mockedConnection, mockedJdbcListener, connectionInformation);
+    wrappedConnection = connectionWrapper.wrap();
     verify(mockedJdbcListener).onConnectionWrapped(eq(connectionInformation));
     wrappedStatement = StatementWrapper.wrap(mockedStatement, statementInformation, mockedJdbcListener);
     wrappedPreparedStatement = PreparedStatementWrapper.wrap(mockedPreparedStatement, preparedStatementInformation,
