@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.logging.LoggingEventListener;
+import com.p6spy.engine.spy.DefaultJdbcEventListenerFactory;
 import com.p6spy.engine.test.TestJdbcEventListener;
 import com.p6spy.engine.test.TestLoggingEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
@@ -37,9 +38,7 @@ public class EventListenerServiceLoaderTest {
 
   @Test
   public void testServiceLoader() throws Exception {
-    @SuppressWarnings("resource")
-    ConnectionWrapper connectionWrapper = new ConnectionWrapper(null, null);
-    JdbcEventListener eventListener = connectionWrapper.getEventListener();
+    JdbcEventListener eventListener = new DefaultJdbcEventListenerFactory().createJdbcEventListener();
     assertTrue(eventListener instanceof CompoundJdbcEventListener);
 
     CompoundJdbcEventListener compoundJdbcEventListener = (CompoundJdbcEventListener) eventListener;
@@ -55,7 +54,7 @@ public class EventListenerServiceLoaderTest {
   public void testServiceLoaderFromWrapConnection() throws Exception {
     final Connection connectionMock = mock(Connection.class);
     @SuppressWarnings("resource")
-    final Connection connection = new ConnectionWrapper(connectionMock, ConnectionInformation.fromTestConnection(connectionMock)).wrap();
+    final Connection connection = new ConnectionWrapper(connectionMock, new DefaultJdbcEventListenerFactory().createJdbcEventListener(), ConnectionInformation.fromTestConnection(connectionMock)).wrap();
     assertTrue(connection instanceof ConnectionWrapper);
     ConnectionWrapper connectionWrapper = (ConnectionWrapper) connection;
     final JdbcEventListener eventListener = connectionWrapper.getEventListener();

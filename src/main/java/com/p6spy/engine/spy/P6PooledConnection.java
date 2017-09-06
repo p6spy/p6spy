@@ -30,28 +30,29 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 public class P6PooledConnection implements PooledConnection {
 
-  protected PooledConnection passthru;
-
-  public P6PooledConnection(PooledConnection connection) {
-    passthru = connection;
+  protected final PooledConnection passthru;
+  protected final JdbcEventListenerFactory jdbcEventListenerFactory;
+  
+  public P6PooledConnection(PooledConnection connection, JdbcEventListenerFactory jdbcEventListenerFactory) {
+    this.passthru = connection;
+    this.jdbcEventListenerFactory = jdbcEventListenerFactory;
   }
 
   @Override
   public Connection getConnection() throws SQLException {
     final long start = System.nanoTime();
+    
     final Connection conn;
     try {
       conn = passthru.getConnection();
     } catch (SQLException e) {
-      @SuppressWarnings("resource")
-      ConnectionWrapper connectionWrapper = new ConnectionWrapper(null, null);
-      connectionWrapper.getJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromPooledConnection(passthru, null, System.nanoTime() - start), e);
+      this.jdbcEventListenerFactory.createJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromPooledConnection(passthru, null, System.nanoTime() - start), e);
       throw e;
     }
     
     ConnectionInformation connectionInformation = ConnectionInformation.fromPooledConnection(passthru, conn, System.nanoTime() - start);
     @SuppressWarnings("resource")
-    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, connectionInformation);
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, this.jdbcEventListenerFactory.createJdbcEventListener(), connectionInformation);
     connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
     return connectionWrapper.wrap();
   }

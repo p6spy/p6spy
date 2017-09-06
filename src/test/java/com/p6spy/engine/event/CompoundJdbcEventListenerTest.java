@@ -52,6 +52,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import com.p6spy.engine.spy.DefaultJdbcEventListenerFactory;
 import com.p6spy.engine.spy.P6DataSource;
 import com.p6spy.engine.spy.P6PooledConnection;
 import com.p6spy.engine.test.P6TestFactory;
@@ -115,7 +116,7 @@ public class CompoundJdbcEventListenerTest {
     final CallableStatement mockedCallableStatement = mock(CallableStatement.class);
 
     wrappedDataSource = new P6DataSource(mockedDataSource);
-    wrappedPooledConnection = new P6PooledConnection(mockedPooledConnection);
+    wrappedPooledConnection = new P6PooledConnection(mockedPooledConnection, new DefaultJdbcEventListenerFactory());
     when(mockedDataSource.getConnection()).thenReturn(mockedConnection);
     when(mockedDataSource.getConnection(anyString(), anyString())).thenReturn(mockedConnection);
     when(mockedPooledConnection.getConnection()).thenReturn(mockedConnection);

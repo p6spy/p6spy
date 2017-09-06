@@ -33,23 +33,15 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.ServiceConfigurationError;
-import java.util.ServiceLoader;
 import java.util.concurrent.Executor;
 
 import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.common.StatementInformation;
-import com.p6spy.engine.event.CompoundJdbcEventListener;
-import com.p6spy.engine.event.DefaultEventListener;
 import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.spy.P6Factory;
-import com.p6spy.engine.spy.P6ModuleManager;
 
 /**
  * This implementation wraps a {@link Connection}  and notifies a {@link JdbcEventListener}
@@ -66,28 +58,11 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
   private final JdbcEventListener jdbcEventListener;
   private final ConnectionInformation connectionInformation;
 
-  private static ServiceLoader<JdbcEventListener> jdbcEventListenerServiceLoader = ServiceLoader.load(JdbcEventListener.class, ConnectionWrapper.class.getClassLoader());
-  
-  public ConnectionWrapper(Connection delegate, ConnectionInformation connectionInformation) {
-    super(delegate);
-    this.delegate = delegate;
-    this.connectionInformation = connectionInformation;
-    this.jdbcEventListener = getDefaultJdbcEventListener();
-  }
-  
   public ConnectionWrapper(Connection delegate, JdbcEventListener jdbcEventListener, ConnectionInformation connectionInformation) {
     super(delegate);
     this.delegate = delegate;
     this.connectionInformation = connectionInformation;
     this.jdbcEventListener = jdbcEventListener;
-  }
-  
-  private JdbcEventListener getDefaultJdbcEventListener() {
-    CompoundJdbcEventListener compoundEventListener = new CompoundJdbcEventListener();
-    compoundEventListener.addListender(DefaultEventListener.INSTANCE);
-    registerEventListenersFromFactories(compoundEventListener);
-    registerEventListenersFromServiceLoader(compoundEventListener);
-    return compoundEventListener;
   }
   
   public Connection wrap() {
@@ -101,29 +76,6 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
   public JdbcEventListener getJdbcEventListener() {
     return this.jdbcEventListener;
   }
-
-  private void registerEventListenersFromFactories(CompoundJdbcEventListener compoundEventListener) {
-    List<P6Factory> factories = P6ModuleManager.getInstance().getFactories();
-    if (factories != null) {
-      for (P6Factory factory : factories) {
-        final JdbcEventListener eventListener = factory.getJdbcEventListener();
-        if (eventListener != null) {
-          compoundEventListener.addListender(eventListener);
-        }
-      }
-    }
-  }
-
-  private void registerEventListenersFromServiceLoader(CompoundJdbcEventListener compoundEventListener) {
-    for (Iterator<JdbcEventListener> iterator = jdbcEventListenerServiceLoader.iterator(); iterator.hasNext(); ) {
-      try {
-        compoundEventListener.addListender(iterator.next());
-      } catch (ServiceConfigurationError e) {
-        e.printStackTrace();
-      }
-    }
-  }
-
 
   public JdbcEventListener getEventListener() {
     return jdbcEventListener;

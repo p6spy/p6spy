@@ -39,10 +39,11 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
  */
 public class P6SpyDriver implements Driver {
   private static Driver INSTANCE = new P6SpyDriver();
-
+  private static JdbcEventListenerFactory jdbcEventListenerFactory;
+  
   static {
     try {
-      DriverManager.registerDriver(INSTANCE);
+      DriverManager.registerDriver(P6SpyDriver.INSTANCE);
     } catch (SQLException e) {
       throw new IllegalStateException("Could not register P6SpyDriver with DriverManager", e);
     }
@@ -88,19 +89,22 @@ public class P6SpyDriver implements Driver {
     P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
 
     final long start = System.nanoTime();
+    
+    if (P6SpyDriver.jdbcEventListenerFactory == null) {
+      P6SpyDriver.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+    }
+    
     final Connection conn;
     try {
       conn =  passThru.connect(extractRealUrl(url), properties);
     } catch (SQLException e) {
-      @SuppressWarnings("resource")
-      ConnectionWrapper connectionWrapper = new ConnectionWrapper(null, null);
-      connectionWrapper.getJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
+      P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
       throw e;
     }
     
     ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
     @SuppressWarnings("resource")
-    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, connectionInformation);
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener(), connectionInformation);
     connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
     return connectionWrapper.wrap();
   }
@@ -152,5 +156,9 @@ public class P6SpyDriver implements Driver {
   // Note: @Override annotation not added to allow compilation using Java 1.6
   public Logger getParentLogger() throws SQLFeatureNotSupportedException {
     throw new SQLFeatureNotSupportedException("Feature not supported");
+  }
+  
+  public static void setJdbcEventListenerFactory(JdbcEventListenerFactory jdbcEventListenerFactory) {
+    P6SpyDriver.jdbcEventListenerFactory = jdbcEventListenerFactory;
   }
 }
