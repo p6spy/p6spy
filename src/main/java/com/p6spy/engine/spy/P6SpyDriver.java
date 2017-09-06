@@ -18,11 +18,6 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.wrapper.ConnectionWrapper;
-
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -34,6 +29,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
+
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 /**
  * JDBC driver for P6Spy
@@ -49,14 +48,9 @@ public class P6SpyDriver implements Driver {
     }
   }
 
-
   @Override
-  public boolean acceptsURL(final String url) throws SQLException {
-    if (url != null && url.startsWith("jdbc:p6spy:")) {
-      return true;
-    } else {
-      return false;
-    }
+  public boolean acceptsURL(final String url) {
+    return url != null && url.startsWith("jdbc:p6spy:");
   }
 
   /**
@@ -66,7 +60,7 @@ public class P6SpyDriver implements Driver {
    * @return the parsed URL
    */
   private String extractRealUrl(String url) {
-    return url.startsWith("jdbc:p6spy:") ? url.replace("p6spy:", "") : url;
+    return acceptsURL(url) ? url.replace("p6spy:", "") : url;
   }
 
   static List<Driver> registeredDrivers() {
