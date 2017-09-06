@@ -20,6 +20,8 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -91,9 +93,17 @@ public class P6SpyDriver implements Driver {
 
     P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
 
+    JdbcEventListener jdbcEventListener = P6Core.getJdbcEventListener();
     final long start = System.nanoTime();
-    Connection conn = passThru.connect(extractRealUrl(url), properties);
-    return P6Core.wrapConnection(conn, ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start));
+    try {
+      final Connection conn =  passThru.connect(extractRealUrl(url), properties);
+      ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
+      return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+    } catch (SQLException e) {
+      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
+      throw e;
+    }
   }
 
   protected Driver findPassthru(String url) throws SQLException {

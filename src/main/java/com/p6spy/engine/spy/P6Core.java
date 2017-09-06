@@ -38,15 +38,20 @@ public class P6Core {
 
   private static ServiceLoader<JdbcEventListener> jdbcEventListenerServiceLoader = ServiceLoader.load(JdbcEventListener.class, P6Core.class.getClassLoader());
 
+  @Deprecated
   public static Connection wrapConnection(Connection realConnection, ConnectionInformation connectionInformation) {
     if (realConnection == null) {
       return null;
     }
-    final CompoundJdbcEventListener compoundEventListener = new CompoundJdbcEventListener();
+    return ConnectionWrapper.wrap(realConnection, getJdbcEventListener(), connectionInformation);
+  }
+
+  public static JdbcEventListener getJdbcEventListener() {
+    CompoundJdbcEventListener compoundEventListener = new CompoundJdbcEventListener();
     compoundEventListener.addListender(DefaultEventListener.INSTANCE);
     registerEventListenersFromFactories(compoundEventListener);
     registerEventListenersFromServiceLoader(compoundEventListener);
-    return ConnectionWrapper.wrap(realConnection, compoundEventListener, connectionInformation);
+    return compoundEventListener;
   }
 
   private static void registerEventListenersFromFactories(CompoundJdbcEventListener compoundEventListener) {

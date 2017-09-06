@@ -23,8 +23,8 @@ import com.p6spy.engine.logging.LoggingEventListener;
 import com.p6spy.engine.spy.P6Core;
 import com.p6spy.engine.test.TestJdbcEventListener;
 import com.p6spy.engine.test.TestLoggingEventListener;
-import com.p6spy.engine.wrapper.ConnectionWrapper;
 
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -38,6 +38,20 @@ public class EventListenerServiceLoaderTest {
 
   @Test
   public void testServiceLoader() throws Exception {
+    JdbcEventListener eventListener = P6Core.getJdbcEventListener();
+    assertTrue(eventListener instanceof CompoundJdbcEventListener);
+
+    CompoundJdbcEventListener compoundJdbcEventListener = (CompoundJdbcEventListener) eventListener;
+
+    final List<JdbcEventListener> eventListeners = compoundJdbcEventListener.getEventListeners();
+    assertTrue(containsClass(TestJdbcEventListener.class, eventListeners));
+    assertFalse(containsClass(JdbcEventListener.class, eventListeners));
+    assertTrue(containsClass(TestLoggingEventListener.class, eventListeners));
+    assertFalse(containsClass(LoggingEventListener.class, eventListeners));
+  }
+
+  @Test
+  public void testServiceLoaderFromWrapConnection() throws Exception {
     final Connection connectionMock = mock(Connection.class);
     final Connection connection = P6Core.wrapConnection(connectionMock, ConnectionInformation.fromTestConnection(connectionMock));
     assertTrue(connection instanceof ConnectionWrapper);

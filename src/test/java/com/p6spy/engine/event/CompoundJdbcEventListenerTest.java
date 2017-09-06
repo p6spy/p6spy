@@ -20,10 +20,15 @@ package com.p6spy.engine.event;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -35,6 +40,7 @@ import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.Ref;
@@ -46,9 +52,16 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import com.p6spy.engine.spy.P6DataSource;
+import com.p6spy.engine.spy.P6PooledConnection;
+import com.p6spy.engine.test.P6TestFactory;
+import com.p6spy.engine.test.P6TestFramework;
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -62,11 +75,21 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
 import com.p6spy.engine.wrapper.PreparedStatementWrapper;
 import com.p6spy.engine.wrapper.StatementWrapper;
 
+import javax.sql.DataSource;
+import javax.sql.PooledConnection;
+
 @RunWith(MockitoJUnitRunner.class)
 public class CompoundJdbcEventListenerTest {
 
   @Mock
+  private DataSource mockedDataSource;
+  @Mock
+  private PooledConnection mockedPooledConnection;
+  @Mock
   private JdbcEventListener mockedJdbcListener;
+
+  private DataSource wrappedDataSource;
+  private PooledConnection wrappedPooledConnection;
 
   private Connection wrappedConnection;
   private Statement wrappedStatement;
@@ -81,11 +104,21 @@ public class CompoundJdbcEventListenerTest {
   private static final String SQL = "SELECT * FROM DUAL";
 
   @Before
-  public void before() {
+  public void before() throws SQLException, IOException {
+    P6TestFactory.setJdbcEventListener(mockedJdbcListener);
+    new P6TestFramework("H2") {
+    };
+
     final Connection mockedConnection = mock(Connection.class);
     final Statement mockedStatement = mock(Statement.class);
     final PreparedStatement mockedPreparedStatement = mock(PreparedStatement.class);
     final CallableStatement mockedCallableStatement = mock(CallableStatement.class);
+
+    wrappedDataSource = new P6DataSource(mockedDataSource);
+    wrappedPooledConnection = new P6PooledConnection(mockedPooledConnection);
+    when(mockedDataSource.getConnection()).thenReturn(mockedConnection);
+    when(mockedDataSource.getConnection(anyString(), anyString())).thenReturn(mockedConnection);
+    when(mockedPooledConnection.getConnection()).thenReturn(mockedConnection);
 
     connectionInformation = ConnectionInformation.fromTestConnection(mockedConnection);
     statementInformation = new StatementInformation(connectionInformation);
@@ -99,6 +132,72 @@ public class CompoundJdbcEventListenerTest {
         mockedJdbcListener);
     wrappedCallableStatement = CallableStatementWrapper.wrap(mockedCallableStatement, callableStatementInformation,
         mockedJdbcListener);
+  }
+
+  @After
+  public void after() throws Exception {
+    P6TestFactory.setJdbcEventListener(null);
+  }
+
+  @Test
+  public void testConnectionOnAfterGetConnectionAfterGettingFromDataSource() throws SQLException {
+    wrappedDataSource.getConnection();
+    wrappedDataSource.getConnection("test", "test");
+    verify(mockedJdbcListener, times(2)).onAfterGetConnection(connectionInformationWithConnection(), ArgumentMatchers.<SQLException>isNull());
+  }
+
+  @Test
+  public void testConnectionOnAfterGetConnectionAfterGettingFromDataSourceWithThrowingSQLException() throws SQLException {
+    SQLException sqle = new SQLException();
+    when(mockedDataSource.getConnection()).thenThrow(sqle);
+    when(mockedDataSource.getConnection(anyString(), anyString())).thenThrow(sqle);
+
+    try {
+      wrappedDataSource.getConnection();
+      Assert.fail("exception should be thrown");
+    } catch (SQLException expected) {
+    }
+    try {
+      wrappedDataSource.getConnection("test", "test");
+      Assert.fail("exception should be thrown");
+    } catch (SQLException expected) {
+    }
+    verify(mockedJdbcListener, times(2)).onAfterGetConnection(connectionInformationWithoutConnection(), eq(sqle));
+  }
+
+  @Test
+  public void testConnectionOnAfterGetConnectionAfterGettingFromDriver() throws SQLException {
+    DriverManager.getConnection("jdbc:p6spy:h2:mem:p6spy", "sa", null);
+    verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithConnection(), ArgumentMatchers.<SQLException>isNull());
+  }
+
+  @Test
+  public void testConnectionOnAfterGetConnectionAfterGettingFromDriverWithThrowingSQLException() throws SQLException {
+    try {
+      DriverManager.getConnection("jdbc:p6spy:h2:tcp://dev/null/", "sa", null);
+      Assert.fail("exception should be thrown");
+    } catch (SQLException expected) {
+    }
+    verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithoutConnection(), any(SQLException.class));
+  }
+
+  @Test
+  public void testConnectionOnAfterGetConnectionAfterGettingFromPooledConnection() throws SQLException {
+    wrappedPooledConnection.getConnection();
+    verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithConnection(), ArgumentMatchers.<SQLException>isNull());
+  }
+
+  @Test
+  public void testConnectionOnAfterGetConnectionAfterGettingFromPooledConnectionWithThrowingSQLException() throws SQLException {
+    SQLException sqle = new SQLException();
+    when(mockedPooledConnection.getConnection()).thenThrow(sqle);
+
+    try {
+      wrappedPooledConnection.getConnection();
+      Assert.fail("exception should be thrown");
+    } catch (SQLException expected) {
+    }
+    verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithoutConnection(), eq(sqle));
   }
 
   @Test
@@ -942,6 +1041,24 @@ public class CompoundJdbcEventListenerTest {
   public void testStatementOnAfterStatementClose() throws SQLException {
     wrappedStatement.close();
     verify(mockedJdbcListener).onAfterStatementClose(eq(statementInformation), ArgumentMatchers.<SQLException>isNull());
+  }
+
+  private ConnectionInformation connectionInformationWithConnection() {
+    return argThat(new ArgumentMatcher<ConnectionInformation>() {
+      @Override
+      public boolean matches(ConnectionInformation connectionInformation) {
+        return connectionInformation.getConnection() != null;
+      }
+    });
+  }
+
+  private ConnectionInformation connectionInformationWithoutConnection() {
+    return argThat(new ArgumentMatcher<ConnectionInformation>() {
+      @Override
+      public boolean matches(ConnectionInformation connectionInformation) {
+        return connectionInformation.getConnection() == null;
+      }
+    });
   }
 
 }

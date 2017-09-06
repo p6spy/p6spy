@@ -24,8 +24,11 @@ import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.common.StatementInformation;
 
+import javax.sql.DataSource;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,6 +53,21 @@ import java.sql.Statement;
 public abstract class JdbcEventListener {
 
   /**
+   * This callback method is executed after a {@link Connection} obtained from a {@link DataSource} or a {@link Driver}.
+   * <p/>
+   * The {@link ConnectionInformation} holds information about the creator of the connection which is either
+   * {@link ConnectionInformation#dataSource}, {@link ConnectionInformation#driver} or
+   * {@link ConnectionInformation#pooledConnection}, though {@link ConnectionInformation#connection} itself is <code>null</code>
+   * when {@link SQLException} is not <code>null</code> and vise versa.
+   *
+   * @param connectionInformation The meta information about the wrapped {@link Connection}
+   * @param e                     The {@link SQLException} which may be triggered by the call (<code>null</code> if
+   *                              there was no exception).
+   */
+  public void onAfterGetConnection(ConnectionInformation connectionInformation, SQLException e) {
+  }
+
+  /**
    * This callback method is executed after a wrapped {@link Connection} has been created.
    * <p>
    * The {@link ConnectionInformation} holds information about the creator of the connection which is either
@@ -57,6 +75,8 @@ public abstract class JdbcEventListener {
    * {@link ConnectionInformation#pooledConnection}.
    *
    * @param connectionInformation The meta information about the wrapped {@link Connection}
+   *
+   * @deprecated Use {@link #onAfterGetConnection(ConnectionInformation, SQLException)}
    */
   public void onConnectionWrapped(ConnectionInformation connectionInformation) {
   }

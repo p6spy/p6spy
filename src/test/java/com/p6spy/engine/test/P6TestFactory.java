@@ -25,6 +25,8 @@ import com.p6spy.engine.spy.option.P6OptionsRepository;
 
 public class P6TestFactory implements P6Factory {
 
+  private static JdbcEventListener jdbcEventListener;
+
   @Override
   public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
     return new P6TestOptions(optionsRepository);
@@ -32,7 +34,10 @@ public class P6TestFactory implements P6Factory {
 
   @Override
   public JdbcEventListener getJdbcEventListener() {
-    return null;
+    return jdbcEventListener;
   }
 
+  public static void setJdbcEventListener(JdbcEventListener jdbcEventListener) {
+    P6TestFactory.jdbcEventListener = jdbcEventListener;
+  }
 }

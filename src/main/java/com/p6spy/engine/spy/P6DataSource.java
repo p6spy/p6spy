@@ -20,6 +20,8 @@ package com.p6spy.engine.spy;
 
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -283,9 +285,17 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (realDataSource == null) {
       bindDataSource();
     }
+    JdbcEventListener jdbcEventListener = P6Core.getJdbcEventListener();
     final long start = System.nanoTime();
-    final Connection connection = ((DataSource) realDataSource).getConnection();
-    return P6Core.wrapConnection(connection, ConnectionInformation.fromDataSource(realDataSource, connection, System.nanoTime() - start));
+    try {
+      final Connection conn = ((DataSource) realDataSource).getConnection();
+      ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource, conn, System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
+      return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+    } catch (SQLException e) {
+      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDataSource(realDataSource, null, System.nanoTime() - start), e);
+      throw e;
+    }
   }
 
   @Override
@@ -293,9 +303,17 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (realDataSource == null) {
       bindDataSource();
     }
+    JdbcEventListener jdbcEventListener = P6Core.getJdbcEventListener();
     final long start = System.nanoTime();
-    final Connection connection = ((DataSource) realDataSource).getConnection(username, password);
-    return P6Core.wrapConnection(connection, ConnectionInformation.fromDataSource(realDataSource, connection, System.nanoTime() - start));
+    try {
+      final Connection conn = ((DataSource) realDataSource).getConnection(username, password);
+      ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource, conn, System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
+      return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+    } catch (SQLException e) {
+      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDataSource(realDataSource, null, System.nanoTime() - start), e);
+      throw e;
+    }
   }
 
   @Override
