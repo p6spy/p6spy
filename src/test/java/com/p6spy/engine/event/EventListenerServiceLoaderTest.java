@@ -18,27 +18,28 @@
 
 package com.p6spy.engine.event;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.logging.LoggingEventListener;
-import com.p6spy.engine.spy.P6Core;
-import com.p6spy.engine.test.TestJdbcEventListener;
-import com.p6spy.engine.test.TestLoggingEventListener;
-
-import com.p6spy.engine.wrapper.ConnectionWrapper;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.sql.Connection;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
+import org.junit.Test;
+
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.logging.LoggingEventListener;
+import com.p6spy.engine.test.TestJdbcEventListener;
+import com.p6spy.engine.test.TestLoggingEventListener;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 public class EventListenerServiceLoaderTest {
 
   @Test
   public void testServiceLoader() throws Exception {
-    JdbcEventListener eventListener = P6Core.getJdbcEventListener();
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(null, null);
+    JdbcEventListener eventListener = connectionWrapper.getEventListener();
     assertTrue(eventListener instanceof CompoundJdbcEventListener);
 
     CompoundJdbcEventListener compoundJdbcEventListener = (CompoundJdbcEventListener) eventListener;
