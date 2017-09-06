@@ -93,8 +93,6 @@ public class P6SpyDriver implements Driver {
 
     P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
 
-    
-    
     final long start = System.nanoTime();
     final Connection conn;
     try {
@@ -106,7 +104,7 @@ public class P6SpyDriver implements Driver {
       throw e;
     }
     
-    ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
+    ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
     @SuppressWarnings("resource")
     ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, connectionInformation);
     connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
