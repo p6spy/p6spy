@@ -33,6 +33,7 @@ import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -114,9 +115,9 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
   }
 
   private void registerEventListenersFromServiceLoader(CompoundJdbcEventListener compoundEventListener) {
-    for (JdbcEventListener jdbcEventListeners : jdbcEventListenerServiceLoader) {
+    for (Iterator<JdbcEventListener> iterator = jdbcEventListenerServiceLoader.iterator(); iterator.hasNext(); ) {
       try {
-        compoundEventListener.addListender(jdbcEventListeners);
+        compoundEventListener.addListender(iterator.next());
       } catch (ServiceConfigurationError e) {
         e.printStackTrace();
       }
