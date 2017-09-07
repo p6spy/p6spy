@@ -63,6 +63,13 @@ public class P6ModuleManager {
     try {
       cleanUp();
 
+      new DefaultJdbcEventListenerFactory() {
+        {
+          // we need proper reload of the jdbcEventListener
+          jdbcEventListener = null;
+        }
+      };
+      
       instance = new P6ModuleManager();
       P6LogQuery.initialize();
       

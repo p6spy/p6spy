@@ -40,7 +40,8 @@ public class DefaultJdbcEventListenerFactory implements JdbcEventListenerFactory
   private static ServiceLoader<JdbcEventListener> jdbcEventListenerServiceLoader = //
       ServiceLoader.load(JdbcEventListener.class, DefaultJdbcEventListenerFactory.class.getClassLoader());
   
-  private static JdbcEventListener jdbcEventListener;
+  // need to be nulled on reload => keeping protected
+  protected static JdbcEventListener jdbcEventListener;
   
   @Override
   public JdbcEventListener createJdbcEventListener() {
