@@ -95,11 +95,7 @@ public abstract class P6TestFramework extends BaseTestCase {
   @Before
   public void setUpFramework() throws Exception {
     // clean table plz (we need to make sure that all the configured factories will be re-loaded)
-    new DefaultJdbcEventListenerFactory() {
-      {
-        jdbcEventListener = null;
-      }
-    };
+    new DefaultJdbcEventListenerFactory().clearCache();
     
     
     Collection<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
