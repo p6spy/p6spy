@@ -54,7 +54,7 @@ public abstract class JdbcEventListener {
 
   /**
    * This callback method is executed after a {@link Connection} obtained from a {@link DataSource} or a {@link Driver}.
-   * <p/>
+   * <p>
    * The {@link ConnectionInformation} holds information about the creator of the connection which is either
    * {@link ConnectionInformation#dataSource}, {@link ConnectionInformation#driver} or
    * {@link ConnectionInformation#pooledConnection}, though {@link ConnectionInformation#connection} itself is <code>null</code>
