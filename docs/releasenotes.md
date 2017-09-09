@@ -1,10 +1,22 @@
 # Release Notes
 
-## [3.2.1](https://github.com/p6spy/p6spy/compare/p6spy-3.2.0...master) (Unreleased)
+## [3.3.1](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...master) (Unreleased)
 
 Improvements:
 
 Defects resolved:
+
+## [3.3.0](https://github.com/p6spy/p6spy/compare/p6spy-3.2.0...3.3.0) (2017-09-09)
+
+Improvements:
+
+* [issue #384](https://github.com/p6spy/p6spy/pull/384): Introduced event onAfterConnectionGet
+* [issue #400](https://github.com/p6spy/p6spy/pull/400): Introduced JdbcEventListenerFactory (enabling programatic JdbcEventListener implementation)
+* [issue #400](https://github.com/p6spy/p6spy/pull/400): Deprecated P6Core favoring ConnectionWrapper and JdbcEventListenerFactory
+
+Defects resolved:
+
+* [issue #404](https://github.com/p6spy/p6spy/pull/404): Reintroduced zip + tar distribution packaging (was missing since 3.1.0 version)
 
 ## [3.2.0](https://github.com/p6spy/p6spy/compare/p6spy-3.1.0...p6spy-3.2.0) (2017-09-01)
 
