@@ -62,7 +62,7 @@ public class P6ModuleManager {
   private synchronized static void initMe() {
     try {
       cleanUp();
-
+      
       instance = new P6ModuleManager();
       P6LogQuery.initialize();
       
@@ -95,6 +95,9 @@ public class P6ModuleManager {
         instance.mBeansRegistry.unregisterAllMBeans(P6SpyOptions.getActiveInstance().getJmxPrefix());
       }
     }
+    
+    // clean table plz (we need to make sure that all the configured factories will be re-loaded)
+    new DefaultJdbcEventListenerFactory().clearCache();
   }
 
   /**

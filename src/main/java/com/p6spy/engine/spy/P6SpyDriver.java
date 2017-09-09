@@ -18,11 +18,6 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.wrapper.ConnectionWrapper;
-
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -35,28 +30,28 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
+
 /**
  * JDBC driver for P6Spy
  */
 public class P6SpyDriver implements Driver {
   private static Driver INSTANCE = new P6SpyDriver();
-
+  private static JdbcEventListenerFactory jdbcEventListenerFactory;
+  
   static {
     try {
-      DriverManager.registerDriver(INSTANCE);
+      DriverManager.registerDriver(P6SpyDriver.INSTANCE);
     } catch (SQLException e) {
       throw new IllegalStateException("Could not register P6SpyDriver with DriverManager", e);
     }
   }
 
-
   @Override
-  public boolean acceptsURL(final String url) throws SQLException {
-    if (url != null && url.startsWith("jdbc:p6spy:")) {
-      return true;
-    } else {
-      return false;
-    }
+  public boolean acceptsURL(final String url) {
+    return url != null && url.startsWith("jdbc:p6spy:");
   }
 
   /**
@@ -66,7 +61,7 @@ public class P6SpyDriver implements Driver {
    * @return the parsed URL
    */
   private String extractRealUrl(String url) {
-    return url.startsWith("jdbc:p6spy:") ? url.replace("p6spy:", "") : url;
+    return acceptsURL(url) ? url.replace("p6spy:", "") : url;
   }
 
   static List<Driver> registeredDrivers() {
@@ -93,17 +88,25 @@ public class P6SpyDriver implements Driver {
 
     P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
 
-    JdbcEventListener jdbcEventListener = P6Core.getJdbcEventListener();
     final long start = System.nanoTime();
+    
+    if (P6SpyDriver.jdbcEventListenerFactory == null) {
+      P6SpyDriver.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+    }
+    
+    final Connection conn;
     try {
-      final Connection conn =  passThru.connect(extractRealUrl(url), properties);
-      ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
-      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
-      return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+      conn =  passThru.connect(extractRealUrl(url), properties);
     } catch (SQLException e) {
-      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
+      P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
       throw e;
     }
+    
+    ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener(), connectionInformation);
+    connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
+    return connectionWrapper.wrap();
   }
 
   protected Driver findPassthru(String url) throws SQLException {
@@ -153,5 +156,9 @@ public class P6SpyDriver implements Driver {
   // Note: @Override annotation not added to allow compilation using Java 1.6
   public Logger getParentLogger() throws SQLFeatureNotSupportedException {
     throw new SQLFeatureNotSupportedException("Feature not supported");
+  }
+  
+  public static void setJdbcEventListenerFactory(JdbcEventListenerFactory jdbcEventListenerFactory) {
+    P6SpyDriver.jdbcEventListenerFactory = jdbcEventListenerFactory;
   }
 }

@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThat;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,7 @@ import org.junit.runners.Parameterized;
 
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.StatementInformation;
+import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.event.SimpleJdbcEventListener;
 import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.test.P6TestLoadableOptions;
@@ -57,18 +59,22 @@ public class P6TestPool extends P6TestFramework {
     connection = ds.getConnection().unwrap(ConnectionWrapper.class);
   }
 
-
   @Test
   public void testExecute() throws SQLException {
     String query = "select * from customers";
 
-    final Connection connectionWrapper = ConnectionWrapper.wrap(this.connection, new SimpleJdbcEventListener() {
-      @Override
-      public void onBeforeAnyExecute(StatementInformation statementInformation) {
-        assertThat("sql of statementInformation", statementInformation.getSql(), is(notNullValue()));
-      }
-    }, ConnectionInformation.fromTestConnection(this.connection));
-
-    P6TestUtil.execute(connectionWrapper, query);
+    try (ConnectionWrapper connectionWrapper = //
+        new ConnectionWrapper( //
+            this.connection, new SimpleJdbcEventListener() {
+              @Override
+              public void onBeforeAnyExecute(StatementInformation statementInformation) {
+                assertThat("sql of statementInformation", statementInformation.getSql(), is(notNullValue()));
+              }
+            }, //
+            ConnectionInformation.fromTestConnection(this.connection) //
+        ) //
+    ) {
+      P6TestUtil.execute(connectionWrapper, query);
+    }
   }
 }

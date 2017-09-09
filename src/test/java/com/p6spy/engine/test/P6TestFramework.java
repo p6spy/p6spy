@@ -18,30 +18,32 @@
 
 package com.p6spy.engine.test;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.P6ModuleManager;
-import com.p6spy.engine.spy.P6SpyOptions;
-import com.p6spy.engine.spy.P6TestUtil;
-import com.p6spy.engine.spy.appender.P6TestLogger;
-import com.p6spy.engine.spy.option.SpyDotProperties;
-import com.p6spy.engine.wrapper.ConnectionWrapper;
-
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runners.Parameterized.Parameters;
-
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runners.Parameterized.Parameters;
+
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.DefaultJdbcEventListenerFactory;
+import com.p6spy.engine.spy.P6ModuleManager;
+import com.p6spy.engine.spy.P6SpyOptions;
+import com.p6spy.engine.spy.P6TestUtil;
+import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.spy.option.SpyDotProperties;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 /**
  * Base test case for tests which should execute against all databases defined for testing.
@@ -92,6 +94,10 @@ public abstract class P6TestFramework extends BaseTestCase {
 
   @Before
   public void setUpFramework() throws Exception {
+    // clean table plz (we need to make sure that all the configured factories will be re-loaded)
+    new DefaultJdbcEventListenerFactory().clearCache();
+    
+    
     Collection<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
     String user = P6TestOptions.getActiveInstance().getUser();
     String password = P6TestOptions.getActiveInstance().getPassword();

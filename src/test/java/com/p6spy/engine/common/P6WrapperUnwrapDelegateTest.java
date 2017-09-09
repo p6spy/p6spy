@@ -41,7 +41,9 @@ public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
   @Test
   public void testCastableFromProxy() throws SQLException {
     Connection con = new TestConnectionImpl();
-    Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener, ConnectionInformation.fromTestConnection(con));
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(con));
+    Connection proxy = connectionWrapper.wrap();
 
     // if the proxy implements the interface then the proxy should be returned
     {
@@ -70,19 +72,20 @@ public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
   @Test
   public void testCastableFromUnderlying() throws SQLException {
     Connection con = new TestConnectionImpl();
-    Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener, ConnectionInformation.fromTestConnection(con));
+    try (ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
+      Connection proxy = connectionWrapper.wrap();
 
-    // if the underlying object extends the class (or matches the class) then the underlying object should be returned.
-    {
-      AbstractTestConnection unwrapped = proxy.unwrap(AbstractTestConnection.class);
-      assertFalse(AbstractWrapper.isProxy(unwrapped));
+      // if the underlying object extends the class (or matches the class) then the underlying object should be returned.
+      {
+        AbstractTestConnection unwrapped = proxy.unwrap(AbstractTestConnection.class);
+        assertFalse(AbstractWrapper.isProxy(unwrapped));
+      }
+  
+      {
+        TestConnectionImpl unwrapped = proxy.unwrap(TestConnectionImpl.class);
+        assertFalse(AbstractWrapper.isProxy(unwrapped));
+      }
     }
-
-    {
-      TestConnectionImpl unwrapped = proxy.unwrap(TestConnectionImpl.class);
-      assertFalse(AbstractWrapper.isProxy(unwrapped));
-    }
-
   }
 
   @Test
@@ -95,22 +98,23 @@ public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
     // is implemented here.
     DelegatingConnection underlying = new DelegatingConnection(con);
 
-    Connection proxy = ConnectionWrapper.wrap(underlying, noOpEventListener, ConnectionInformation.fromTestConnection(underlying));
+    try (ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(underlying))) {
+      Connection proxy = connectionWrapper.wrap();
 
-    // TestConnection is an interface of the actual connection but not of the proxy.  Unwrapping works
-    // but a proxy is not returned
-    {
-      TestConnection unwrapped = proxy.unwrap(TestConnection.class);
-      assertFalse(AbstractWrapper.isProxy(unwrapped));
+      // TestConnection is an interface of the actual connection but not of the proxy.  Unwrapping works
+      // but a proxy is not returned
+      {
+        TestConnection unwrapped = proxy.unwrap(TestConnection.class);
+        assertFalse(AbstractWrapper.isProxy(unwrapped));
+      }
+  
+      // ResultSet is not implemented at all - an exception will be thrown
+      try {
+        proxy.unwrap(ResultSet.class);
+        fail("Expected exception not thrown");
+      } catch (SQLException e) {
+      }
     }
-
-    // ResultSet is not implemented at all - an exception will be thrown
-    try {
-      proxy.unwrap(ResultSet.class);
-      fail("Expected exception not thrown");
-    } catch (SQLException e) {
-    }
-
   }
 
 }

@@ -66,7 +66,7 @@ dependencies {
   compileOnly 'ch.qos.logback:logback-classic:1.1.2' 
   compileOnly 'ch.qos.logback:logback-core:1.1.2'
 
-  testCompile 'junit:junit:4.11'
+  testCompile 'junit:junit:4.12'
   testCompile 'org.eclipse.jetty:jetty-plus:8.1.7.v20120910' // datasource testing through JNDI
   testCompile 'commons-dbcp:commons-dbcp:1.4' // datasource testing
   testCompile 'org.codehaus.btm:btm:2.1.4' // xa datasource testing

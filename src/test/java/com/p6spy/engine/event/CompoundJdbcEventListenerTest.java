@@ -52,10 +52,9 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import com.p6spy.engine.spy.P6DataSource;
-import com.p6spy.engine.spy.P6PooledConnection;
-import com.p6spy.engine.test.P6TestFactory;
-import com.p6spy.engine.test.P6TestFramework;
+import javax.sql.DataSource;
+import javax.sql.PooledConnection;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -70,13 +69,16 @@ import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
 import com.p6spy.engine.common.StatementInformation;
+import com.p6spy.engine.spy.JdbcEventListenerFactory;
+import com.p6spy.engine.spy.P6DataSource;
+import com.p6spy.engine.spy.P6PooledConnection;
+import com.p6spy.engine.spy.P6SpyDriver;
+import com.p6spy.engine.test.P6TestFactory;
+import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.wrapper.CallableStatementWrapper;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 import com.p6spy.engine.wrapper.PreparedStatementWrapper;
 import com.p6spy.engine.wrapper.StatementWrapper;
-
-import javax.sql.DataSource;
-import javax.sql.PooledConnection;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompoundJdbcEventListenerTest {
@@ -115,7 +117,18 @@ public class CompoundJdbcEventListenerTest {
     final CallableStatement mockedCallableStatement = mock(CallableStatement.class);
 
     wrappedDataSource = new P6DataSource(mockedDataSource);
-    wrappedPooledConnection = new P6PooledConnection(mockedPooledConnection);
+    ((P6DataSource) wrappedDataSource).setJdbcEventListenerFactory(new JdbcEventListenerFactory() {
+      @Override
+      public JdbcEventListener createJdbcEventListener() {
+        return mockedJdbcListener;
+      }
+    });
+    wrappedPooledConnection = new P6PooledConnection(mockedPooledConnection, new JdbcEventListenerFactory() {
+      @Override
+      public JdbcEventListener createJdbcEventListener() {
+        return mockedJdbcListener;
+      }
+    });
     when(mockedDataSource.getConnection()).thenReturn(mockedConnection);
     when(mockedDataSource.getConnection(anyString(), anyString())).thenReturn(mockedConnection);
     when(mockedPooledConnection.getConnection()).thenReturn(mockedConnection);
@@ -125,18 +138,28 @@ public class CompoundJdbcEventListenerTest {
     preparedStatementInformation = new PreparedStatementInformation(connectionInformation, "SELECT * FROM DUAL");
     callableStatementInformation = new CallableStatementInformation(connectionInformation, "SELECT * FROM DUAL");
 
-    wrappedConnection = ConnectionWrapper.wrap(mockedConnection, mockedJdbcListener, connectionInformation);
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(mockedConnection, mockedJdbcListener, connectionInformation);
+    wrappedConnection = connectionWrapper.wrap();
     verify(mockedJdbcListener).onConnectionWrapped(eq(connectionInformation));
     wrappedStatement = StatementWrapper.wrap(mockedStatement, statementInformation, mockedJdbcListener);
     wrappedPreparedStatement = PreparedStatementWrapper.wrap(mockedPreparedStatement, preparedStatementInformation,
         mockedJdbcListener);
     wrappedCallableStatement = CallableStatementWrapper.wrap(mockedCallableStatement, callableStatementInformation,
         mockedJdbcListener);
+    
+    P6SpyDriver.setJdbcEventListenerFactory(new JdbcEventListenerFactory() {
+      @Override
+      public JdbcEventListener createJdbcEventListener() {
+        return mockedJdbcListener;
+      }
+    });
   }
 
   @After
   public void after() throws Exception {
     P6TestFactory.setJdbcEventListener(null);
+    P6SpyDriver.setJdbcEventListenerFactory(null);
   }
 
   @Test

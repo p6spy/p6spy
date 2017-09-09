@@ -18,10 +18,17 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.wrapper.ConnectionWrapper;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.sql.Wrapper;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -35,17 +42,10 @@ import javax.sql.DataSource;
 import javax.sql.PooledConnection;
 import javax.sql.XAConnection;
 import javax.sql.XADataSource;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
-import java.sql.Wrapper;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
-import java.util.logging.Logger;
+
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 /**
  * P6Spy {@link DataSource} implementation.
@@ -55,7 +55,8 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
 
   protected CommonDataSource realDataSource;
   protected String rdsName;
-
+  protected JdbcEventListenerFactory jdbcEventListenerFactory;
+  
   /**
    * Default no-arg constructor for Serialization
    */
@@ -285,35 +286,53 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (realDataSource == null) {
       bindDataSource();
     }
-    JdbcEventListener jdbcEventListener = P6Core.getJdbcEventListener();
+    
     final long start = System.nanoTime();
+    
+    if (this.jdbcEventListenerFactory == null) {
+      this.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+    }
+    
+    final Connection conn;
     try {
-      final Connection conn = ((DataSource) realDataSource).getConnection();
-      ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource, conn, System.nanoTime() - start);
-      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
-      return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+      conn = ((DataSource) realDataSource).getConnection();
     } catch (SQLException e) {
-      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDataSource(realDataSource, null, System.nanoTime() - start), e);
+      this.jdbcEventListenerFactory.createJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromDataSource(realDataSource, null, System.nanoTime() - start), e);
       throw e;
     }
+    
+    ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource, conn, System.nanoTime() - start);
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, this.jdbcEventListenerFactory.createJdbcEventListener(), connectionInformation);
+    connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
+    return connectionWrapper.wrap();
   }
-
+  
   @Override
   public Connection getConnection(String username, String password) throws SQLException {
     if (realDataSource == null) {
       bindDataSource();
     }
-    JdbcEventListener jdbcEventListener = P6Core.getJdbcEventListener();
+    
     final long start = System.nanoTime();
+    
+    if (this.jdbcEventListenerFactory == null) {
+      this.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+    }
+    
+    final Connection conn;
     try {
-      final Connection conn = ((DataSource) realDataSource).getConnection(username, password);
-      ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource, conn, System.nanoTime() - start);
-      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
-      return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+      conn = ((DataSource) realDataSource).getConnection(username, password);
     } catch (SQLException e) {
-      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDataSource(realDataSource, null, System.nanoTime() - start), e);
+      this.jdbcEventListenerFactory.createJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromDataSource(realDataSource, null, System.nanoTime() - start), e);
       throw e;
     }
+    
+    ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource, conn, System.nanoTime() - start);
+    @SuppressWarnings("resource")
+    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, this.jdbcEventListenerFactory.createJdbcEventListener(), connectionInformation);
+    connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
+    return connectionWrapper.wrap();
   }
 
   @Override
@@ -333,22 +352,34 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
 
   @Override
   public PooledConnection getPooledConnection() throws SQLException {
-    return new P6XAConnection(castRealDS(ConnectionPoolDataSource.class).getPooledConnection());
+    if (this.jdbcEventListenerFactory == null) {
+      this.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+    }
+    return new P6XAConnection(castRealDS(ConnectionPoolDataSource.class).getPooledConnection(), this.jdbcEventListenerFactory);
   }
 
   @Override
   public PooledConnection getPooledConnection(String user, String password) throws SQLException {
-    return new P6XAConnection(castRealDS(ConnectionPoolDataSource.class).getPooledConnection(user, password));
+    if (this.jdbcEventListenerFactory == null) {
+      this.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+    }
+    return new P6XAConnection(castRealDS(ConnectionPoolDataSource.class).getPooledConnection(user, password), this.jdbcEventListenerFactory);
   }
 
   @Override
   public XAConnection getXAConnection() throws SQLException {
-    return new P6XAConnection(castRealDS(XADataSource.class).getXAConnection());
+    if (this.jdbcEventListenerFactory == null) {
+      this.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+    }
+    return new P6XAConnection(castRealDS(XADataSource.class).getXAConnection(), this.jdbcEventListenerFactory);
   }
 
   @Override
   public XAConnection getXAConnection(String user, String password) throws SQLException {
-    return new P6XAConnection(castRealDS(XADataSource.class).getXAConnection(user, password));
+    if (this.jdbcEventListenerFactory == null) {
+      this.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+    }
+    return new P6XAConnection(castRealDS(XADataSource.class).getXAConnection(user, password), this.jdbcEventListenerFactory);
   }
 
   @SuppressWarnings("unchecked")
@@ -364,6 +395,10 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     } else {
       throw new IllegalStateException("realdatasource type not supported: " + realDataSource);
     }
+  }
+
+  public void setJdbcEventListenerFactory(JdbcEventListenerFactory jdbcEventListenerFactory) {
+    this.jdbcEventListenerFactory = jdbcEventListenerFactory;
   }
 
 }
