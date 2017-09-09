@@ -3,6 +3,7 @@ plugins {
     id 'jacoco'
     id 'maven'
     id 'maven-publish'
+    id 'distribution'
 
     id 'com.fizzpod.sweeney' version '2.1.2'
     id 'com.github.hierynomus.license' version '0.14.0'    
@@ -176,8 +177,23 @@ task shadowLogbackJar(type: ShadowJar) {
   }
 }
 
+distributions {
+    main {
+        contents {
+            from { 'src/main/assembly/individualFiles' }
+            from { 'license.txt' }
+            from jar
+            from javadocJar
+            from sourcesJar
+            from shadowLog4jJar
+            from shadowLog4j2Jar
+            from shadowLogbackJar
+        }
+    }
+}
+
 artifacts {
-    archives javadocJar, sourcesJar, shadowLog4jJar, shadowLog4j2Jar, shadowLogbackJar
+    archives javadocJar, sourcesJar, shadowLog4jJar, shadowLog4j2Jar, shadowLogbackJar, distZip, distTar
 }
 
 publishing {
@@ -208,50 +224,61 @@ publishing {
         classifier 'logback-nodep'
       }
 
-      pom.withXml {
-        asNode().children().last() + {
-          def builder = delegate
+      artifact distZip {
+        extension 'zip'
+      }
 
-          // maven central publishing mandatories
-          builder.name project.name
-          builder.description description
-          builder.url 'https://github.com/p6spy/p6spy'
+      artifact distTar {
+        extension 'tar'
+      }
 
-          builder.licenses {
-              builder.license {
-                builder.name 'The Apache Software License, Version 2.0'
-                builder.url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                builder.distribution 'repo'
-              }
-          }
-          builder.scm {
-              builder.url 'http://github.com/p6spy/p6spy'
-              builder.connection 'scm:git:git://github.com/p6spy/p6spy.git'
-              builder.developerConnection 'scm:git:ssh://github.com:p6spy/p6spy.git'
-          }
-          builder.developers {
-              builder.developer {
-                builder.name 'Quinton McCombs'
-                builder.email 'quinton.mccombs@gmail.com'
-              }
-              builder.developer {
-                builder.name 'Peter Butkovic'
-                builder.email 'butkovic@gmail.com'
-              }
-              builder.developer {
-                builder.name 'Felix Barnsteiner'
-                builder.email 'felix.barnsteiner@isys-software.de'
-              }
-          }
+      pom {
+        packaging 'jar'
+        withXml {
+          asNode().children().last() + {
+            def builder = delegate
 
-          // maven central publishing optionals
-          builder.issueManagement {
-            builder.system 'github'
-            builder.url 'https://github.com/p6spy/p6spy/issues'
-          }
-          builder.ciManagement {
-            builder.system 'Travis CI'
-            builder.url 'https://travis-ci.org/p6spy/p6spy'
+            // maven central publishing mandatories
+            builder.name project.name
+            builder.description description
+            builder.url 'https://github.com/p6spy/p6spy'
+
+            builder.licenses {
+                builder.license {
+                  builder.name 'The Apache Software License, Version 2.0'
+                  builder.url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                  builder.distribution 'repo'
+                }
+            }
+            builder.scm {
+                builder.url 'http://github.com/p6spy/p6spy'
+                builder.connection 'scm:git:git://github.com/p6spy/p6spy.git'
+                builder.developerConnection 'scm:git:ssh://github.com:p6spy/p6spy.git'
+            }
+            builder.developers {
+                builder.developer {
+                  builder.name 'Quinton McCombs'
+                  builder.email 'quinton.mccombs@gmail.com'
+                }
+                builder.developer {
+                  builder.name 'Peter Butkovic'
+                  builder.email 'butkovic@gmail.com'
+                }
+                builder.developer {
+                  builder.name 'Felix Barnsteiner'
+                  builder.email 'felix.barnsteiner@isys-software.de'
+                }
+            }
+
+            // maven central publishing optionals
+            builder.issueManagement {
+              builder.system 'github'
+              builder.url 'https://github.com/p6spy/p6spy/issues'
+            }
+            builder.ciManagement {
+              builder.system 'Travis CI'
+              builder.url 'https://travis-ci.org/p6spy/p6spy'
+            }
           }
         }
       }
