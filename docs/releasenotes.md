@@ -17,6 +17,7 @@ Improvements:
 Defects resolved:
 
 * [issue #404](https://github.com/p6spy/p6spy/pull/404): Reintroduced zip + tar distribution packaging (was missing since 3.1.0 version)
+* [issue #401](https://github.com/p6spy/p6spy/issues/401): Fixed AOP Error: No visible constructors in class `com.p6spy.engine.wrapper.ConnectionWrapper`
 
 ## [3.2.0](https://github.com/p6spy/p6spy/compare/p6spy-3.1.0...p6spy-3.2.0) (2017-09-01)
 
