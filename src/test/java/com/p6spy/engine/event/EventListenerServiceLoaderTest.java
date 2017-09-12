@@ -18,21 +18,20 @@
 
 package com.p6spy.engine.event;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-
-import java.sql.Connection;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.logging.LoggingEventListener;
 import com.p6spy.engine.spy.DefaultJdbcEventListenerFactory;
 import com.p6spy.engine.test.TestJdbcEventListener;
 import com.p6spy.engine.test.TestLoggingEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
+import org.junit.Test;
+
+import java.sql.Connection;
+import java.util.List;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class EventListenerServiceLoaderTest {
 
@@ -54,7 +53,7 @@ public class EventListenerServiceLoaderTest {
   public void testServiceLoaderFromWrapConnection() throws Exception {
     final Connection connectionMock = mock(Connection.class);
     @SuppressWarnings("resource")
-    final Connection connection = new ConnectionWrapper(connectionMock, new DefaultJdbcEventListenerFactory().createJdbcEventListener(), ConnectionInformation.fromTestConnection(connectionMock)).wrap();
+    final Connection connection = ConnectionWrapper.wrap(connectionMock, new DefaultJdbcEventListenerFactory().createJdbcEventListener(), ConnectionInformation.fromTestConnection(connectionMock));
     assertTrue(connection instanceof ConnectionWrapper);
     ConnectionWrapper connectionWrapper = (ConnectionWrapper) connection;
     final JdbcEventListener eventListener = connectionWrapper.getEventListener();

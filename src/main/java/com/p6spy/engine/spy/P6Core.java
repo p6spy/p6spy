@@ -18,11 +18,11 @@
 
 package com.p6spy.engine.spy;
 
-import java.sql.Connection;
-
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
+
+import java.sql.Connection;
 
 /**
  * @author Quinton McCombs
@@ -36,7 +36,7 @@ public class P6Core {
     if (realConnection == null) {
       return null;
     }
-    return new ConnectionWrapper(realConnection, new DefaultJdbcEventListenerFactory().createJdbcEventListener(), connectionInformation).wrap();
+    return ConnectionWrapper.wrap(realConnection, new DefaultJdbcEventListenerFactory().createJdbcEventListener(), connectionInformation);
   }
 
   public static JdbcEventListener getJdbcEventListener() {

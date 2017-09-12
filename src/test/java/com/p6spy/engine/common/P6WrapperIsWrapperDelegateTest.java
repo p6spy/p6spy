@@ -40,9 +40,7 @@ public class P6WrapperIsWrapperDelegateTest extends BaseTestCase {
   @Test
   public void testCastableFromProxy() throws SQLException {
     Connection con = new TestConnectionImpl();
-    try (ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
-      Connection proxy = connectionWrapper.wrap();
-  
+    try (Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
       // if the proxy implements the interface then true should be returned.
       assertTrue(proxy.isWrapperFor(Connection.class));
       assertTrue(proxy.isWrapperFor(TestConnection.class));
@@ -53,9 +51,7 @@ public class P6WrapperIsWrapperDelegateTest extends BaseTestCase {
   @Test
   public void testCastableFromUnderlying() throws SQLException {
     Connection con = new TestConnectionImpl();
-    try (ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
-      Connection proxy = connectionWrapper.wrap();
-  
+    try (Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
       // if the underlying object extends the class (or matches the class) then true should be returned.
       assertTrue(proxy.isWrapperFor(TestConnectionImpl.class));
       assertTrue(proxy.isWrapperFor(AbstractTestConnection.class));
@@ -72,9 +68,7 @@ public class P6WrapperIsWrapperDelegateTest extends BaseTestCase {
     // is implemented here.
     DelegatingConnection underlying = new DelegatingConnection(con);
 
-    try (ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
-      Connection proxy = connectionWrapper.wrap();
-
+    try (Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
       // TestConnection is an interface of the wrapped underlying object.
       assertTrue(proxy.isWrapperFor(TestConnection.class));
   

@@ -18,15 +18,6 @@
 
 package com.p6spy.engine.common;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Wrapper;
-
 import com.p6spy.engine.test.AbstractTestConnection;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.TestConnection;
@@ -36,15 +27,20 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
 import org.apache.commons.dbcp.DelegatingConnection;
 import org.junit.Test;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Wrapper;
+
+import static org.junit.Assert.*;
+
 public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
 
   @Test
   public void testCastableFromProxy() throws SQLException {
     Connection con = new TestConnectionImpl();
     @SuppressWarnings("resource")
-    ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(con));
-    Connection proxy = connectionWrapper.wrap();
-
+    Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener, ConnectionInformation.fromTestConnection(con));
     // if the proxy implements the interface then the proxy should be returned
     {
       Connection unwrapped = proxy.unwrap(Connection.class);
@@ -72,9 +68,7 @@ public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
   @Test
   public void testCastableFromUnderlying() throws SQLException {
     Connection con = new TestConnectionImpl();
-    try (ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
-      Connection proxy = connectionWrapper.wrap();
-
+    try (Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener, ConnectionInformation.fromTestConnection(con))) {
       // if the underlying object extends the class (or matches the class) then the underlying object should be returned.
       {
         AbstractTestConnection unwrapped = proxy.unwrap(AbstractTestConnection.class);
@@ -98,9 +92,7 @@ public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
     // is implemented here.
     DelegatingConnection underlying = new DelegatingConnection(con);
 
-    try (ConnectionWrapper connectionWrapper = new ConnectionWrapper(con, noOpEventListener, ConnectionInformation.fromTestConnection(underlying))) {
-      Connection proxy = connectionWrapper.wrap();
-
+    try (Connection proxy = ConnectionWrapper.wrap(con, noOpEventListener, ConnectionInformation.fromTestConnection(underlying))) {
       // TestConnection is an interface of the actual connection but not of the proxy.  Unwrapping works
       // but a proxy is not returned
       {

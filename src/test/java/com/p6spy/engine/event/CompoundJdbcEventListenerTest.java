@@ -17,54 +17,6 @@
  */
 package com.p6spy.engine.event;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.Ref;
-import java.sql.RowId;
-import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Calendar;
-
-import javax.sql.DataSource;
-import javax.sql.PooledConnection;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
@@ -79,6 +31,34 @@ import com.p6spy.engine.wrapper.CallableStatementWrapper;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 import com.p6spy.engine.wrapper.PreparedStatementWrapper;
 import com.p6spy.engine.wrapper.StatementWrapper;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import javax.sql.DataSource;
+import javax.sql.PooledConnection;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.*;
+import java.util.Calendar;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompoundJdbcEventListenerTest {
@@ -139,8 +119,8 @@ public class CompoundJdbcEventListenerTest {
     callableStatementInformation = new CallableStatementInformation(connectionInformation, "SELECT * FROM DUAL");
 
     @SuppressWarnings("resource")
-    ConnectionWrapper connectionWrapper = new ConnectionWrapper(mockedConnection, mockedJdbcListener, connectionInformation);
-    wrappedConnection = connectionWrapper.wrap();
+    Connection connectionWrapper = ConnectionWrapper.wrap(mockedConnection, mockedJdbcListener, connectionInformation);
+    wrappedConnection = connectionWrapper;
     verify(mockedJdbcListener).onConnectionWrapped(eq(connectionInformation));
     wrappedStatement = StatementWrapper.wrap(mockedStatement, statementInformation, mockedJdbcListener);
     wrappedPreparedStatement = PreparedStatementWrapper.wrap(mockedPreparedStatement, preparedStatementInformation,
