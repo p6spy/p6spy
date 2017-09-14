@@ -1,6 +1,6 @@
 p6spy
 =====
-[![Build Status](https://secure.travis-ci.org/p6spy/p6spy.png?branch=master)](http://travis-ci.org/p6spy/p6spy)
+[![Build Status](https://travis-ci.org/p6spy/p6spy.svg?branch=master)](https://travis-ci.org/p6spy/p6spy)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/p6spy/p6spy/badge.svg)](https://maven-badges.herokuapp.com/maven-central/p6spy/p6spy) 
 [![Bintray](https://api.bintray.com/packages/p6spy/maven/p6spy%3Ap6spy/images/download.svg) ](https://bintray.com/p6spy/maven/p6spy%3Ap6spy/_latestVersion) 
 [![Docs](http://readthedocs.org/projects/p6spy/badge/?version=latest)](http://p6spy.readthedocs.io/) 
