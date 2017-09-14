@@ -55,16 +55,6 @@ import java.util.Calendar;
 import javax.sql.DataSource;
 import javax.sql.PooledConnection;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
@@ -79,6 +69,15 @@ import com.p6spy.engine.wrapper.CallableStatementWrapper;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 import com.p6spy.engine.wrapper.PreparedStatementWrapper;
 import com.p6spy.engine.wrapper.StatementWrapper;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompoundJdbcEventListenerTest {
@@ -139,8 +138,8 @@ public class CompoundJdbcEventListenerTest {
     callableStatementInformation = new CallableStatementInformation(connectionInformation, "SELECT * FROM DUAL");
 
     @SuppressWarnings("resource")
-    ConnectionWrapper connectionWrapper = new ConnectionWrapper(mockedConnection, mockedJdbcListener, connectionInformation);
-    wrappedConnection = connectionWrapper.wrap();
+    Connection connectionWrapper = ConnectionWrapper.wrap(mockedConnection, mockedJdbcListener, connectionInformation);
+    wrappedConnection = connectionWrapper;
     verify(mockedJdbcListener).onConnectionWrapped(eq(connectionInformation));
     wrappedStatement = StatementWrapper.wrap(mockedStatement, statementInformation, mockedJdbcListener);
     wrappedPreparedStatement = PreparedStatementWrapper.wrap(mockedPreparedStatement, preparedStatementInformation,

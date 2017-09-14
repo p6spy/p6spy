@@ -26,13 +26,14 @@ import javax.sql.PooledConnection;
 import javax.sql.StatementEventListener;
 
 import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 public class P6PooledConnection implements PooledConnection {
 
   protected final PooledConnection passthru;
   protected final JdbcEventListenerFactory jdbcEventListenerFactory;
-  
+
   public P6PooledConnection(PooledConnection connection, JdbcEventListenerFactory jdbcEventListenerFactory) {
     this.passthru = connection;
     this.jdbcEventListenerFactory = jdbcEventListenerFactory;
@@ -41,20 +42,21 @@ public class P6PooledConnection implements PooledConnection {
   @Override
   public Connection getConnection() throws SQLException {
     final long start = System.nanoTime();
-    
+
     final Connection conn;
+    final JdbcEventListener jdbcEventListener = this.jdbcEventListenerFactory.createJdbcEventListener();
     try {
       conn = passthru.getConnection();
     } catch (SQLException e) {
-      this.jdbcEventListenerFactory.createJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromPooledConnection(passthru, null, System.nanoTime() - start), e);
+      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromPooledConnection(passthru, null, System.nanoTime() - start), e);
       throw e;
     }
-    
+
     ConnectionInformation connectionInformation = ConnectionInformation.fromPooledConnection(passthru, conn, System.nanoTime() - start);
     @SuppressWarnings("resource")
-    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, this.jdbcEventListenerFactory.createJdbcEventListener(), connectionInformation);
-    connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
-    return connectionWrapper.wrap();
+    Connection connectionWrapper = ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+    jdbcEventListener.onAfterGetConnection(connectionInformation, null);
+    return connectionWrapper;
   }
 
   @Override

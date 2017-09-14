@@ -18,18 +18,17 @@
 
 package com.p6spy.engine.wrapper;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.event.JdbcEventListener;
-
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.event.JdbcEventListener;
+import org.junit.Test;
 
 public class ConnectionWrapperTest {
 
@@ -38,8 +37,8 @@ public class ConnectionWrapperTest {
   @Test
   public void testOnConnectionWrapped() throws Exception {
     final Connection connection = mock(Connection.class);
-    try (ConnectionWrapper connectionWrapper = //
-        new ConnectionWrapper( //
+    try (Connection connectionWrapper = //
+        ConnectionWrapper.wrap( //
             connection, //
             new JdbcEventListener() {
               @Override
@@ -53,7 +52,6 @@ public class ConnectionWrapperTest {
                 connection, //
                 42))
         ) {
-      connectionWrapper.wrap();
       assertTrue(onConnectionWrappedCalled);
     }
   }

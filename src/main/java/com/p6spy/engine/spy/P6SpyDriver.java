@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 /**
@@ -40,7 +41,7 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
 public class P6SpyDriver implements Driver {
   private static Driver INSTANCE = new P6SpyDriver();
   private static JdbcEventListenerFactory jdbcEventListenerFactory;
-  
+
   static {
     try {
       DriverManager.registerDriver(P6SpyDriver.INSTANCE);
@@ -89,24 +90,25 @@ public class P6SpyDriver implements Driver {
     P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
 
     final long start = System.nanoTime();
-    
+
     if (P6SpyDriver.jdbcEventListenerFactory == null) {
       P6SpyDriver.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
     }
-    
+
     final Connection conn;
+    final JdbcEventListener jdbcEventListener = P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener();
     try {
       conn =  passThru.connect(extractRealUrl(url), properties);
     } catch (SQLException e) {
-      P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener().onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
+      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDriver(passThru, null, System.nanoTime() - start), e);
       throw e;
     }
-    
+
     ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru, conn, System.nanoTime() - start);
     @SuppressWarnings("resource")
-    ConnectionWrapper connectionWrapper = new ConnectionWrapper(conn, P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener(), connectionInformation);
-    connectionWrapper.getJdbcEventListener().onAfterGetConnection(connectionInformation, null);
-    return connectionWrapper.wrap();
+    Connection connectionWrapper = ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
+    jdbcEventListener.onAfterGetConnection(connectionInformation, null);
+    return connectionWrapper;
   }
 
   protected Driver findPassthru(String url) throws SQLException {

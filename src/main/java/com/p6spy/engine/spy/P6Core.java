@@ -36,7 +36,7 @@ public class P6Core {
     if (realConnection == null) {
       return null;
     }
-    return new ConnectionWrapper(realConnection, new DefaultJdbcEventListenerFactory().createJdbcEventListener(), connectionInformation).wrap();
+    return ConnectionWrapper.wrap(realConnection, new DefaultJdbcEventListenerFactory().createJdbcEventListener(), connectionInformation);
   }
 
   public static JdbcEventListener getJdbcEventListener() {
