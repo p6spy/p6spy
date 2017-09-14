@@ -18,6 +18,15 @@
 
 package com.p6spy.engine.common;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Wrapper;
+
 import com.p6spy.engine.test.AbstractTestConnection;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.TestConnection;
@@ -26,13 +35,6 @@ import com.p6spy.engine.wrapper.AbstractWrapper;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 import org.apache.commons.dbcp.DelegatingConnection;
 import org.junit.Test;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Wrapper;
-
-import static org.junit.Assert.*;
 
 public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
 

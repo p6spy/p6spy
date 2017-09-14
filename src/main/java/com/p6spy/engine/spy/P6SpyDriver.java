@@ -18,17 +18,22 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.wrapper.ConnectionWrapper;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.DriverPropertyInfo;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
+
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 /**
  * JDBC driver for P6Spy

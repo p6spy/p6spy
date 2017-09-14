@@ -18,11 +18,11 @@
 
 package com.p6spy.engine.spy;
 
+import java.sql.Connection;
+
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
-
-import java.sql.Connection;
 
 /**
  * @author Quinton McCombs

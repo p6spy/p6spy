@@ -17,6 +17,14 @@
  */
 package com.p6spy.engine.spy;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.event.SimpleJdbcEventListener;
@@ -27,14 +35,6 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class P6TestPool extends P6TestFramework {

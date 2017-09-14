@@ -18,15 +18,16 @@
 
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.event.JdbcEventListener;
-import com.p6spy.engine.wrapper.ConnectionWrapper;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.sql.ConnectionEventListener;
 import javax.sql.PooledConnection;
 import javax.sql.StatementEventListener;
-import java.sql.Connection;
-import java.sql.SQLException;
+
+import com.p6spy.engine.common.ConnectionInformation;
+import com.p6spy.engine.event.JdbcEventListener;
+import com.p6spy.engine.wrapper.ConnectionWrapper;
 
 public class P6PooledConnection implements PooledConnection {
 
