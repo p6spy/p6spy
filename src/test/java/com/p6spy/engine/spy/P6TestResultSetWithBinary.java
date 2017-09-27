@@ -73,15 +73,15 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
         // java.lang.AbstractMethodError
         // at com.p6spy.engine.wrapper.ConnectionWrapper.createBlob(ConnectionWrapper.java:315)
         || "SQLite".equals(db)) {
-      prep.setBytes(3, "foo".getBytes(StandardCharsets.UTF_8));
+      prep.setBytes(3, "ƒØØ".getBytes(StandardCharsets.UTF_8));
     } else {
       Blob data = connection.createBlob();
-      data.setBytes(1, "foo".getBytes(StandardCharsets.UTF_8));
+      data.setBytes(1, "ƒØØ".getBytes(StandardCharsets.UTF_8));
       prep.setBlob(3, data);
     }
     prep.execute();
 
-    resultSet = executeQuery("select val from img where id=1000");
+    resultSet = executeQuery("select val,val2 from img where id=1000");
 
     P6LogOptions.getActiveInstance().setExcludecategories("info,debug,result");
     clearLogEntries();
@@ -115,7 +115,7 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
   }
   
   @Test
-  public void binaryExcludedFalse() throws SQLException {
+  public void binaryExcludedFalseASCII() throws SQLException {
     boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
 
     try {
@@ -128,11 +128,32 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
       resultSet.next();
 
       // then
-      assertTrue(super.getLastLogEntry().contains("val = '666F6F'"));
+      assertTrue(super.getLastLogEntry().contains("val = 'foo'"));
     } finally {
       P6LogOptions.getActiveInstance().setExcludebinary(original);
     }
   }
+
+  @Test
+  public void binaryExcludedFalseBinary() throws SQLException {
+    boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
+
+    try {
+      // given
+      P6LogOptions.getActiveInstance().setExcludebinary(false);
+      resultSet.next();
+      
+      // when
+      resultSet.getBytes("val2");
+      resultSet.next();
+
+      // then
+      assertTrue(super.getLastLogEntry().contains("val2 = 'C692C398C398'"));
+    } finally {
+      P6LogOptions.getActiveInstance().setExcludebinary(original);
+    }
+  }
+
   
   protected PreparedStatement getPreparedStatement(String query) throws SQLException {
     return connection.prepareStatement(query);

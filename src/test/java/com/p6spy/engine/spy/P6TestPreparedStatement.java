@@ -342,7 +342,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
     prep.execute();
     
     // then
-    assertTrue(super.getLastLogEntry().contains("insert into img values (1, '666F6F',"));
+    assertTrue(super.getLastLogEntry().contains("insert into img values (1, 'foo',"));
   }
   
   protected void dropPreparedStatement(String sql, Statement statement) {
