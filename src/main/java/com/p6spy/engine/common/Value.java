@@ -19,9 +19,16 @@ package com.p6spy.engine.common;
 
 import java.sql.Blob;
 import java.text.SimpleDateFormat;
+import java.io.UnsupportedEncodingException;
 
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.P6SpyOptions;
+
+import java.nio.ByteBuffer;  
+import java.nio.CharBuffer;  
+import java.nio.charset.Charset;  
+import java.nio.charset.CharsetDecoder;  
+import java.nio.charset.CharacterCodingException;
 
 /**
  * Value holder of the data passed to DB as well as of those retrieved capable
@@ -89,7 +96,14 @@ public class Value {
         if (P6LogOptions.getActiveInstance().getExcludebinary()) {
           result = "[binary]";
         } else {
-          result = toHexString((byte[]) value);
+            CharsetDecoder d = Charset.forName("US-ASCII").newDecoder();  
+            try {  
+                CharBuffer r = d.decode(ByteBuffer.wrap((byte[]) value));  
+                result = r.toString();  
+            }  
+            catch(CharacterCodingException e) {  
+                result = toHexString((byte[]) value);
+            }  
         }
         
         // we should not do ((Blob) value).getBinaryStream(). ...
