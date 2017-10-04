@@ -45,18 +45,20 @@ public class P6PooledConnection implements PooledConnection {
 
     final Connection conn;
     final JdbcEventListener jdbcEventListener = this.jdbcEventListenerFactory.createJdbcEventListener();
+    final ConnectionInformation connectionInformation = ConnectionInformation.fromPooledConnection(passthru);
+    jdbcEventListener.onBeforeGetConnection(connectionInformation);
     try {
       conn = passthru.getConnection();
+      connectionInformation.setConnection(conn);
+      connectionInformation.setTimeToGetConnectionNs(System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
     } catch (SQLException e) {
-      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromPooledConnection(passthru, null, System.nanoTime() - start), e);
+      connectionInformation.setTimeToGetConnectionNs(System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, e);
       throw e;
     }
 
-    ConnectionInformation connectionInformation = ConnectionInformation.fromPooledConnection(passthru, conn, System.nanoTime() - start);
-    @SuppressWarnings("resource")
-    Connection connectionWrapper = ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
-    jdbcEventListener.onAfterGetConnection(connectionInformation, null);
-    return connectionWrapper;
+    return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
   }
 
   @Override

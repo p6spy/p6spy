@@ -293,21 +293,23 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (this.jdbcEventListenerFactory == null) {
       this.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
     }
-    
+
     final Connection conn;
     final JdbcEventListener jdbcEventListener = this.jdbcEventListenerFactory.createJdbcEventListener();
+    final ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource);
+    jdbcEventListener.onBeforeGetConnection(connectionInformation);
     try {
       conn = ((DataSource) realDataSource).getConnection();
+      connectionInformation.setConnection(conn);
+      connectionInformation.setTimeToGetConnectionNs(System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
     } catch (SQLException e) {
-      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDataSource(realDataSource, null, System.nanoTime() - start), e);
+      connectionInformation.setTimeToGetConnectionNs(System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, e);
       throw e;
     }
-    
-    ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource, conn, System.nanoTime() - start);
-    @SuppressWarnings("resource")
-    Connection connectionWrapper = ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
-    jdbcEventListener.onAfterGetConnection(connectionInformation, null);
-    return connectionWrapper;
+
+    return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
   }
   
   @Override
@@ -321,21 +323,23 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     if (this.jdbcEventListenerFactory == null) {
       this.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
     }
-    
+
     final Connection conn;
     final JdbcEventListener jdbcEventListener = this.jdbcEventListenerFactory.createJdbcEventListener();
+    final ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource);
+    jdbcEventListener.onBeforeGetConnection(connectionInformation);
     try {
       conn = ((DataSource) realDataSource).getConnection(username, password);
+      connectionInformation.setConnection(conn);
+      connectionInformation.setTimeToGetConnectionNs(System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, null);
     } catch (SQLException e) {
-      jdbcEventListener.onAfterGetConnection(ConnectionInformation.fromDataSource(realDataSource, null, System.nanoTime() - start), e);
+      connectionInformation.setTimeToGetConnectionNs(System.nanoTime() - start);
+      jdbcEventListener.onAfterGetConnection(connectionInformation, e);
       throw e;
     }
-    
-    ConnectionInformation connectionInformation = ConnectionInformation.fromDataSource(realDataSource, conn, System.nanoTime() - start);
-    @SuppressWarnings("resource")
-    Connection connectionWrapper = ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
-    jdbcEventListener.onAfterGetConnection(connectionInformation, null);
-    return connectionWrapper;
+
+    return ConnectionWrapper.wrap(conn, jdbcEventListener, connectionInformation);
   }
 
   @Override

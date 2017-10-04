@@ -54,6 +54,13 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
+  public void onBeforeGetConnection(ConnectionInformation connectionInformation) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onBeforeGetConnection(connectionInformation);
+    }
+  }
+
+  @Override
   public void onAfterGetConnection(ConnectionInformation connectionInformation, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
       eventListener.onAfterGetConnection(connectionInformation, e);
