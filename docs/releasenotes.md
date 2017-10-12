@@ -1,18 +1,23 @@
 # Release Notes
 
-## [3.3.1](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...master) (Unreleased)
+## [3.4.0](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...master) (Unreleased)
 
 Improvements:
 
+* [issue #405](https://github.com/p6spy/p6spy/pull/405): Reintroduced p6spy compatibility with java 6
+* [issue #412](https://github.com/p6spy/p6spy/pull/412): Introduced event `onBeforeGetConnection`
+
 Defects resolved:
+
+* [issue #406](https://github.com/p6spy/p6spy/pull/406): Fixed API breaking changes comming with 3.3.0 via reintroduced `ConnectionWrapper.wrap()`
 
 ## [3.3.0](https://github.com/p6spy/p6spy/compare/p6spy-3.2.0...3.3.0) (2017-09-09)
 
 Improvements:
 
-* [issue #384](https://github.com/p6spy/p6spy/pull/384): Introduced event onAfterConnectionGet
-* [issue #400](https://github.com/p6spy/p6spy/pull/400): Introduced JdbcEventListenerFactory (enabling programatic JdbcEventListener implementation)
-* [issue #400](https://github.com/p6spy/p6spy/pull/400): Deprecated P6Core favoring ConnectionWrapper and JdbcEventListenerFactory
+* [issue #384](https://github.com/p6spy/p6spy/pull/384): Introduced event `onAfterConnectionGet`
+* [issue #400](https://github.com/p6spy/p6spy/pull/400): Introduced `JdbcEventListenerFactory` (enabling programatic `JdbcEventListener` implementation)
+* [issue #400](https://github.com/p6spy/p6spy/pull/400): Deprecated `P6Core` favoring `ConnectionWrapper` and `JdbcEventListenerFactory`
 
 Defects resolved:
 
@@ -51,7 +56,7 @@ Other:
 
 Known issues:
 
-* [issue #372](https://github.com/p6spy/p6spy/pull/372): 3.1.0 version never made it to maven central (due to incomplete `pom.xml`), only available in bintray 
+* [issue #372](https://github.com/p6spy/p6spy/pull/372): 3.1.0 version never made it to maven central (due to incomplete `pom.xml`), only available in bintray
 
 ## [3.0.0](https://github.com/p6spy/p6spy/compare/p6spy-3.0.0-rc3...p6spy-3.0.0) (2016-10-26)
 
@@ -135,32 +140,32 @@ Improvements:
 
 Defects resolved:
 
-* [issue #330](https://github.com/p6spy/p6spy/issues/330): Unsafe iteration over System.getProperties() 
+* [issue #330](https://github.com/p6spy/p6spy/issues/330): Unsafe iteration over System.getProperties()
 
 ## [2.1.4](https://github.com/p6spy/p6spy/compare/p6spy-2.1.3...p6spy-2.1.4) (2015-05-09)
 
 Defects resolved:
 
 * [issue #286](https://github.com/p6spy/p6spy/issues/286): P6Spy proxy creation fails when JDBC object is wrapped by JBoss 7+
-* [issue #282](https://github.com/p6spy/p6spy/issues/282): No resultset logged when executing a stored procedure 
+* [issue #282](https://github.com/p6spy/p6spy/issues/282): No resultset logged when executing a stored procedure
 
 ## [2.1.3](https://github.com/p6spy/p6spy/compare/p6spy-2.1.2...p6spy-2.1.3) (2015-04-02)
 
 Defects resolved:
 
-* [issue #275](https://github.com/p6spy/p6spy/issues/275): ArrayIndexOutOfBoundsException when calling 
-  PreparedStatement.setMaxRows(int) with outage module enabled 
+* [issue #275](https://github.com/p6spy/p6spy/issues/275): ArrayIndexOutOfBoundsException when calling
+  PreparedStatement.setMaxRows(int) with outage module enabled
 
 ## [2.1.2](https://github.com/p6spy/p6spy/compare/p6spy-2.1.1...p6spy-2.1.2) (2014-10-14)
 
 Defects resolved:
 
-* [issue #268] (https://github.com/p6spy/p6spy/issues/268): SingleLineFormat updated to remove CR and LF characters 
-  from the log file 
-* [issue #267] (https://github.com/p6spy/p6spy/issues/267): The equals(Object) method on all proxied objects now 
-  unwraps the argument passed in (if it is a p6spy proxy) before invoking the method on the proxied object.  This 
+* [issue #268] (https://github.com/p6spy/p6spy/issues/268): SingleLineFormat updated to remove CR and LF characters
+  from the log file
+* [issue #267] (https://github.com/p6spy/p6spy/issues/267): The equals(Object) method on all proxied objects now
+  unwraps the argument passed in (if it is a p6spy proxy) before invoking the method on the proxied object.  This
   fixes a problem with c3p0 and statement caching.
-* [issue #264] (https://github.com/p6spy/p6spy/issues/264): Fixed a defect causing the last row read of a result set 
+* [issue #264] (https://github.com/p6spy/p6spy/issues/264): Fixed a defect causing the last row read of a result set
   to not be logged unless all rows were read.
 
 ## [2.1.1](https://github.com/p6spy/p6spy/compare/p6spy-2.1.0...p6spy-2.1.1) (2014-09-03)
@@ -168,26 +173,26 @@ Defects resolved:
 Defects resolved:
 
 * [issue #256] (https://github.com/p6spy/p6spy/issues/256): jmx exposing becomes optional (enabled/disabled via flag) + jmx prefix introduced (see )
-* [issue #254] (https://github.com/p6spy/p6spy/issues/254): resultset logging filtering fixed 
+* [issue #254] (https://github.com/p6spy/p6spy/issues/254): resultset logging filtering fixed
 
 ## [2.1.0](https://github.com/p6spy/p6spy/compare/p6spy-2.0.2...p6spy-2.1.0) (2014-06-15)
 
 Improvements:
 
 * P6ConnectionPoolDataSource merged to P6DataSource (to simplify datasource config)
-* `excludecategories` using class `Category` rather than just plain strings (affects `P6Logger` API) 
+* `excludecategories` using class `Category` rather than just plain strings (affects `P6Logger` API)
 * [issue #131](https://github.com/p6spy/p6spy/issues/131): providing additional distribution artifacts - wrapping (slf4j bridged) logging implementations for log4j, log4j2 and logback `p6spy-<version>-*-nodep.jar`
 * [issue #231](https://github.com/p6spy/p6spy/issues/231): `include`/`exclude` behavior enabling any substring in SQL string matching
 * considering Wrapper for DataSource proxies (bringing support for Glassfish XADataSources)
-* `unSet*` API provided for properties (in `com.p6spy.engine.spy.P6SpyOptions` and `com.p6spy.engine.logging.P6LogOptions`) to enable reverting to `null` (default value) 
+* `unSet*` API provided for properties (in `com.p6spy.engine.spy.P6SpyOptions` and `com.p6spy.engine.logging.P6LogOptions`) to enable reverting to `null` (default value)
 * [issue #247](https://github.com/p6spy/p6spy/issues/247): `-` prefixed syntax for list-like properties deprecated, in favor of full overriding
 
-Defects resolved: 
+Defects resolved:
 
 * [issue #221] (https://github.com/p6spy/p6spy/issues/221): Bind variables set by name on a CallableStatement are now logged
-* [issue #226](https://github.com/p6spy/p6spy/issues/226): `setAppender()` considered in logging properly 
+* [issue #226](https://github.com/p6spy/p6spy/issues/226): `setAppender()` considered in logging properly
 * [issue #227] (https://github.com/p6spy/p6spy/issues/227): fixed disabling modules on reload
-* [issue #242](https://github.com/p6spy/p6spy/issues/242): character `'` escaping in the logged SQL query fixed 
+* [issue #242](https://github.com/p6spy/p6spy/issues/242): character `'` escaping in the logged SQL query fixed
 * [issue #246](https://github.com/p6spy/p6spy/issues/246): `NullPointerException` fixed for empty batch execution
 
 ## [2.0.2](https://github.com/p6spy/p6spy/compare/p6spy-2.0.1...p6spy-2.0.2) (2014-04-04)
@@ -196,15 +201,15 @@ Improvements:
 
 * [issue #84] (https://github.com/p6spy/p6spy/issues/84): significant performance improvements for huge data selects
 
-Defects resolved: 
+Defects resolved:
 
-* [issue #214] (https://github.com/p6spy/p6spy/issues/214): fixed PostgreSQL issue: `operator is not unique: date + unknown` 
+* [issue #214] (https://github.com/p6spy/p6spy/issues/214): fixed PostgreSQL issue: `operator is not unique: date + unknown`
 * [issue #219](https://github.com/p6spy/p6spy/issues/219): fixed defect causing ClassCastException when setting bind variables by name on CallableStatement
 * [issue #217](https://github.com/p6spy/p6spy/issues/217): fixed defect in P6Leak module causing closed connections not to be recorded properly
 
 ## [2.0.1](https://github.com/p6spy/p6spy/compare/p6spy-2.0.0...p6spy-2.0.1) (2014-03-15)
 
-Defects resolved: 
+Defects resolved:
 
 * [issue #200] (https://github.com/p6spy/p6spy/issues/200): fixed usage with signed jdbc jars
 * [issue #201] (https://github.com/p6spy/p6spy/issues/201): internal logs not printed out any more
@@ -221,13 +226,13 @@ Improvements:
     ```
     jdbc:mysql://<hostname>:<port>/<database>
     ```
-        
+
     the one proxied via p6spy would one:
-    
+
     ```
     jdbc:p6spy:mysql://<hostname>:<port>/<database>
     ```
-  
+
  * XA Datasource support has been introduced
  * configuration via:
      * system/environment properties and
@@ -237,7 +242,7 @@ Improvements:
  * slf4j support (more flexible as previously used log4j)
  * junit tests were migrated to junit 4
  * Continuous integration using Travis was setup providing testing on popular:
-     * DB systems (namely: Oracle, DB2, PostgreSQL, MySQL, H2, HSQLDB, SQLite, Firebird, and Derby), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy) as well as 
+     * DB systems (namely: Oracle, DB2, PostgreSQL, MySQL, H2, HSQLDB, SQLite, Firebird, and Derby), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy) as well as
      * application servers (namely: Wildfly 8, JBoss 4.2, 5.1, 6.1, 7.1, Glassfish 3.1, 4.0, Jetty 7.6, 8.1, 9.1, Tomcat 6, 7, 8, Resin 4, Jonas 5.3 and Geronimo 2.1, 2.2), see build status on: [travis-ci](https://travis-ci.org/p6spy/p6spy-it).
 
 ## 1.3 (2005-12-27)
