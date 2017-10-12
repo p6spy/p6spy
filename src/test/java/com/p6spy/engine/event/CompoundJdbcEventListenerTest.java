@@ -162,9 +162,10 @@ public class CompoundJdbcEventListenerTest {
   }
 
   @Test
-  public void testConnectionOnAfterGetConnectionAfterGettingFromDataSource() throws SQLException {
+  public void testConnectionOnBeforeAfterGetConnectionFromDataSource() throws SQLException {
     wrappedDataSource.getConnection();
     wrappedDataSource.getConnection("test", "test");
+    verify(mockedJdbcListener, times(2)).onBeforeGetConnection(connectionInformationWithConnection());
     verify(mockedJdbcListener, times(2)).onAfterGetConnection(connectionInformationWithConnection(), ArgumentMatchers.<SQLException>isNull());
   }
 
@@ -188,8 +189,9 @@ public class CompoundJdbcEventListenerTest {
   }
 
   @Test
-  public void testConnectionOnAfterGetConnectionAfterGettingFromDriver() throws SQLException {
+  public void testConnectionOnBeforeAfterGetConnectionFromDriver() throws SQLException {
     DriverManager.getConnection("jdbc:p6spy:h2:mem:p6spy", "sa", null);
+    verify(mockedJdbcListener).onBeforeGetConnection(connectionInformationWithConnection());
     verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithConnection(), ArgumentMatchers.<SQLException>isNull());
   }
 
@@ -204,8 +206,9 @@ public class CompoundJdbcEventListenerTest {
   }
 
   @Test
-  public void testConnectionOnAfterGetConnectionAfterGettingFromPooledConnection() throws SQLException {
+  public void testConnectionOnBeforeAfterGetConnectionFromPooledConnection() throws SQLException {
     wrappedPooledConnection.getConnection();
+    verify(mockedJdbcListener).onBeforeGetConnection(connectionInformationWithConnection());
     verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithConnection(), ArgumentMatchers.<SQLException>isNull());
   }
 

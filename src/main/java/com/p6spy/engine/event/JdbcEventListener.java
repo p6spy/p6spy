@@ -53,6 +53,18 @@ import java.sql.Statement;
 public abstract class JdbcEventListener {
 
   /**
+   * This callback method is executed before a {@link Connection} obtained from a {@link DataSource} or a {@link Driver}.
+   * <p>
+   * The {@link ConnectionInformation} holds information about the creator of the connection which is either
+   * {@link ConnectionInformation#dataSource}, {@link ConnectionInformation#driver} or
+   * {@link ConnectionInformation#pooledConnection}, though {@link ConnectionInformation#connection} itself is <code>null</code>.
+   *
+   * @param connectionInformation The meta information about the wrapped {@link Connection}
+   */
+  public void onBeforeGetConnection(ConnectionInformation connectionInformation) {
+  }
+
+  /**
    * This callback method is executed after a {@link Connection} obtained from a {@link DataSource} or a {@link Driver}.
    * <p>
    * The {@link ConnectionInformation} holds information about the creator of the connection which is either

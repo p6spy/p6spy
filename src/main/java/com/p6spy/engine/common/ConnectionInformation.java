@@ -95,6 +95,45 @@ public class ConnectionInformation implements Loggable {
   }
 
   /**
+   * Creates a new {@link ConnectionInformation} instance for a {@link Connection} which will be obtained via a
+   * {@link Driver}
+   *
+   * @param driver                the {@link Driver} which created the {@link #connection}
+   * @return a new {@link ConnectionInformation} instance
+   */
+  public static ConnectionInformation fromDriver(Driver driver) {
+    final ConnectionInformation connectionInformation = new ConnectionInformation();
+    connectionInformation.driver = driver;
+    return connectionInformation;
+  }
+
+  /**
+   * Creates a new {@link ConnectionInformation} instance for a {@link Connection} which will be obtained via a
+   * {@link CommonDataSource}
+   *
+   * @param dataSource            the {@link javax.sql.CommonDataSource} which created the {@link #connection}
+   * @return a new {@link ConnectionInformation} instance
+   */
+  public static ConnectionInformation fromDataSource(CommonDataSource dataSource) {
+    final ConnectionInformation connectionInformation = new ConnectionInformation();
+    connectionInformation.dataSource = dataSource;
+    return connectionInformation;
+  }
+
+  /**
+   * Creates a new {@link ConnectionInformation} instance for a {@link Connection} which will be obtained via a
+   * {@link PooledConnection}
+   *
+   * @param pooledConnection      the {@link PooledConnection} which created the {@link #connection}
+   * @return a new {@link ConnectionInformation} instance
+   */
+  public static ConnectionInformation fromPooledConnection(PooledConnection pooledConnection) {
+    final ConnectionInformation connectionInformation = new ConnectionInformation();
+    connectionInformation.pooledConnection = pooledConnection;
+    return connectionInformation;
+  }
+
+  /**
    * This method should only be used in test scenarios
    *
    * @param connection the underlying connection (possibly a mock)
@@ -149,6 +188,10 @@ public class ConnectionInformation implements Loggable {
     return connection;
   }
 
+  public void setConnection(Connection connection) {
+    this.connection = connection;
+  }
+
   /**
    * Returns the {@link #pooledConnection} which created the {@link #connection}
    * or <code>null</code> if it wasn't created via a {@link PooledConnection}.
@@ -166,6 +209,10 @@ public class ConnectionInformation implements Loggable {
    */
   public long getTimeToGetConnectionNs() {
     return timeToGetConnectionNs;
+  }
+
+  public void setTimeToGetConnectionNs(long timeToGetConnectionNs) {
+    this.timeToGetConnectionNs = timeToGetConnectionNs;
   }
 
   /** {@inheritDoc} */
