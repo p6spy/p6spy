@@ -17,13 +17,13 @@ language: java
 
 jdk:
   # seems to be unsupported by trusty: https://github.com/travis-ci/travis-ci/issues/7884#issuecomment-308451879
-  # - oraclejdk7 
+  # - oraclejdk7
   # unresolved problem on trusty: https://travis-ci.org/p6spy/p6spy/jobs/251801157
   # failing with: Exception in thread "main" javax.net.ssl.SSLException: java.security.ProviderException: java.security.InvalidKeyException: EC parameters error
   # ...
   # Caused by: java.security.NoSuchProviderException: no such provider: SunEC
   # ...
-  # - openjdk7 
+  # - openjdk7
   - oraclejdk8
   - openjdk8
 
@@ -54,7 +54,7 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - docker-compose --version  
+  - docker-compose --version
 
 install:
   - docker-compose -f docker-compose.travis.yml up & # using rather than 'docker-compose up -d' to see log msgs in console
@@ -79,13 +79,14 @@ after_success:
         ./gradlew jacocoTestReport coveralls --info --stacktrace
       fi
 
-      # sonarcloud.io publishing 
+      # sonarcloud.io publishing
       # by default, the SonarCloud add-on only analyzes the master branch, see https://docs.travis-ci.com/user/sonarcloud/
       if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
         ./gradlew sonarqube --info --stacktrace
       fi
 
       # github release notes sync (via chandler)
+      # TODO we should update release notes during release (=> !master)
       if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
         gem install --no-ri --no-rdoc chandler
         chandler --changelog=$(pwd)/docs/releasenotes.md --github=p6spy/p6spy --tag-prefix=p6spy- push
