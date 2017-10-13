@@ -1,6 +1,6 @@
 version: "3.0"
 
-services:   
+services:
 
   oracle:
     image: wnameless/oracle-xe-11g:latest
@@ -15,7 +15,7 @@ services:
       interval: 2s
       timeout: 10s
       retries: 1800 # 2s*1800 = 3600s = 60min
-    
+
   # mssqlserver:
   #   image: microsoft/mssql-server-linux:latest
   #   environment:
@@ -56,7 +56,7 @@ services:
       ports:
         - "3050:3050"
       healthcheck:
-        test: /bin/sh -c "[ -f /databases/p6spy.gdb ]"
+        test: /bin/sh -c "[ -f /firebird/data//p6spy.gdb ]"
         interval: 2s
         timeout: 10s
         retries: 1800 # 2s*1800 = 3600s = 60min
