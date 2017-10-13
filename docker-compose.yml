@@ -104,7 +104,7 @@ services:
     ports:
       - "3050:3050"
     healthcheck:
-      test: /bin/sh -c "[ -f /firebird/data//p6spy.gdb ]"
+      test: /bin/sh -c "[ -f /firebird/data/p6spy.gdb ]"
       interval: 2s
       timeout: 10s
       retries: 1800 # 2s*1800 = 3600s = 60min
