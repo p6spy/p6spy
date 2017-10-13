@@ -1,6 +1,12 @@
 # Release Notes
 
-## [3.4.0](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...master) (Unreleased)
+## [3.4.1](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...master) (Unreleased)
+
+Improvements:
+
+Defects resolved:
+
+## [3.4.0](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...3.4.0) (2017-10-13)
 
 Improvements:
 
