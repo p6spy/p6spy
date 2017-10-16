@@ -18,19 +18,15 @@ language: java
 jdk:
   # seems to be unsupported by trusty: https://github.com/travis-ci/travis-ci/issues/7884#issuecomment-308451879
   # - oraclejdk7
-  - openjdk7
+  # unresolved problem on trusty: https://travis-ci.org/p6spy/p6spy/jobs/251801157
+  # failing with: Exception in thread "main" javax.net.ssl.SSLException: java.security.ProviderException: java.security.InvalidKeyException: EC parameters error
+  # ...
+  # Caused by: java.security.NoSuchProviderException: no such provider: SunEC
+  # ...
+  # - openjdk7
   - oraclejdk8
   - openjdk8
   - oraclejdk9
-  - openjdk9
-
-matrix:
-  include:
-    - jdk: openjdk6
-      addons:
-        apt:
-          packages:
-            - openjdk-6-jdk
 
 env:
   global:
@@ -75,13 +71,7 @@ before_script:
   - mkdir -p ./build/repo && docker cp p6spy_oracle_1:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar ./build/repo
 
 script:
-  - |
-      # proving library is java 6 compatible (while tests need at least java 7)
-      if [[$TRAVIS_JDK_VERSION == "openjdk6"]]; then
-        ./gradlew assemble --info --stacktrace
-      else
-        ./gradlew check --info --stacktrace
-      fi
+  - ./gradlew check --info --stacktrace
 
 after_success:
   - |
