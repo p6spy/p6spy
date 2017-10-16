@@ -25,11 +25,12 @@ jdk:
   - openjdk9
 
 matrix:
-  - jdk: openjdk6
-  addons:
-    apt:
-      packages:
-        - openjdk-6-jdk
+  include:
+    - jdk: openjdk6
+      addons:
+        apt:
+          packages:
+            - openjdk-6-jdk
 
 env:
   global:
@@ -75,12 +76,12 @@ before_script:
 
 script:
   - |
-    # proving library is java 6 compatible (while tests need at least java 7)
-    if [[$TRAVIS_JDK_VERSION == "openjdk6"]]; then
-      ./gradlew assemble --info --stacktrace
-    else
-      ./gradlew check --info --stacktrace
-    fi
+      # proving library is java 6 compatible (while tests need at least java 7)
+      if [[$TRAVIS_JDK_VERSION == "openjdk6"]]; then
+        ./gradlew assemble --info --stacktrace
+      else
+        ./gradlew check --info --stacktrace
+      fi
 
 after_success:
   - |
