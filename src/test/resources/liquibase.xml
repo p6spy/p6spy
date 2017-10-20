@@ -149,9 +149,9 @@
     </sql>
     <createProcedure>
       CREATE ALIAS SLEEP AS $$ 
-      void sleep(long miliseconds) {
+      void sleep(long milliseconds) {
          try { 
-               java.lang.Thread.sleep(miliseconds); 
+               java.lang.Thread.sleep(milliseconds);
          } catch (java.lang.InterruptedException e) {} 
       } $$;      
     </createProcedure>
