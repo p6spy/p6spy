@@ -1,6 +1,6 @@
 # Configuration and Usage
 
-Configuration follows **layered approach**, where **each layer overrides the values set by the lower ones** 
+Configuration follows **layered approach**, where **each layer overrides the values set by the lower ones**
 (leaving those not provided unchanged):
 
 * JMX set properties (please note, that these are reset on next reload)
@@ -9,20 +9,20 @@ Configuration follows **layered approach**, where **each layer overrides the val
 * spy.properties
 * defaults
 
-For the full list of available options, see the section [Common Property File Settings](#common-property-file-settings). 
-Please note that providing any of these via System properties/Environment variables is possible, using the particular 
+For the full list of available options, see the section [Common Property File Settings](#common-property-file-settings).
+Please note that providing any of these via System properties/Environment variables is possible, using the particular
 property name following naming rule: `p6spy.config.<property name><property value>`;
 
-Please be aware of the restriction. In fact this also means you need to be aware of values set by the lower 
+Please be aware of the restriction. In fact this also means you need to be aware of values set by the lower
 configuration layers (including defaults) to properly override/modify those.
 
 There are **two cases one needs to distinguish when overriding**:
 
-* don't override the property on the current level (can be achieved by specifying neither key nor value) and 
+* don't override the property on the current level (can be achieved by specifying neither key nor value) and
 * clear the property value (can be achieved by specifying the key empty string value, could be for specified in `spy.properties` like this: `excludecategories=`)
 
 The `spy.properties` configuration file can be located in various places.  The following locations are searched
-to locate the file.  
+to locate the file.
 
 1. The file name configured in the system property "spy.properties" (can include path)
 1. The current working directory (for relative path) or any directory (for absolute path)
@@ -30,7 +30,7 @@ to locate the file.
 
 ## Properties exposal via JMX
 
-Please note that all the properties are exposed via JMX. So you can use your tool of choice (e.g.,JConsole) to view/change them. 
+Please note that all the properties are exposed via JMX. So you can use your tool of choice (e.g.,JConsole) to view/change them.
 Moreover reload operation is exposed as well. To provide on-demand reload option.
 
 In the JConsole p6spy related JMX attributes might look like this:
@@ -39,7 +39,7 @@ In the JConsole p6spy related JMX attributes might look like this:
 
 ## Command Line Options
 
-Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag (system property), adding the the prefix: 
+Every parameter specified in the property file can be set and overriden at the command line using the Java -D flag (system property), adding the the prefix:
 
     p6spy.config.
 
@@ -53,7 +53,7 @@ Moreover to set different file to be used as the properties file (as an example:
 
 ## Common Property File Settings
 
-An example `spy.properties` file follows (please note default values mentioned as these refer to defaults mentioned 
+An example `spy.properties` file follows (please note default values mentioned as these refer to defaults mentioned
 in section: [Configuration and Usage](#configuration-and-usage)):
 
     #################################################################
@@ -65,14 +65,14 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     #################################################################
     # MODULES                                                       #
     #                                                               #
-    # Module list adapts the modular functionality of P6Spy.		#
-    # Only modules listed are active.						        #
+    # Module list adapts the modular functionality of P6Spy.        #
+    # Only modules listed are active.                               #
     # (default is com.p6spy.engine.logging.P6LogFactory and         #
     # com.p6spy.engine.spy.P6SpyFactory)                            #
-    # Please note that the core module (P6SpyFactory) can't be		# 
-    # deactivated. 													#
+    # Please note that the core module (P6SpyFactory) can't be      #
+    # deactivated.                                                  #
     # Unlike the other properties, activation of the changes on     #
-    # this one requires reload.										#
+    # this one requires reload.                                     #
     #################################################################
     #modulelist=com.p6spy.engine.spy.P6SpyFactory,com.p6spy.engine.logging.P6LogFactory,com.p6spy.engine.outage.P6OutageFactory
 
@@ -91,10 +91,10 @@ in section: [Configuration and Usage](#configuration-and-usage)):
 
     # for flushing per statement
     # (default is false)
-    #autoflush = false
+    #autoflush=false
 
-    # sets the date format using Java's SimpleDateFormat routine. 
-    # In case property is not set, miliseconds since 1.1.1970 (unix time) is used (default is empty)
+    # sets the date format using Java's SimpleDateFormat routine.
+    # In case property is not set, milliseconds since 1.1.1970 (unix time) is used (default is empty)
     #dateformat=
 
     # prints a stack trace for every statement logged
@@ -105,10 +105,10 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     # determines if property file should be reloaded
     # Please note: reload means forgetting all the previously set
     # settings (even those set during runtime - via JMX)
-    # and starting with the clean table 
+    # and starting with the clean table
     # (default is false)
     #reloadproperties=false
-    
+
     # determines how often should be reloaded in seconds
     # (default is 60)
     #reloadpropertiesinterval=60
@@ -116,17 +116,17 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     # specifies the appender to use for logging
     # Please note: reload means forgetting all the previously set
     # settings (even those set during runtime - via JMX)
-    # and starting with the clean table 
+    # and starting with the clean table
     # (only the properties read from the configuration file)
     # (default is com.p6spy.engine.spy.appender.FileLogger)
     #appender=com.p6spy.engine.spy.appender.Slf4JLogger
     #appender=com.p6spy.engine.spy.appender.StdoutLogger
     #appender=com.p6spy.engine.spy.appender.FileLogger
 
-    # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) 
+    # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log)
     # (used for com.p6spy.engine.spy.appender.FileLogger only)
     # (default is spy.log)
-    #logfile = spy.log
+    #logfile=spy.log
 
     # append to the p6spy log file. if this is set to false the
     # log file is truncated every time. (file logger only)
@@ -135,18 +135,18 @@ in section: [Configuration and Usage](#configuration-and-usage)):
 
     # class to use for formatting log messages (default is: com.p6spy.engine.spy.appender.SingleLineFormat)
     #logMessageFormat=com.p6spy.engine.spy.appender.SingleLineFormat
-    
+
     # Custom log message format used ONLY IF logMessageFormat is set to com.p6spy.engine.spy.appender.CustomLineFormat
     # default is %(currentTime)|%(executionTime)|%(category)|connection%(connectionId)|%(sqlSingleLine)
     # Available placeholders are:
-    #   %(connectionId)           the id of the connection
-    #   %(currentTime)                    the current time expressing in milliseconds
-    #   %(executionTime)          the time in milliseconds that the operation took to complete
-    #   %(category)               the category of the operation
-    #   %(effectiveSql)           the SQL statement as submitted to the driver
-    #   %(effectiveSqlSingleLine) the SQL statement as submitted to the driver, with all new lines removed
-    #   %(sql)                    the SQL statement with all bind variables replaced with actual values
-    #   %(sqlSingleLine)          the SQL statement with all bind variables replaced with actual values, with all new lines removed
+    #   %(connectionId)            the id of the connection
+    #   %(currentTime)             the current time expressing in milliseconds
+    #   %(executionTime)           the time in milliseconds that the operation took to complete
+    #   %(category)                the category of the operation
+    #   %(effectiveSql)            the SQL statement as submitted to the driver
+    #   %(effectiveSqlSingleLine)  the SQL statement as submitted to the driver, with all new lines removed
+    #   %(sql)                     the SQL statement with all bind variables replaced with actual values
+    #   %(sqlSingleLine)           the SQL statement with all bind variables replaced with actual values, with all new lines removed
     #customLogMessageFormat=%(currentTime)|%(executionTime)|%(category)|connection%(connectionId)|%(sqlSingleLine)
 
     # format that is used for logging of the date/time/... (has to be compatible with java.text.SimpleDateFormat)
@@ -156,13 +156,13 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     # whether to expose options via JMX or not
     # (default is true)
     #jmx=true
-    
+
     # if exposing options via jmx (see option: jmx), what should be the prefix used?
     # jmx naming pattern constructed is: com.p6spy(.<jmxPrefix>)?:name=<optionsClassName>
     # please note, if there is already such a name in use it would be unregistered first (the last registered wins)
     # (default is none)
     #jmxPrefix=
-   
+
     # if set to true, the execution time will be measured in nanoseconds as opposed to milliseconds
     # (default is false)
     #useNanoTime=false
@@ -217,14 +217,14 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     # semicolon, and separate the pairs with commas.                #
     #                                                               #
     # The example shown here is for a standalone program running on #
-    # a machine that is also running JBoss, so the JDNI context     #
+    # a machine that is also running JBoss, so the JNDI context     #
     # is configured for JBoss (3.0.4).                              #
     #                                                               #
     # (by default all these are empty)                              #
     #################################################################
     #jndicontextfactory=org.jnp.interfaces.NamingContextFactory
     #jndicontextproviderurl=localhost:1099
-    #jndicontextcustom=java.naming.factory.url.pkgs;org.jboss.nameing:org.jnp.interfaces
+    #jndicontextcustom=java.naming.factory.url.pkgs;org.jboss.naming:org.jnp.interfaces
 
     #jndicontextfactory=com.ibm.websphere.naming.WsnInitialContextFactory
     #jndicontextproviderurl=iiop://localhost:900
@@ -237,42 +237,42 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     # please note this is a precondition for usage of: include/exclude/sqlexpression
     # (default is false)
     #filter=false
-    
+
     # comma separated list of strings to include
     # please note that special characters escaping (used in java) has to be done for the provided regular expression
     # (default is empty)
-    #include =
+    #include=
     # comma separated list of strings to exclude
     # (default is empty)
-    #exclude =
+    #exclude=
 
     # sql expression to evaluate if using regex
     # please note that special characters escaping (used in java) has to be done for the provided regular expression
     # (default is empty)
-    #sqlexpression = 
-    
+    #sqlexpression=
+
     #list of categories to exclude: error, info, batch, debug, statement,
     #commit, rollback, result and resultset are valid values
     # (default is info,debug,result,resultset,batch)
     #excludecategories=info,debug,result,resultset,batch
-    
-    #whehter the binary values (passed to DB or retrieved ones) should be logged with placeholder: [binary] or not.
+
+    #whether the binary values (passed to DB or retrieved ones) should be logged with placeholder: [binary] or not.
     # (default is false)
     #excludebinary=false
-    
-    # Execution threshold applies to the standard logging of P6Spy.       
-    # While the standard logging logs out every statement          
-    # regardless of its execution time, this feature puts a time   
-    # condition on that logging. Only statements that have taken   
-    # longer than the time specified (in milliseconds) will be     
-    # logged. This way it is possible to see only statements that  
-    # have exceeded some high water mark.                          
-    # This time is reloadable.                                     
+
+    # Execution threshold applies to the standard logging of P6Spy.
+    # While the standard logging logs out every statement
+    # regardless of its execution time, this feature puts a time
+    # condition on that logging. Only statements that have taken
+    # longer than the time specified (in milliseconds) will be
+    # logged. This way it is possible to see only statements that
+    # have exceeded some high water mark.
+    # This time is reloadable.
     #
     # executionThreshold=integer time (milliseconds)
     # (default is 0)
     #executionThreshold=
-    
+
     ################################################################
     # P6 OUTAGE SPECIFIC PROPERTIES                                #
     ################################################################
@@ -295,7 +295,7 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     #outagedetection=false
     # (default is 60)
     #outagedetectioninterval=30
-    
+
 ### modulelist
 
 modulelist holds the list of p6spy modules activated. A module contains a group of functionality. If none are specified only core
@@ -312,7 +312,7 @@ Where these are required:
 
 * com.p6spy.engine.logging.P6LogFactory - for the logging functionality, see [P6Log](#p6log).
 * com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see [P6Outage](#p6outage).
- 
+
 Please note to implement custom module have a look at the implementation of the any of the existing ones.
 
 ### driverlist
@@ -320,8 +320,8 @@ Please note to implement custom module have a look at the implementation of the 
 This is a comma separated list of JDBC driver classes to load and register with DriverManager. You should list
 the classname(s) of the JDBC driver(s) that you want to proxy with P6Spy if any of the following conditions are met.
 
-1. The JDBC driver does not implement the JDBC 4.0 API 
-1. You are using a JNDI Data Source - Some application servers will prevent the automatic registration feature from working.  
+1. The JDBC driver does not implement the JDBC 4.0 API
+1. You are using a JNDI Data Source - Some application servers will prevent the automatic registration feature from working.
 
 ### autoflush
 
@@ -331,7 +331,7 @@ requirement. In those cases, the system performs slightly faster with autoflush 
 
 An example follows:
 
-    autoflush = true
+    autoflush=true
 
 ### dateformat
 
@@ -371,10 +371,10 @@ and logging to a file (default). Please note, that all of these output in the CS
         #appender=com.p6spy.engine.spy.appender.StdoutLogger
         appender=com.p6spy.engine.spy.appender.FileLogger
 
-        # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log) 
-	    # (used for com.p6spy.engine.spy.appender.FileLogger only)
-	    # (default is spy.log)
-	    #logfile = spy.log
+        # name of logfile to use, note Windows users should make sure to use forward slashes in their pathname (e:/test/spy.log)
+        # (used for com.p6spy.engine.spy.appender.FileLogger only)
+        # (default is spy.log)
+        #logfile=spy.log
 
         # append to the p6spy log file. if this is set to false the
         # log file is truncated every time. (file logger only)
@@ -392,7 +392,7 @@ and logging to a file (default). Please note, that all of these output in the CS
         #appender=com.p6spy.engine.spy.appender.StdoutLogger
         #appender=com.p6spy.engine.spy.appender.FileLogger
 
-	In general you need to slf4j-api and the appropriate bridge to the actual logging
+    In general you need to slf4j-api and the appropriate bridge to the actual logging
 implementation as well as the logging implementation itself on your classpath. To simplify setup for those not having any of the additional dependencies already
 on classpath following `*-nodep.jar` bundles are provided as part of p6spy distribution:
 
@@ -401,22 +401,22 @@ on classpath following `*-nodep.jar` bundles are provided as part of p6spy distr
     * `p6spy-<version>-logback-nodep.jar` - having [logback](http://logback.qos.ch/) included.
 
     Mapping to SLF4J levels is provided in the following way:
-    
-	<table>
-	<tr><th>P6Spy category</th><th>SLF4J level</th></tr>
-	<tr><td>error</td><td>error</td></tr>
-	<tr><td>warn</td><td>warn</td></tr>
-	<tr><td>debug</td><td>debug</td></tr>
-	<tr><td>info/any other category</td><td>info</td></tr>
-	</table>
-	
-	Internally is Slf4j Logger is retrieved for the: `p6spy`, keep this in mind when configuring your logging implementation. So for example for the `log4j` following could be used to restrict the p6spy logging (if using xml-based configuration) to `INFO` level only:
-	
+
+    <table>
+    <tr><th>P6Spy category</th><th>SLF4J level</th></tr>
+    <tr><td>error</td><td>error</td></tr>
+    <tr><td>warn</td><td>warn</td></tr>
+    <tr><td>debug</td><td>debug</td></tr>
+    <tr><td>info/any other category</td><td>info</td></tr>
+    </table>
+
+    Internally is Slf4j Logger is retrieved for the: `p6spy`, keep this in mind when configuring your logging implementation. So for example for the `log4j` following could be used to restrict the p6spy logging (if using xml-based configuration) to `INFO` level only:
+
           <category name="p6spy">
             <priority value="INFO" />
           </category>
-	
-	For further instructions on configuring SLF4J, see the [SLF4J documentation](http://www.slf4j.org/manual.html).
+
+    For further instructions on configuring SLF4J, see the [SLF4J documentation](http://www.slf4j.org/manual.html).
 
 ### logMessageFormat
 
@@ -425,15 +425,15 @@ classes are available with P6Spy.
 
 * `com.p6spy.engine.spy.appender.SingleLineFormat` which results in log messages in format:
 
-		current time|execution time|category|connection id|statement SQL String|effective SQL string
-		
+      current time|execution time|category|connection id|statement SQL String|effective SQL string
+
 * `com.p6spy.engine.spy.appender.CustomLineFormat`, which allows log messages to be full customized, in a separate
     property called `customLogMessageFormat`. See below for details.
-		
-* `com.p6spy.engine.spy.appender.MultiLineFormat`, which results in log messages in format: 
-		
-		current time|execution time|category|connection id|statement SQL String
-		effective SQL string
+
+* `com.p6spy.engine.spy.appender.MultiLineFormat`, which results in log messages in format:
+
+      current time|execution time|category|connection id|statement SQL String
+      effective SQL string
 
 Where:
 
@@ -451,7 +451,7 @@ Where:
 * `category` - You can manage your log by including and excluding categories,
   which is described in [Common Property File Settings](#common-property-file-settings).
 * `connection id` - Indicates the connection on which the activity was logged.  The connection id is a sequentially
-  generated identifier.  
+  generated identifier.
 * `statement SQL string` - This is the SQL string passed to the statement object.
   If it is a prepared statement, it is the prepared statement that existed prior to
   the parameters being set. To see the complete statement, refer to effective SQL string.
@@ -472,7 +472,7 @@ the `com.p6spy.engine.spy.appender.MessageFormattingStrategy` interface and plac
 
 The custom log message format to use when 'logMessageFormat' is set to `com.p6spy.engine.spy.appender.CustomLineFormat`
 
-The message is build out of the format string, with the all the Java special characters supported (`\n`, `\t` etc) 
+The message is build out of the format string, with the all the Java special characters supported (`\n`, `\t` etc)
 and the following placeholders being resolved to the appropriate values:
 
 * `%(connectionId)`           the id of the connection
@@ -486,10 +486,10 @@ and the following placeholders being resolved to the appropriate values:
 
 ### filter, include, exclude
 
-P6Spy allows you to filter SQL queries by specific strings to be present (`includes` property value) or not present (`excludes` property value). 
-As a precondition, setting `filter=true` has to be provided. 
-P6Spy will perform string matching on each statement to determine if it should be written to the log file. 
-`include` accepts a comma-delimited list of expressions which is required to appear in a statement before it can appear in the log. `exclude` accepts a comma-delimited list to exclude. 
+P6Spy allows you to filter SQL queries by specific strings to be present (`includes` property value) or not present (`excludes` property value).
+As a precondition, setting `filter=true` has to be provided.
+P6Spy will perform string matching on each statement to determine if it should be written to the log file.
+`include` accepts a comma-delimited list of expressions which is required to appear in a statement before it can appear in the log. `exclude` accepts a comma-delimited list to exclude.
 Exclusion overrides inclusion, so that a statement matching both an include string and an exclude string is excluded.
 
 Please note that matching mode used in the underlying regex is (achieved via prefix `(?mis)`):
@@ -500,73 +500,73 @@ Please note that matching mode used in the underlying regex is (achieved via pre
 
 An example showing capture of all statements having select, except those having order follow:
 
-    filter = true
+    filter=true
     # comma separated list of strings to include
-    include = select
+    include=select
     # comma separated list of strings to exclude
-    exclude = order
+    exclude=order
 
 Please note, that internally following regex would be used for particular expression matching: `(?mis)^(?!.*(order).*)(.*(select).*)$`
 
 An example showing only capture statements having any of: order_details, price, and price_history follows:
 
-    filter = true
+    filter=true
     # comma separated list of strings to include
-    include = order,order_details,price,price_history
+    include=order,order_details,price,price_history
     # comma separated list of strings to exclude
-    exclude =
-    
+    exclude=
+
 Please note, that internally following regex would be used for particular expression matching: `(?mis)^(.*(order|order_details|price|price_history).*)$`
 
 An example showing the capture of all statements, except statements order string in them follows:
 
-    filter = false
+    filter=false
     # comma separated list of strings to include
-    include =
+    include=
     # comma separated list of strings to exclude
-    exclude = order
+    exclude=order
 
 Please note, that internally following regex would be used for particular expression matching: `(?mis)^(?!.*(order).*)(.*)$`
 
 As you can use full regex syntax, capture of statements having: pri[cz]e follows:
 
-    filter = true
+    filter=true
     # comma separated list of strings to include
-    include = pri[cz]e
+    include=pri[cz]e
     # comma separated list of strings to exclude
-    exclude =
-    
+    exclude=
+
 Please note, that internally following regex would be used for particular expression matching: `(?mis)^(.*(pri[cz]e).*)$`
 
 Moreover, please note, that special characters escaping (used in java) has to be done for the provided regular expression.
 As an example, matching for:
 
-	from\scustomers
-	
+    from\scustomers
+
 would mean, that following should be specified (please note doubled backslash):
-	
-	filter=true
+
+    filter=true
     include=from\\scustomers
 
 ### filter, sqlexpression
 
-If you need more control over regular expression for matching, SQL string property `sqlexpression` is to be used as an alternative to `exclude` and `include`. 
+If you need more control over regular expression for matching, SQL string property `sqlexpression` is to be used as an alternative to `exclude` and `include`.
 An example follows:
 
-    filter = true
-    sqlexpression = your expression
+    filter=true
+    sqlexpression=your expression
 
-If your expression matches the SQL string, it is logged. If the expression does not match, it is not logged. 
+If your expression matches the SQL string, it is logged. If the expression does not match, it is not logged.
 Please note you can use `sqlexpression` together with `include`/`exclude`, where both would be evaluated.
 
 Moreover, please note, that special characters escaping (used in java) has to be done for the provided regular expression.
 As an example, matching for:
 
-	^(.*(from\scustomers).*)$
-	
+    ^(.*(from\scustomers).*)$
+
 would mean, that following should be specified (please note doubled backslash)::
-	
-	filter=true
+
+    filter=true
     sqlexpression=^(.*(from\\scustomers).*)$
 
 ### excludecategories
@@ -588,7 +588,7 @@ Enter a comma-delimited list of categories to exclude from your log file. See fi
 
 ### excludebinary
 
-whehter the binary values (passed to DB or retrieved ones) should be logged with placeholder: [binary] or not.
+whether the binary values (passed to DB or retrieved ones) should be logged with placeholder: [binary] or not.
 
 ### outagedetection
 
@@ -596,7 +596,7 @@ This feature detects long-running statements that may be indicative of a databas
 problem. When enabled, it logs any statement that surpasses the configurable time boundary during its execution.
 No other statements are logged except the long-running statements.
 
-### outagedetectioninterval 
+### outagedetectioninterval
 
 The interval property is the boundary time set in seconds. For example, if set to
 2, any statement requiring at least 2 seconds is logged. The same statement will continue to be logged for as

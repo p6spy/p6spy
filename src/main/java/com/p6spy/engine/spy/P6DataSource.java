@@ -105,7 +105,7 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
 
     final P6SpyLoadableOptions options = P6SpyOptions.getActiveInstance();
 
-    // can be set when object is bound to JDNI, or
+    // can be set when object is bound to JNDI, or
     // can be loaded from spy.properties
     if (rdsName == null) {
       rdsName = options.getRealDataSource();

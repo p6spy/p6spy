@@ -88,9 +88,9 @@ public class P6TestOutage extends P6TestFramework {
     prep.close();
   }
 
-  private void callSleep(long miliseconds) throws SQLException {
+  private void callSleep(long milliseconds) throws SQLException {
     final Statement statement = connection.createStatement();
-    statement.executeQuery("CALL SLEEP( " + miliseconds + ")");
+    statement.executeQuery("CALL SLEEP( " + milliseconds + ")");
     statement.close();
   }
 }
