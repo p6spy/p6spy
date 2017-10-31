@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -477,6 +478,22 @@ public class P6TestCommon extends P6TestFramework {
       // reset formatting setting
       P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
     }
+    
+    // prep statement
+    {
+        P6SpyOptions.getActiveInstance().setLogMessageFormat(CustomLineFormat.class.getName());
+        P6SpyOptions.getActiveInstance().setCustomLogMessageFormat("%(currentTime)|%(executionTime)|%(category)|connection%(connectionId)\n%(effectiveSqlSingleLine)\n%(sqlSingleLine);\n");
+
+        String query = "select count(*) from customers where name IN (?, ?)";
+        PreparedStatement prep = connection.prepareStatement(query);
+        prep.setString(1, "foo");
+        prep.setString(2, "bar");
+        prep.executeQuery();
+        assertTrue(super.getLastLogEntry().contains("\nselect count(*) from customers where name IN (?, ?)\nselect count(*) from customers where name IN ('foo', 'bar');"));
+
+        // reset formatting setting
+        P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
+      }
     {
       P6SpyOptions.getActiveInstance().setLogMessageFormat(CustomLineFormat.class.getName());
       P6SpyOptions.getActiveInstance().setCustomLogMessageFormat("SQL in custom format: #"+

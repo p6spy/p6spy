@@ -18,10 +18,11 @@
 
 package com.p6spy.engine.spy.appender;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.P6SpyOptions;
-
-import java.util.regex.Pattern;
 
 /**
  * @author Peter G. Horvath
@@ -66,9 +67,9 @@ public class CustomLineFormat implements MessageFormattingStrategy {
       .replaceAll(Pattern.quote(CURRENT_TIME), now)
       .replaceAll(Pattern.quote(EXECUTION_TIME), Long.toString(elapsed))
       .replaceAll(Pattern.quote(CATEGORY), category)
-      .replaceAll(Pattern.quote(EFFECTIVE_SQL), prepared)
-      .replaceAll(Pattern.quote(EFFECTIVE_SQL_SINGLELINE), P6Util.singleLine(prepared))
-      .replaceAll(Pattern.quote(SQL), sql)
-      .replaceAll(Pattern.quote(SQL_SINGLE_LINE), P6Util.singleLine(sql));
+      .replaceAll(Pattern.quote(EFFECTIVE_SQL), Matcher.quoteReplacement(prepared))
+      .replaceAll(Pattern.quote(EFFECTIVE_SQL_SINGLELINE), Matcher.quoteReplacement(P6Util.singleLine(prepared)))
+      .replaceAll(Pattern.quote(SQL), Matcher.quoteReplacement(sql))
+      .replaceAll(Pattern.quote(SQL_SINGLE_LINE), Matcher.quoteReplacement(P6Util.singleLine(sql)));
   }
 }
