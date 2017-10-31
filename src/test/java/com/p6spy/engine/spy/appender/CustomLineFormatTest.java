@@ -29,9 +29,9 @@ public class CustomLineFormatTest {
 	@After
 	public void after() {
 		// reset formatting setting
-        P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
+		P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
 	}
-	
+
 	@Test
 	public void formatPreparedStatementWithDollarSign() {
 		String customLogMessageFormat = "%(currentTime)|%(executionTime)|%(category)|connection%(connectionId)\n%(effectiveSqlSingleLine)\n%(sqlSingleLine);\n";
@@ -39,9 +39,9 @@ public class CustomLineFormatTest {
 		String logMsg = new CustomLineFormat().formatMessage(0, "1", 1L, "statement",
 				"select value from V$parameter where lower(name)=?",
 				"select value from V$parameter where lower(name)='compatible'");
-		
-		Assert.assertTrue(logMsg.contains("select value from V$parameter where lower(name)=?\nselect value from V$parameter where lower(name)='compatible';\n"));
-		P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
-	}	
-	
+
+		Assert.assertTrue(logMsg.contains(
+				"select value from V$parameter where lower(name)=?\nselect value from V$parameter where lower(name)='compatible';\n"));
+	}
+
 }
