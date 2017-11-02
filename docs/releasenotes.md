@@ -1,9 +1,16 @@
 # Release Notes
 
-## [3.4.1](https://github.com/p6spy/p6spy/compare/p6spy-3.4.0...master) (Unreleased)
+## [3.5.1](https://github.com/p6spy/p6spy/compare/p6spy-3.5.0...master) (Unreleased)
+
+Improvements:
 
 Defects resolved:
-* [issue #417](https://github.com/p6spy/p6spy/pull/417): Fix `IllegalArgumentException` for `CustomLineFormat` with specific chars in statement
+
+## [3.5.0](https://github.com/p6spy/p6spy/compare/p6spy-3.4.0...3.5.0) (Unreleased)
+
+Defects resolved:
+* [issue #417](https://github.com/p6spy/p6spy/pull/417): Fixed `IllegalArgumentException` for `CustomLineFormat` with specific chars in statement
+* [issue #363](https://github.com/p6spy/p6spy/issue/363): Fixed `NullPointerException` for `OutageJdbcEventListener.onAfterCommit` via refactoring the `P6OutageDetector` to `enum`
 
 ## [3.4.0](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...3.4.0) (2017-10-13)
 
