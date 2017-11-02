@@ -76,7 +76,7 @@ script:
 after_success:
   - |
       # oraclejdk 8 used for all the publishing works
-      if [[$TRAVIS_JDK_VERSION == "oraclejdk8"]]; then
+      if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
 
         # coveralls publishing
         if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
