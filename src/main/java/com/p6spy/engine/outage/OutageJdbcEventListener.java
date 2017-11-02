@@ -37,35 +37,35 @@ public class OutageJdbcEventListener extends SimpleJdbcEventListener {
   @Override
   public void onBeforeCommit(ConnectionInformation connectionInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "commit", "", "");
+      P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "commit", "", "");
     }
   }
 
   @Override
   public void onAfterCommit(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().unregisterInvocation(this);
+      P6OutageDetector.INSTANCE.unregisterInvocation(this);
     }
   }
 
   @Override
   public void onBeforeRollback(ConnectionInformation connectionInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "rollback", "", "");
+      P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "rollback", "", "");
     }
   }
 
   @Override
   public void onAfterRollback(ConnectionInformation connectionInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().unregisterInvocation(this);
+      P6OutageDetector.INSTANCE.unregisterInvocation(this);
     }
   }
 
   @Override
   public void onBeforeAnyAddBatch(StatementInformation statementInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "batch",
+      P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "batch",
         statementInformation.getSqlWithValues(), statementInformation.getStatementQuery());
     }
   }
@@ -73,14 +73,14 @@ public class OutageJdbcEventListener extends SimpleJdbcEventListener {
   @Override
   public void onAfterAnyAddBatch(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().unregisterInvocation(this);
+      P6OutageDetector.INSTANCE.unregisterInvocation(this);
     }
   }
 
   @Override
   public void onBeforeAnyExecute(StatementInformation statementInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().registerInvocation(this, System.nanoTime(), "statement",
+      P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "statement",
         statementInformation.getSqlWithValues(), statementInformation.getStatementQuery());
     }
   }
@@ -88,7 +88,7 @@ public class OutageJdbcEventListener extends SimpleJdbcEventListener {
   @Override
   public void onAfterAnyExecute(StatementInformation statementInformation, long timeElapsedNanos, SQLException e) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.getInstance().unregisterInvocation(this);
+      P6OutageDetector.INSTANCE.unregisterInvocation(this);
     }
   }
 }

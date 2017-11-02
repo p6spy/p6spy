@@ -46,42 +46,29 @@ import com.p6spy.engine.logging.Category;
  * slightly unreliable, but we aren't dealing with bank accounts here so thats
  * okay.
  */
-public class P6OutageDetector implements Runnable {
+public enum P6OutageDetector implements Runnable {
+	
+	INSTANCE;
+	
     private ConcurrentMap<Object, InvocationInfo> pendingMessages;
 
     // flag that indicates that the thread should stop running
     private boolean haltThread;
 
-    // singleton contruct
-    private static P6OutageDetector instance;
-
     /** Creates new P6OutageDetector */
-    protected P6OutageDetector() {
-        pendingMessages = new ConcurrentHashMap<Object, InvocationInfo>();
-
+    private P6OutageDetector() {
+    	pendingMessages = new ConcurrentHashMap<Object, InvocationInfo>();
+    	
+    	// create and run the auxilliary thread
+        // make it a deamon thread so it won't prevent the server from
+        // shutting down when it wants to.
+    	ThreadGroup group = new ThreadGroup("P6SpyThreadGroup");
+        group.setDaemon(true);
+        Thread outageThread = new Thread(group, this, "P6SpyOutageThread");
+        outageThread.start();
+    	
         P6LogQuery.debug("P6Spy - P6OutageDetector has been invoked.");
         P6LogQuery.debug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = " + P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
-    }
-
-    /**
-     * Gets the instance of the detector. A side effect of the first call to this method is that the
-     * auxillary thread will be kicked off here.
-     *
-     * @return the P6OutageDetector instance
-     */
-    static public synchronized P6OutageDetector getInstance() {
-        if (instance == null) {
-            instance = new P6OutageDetector();
-
-            // create and run the auxilliary thread
-            // make it a deamon thread so it won't prevent the server from
-            // shutting down when it wants to.
-            ThreadGroup group = new ThreadGroup("P6SpyThreadGroup");
-            group.setDaemon(true);
-            Thread outageThread = new Thread(group, instance, "P6SpyOutageThread");
-            outageThread.start();
-        }
-        return instance;
     }
 
     /**
