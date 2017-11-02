@@ -1,10 +1,9 @@
 # Release Notes
 
-## [3.4.1](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...master) (Unreleased)
-
-Improvements:
+## [3.4.1](https://github.com/p6spy/p6spy/compare/p6spy-3.4.0...master) (Unreleased)
 
 Defects resolved:
+* [issue #417](https://github.com/p6spy/p6spy/pull/417): Fix `IllegalArgumentException` for `CustomLineFormat` with specific chars in statement
 
 ## [3.4.0](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...3.4.0) (2017-10-13)
 
