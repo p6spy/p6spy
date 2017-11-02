@@ -310,8 +310,8 @@ The following modules come with the p6spy by default:
 
 Where these are required:
 
-* com.p6spy.engine.logging.P6LogFactory - for the logging functionality, see [P6Log](#p6log).
-* com.p6spy.engine.outage.P6OutageFactory - for outage functionality, see [P6Outage](#p6outage).
+* com.p6spy.engine.logging.P6LogFactory - for the logging functionality and
+* com.p6spy.engine.outage.P6OutageFactory - for outage functionality.
 
 Please note to implement custom module have a look at the implementation of the any of the existing ones.
 
