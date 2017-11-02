@@ -1,16 +1,25 @@
 # Release Notes
 
-## [3.5.1](https://github.com/p6spy/p6spy/compare/p6spy-3.5.0...master) (Unreleased)
+## [3.5.2](https://github.com/p6spy/p6spy/compare/p6spy-3.5.1...master) (Unreleased)
 
 Improvements:
 
 Defects resolved:
+
+## [3.5.1](https://github.com/p6spy/p6spy/compare/p6spy-3.5.0...3.5.1) (Unreleased)
+
+Defects resolved:
+* [issue #423](https://github.com/p6spy/p6spy/pull/423): 3.5.0 version never made it to bintray/maven central (due broken `.travis.yml`)
 
 ## [3.5.0](https://github.com/p6spy/p6spy/compare/p6spy-3.4.0...3.5.0) (Unreleased)
 
 Defects resolved:
 * [issue #417](https://github.com/p6spy/p6spy/pull/417): Fixed `IllegalArgumentException` for `CustomLineFormat` with specific chars in statement
 * [issue #363](https://github.com/p6spy/p6spy/issue/363): Fixed `NullPointerException` for `OutageJdbcEventListener.onAfterCommit` via refactoring the `P6OutageDetector` to `enum`
+
+Known issues:
+
+* [issue #423](https://github.com/p6spy/p6spy/pull/423): 3.5.0 version never made it to bintray/maven central (due broken `.travis.yml`)
 
 ## [3.4.0](https://github.com/p6spy/p6spy/compare/p6spy-3.3.0...3.4.0) (2017-10-13)
 
