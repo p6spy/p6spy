@@ -6,12 +6,12 @@ Improvements:
 
 Defects resolved:
 
-## [3.5.1](https://github.com/p6spy/p6spy/compare/p6spy-3.5.0...3.5.1) (Unreleased)
+## [3.5.1](https://github.com/p6spy/p6spy/compare/p6spy-3.5.0...3.5.1) (2017-11-02)
 
 Defects resolved:
 * [issue #423](https://github.com/p6spy/p6spy/pull/423): 3.5.0 version never made it to bintray/maven central (due broken `.travis.yml`)
 
-## [3.5.0](https://github.com/p6spy/p6spy/compare/p6spy-3.4.0...3.5.0) (Unreleased)
+## [3.5.0](https://github.com/p6spy/p6spy/compare/p6spy-3.4.0...3.5.0) (2017-11-02)
 
 Defects resolved:
 * [issue #417](https://github.com/p6spy/p6spy/pull/417): Fixed `IllegalArgumentException` for `CustomLineFormat` with specific chars in statement
