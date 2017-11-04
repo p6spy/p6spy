@@ -30,7 +30,7 @@ public class SpyDotPropertiesReloader implements P6OptionChangedListener {
 
   private ScheduledExecutorService reloader;
   private final SpyDotProperties spyDotProperties;
-  private boolean killed = false;
+  private volatile boolean killed = false;
 
   public SpyDotPropertiesReloader(SpyDotProperties spyDotProperties,
                                   P6ModuleManager p6ModuleManager) {

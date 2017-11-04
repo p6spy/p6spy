@@ -55,7 +55,7 @@ public class BatchFileLogger extends FileLogger {
     if (endOfStatement) {
       getStream().println(BATCH_SEPARATOR);
     }
-    if (category.equals("statement")) {
+    if (Category.STATEMENT.equals(category)) {
       String actual = null == sql || 0 == sql.length() ? prepared : sql;
       getStream().print(actual);
       endOfStatement = true;
