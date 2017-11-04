@@ -118,3 +118,8 @@ services:
   #     - "3051:3050"
   #     - "50000:50000"
   #   command: ["db2start"]
+
+  sonarqube:
+    image: sonarqube:6.6-alpine
+    ports:
+      - "9000:9000"
