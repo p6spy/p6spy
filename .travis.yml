@@ -12,6 +12,10 @@ addons:
     organization: "p6spy-github"
     token:
       secure: "e58ZcHgvejYlEGki2uxy1b4LuQiFKnULEpUUUWALfM0NV/JZAyxLMjrUYeSiJkinMs/yA7bxjGzXIpEu6eRgCCZhzolBvs6QbRzrkhAhaZXVnEbYojFkPGUc6QFsU6V30mI0I2k7O9FoUiwoyZwWVV3HT2phn4s+ebLFgN+Krvg="
+  # https://docs.travis-ci.com/user/sonarcloud/#Activation-for-branches
+  branches:
+    - master
+    - sonar
 
 language: java
 
@@ -84,7 +88,6 @@ after_success:
         fi
 
         # sonarcloud.io publishing
-        # by default, the SonarCloud add-on only analyzes the master branch, see https://docs.travis-ci.com/user/sonarcloud/
         ./gradlew sonarqube --info --stacktrace
 
         # github release notes sync (via chandler)
