@@ -27,7 +27,7 @@ import com.p6spy.engine.spy.P6SpyOptions;
  * Value holder of the data passed to DB as well as of those retrieved capable
  * of binary data logging depending on the configuration property
  * {@code excludebinary}.
- * 
+ *
  * @author Peter Butkovic
  *
  */
@@ -45,7 +45,7 @@ public class Value {
     this();
     this.value = valueToSet;
   }
-  
+
   public Value() {
   }
 
@@ -73,7 +73,7 @@ public class Value {
    * set.</li>
    * <li>for other types string representation is simply returned.</li>
    * </ul>
-   * 
+   *
    * @param value
    * @return
    */
@@ -85,6 +85,12 @@ public class Value {
 
       if (value instanceof java.util.Date) {
         result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
+      } else if (value instanceof Boolean) {
+        if ("numeric".equals(P6SpyOptions.getActiveInstance().getDatabaseDialectBooleanFormat())) {
+          result = Boolean.FALSE.equals(value) ? "0" : "1";
+        } else {
+          result = value.toString();
+        }
       } else if (value instanceof byte[]) {
         if (P6LogOptions.getActiveInstance().getExcludebinary()) {
           result = "[binary]";
