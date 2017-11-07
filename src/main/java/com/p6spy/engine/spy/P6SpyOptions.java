@@ -51,6 +51,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String REALDATASOURCEPROPERTIES = "realdatasourceproperties";
     public static final String CUSTOM_LOG_MESSAGE_FORMAT = "customLogMessageFormat";
     public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
+    public static final String DATABASE_DIALECT_BOOLEAN_FORMAT = "databaseDialectBooleanFormat";
     public static final String JMX = "jmx";
     public static final String JMX_PREFIX = "jmxPrefix";
 
@@ -75,6 +76,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       defaults.put(RELOADPROPERTIES, Boolean.FALSE.toString());
       defaults.put(RELOADPROPERTIESINTERVAL, Long.toString(60));
       defaults.put(DATABASE_DIALECT_DATE_FORMAT, "dd-MMM-yy");
+      defaults.put(DATABASE_DIALECT_BOOLEAN_FORMAT, "boolean");
       defaults.put(CUSTOM_LOG_MESSAGE_FORMAT, String.format("%s|%s|%s|connection%s|%s",
         CustomLineFormat.CURRENT_TIME, CustomLineFormat.EXECUTION_TIME, CustomLineFormat.CATEGORY,
         CustomLineFormat.CONNECTION_ID, CustomLineFormat.SQL_SINGLE_LINE));
@@ -109,6 +111,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setRealDataSourceClass(options.get(REALDATASOURCECLASS));
       setRealDataSourceProperties(options.get(REALDATASOURCEPROPERTIES));
       setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
+      setDatabaseDialectBooleanFormat(options.get(DATABASE_DIALECT_BOOLEAN_FORMAT));
       setCustomLogMessageFormat(options.get(CUSTOM_LOG_MESSAGE_FORMAT));
       setJmx(options.get(JMX));
       setJmxPrefix(options.get(JMX_PREFIX));
@@ -304,6 +307,26 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public void setDatabaseDialectDateFormat(String databaseDialectDateFormat) {
       optionsRepository.set(String.class, DATABASE_DIALECT_DATE_FORMAT, databaseDialectDateFormat);
     }
+
+  /**
+   * Returns the databaseDialectBooleanFormat.
+   *
+   * @return String
+   */
+  @Override
+  public String getDatabaseDialectBooleanFormat() {
+    return optionsRepository.get(String.class, DATABASE_DIALECT_BOOLEAN_FORMAT);
+  }
+
+  /**
+   * Sets the databaseDialectDateFormat.
+   *
+   * @param databaseDialectBooleanFormat The databaseDialectBooleanFormat to set
+   */
+  @Override
+  public void setDatabaseDialectBooleanFormat(String databaseDialectBooleanFormat) {
+    optionsRepository.set(String.class, DATABASE_DIALECT_BOOLEAN_FORMAT, databaseDialectBooleanFormat);
+  }
 
     /**
      * Returns the customLogMessageFormat.
