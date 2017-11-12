@@ -31,7 +31,7 @@ public class P6OutageOptions extends StandardMBean implements P6OutageLoadableOp
   public static final String OUTAGEDETECTIONINTERVAL = "outagedetectioninterval";
   public static final String OUTAGEDETECTION = "outagedetection";
 
-  public static final Map<String, String> defaults;
+  protected static final Map<String, String> defaults;
 
   static {
     defaults = new HashMap<String, String>();

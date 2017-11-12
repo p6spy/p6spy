@@ -46,7 +46,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
   public static final String EXCLUDECATEGORIES_SET = "excludecategoriesSet";
   public static final String SQLEXPRESSION_PATTERN = "sqlexpressionPattern";
   
-  public static final Map<String, String> defaults;
+  protected static final Map<String, String> defaults;
   
   static {
     defaults = new HashMap<String, String>();

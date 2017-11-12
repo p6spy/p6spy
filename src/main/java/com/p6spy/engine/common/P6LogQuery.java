@@ -40,12 +40,12 @@ import com.p6spy.engine.spy.option.P6OptionChangedListener;
 
 public class P6LogQuery implements P6OptionChangedListener {
   
-  private static final Set<Category> CATEGORIES_IMPLICITLY_INCLUDED = new HashSet<Category>(
+  private static final Set<Category> CATEGORIES_IMPLICITLY_INCLUDED = new HashSet<>(
 	      Arrays.asList(Category.ERROR, Category.OUTAGE /* we still want to have outage category enabled! */));
   /**
    * Options that cause re-init of {@link P6LogQuery}.
    */
-  private static final Set<String> ON_CHANGE = new HashSet<String>(Arrays.asList(
+  private static final Set<String> ON_CHANGE = new HashSet<>(Arrays.asList(
     P6SpyOptions.APPENDER_INSTANCE, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
 
   protected static P6Logger logger;
@@ -60,7 +60,7 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  public synchronized static void initialize() {
+  public static synchronized void initialize() {
     final P6ModuleManager moduleManager = P6ModuleManager.getInstance();
     if (null == moduleManager) {
       // not initialized yet => can't proceed
@@ -83,12 +83,12 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  static protected void doLog(long elapsed, Category category, String prepared, String sql) {
+  protected static void doLog(long elapsed, Category category, String prepared, String sql) {
     doLog(-1, elapsed, category, prepared, sql);
   }
 
   // this is an internal method called by logElapsed
-  static protected void doLogElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql) {
+  protected static void doLogElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql) {
     doLog(connectionId, timeElapsedNanos, category, prepared, sql);
   }
 
@@ -153,8 +153,8 @@ public class P6LogQuery implements P6OptionChangedListener {
     final Pattern sqlExpressionPattern = opts.getSQLExpressionPattern();
     final Pattern includeExcludePattern = opts.getIncludeExcludePattern();
     
-    return (sqlExpressionPattern == null || sqlExpressionPattern != null && sqlExpressionPattern.matcher(sql).matches()) 
-        && (includeExcludePattern == null || includeExcludePattern != null && includeExcludePattern.matcher(sql).matches());
+    return (sqlExpressionPattern == null || sqlExpressionPattern.matcher(sql).matches()) 
+        && (includeExcludePattern == null || includeExcludePattern.matcher(sql).matches());
   }
 
   static boolean isCategoryOk(Category category) {
@@ -196,8 +196,8 @@ public class P6LogQuery implements P6OptionChangedListener {
   
   public static void logElapsed(int connectionId, long timeElapsedNanos, Category category, Loggable loggable) {
     // usually an expensive operation => cache where possible
-    String sql;
-    if (logger != null && meetsThresholdRequirement(timeElapsedNanos) && isCategoryOk(category) && isLoggable(sql = loggable.getSql())) {
+    String sql = loggable.getSql();
+    if (logger != null && meetsThresholdRequirement(timeElapsedNanos) && isCategoryOk(category) && isLoggable(sql)) {
       doLogElapsed(connectionId, timeElapsedNanos, category, sql, loggable.getSqlWithValues());
     } else if (isDebugEnabled()) {
       sql = loggable.getSqlWithValues();

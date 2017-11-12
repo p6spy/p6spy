@@ -33,6 +33,11 @@ import java.util.regex.Pattern;
 
 public class P6Util {
     static Pattern lineBreakPattern = Pattern.compile("(\\r?\\n)+");
+    
+    private P6Util() {
+      throw new IllegalStateException("Utility class");
+    }
+    
     public static String singleLine(String str) {
         return lineBreakPattern.matcher(str).replaceAll(" ");
     }
@@ -169,7 +174,7 @@ public class P6Util {
 			return null;
 		}
 
-		final HashMap<String, String> map = new HashMap<String, String>();
+		final HashMap<String, String> map = new HashMap<>();
 		for (Entry<Object, Object> entry : properties.entrySet()) {
 			map.put((String) entry.getKey(), (String) entry.getValue());
 		}
