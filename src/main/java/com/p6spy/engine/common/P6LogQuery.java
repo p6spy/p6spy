@@ -40,12 +40,12 @@ import com.p6spy.engine.spy.option.P6OptionChangedListener;
 
 public class P6LogQuery implements P6OptionChangedListener {
   
-  private static final Set<Category> CATEGORIES_IMPLICITLY_INCLUDED = new HashSet<>(
+  private static final Set<Category> CATEGORIES_IMPLICITLY_INCLUDED = new HashSet<Category>(
 	      Arrays.asList(Category.ERROR, Category.OUTAGE /* we still want to have outage category enabled! */));
   /**
    * Options that cause re-init of {@link P6LogQuery}.
    */
-  private static final Set<String> ON_CHANGE = new HashSet<>(Arrays.asList(
+  private static final Set<String> ON_CHANGE = new HashSet<String>(Arrays.asList(
     P6SpyOptions.APPENDER_INSTANCE, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
 
   protected static P6Logger logger;
