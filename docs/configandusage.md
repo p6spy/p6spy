@@ -152,6 +152,10 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     # format that is used for logging of the date/time/... (has to be compatible with java.text.SimpleDateFormat)
     # (default is dd-MMM-yy)
     #databaseDialectDateFormat=dd-MMM-yy
+    
+    # format that is used for logging booleans, possible values: boolean, numeric
+    # (default is boolean)
+    #databaseDialectBooleanFormat=boolean
 
     # whether to expose options via JMX or not
     # (default is true)
