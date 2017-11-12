@@ -1,10 +1,15 @@
 # Release Notes
 
-## [3.5.2](https://github.com/p6spy/p6spy/compare/p6spy-3.5.1...master) (Unreleased)
+## [3.6.1](https://github.com/p6spy/p6spy/compare/p6spy-3.6.0...master) (Unreleased)
 
 Improvements:
 
 Defects resolved:
+
+## [3.6.0](https://github.com/p6spy/p6spy/compare/p6spy-3.5.1...3.6.0) (2017-11-12)
+
+Improvements:
+* [issue #426](https://github.com/p6spy/p6spy/issues/426) The format for boolean parameters made configurable
 
 ## [3.5.1](https://github.com/p6spy/p6spy/compare/p6spy-3.5.0...3.5.1) (2017-11-02)
 
