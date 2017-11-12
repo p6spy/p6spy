@@ -146,13 +146,13 @@ public enum P6OutageDetector implements Runnable {
 
 // inner class to hold the info about a specific statement invocation
 class InvocationInfo {
-    public long startTime;
+    final long startTime;
 
-    public String category;
+    final String category;
 
-    public String preparedStmt;
+    final String preparedStmt;
 
-    public String sql;
+    final String sql;
 
     public String url;
 

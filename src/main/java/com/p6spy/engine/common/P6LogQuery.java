@@ -1,7 +1,7 @@
 /**
  * P6Spy
  *
- * Copyright (C) 2002 - 2018 P6Spy
+ * Copyright (C) 2002 - 2017 P6Spy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.p6spy.engine.common;
 
 import java.io.PrintWriter;
@@ -83,12 +84,12 @@ public class P6LogQuery implements P6OptionChangedListener {
   }
 
   static protected void doLog(long elapsed, Category category, String prepared, String sql) {
-    doLog(-1, elapsed, category, prepared, sql, "");
+    doLog(-1, elapsed, category, prepared, sql);
   }
 
   // this is an internal method called by logElapsed
-  static protected void doLogElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql, String url) {
-    doLog(connectionId, timeElapsedNanos, category, prepared, sql, url);
+  static protected void doLogElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql) {
+    doLog(connectionId, timeElapsedNanos, category, prepared, sql);
   }
 
 	/**
@@ -99,9 +100,8 @@ public class P6LogQuery implements P6OptionChangedListener {
 	 * @param category
 	 * @param prepared
 	 * @param sql
-   * @param url
 	 */
-	protected static void doLog(int connectionId, long elapsedNanos, Category category, String prepared, String sql, String url) {
+	protected static void doLog(int connectionId, long elapsedNanos, Category category, String prepared, String sql) {
 	    // give it one more try if not initialized yet
 	    if (logger == null) {
 	      initialize();
@@ -118,7 +118,7 @@ public class P6LogQuery implements P6OptionChangedListener {
         stringNow = new SimpleDateFormat(format).format(new java.util.Date()).trim();
       }
 
-      logger.logSQL(connectionId, stringNow, TimeUnit.NANOSECONDS.toMillis(elapsedNanos), category, prepared, sql, url);
+      logger.logSQL(connectionId, stringNow, TimeUnit.NANOSECONDS.toMillis(elapsedNanos), category, prepared, sql);
 
       final boolean stackTrace = P6SpyOptions.getActiveInstance().getStackTrace();
       if (stackTrace) {
@@ -185,9 +185,9 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  public static void logElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql, String url) {
+  public static void logElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql) {
     if (logger != null && meetsThresholdRequirement(timeElapsedNanos) && isCategoryOk(category) && isLoggable(sql) ) {
-      doLogElapsed(connectionId, timeElapsedNanos, category, prepared, sql, url == null ? "" : url);
+      doLogElapsed(connectionId, timeElapsedNanos, category, prepared, sql);
     } else if (isDebugEnabled()) {
       debug("P6Spy intentionally did not log category: " + category + ", statement: " + sql + "  Reason: logger=" + logger + ", isLoggable="
           + isLoggable(sql) + ", isCategoryOk=" + isCategoryOk(category) + ", meetsTreshold=" + meetsThresholdRequirement(timeElapsedNanos));
@@ -197,9 +197,8 @@ public class P6LogQuery implements P6OptionChangedListener {
   public static void logElapsed(int connectionId, long timeElapsedNanos, Category category, Loggable loggable) {
     // usually an expensive operation => cache where possible
     String sql;
-    String url = loggable.getConnectionInformation().getUrl();
     if (logger != null && meetsThresholdRequirement(timeElapsedNanos) && isCategoryOk(category) && isLoggable(sql = loggable.getSql())) {
-      doLogElapsed(connectionId, timeElapsedNanos, category, sql, loggable.getSqlWithValues(), url == null ? "" : url);
+      doLogElapsed(connectionId, timeElapsedNanos, category, sql, loggable.getSqlWithValues());
     } else if (isDebugEnabled()) {
       sql = loggable.getSqlWithValues();
       debug("P6Spy intentionally did not log category: " + category + ", statement: " + sql + "  Reason: logger=" + logger + ", isLoggable="
