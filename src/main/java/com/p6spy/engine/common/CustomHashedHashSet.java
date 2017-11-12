@@ -36,7 +36,7 @@ public class CustomHashedHashSet<T> extends HashSet<T> {
 	/**
 	 * Maps hash code computed via {@link #hasher} to object stored in the set.
 	 */
-	private Map<Integer, T> map = new HashMap<>();
+	private Map<Integer, T> map = new HashMap<Integer, T>();
 
 	final Hasher hasher;
 
@@ -117,7 +117,7 @@ public class CustomHashedHashSet<T> extends HashSet<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		return new CustomHashedHashSetIterator<>(super.iterator());
+		return new CustomHashedHashSetIterator<T>(super.iterator());
 	}
 
 	@Override

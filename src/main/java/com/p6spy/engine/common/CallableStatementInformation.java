@@ -28,7 +28,7 @@ import java.util.Map.Entry;
  * @since 09/2013
  */
 public class CallableStatementInformation extends PreparedStatementInformation {
-  private final Map<String, Value> namedParameterValues = new HashMap<>();
+  private final Map<String, Value> namedParameterValues = new HashMap<String, Value>();
 
   public CallableStatementInformation(ConnectionInformation connectionInformation, String query) {
     super(connectionInformation, query);
