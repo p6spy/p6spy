@@ -6,7 +6,7 @@ plugins {
     id 'distribution'
 
     id 'com.fizzpod.sweeney' version '2.1.2'
-    id 'com.github.hierynomus.license' version '0.14.0'    
+    id 'com.github.hierynomus.license' version '0.14.0'
     id 'com.github.johnrengelman.shadow' version '2.0.1'
     // to publish code coverage to coveralls
     // ./gradlew jacocoTestReport coveralls
@@ -60,7 +60,7 @@ dependencies {
 
   // for providing misc *-nodep artifacts, please note that order matters here
   // even if slf4j complains about multiple implementations on classpath, it takes the 1.st one
-  // and as we use log4j in tests => bridge needs to be the 1.st one specified 
+  // and as we use log4j in tests => bridge needs to be the 1.st one specified
   compileOnly 'org.slf4j:slf4j-api:1.7.7'
   compileOnly 'org.slf4j:slf4j-log4j12:1.7.7'
   compileOnly 'log4j:log4j:1.2.17'
@@ -72,7 +72,7 @@ dependencies {
   compileOnly 'org.apache.logging.log4j:log4j-api:2.0-rc1'
   compileOnly 'org.apache.logging.log4j:log4j-core:2.0-rc1'
 
-  compileOnly 'ch.qos.logback:logback-classic:1.1.2' 
+  compileOnly 'ch.qos.logback:logback-classic:1.1.2'
   compileOnly 'ch.qos.logback:logback-core:1.1.2'
 
   testCompile 'junit:junit:4.12'
@@ -130,8 +130,8 @@ test {
     systemProperty 'user.country', 'US'
     systemProperty 'derby.stream.error.file', 'target/derby.log'
     systemProperty 'DB', envDB
-    
-    // to enable remote JMX testing, 
+
+    // to enable remote JMX testing,
     // see: http://stackoverflow.com/questions/5552960/how-to-connect-to-a-java-program-on-localhost-jvm-using-jmx
     // to workaround oracle timezone issue: http://stackoverflow.com/questions/9156379/ora-01882-timezone-region-not-found
     // to get rid of DB2 traces => -Ddb2.jcc.override.traceLevel=0
@@ -156,9 +156,9 @@ task shadowLog4jJar(type: ShadowJar) {
   from sourceSets.main.output //tells the task to include the project code
   configurations = [ project.configurations.compileOnly ]
   dependencies {
-    include(dependency( group: 'log4j', name: 'log4j')) 
-    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
-    include(dependency( group: 'org.slf4j', name: 'slf4j-log4j')) 
+    include(dependency( group: 'log4j', name: 'log4j'))
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api'))
+    include(dependency( group: 'org.slf4j', name: 'slf4j-log4j'))
   }
 }
 
@@ -167,10 +167,10 @@ task shadowLog4j2Jar(type: ShadowJar) {
   from sourceSets.main.output //tells the task to include the project code
   configurations = [ project.configurations.compileOnly ]
   dependencies {
-    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
-    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl')) 
-    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-api')) 
-    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-core')) 
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api'))
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl'))
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-api'))
+    include(dependency( group: 'org.apache.logging.log4j', name: 'log4j-core'))
   }
 }
 
@@ -179,9 +179,9 @@ task shadowLogbackJar(type: ShadowJar) {
   from sourceSets.main.output //tells the task to include the project code
   configurations = [ project.configurations.compileOnly ]
   dependencies {
-    include(dependency( group: 'org.slf4j', name: 'slf4j-api')) 
-    include(dependency( group: 'ch.qos.logback', name: 'logback-classic')) 
-    include(dependency( group: 'ch.qos.logback', name: 'logback-core')) 
+    include(dependency( group: 'org.slf4j', name: 'slf4j-api'))
+    include(dependency( group: 'ch.qos.logback', name: 'logback-classic'))
+    include(dependency( group: 'ch.qos.logback', name: 'logback-core'))
   }
 }
 
@@ -309,9 +309,9 @@ artifactory {
             if (project.version.endsWith("-SNAPSHOT")) {
               repoKey = 'oss-snapshot-local'
             } else {
-              repoKey = 'oss-release-local' 
+              repoKey = 'oss-release-local'
             }
-            
+
             username = System.getenv('BINTRAY_USER')
             password = System.getenv('BINTRAY_API_KEY')
         }
@@ -345,7 +345,7 @@ bintray {
 			released = new Date()
       name = project.version
       vcsTag = "p6spy-${project.version}"
-        
+
       // Optional configuration for Maven Central sync of the version
       mavenCentralSync {
           sync = true //[Default: true] Determines whether to sync the version to Maven Central.
@@ -358,5 +358,5 @@ bintray {
 }
 
 task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
-    gradleVersion = '4.1'
+    gradleVersion = '4.4'
 }
