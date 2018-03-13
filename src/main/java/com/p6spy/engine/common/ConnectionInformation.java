@@ -37,6 +37,7 @@ public class ConnectionInformation implements Loggable {
   private Connection connection;
   private PooledConnection pooledConnection;
   private long timeToGetConnectionNs;
+  private String url;
 
   private ConnectionInformation() {
     this.connectionId = counter.getAndIncrement();
@@ -218,5 +219,13 @@ public class ConnectionInformation implements Loggable {
   @Override
   public ConnectionInformation getConnectionInformation() {
     return this;
+  }
+  
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public String getUrl() {
+    return this.url;
   }
 }
