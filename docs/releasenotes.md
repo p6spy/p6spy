@@ -1,8 +1,9 @@
 # Release Notes
 
-## [3.6.1](https://github.com/p6spy/p6spy/compare/p6spy-3.6.0...master) (Unreleased)
+## [3.7.0](https://github.com/p6spy/p6spy/compare/p6spy-3.6.0...master) (Unreleased)
 
 Improvements:
+* Add ability to register custom `JdbcEventListenerFactory`
 
 Defects resolved:
 

@@ -91,7 +91,7 @@ public class P6SpyDriver implements Driver {
     final long start = System.nanoTime();
 
     if (P6SpyDriver.jdbcEventListenerFactory == null) {
-      P6SpyDriver.jdbcEventListenerFactory = new DefaultJdbcEventListenerFactory();
+      P6SpyDriver.jdbcEventListenerFactory = JdbcEventListenerFactoryLoader.load();
     }
     final Connection conn;
     final JdbcEventListener jdbcEventListener = P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener();
