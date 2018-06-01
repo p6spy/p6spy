@@ -37,6 +37,7 @@ public class ConnectionInformation implements Loggable {
   private Connection connection;
   private PooledConnection pooledConnection;
   private long timeToGetConnectionNs;
+  private String url;
 
   private ConnectionInformation() {
     this.connectionId = counter.getAndIncrement();
@@ -218,5 +219,20 @@ public class ConnectionInformation implements Loggable {
   @Override
   public ConnectionInformation getConnectionInformation() {
     return this;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  /**
+   * If the connection was created by calling {@link Driver#connect(String, Properties)},
+   * returns the {@link #url} which was used to create the {@link #connection}.
+   * Returns {@code null} otherwise.
+   *
+   * @return the {@link #url} used to create the {@link #connection}, may be {@code null}
+   */
+  public String getUrl() {
+    return this.url;
   }
 }

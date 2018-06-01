@@ -96,6 +96,7 @@ public class P6SpyDriver implements Driver {
     final Connection conn;
     final JdbcEventListener jdbcEventListener = P6SpyDriver.jdbcEventListenerFactory.createJdbcEventListener();
     final ConnectionInformation connectionInformation = ConnectionInformation.fromDriver(passThru);
+    connectionInformation.setUrl(url);
     jdbcEventListener.onBeforeGetConnection(connectionInformation);
     try {
       conn =  passThru.connect(extractRealUrl(url), properties);
