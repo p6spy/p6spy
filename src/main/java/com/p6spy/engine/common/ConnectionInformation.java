@@ -220,16 +220,17 @@ public class ConnectionInformation implements Loggable {
   public ConnectionInformation getConnectionInformation() {
     return this;
   }
-  
+
   public void setUrl(String url) {
     this.url = url;
   }
 
   /**
-   * Returns the {@link #url} which was used to create the {@link #connection}
-   * via a {@link Driver}, otherwise <code>null</code>.
-   * 
-   * @return {@link #url} used to create the {@link #connection}
+   * If the connection was created by calling {@link Driver#connect(String, Properties)},
+   * returns the {@link #url} which was used to create the {@link #connection}.
+   * Returns {@code null} otherwise.
+   *
+   * @return the {@link #url} used to create the {@link #connection}, may be {@code null}
    */
   public String getUrl() {
     return this.url;
