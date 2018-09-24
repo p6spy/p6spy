@@ -31,8 +31,8 @@ public abstract class FormattedLogger implements P6Logger {
   }
 
   @Override
-  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql) {
-    logText(strategy.formatMessage(connectionId, now, elapsed, category.toString(), prepared, sql));
+  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url) {
+    logText(strategy.formatMessage(connectionId, now, elapsed, category.toString(), prepared, sql, url));
   }
 
   /**

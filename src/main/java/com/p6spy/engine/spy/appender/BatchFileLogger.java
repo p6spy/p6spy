@@ -50,7 +50,7 @@ public class BatchFileLogger extends FileLogger {
   }
 
   @Override
-  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql) {
+  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url) {
     if (endOfStatement) {
       getStream().println(BATCH_SEPARATOR);
     }

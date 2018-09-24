@@ -31,8 +31,9 @@ public interface MessageFormattingStrategy {
    * @param category the category of the operation
    * @param prepared the SQL statement with all bind variables replaced with actual values
    * @param sql the sql statement executed
+   * @param url the database url where the sql statement executed
    * @return the formatted log message
    */
-  String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql);
+  String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url);
 
 }

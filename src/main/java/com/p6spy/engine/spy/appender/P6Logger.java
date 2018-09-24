@@ -35,9 +35,11 @@ public interface P6Logger {
          *            the prepared statement to be logged.
          * @param sql
          *            the {@code SQL} to be logged.
+         * @param url
+         *            the database url where the sql statement executed
          */
         public void logSQL(int connectionId, String now, long elapsed,
-                        Category category, String prepared, String sql);
+                        Category category, String prepared, String sql, String url);
 
         /**
          * Logs the stacktrace of the exception.

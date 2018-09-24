@@ -48,8 +48,8 @@ public class P6TestLogger extends StdoutLogger {
   }
 
   @Override
-  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql) {
-    super.logSQL(connectionId, now, elapsed, category, prepared, sql);
+  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url) {
+    super.logSQL(connectionId, now, elapsed, category, prepared, sql, url);
     times.add(elapsed);
   }
 
