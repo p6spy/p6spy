@@ -39,6 +39,7 @@ public class CustomLineFormat implements MessageFormattingStrategy {
   public static final String EFFECTIVE_SQL_SINGLELINE = "%(effectiveSqlSingleLine)";
   public static final String SQL = "%(sql)";
   public static final String SQL_SINGLE_LINE = "%(sqlSingleLine)";
+  public static final String URL = "%(url)";
 
   /**
    * Formats a log message for the logging module
@@ -49,16 +50,17 @@ public class CustomLineFormat implements MessageFormattingStrategy {
    * @param category     the category of the operation
    * @param prepared     the SQL statement with all bind variables replaced with actual values
    * @param sql          the sql statement executed
+   * @param url          the database url where the sql statement executed
    * @return the formatted log message
    */
   @Override
-  public String formatMessage(final int connectionId, final String now, final long elapsed, final String category, final String prepared, final String sql) {
+  public String formatMessage(final int connectionId, final String now, final long elapsed, final String category, final String prepared, final String sql, final String url) {
 
     String customLogMessageFormat = P6SpyOptions.getActiveInstance().getCustomLogMessageFormat();
 
     if (customLogMessageFormat == null) {
       // Someone forgot to configure customLogMessageFormat: fall back to built-in
-      return FALLBACK_FORMATTING_STRATEGY.formatMessage(connectionId, now, elapsed, category, prepared, sql);
+      return FALLBACK_FORMATTING_STRATEGY.formatMessage(connectionId, now, elapsed, category, prepared, sql, url);
     }
 
     return customLogMessageFormat
@@ -69,6 +71,7 @@ public class CustomLineFormat implements MessageFormattingStrategy {
       .replaceAll(Pattern.quote(EFFECTIVE_SQL), Matcher.quoteReplacement(prepared))
       .replaceAll(Pattern.quote(EFFECTIVE_SQL_SINGLELINE), Matcher.quoteReplacement(P6Util.singleLine(prepared)))
       .replaceAll(Pattern.quote(SQL), Matcher.quoteReplacement(sql))
-      .replaceAll(Pattern.quote(SQL_SINGLE_LINE), Matcher.quoteReplacement(P6Util.singleLine(sql)));
+      .replaceAll(Pattern.quote(SQL_SINGLE_LINE), Matcher.quoteReplacement(P6Util.singleLine(sql)))
+      .replaceAll(Pattern.quote(URL), url);
   }
 }

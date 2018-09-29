@@ -36,7 +36,7 @@ public class OutageJdbcEventListener extends SimpleJdbcEventListener {
   @Override
   public void onBeforeCommit(ConnectionInformation connectionInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "commit", "", "");
+      P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "commit", "", "", connectionInformation.getUrl());
     }
   }
 
@@ -50,7 +50,7 @@ public class OutageJdbcEventListener extends SimpleJdbcEventListener {
   @Override
   public void onBeforeRollback(ConnectionInformation connectionInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
-      P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "rollback", "", "");
+      P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "rollback", "", "", connectionInformation.getUrl());
     }
   }
 
@@ -65,7 +65,7 @@ public class OutageJdbcEventListener extends SimpleJdbcEventListener {
   public void onBeforeAnyAddBatch(StatementInformation statementInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "batch",
-        statementInformation.getSqlWithValues(), statementInformation.getStatementQuery());
+        statementInformation.getSqlWithValues(), statementInformation.getStatementQuery(), statementInformation.getConnectionInformation().getUrl());
     }
   }
 
@@ -80,7 +80,7 @@ public class OutageJdbcEventListener extends SimpleJdbcEventListener {
   public void onBeforeAnyExecute(StatementInformation statementInformation) {
     if (P6OutageOptions.getActiveInstance().getOutageDetection()) {
       P6OutageDetector.INSTANCE.registerInvocation(this, System.nanoTime(), "statement",
-        statementInformation.getSqlWithValues(), statementInformation.getStatementQuery());
+        statementInformation.getSqlWithValues(), statementInformation.getStatementQuery(), statementInformation.getConnectionInformation().getUrl());
     }
   }
 

@@ -46,9 +46,9 @@ public class Slf4JLogger extends FormattedLogger {
 
 	@Override
 	public void logSQL(int connectionId, String now, long elapsed,
-			Category category, String prepared, String sql) {
+			Category category, String prepared, String sql, String url) {
 		final String msg = strategy.formatMessage(connectionId, now, elapsed,
-				category.toString(), prepared, sql);
+				category.toString(), prepared, sql, url);
 
 		if (Category.ERROR.equals(category)) {
 			log.error(msg);

@@ -34,10 +34,11 @@ public class SingleLineFormat implements MessageFormattingStrategy {
    * @param category     the category of the operation
    * @param prepared     the SQL statement with all bind variables replaced with actual values
    * @param sql          the sql statement executed
+   * @param url          the database url where the sql statement executed
    * @return the formatted log message
    */
   @Override
-  public String formatMessage(final int connectionId, final String now, final long elapsed, final String category, final String prepared, final String sql) {
-    return now + "|" + elapsed + "|" + category + "|connection " + connectionId + "|" + P6Util.singleLine(prepared) + "|" + P6Util.singleLine(sql);
+  public String formatMessage(final int connectionId, final String now, final long elapsed, final String category, final String prepared, final String sql, final String url) {
+    return now + "|" + elapsed + "|" + category + "|connection " + connectionId + "|url " + url + "|" + P6Util.singleLine(prepared) + "|" + P6Util.singleLine(sql);
   }
 }
