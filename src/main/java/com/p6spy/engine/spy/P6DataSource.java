@@ -181,14 +181,14 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
               // expects
               String value = props.get(key);
               Class<?>[] types = method.getParameterTypes();
-              if (types[0].getName().equals(value.getClass().getName())) {
+              if (types[0].isAssignableFrom(value.getClass())) {
                 // the method expects a string
                 String[] args = new String[1];
                 args[0] = value;
                 P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
                 method.invoke(realDataSource, args);
                 matchedProps.put(key, value);
-              } else if (types[0].isPrimitive() && "int".equals(types[0].getName())) {
+              } else if (types[0].isPrimitive() && Integer.class.isInstance(types[0])) {
                 // the method expects an int, so we pass an Integer
                 Integer[] args = new Integer[1];
                 args[0] = Integer.valueOf(value);

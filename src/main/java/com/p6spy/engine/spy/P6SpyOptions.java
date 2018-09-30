@@ -61,7 +61,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String LOG_MESSAGE_FORMAT_INSTANCE = "logMessageFormatInstance";
     public static final String APPENDER_INSTANCE = "appenderInstance";
     
-    public static final Map<String, String> defaults;
+    protected static final Map<String, String> defaults;
 
     static {
       defaults = new HashMap<String, String>();

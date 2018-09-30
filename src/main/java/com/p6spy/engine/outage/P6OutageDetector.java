@@ -98,8 +98,8 @@ public enum P6OutageDetector implements Runnable {
      * Registers the execution of a statement. This should be called just before the statement is
      * passed to the real driver.
      */
-    public void registerInvocation(Object jdbcObject, long startTime, String category, String ps, String sql, String url) {
-        pendingMessages.put(jdbcObject, new InvocationInfo(startTime, category, ps, sql, url));
+    public void registerInvocation(Object jdbcObject, long startTime, String category, String ps, String sql) {
+        pendingMessages.put(jdbcObject, new InvocationInfo(startTime, category, ps, sql));
     }
 
     /**
@@ -139,7 +139,7 @@ public enum P6OutageDetector implements Runnable {
     }
 
     private void logOutage(InvocationInfo ii) {
-        P6LogQuery.logElapsed(-1, System.nanoTime() - ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql, ii.url);
+        P6LogQuery.logElapsed(-1, System.nanoTime() - ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql);
     }
 
 }
@@ -154,13 +154,10 @@ class InvocationInfo {
 
     public String sql;
 
-    public String url;
-
-    public InvocationInfo(long startTime, String category, String ps, String sql, String url) {
+    public InvocationInfo(long startTime, String category, String ps, String sql) {
         this.startTime = startTime;
         this.category = category;
         this.preparedStmt = ps;
         this.sql = sql;
-        this.url = url;
     }
 }

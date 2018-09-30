@@ -19,6 +19,7 @@ package com.p6spy.engine.common;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Stores information about the callable statement and bind variables.
@@ -74,8 +75,8 @@ public class CallableStatementInformation extends PreparedStatementInformation {
     }
 
     // add named parameters
-    for( String name : namedParameterValues.keySet() ) {
-      appendParameter(parameters, name, namedParameterValues.get(name));
+    for( Entry<String, Value> entry : namedParameterValues.entrySet() ) {
+      appendParameter(parameters, entry.getKey(), entry.getValue());
     }
 
     result.append(parameters);

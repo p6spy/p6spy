@@ -32,6 +32,11 @@ import java.util.regex.Pattern;
 
 public class P6Util {
     static Pattern lineBreakPattern = Pattern.compile("(\\r?\\n)+");
+    
+    private P6Util() {
+      throw new IllegalStateException("Utility class");
+    }
+    
     public static String singleLine(String str) {
         return lineBreakPattern.matcher(str).replaceAll(" ");
     }
