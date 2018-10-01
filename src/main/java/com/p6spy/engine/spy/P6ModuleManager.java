@@ -58,13 +58,13 @@ public class P6ModuleManager {
     initMe();
   }
 
-  private synchronized static void initMe() {
+  private static synchronized void initMe() {
     try {
       cleanUp();
       
       instance = new P6ModuleManager();
       P6LogQuery.initialize();
-      
+
     } catch (IOException e) {
       handleInitEx(e);
     } catch (MBeanRegistrationException e) {
@@ -102,15 +102,13 @@ public class P6ModuleManager {
   /**
    * Used on the class load only (only once!)
    * 
-   * @throws IOException
    * @throws NotCompliantMBeanException
    * @throws MBeanRegistrationException
    * @throws InstanceAlreadyExistsException
    * @throws MalformedObjectNameException
    * @throws InstanceNotFoundException 
    */
-  private P6ModuleManager() throws IOException, 
-                           MBeanRegistrationException, NotCompliantMBeanException,
+  private P6ModuleManager() throws IOException, MBeanRegistrationException, NotCompliantMBeanException,
                            MalformedObjectNameException, InstanceNotFoundException {
     debug(this.getClass().getName() + " re/initiating modules started");
 

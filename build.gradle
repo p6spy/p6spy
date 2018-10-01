@@ -17,7 +17,7 @@ plugins {
     // to publish SNAPSHOTs to oss.jfrog.org
     // ./gradlew artifactoryPublish
     id 'com.jfrog.artifactory' version '4.5.2'
-    id "org.sonarqube" version "2.5"
+    id "org.sonarqube" version "2.6.2"
 }
 
 def envDB
@@ -41,10 +41,9 @@ repositories {
     }
 }
 
-compileJava {
-  sourceCompatibility = 1.6
-  targetCompatibility = 1.6
-}
+// on project level (rather than compileJava one) as sonarqube respects these
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
 compileTestJava {
   sourceCompatibility = 1.8

@@ -18,12 +18,6 @@
 package com.p6spy.engine.spy.appender;
 
 import com.p6spy.engine.logging.Category;
-import com.p6spy.engine.spy.P6SpyOptions;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 
 /**
  * SQL batch file logger Private: (?) No Appender that writes a trace of JDBC activity into an SQL
@@ -54,7 +48,7 @@ public class BatchFileLogger extends FileLogger {
     if (endOfStatement) {
       getStream().println(BATCH_SEPARATOR);
     }
-    if (category.equals("statement")) {
+    if (Category.STATEMENT.equals(category)) {
       String actual = null == sql || 0 == sql.length() ? prepared : sql;
       getStream().print(actual);
       endOfStatement = true;

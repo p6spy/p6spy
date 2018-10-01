@@ -32,10 +32,11 @@ public class P6DataSourceFactory implements ObjectFactory {
 
   protected static final String DATASOURCE_CLASS_NAME = P6DataSource.class.getName();
 
+  @Override
   public Object getObjectInstance(Object refObj,
                                   Name nm,
                                   Context ctx,
-                                  Hashtable env) throws Exception {
+                                  Hashtable<?,?> env) throws Exception {
 
     final Reference ref = (Reference) refObj;
     final String className = ref.getClassName();

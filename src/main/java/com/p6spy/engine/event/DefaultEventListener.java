@@ -31,7 +31,7 @@ import java.sql.SQLException;
  */
 public class DefaultEventListener extends JdbcEventListener {
 
-  public final static DefaultEventListener INSTANCE = new DefaultEventListener();
+  public static final DefaultEventListener INSTANCE = new DefaultEventListener();
 
   private DefaultEventListener() {
   }

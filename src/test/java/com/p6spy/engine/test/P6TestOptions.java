@@ -37,7 +37,7 @@ public class P6TestOptions extends StandardMBean implements P6TestLoadableOption
   public static final String XA_DATASOURCE = "xaDataSource";
   public static final String VALIDATION_QUERY = "validationQuery";
 
-  private static final Map<String, String> defaults = new HashMap<String, String>();
+  private static final Map<String, String> defaults = new HashMap<>();
 
   private final P6OptionsRepository optionsRepository;
 
