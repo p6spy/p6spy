@@ -77,8 +77,8 @@ dependencies {
   testCompile 'commons-dbcp:commons-dbcp:1.4' // datasource testing
   testCompile 'org.codehaus.btm:btm:2.1.4' // xa datasource testing
   testCompile 'org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1'
-  testCompile 'org.liquibase:liquibase-core:3.6.2'
-  testCompile 'com.mattbertolini:liquibase-slf4j:2.0.0'
+  testCompile 'org.liquibase:liquibase-core:3.0.8'
+  testCompile 'com.mattbertolini:liquibase-slf4j:1.2.1'
   testCompile 'org.springframework:spring-jdbc:5.1.0.RELEASE'
   testCompile 'org.springframework:spring-context:5.1.0.RELEASE'
   testCompile 'com.j256.simplejmx:simplejmx:1.15'
@@ -95,7 +95,7 @@ dependencies {
   testCompile 'org.hsqldb:hsqldb:2.4.1'
   testCompile 'com.h2database:h2:1.4.197'
   testRuntime 'org.xerial:sqlite-jdbc:3.25.2' // type 3 driver
-  testRuntime 'org.apache.derby:derby:10.10.1.1'
+  testRuntime 'org.apache.derby:derby:10.14.2.0'
   testRuntime 'org.firebirdsql.jdbc:jaybird-jdk17:3.0.5' // type 4.1 driver
   testRuntime 'com.microsoft.sqlserver:mssql-jdbc:7.1.1.jre8-preview'
 
