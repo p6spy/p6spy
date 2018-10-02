@@ -95,7 +95,7 @@ dependencies {
   testCompile 'org.hsqldb:hsqldb:2.4.1'
   testCompile 'com.h2database:h2:1.4.197'
   testRuntime 'org.xerial:sqlite-jdbc:3.25.2' // type 3 driver
-  testRuntime 'org.apache.derby:derby:10.14.2.0'
+  testRuntime 'org.apache.derby:derby:10.10.1.1'
   testRuntime 'org.firebirdsql.jdbc:jaybird-jdk17:3.0.5' // type 4.1 driver
   testRuntime 'com.microsoft.sqlserver:mssql-jdbc:7.1.1.jre8-preview'
 
