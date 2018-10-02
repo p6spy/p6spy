@@ -99,6 +99,11 @@ public abstract class AbstractWrapper implements Wrapper, P6Proxy {
   }
 
   @Override
+  public int hashCode() {
+    return delegate.hashCode();
+  }
+
+  @Override
   public Object unwrapP6SpyProxy() {
     return delegate;
   }

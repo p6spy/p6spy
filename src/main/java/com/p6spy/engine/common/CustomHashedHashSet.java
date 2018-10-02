@@ -36,9 +36,9 @@ public class CustomHashedHashSet<T> extends HashSet<T> {
 	/**
 	 * Maps hash code computed via {@link #hasher} to object stored in the set.
 	 */
-	private Map<Integer, T> map = new HashMap<Integer, T>();
+	private transient Map<Integer, T> map = new HashMap<Integer, T>();
 
-	final Hasher hasher;
+	final transient Hasher hasher;
 
 	public CustomHashedHashSet(final Hasher hasher) {
 		super();

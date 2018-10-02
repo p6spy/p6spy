@@ -120,8 +120,7 @@ public class P6OptionsRepository {
       }
 
       try {
-		T typedInstance = (T) instance;
-        return typedInstance;
+        return (T) instance;
       } catch (ClassCastException e) {
         System.err.println("Value " + value + ", is not of expected type. Error: " + e);
         return null;
@@ -163,7 +162,7 @@ public class P6OptionsRepository {
 	
 	    for (String item : collection) {
 	    	
-	    	if (item.toString().startsWith("-")) {
+	    	if (item.startsWith("-")) {
 	        	throw new IllegalArgumentException("- prefix has been deprecated for list-like properties! Full overriding happens (see: http://p6spy.github.io/p6spy/2.0/configandusage.html)");
 	        }
 	    	

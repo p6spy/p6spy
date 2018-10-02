@@ -69,14 +69,15 @@ public class CallableStatementInformation extends PreparedStatementInformation {
     StringBuilder parameters = new StringBuilder();
 
     // add parameters set with ordinal positions
-    for( Integer position : getParameterValues().keySet() ) {
-      appendParameter(parameters, position.toString(), getParameterValues().get(position));
+    for( Map.Entry<Integer, Value> entry : getParameterValues().entrySet() ) {
+      appendParameter(parameters, entry.getKey().toString(), entry.getValue());
     }
 
     // add named parameters
-    for( String name : namedParameterValues.keySet() ) {
-      appendParameter(parameters, name, namedParameterValues.get(name));
+    for( Map.Entry<String, Value> entry : namedParameterValues.entrySet() ) {
+      appendParameter(parameters, entry.getKey(), entry.getValue());
     }
+
 
     result.append(parameters);
 

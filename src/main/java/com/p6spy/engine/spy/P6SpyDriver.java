@@ -38,12 +38,12 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
  * JDBC driver for P6Spy
  */
 public class P6SpyDriver implements Driver {
-  private static Driver INSTANCE = new P6SpyDriver();
+  private static Driver instance = new P6SpyDriver();
   private static JdbcEventListenerFactory jdbcEventListenerFactory;
 
   static {
     try {
-      DriverManager.registerDriver(P6SpyDriver.INSTANCE);
+      DriverManager.registerDriver(P6SpyDriver.instance);
     } catch (SQLException e) {
       throw new IllegalStateException("Could not register P6SpyDriver with DriverManager", e);
     }

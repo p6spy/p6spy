@@ -168,7 +168,7 @@ public class P6Util {
 			return null;
 		}
 
-		final HashMap<String, String> map = new HashMap<String, String>();
+		final Map<String, String> map = new HashMap<String, String>();
 		for (Entry<Object, Object> entry : properties.entrySet()) {
 			map.put((String) entry.getKey(), (String) entry.getValue());
 		}

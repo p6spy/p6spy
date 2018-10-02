@@ -26,6 +26,7 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Wrapper;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -53,9 +54,9 @@ import com.p6spy.engine.wrapper.ConnectionWrapper;
 @SuppressWarnings("serial")
 public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADataSource, Referenceable, Serializable {
 
-  protected CommonDataSource realDataSource;
+  protected transient CommonDataSource realDataSource;
   protected String rdsName;
-  protected JdbcEventListenerFactory jdbcEventListenerFactory;
+  protected transient JdbcEventListenerFactory jdbcEventListenerFactory;
   
   /**
    * Default no-arg constructor for Serialization
@@ -146,7 +147,7 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
 
     // Set any properties that the spy.properties file contains
     // that are supported by set methods in this class
-    HashMap<String, String> props = parseDelimitedString(options.getRealDataSourceProperties());
+    Map<String, String> props = parseDelimitedString(options.getRealDataSourceProperties());
     if (props != null) {
       setDataSourceProperties(props);
     }
@@ -156,8 +157,8 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     }
   }
 
-  private void setDataSourceProperties(HashMap<String, String> props) throws SQLException {
-    HashMap<String, String> matchedProps = new HashMap<String, String>();
+  private void setDataSourceProperties(Map<String, String> props) throws SQLException {
+    Map<String, String> matchedProps = new HashMap<String, String>();
 
     Class<?> klass = realDataSource.getClass();
 
@@ -181,19 +182,19 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
               // expects
               String value = props.get(key);
               Class<?>[] types = method.getParameterTypes();
-              if (types[0].getName().equals(value.getClass().getName())) {
+              if (types[0].isAssignableFrom(String.class)) {
                 // the method expects a string
                 String[] args = new String[1];
                 args[0] = value;
                 P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
-                method.invoke(realDataSource, args);
+                method.invoke(realDataSource, (Object[]) args);
                 matchedProps.put(key, value);
-              } else if (types[0].isPrimitive() && "int".equals(types[0].getName())) {
+              } else if (types[0].isPrimitive() && int.class.equals(types[0])) {
                 // the method expects an int, so we pass an Integer
                 Integer[] args = new Integer[1];
                 args[0] = Integer.valueOf(value);
                 P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
-                method.invoke(realDataSource, args);
+                method.invoke(realDataSource, (Object[]) args);
                 matchedProps.put(key, value);
               } else {
                 P6LogQuery.debug("method " + methodName + " on DataSource " + rdsName + " matches property "
