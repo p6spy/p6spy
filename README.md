@@ -6,7 +6,7 @@ p6spy
 [![Docs](http://readthedocs.org/projects/p6spy/badge/?version=latest)](http://p6spy.readthedocs.io/) 
 [![Javadoc](http://www.javadoc.io/badge/p6spy/p6spy.svg)](http://www.javadoc.io/doc/p6spy/p6spy) 
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=p6spy:p6spy&metric=coverage)](https://sonarcloud.io/dashboard?id=p6spy:p6spy)
-[![Quality Gate](https://sonarcloud.io/api/badges/gate?key=p6spy%3Ap6spy)](https://sonarcloud.io/dashboard?id=p6spy%3p6spy)
+[![Sqale Rating](https://sonarcloud.io/api/project_badges/measure?project=p6spy:p6spy&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=p6spy:p6spy)
 
 P6Spy is a framework that enables database data to be seamlessly intercepted and logged with no code changes to existing application. The P6Spy distribution includes P6Log, an application which logs all JDBC transactions for any Java application.
 
