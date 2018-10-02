@@ -118,3 +118,9 @@ services:
   #     - "3051:3050"
   #     - "50000:50000"
   #   command: ["db2start"]
+
+  # usable with: ./gradlew sonarqube -Dsonar.host.url=http://localhost:9000
+  sonarqube:
+    image: sonarqube:6.7.5-alpine
+    ports:
+    - "9000:9000"

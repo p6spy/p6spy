@@ -40,7 +40,7 @@ public class DefaultJdbcEventListenerFactory implements JdbcEventListenerFactory
   private static ServiceLoader<JdbcEventListener> jdbcEventListenerServiceLoader = //
       ServiceLoader.load(JdbcEventListener.class, DefaultJdbcEventListenerFactory.class.getClassLoader());
   
-  private static JdbcEventListener jdbcEventListener;
+  private static volatile JdbcEventListener jdbcEventListener;
   
   @Override
   public JdbcEventListener createJdbcEventListener() {
@@ -59,7 +59,7 @@ public class DefaultJdbcEventListenerFactory implements JdbcEventListenerFactory
     return jdbcEventListener;
   }
   
-  public void clearCache() {
+  public static void clearCache() {
     jdbcEventListener = null;
   }
   
@@ -77,11 +77,7 @@ public class DefaultJdbcEventListenerFactory implements JdbcEventListenerFactory
 
   protected void registerEventListenersFromServiceLoader(CompoundJdbcEventListener compoundEventListener) {
     for (Iterator<JdbcEventListener> iterator = jdbcEventListenerServiceLoader.iterator(); iterator.hasNext(); ) {
-      try {
-        compoundEventListener.addListender(iterator.next());
-      } catch (ServiceConfigurationError e) {
-        e.printStackTrace();
-      }
+      compoundEventListener.addListender(iterator.next());
     }
   }
   
