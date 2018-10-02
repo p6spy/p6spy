@@ -149,9 +149,13 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     #   %(sqlSingleLine)           the SQL statement with all bind variables replaced with actual values, with all new lines removed
     #customLogMessageFormat=%(currentTime)|%(executionTime)|%(category)|connection%(connectionId)|%(sqlSingleLine)
 
-    # format that is used for logging of the date/time/... (has to be compatible with java.text.SimpleDateFormat)
-    # (default is dd-MMM-yy)
-    #databaseDialectDateFormat=dd-MMM-yy
+    # format that is used for logging of the java.util.Date implementations (has to be compatible with java.text.SimpleDateFormat)
+    # (default is yyyy-MM-dd'T'HH:mm:ss.SSSZ)
+    #databaseDialectDateFormat=yyyy-MM-dd'T'HH:mm:ss.SSSZ
+    
+    # format that is used for logging of the java.sql.Timestamp implementations (has to be compatible with java.text.SimpleDateFormat)
+    # (default is yyyy-MM-dd'T'HH:mm:ss.SSSZ)
+    #databaseDialectTimestampFormat=yyyy-MM-dd'T'HH:mm:ss.SSSZ
     
     # format that is used for logging booleans, possible values: boolean, numeric
     # (default is boolean)

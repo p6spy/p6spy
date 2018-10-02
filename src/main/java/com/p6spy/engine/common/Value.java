@@ -17,11 +17,12 @@
  */
 package com.p6spy.engine.common;
 
-import java.sql.Blob;
-import java.text.SimpleDateFormat;
-
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.P6SpyOptions;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Value holder of the data passed to DB as well as of those retrieved capable
@@ -83,7 +84,9 @@ public class Value {
       result = "NULL";
     } else {
 
-      if (value instanceof java.util.Date) {
+      if (value instanceof Timestamp) {
+        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectTimestampFormat()).format(value);
+      } else if (value instanceof Date) {
         result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
       } else if (value instanceof Boolean) {
         if ("numeric".equals(P6SpyOptions.getActiveInstance().getDatabaseDialectBooleanFormat())) {

@@ -141,7 +141,8 @@ public class P6TestOptionDefaults extends BaseTestCase {
     Assert.assertNull(opts.getJNDIContextCustom());
     Assert.assertNull(opts.getRealDataSource());
     Assert.assertNull(opts.getRealDataSourceClass());
-    Assert.assertEquals("dd-MMM-yy", opts.getDatabaseDialectDateFormat());
+    Assert.assertEquals("yyyy-MM-dd'T'HH:mm:ss.SSSZ", opts.getDatabaseDialectDateFormat());
+    Assert.assertEquals("yyyy-MM-dd'T'HH:mm:ss.SSSZ", opts.getDatabaseDialectTimestampFormat());
     Assert.assertEquals("boolean", opts.getDatabaseDialectBooleanFormat());
     Assert.assertEquals(String.format("%s|%s|%s|connection%s|%s",
       CustomLineFormat.CURRENT_TIME, CustomLineFormat.EXECUTION_TIME, CustomLineFormat.CATEGORY,
