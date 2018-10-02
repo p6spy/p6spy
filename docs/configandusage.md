@@ -492,6 +492,20 @@ and the following placeholders being resolved to the appropriate values:
 * `%(sql)`                    the SQL statement with all bind variables replaced with actual values
 * `%(sqlSingleLine)`          the SQL statement with all bind variables replaced with actual values, with all new lines removed
 
+### databaseDialectDateFormat
+
+The way of formatting `java.util.Date` values. The date format engine is Java's SimpleDateFormat class.
+Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
+
+    databaseDialectDateFormat=MM-dd-yy HH:mm:ss:SS
+
+### databaseDialectTimestampFormat
+
+The way of formatting `java.sql.Timestamp` values. The date format engine is Java's SimpleDateFormat class.
+Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
+
+    databaseDialectTimestampFormat=MM-dd-yy HH:mm:ss:SS
+
 ### filter, include, exclude
 
 P6Spy allows you to filter SQL queries by specific strings to be present (`includes` property value) or not present (`excludes` property value).
