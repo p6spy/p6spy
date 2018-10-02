@@ -90,8 +90,8 @@ dependencies {
   testCompile 'org.apache.tomcat:tomcat-jdbc:9.0.12' // tomcat pooled datasource testing
 
   // all the JDBC drivers tested
-  testRuntime 'mysql:mysql-connector-java:8.0.12'
-  testRuntime 'org.postgresql:postgresql:9.3-1100-jdbc41'
+  testRuntime 'mysql:mysql-connector-java:5.1.47'
+  testRuntime 'org.postgresql:postgresql:42.2.5.jre7'
   testCompile 'org.hsqldb:hsqldb:2.4.1'
   testCompile 'com.h2database:h2:1.4.197'
   testRuntime 'org.xerial:sqlite-jdbc:3.25.2' // type 3 driver
