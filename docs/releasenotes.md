@@ -1,10 +1,15 @@
 # Release Notes
 
-## [3.7.1](https://github.com/p6spy/p6spy/compare/p6spy-3.7.0...master) (Unreleased)
+## [3.8.0](https://github.com/p6spy/p6spy/compare/p6spy-3.7.0...3.8.0) (Unreleased)
 
 Improvements:
+* [issue #445](https://github.com/p6spy/p6spy/issues/445) Introduced property:`databaseDialectTimestampFormat` for `java.sql.Timestamp` logging format customizations.
+* [issue #434](https://github.com/p6spy/p6spy/issues/434) Changed default value of propety:`databaseDialectDateFormat`.
+* [issue #440](https://github.com/p6spy/p6spy/issues/440) Connection URL stored in ConnectionInformation.
+* [issue #446](https://github.com/p6spy/p6spy/issues/446) Added url logging to loggers (#446) 
 
 Defects resolved:
+* [issue #447](https://github.com/p6spy/p6spy/issues/447) Fixed misc sonarqube reported issues.
 
 ## [3.7.0](https://github.com/p6spy/p6spy/compare/p6spy-3.6.0...3.7.0) (2018-04-03)
 
