@@ -49,3 +49,6 @@ _build/
 
 # zsh gradle plugin
 .gradletasknamecache
+
+# vscode
+.vscode
