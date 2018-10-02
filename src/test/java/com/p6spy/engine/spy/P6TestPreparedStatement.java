@@ -251,7 +251,7 @@ public class P6TestPreparedStatement extends P6TestFramework {
     
     prep.setQueryTimeout(12);
     // The SQLLite driver returns the value in ms
-    assertEquals(("SQLite".equals(db) ? 12000 : 12), prep.getQueryTimeout());
+    assertEquals(("SQLite".equals(db) ? 3000 : 12), prep.getQueryTimeout());
     
     prep.close();
   }

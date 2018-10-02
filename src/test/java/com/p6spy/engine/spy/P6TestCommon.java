@@ -416,7 +416,8 @@ public class P6TestCommon extends P6TestFramework {
 
     while (resultSet.next()) {
       String col1 = resultSet.getString("name");
-      assertTrue(col1.startsWith("david") || col1.startsWith("mary"));
+      System.out.println("col1" + col1);
+      assertTrue("david".equals(col1) || "mary".equals(col1));
     }
     int resultCount = 0;
     int resultSetCount = 0;

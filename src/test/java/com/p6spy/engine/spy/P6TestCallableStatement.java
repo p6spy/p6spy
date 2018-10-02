@@ -145,13 +145,6 @@ public class P6TestCallableStatement extends P6TestFramework {
     String param2Name = "param2";
     String resultParamName = "result_param";
     
-    if( "HSQLDB".equals(db) ) {
-      // HSQLDB uses @p1, @p2, etc...  as the "names" of the parameters
-      param1Name = "@p1";
-      param2Name = "@p2";
-      resultParamName = "@p3";
-    }
-
     // execute the statement
     String query = "{call test_proc(?,?,?)}";
     CallableStatement call = connection.prepareCall(query);
@@ -199,13 +192,6 @@ public class P6TestCallableStatement extends P6TestFramework {
     String paramValName = "param_val";
     String paramIntName = "param_id";
     String resultParamName = "result_param";
-    
-    if( "HSQLDB".equals(db) ) {
-      // HSQLDB uses @p1, @p2, etc...  as the "names" of the parameters
-      paramValName = "@p1";
-      paramIntName = "@p2";
-      resultParamName = "@p3";
-    }
 
     // execute the statement
     String query = "{call test_proc_binary(?,?,?)}";
@@ -233,13 +219,6 @@ public class P6TestCallableStatement extends P6TestFramework {
     String paramValName = "param_val";
     String paramIntName = "param_id";
     String resultParamName = "result_param";
-    
-    if( "HSQLDB".equals(db) ) {
-      // HSQLDB uses @p1, @p2, etc...  as the "names" of the parameters
-      paramValName = "@p1";
-      paramIntName = "@p2";
-      resultParamName = "@p3";
-    }
 
     // execute the statement
     String query = "{call test_proc_binary(?,?,?)}";

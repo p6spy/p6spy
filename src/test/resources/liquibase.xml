@@ -155,7 +155,24 @@
     </createProcedure>
   </changeSet>
 
-  <changeSet id="create-img-table" author="butkovic">
+  <changeSet id="create-img-table-postgres" author="butkovic">
+    <preConditions onFail="CONTINUE">
+      <dbms type="postgresql"/>
+    </preConditions>
+    <!-- table holding binary data -->
+    <createTable tableName="img">
+      <column name="id" type="int"/>
+      <column name="val" type="bytea"/>
+      <column name="val2" type="bytea"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="create-img-table-non-postgres" author="butkovic">
+    <preConditions onFail="CONTINUE">
+      <not>
+        <dbms type="postgresql"/>
+      </not>
+    </preConditions>
     <!-- table holding binary data -->
     <createTable tableName="img">
       <column name="id" type="int"/>

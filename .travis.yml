@@ -78,13 +78,7 @@ after_success:
       # oraclejdk 8 used for all the publishing works
       if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
 
-        # coveralls publishing
-        if [[ $TRAVIS_BRANCH == "master" && $TRAVIS_PULL_REQUEST == "false" ]]; then
-          ./gradlew jacocoTestReport coveralls --info --stacktrace
-        fi
-
         # sonarcloud.io publishing
-        # by default, the SonarCloud add-on only analyzes the master branch, see https://docs.travis-ci.com/user/sonarcloud/
         ./gradlew sonarqube --info --stacktrace
 
         # github release notes sync (via chandler)
