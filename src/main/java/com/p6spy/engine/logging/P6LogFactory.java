@@ -35,11 +35,7 @@ public class P6LogFactory implements P6Factory {
   public JdbcEventListener getJdbcEventListener() {
     // return first custom implementaion
     for (Iterator<LoggingEventListener> iterator = customLoggingEventListener.iterator(); iterator.hasNext(); ) {
-      try {
-        return iterator.next();
-      } catch (ServiceConfigurationError e) {
-        e.printStackTrace();
-      }
+      return iterator.next();
     }
     // if none found, return default impl
     return LoggingEventListener.INSTANCE;

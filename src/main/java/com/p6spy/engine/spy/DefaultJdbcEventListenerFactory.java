@@ -77,11 +77,7 @@ public class DefaultJdbcEventListenerFactory implements JdbcEventListenerFactory
 
   protected void registerEventListenersFromServiceLoader(CompoundJdbcEventListener compoundEventListener) {
     for (Iterator<JdbcEventListener> iterator = jdbcEventListenerServiceLoader.iterator(); iterator.hasNext(); ) {
-      try {
-        compoundEventListener.addListender(iterator.next());
-      } catch (ServiceConfigurationError e) {
-        e.printStackTrace();
-      }
+      compoundEventListener.addListender(iterator.next());
     }
   }
   
