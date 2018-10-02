@@ -61,7 +61,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String MODULE_NAMES = "moduleNames";
     public static final String LOG_MESSAGE_FORMAT_INSTANCE = "logMessageFormatInstance";
     public static final String APPENDER_INSTANCE = "appenderInstance";
-    
+
     protected static final Map<String, String> defaults;
 
     static {
@@ -130,7 +130,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
 
     // JMX exporsed API
     
-    @OverridesetDatabaseDialectTimestampFormat
+    @Override
     public void reload() {
       P6ModuleManager.getInstance().reload();
     }
