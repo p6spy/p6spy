@@ -123,7 +123,7 @@ public class Value {
    *         {@code bytes}.
    */
   private String toHexString(byte[] bytes) {
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder(bytes.length * 2);
     for (byte b : bytes) {
       int temp = (int) b & 0xFF;
       sb.append(HEX_CHARS[temp / 16]);
