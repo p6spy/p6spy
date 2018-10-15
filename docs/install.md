@@ -72,17 +72,17 @@ P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory
 	* via moving it to to the `$JBOSS_DIST\modules\system\layers\base\com\p6spy\main` (for Wildfly) or to `$JBOSS_DIST\modules\com\p6spy\main` (for JBoss 7.1) directory
 	* and via providing `module.xml` in the same directory with the contents: 
 		
-        <module xmlns="urn:jboss:module:1.0" name="com.p6spy">
-		    <resources>
-		        <resource-root path="p6spy-2.0.3.jar"/>
-		    </resources>
-		    <dependencies>
-		        <module name="javax.api"/>
-		        <module name="javax.transaction.api"/>
-		        <!-- make sure to refer to module holding real driver -->
-		        <module name="com.h2database.h2"/>
-		    </dependencies>
-		</module>
+          <module xmlns="urn:jboss:module:1.0" name="com.p6spy">
+              <resources>
+                  <resource-root path="p6spy-2.0.3.jar"/>
+              </resources>
+              <dependencies>
+                  <module name="javax.api"/>
+                  <module name="javax.transaction.api"/>
+                  <!-- make sure to refer to module holding real driver -->
+                  <module name="com.h2database.h2"/>
+              </dependencies>
+          </module>
 		
 	please note, that p6spy-2.0.3 version jar is used in the sample configuration. Moreover the reference to module holding the real (proxied) jdbc driver has to be provided (in the sample case is h2 one used). 
 
