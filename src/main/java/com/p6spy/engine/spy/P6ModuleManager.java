@@ -90,7 +90,7 @@ public class P6ModuleManager {
 
     if (P6SpyOptions.getActiveInstance().getJmx() //
       // unregister mbeans (to prevent naming conflicts)
-      && (instance.mBeansRegistry != null) {
+      && instance.mBeansRegistry != null) {
         instance.mBeansRegistry.unregisterAllMBeans(P6SpyOptions.getActiveInstance().getJmxPrefix());
     }
     
