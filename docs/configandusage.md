@@ -149,9 +149,13 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     #   %(sqlSingleLine)           the SQL statement with all bind variables replaced with actual values, with all new lines removed
     #customLogMessageFormat=%(currentTime)|%(executionTime)|%(category)|connection%(connectionId)|%(sqlSingleLine)
 
-    # format that is used for logging of the date/time/... (has to be compatible with java.text.SimpleDateFormat)
-    # (default is dd-MMM-yy)
-    #databaseDialectDateFormat=dd-MMM-yy
+    # format that is used for logging of the java.util.Date implementations (has to be compatible with java.text.SimpleDateFormat)
+    # (default is yyyy-MM-dd'T'HH:mm:ss.SSSZ)
+    #databaseDialectDateFormat=yyyy-MM-dd'T'HH:mm:ss.SSSZ
+    
+    # format that is used for logging of the java.sql.Timestamp implementations (has to be compatible with java.text.SimpleDateFormat)
+    # (default is yyyy-MM-dd'T'HH:mm:ss.SSSZ)
+    #databaseDialectTimestampFormat=yyyy-MM-dd'T'HH:mm:ss.SSSZ
     
     # format that is used for logging booleans, possible values: boolean, numeric
     # (default is boolean)
@@ -487,6 +491,20 @@ and the following placeholders being resolved to the appropriate values:
 * `%(effectiveSqlSingleLine)` the SQL statement as submitted to the driver, with all new lines removed
 * `%(sql)`                    the SQL statement with all bind variables replaced with actual values
 * `%(sqlSingleLine)`          the SQL statement with all bind variables replaced with actual values, with all new lines removed
+
+### databaseDialectDateFormat
+
+The way of formatting `java.util.Date` values. The date format engine is Java's SimpleDateFormat class.
+Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
+
+    databaseDialectDateFormat=MM-dd-yy HH:mm:ss:SS
+
+### databaseDialectTimestampFormat
+
+The way of formatting `java.sql.Timestamp` values. The date format engine is Java's SimpleDateFormat class.
+Refer to the SimpleDateFormat class in the JavaDocs for information on setting this value. An example follows:
+
+    databaseDialectTimestampFormat=MM-dd-yy HH:mm:ss:SS
 
 ### filter, include, exclude
 
