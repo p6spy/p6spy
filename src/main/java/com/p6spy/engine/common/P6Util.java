@@ -30,10 +30,14 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public static class P6Util {
+public class P6Util {
     static Pattern lineBreakPattern = Pattern.compile("(\\r?\\n)+");
     public static String singleLine(String str) {
         return lineBreakPattern.matcher(str).replaceAll(" ");
+    }
+
+    private P6Util() {
+      // preventing instantiation of the util class
     }
 
     public static int parseInt(String i, int defaultValue) {
