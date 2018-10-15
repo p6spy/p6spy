@@ -31,13 +31,17 @@ directory when the application runs.  This log file will contain a list of the v
 executed.  You can alter the location of this log file as well as what gets logged by editing **spy.properties**.  See
 [Common Property File Settings](configandusage.html#settings) for the various configuration options available.
 
-Application Servers:
+## Application Servers:
     
 * [JBoss/WildFly](#jboss-wildfly)    
 * [Apache Tomcat and Apache TomEE](#apache-tomcat-and-apache-tomee)    
 * [Glassfish and Payara](#glassfish-and-payara)    
 * [Weblogic](#weblogic)
 * [Generic Instructions](#generic-instructions)    
+
+Limitations:
+
+P6spy doesn't support Websphere application server (for details, see: [issue#186](https://github.com/p6spy/p6spy/issues/186)).
 
 ## JBoss/WildFly
 
