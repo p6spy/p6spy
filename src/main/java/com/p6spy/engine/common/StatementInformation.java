@@ -53,7 +53,7 @@ public class StatementInformation implements Loggable {
 
   @Override
   public String getSql() {
-    return statementQuery;
+    return getStatementQuery();
   }
 
   public long getTotalTimeElapsed() {

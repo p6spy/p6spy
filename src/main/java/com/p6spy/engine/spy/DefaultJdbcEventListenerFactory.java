@@ -19,7 +19,6 @@ package com.p6spy.engine.spy;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
 import com.p6spy.engine.event.CompoundJdbcEventListener;

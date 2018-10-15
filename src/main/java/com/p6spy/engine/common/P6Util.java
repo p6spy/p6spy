@@ -36,6 +36,10 @@ public class P6Util {
         return lineBreakPattern.matcher(str).replaceAll(" ");
     }
 
+    private P6Util() {
+      // preventing instantiation of the util class
+    }
+
     public static int parseInt(String i, int defaultValue) {
         if (i == null || i.isEmpty()) {
             return defaultValue;
@@ -176,11 +180,7 @@ public class P6Util {
 	}
     
     public static List<String> parseCSVList(String csv) {
-      if (csv == null) {
-        return null;
-      }
-      
-      if (csv.isEmpty()) {
+      if (csv == null || csv.isEmpty()) {
     	  return Collections.emptyList();
       }
       
