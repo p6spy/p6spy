@@ -26,3 +26,7 @@ the proxied object to obtain access to driver specific methods.
 Please be aware that any P6Spy will not be able to log any actions performed against the unwrapped object.  This is
 perfectly fine as long as you are only using the non-standard functionality.  However, if you use the unwrapped
 PreparedStatement in the example above to execute a SQL statement, it would not be logged.
+
+## OUT parameters of a stored procedure are not logged
+
+The reason is that log message is written once the statement is executed. However the OUT parameters are not accessed until after the statement is executed.
