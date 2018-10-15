@@ -5,6 +5,7 @@
 Improvements:
 
 Defects resolved:
+* [issue #451](https://github.com/p6spy/p6spy/pull/451) Fixed low level sonarqube reported issues.
 
 ## [3.8.0](https://github.com/p6spy/p6spy/compare/p6spy-3.7.0...3.8.0) (15.10.2018)
 
