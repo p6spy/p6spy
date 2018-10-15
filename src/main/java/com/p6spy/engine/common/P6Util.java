@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public class P6Util {
+public static class P6Util {
     static Pattern lineBreakPattern = Pattern.compile("(\\r?\\n)+");
     public static String singleLine(String str) {
         return lineBreakPattern.matcher(str).replaceAll(" ");
@@ -176,11 +176,7 @@ public class P6Util {
 	}
     
     public static List<String> parseCSVList(String csv) {
-      if (csv == null) {
-        return null;
-      }
-      
-      if (csv.isEmpty()) {
+      if (csv == null || csv.isEmpty()) {
     	  return Collections.emptyList();
       }
       

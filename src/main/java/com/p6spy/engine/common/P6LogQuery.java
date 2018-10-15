@@ -59,7 +59,7 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  public synchronized static void initialize() {
+  public static synchronized void initialize() {
     final P6ModuleManager moduleManager = P6ModuleManager.getInstance();
     if (null == moduleManager) {
       // not initialized yet => can't proceed
@@ -82,12 +82,12 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  static protected void doLog(long elapsed, Category category, String prepared, String sql) {
+  protected static void doLog(long elapsed, Category category, String prepared, String sql) {
     doLog(-1, elapsed, category, prepared, sql, "");
   }
 
   // this is an internal method called by logElapsed
-  static protected void doLogElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql, String url) {
+  protected static void doLogElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql, String url) {
     doLog(connectionId, timeElapsedNanos, category, prepared, sql, url);
   }
 
@@ -153,8 +153,8 @@ public class P6LogQuery implements P6OptionChangedListener {
     final Pattern sqlExpressionPattern = opts.getSQLExpressionPattern();
     final Pattern includeExcludePattern = opts.getIncludeExcludePattern();
     
-    return (sqlExpressionPattern == null || sqlExpressionPattern != null && sqlExpressionPattern.matcher(sql).matches()) 
-        && (includeExcludePattern == null || includeExcludePattern != null && includeExcludePattern.matcher(sql).matches());
+    return (sqlExpressionPattern == null || sqlExpressionPattern.matcher(sql).matches())
+        && (includeExcludePattern == null || includeExcludePattern.matcher(sql).matches());
   }
 
   static boolean isCategoryOk(Category category) {
@@ -196,9 +196,9 @@ public class P6LogQuery implements P6OptionChangedListener {
   
   public static void logElapsed(int connectionId, long timeElapsedNanos, Category category, Loggable loggable) {
     // usually an expensive operation => cache where possible
-    String sql;
+    String sql = loggable.getSql();
     String url = loggable.getConnectionInformation().getUrl();
-    if (logger != null && meetsThresholdRequirement(timeElapsedNanos) && isCategoryOk(category) && isLoggable(sql = loggable.getSql())) {
+    if (logger != null && meetsThresholdRequirement(timeElapsedNanos) && isCategoryOk(category) && isLoggable(sql)) {
       doLogElapsed(connectionId, timeElapsedNanos, category, sql, loggable.getSqlWithValues(), url == null ? "" : url);
     } else if (isDebugEnabled()) {
       sql = loggable.getSqlWithValues();

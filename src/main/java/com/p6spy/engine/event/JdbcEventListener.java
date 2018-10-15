@@ -89,6 +89,7 @@ public abstract class JdbcEventListener {
    *
    * @deprecated Use {@link #onAfterGetConnection(ConnectionInformation, SQLException)}
    */
+  @Deprecated
   public void onConnectionWrapped(ConnectionInformation connectionInformation) {
   }
 

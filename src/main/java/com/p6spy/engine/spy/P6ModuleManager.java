@@ -88,11 +88,10 @@ public class P6ModuleManager {
       optionsSource.preDestroy(instance);
     }
 
-    if (P6SpyOptions.getActiveInstance().getJmx()) {
+    if (P6SpyOptions.getActiveInstance().getJmx() //
       // unregister mbeans (to prevent naming conflicts)
-      if (instance.mBeansRegistry != null) {
+      && (instance.mBeansRegistry != null) {
         instance.mBeansRegistry.unregisterAllMBeans(P6SpyOptions.getActiveInstance().getJmxPrefix());
-      }
     }
     
     // clean table plz (we need to make sure that all the configured factories will be re-loaded)
