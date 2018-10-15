@@ -1,5 +1,11 @@
 # Release Notes
 
+## [3.8.1](https://github.com/p6spy/p6spy/compare/p6spy-3.8.0...3.8.1) (Unreleased)
+
+Improvements:
+
+Defects resolved:
+
 ## [3.8.0](https://github.com/p6spy/p6spy/compare/p6spy-3.7.0...3.8.0) (15.10.2018)
 
 Improvements:
