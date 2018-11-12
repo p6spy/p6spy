@@ -301,6 +301,9 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     try {
       conn = ((DataSource) realDataSource).getConnection();
       connectionInformation.setConnection(conn);
+
+      connectionInformation.setUrl(conn.getMetaData().getURL());
+
       connectionInformation.setTimeToGetConnectionNs(System.nanoTime() - start);
       jdbcEventListener.onAfterGetConnection(connectionInformation, null);
     } catch (SQLException e) {
