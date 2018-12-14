@@ -50,7 +50,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String REALDATASOURCEPROPERTIES = "realdatasourceproperties";
     public static final String CUSTOM_LOG_MESSAGE_FORMAT = "customLogMessageFormat";
     public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
-    public static final String DATABASE_DIALECT_TIMEZONE_FORMAT = "databaseDialectTimezoneFormat";
+    public static final String DATABASE_DIALECT_TIMESTAMP_FORMAT = "databaseDialectTimestampFormat";
     public static final String DATABASE_DIALECT_BOOLEAN_FORMAT = "databaseDialectBooleanFormat";
     public static final String JMX = "jmx";
     public static final String JMX_PREFIX = "jmxPrefix";
@@ -76,7 +76,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       defaults.put(RELOADPROPERTIES, Boolean.FALSE.toString());
       defaults.put(RELOADPROPERTIESINTERVAL, Long.toString(60));
       defaults.put(DATABASE_DIALECT_DATE_FORMAT, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-      defaults.put(DATABASE_DIALECT_TIMEZONE_FORMAT, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+      defaults.put(DATABASE_DIALECT_TIMESTAMP_FORMAT, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
       defaults.put(DATABASE_DIALECT_BOOLEAN_FORMAT, "boolean");
       defaults.put(CUSTOM_LOG_MESSAGE_FORMAT, String.format("%s|%s|%s|connection%s|%s",
         CustomLineFormat.CURRENT_TIME, CustomLineFormat.EXECUTION_TIME, CustomLineFormat.CATEGORY,
@@ -112,7 +112,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setRealDataSourceClass(options.get(REALDATASOURCECLASS));
       setRealDataSourceProperties(options.get(REALDATASOURCEPROPERTIES));
       setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
-      setDatabaseDialectTimestampFormat(options.get(DATABASE_DIALECT_TIMEZONE_FORMAT));
+      setDatabaseDialectTimestampFormat(options.get(DATABASE_DIALECT_TIMESTAMP_FORMAT));
       setDatabaseDialectBooleanFormat(options.get(DATABASE_DIALECT_BOOLEAN_FORMAT));
       setCustomLogMessageFormat(options.get(CUSTOM_LOG_MESSAGE_FORMAT));
       setJmx(options.get(JMX));
@@ -317,7 +317,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
      */
     @Override
     public String getDatabaseDialectTimestampFormat() {
-      return optionsRepository.get(String.class, DATABASE_DIALECT_TIMEZONE_FORMAT);
+      return optionsRepository.get(String.class, DATABASE_DIALECT_TIMESTAMP_FORMAT);
     }
 
     /**
@@ -327,7 +327,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
      */
     @Override
     public void setDatabaseDialectTimestampFormat(String databaseDialectTimestampFormat) {
-      optionsRepository.set(String.class, DATABASE_DIALECT_TIMEZONE_FORMAT, databaseDialectTimestampFormat);
+      optionsRepository.set(String.class, DATABASE_DIALECT_TIMESTAMP_FORMAT, databaseDialectTimestampFormat);
     }
 
   /**
