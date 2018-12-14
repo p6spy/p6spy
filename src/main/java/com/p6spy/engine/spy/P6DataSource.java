@@ -173,14 +173,15 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
         String propertyName = methodName.substring(3).toLowerCase();
         // found a setXXX method, so see if there is an XXX
         // property in the list read in from spy.properties.
-        for (String key : props.keySet()) {
+        for (Map.Entry<String, String> entry : props.entrySet()) {
           // all checks are all lower case
+          String key = entry.getKey();
           if (key.toLowerCase().equals(propertyName)) {
             try {
               // this is a parameter for the current method,
               // so find out which supported type the method
               // expects
-              String value = props.get(key);
+              String value = entry.getValue();
               Class<?>[] types = method.getParameterTypes();
               if (types[0].isAssignableFrom(String.class)) {
                 // the method expects a string
