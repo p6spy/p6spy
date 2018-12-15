@@ -14,7 +14,7 @@ Improvements:
 Defects resolved:
 * [issue #451](https://github.com/p6spy/p6spy/pull/451) Fixed low level sonarqube reported issues.
 * [issue #458](https://github.com/p6spy/p6spy/issues/458) Property renamed (to reflect the docs) `databaseDialectTimezoneFormat` to `databaseDialectTimestampFormat`.
-* [issue #459](https://github.com/p6spy/p6spy/pull/459) Iterate over `Map.entrySet()`` instead of `Map.keySet`.
+* [issue #459](https://github.com/p6spy/p6spy/pull/459) Iterate over `Map.entrySet()` instead of `Map.keySet`.
 
 ## [3.8.0](https://github.com/p6spy/p6spy/compare/p6spy-3.7.0...3.8.0) (2018-10-15)
 
