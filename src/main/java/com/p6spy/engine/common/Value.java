@@ -126,13 +126,14 @@ public class Value {
    *         {@code bytes}.
    */
   private String toHexString(byte[] bytes) {
-    StringBuilder sb = new StringBuilder(bytes.length * 2);
+    char[] result = new char[bytes.length * 2];
+    int idx = 0;
     for (byte b : bytes) {
       int temp = (int) b & 0xFF;
-      sb.append(HEX_CHARS[temp / 16]);
-      sb.append(HEX_CHARS[temp % 16]);
+      result[idx++] = HEX_CHARS[temp / 16];
+      result[idx++] = HEX_CHARS[temp % 16];
     }
-    return sb.toString();
+    return new String(result);
   }
 
   /**
