@@ -1,11 +1,17 @@
 # Release Notes
 
-
-## [3.8.1](https://github.com/p6spy/p6spy/compare/p6spy-3.8.1...master) (Unreleased)
+## [3.8.3(https://github.com/p6spy/p6spy/compare/p6spy-3.8.2...master) (Unreleased)
 
 Improvements:
 
 Defects resolved:
+
+## [3.8.2](https://github.com/p6spy/p6spy/compare/p6spy-3.8.1...3.8.2) (Unreleased)
+
+Improvements:
+
+Defects resolved:
+* [issue #470](https://github.com/p6spy/p6spy/pull/470) Commits/rollbacks are not logged when using include/exclude.
 
 ## [3.8.1](https://github.com/p6spy/p6spy/compare/p6spy-3.8.0...3.8.1) (Unreleased)
 
