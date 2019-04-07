@@ -140,10 +140,11 @@ public class P6LogQuery implements P6OptionChangedListener {
   }
 
   static boolean isLoggable(String sql) {
-	if (null == sql) {
-		return false;
-	}
-	
+    // empty batches and connection commits/rollbacks
+    if (sql == null || sql.isEmpty()) {
+      return true;
+    }
+
     final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
     
     if (!opts.getFilter()) {

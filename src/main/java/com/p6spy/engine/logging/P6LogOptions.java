@@ -109,7 +109,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
       return null;
     }
 
-    final StringBuilder sb = new StringBuilder("(?mis)^");
+    final StringBuilder sb = new StringBuilder("(?mis)");
     
     if (excludes.length() > 0 ) {
       sb.append("(?!.*(").append(excludes).append(").*)");
@@ -122,7 +122,7 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
       sb.append("(.*)");
     }
     
-    return sb.append("$").toString();
+    return sb.toString();
   }
   
   @Override

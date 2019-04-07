@@ -154,6 +154,28 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setInclude("");
       assertEquals(1, super.getLogEntriesCount());
     }
+
+    // excluded - connection commit  => logged
+    {
+      super.clearLogEntries();
+      P6LogOptions.getActiveInstance().setExclude("customers");
+      connection.setAutoCommit(false);
+      connection.commit();
+      connection.setAutoCommit(true);
+      P6LogOptions.getActiveInstance().setExclude("");
+      assertEquals(1, super.getLogEntriesCount());
+    }
+
+    // included - connection commit  => logged
+    {
+      super.clearLogEntries();
+      P6LogOptions.getActiveInstance().setInclude("customers");
+      connection.setAutoCommit(false);
+      connection.commit();
+      connection.setAutoCommit(true);
+      P6LogOptions.getActiveInstance().setInclude("");
+      assertEquals(1, super.getLogEntriesCount());
+    }
   }
   
   @Test
