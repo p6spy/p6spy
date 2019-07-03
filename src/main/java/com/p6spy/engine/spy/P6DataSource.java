@@ -183,23 +183,20 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
               // expects
               String value = entry.getValue();
               Class<?>[] types = method.getParameterTypes();
-              if (types[0].isAssignableFrom(String.class)) {
+              Class<?> paramType = types[0];
+              if (paramType.isAssignableFrom(String.class)) {
                 // the method expects a string
-                String[] args = new String[1];
-                args[0] = value;
                 P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
-                method.invoke(realDataSource, (Object[]) args);
+                method.invoke(realDataSource, value);
                 matchedProps.put(key, value);
-              } else if (types[0].isPrimitive() && int.class.equals(types[0])) {
+              } else if (paramType.isPrimitive() && int.class.equals(paramType)) {
                 // the method expects an int, so we pass an Integer
-                Integer[] args = new Integer[1];
-                args[0] = Integer.valueOf(value);
                 P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
-                method.invoke(realDataSource, (Object[]) args);
+                method.invoke(realDataSource, Integer.valueOf(value));
                 matchedProps.put(key, value);
               } else {
                 P6LogQuery.debug("method " + methodName + " on DataSource " + rdsName + " matches property "
-                  + propertyName + " but expects unsupported type " + types[0].getName());
+                  + propertyName + " but expects unsupported type " + paramType.getName());
                 matchedProps.put(key, value);
               }
             } catch (IllegalAccessException e) {
