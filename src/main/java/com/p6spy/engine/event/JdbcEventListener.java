@@ -437,7 +437,7 @@ public abstract class JdbcEventListener {
 
 
   /**
-   * this callbacl method is executed before calling {@link Connection#setAutoCommit(boolean)}
+   * this callback method is executed before calling {@link Connection#setAutoCommit(boolean)}
    * @param connectionInformation The meta information about the {@link Connection} being invoked
    * @param newAutoCommit the new auto commit flag about to be set
    * @param oldAutoCommit the old auto commit flag about to be changed
@@ -448,7 +448,7 @@ public abstract class JdbcEventListener {
 
 
   /**
-   * this callbacl method is executed after {@link Connection#setAutoCommit(boolean)} was called.
+   * this callback method is executed after {@link Connection#setAutoCommit(boolean)} was called.
    * @param connectionInformation The meta information about the {@link Connection} being invoked
    * @param newAutoCommit the new auto commit flag about to be set
    * @param oldAutoCommit the old auto commit flag about to be changed
