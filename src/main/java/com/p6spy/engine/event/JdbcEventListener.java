@@ -435,4 +435,27 @@ public abstract class JdbcEventListener {
   public void onAfterStatementClose(StatementInformation statementInformation, SQLException e) {
   }
 
+
+  /**
+   * this callbacl method is executed before calling {@link Connection#setAutoCommit(boolean)}
+   * @param connectionInformation The meta information about the {@link Connection} being invoked
+   * @param newAutoCommit the new auto commit flag about to be set
+   * @param oldAutoCommit the old auto commit flag about to be changed
+   */
+  public void onBeforeSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean oldAutoCommit) {
+  }
+
+
+
+  /**
+   * this callbacl method is executed after {@link Connection#setAutoCommit(boolean)} was called.
+   * @param connectionInformation The meta information about the {@link Connection} being invoked
+   * @param newAutoCommit the new auto commit flag about to be set
+   * @param oldAutoCommit the old auto commit flag about to be changed
+   * @param e the exception object if {@link Connection#setAutoCommit(boolean)} failed
+   */
+  public void onAfterSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean oldAutoCommit, SQLException e) {
+  }
+
+
 }

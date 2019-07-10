@@ -39,7 +39,7 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
     this.eventListeners = eventListeners;
   }
 
-  public void addListender(JdbcEventListener listener) {
+  public void addListener(JdbcEventListener listener) {
     eventListeners.add(listener);
   }
 
@@ -297,4 +297,19 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
       eventListener.onAfterStatementClose(statementInformation, e);
     }
   }
+
+  @Override
+  public void onBeforeSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean oldAutoCommit) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onBeforeSetAutoCommit(connectionInformation, newAutoCommit,oldAutoCommit);
+    }
+  }
+
+  @Override
+  public void onAfterSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean oldAutoCommit, SQLException e) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterSetAutoCommit(connectionInformation, newAutoCommit,oldAutoCommit,e);
+    }
+  }
+
 }

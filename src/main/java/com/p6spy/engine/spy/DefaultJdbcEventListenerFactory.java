@@ -47,7 +47,7 @@ public class DefaultJdbcEventListenerFactory implements JdbcEventListenerFactory
       synchronized (DefaultJdbcEventListenerFactory.class) {
         if (jdbcEventListener == null) {
           CompoundJdbcEventListener compoundEventListener = new CompoundJdbcEventListener();
-          compoundEventListener.addListender(DefaultEventListener.INSTANCE);
+          compoundEventListener.addListener(DefaultEventListener.INSTANCE);
           registerEventListenersFromFactories(compoundEventListener);
           registerEventListenersFromServiceLoader(compoundEventListener);
           jdbcEventListener = compoundEventListener;
@@ -68,7 +68,7 @@ public class DefaultJdbcEventListenerFactory implements JdbcEventListenerFactory
       for (P6Factory factory : factories) {
         final JdbcEventListener eventListener = factory.getJdbcEventListener();
         if (eventListener != null) {
-          compoundEventListener.addListender(eventListener);
+          compoundEventListener.addListener(eventListener);
         }
       }
     }
@@ -76,7 +76,7 @@ public class DefaultJdbcEventListenerFactory implements JdbcEventListenerFactory
 
   protected void registerEventListenersFromServiceLoader(CompoundJdbcEventListener compoundEventListener) {
     for (Iterator<JdbcEventListener> iterator = jdbcEventListenerServiceLoader.iterator(); iterator.hasNext(); ) {
-      compoundEventListener.addListender(iterator.next());
+      compoundEventListener.addListener(iterator.next());
     }
   }
   
