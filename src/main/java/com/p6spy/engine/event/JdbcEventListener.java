@@ -437,10 +437,11 @@ public abstract class JdbcEventListener {
 
 
   /**
-   * this callback method is executed before calling {@link Connection#setAutoCommit(boolean)}
+   * This callback method is executed before calling {@link Connection#setAutoCommit(boolean)}
+   *
    * @param connectionInformation The meta information about the {@link Connection} being invoked
-   * @param newAutoCommit the new auto commit flag about to be set
-   * @param oldAutoCommit the old auto commit flag about to be changed
+   * @param newAutoCommit         The new auto commit flag about to be set
+   * @param oldAutoCommit         The old auto commit flag about to be changed
    */
   public void onBeforeSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean oldAutoCommit) {
   }
@@ -448,11 +449,13 @@ public abstract class JdbcEventListener {
 
 
   /**
-   * this callback method is executed after {@link Connection#setAutoCommit(boolean)} was called.
+   * This callback method is executed after {@link Connection#setAutoCommit(boolean)} was called.
+   *
    * @param connectionInformation The meta information about the {@link Connection} being invoked
-   * @param newAutoCommit the new auto commit flag about to be set
-   * @param oldAutoCommit the old auto commit flag about to be changed
-   * @param e the exception object if {@link Connection#setAutoCommit(boolean)} failed
+   * @param newAutoCommit         The new auto commit flag about to be set
+   * @param oldAutoCommit         The old auto commit flag about to be changed
+   * @param e                     The {@link SQLException} which may be triggered by the call (<code>null</code> if
+   *                              there was no exception).
    */
   public void onAfterSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean oldAutoCommit, SQLException e) {
   }

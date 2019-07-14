@@ -213,13 +213,13 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
     SQLException e = null;
     boolean oldAutoCommit = delegate.getAutoCommit();
     try {
-      jdbcEventListener.onBeforeSetAutoCommit(connectionInformation,autoCommit,oldAutoCommit);
+      jdbcEventListener.onBeforeSetAutoCommit(connectionInformation, autoCommit, oldAutoCommit);
       delegate.setAutoCommit(autoCommit);
-    }catch (SQLException sqle){
+    } catch (SQLException sqle){
       e = sqle;
       throw e;
-    }finally {
-      jdbcEventListener.onAfterSetAutoCommit(connectionInformation,autoCommit,oldAutoCommit,e);
+    } finally {
+      jdbcEventListener.onAfterSetAutoCommit(connectionInformation, autoCommit, oldAutoCommit, e);
     }
   }
 
