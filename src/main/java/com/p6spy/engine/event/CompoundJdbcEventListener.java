@@ -315,9 +315,9 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   }
 
   @Override
-  public void onBeforeSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean oldAutoCommit) {
+  public void onBeforeSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean currentAutoCommit) {
     for (JdbcEventListener eventListener : eventListeners) {
-      eventListener.onBeforeSetAutoCommit(connectionInformation, newAutoCommit,oldAutoCommit);
+      eventListener.onBeforeSetAutoCommit(connectionInformation, newAutoCommit,currentAutoCommit);
     }
   }
 
