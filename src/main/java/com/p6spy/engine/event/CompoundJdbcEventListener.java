@@ -41,17 +41,19 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
 
 
   /**
-   * adds a listener to this {@link CompoundJdbcEventListener}
-   * @param listener the listener to add
-   * @deprecated this method name has a typo, please use {@link CompoundJdbcEventListener#addListener}
+   * Adds a listener to this {@link CompoundJdbcEventListener}
+   *
+   * @param listener The listener to add
+   * @deprecated     This method name has a typo, please use {@link CompoundJdbcEventListener#addListener}
    */
   public void addListender(JdbcEventListener listener) {
     addListener(listener);
   }
 
   /**
-   * adds a listener to this {@link CompoundJdbcEventListener}
-   * @param listener the listener to add
+   * Adds a listener to this {@link CompoundJdbcEventListener}
+   *
+   * @param listener The listener to add
    */
   public void addListener(JdbcEventListener listener) {
     eventListeners.add(listener);
