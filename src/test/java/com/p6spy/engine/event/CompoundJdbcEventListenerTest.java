@@ -27,6 +27,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -1066,6 +1067,37 @@ public class CompoundJdbcEventListenerTest {
   public void testStatementOnAfterStatementClose() throws SQLException {
     wrappedStatement.close();
     verify(mockedJdbcListener).onAfterStatementClose(eq(statementInformation), ArgumentMatchers.<SQLException>isNull());
+  }
+
+  @Test
+  public void testConnectionOnBeforeConnectionSetAutoCommit() throws SQLException {
+    boolean currentAutoCommit = wrappedConnection.getAutoCommit();
+    wrappedConnection.setAutoCommit(false);
+    verify(mockedJdbcListener).onBeforeSetAutoCommit(eq(connectionInformation), eq(false), eq(currentAutoCommit));
+  }
+
+  @Test
+  public void testConnectionOnAfterConnectionSetAutoCommit() throws SQLException {
+    boolean currentAutoCommit = wrappedConnection.getAutoCommit();
+    wrappedConnection.setAutoCommit(false);
+    verify(mockedJdbcListener).onAfterSetAutoCommit(eq(connectionInformation), eq(false), eq(currentAutoCommit),
+        ArgumentMatchers.<SQLException>isNull());
+  }
+
+  @Test
+  public void testConnectionOnAfterConnectionSetAutoCommitWithException() throws SQLException {
+    SQLException sqle = new SQLException();
+    Connection mockedConnection = mock(Connection.class);
+    doThrow(sqle).when(mockedConnection).setAutoCommit(false);
+    Connection connectionWrapper = ConnectionWrapper.wrap(mockedConnection, mockedJdbcListener, connectionInformation);
+    boolean currentAutoCommit = connectionWrapper.getAutoCommit();
+    try {
+      connectionWrapper.setAutoCommit(false);
+      Assert.fail("exception should be thrown");
+    } catch (SQLException e){
+    }
+    verify(mockedJdbcListener).onAfterSetAutoCommit(eq(connectionInformation), eq(false), eq(currentAutoCommit),
+        eq(sqle));
   }
 
   private ConnectionInformation connectionInformationWithConnection() {

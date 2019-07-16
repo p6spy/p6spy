@@ -39,7 +39,23 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
     this.eventListeners = eventListeners;
   }
 
+
+  /**
+   * Adds a listener to this {@link CompoundJdbcEventListener}
+   *
+   * @param listener The listener to add
+   * @deprecated     This method name has a typo, please use {@link CompoundJdbcEventListener#addListener}
+   */
   public void addListender(JdbcEventListener listener) {
+    addListener(listener);
+  }
+
+  /**
+   * Adds a listener to this {@link CompoundJdbcEventListener}
+   *
+   * @param listener The listener to add
+   */
+  public void addListener(JdbcEventListener listener) {
     eventListeners.add(listener);
   }
 
@@ -297,4 +313,19 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
       eventListener.onAfterStatementClose(statementInformation, e);
     }
   }
+
+  @Override
+  public void onBeforeSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean currentAutoCommit) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onBeforeSetAutoCommit(connectionInformation, newAutoCommit,currentAutoCommit);
+    }
+  }
+
+  @Override
+  public void onAfterSetAutoCommit(ConnectionInformation connectionInformation, boolean newAutoCommit, boolean oldAutoCommit, SQLException e) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterSetAutoCommit(connectionInformation, newAutoCommit,oldAutoCommit,e);
+    }
+  }
+
 }
