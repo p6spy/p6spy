@@ -1,8 +1,17 @@
 # Release Notes
 
-## [3.8.3(https://github.com/p6spy/p6spy/compare/p6spy-3.8.2...master) (Unreleased)
+## [3.8.4](https://github.com/p6spy/p6spy/compare/p6spy-3.8.3...master) (Unreleased)
 
 Improvements:
+
+Defects resolved:
+
+## [3.8.3](https://github.com/p6spy/p6spy/compare/p6spy-3.8.2...3.8.3) (2019-07-21)
+
+Improvements:
+
+* [issue #474](https://github.com/p6spy/p6spy/pull/474) Add events for `Connection.setAutoCommit`.
+* [issue #473](https://github.com/p6spy/p6spy/pull/473) Simplify usage of varargs in `P6DataSource`.
 
 Defects resolved:
 
