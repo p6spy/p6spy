@@ -8,16 +8,27 @@ development.  Assuming that making code changes is acceptable, then the followin
    p6spy:p6spy.
 
 1. Wrap your DataSource with P6DataSource or modify your connection URL to add 'p6spy:'.
-   
+
+## Datasource way
+
 If your application uses a DataSource, simply wrap your current DataSource object with P6DataSource.  P6DataSource
 has a constructor method that accepts the DataSource to wrap.  This is by far the simplest method
 especially if you use a dependency injection framework such as Spring or Guice.    
+
+## Connection URL way
 
 If your application obtains connections from DriverManager, simply modify your JDBC connection URL to include 
 'p6spy:'.  For example, if your URL is `jdbc:mysql://host/db` then just change it to 
 `jdbc:p6spy:mysql://host/db`. P6Spy implements the JDBC 4.0 API allowing automatic registration of our JDBC driver 
 with DriverManager.  As long as your application obtains connections through DriverManager, you only need to modify 
 your database connection URL to activate P6Spy.
+
+## Spring Boot autoconfiguration
+
+Spring Boot autoconfiguration is handled by the separate project: [gavlyukovskiy/spring-boot-data-source-decorator](https://github.com/gavlyukovskiy/spring-boot-data-source-decorator), please consult
+the respective documentation for usage.
+
+## Log file
 
 By default, a file called spy.log will be created in the current working directory.  To customize the logging
 (including using your application's logging framework) you can provide alternate configuration in a file called
