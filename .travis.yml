@@ -2,7 +2,7 @@ dist: bionic
 
 services:
   - mysql
-  - postgresql: 9.6
+  - postgresql: "9.4"
 
 addons:
   sonarcloud:
@@ -21,7 +21,7 @@ jdk:
   # Caused by: java.security.NoSuchProviderException: no such provider: SunEC
   # ...
   # - openjdk7
-  - oraclejdk8
+#  - oraclejdk8
   - openjdk8
   - oraclejdk9
   - openjdk10
