@@ -2,7 +2,7 @@ dist: bionic
 
 services:
   - mysql
-  - postgresql: "9.4"
+  - postgresql: "9.6.13"
 
 addons:
   sonarcloud:
