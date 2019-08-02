@@ -136,6 +136,13 @@ test {
     jvmArgs '-Dcom.sun.management.jmxremote', '-Dcom.sun.management.jmxremote.authenticate=false', '-Dcom.sun.management.jmxremote.port=1234', '-Dcom.sun.management.jmxremote.ssl=false', '-Doracle.jdbc.timezoneAsRegion=false', '-Ddb2.jcc.override.traceLevel=0'
 }
 
+jar {
+  inputs.property('moduleName', project.name)
+  manifest {
+    attributes('Automatic-Module-Name': project.name)
+  }
+}
+
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc
@@ -251,12 +258,12 @@ publishing {
             builder.licenses {
                 builder.license {
                   builder.name 'The Apache Software License, Version 2.0'
-                  builder.url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                  builder.url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                   builder.distribution 'repo'
                 }
             }
             builder.scm {
-                builder.url 'http://github.com/p6spy/p6spy'
+                builder.url 'https://github.com/p6spy/p6spy'
                 builder.connection 'scm:git:git://github.com/p6spy/p6spy.git'
                 builder.developerConnection 'scm:git:ssh://github.com:p6spy/p6spy.git'
             }
@@ -273,6 +280,10 @@ publishing {
                   builder.name 'Felix Barnsteiner'
                   builder.email 'felix.barnsteiner@isys-software.de'
                 }
+              builder.developer {
+                builder.name 'Arthur Gavlyukovskiy'
+                builder.email 'agavlyukovskiy@gmail.com'
+              }
             }
 
             // maven central publishing optionals
