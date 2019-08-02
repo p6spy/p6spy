@@ -38,7 +38,7 @@ public class FileLogger extends StdoutLogger {
     try {
       printStream = new PrintStream(new FileOutputStream(fileName, P6SpyOptions.getActiveInstance().getAppend()));
     } catch (IOException e) {
-      e.printStackTrace(System.err);
+      throw new IllegalStateException("couldn't create PrintStream for " + fileName, e);
     }
   }
 
