@@ -1,10 +1,19 @@
 # Release Notes
 
-## [3.8.4](https://github.com/p6spy/p6spy/compare/p6spy-3.8.3...master) (Unreleased)
+## [3.8.5](https://github.com/p6spy/p6spy/compare/p6spy-3.8.4...master) (Unreleased)
 
 Improvements:
 
 Defects resolved:
+
+## [3.8.4](https://github.com/p6spy/p6spy/compare/p6spy-3.8.3...3.8.4) (Unreleased)
+
+Improvements:
+
+Defects resolved:
+
+* [issue #481](https://github.com/p6spy/p6spy/pull/481) Re-throwing exception when failed to create `PrintStream` .
+* [issue #480](https://github.com/p6spy/p6spy/pull/480) Added `Automatic-Module-Name` to manifest file.
 
 ## [3.8.3](https://github.com/p6spy/p6spy/compare/p6spy-3.8.2...3.8.3) (2019-07-21)
 
