@@ -101,9 +101,12 @@ public class P6Util {
    * @return the URL of the file or null if not found
    */
   public static URL locateOnClassPath(String filename) {
-    URL result;
+    URL result = null;
     // first try to load from context class loader
-    result = Thread.currentThread().getContextClassLoader().getResource(filename);
+    ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+    if (contextClassLoader != null) {
+        result = contextClassLoader.getResource(filename);
+    }
 
     // next try the current class loader which loaded p6spy
     if (result == null) {
