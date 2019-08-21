@@ -17,12 +17,16 @@
  */
 package com.p6spy.engine.common;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.sql.CommonDataSource;
 import javax.sql.PooledConnection;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Driver;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Quinton McCombs
@@ -38,6 +42,17 @@ public class ConnectionInformation implements Loggable {
   private PooledConnection pooledConnection;
   private long timeToGetConnectionNs;
   private String url;
+
+  private static final String ATTRIBUTE_PREFIX = "Connection.";
+
+  /**
+   * The states that this context can be in at any given instance.
+   */
+  private enum LogAttribute {
+    getSchema, isReadOnly
+  }
+
+  private static List<LogAttribute> enabledAttributes = null;
 
   private ConnectionInformation() {
     this.connectionId = counter.getAndIncrement();
@@ -235,4 +250,43 @@ public class ConnectionInformation implements Loggable {
   public String getUrl() {
     return this.url;
   }
+
+  /** {@inheritDoc} */
+  @Override
+  public Map<String, String> getAttributeValues() {
+    Map<String, String> values = null;
+
+    if (enabledAttributes != null) {
+      values = new HashMap<String, String>(enabledAttributes.size());
+
+      for (LogAttribute attr : enabledAttributes) {
+        switch (attr) {
+          case getSchema:
+            try {
+              DatabaseMetaData metaData = connection.getMetaData();
+              values.put(attr.name(), metaData.getUserName());
+            } catch (SQLException ignored) {}
+            break;
+
+          case isReadOnly:
+            try {
+              values.put(attr.name(), Boolean.toString(connection.isReadOnly()));
+            } catch (SQLException ignored) {}
+            break;
+        }
+      }
+    }
+
+    return values;
+  }
+
+  /**
+   * Set object attributes for logging.
+   *
+   * @param attributeNames the list of attributes.
+   */
+  public static void setAttributesToLog(List<String> attributeNames) {
+    enabledAttributes = P6Util.findEnumMatches(LogAttribute.class, ATTRIBUTE_PREFIX, attributeNames);
+  }
+
 }

@@ -17,6 +17,8 @@
  */
 package com.p6spy.engine.common;
 
+import java.util.Map;
+
 /**
  * Assures capability of the class to be logged by {@link P6LogQuery}.
  *
@@ -38,5 +40,10 @@ public interface Loggable {
    * @return the connection information.
    */
   ConnectionInformation getConnectionInformation();
+
+  /**
+   * @return the additional attributes requested for logging.
+   */
+  Map<String, String> getAttributeValues();
 
 }

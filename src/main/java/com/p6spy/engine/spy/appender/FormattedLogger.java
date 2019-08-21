@@ -19,6 +19,8 @@ package com.p6spy.engine.spy.appender;
 
 import com.p6spy.engine.logging.Category;
 
+import java.util.Map;
+
 /**
  * {@link P6Logger} implementation providing support for pluggable {@link MessageFormattingStrategy}.
  */
@@ -31,8 +33,8 @@ public abstract class FormattedLogger implements P6Logger {
   }
 
   @Override
-  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url) {
-    logText(strategy.formatMessage(connectionId, now, elapsed, category.toString(), prepared, sql, url));
+  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url, Map<String, String> attributes) {
+    logText(strategy.formatMessage(connectionId, now, elapsed, category.toString(), prepared, sql, url, attributes));
   }
 
   /**

@@ -226,5 +226,46 @@ public class P6Util {
     return sb.toString();
   }
 
+  /**
+   * Get Enum values matching the list of strings by using case-insensitive search.
+   *
+   * @param enumeration the Enumeration class
+   * @param prefix      the optional prefix to be omitted from the values
+   * @param values      the values to be parsed
+   * @param <T>         the enumeration class
+   * @return            the list of matched enumeration values
+   */
+  public static <T extends Enum<?>> List<T> findEnumMatches(Class<T> enumeration, String prefix, List<String> values) {
+    List<T> newAttributes = null;
+
+    if (values != null && ! values.isEmpty()) {
+      for (String name : values) {
+        if (name.startsWith(prefix)) {
+          name = name.substring(prefix.length());
+        } else if (! "*".equals(name)) {
+          continue;
+        }
+
+        if ("*".equals(name)) {
+          newAttributes = new ArrayList<T>(Arrays.asList(enumeration.getEnumConstants()));
+          break;
+        } else {
+          for (T each : enumeration.getEnumConstants()) {
+            // Use case-insensitive search:
+            if (each.name().equalsIgnoreCase(name)) {
+              if (newAttributes == null) {
+                newAttributes = new ArrayList<T>();
+              }
+              newAttributes.add(each);
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    return newAttributes;
+  }
+
 }
 

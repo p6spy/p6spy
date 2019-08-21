@@ -17,6 +17,8 @@
  */
 package com.p6spy.engine.spy.appender;
 
+import java.util.Map;
+
 /**
  * @author Quinton McCombs
  * @since 09/2013
@@ -32,8 +34,9 @@ public interface MessageFormattingStrategy {
    * @param prepared the SQL statement with all bind variables replaced with actual values
    * @param sql the sql statement executed
    * @param url the database url where the sql statement executed
+   * @param attributes the additional attributes requested for logging
    * @return the formatted log message
    */
-  String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url);
+  String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url, Map<String, String> attributes);
 
 }
