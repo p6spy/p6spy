@@ -152,7 +152,6 @@ public class P6ModuleManager {
 	  final P6LoadableOptions options = factory.getOptions(optionsRepository);
       loadOptions(options);
 
-      // allOptions.put(options.getClass(), options); // Called in loadOptions(options);
       factories.add(factory);
       
       debug("Registered factory: " + factory.getClass().getName() + " with options: " + options.getClass().getName());
