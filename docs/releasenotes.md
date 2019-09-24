@@ -1,10 +1,17 @@
 # Release Notes
 
-## [3.8.6](https://github.com/p6spy/p6spy/compare/p6spy-3.8.5...master) (Unreleased)
+## [3.8.7](https://github.com/p6spy/p6spy/compare/p6spy-3.8.6...master) (Unreleased)
 
 Improvements:
 
 Defects resolved:
+
+## [3.8.6](https://github.com/p6spy/p6spy/compare/p6spy-3.8.5...3.8.6) (2019-09-24)
+
+Improvements:
+
+Defects resolved:
+* [issue #488](https://github.com/p6spy/p6spy/pull/488) fix NPE for binary/varbinary/blob when P6LogFactory not registered.
 
 ## [3.8.5](https://github.com/p6spy/p6spy/compare/p6spy-3.8.4...3.8.5) (2019-08-07)
 
