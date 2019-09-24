@@ -17,6 +17,7 @@
  */
 package com.p6spy.engine.common;
 
+import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.spy.P6SpyOptions;
 
@@ -95,7 +96,9 @@ public class Value {
           result = value.toString();
         }
       } else if (value instanceof byte[]) {
-        if (P6LogOptions.getActiveInstance().getExcludebinary()) {
+        // P6LogFactory may not be registered
+        P6LogLoadableOptions logOptions = P6LogOptions.getActiveInstance();
+        if (logOptions != null && logOptions.getExcludebinary()) {
           result = "[binary]";
         } else {
           result = toHexString((byte[]) value);
@@ -104,7 +107,8 @@ public class Value {
         // we should not do ((Blob) value).getBinaryStream(). ...
         // as inputstream might not be re-rea
 //      } else  if (value instanceof Blob) {
-//        if (P6LogOptions.getActiveInstance().getExcludebinary()) {
+//        P6LogLoadableOptions logOptions = P6LogOptions.getActiveInstance();
+//        if (logOptions != null && logOptions.getExcludebinary()) {
 //          result = "[binary]";
 //        } else {
 //          result = value.toString();
