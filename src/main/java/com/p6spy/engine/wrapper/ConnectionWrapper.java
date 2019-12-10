@@ -231,12 +231,14 @@ public class ConnectionWrapper extends AbstractWrapper implements Connection {
   @Override
   public void close() throws SQLException {
     SQLException e = null;
+    long start = System.nanoTime();
     try {
       delegate.close();
     } catch (SQLException sqle) {
       e = sqle;
       throw e;
     } finally {
+      connectionInformation.setTimeToCloseConnectionNs(System.nanoTime() - start);
       jdbcEventListener.onAfterConnectionClose(connectionInformation, e);
     }
   }

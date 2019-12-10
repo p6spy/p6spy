@@ -37,6 +37,7 @@ public class ConnectionInformation implements Loggable {
   private Connection connection;
   private PooledConnection pooledConnection;
   private long timeToGetConnectionNs;
+  private long timeToCloseConnectionNs;
   private String url;
 
   private ConnectionInformation() {
@@ -213,6 +214,19 @@ public class ConnectionInformation implements Loggable {
 
   public void setTimeToGetConnectionNs(long timeToGetConnectionNs) {
     this.timeToGetConnectionNs = timeToGetConnectionNs;
+  }
+
+  /**
+   * Returns the time it took to close the connection in nanoseconds
+   *
+   * @return the time it took to close the connection in nanoseconds
+   */
+  public long getTimeToCloseConnectionNs() {
+    return timeToCloseConnectionNs;
+  }
+
+  public void setTimeToCloseConnectionNs(long timeToCloseConnectionNs) {
+    this.timeToCloseConnectionNs = timeToCloseConnectionNs;
   }
 
   /** {@inheritDoc} */
