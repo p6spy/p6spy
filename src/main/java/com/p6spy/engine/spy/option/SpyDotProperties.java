@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Properties;
 
@@ -61,8 +62,9 @@ public class SpyDotProperties implements P6OptionsSource {
     try {
       in = url.openStream();
       final Properties properties = new Properties();
-      String charsetName = System.getProperty(OPTIONS_FILE_CHARSET_PROPERTY,"GBK");
-      properties.load(new InputStreamReader(in ,charsetName));
+
+      String charsetName = System.getProperty(OPTIONS_FILE_CHARSET_PROPERTY, Charset.defaultCharset().name());
+      properties.load(new InputStreamReader(in, charsetName));
       options = P6Util.getPropertiesMap(properties);
     } finally {
       if (null != in) {
