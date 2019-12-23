@@ -50,6 +50,8 @@ An example follows:
 Moreover to set different file to be used as the properties file (as an example: another_spy.properties), it should be specified using system property "spy.properties" as:
 
     java -Dspy.properties=c:\jboss\lib\another_spy.properties
+    
+The encoding for loading the properties file can be set via `-Dfile.encoding=<charset name>` or via p6spy specific System property: `-Dspy.properties.charset=<charset name>`.
 
 ## Common Property File Settings
 

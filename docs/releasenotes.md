@@ -1,8 +1,16 @@
 # Release Notes
 
-## [3.8.7](https://github.com/p6spy/p6spy/compare/p6spy-3.8.6...master) (Unreleased)
+## [3.8.8](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...master) (Unreleased)
 
 Improvements:
+
+Defects resolved:
+
+## [3.8.7](https://github.com/p6spy/p6spy/compare/p6spy-3.8.6...3.8.7) (Unreleased)
+
+Improvements:
+* [issue #492](https://github.com/p6spy/p6spy/pull/492) The `file.encoding` system property is used by default to read the configuration file, can be overriden using `-Dspy.properties.charset`.
+* [issue #488](https://github.com/p6spy/p6spy/pull/488) Added `ConnectionInformation.getTimeToCloseConnectionNs()`.
 
 Defects resolved:
 
