@@ -22,6 +22,8 @@ import org.slf4j.LoggerFactory;
 
 import com.p6spy.engine.logging.Category;
 
+import java.util.Map;
+
 /**
  * Appender which delegates to SLF4J. All log messages are logged at the INFO
  * level using the "p6spy" category, except debug and error ones that log on the
@@ -46,9 +48,10 @@ public class Slf4JLogger extends FormattedLogger {
 
 	@Override
 	public void logSQL(int connectionId, String now, long elapsed,
-			Category category, String prepared, String sql, String url) {
+                     Category category, String prepared, String sql, String url,
+                     Map<String, String> attributes) {
 		final String msg = strategy.formatMessage(connectionId, now, elapsed,
-				category.toString(), prepared, sql, url);
+				category.toString(), prepared, sql, url, null);
 
 		if (Category.ERROR.equals(category)) {
 			log.error(msg);

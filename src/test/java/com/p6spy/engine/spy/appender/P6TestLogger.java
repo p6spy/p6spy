@@ -22,6 +22,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.p6spy.engine.logging.Category;
 
@@ -48,8 +49,8 @@ public class P6TestLogger extends StdoutLogger {
   }
 
   @Override
-  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url) {
-    super.logSQL(connectionId, now, elapsed, category, prepared, sql, url);
+  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url, Map<String, String> attributes) {
+    super.logSQL(connectionId, now, elapsed, category, prepared, sql, url, attributes);
     times.add(elapsed);
   }
 

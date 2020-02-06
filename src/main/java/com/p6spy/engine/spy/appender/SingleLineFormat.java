@@ -19,6 +19,8 @@ package com.p6spy.engine.spy.appender;
 
 import com.p6spy.engine.common.P6Util;
 
+import java.util.Map;
+
 /**
  * @author Quinton McCombs
  * @since 09/2013
@@ -35,10 +37,11 @@ public class SingleLineFormat implements MessageFormattingStrategy {
    * @param prepared     the SQL statement with all bind variables replaced with actual values
    * @param sql          the sql statement executed
    * @param url          the database url where the sql statement executed
+   * @param attributes   the additional attributes requested for logging
    * @return the formatted log message
    */
   @Override
-  public String formatMessage(final int connectionId, final String now, final long elapsed, final String category, final String prepared, final String sql, final String url) {
-    return now + "|" + elapsed + "|" + category + "|connection " + connectionId + "|url " + url + "|" + P6Util.singleLine(prepared) + "|" + P6Util.singleLine(sql);
+  public String formatMessage(final int connectionId, final String now, final long elapsed, final String category, final String prepared, final String sql, final String url, Map<String, String> attributes) {
+    return new StringBuilder().append(now).append("|").append(elapsed).append("|").append(category).append("|connection ").append(connectionId).append("|url ").append(url).append("|").append(P6Util.singleLine(prepared)).append("|").append(P6Util.singleLine(sql)).toString();
   }
 }

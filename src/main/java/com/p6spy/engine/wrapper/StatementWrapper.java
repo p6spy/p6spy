@@ -55,6 +55,8 @@ public class StatementWrapper extends AbstractWrapper implements Statement {
     this.delegate = delegate;
     this.eventListener = eventListener;
     this.statementInformation = statementInformation;
+
+    this.statementInformation.captureAttributeValues(delegate);
   }
 
   @Override
@@ -306,6 +308,7 @@ public class StatementWrapper extends AbstractWrapper implements Statement {
 
   @Override
   public void setQueryTimeout(int seconds) throws SQLException {
+    statementInformation.setQueryTimeout(seconds);
     delegate.setQueryTimeout(seconds);
   }
 
@@ -351,6 +354,7 @@ public class StatementWrapper extends AbstractWrapper implements Statement {
 
   @Override
   public void setFetchSize(int rows) throws SQLException {
+    statementInformation.setFetchSize(rows);
     delegate.setFetchSize(rows);
   }
 

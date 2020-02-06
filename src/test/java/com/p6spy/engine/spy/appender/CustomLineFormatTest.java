@@ -38,7 +38,7 @@ public class CustomLineFormatTest {
 		P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(customLogMessageFormat);
 		String logMsg = new CustomLineFormat().formatMessage(0, "1", 1L, "statement",
 				"select value from V$parameter where lower(name)=?",
-				"select value from V$parameter where lower(name)='compatible'", "jdbc:h2:mem:p6spyDSTest");
+				"select value from V$parameter where lower(name)='compatible'", "jdbc:h2:mem:p6spyDSTest", null);
 
 		Assert.assertTrue(logMsg.contains(
 				"select value from V$parameter where lower(name)=?\nselect value from V$parameter where lower(name)='compatible';\n"));

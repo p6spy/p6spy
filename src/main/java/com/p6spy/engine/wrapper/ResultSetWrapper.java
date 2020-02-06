@@ -68,6 +68,8 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
     this.delegate = delegate;
     this.resultSetInformation = resultSetInformation;
     this.eventListener = eventListener;
+
+    this.resultSetInformation.captureAttributeValues(delegate);
   }
 
   @Override
@@ -734,6 +736,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
 
   @Override
   public void setFetchSize(int rows) throws SQLException {
+    resultSetInformation.setFetchSize(rows);
     delegate.setFetchSize(rows);
   }
 

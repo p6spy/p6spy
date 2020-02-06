@@ -19,6 +19,8 @@ package com.p6spy.engine.spy.appender;
 
 import com.p6spy.engine.logging.Category;
 
+import java.util.Map;
+
 /**
  * SQL batch file logger Private: (?) No Appender that writes a trace of JDBC activity into an SQL
  * batch file that can be later "replayed" using a generic SQL client.
@@ -44,7 +46,7 @@ public class BatchFileLogger extends FileLogger {
   }
 
   @Override
-  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url) {
+  public void logSQL(int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url, Map<String, String> attributes) {
     if (endOfStatement) {
       getStream().println(BATCH_SEPARATOR);
     }

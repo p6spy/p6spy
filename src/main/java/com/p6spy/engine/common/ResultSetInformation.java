@@ -17,7 +17,12 @@
  */
 package com.p6spy.engine.common;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.p6spy.engine.logging.Category;
@@ -33,6 +38,18 @@ public class ResultSetInformation implements Loggable {
   private final Map<String, Value> resultMap = new LinkedHashMap<String, Value>();
   private int currRow = -1;
   private int lastRowLogged = -1;
+  private int fetchSize;
+
+  private static final String ATTRIBUTE_PREFIX = "ResultSet.";
+
+  /**
+   * The states that this context can be in at any given instance.
+   */
+  private enum LogAttribute {
+    getFetchSize
+  }
+
+  private static List<LogAttribute> enabledAttributes = null;
 
   public ResultSetInformation(final StatementInformation statementInformation) {
     this.statementInformation = statementInformation;
@@ -90,5 +107,39 @@ public class ResultSetInformation implements Loggable {
   @Override
   public ConnectionInformation getConnectionInformation() {
     return this.statementInformation.getConnectionInformation();
+  }
+
+  public void setFetchSize(int rows) {
+    this.fetchSize = rows;
+  }
+
+  public void captureAttributeValues(ResultSet resultSet) {
+    try {
+      fetchSize = resultSet.getFetchSize();
+    } catch (SQLException ignored) {}
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public Map<String, String> getAttributeValues() {
+    Map<String, String> values = null;
+
+    if (enabledAttributes != null) {
+      values = new HashMap<String, String>(enabledAttributes.size());
+
+      for (LogAttribute attr : enabledAttributes) {
+        switch (attr) {
+          case getFetchSize:
+            values.put(attr.name(), String.valueOf(fetchSize));
+            break;
+        }
+      }
+    }
+
+    return values;
+  }
+
+  public static void setAttributesToLog(List<String> attributeNames) {
+    enabledAttributes = P6Util.findEnumMatches(LogAttribute.class, ATTRIBUTE_PREFIX, attributeNames);
   }
 }

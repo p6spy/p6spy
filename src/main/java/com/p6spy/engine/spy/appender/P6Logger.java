@@ -19,6 +19,8 @@ package com.p6spy.engine.spy.appender;
 
 import com.p6spy.engine.logging.Category;
 
+import java.util.Map;
+
 public interface P6Logger {
 
         /**
@@ -29,6 +31,7 @@ public interface P6Logger {
          * @param now
          *            current time.
          * @param elapsed
+         *            the time in milliseconds that the operation took to complete
          * @param category
          *            the category to be used for logging.
          * @param prepared
@@ -37,9 +40,12 @@ public interface P6Logger {
          *            the {@code SQL} to be logged.
          * @param url
          *            the database url where the sql statement executed
+         * @param attributes
+         *            the additional attributes requested for logging
          */
         public void logSQL(int connectionId, String now, long elapsed,
-                        Category category, String prepared, String sql, String url);
+                           Category category, String prepared, String sql, String url,
+                           Map<String, String> attributes);
 
         /**
          * Logs the stacktrace of the exception.
