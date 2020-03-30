@@ -55,6 +55,7 @@ public class StatementWrapper extends AbstractWrapper implements Statement {
     this.delegate = delegate;
     this.eventListener = eventListener;
     this.statementInformation = statementInformation;
+    statementInformation.setStatement(delegate);
   }
 
   @Override

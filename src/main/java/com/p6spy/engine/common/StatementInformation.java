@@ -17,6 +17,7 @@
  */
 package com.p6spy.engine.common;
 
+import java.sql.Statement;
 
 /**
  * @author Quinton McCombs
@@ -25,11 +26,20 @@ package com.p6spy.engine.common;
 public class StatementInformation implements Loggable {
 
   private final ConnectionInformation connectionInformation;
+  private Statement statement;
   private String statementQuery;
   private long totalTimeElapsed;
-  
+
   public StatementInformation(final ConnectionInformation connectionInformation) {
     this.connectionInformation = connectionInformation;
+  }
+
+  public Statement getStatement() {
+    return statement;
+  }
+
+  public void setStatement(Statement statement) {
+    this.statement = statement;
   }
 
   public String getStatementQuery() {
