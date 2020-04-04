@@ -17,6 +17,7 @@
  */
 package com.p6spy.engine.common;
 
+import java.sql.ResultSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import com.p6spy.engine.logging.Category;
 public class ResultSetInformation implements Loggable {
 
   private final StatementInformation statementInformation;
+  private ResultSet resultSet;
   private String query;
   private final Map<String, Value> resultMap = new LinkedHashMap<String, Value>();
   private int currRow = -1;
@@ -90,5 +92,13 @@ public class ResultSetInformation implements Loggable {
   @Override
   public ConnectionInformation getConnectionInformation() {
     return this.statementInformation.getConnectionInformation();
+  }
+
+  public ResultSet getResultSet() {
+    return resultSet;
+  }
+
+  public void setResultSet(ResultSet resultSet) {
+    this.resultSet = resultSet;
   }
 }

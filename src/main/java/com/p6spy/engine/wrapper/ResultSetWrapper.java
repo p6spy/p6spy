@@ -68,6 +68,7 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
     this.delegate = delegate;
     this.resultSetInformation = resultSetInformation;
     this.eventListener = eventListener;
+    resultSetInformation.setResultSet(delegate);
   }
 
   @Override

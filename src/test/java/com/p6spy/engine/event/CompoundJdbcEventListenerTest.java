@@ -17,6 +17,7 @@
  */
 package com.p6spy.engine.event;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -45,6 +46,7 @@ import java.sql.DriverManager;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.Ref;
+import java.sql.ResultSet;
 import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLXML;
@@ -59,6 +61,7 @@ import javax.sql.PooledConnection;
 import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
+import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.spy.JdbcEventListenerFactory;
 import com.p6spy.engine.spy.P6DataSource;
@@ -68,7 +71,9 @@ import com.p6spy.engine.test.P6TestFactory;
 import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.wrapper.CallableStatementWrapper;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
+import com.p6spy.engine.wrapper.P6Proxy;
 import com.p6spy.engine.wrapper.PreparedStatementWrapper;
+import com.p6spy.engine.wrapper.ResultSetWrapper;
 import com.p6spy.engine.wrapper.StatementWrapper;
 import org.junit.After;
 import org.junit.Assert;
@@ -97,11 +102,13 @@ public class CompoundJdbcEventListenerTest {
   private Statement wrappedStatement;
   private PreparedStatement wrappedPreparedStatement;
   private CallableStatement wrappedCallableStatement;
+  private ResultSet wrappedResultSet;
 
   private ConnectionInformation connectionInformation;
   private StatementInformation statementInformation;
   private PreparedStatementInformation preparedStatementInformation;
   private CallableStatementInformation callableStatementInformation;
+  private ResultSetInformation resultSetInformation;
 
   private static final String SQL = "SELECT * FROM DUAL";
 
@@ -115,6 +122,7 @@ public class CompoundJdbcEventListenerTest {
     final Statement mockedStatement = mock(Statement.class);
     final PreparedStatement mockedPreparedStatement = mock(PreparedStatement.class);
     final CallableStatement mockedCallableStatement = mock(CallableStatement.class);
+    final ResultSet mockedResultSet = mock(ResultSet.class);
 
     wrappedDataSource = new P6DataSource(mockedDataSource);
     ((P6DataSource) wrappedDataSource).setJdbcEventListenerFactory(new JdbcEventListenerFactory() {
@@ -137,6 +145,7 @@ public class CompoundJdbcEventListenerTest {
     statementInformation = new StatementInformation(connectionInformation);
     preparedStatementInformation = new PreparedStatementInformation(connectionInformation, "SELECT * FROM DUAL");
     callableStatementInformation = new CallableStatementInformation(connectionInformation, "SELECT * FROM DUAL");
+    resultSetInformation = new ResultSetInformation(statementInformation);
 
     @SuppressWarnings("resource")
     Connection connectionWrapper = ConnectionWrapper.wrap(mockedConnection, mockedJdbcListener, connectionInformation);
@@ -147,6 +156,7 @@ public class CompoundJdbcEventListenerTest {
         mockedJdbcListener);
     wrappedCallableStatement = CallableStatementWrapper.wrap(mockedCallableStatement, callableStatementInformation,
         mockedJdbcListener);
+    wrappedResultSet = ResultSetWrapper.wrap(mockedResultSet, resultSetInformation, mockedJdbcListener);
     
     P6SpyDriver.setJdbcEventListenerFactory(new JdbcEventListenerFactory() {
       @Override
@@ -339,6 +349,9 @@ public class CompoundJdbcEventListenerTest {
   public void testPreparedStatementOnBeforeExecuteQuery() throws SQLException {
     wrappedPreparedStatement.executeQuery();
     verify(mockedJdbcListener).onBeforeExecuteQuery(eq(preparedStatementInformation));
+    assertTrue(preparedStatementInformation.getStatement() != wrappedPreparedStatement);
+    assertTrue(preparedStatementInformation.getStatement() ==
+        (PreparedStatement) ((P6Proxy) wrappedPreparedStatement).unwrapP6SpyProxy());
   }
 
   @Test
@@ -1098,6 +1111,15 @@ public class CompoundJdbcEventListenerTest {
     }
     verify(mockedJdbcListener).onAfterSetAutoCommit(eq(connectionInformation), eq(false), eq(currentAutoCommit),
         eq(sqle));
+  }
+
+  @Test
+  public void testResultSetOnBeforeResultSetNext() throws SQLException {
+    wrappedResultSet.next();
+    verify(mockedJdbcListener).onBeforeResultSetNext(eq(resultSetInformation));
+    assertTrue(resultSetInformation.getResultSet() != wrappedResultSet);
+    assertTrue(resultSetInformation.getResultSet() ==
+        (ResultSet) ((P6Proxy) wrappedResultSet).unwrapP6SpyProxy());
   }
 
   private ConnectionInformation connectionInformationWithConnection() {
