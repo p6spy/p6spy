@@ -1,15 +1,15 @@
 # Release Notes
 
-## [3.9.0](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...3.9.0) (Unreleased)
+## [3.9.1](https://github.com/p6spy/p6spy/compare/p6spy-3.9.0...master) (Unreleased)
 
 Improvements:
-## [3.8.7](https://github.com/p6spy/p6spy/compare/p6spy-3.8.6...3.8.7) (Unreleased)
 
 Defects resolved:
 
-## [3.8.8](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...3.9.0) (Unreleased)
+## [3.9.0](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...3.9.0) (Unreleased)
 
 Improvements:
+* [issue 497](https://github.com/p6spy/p6spy/pull/497) Added `Statement` into `StatementInformation`.
 
 Defects resolved:
 
