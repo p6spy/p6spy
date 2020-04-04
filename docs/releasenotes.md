@@ -1,6 +1,13 @@
 # Release Notes
 
-## [3.8.8](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...master) (Unreleased)
+## [3.9.0](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...3.9.0) (Unreleased)
+
+Improvements:
+## [3.8.7](https://github.com/p6spy/p6spy/compare/p6spy-3.8.6...3.8.7) (Unreleased)
+
+Defects resolved:
+
+## [3.8.8](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...3.9.0) (Unreleased)
 
 Improvements:
 
