@@ -25,6 +25,8 @@ import javax.management.StandardMBean;
 
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogFactory;
+import com.p6spy.engine.logging.format.BinaryFormat;
+import com.p6spy.engine.logging.format.HexEncodedBinaryFormat;
 import com.p6spy.engine.spy.appender.*;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
@@ -52,6 +54,8 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String DATABASE_DIALECT_DATE_FORMAT = "databaseDialectDateFormat";
     public static final String DATABASE_DIALECT_TIMESTAMP_FORMAT = "databaseDialectTimestampFormat";
     public static final String DATABASE_DIALECT_BOOLEAN_FORMAT = "databaseDialectBooleanFormat";
+    public static final String DATABASE_DIALECT_BINARY_FORMAT = "databaseDialectBinaryFormat";
+    public static final String DATABASE_DIALECT_BINARY_FORMAT_INSTANCE = "databaseDialectBinaryFormatInstance";
     public static final String JMX = "jmx";
     public static final String JMX_PREFIX = "jmxPrefix";
 
@@ -78,6 +82,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       defaults.put(DATABASE_DIALECT_DATE_FORMAT, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
       defaults.put(DATABASE_DIALECT_TIMESTAMP_FORMAT, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
       defaults.put(DATABASE_DIALECT_BOOLEAN_FORMAT, "boolean");
+      defaults.put(DATABASE_DIALECT_BINARY_FORMAT, HexEncodedBinaryFormat.class.getName());
       defaults.put(CUSTOM_LOG_MESSAGE_FORMAT, String.format("%s|%s|%s|connection%s|%s",
         CustomLineFormat.CURRENT_TIME, CustomLineFormat.EXECUTION_TIME, CustomLineFormat.CATEGORY,
         CustomLineFormat.CONNECTION_ID, CustomLineFormat.SQL_SINGLE_LINE));
@@ -114,6 +119,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setDatabaseDialectDateFormat(options.get(DATABASE_DIALECT_DATE_FORMAT));
       setDatabaseDialectTimestampFormat(options.get(DATABASE_DIALECT_TIMESTAMP_FORMAT));
       setDatabaseDialectBooleanFormat(options.get(DATABASE_DIALECT_BOOLEAN_FORMAT));
+      setDatabaseDialectBinaryFormat(options.get(DATABASE_DIALECT_BINARY_FORMAT));
       setCustomLogMessageFormat(options.get(CUSTOM_LOG_MESSAGE_FORMAT));
       setJmx(options.get(JMX));
       setJmxPrefix(options.get(JMX_PREFIX));
@@ -349,6 +355,37 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
   public void setDatabaseDialectBooleanFormat(String databaseDialectBooleanFormat) {
     optionsRepository.set(String.class, DATABASE_DIALECT_BOOLEAN_FORMAT, databaseDialectBooleanFormat);
   }
+  
+    /**
+     * Returns the class name of the database dialect binary format.
+     *
+     * @return String
+     */
+    @Override
+    public String getDatabaseDialectBinaryFormat() {
+      return optionsRepository.get(String.class, DATABASE_DIALECT_BINARY_FORMAT);
+    }
+
+    /**
+     * Sets the class name of the database dialect binary format.
+     *
+     * @param className The class name to set
+     */
+    @Override
+    public void setDatabaseDialectBinaryFormat(String className) {
+      optionsRepository.set(String.class, DATABASE_DIALECT_BINARY_FORMAT, className);
+      optionsRepository.set(BinaryFormat.class, DATABASE_DIALECT_BINARY_FORMAT_INSTANCE, className);
+    }
+
+    /**
+     * Returns the class name of the database dialect binary format.
+     *
+     * @return String
+     */
+    @Override
+    public BinaryFormat getDatabaseDialectBinaryFormatInstance() {
+      return optionsRepository.get(BinaryFormat.class, DATABASE_DIALECT_BINARY_FORMAT_INSTANCE);
+    }
 
     /**
      * Returns the customLogMessageFormat.

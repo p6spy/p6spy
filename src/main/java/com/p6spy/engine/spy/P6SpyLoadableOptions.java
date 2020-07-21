@@ -19,6 +19,7 @@ package com.p6spy.engine.spy;
 
 import java.util.Set;
 
+import com.p6spy.engine.logging.format.BinaryFormat;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.p6spy.engine.spy.appender.P6Logger;
 
@@ -37,6 +38,12 @@ public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsMBe
   void setAppend(String append);
   
   P6Logger getAppenderInstance();
+  
+  /**
+   * Gets an instance of the database dialect {@link BinaryFormat} the implementing class of which is
+   * set by {@link P6SpyOptionsMBean#setDatabaseDialectBinaryFormat}.
+   */
+  BinaryFormat getDatabaseDialectBinaryFormatInstance();
 
   MessageFormattingStrategy getLogMessageFormatInstance();
   

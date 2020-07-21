@@ -34,6 +34,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.logging.format.HexEncodedBinaryFormat;
+import com.p6spy.engine.logging.format.MySQLBinaryFormat;
+import com.p6spy.engine.logging.format.PostgreSQLBinaryFormat;
 import com.p6spy.engine.test.P6TestFramework;
 
 @RunWith(Parameterized.class)
@@ -42,6 +45,7 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
   ResultSet resultSet = null;
 
   private boolean originalExcludeBinaryFlag;
+  private String originalDatabaseDialectBinaryFormat;
   
   public P6TestResultSetWithBinary(String db) throws SQLException, IOException {
     super(db);
@@ -50,11 +54,13 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
   @Before
   public void before() {
     this.originalExcludeBinaryFlag = P6LogOptions.getActiveInstance().getExcludebinary();
+    this.originalDatabaseDialectBinaryFormat = P6SpyOptions.getActiveInstance().getDatabaseDialectBinaryFormat();
   }
   
   @After
   public void after() {
     P6LogOptions.getActiveInstance().setExcludebinary(this.originalExcludeBinaryFlag);
+    P6SpyOptions.getActiveInstance().setDatabaseDialectBinaryFormat(this.originalDatabaseDialectBinaryFormat);
   }
   
   @Before
@@ -117,10 +123,12 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
   @Test
   public void binaryExcludedFalse() throws SQLException {
     boolean original = P6LogOptions.getActiveInstance().getExcludebinary();
+    String originalBinaryFormat = P6SpyOptions.getActiveInstance().getDatabaseDialectBinaryFormat();
 
     try {
       // given
       P6LogOptions.getActiveInstance().setExcludebinary(false);
+      P6SpyOptions.getActiveInstance().setDatabaseDialectBinaryFormat(HexEncodedBinaryFormat.class.getName());
       resultSet.next();
       
       // when
@@ -131,6 +139,53 @@ public class P6TestResultSetWithBinary extends P6TestFramework {
       assertTrue(super.getLastLogEntry().contains("val = '666F6F'"));
     } finally {
       P6LogOptions.getActiveInstance().setExcludebinary(original);
+      P6SpyOptions.getActiveInstance().setDatabaseDialectBinaryFormat(originalBinaryFormat);
+    }
+  }
+  
+  @Test
+  public void postgreSQLBinaryFormat() throws SQLException {
+    boolean originalExclude = P6LogOptions.getActiveInstance().getExcludebinary();
+    String originalBinaryFormat = P6SpyOptions.getActiveInstance().getDatabaseDialectBinaryFormat();
+
+    try {
+      // given
+      P6LogOptions.getActiveInstance().setExcludebinary(false);
+      P6SpyOptions.getActiveInstance().setDatabaseDialectBinaryFormat(PostgreSQLBinaryFormat.class.getName());
+      resultSet.next();
+      
+      // when
+      resultSet.getBytes("val");
+      resultSet.next();
+
+      // then
+      assertTrue(super.getLastLogEntry().contains("val = '\\x666F6F'"));
+    } finally {
+      P6LogOptions.getActiveInstance().setExcludebinary(originalExclude);
+      P6SpyOptions.getActiveInstance().setDatabaseDialectBinaryFormat(originalBinaryFormat);
+    }
+  }
+  
+  @Test
+  public void mySQLBinaryFormat() throws SQLException {
+    boolean originalExclude = P6LogOptions.getActiveInstance().getExcludebinary();
+    String originalBinaryFormat = P6SpyOptions.getActiveInstance().getDatabaseDialectBinaryFormat();
+
+    try {
+      // given
+      P6LogOptions.getActiveInstance().setExcludebinary(false);
+      P6SpyOptions.getActiveInstance().setDatabaseDialectBinaryFormat(MySQLBinaryFormat.class.getName());
+      resultSet.next();
+      
+      // when
+      resultSet.getBytes("val");
+      resultSet.next();
+
+      // then
+      assertTrue(super.getLastLogEntry().contains("val = 0x666F6F"));
+    } finally {
+      P6LogOptions.getActiveInstance().setExcludebinary(originalExclude);
+      P6SpyOptions.getActiveInstance().setDatabaseDialectBinaryFormat(originalBinaryFormat);
     }
   }
   

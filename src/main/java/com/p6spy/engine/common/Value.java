@@ -19,6 +19,7 @@ package com.p6spy.engine.common;
 
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.logging.format.BinaryFormat;
 import com.p6spy.engine.spy.P6SpyOptions;
 
 import java.sql.Timestamp;
@@ -34,9 +35,6 @@ import java.util.Date;
  *
  */
 public class Value {
-
-  private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
-      'F' };
 
   /**
    * Value itself.
@@ -70,8 +68,8 @@ public class Value {
    * <ul>
    * <li>{@link java.util.Date} values it in a way configured via configuration
    * property: {@code dateformat},</li>
-   * <li>{@code byte[]} values are converted to {@link String} Hexadecimal
-   * representation, unless configuration property {@code exclidebinary=true} is
+   * <li>{@code byte[]} values are converted to {@link String} representation using the configured
+   * database dialect {@link BinaryFormat}, unless configuration property {@code exclidebinary=true} is
    * set.</li>
    * <li>for other types string representation is simply returned.</li>
    * </ul>
@@ -81,6 +79,8 @@ public class Value {
    */
   public String convertToString(Object value) {
     String result;
+    BinaryFormat binaryFormat = null;
+    
     if (value == null) {
       result = "NULL";
     } else {
@@ -101,7 +101,8 @@ public class Value {
         if (logOptions != null && logOptions.getExcludebinary()) {
           result = "[binary]";
         } else {
-          result = toHexString((byte[]) value);
+          binaryFormat = P6SpyOptions.getActiveInstance().getDatabaseDialectBinaryFormatInstance();
+          result = binaryFormat.toString((byte[]) value);
         }
         
         // we should not do ((Blob) value).getBinaryStream(). ...
@@ -117,27 +118,10 @@ public class Value {
         result = value.toString();
       }
 
-      result = quoteIfNeeded(result, value);
+      result = quoteIfNeeded(result, value, binaryFormat);
     }
 
     return result;
-  }
-
-  /**
-   * @param bytes
-   *          the bytes value to convert to {@link String}
-   * @return the hexadecimal {@link String} representation of the given
-   *         {@code bytes}.
-   */
-  private String toHexString(byte[] bytes) {
-    char[] result = new char[bytes.length * 2];
-    int idx = 0;
-    for (byte b : bytes) {
-      int temp = (int) b & 0xFF;
-      result[idx++] = HEX_CHARS[temp / 16];
-      result[idx++] = HEX_CHARS[temp % 16];
-    }
-    return new String(result);
   }
 
   /**
@@ -145,15 +129,17 @@ public class Value {
    * 
    * @param stringValue
    * @param obj
+   * @param binaryFormat the binary format, or null if not applicable
    * @return
    */
-  private String quoteIfNeeded(String stringValue, Object obj) {
+  private String quoteIfNeeded(String stringValue, Object obj, BinaryFormat binaryFormat) {
     if (stringValue == null) {
       return null;
     }
 
     /*
-     * The following types do not get quoted: numeric, boolean
+     * The following types do not get quoted: numeric, boolean.
+     * Binary data is quoted only if the supplied binaryFormat requires that.
      * 
      * It is tempting to use ParameterMetaData.getParameterType() for this
      * purpose as it would be safer. However, this method will fail with some
@@ -165,6 +151,10 @@ public class Value {
      * MySQL: The method call only works if service side prepared statements are
      * enabled. The URL parameter 'useServerPrepStmts=true' enables.
      */
+    if (obj instanceof byte[] && binaryFormat != null && !binaryFormat.needsQuotes()) {
+      return stringValue;
+    }
+    
     if (Number.class.isAssignableFrom(obj.getClass()) || Boolean.class.isAssignableFrom(obj.getClass())) {
       return stringValue;
     } else {
