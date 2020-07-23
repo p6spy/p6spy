@@ -20,6 +20,7 @@ package com.p6spy.engine.logging.format;
 public interface BinaryFormat {
   /**
    * Transforms the supplied binary data to a string representation.
+   * Wraps the value in quotes if the database dialect requires them.
    * 
    * @param input
    *    the binary data input value to convert to {@link String}
@@ -27,9 +28,4 @@ public interface BinaryFormat {
    *    the {@link String} representation of the given bytes
    */
   public String toString(byte[] input);
-
-  /**
-   * Tells whether this binary format needs quotes around the string value when used in queries.
-   */
-  public boolean needsQuotes();
 }

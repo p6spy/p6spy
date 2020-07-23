@@ -24,20 +24,24 @@ public class HexEncodedBinaryFormat implements BinaryFormat {
   private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
       'F' };
 
+  /**
+   * The space needed for the opening and closing quote character.
+   */
+  private static final int QUOTE_COUNT = 2;
+
   @Override
   public String toString(byte[] input) {
-    char[] result = new char[input.length * 2];
-    hexEncode(input, result, 0);
+    char[] result = new char[QUOTE_COUNT + input.length * 2];
+    int i = 0;
+    result[i++] = '\''; // add opening quote
+    hexEncode(input, result, i);
+    result[result.length - 1] = '\''; // add closing quote
     return new String(result);
   }
 
-  @Override
-  public boolean needsQuotes() {
-    return true;
-  }
-  
   /**
    * Hex encodes the supplied input bytes to the supplied output array.
+   * Writes two {@code char}s of output for every {@code byte} of input.
    * @param input the input array
    * @param output the output array
    * @param outputOffset the offset of the output array to start writing from

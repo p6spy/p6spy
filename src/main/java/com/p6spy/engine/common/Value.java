@@ -79,30 +79,21 @@ public class Value {
    */
   public String convertToString(Object value) {
     String result;
-    BinaryFormat binaryFormat = null;
     
     if (value == null) {
       result = "NULL";
     } else {
 
-      if (value instanceof Timestamp) {
-        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectTimestampFormat()).format(value);
-      } else if (value instanceof Date) {
-        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
-      } else if (value instanceof Boolean) {
-        if ("numeric".equals(P6SpyOptions.getActiveInstance().getDatabaseDialectBooleanFormat())) {
-          result = Boolean.FALSE.equals(value) ? "0" : "1";
-        } else {
-          result = value.toString();
-        }
-      } else if (value instanceof byte[]) {
+      if (value instanceof byte[]) {
         // P6LogFactory may not be registered
         P6LogLoadableOptions logOptions = P6LogOptions.getActiveInstance();
         if (logOptions != null && logOptions.getExcludebinary()) {
           result = "[binary]";
         } else {
-          binaryFormat = P6SpyOptions.getActiveInstance().getDatabaseDialectBinaryFormatInstance();
-          result = binaryFormat.toString((byte[]) value);
+          BinaryFormat binaryFormat = P6SpyOptions.getActiveInstance().getDatabaseDialectBinaryFormatInstance();
+          
+          // return early because BinaryFormat#toString wraps the value in quotes if needed
+          return binaryFormat.toString((byte[]) value);
         }
         
         // we should not do ((Blob) value).getBinaryStream(). ...
@@ -114,11 +105,21 @@ public class Value {
 //        } else {
 //          result = value.toString();
 //        }
+      } else if (value instanceof Timestamp) {
+        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectTimestampFormat()).format(value);
+      } else if (value instanceof Date) {
+        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
+      } else if (value instanceof Boolean) {
+        if ("numeric".equals(P6SpyOptions.getActiveInstance().getDatabaseDialectBooleanFormat())) {
+          result = Boolean.FALSE.equals(value) ? "0" : "1";
+        } else {
+          result = value.toString();
+        }
       } else {
         result = value.toString();
       }
 
-      result = quoteIfNeeded(result, value, binaryFormat);
+      result = quoteIfNeeded(result, value);
     }
 
     return result;
@@ -129,10 +130,9 @@ public class Value {
    * 
    * @param stringValue
    * @param obj
-   * @param binaryFormat the binary format, or null if not applicable
    * @return
    */
-  private String quoteIfNeeded(String stringValue, Object obj, BinaryFormat binaryFormat) {
+  private String quoteIfNeeded(String stringValue, Object obj) {
     if (stringValue == null) {
       return null;
     }
@@ -151,10 +151,6 @@ public class Value {
      * MySQL: The method call only works if service side prepared statements are
      * enabled. The URL parameter 'useServerPrepStmts=true' enables.
      */
-    if (obj instanceof byte[] && binaryFormat != null && !binaryFormat.needsQuotes()) {
-      return stringValue;
-    }
-    
     if (Number.class.isAssignableFrom(obj.getClass()) || Boolean.class.isAssignableFrom(obj.getClass())) {
       return stringValue;
     } else {
