@@ -97,7 +97,17 @@ public interface P6SpyOptionsMBean {
   String getDatabaseDialectBooleanFormat();
 
   void setDatabaseDialectBooleanFormat(String databaseDialectBooleanFormat);
+  
+  /**
+   * Gets the class name of the database dialect binary formatter.
+   */
+  String getDatabaseDialectBinaryFormat();
 
+  /**
+   * Sets the class name of the database dialect binary formatter.
+   */
+  void setDatabaseDialectBinaryFormat(String className);
+  
   String getCustomLogMessageFormat();
 
   void setCustomLogMessageFormat(String customLogMessageFormat);

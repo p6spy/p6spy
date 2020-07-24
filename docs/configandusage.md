@@ -162,6 +162,12 @@ in section: [Configuration and Usage](#configuration-and-usage)):
     # format that is used for logging booleans, possible values: boolean, numeric
     # (default is boolean)
     #databaseDialectBooleanFormat=boolean
+    
+    # Specifies the format for logging binary data. Not applicable if excludebinary is true.
+    # (default is com.p6spy.engine.logging.format.HexEncodedBinaryFormat)
+    #databaseDialectBinaryFormat=com.p6spy.engine.logging.format.PostgreSQLBinaryFormat
+    #databaseDialectBinaryFormat=com.p6spy.engine.logging.format.MySQLBinaryFormat
+    #databaseDialectBinaryFormat=com.p6spy.engine.logging.format.HexEncodedBinaryFormat
 
     # whether to expose options via JMX or not
     # (default is true)

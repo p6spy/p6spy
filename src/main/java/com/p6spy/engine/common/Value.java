@@ -19,6 +19,7 @@ package com.p6spy.engine.common;
 
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.logging.format.BinaryFormat;
 import com.p6spy.engine.spy.P6SpyOptions;
 
 import java.sql.Timestamp;
@@ -34,9 +35,6 @@ import java.util.Date;
  *
  */
 public class Value {
-
-  private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
-      'F' };
 
   /**
    * Value itself.
@@ -70,8 +68,8 @@ public class Value {
    * <ul>
    * <li>{@link java.util.Date} values it in a way configured via configuration
    * property: {@code dateformat},</li>
-   * <li>{@code byte[]} values are converted to {@link String} Hexadecimal
-   * representation, unless configuration property {@code exclidebinary=true} is
+   * <li>{@code byte[]} values are converted to {@link String} representation using the configured
+   * database dialect {@link BinaryFormat}, unless configuration property {@code exclidebinary=true} is
    * set.</li>
    * <li>for other types string representation is simply returned.</li>
    * </ul>
@@ -81,27 +79,21 @@ public class Value {
    */
   public String convertToString(Object value) {
     String result;
+    
     if (value == null) {
       result = "NULL";
     } else {
 
-      if (value instanceof Timestamp) {
-        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectTimestampFormat()).format(value);
-      } else if (value instanceof Date) {
-        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
-      } else if (value instanceof Boolean) {
-        if ("numeric".equals(P6SpyOptions.getActiveInstance().getDatabaseDialectBooleanFormat())) {
-          result = Boolean.FALSE.equals(value) ? "0" : "1";
-        } else {
-          result = value.toString();
-        }
-      } else if (value instanceof byte[]) {
+      if (value instanceof byte[]) {
         // P6LogFactory may not be registered
         P6LogLoadableOptions logOptions = P6LogOptions.getActiveInstance();
         if (logOptions != null && logOptions.getExcludebinary()) {
           result = "[binary]";
         } else {
-          result = toHexString((byte[]) value);
+          BinaryFormat binaryFormat = P6SpyOptions.getActiveInstance().getDatabaseDialectBinaryFormatInstance();
+          
+          // return early because BinaryFormat#toString wraps the value in quotes if needed
+          return binaryFormat.toString((byte[]) value);
         }
         
         // we should not do ((Blob) value).getBinaryStream(). ...
@@ -113,6 +105,16 @@ public class Value {
 //        } else {
 //          result = value.toString();
 //        }
+      } else if (value instanceof Timestamp) {
+        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectTimestampFormat()).format(value);
+      } else if (value instanceof Date) {
+        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
+      } else if (value instanceof Boolean) {
+        if ("numeric".equals(P6SpyOptions.getActiveInstance().getDatabaseDialectBooleanFormat())) {
+          result = Boolean.FALSE.equals(value) ? "0" : "1";
+        } else {
+          result = value.toString();
+        }
       } else {
         result = value.toString();
       }
@@ -121,23 +123,6 @@ public class Value {
     }
 
     return result;
-  }
-
-  /**
-   * @param bytes
-   *          the bytes value to convert to {@link String}
-   * @return the hexadecimal {@link String} representation of the given
-   *         {@code bytes}.
-   */
-  private String toHexString(byte[] bytes) {
-    char[] result = new char[bytes.length * 2];
-    int idx = 0;
-    for (byte b : bytes) {
-      int temp = (int) b & 0xFF;
-      result[idx++] = HEX_CHARS[temp / 16];
-      result[idx++] = HEX_CHARS[temp % 16];
-    }
-    return new String(result);
   }
 
   /**
@@ -153,7 +138,8 @@ public class Value {
     }
 
     /*
-     * The following types do not get quoted: numeric, boolean
+     * The following types do not get quoted: numeric, boolean.
+     * Binary data is quoted only if the supplied binaryFormat requires that.
      * 
      * It is tempting to use ParameterMetaData.getParameterType() for this
      * purpose as it would be safer. However, this method will fail with some
