@@ -3,17 +3,19 @@
 ## [3.9.1](https://github.com/p6spy/p6spy/compare/p6spy-3.9.0...master) (Unreleased)
 
 Improvements:
+* [issue 501](https://github.com/p6spy/p6spy/pull/501) Database dialect dependent binary data representation.
+* [issue 493](https://github.com/p6spy/p6spy/pull/493) Added `ResultSetInformation.getResultMap()`.
 
 Defects resolved:
 
-## [3.9.0](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...3.9.0) (Unreleased)
+## [3.9.0](https://github.com/p6spy/p6spy/compare/p6spy-3.8.7...3.9.0) (2020-04-04)
 
 Improvements:
 * [issue 497](https://github.com/p6spy/p6spy/pull/497) Added `Statement` into `StatementInformation`.
 
 Defects resolved:
 
-## [3.8.7](https://github.com/p6spy/p6spy/compare/p6spy-3.8.6...3.8.7) (Unreleased)
+## [3.8.7](https://github.com/p6spy/p6spy/compare/p6spy-3.8.6...3.8.7) (2019-12-23)
 
 Improvements:
 * [issue #492](https://github.com/p6spy/p6spy/pull/492) The `file.encoding` system property is used by default to read the configuration file, can be overriden using `-Dspy.properties.charset`.

@@ -24,6 +24,7 @@ import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.NClob;
 import java.sql.Ref;
@@ -39,6 +40,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
+import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.event.JdbcEventListener;
 
@@ -69,6 +71,14 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
     this.resultSetInformation = resultSetInformation;
     this.eventListener = eventListener;
     resultSetInformation.setResultSet(delegate);
+  }
+
+  public ResultSet getDelegate() {
+    return delegate;
+  }
+
+  public ResultSetInformation getResultSetInformation() {
+    return resultSetInformation;
   }
 
   @Override
