@@ -379,7 +379,7 @@ dependencyUpdates.resolutionStrategy {
 }
 
 tasks {
-  sonarqube {
+  check {
     dependsOn(jacocoTestReport)
   }
 }
