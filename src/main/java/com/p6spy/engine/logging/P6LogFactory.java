@@ -33,9 +33,9 @@ public class P6LogFactory implements P6Factory {
 
   @Override
   public JdbcEventListener getJdbcEventListener() {
-    // return first custom implementaion
-    for (Iterator<LoggingEventListener> iterator = customLoggingEventListener.iterator(); iterator.hasNext(); ) {
-      return iterator.next();
+    // return first custom implementation
+    for (LoggingEventListener loggingEventListener : customLoggingEventListener) {
+      return loggingEventListener;
     }
     // if none found, return default impl
     return LoggingEventListener.INSTANCE;

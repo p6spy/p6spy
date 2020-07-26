@@ -7,6 +7,9 @@ services:
   - mysql
   - postgresql
 
+git:
+  depth: false
+
 addons:
   sonarcloud:
     organization: "p6spy-github"
@@ -26,7 +29,8 @@ jdk:
   # - openjdk7
   - oraclejdk8
   - openjdk8
-  - oraclejdk9
+  - openjdk11
+  - openjdk-ea
 
 env:
   global:
@@ -76,7 +80,7 @@ script:
 after_success:
   - |
       # oraclejdk 8 used for all the publishing works
-      if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then
+      if [[ $TRAVIS_JDK_VERSION == "openjdk11" ]]; then
 
         # sonarcloud.io publishing
         ./gradlew sonarqube --info --stacktrace
