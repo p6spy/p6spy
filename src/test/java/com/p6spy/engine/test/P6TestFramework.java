@@ -21,7 +21,6 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -95,8 +94,8 @@ public abstract class P6TestFramework extends BaseTestCase {
   public void setUpFramework() throws Exception {
     // clean table plz (we need to make sure that all the configured factories will be re-loaded)
     new DefaultJdbcEventListenerFactory().clearCache();
-    
-    
+
+
     Collection<String> driverNames = P6SpyOptions.getActiveInstance().getDriverNames();
     String user = P6TestOptions.getActiveInstance().getUser();
     String password = P6TestOptions.getActiveInstance().getPassword();
