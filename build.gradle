@@ -39,9 +39,14 @@ repositories {
     }
 }
 
-// on project level (rather than compileJava one) as sonarqube respects these
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+// using target 1.8 for JDK 14+, doesn't change requirements as release is performed on "oraclejdk8"
+if (System.getenv("TRAVIS_JDK_VERSION") == "openjdk14") {
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+} else {
+  sourceCompatibility = 1.6
+  targetCompatibility = 1.6
+}
 
 compileTestJava {
   sourceCompatibility = 1.8
