@@ -2,19 +2,19 @@ version: "3.0"
 
 services:
 
-oracle:
-  image: wnameless/oracle-xe-11g-r2:latest
-  ports:
-    - "1522:1521"
-    - "8081:8080"
-  volumes:
-    - ./script/docker/oracle/create_user.sql:/docker-entrypoint-initdb.d/create_user.sql
-    - ./script/docker/oracle/healthcheck.sh:/tmp/healthcheck.sh
-  healthcheck:
-    test: /bin/bash /tmp/healthcheck.sh
-    interval: 2s
-    timeout: 10s
-    retries: 1800 # 2s*1800 = 3600s = 60min
+  oracle:
+    image: wnameless/oracle-xe-11g-r2:latest
+    ports:
+      - "1522:1521"
+      - "8081:8080"
+    volumes:
+      - ./script/docker/oracle/create_user.sql:/docker-entrypoint-initdb.d/create_user.sql
+      - ./script/docker/oracle/healthcheck.sh:/tmp/healthcheck.sh
+    healthcheck:
+      test: /bin/bash /tmp/healthcheck.sh
+      interval: 2s
+      timeout: 10s
+      retries: 1800 # 2s*1800 = 3600s = 60min
 
   # mssqlserver:
   #   image: microsoft/mssql-server-linux:latest
