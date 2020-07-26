@@ -112,6 +112,7 @@ sweeney {
 jacocoTestReport {
     reports {
         html.enabled = true
+        xml.enabled = true
     }
 }
 
@@ -374,5 +375,11 @@ dependencyUpdates.resolutionStrategy {
         selection.reject('Release candidate')
       }
     }
+  }
+}
+
+tasks {
+  sonarqube {
+    dependsOn(jacocoTestReport)
   }
 }
