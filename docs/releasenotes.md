@@ -3,8 +3,9 @@
 ## [3.9.1](https://github.com/p6spy/p6spy/compare/p6spy-3.9.0...master) (Unreleased)
 
 Improvements:
-* [issue 501](https://github.com/p6spy/p6spy/pull/501) Database dialect dependent binary data representation.
-* [issue 493](https://github.com/p6spy/p6spy/pull/493) Added `ResultSetInformation.getResultMap()`.
+* [issue 501](https://github.com/p6spy/p6spy/issues/501) Database dialect dependent binary data representation.
+* [issue 493](https://github.com/p6spy/p6spy/issues/493) Added `ResultSetInformation.getResultMap()`.
+* [issue 505](https://github.com/p6spy/p6spy/issues/505) Run Sonar on JDK 11
 
 Defects resolved:
 

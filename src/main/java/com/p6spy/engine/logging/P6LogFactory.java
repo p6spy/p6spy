@@ -22,6 +22,7 @@ import com.p6spy.engine.spy.P6Factory;
 import com.p6spy.engine.spy.P6LoadableOptions;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
 
+import java.util.Iterator;
 import java.util.ServiceLoader;
 
 public class P6LogFactory implements P6Factory {
@@ -32,8 +33,9 @@ public class P6LogFactory implements P6Factory {
   @Override
   public JdbcEventListener getJdbcEventListener() {
     // return first custom implementation
-    for (LoggingEventListener loggingEventListener : customLoggingEventListener) {
-      return loggingEventListener;
+    Iterator<LoggingEventListener> iterator = customLoggingEventListener.iterator();
+    if (iterator.hasNext()) {
+      return iterator.next();
     }
     // if none found, return default impl
     return LoggingEventListener.INSTANCE;
