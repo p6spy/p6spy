@@ -17,7 +17,8 @@
  */
 package com.p6spy.engine.event;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -157,7 +158,7 @@ public class CompoundJdbcEventListenerTest {
     wrappedCallableStatement = CallableStatementWrapper.wrap(mockedCallableStatement, callableStatementInformation,
         mockedJdbcListener);
     wrappedResultSet = ResultSetWrapper.wrap(mockedResultSet, resultSetInformation, mockedJdbcListener);
-    
+
     P6SpyDriver.setJdbcEventListenerFactory(new JdbcEventListenerFactory() {
       @Override
       public JdbcEventListener createJdbcEventListener() {
@@ -349,9 +350,8 @@ public class CompoundJdbcEventListenerTest {
   public void testPreparedStatementOnBeforeExecuteQuery() throws SQLException {
     wrappedPreparedStatement.executeQuery();
     verify(mockedJdbcListener).onBeforeExecuteQuery(eq(preparedStatementInformation));
-    assertTrue(preparedStatementInformation.getStatement() != wrappedPreparedStatement);
-    assertTrue(preparedStatementInformation.getStatement() ==
-        (PreparedStatement) ((P6Proxy) wrappedPreparedStatement).unwrapP6SpyProxy());
+    assertNotSame(preparedStatementInformation.getStatement(), wrappedPreparedStatement);
+    assertSame(preparedStatementInformation.getStatement(), ((P6Proxy) wrappedPreparedStatement).unwrapP6SpyProxy());
   }
 
   @Test
@@ -380,7 +380,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), any(),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetNullWithTypeName() throws SQLException {
     wrappedPreparedStatement.setNull(0, 0, "foo");
@@ -394,70 +394,70 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(false),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetByte() throws SQLException {
     wrappedPreparedStatement.setByte(0, (byte) 0);
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq((byte) 0),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetShort() throws SQLException {
     wrappedPreparedStatement.setShort(0, (short) 0);
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq((short) 0),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetInt() throws SQLException {
     wrappedPreparedStatement.setInt(0, 0);
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(0),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetLong() throws SQLException {
     wrappedPreparedStatement.setLong(0, 0L);
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(0L),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetFloat() throws SQLException {
     wrappedPreparedStatement.setFloat(0, 0.0f);
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(0.0f),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetDouble() throws SQLException {
     wrappedPreparedStatement.setDouble(0, 0.0);
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(0.0),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetBigDecimal() throws SQLException {
     wrappedPreparedStatement.setBigDecimal(0, new BigDecimal(0));
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(new BigDecimal(0)),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetString() throws SQLException {
     wrappedPreparedStatement.setString(0, "foo");
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq("foo"),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetBytes() throws SQLException {
     wrappedPreparedStatement.setBytes(0, new byte[0]);
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(new byte[0]),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetDate() throws SQLException {
     final Date date = mock(Date.class);
@@ -465,7 +465,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(date),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetDateWithCalendar() throws SQLException {
     final Date date = mock(Date.class);
@@ -474,7 +474,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(date),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetTime() throws SQLException {
     final Time time = mock(Time.class);
@@ -482,7 +482,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(time),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetTimeWithCalendar() throws SQLException {
     final Time time = mock(Time.class);
@@ -491,7 +491,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(time),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetTimestamp() throws SQLException {
     final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -499,7 +499,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(timestamp),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetTimestampWithCalendar() throws SQLException {
     final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -508,7 +508,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(timestamp),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetAsciiStream() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -516,7 +516,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetAsciiStreamWithIntLength() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -524,7 +524,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetAsciiStreamWithLongLength() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -532,7 +532,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetUnicodeStream() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -548,7 +548,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetBinaryStreamWithIntLength() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -556,7 +556,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetBinaryStreamWithLongLength() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -564,7 +564,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetObject() throws SQLException {
     final Object object = new Object();
@@ -572,7 +572,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(object),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetObjectWithTargetType() throws SQLException {
     final Object object = new Object();
@@ -580,7 +580,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(object),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetObjectWithTargetTypeAndScaleOrLenght() throws SQLException {
     final Object object = new Object();
@@ -588,7 +588,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(object),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetCharacterStream() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -596,7 +596,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetCharacterStreamWithIntLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -604,7 +604,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetCharacterStreamWithLongLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -612,7 +612,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetRef() throws SQLException {
     final Ref ref = mock(Ref.class);
@@ -620,7 +620,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(ref),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetBlob() throws SQLException {
     final Blob blob = mock(Blob.class);
@@ -628,7 +628,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(blob),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetClob() throws SQLException {
     final Clob clob = mock(Clob.class);
@@ -636,7 +636,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(clob),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetClobWithReader() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -644,7 +644,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetClobWithReaderAndLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -652,7 +652,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetArray() throws SQLException {
     final Array array = mock(Array.class);
@@ -660,7 +660,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(array),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetURL() throws SQLException, MalformedURLException {
     final URL url = new URL("http://google.com");
@@ -668,7 +668,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(url),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetRowId() throws SQLException {
     final RowId rowId = mock(RowId.class);
@@ -676,7 +676,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(rowId),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetNString() throws SQLException {
     final RowId rowId = mock(RowId.class);
@@ -684,7 +684,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(rowId),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetNCharacterStream() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -692,7 +692,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetNCharacterStreamWithLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -700,7 +700,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetNClob() throws SQLException {
     final NClob nClob = mock(NClob.class);
@@ -708,7 +708,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(nClob),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetNClobWithReader() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -716,7 +716,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testPreparedStatementOnAfterPreparedStatementSetNClobWithReaderAndLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -732,14 +732,14 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetNull() throws SQLException {
     wrappedCallableStatement.setNull(null, 0);
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), any(),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetNullWithTypeName() throws SQLException {
     wrappedCallableStatement.setNull(null, 0, "foo");
@@ -753,70 +753,70 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(false),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetByte() throws SQLException {
     wrappedCallableStatement.setByte(null, (byte) 0);
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq((byte) 0),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetShort() throws SQLException {
     wrappedCallableStatement.setShort(null, (short) 0);
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq((short) 0),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetInt() throws SQLException {
     wrappedCallableStatement.setInt(null, 0);
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(0),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetLong() throws SQLException {
     wrappedCallableStatement.setLong(null, 0L);
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(0L),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetFloat() throws SQLException {
     wrappedCallableStatement.setFloat(null, 0.0f);
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(0.0f),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetDouble() throws SQLException {
     wrappedCallableStatement.setDouble(null, 0.0);
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(0.0),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetBigDecimal() throws SQLException {
     wrappedCallableStatement.setBigDecimal(null, new BigDecimal(0));
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(new BigDecimal(0)),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetString() throws SQLException {
     wrappedCallableStatement.setString(null, "foo");
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq("foo"),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetBytes() throws SQLException {
     wrappedCallableStatement.setBytes(null, new byte[0]);
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(new byte[0]),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetDate() throws SQLException {
     final Date date = mock(Date.class);
@@ -824,7 +824,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(date),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetDateWithCalendar() throws SQLException {
     final Date date = mock(Date.class);
@@ -833,7 +833,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(date),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetTime() throws SQLException {
     final Time time = mock(Time.class);
@@ -841,7 +841,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(time),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetTimeWithCalendar() throws SQLException {
     final Time time = mock(Time.class);
@@ -850,7 +850,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(time),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetTimestamp() throws SQLException {
     final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -858,7 +858,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(timestamp),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetTimestampWithCalendar() throws SQLException {
     final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -867,7 +867,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(timestamp),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetAsciiStream() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -875,7 +875,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetAsciiStreamWithIntLength() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -883,7 +883,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetAsciiStreamWithLongLength() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -891,7 +891,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetBinaryStream() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -899,7 +899,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetBinaryStreamWithIntLength() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -907,7 +907,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetBinaryStreamWithLongLength() throws SQLException {
     final InputStream is = mock(InputStream.class);
@@ -915,7 +915,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(is),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetObject() throws SQLException {
     final Object object = new Object();
@@ -923,7 +923,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(object),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetObjectWithTargetType() throws SQLException {
     final Object object = new Object();
@@ -931,7 +931,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(object),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetObjectWithTargetTypeAndScaleOrLenght() throws SQLException {
     final Object object = new Object();
@@ -939,7 +939,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(object),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetCharacterStream() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -947,7 +947,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetCharacterStreamWithIntLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -955,7 +955,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetCharacterStreamWithLongLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -963,7 +963,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetBlob() throws SQLException {
     final Blob blob = mock(Blob.class);
@@ -971,7 +971,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(blob),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetClob() throws SQLException {
     final Clob clob = mock(Clob.class);
@@ -979,7 +979,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(clob),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetClobWithReader() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -987,7 +987,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetClobWithReaderAndLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -995,7 +995,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetURL() throws SQLException, MalformedURLException {
     final URL url = new URL("http://google.com");
@@ -1003,7 +1003,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(url),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetRowId() throws SQLException {
     final RowId rowId = mock(RowId.class);
@@ -1011,7 +1011,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(rowId),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetNString() throws SQLException {
     final RowId rowId = mock(RowId.class);
@@ -1019,7 +1019,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(rowId),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetNCharacterStream() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -1027,7 +1027,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetNCharacterStreamWithLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -1035,7 +1035,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetNClob() throws SQLException {
     final NClob nClob = mock(NClob.class);
@@ -1043,7 +1043,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(nClob),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetNClobWithReader() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -1051,7 +1051,7 @@ public class CompoundJdbcEventListenerTest {
     verify(mockedJdbcListener).onAfterCallableStatementSet(eq(callableStatementInformation), ArgumentMatchers.<String>isNull(), eq(reader),
         ArgumentMatchers.<SQLException>isNull());
   }
-  
+
   @Test
   public void testCallableStatementOnAfterCallableStatementSetNClobWithReaderAndLength() throws SQLException {
     final Reader reader = mock(Reader.class);
@@ -1068,7 +1068,7 @@ public class CompoundJdbcEventListenerTest {
         ArgumentMatchers.<SQLException>isNull());
   }
 
-  
+
   @Test
   public void testConnectionOnAfterConnectionClose() throws SQLException {
     wrappedConnection.close();
@@ -1117,9 +1117,9 @@ public class CompoundJdbcEventListenerTest {
   public void testResultSetOnBeforeResultSetNext() throws SQLException {
     wrappedResultSet.next();
     verify(mockedJdbcListener).onBeforeResultSetNext(eq(resultSetInformation));
-    assertTrue(resultSetInformation.getResultSet() != wrappedResultSet);
-    assertTrue(resultSetInformation.getResultSet() ==
-        (ResultSet) ((P6Proxy) wrappedResultSet).unwrapP6SpyProxy());
+    assertNotSame(resultSetInformation.getResultSet(), wrappedResultSet);
+    assertSame(resultSetInformation.getResultSet(), ((P6Proxy) wrappedResultSet).unwrapP6SpyProxy());
+    assertSame(resultSetInformation.getResultSet(), ((ResultSetWrapper) wrappedResultSet).getDelegate());
   }
 
   private ConnectionInformation connectionInformationWithConnection() {

@@ -18,6 +18,7 @@
 package com.p6spy.engine.common;
 
 import java.sql.ResultSet;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -47,7 +48,6 @@ public class ResultSetInformation implements Loggable {
   public void generateLogMessage() {
     if (lastRowLogged != currRow) {
       P6LogQuery.log(Category.RESULTSET, this);
-      resultMap.clear();
       lastRowLogged = currRow;
     }
   }
@@ -58,6 +58,7 @@ public class ResultSetInformation implements Loggable {
 
   public void incrementCurrRow() {
     this.currRow++;
+    this.resultMap.clear();
   }
 
   public void setColumnValue(String columnName, Object value) {
@@ -82,6 +83,16 @@ public class ResultSetInformation implements Loggable {
     }
 
     return sb.toString();
+  }
+
+  /**
+   * Returns column/value map for the last row read.
+   *
+   * NOTE: Only values that were retrieved from {@link ResultSet}
+   * ({@link ResultSet#getString(int)}, {@link ResultSet#getBoolean(int)}, etc.) will be returned.
+   */
+  public Map<String, Value> getResultMap() {
+    return Collections.unmodifiableMap(resultMap);
   }
 
   public StatementInformation getStatementInformation() {

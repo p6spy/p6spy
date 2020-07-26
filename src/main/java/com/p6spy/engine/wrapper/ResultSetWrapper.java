@@ -71,6 +71,14 @@ public class ResultSetWrapper extends AbstractWrapper implements ResultSet {
     resultSetInformation.setResultSet(delegate);
   }
 
+  public ResultSet getDelegate() {
+    return delegate;
+  }
+
+  public ResultSetInformation getResultSetInformation() {
+    return resultSetInformation;
+  }
+
   @Override
   public boolean next() throws SQLException {
     SQLException e = null;
