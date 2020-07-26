@@ -30,7 +30,7 @@ jdk:
   - oraclejdk8
   - openjdk8
   - openjdk11
-  - openjdk-ea
+  - openjdk14
 
 env:
   global:
