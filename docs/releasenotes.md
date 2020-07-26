@@ -1,6 +1,12 @@
 # Release Notes
 
-## [3.9.1](https://github.com/p6spy/p6spy/compare/p6spy-3.9.0...master) (Unreleased)
+## [3.9.2](https://github.com/p6spy/p6spy/compare/p6spy-3.9.1...master) (Unreleased)
+
+Improvements:
+
+Defects resolved:
+
+## [3.9.1](https://github.com/p6spy/p6spy/compare/p6spy-3.9.0...3.9.1) (2020-07-26)
 
 Improvements:
 * [issue 501](https://github.com/p6spy/p6spy/issues/501) Database dialect dependent binary data representation.
