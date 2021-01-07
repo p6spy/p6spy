@@ -1,14 +1,14 @@
 /**
  * P6Spy
- *
+ * <p>
  * Copyright (C) 2002 - 2020 P6Spy
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,18 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.Gson;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.logging.Category;
+import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.appender.*;
+import com.p6spy.engine.spy.appender.json.LogEvent;
+import com.p6spy.engine.spy.option.SystemProperties;
+import com.p6spy.engine.test.P6TestFramework;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -30,17 +36,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.appender.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-import com.p6spy.engine.logging.Category;
-import com.p6spy.engine.logging.P6LogOptions;
-import com.p6spy.engine.spy.option.SystemProperties;
-import com.p6spy.engine.test.P6TestFramework;
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class P6TestCommon extends P6TestFramework {
@@ -93,7 +89,7 @@ public class P6TestCommon extends P6TestFramework {
     {
       super.clearLogEntries();
       P6LogOptions.getActiveInstance().setExclude(
-          "non_existing_table1,customers,non_existing_table2,non_existing_table3");
+        "non_existing_table1,customers,non_existing_table2,non_existing_table3");
       statement.executeQuery(query);
       P6LogOptions.getActiveInstance().setExclude("");
       assertEquals(0, super.getLogEntriesCount());
@@ -117,7 +113,7 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().setInclude("");
       assertEquals(0, super.getLogEntriesCount());
     }
-    
+
     // excluded - case insensitive => not logged
     {
       super.clearLogEntries();
@@ -177,40 +173,40 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntriesCount());
     }
   }
-  
+
   @Test
   public void testIncludeOtherTableShouldLogResultSet() throws SQLException {
-      final String query = "select 'x' from customers";
-      super.clearLogEntries();
-      P6SpyOptions.getActiveInstance().setStackTrace("true");
+    final String query = "select 'x' from customers";
+    super.clearLogEntries();
+    P6SpyOptions.getActiveInstance().setStackTrace("true");
 
-      // other table is included => resultset is still logged
-      P6LogOptions.getActiveInstance().setInclude("non_existing_table1");
-      P6LogOptions.getActiveInstance().setExcludecategories("info,debug,batch");
-      ResultSet rs = statement.executeQuery(query);
-      while (rs.next()) {
-          @SuppressWarnings("unused")
-          String value = rs.getString(1);
-      }
-      P6LogOptions.getActiveInstance().setInclude("");
-      assertEquals(0, super.getLogEntriesCount());
+    // other table is included => resultset is still logged
+    P6LogOptions.getActiveInstance().setInclude("non_existing_table1");
+    P6LogOptions.getActiveInstance().setExcludecategories("info,debug,batch");
+    ResultSet rs = statement.executeQuery(query);
+    while (rs.next()) {
+      @SuppressWarnings("unused")
+      String value = rs.getString(1);
+    }
+    P6LogOptions.getActiveInstance().setInclude("");
+    assertEquals(0, super.getLogEntriesCount());
   }
 
   @Test
   public void testExcludeThisTableShouldLogResultSet() throws SQLException {
-      super.clearLogEntries();
-      final String query = "select 'x' from customers";
+    super.clearLogEntries();
+    final String query = "select 'x' from customers";
 
-      // table is excluded => resultset is still logged
-      P6LogOptions.getActiveInstance().setExclude("customers");
-      P6LogOptions.getActiveInstance().setExcludecategories("info,debug,batch");
-      ResultSet rs = statement.executeQuery(query);
-      if (rs.next()) {
-          @SuppressWarnings("unused")
-          String value = rs.getString(1);
-      }
-      P6LogOptions.getActiveInstance().setExclude("");
-      assertEquals(0, super.getLogEntriesCount());
+    // table is excluded => resultset is still logged
+    P6LogOptions.getActiveInstance().setExclude("customers");
+    P6LogOptions.getActiveInstance().setExcludecategories("info,debug,batch");
+    ResultSet rs = statement.executeQuery(query);
+    if (rs.next()) {
+      @SuppressWarnings("unused")
+      String value = rs.getString(1);
+    }
+    P6LogOptions.getActiveInstance().setExclude("");
+    assertEquals(0, super.getLogEntriesCount());
   }
 
 
@@ -237,7 +233,7 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntriesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
-    
+
     // backslashes (have to be doubled)
     {
       super.clearLogEntries();
@@ -255,7 +251,7 @@ public class P6TestCommon extends P6TestFramework {
       assertTrue(super.getLastLogEntry().contains(query));
     }
   }
-  
+
   @Test
   public void testSqlExpressionPattern() throws SQLException {
     final String query = "select 'y' from customers";
@@ -278,7 +274,7 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntriesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
-    
+
     // multiline + case insensitive + dotall matched => logged
     {
       super.clearLogEntries();
@@ -289,7 +285,7 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntriesCount());
       assertTrue(super.getLastLogEntry().contains(P6Util.singleLine(queryMultiline)));
     }
-    
+
     // backslashes (have to be doubled)
     {
       super.clearLogEntries();
@@ -300,11 +296,11 @@ public class P6TestCommon extends P6TestFramework {
       assertTrue(super.getLastLogEntry().contains(query));
     }
   }
-  
+
   @Test
   public void testIncludeExcludeWithSqlExpressionPattern() throws SQLException {
     final String query = "select 'x' from customers";
-    
+
     // include/exclude passes AND sqlexpression does NOT pass => NOT logged
     {
       super.clearLogEntries();
@@ -317,7 +313,7 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().unSetSQLExpression();
       assertEquals(0, super.getLogEntriesCount());
     }
-    
+
     // include/exclude does NOT pass AND sqlexpression passes => NOT logged
     {
       super.clearLogEntries();
@@ -328,7 +324,7 @@ public class P6TestCommon extends P6TestFramework {
       P6LogOptions.getActiveInstance().unSetSQLExpression();
       assertEquals(0, super.getLogEntriesCount());
     }
-    
+
     // include/exclude passes AND sqlexpression passes => logged
     {
       super.clearLogEntries();
@@ -342,7 +338,7 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntriesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
-    
+
     // include/exclude NOT SET AND sqlexpression passes => logged
     {
       super.clearLogEntries();
@@ -352,7 +348,7 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntriesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
-    
+
     // include/exclude passes AND sqlexpression NOT SET => logged
     {
       super.clearLogEntries();
@@ -364,7 +360,7 @@ public class P6TestCommon extends P6TestFramework {
       assertEquals(1, super.getLogEntriesCount());
       assertTrue(super.getLastLogEntry().contains(query));
     }
-    
+
     // include/exclude NOT SET AND sqlexpression NOT SET => logged
     {
       super.clearLogEntries();
@@ -420,19 +416,19 @@ public class P6TestCommon extends P6TestFramework {
 
   private void testResultAndResultSetCategory(final boolean resultCategoryNotExcluded,
                                               final boolean resultsetCategoryNotExcluded)
-      throws SQLException {
+    throws SQLException {
     final String query = "select id, name from customers where id in (1,2)";
-    
+
     // debug would corrupt count checks here
     final StringBuilder sb = new StringBuilder(Category.DEBUG.toString());
     if (!resultCategoryNotExcluded) {
-    	sb.append(",").append(Category.RESULT.toString());
+      sb.append(",").append(Category.RESULT.toString());
     }
     if (!resultsetCategoryNotExcluded) {
-    	sb.append(",").append(Category.RESULTSET.toString());
+      sb.append(",").append(Category.RESULTSET.toString());
     }
     P6LogOptions.getActiveInstance().setExcludecategories(sb.toString());
-    
+
     final ResultSet resultSet = statement.executeQuery(query);
     super.clearLogEntries();
 
@@ -459,12 +455,12 @@ public class P6TestCommon extends P6TestFramework {
 
     if (!resultCategoryNotExcluded && !resultsetCategoryNotExcluded) {
       assertEquals(
-          "if \"result\" \"resultset\" are in excludecategories they should NOT be logged", 0,
-          super.getLogEntriesCount());
+        "if \"result\" \"resultset\" are in excludecategories they should NOT be logged", 0,
+        super.getLogEntriesCount());
     } else {
       assertNotEquals(
-          "if \"result\" \"resultset\" are NOT in excludecategories they should be logged", 0,
-          super.getLogEntriesCount());
+        "if \"result\" \"resultset\" are NOT in excludecategories they should be logged", 0,
+        super.getLogEntriesCount());
     }
   }
 
@@ -500,26 +496,26 @@ public class P6TestCommon extends P6TestFramework {
       // reset formatting setting
       P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
     }
-    
+
     // prep statement
     {
-        P6SpyOptions.getActiveInstance().setLogMessageFormat(CustomLineFormat.class.getName());
-        P6SpyOptions.getActiveInstance().setCustomLogMessageFormat("%(currentTime)|%(executionTime)|%(category)|connection%(connectionId)\n%(effectiveSqlSingleLine)\n%(sqlSingleLine);\n");
+      P6SpyOptions.getActiveInstance().setLogMessageFormat(CustomLineFormat.class.getName());
+      P6SpyOptions.getActiveInstance().setCustomLogMessageFormat("%(currentTime)|%(executionTime)|%(category)|connection%(connectionId)\n%(effectiveSqlSingleLine)\n%(sqlSingleLine);\n");
 
-        String query = "select count(*) from customers where name IN (?, ?)";
-        PreparedStatement prep = connection.prepareStatement(query);
-        prep.setString(1, "foo");
-        prep.setString(2, "bar");
-        prep.executeQuery();
-        assertTrue(super.getLastLogEntry().contains("\nselect count(*) from customers where name IN (?, ?)\nselect count(*) from customers where name IN ('foo', 'bar');"));
+      String query = "select count(*) from customers where name IN (?, ?)";
+      PreparedStatement prep = connection.prepareStatement(query);
+      prep.setString(1, "foo");
+      prep.setString(2, "bar");
+      prep.executeQuery();
+      assertTrue(super.getLastLogEntry().contains("\nselect count(*) from customers where name IN (?, ?)\nselect count(*) from customers where name IN ('foo', 'bar');"));
 
-        // reset formatting setting
-        P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
-      }
+      // reset formatting setting
+      P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
+    }
     {
       P6SpyOptions.getActiveInstance().setLogMessageFormat(CustomLineFormat.class.getName());
-      P6SpyOptions.getActiveInstance().setCustomLogMessageFormat("SQL in custom format: #"+
-        CustomLineFormat.SQL+"#");
+      P6SpyOptions.getActiveInstance().setCustomLogMessageFormat("SQL in custom format: #" +
+        CustomLineFormat.SQL + "#");
 
 
       String query = "select count(*) from customers";
@@ -531,8 +527,8 @@ public class P6TestCommon extends P6TestFramework {
     }
     {
       P6SpyOptions.getActiveInstance().setLogMessageFormat(CustomLineFormat.class.getName());
-      P6SpyOptions.getActiveInstance().setCustomLogMessageFormat("SQL in custom format: #"+
-        CustomLineFormat.SQL +"#\n");
+      P6SpyOptions.getActiveInstance().setCustomLogMessageFormat("SQL in custom format: #" +
+        CustomLineFormat.SQL + "#\n");
 
 
       String query = "select count(*) from customers";
@@ -546,6 +542,38 @@ public class P6TestCommon extends P6TestFramework {
     // reset to default line format strategy
     P6SpyOptions.getActiveInstance().setLogMessageFormat(SingleLineFormat.class.getName());
 
+  }
+
+  @Test
+  public void testMessageFormatJSON() throws Exception {
+    P6SpyOptions.getActiveInstance().setLogMessageFormat(JSONFormat.class.getName());
+    P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(JSONFormat.class.getName());
+
+    String query = "select count(*) from customers";
+    statement.executeQuery(query);
+    final String jsonResult = super.getLastLogEntry();
+    final LogEvent logEvent = new Gson().fromJson(jsonResult, LogEvent.class);
+
+    assertEquals(query, logEvent.getSql());
+
+    // reset formatting setting
+    P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
+  }
+
+  @Test
+  public void testMessageFormatJSONWithStackTrace() throws Exception {
+    P6SpyOptions.getActiveInstance().setJSONStackTrace(true);
+    P6SpyOptions.getActiveInstance().setLogMessageFormat(JSONFormat.class.getName());
+
+    String query = "select count(*) from customers";
+    statement.executeQuery(query);
+    final String jsonResult = super.getLastLogEntry();
+    final LogEvent logEvent = new Gson().fromJson(jsonResult, LogEvent.class);
+
+    assertEquals(query, logEvent.getSql());
+    assertNotNull(logEvent.getStackTrace());
+    // reset formatting setting
+    P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
   }
 
   @Test
@@ -579,7 +607,7 @@ public class P6TestCommon extends P6TestFramework {
   public void testAppenderReconfigurationTakesPlaceImediatelly() throws Exception {
     final String sql = "select count(*) from customers";
     P6TestLogger oldAppenderRef = null;
-    
+
     // precondition - logging via P6TestLogger works OK
     {
       assertEquals(P6TestLogger.class.getName(), P6SpyOptions.getActiveInstance().getAppender());
@@ -589,23 +617,23 @@ public class P6TestCommon extends P6TestFramework {
       assertNotNull(oldAppenderRef.getLastEntry());
       assertTrue(oldAppenderRef.getLastEntry().contains(sql));
     }
-    
+
     super.clearLogEntries();
-    
+
     // let's log via StdoutLogger 
     P6SpyOptions.getActiveInstance().setAppender(StdoutLogger.class.getName());
     assertEquals(StdoutLogger.class.getName(), P6SpyOptions.getActiveInstance().getAppender());
     statement.executeQuery(sql);
-    
+
     // old appender should not be in use any more!
     assertNull(oldAppenderRef.getLastEntry());
-    
+
     // cleanup stuff - go for the default logger
     {
       P6SpyOptions.getActiveInstance().setAppender(P6TestLogger.class.getName());
     }
   }
-  
+
   @Test
   public void testDisableLogModule() throws SQLException {
     P6SpyLoadableOptions o = P6SpyOptions.getActiveInstance();
@@ -615,27 +643,27 @@ public class P6TestCommon extends P6TestFramework {
     statement.executeQuery("select 'x' from customers");
     // one log message should have been written - normal behavior
     assertEquals("A log message should have been written", 1, getLogEntriesCount());
-    
+
     // hot module unload doesn't work
-    { 
-    	clearLogEntries();
-    	o.setModulelist("");
-    	
-	    statement.executeQuery("select 'x' from customers");
-	    assertEquals("A log message should not have been written", 1, getLogEntriesCount());
+    {
+      clearLogEntries();
+      o.setModulelist("");
+
+      statement.executeQuery("select 'x' from customers");
+      assertEquals("A log message should not have been written", 1, getLogEntriesCount());
     }
-    
+
     // module unload with reload works
-    { 
-    	clearLogEntries();
-    	System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
-    			"");
-    	o.reload();
-    	
-	    statement.executeQuery("select 'x' from customers");
-	    assertEquals("A log message should not have been written", 0, getLogEntriesCount());
-	    System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
+    {
+      clearLogEntries();
+      System.setProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST,
+        "");
+      o.reload();
+
+      statement.executeQuery("select 'x' from customers");
+      assertEquals("A log message should not have been written", 0, getLogEntriesCount());
+      System.clearProperty(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
     }
   }
-  
+
 }

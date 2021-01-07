@@ -134,6 +134,10 @@ public interface P6SpyOptionsMBean {
   
   String getStackTraceClass();
 
+  void setJSONStackTrace(boolean jsonStackTrace);
+
+  boolean getJSONStackTrace();
+
   void setStackTraceClass(String stacktraceclass);
 
   String getLogMessageFormat();

@@ -77,6 +77,8 @@ dependencies {
   compileOnly 'ch.qos.logback:logback-classic:1.2.3'
   compileOnly 'ch.qos.logback:logback-core:1.2.3'
 
+  compile "com.google.code.gson:gson:2.8.6"
+
   testCompile 'junit:junit:4.12'
   testCompile 'org.eclipse.jetty:jetty-plus:9.4.12.v20180830' // datasource testing through JNDI
   testCompile 'commons-dbcp:commons-dbcp:1.4' // datasource testing

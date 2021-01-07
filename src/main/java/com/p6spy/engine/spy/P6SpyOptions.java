@@ -17,18 +17,17 @@
  */
 package com.p6spy.engine.spy;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import javax.management.StandardMBean;
-
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.logging.format.BinaryFormat;
 import com.p6spy.engine.logging.format.HexEncodedBinaryFormat;
 import com.p6spy.engine.spy.appender.*;
 import com.p6spy.engine.spy.option.P6OptionsRepository;
+
+import javax.management.StandardMBean;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions {
 
@@ -42,6 +41,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String MODULELIST = "modulelist";
     public static final String STACKTRACE = "stacktrace";
     public static final String STACKTRACECLASS = "stacktraceclass";
+    public static final String JSONSTACKTRACE = "jsonstacktrace";
     public static final String RELOADPROPERTIES = "reloadproperties";
     public static final String RELOADPROPERTIESINTERVAL = "reloadpropertiesinterval";
     public static final String JNDICONTEXTFACTORY = "jndicontextfactory";
@@ -76,6 +76,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       defaults.put(APPENDER, FileLogger.class.getName());
       defaults.put(MODULELIST, P6SpyFactory.class.getName() + ","+ P6LogFactory.class.getName());
       defaults.put(STACKTRACE, Boolean.FALSE.toString());
+      defaults.put(JSONSTACKTRACE, Boolean.FALSE.toString());
       defaults.put(AUTOFLUSH, Boolean.FALSE.toString());
       defaults.put(RELOADPROPERTIES, Boolean.FALSE.toString());
       defaults.put(RELOADPROPERTIESINTERVAL, Long.toString(60));
@@ -107,6 +108,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setDriverlist(options.get(DRIVERLIST));
       setStackTrace(options.get(STACKTRACE));
       setStackTraceClass(options.get(STACKTRACECLASS));
+      setJSONStackTrace(options.get(JSONSTACKTRACE));
       setAutoflush(options.get(AUTOFLUSH));
       setReloadProperties(options.get(RELOADPROPERTIES));
       setReloadPropertiesInterval(options.get(RELOADPROPERTIESINTERVAL));
@@ -489,7 +491,21 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       optionsRepository.set(String.class, STACKTRACECLASS, stacktraceclass);
     }
 
+    public void setJSONStackTrace(String jsonStackTrace) {
+      optionsRepository.set(Boolean.class, JSONSTACKTRACE, jsonStackTrace);
+    }
+
     @Override
+    public void setJSONStackTrace(boolean jsonStackTrace) {
+      optionsRepository.set(Boolean.class, JSONSTACKTRACE, jsonStackTrace);
+    }
+
+    @Override
+    public boolean getJSONStackTrace() {
+      return optionsRepository.get(Boolean.class, JSONSTACKTRACE);
+    }
+
+  @Override
     public void setLogfile(String logfile) {
       optionsRepository.set(String.class, LOGFILE, logfile);
     }
