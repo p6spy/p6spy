@@ -388,3 +388,24 @@ tasks {
     dependsOn(jacocoTestReport)
   }
 }
+
+// fix for: https://github.com/bintray/gradle-bintray-plugin/issues/229
+// reported internally in: https://github.com/p6spy/p6spy/issues/512
+import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
+import org.gradle.api.publish.maven.internal.artifact.FileBasedMavenArtifact
+
+tasks.withType(BintrayUploadTask) {
+  doFirst {
+    publishing.publications.withType(MavenPublication).forEach({ publication ->
+      File moduleFile = new File(project.buildDir, "publications/${publication.name}/module.json")
+      if (moduleFile.exists()) {
+        publication.artifact(new FileBasedMavenArtifact(moduleFile) {
+          protected String getDefaultExtension() {
+            return 'module';
+          }
+        })
+      }
+    })
+  }
+}
+
