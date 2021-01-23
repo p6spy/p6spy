@@ -114,9 +114,9 @@ P6Spy assumes that you are using the standalone and $JBOSS_DIST is the directory
 
 The following sections contain specific information on installing P6Spy on Apache Tomcat and TomEE.
 
-### Apache Tomcat 6.x, 7.x, 8.x, 9.x, 10.x and TomEE 1.6.x, 7.x, 8.x
+### Apache Tomcat 6.x, 7.x, 8.x, 9.x and TomEE 1.6.x, 7.x, 8.x
 
-The following instructions were tested with Apache Tomcat versions: 6.0.53, 7.0.107, 8.5.61, 9.0.41 and 10.0.0 as well as Apache TomEE 1.6.0.2 (Webprofile, Plus), 7.1.2 (Webprofile, Plus, Plum), 8.0.4 (Microprofile, Webprofile, Plus, Plum). For these instructions, it is assumed that $CATALINA_HOME
+The following instructions were tested with Apache Tomcat versions: 6.0.53, 7.0.107, 8.5.61 and 9.0.41 as well as Apache TomEE 1.6.0.2 (Webprofile, Plus), 7.1.2 (Webprofile, Plus, Plum), 8.0.4 (Microprofile, Webprofile, Plus, Plum). For these instructions, it is assumed that $CATALINA_HOME
 refers to the tomcat/tomee installation directory.  Please be aware that there are many ways to configure JNDI data sources
 on tomcat/tomee.
 
