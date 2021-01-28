@@ -25,6 +25,7 @@ import com.p6spy.engine.spy.P6SpyOptions;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Value holder of the data passed to DB as well as of those retrieved capable
@@ -36,6 +37,7 @@ import java.util.Date;
  */
 public class Value {
 
+  private static final Pattern ESPECIAL_CHARACTER_PATTERN = Pattern.compile("'");
   /**
    * Value itself.
    */
@@ -167,7 +169,7 @@ public class Value {
    * @return escaped value.
    */
   private String escape(String stringValue) {
-    return stringValue.replaceAll("'", "''");
+    return ESPECIAL_CHARACTER_PATTERN.matcher(stringValue).replaceAll("''");
   }
 
 }
