@@ -41,7 +41,9 @@ public class Slf4JLogger extends FormattedLogger {
 
 	@Override
 	public void logText(String text) {
-		log.info(text);
+		if (!text.trim().isEmpty()) {
+			log.info(text);
+		}
 	}
 
 	@Override

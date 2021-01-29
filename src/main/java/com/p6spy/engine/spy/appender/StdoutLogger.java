@@ -34,7 +34,9 @@ public class StdoutLogger extends FormattedLogger {
 
   @Override
   public void logText(String text) {
-    getStream().println(text);
+    if (!text.trim().isEmpty()) {
+      getStream().println(text);
+    }
   }
 
   @Override
