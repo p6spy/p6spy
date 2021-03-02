@@ -64,6 +64,7 @@ public enum P6OutageDetector implements Runnable {
     	ThreadGroup group = new ThreadGroup("P6SpyThreadGroup");
         group.setDaemon(true);
         Thread outageThread = new Thread(group, this, "P6SpyOutageThread");
+        outageThread.setDaemon(true);      
         outageThread.start();
     	
         P6LogQuery.debug("P6Spy - P6OutageDetector has been invoked.");
