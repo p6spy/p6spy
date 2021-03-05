@@ -142,7 +142,14 @@ public class Log4jLoggerTest extends BaseTestCase {
 	  
 	  checkCategoryToInfoLevelMapping(new Category("newly_created_category"));
   }
-  
+
+  @Test
+  public void testLogText() throws Exception {
+    Log4JTestApppender.clearCapturedMessages();
+    P6LogQuery.log(Category.RESULT, "", "");
+    assertEquals(0, Log4JTestApppender.getCapturedMessages().size());
+  }
+
   private void checkCategoryToInfoLevelMapping(Category category) throws Exception {
 	  checkCategoryToLevelMapping(category, null, Level.OFF);
 	  checkCategoryToLevelMapping(category, null, Level.ERROR);
