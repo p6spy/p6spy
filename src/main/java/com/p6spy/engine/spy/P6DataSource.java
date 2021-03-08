@@ -44,7 +44,6 @@ import javax.sql.XAConnection;
 import javax.sql.XADataSource;
 
 import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 
@@ -186,16 +185,16 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
               Class<?> paramType = types[0];
               if (paramType.isAssignableFrom(String.class)) {
                 // the method expects a string
-                P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
+                P6ModuleManager.getInstance().getLogger().debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
                 method.invoke(realDataSource, value);
                 matchedProps.put(key, value);
               } else if (paramType.isPrimitive() && int.class.equals(paramType)) {
                 // the method expects an int, so we pass an Integer
-                P6LogQuery.debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
+                P6ModuleManager.getInstance().getLogger().debug("calling " + methodName + " on DataSource " + rdsName + " with " + value);
                 method.invoke(realDataSource, Integer.valueOf(value));
                 matchedProps.put(key, value);
               } else {
-                P6LogQuery.debug("method " + methodName + " on DataSource " + rdsName + " matches property "
+                P6ModuleManager.getInstance().getLogger().debug("method " + methodName + " on DataSource " + rdsName + " matches property "
                   + propertyName + " but expects unsupported type " + paramType.getName());
                 matchedProps.put(key, value);
               }
@@ -214,7 +213,7 @@ public class P6DataSource implements DataSource, ConnectionPoolDataSource, XADat
     // log properties defined in spy.properties that were not found on the data source.
     for (String key : props.keySet()) {
       if (!matchedProps.containsKey(key)) {
-        P6LogQuery.debug("spy.properties file includes" + " datasource property " + key + " for datasource " + rdsName
+        P6ModuleManager.getInstance().getLogger().debug("spy.properties file includes" + " datasource property " + key + " for datasource " + rdsName
           + " but class " + klass.getName() + " has no method" + " by that name");
       }
     }

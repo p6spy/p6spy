@@ -28,11 +28,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.spy.appender.P6TestLogger;
-import com.p6spy.engine.test.BaseTestCase;
-import com.p6spy.engine.test.P6TestFramework;
-import com.p6spy.engine.wrapper.AbstractWrapper;
 import org.eclipse.jetty.plus.jndi.Resource;
 import org.h2.jdbcx.JdbcDataSource;
 import org.hsqldb.jdbc.JDBCDataSource;
@@ -40,6 +35,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+
+import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.test.BaseTestCase;
+import com.p6spy.engine.test.P6TestFramework;
+import com.p6spy.engine.wrapper.AbstractWrapper;
 
 /**
  * @author Quinton McCombs
@@ -85,7 +85,7 @@ public class MultipleDataSourceTest extends BaseTestCase {
     jndiResources.add(new Resource("jdbc/spyDs3", spyDs3));
 
     // reset captured log messages
-    ((P6TestLogger) P6LogQuery.getLogger()).clearLogs();
+    ((P6TestLogger) P6ModuleManager.getInstance().getLogger().getLogger()).clearLogs();
   }
 
   @After
@@ -138,7 +138,7 @@ public class MultipleDataSourceTest extends BaseTestCase {
       con.createStatement().execute("set database sql syntax ora true");
     }
     con.createStatement().execute("select current_date from dual");
-    assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select current_date") != -1);
+    assertTrue(((P6TestLogger) P6ModuleManager.getInstance().getLogger().getLogger()).getLastEntry().indexOf("select current_date") != -1);
   }
 
   private void validateNotSpyEnabled(DataSource ds) throws SQLException {
@@ -151,6 +151,6 @@ public class MultipleDataSourceTest extends BaseTestCase {
       con.createStatement().execute("set database sql syntax ora true");
     }
     con.createStatement().execute("select current_date from dual");
-    assertNull(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry());
+    assertNull(((P6TestLogger) P6ModuleManager.getInstance().getLogger().getLogger()).getLastEntry());
   }
 }

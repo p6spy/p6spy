@@ -47,11 +47,7 @@ public class P6LogQuery implements P6OptionChangedListener {
   private static final Set<String> ON_CHANGE = new HashSet<String>(Arrays.asList(
     P6SpyOptions.APPENDER_INSTANCE, P6SpyOptions.LOGFILE, P6SpyOptions.LOG_MESSAGE_FORMAT_INSTANCE));
 
-  protected static P6Logger logger;
-
-  static {
-    initialize();
-  }
+  protected P6Logger logger;
 
   public void optionChanged(final String key, final Object oldValue, final Object newValue) {
     if (ON_CHANGE.contains(key)) {
@@ -59,7 +55,7 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  public static synchronized void initialize() {
+  public synchronized void initialize() {
     final P6ModuleManager moduleManager = P6ModuleManager.getInstance();
     if (null == moduleManager) {
       // not initialized yet => can't proceed
@@ -82,12 +78,12 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  protected static void doLog(long elapsed, Category category, String prepared, String sql) {
+  protected void doLog(long elapsed, Category category, String prepared, String sql) {
     doLog(-1, elapsed, category, prepared, sql, "");
   }
 
   // this is an internal method called by logElapsed
-  protected static void doLogElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql, String url) {
+  protected void doLogElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql, String url) {
     doLog(connectionId, timeElapsedNanos, category, prepared, sql, url);
   }
 
@@ -101,7 +97,7 @@ public class P6LogQuery implements P6OptionChangedListener {
 	 * @param sql
    * @param url
 	 */
-	protected static void doLog(int connectionId, long elapsedNanos, Category category, String prepared, String sql, String url) {
+	protected void doLog(int connectionId, long elapsedNanos, Category category, String prepared, String sql, String url) {
 	    // give it one more try if not initialized yet
 	    if (logger == null) {
 	      initialize();
@@ -158,7 +154,7 @@ public class P6LogQuery implements P6OptionChangedListener {
         && (includeExcludePattern == null || includeExcludePattern.matcher(sql).matches());
   }
 
-  static boolean isCategoryOk(Category category) {
+  boolean isCategoryOk(Category category) {
     final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
     if (null == opts) {
       return CATEGORIES_IMPLICITLY_INCLUDED.contains(category);
@@ -174,19 +170,19 @@ public class P6LogQuery implements P6OptionChangedListener {
   // public accessor methods for logging and viewing query data
   // ----------------------------------------------------------------------------------------------------------
 
-  public static void log(Category category, String prepared, String sql) {
+  public void log(Category category, String prepared, String sql) {
     if (logger != null && isCategoryOk(category)) {
       doLog(-1, category, prepared, sql);
     }
   }
 
-  public static void log(Category category, Loggable loggable) {
+  public void log(Category category, Loggable loggable) {
     if (logger != null && isCategoryOk(category) && isLoggable(loggable.getSql())) {
       doLog(-1, category, loggable.getSql(), loggable.getSqlWithValues());
     }
   }
 
-  public static void logElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql, String url) {
+  public void logElapsed(int connectionId, long timeElapsedNanos, Category category, String prepared, String sql, String url) {
     if (logger != null && meetsThresholdRequirement(timeElapsedNanos) && isCategoryOk(category) && isLoggable(sql) ) {
       doLogElapsed(connectionId, timeElapsedNanos, category, prepared, sql, url == null ? "" : url);
     } else if (isDebugEnabled()) {
@@ -195,7 +191,7 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
   
-  public static void logElapsed(int connectionId, long timeElapsedNanos, Category category, Loggable loggable) {
+  public void logElapsed(int connectionId, long timeElapsedNanos, Category category, Loggable loggable) {
     // usually an expensive operation => cache where possible
     String sql = loggable.getSql();
     String url = loggable.getConnectionInformation().getUrl();
@@ -217,17 +213,17 @@ public class P6LogQuery implements P6OptionChangedListener {
     return executionThreshold <= 0 || TimeUnit.NANOSECONDS.toMillis(timeTaken) > executionThreshold;
   }
 
-  public static void info(String sql) {
+  public void info(String sql) {
     if (logger != null && isCategoryOk(Category.INFO)) {
       doLog(-1, Category.INFO, "", sql);
     }
   }
 
-  public static boolean isDebugEnabled() {
+  public boolean isDebugEnabled() {
     return isCategoryOk(Category.DEBUG);
   }
 
-  public static void debug(String sql) {
+  public void debug(String sql) {
     if (isDebugEnabled()) {
       if (logger != null) {
         doLog(-1, Category.DEBUG, "", sql);
@@ -237,14 +233,14 @@ public class P6LogQuery implements P6OptionChangedListener {
     }
   }
 
-  public static void error(String sql) {
+  public void error(String sql) {
     System.err.println("Warning: " + sql);
     if (logger != null) {
       doLog(-1, Category.ERROR, "", sql);
     }
   }
   
-  public static P6Logger getLogger() {
+  public P6Logger getLogger() {
     return logger;
   }
 

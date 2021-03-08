@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.p6spy.engine.logging.Category;
+import com.p6spy.engine.spy.P6ModuleManager;
 
 /**
  * @author Quinton McCombs
@@ -47,7 +48,7 @@ public class ResultSetInformation implements Loggable {
    */
   public void generateLogMessage() {
     if (lastRowLogged != currRow) {
-      P6LogQuery.log(Category.RESULTSET, this);
+      P6ModuleManager.getInstance().getLogger().log(Category.RESULTSET, this);
       lastRowLogged = currRow;
     }
   }

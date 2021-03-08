@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.Category;
+import com.p6spy.engine.spy.P6ModuleManager;
 
 /**
  * This class is a singleton. Since P6Spy is normally loaded by the system
@@ -67,8 +68,8 @@ public enum P6OutageDetector implements Runnable {
         outageThread.setDaemon(true);      
         outageThread.start();
     	
-        P6LogQuery.debug("P6Spy - P6OutageDetector has been invoked.");
-        P6LogQuery.debug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = " + P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
+        P6ModuleManager.getInstance().getLogger().debug("P6Spy - P6OutageDetector has been invoked.");
+        P6ModuleManager.getInstance().getLogger().debug("P6Spy - P6OutageOptions.getOutageDetectionIntervalMS() = " + P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
     }
 
     /**
@@ -117,7 +118,7 @@ public enum P6OutageDetector implements Runnable {
             return;
         }
 
-        P6LogQuery.debug("P6Spy - detectOutage.pendingMessage.size = " + listSize);
+        P6ModuleManager.getInstance().getLogger().debug("P6Spy - detectOutage.pendingMessage.size = " + listSize);
 
         long currentTime = System.nanoTime();
         long threshold = TimeUnit.MILLISECONDS.toNanos(P6OutageOptions.getActiveInstance().getOutageDetectionIntervalMS());
@@ -133,14 +134,14 @@ public enum P6OutageDetector implements Runnable {
 
             // has this statement exceeded the threshold?
             if ((currentTime - ii.startTime) > threshold) {
-                P6LogQuery.debug("P6Spy - statement exceeded threshold - check log.");
+            	P6ModuleManager.getInstance().getLogger().debug("P6Spy - statement exceeded threshold - check log.");
                 logOutage(ii);
             }
         }
     }
 
     private void logOutage(InvocationInfo ii) {
-        P6LogQuery.logElapsed(-1, System.nanoTime() - ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql, ii.url);
+    	P6ModuleManager.getInstance().getLogger().logElapsed(-1, System.nanoTime() - ii.startTime, Category.OUTAGE, ii.preparedStmt, ii.sql, ii.url);
     }
 
 }
