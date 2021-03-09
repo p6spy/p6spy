@@ -57,7 +57,7 @@ public class P6ModuleManager {
 
   private void cleanUp() throws MBeanRegistrationException, InstanceNotFoundException,
     MalformedObjectNameException {
-    Integer classLoaderIdentifier = System.identityHashCode(Thread.currentThread().getContextClassLoader());
+    Integer classLoaderIdentifier = getContextIdentifier();
     P6ModuleManager instance = instances.get(classLoaderIdentifier);
     if (instance == null) {
       return;
@@ -162,14 +162,20 @@ public class P6ModuleManager {
 	}
 
 	public static P6ModuleManager getInstance() {
-		Integer classLoaderIdentifier = System.identityHashCode(Thread.currentThread().getContextClassLoader());
-
+		Integer classLoaderIdentifier = getContextIdentifier();
+		System.out.println("P6MODULE: Loading " + classLoaderIdentifier);
+		
 		if (!instances.containsKey(classLoaderIdentifier)) {
+			System.out.println("P6MODULE: Creating " + classLoaderIdentifier);
 			synchronized (P6ModuleManager.class) {
 				if (!instances.containsKey(classLoaderIdentifier)) {
 					try {
+						// Null value set because P6ModuleManager.getInstance is called by logging actions during P6ModuleManager construction
+						instances.put(classLoaderIdentifier, null); 
 						P6ModuleManager moduleManager = new P6ModuleManager();
 						instances.put(classLoaderIdentifier, moduleManager);
+						if(instances.size() > 1) 
+							throw new RuntimeException("FINALY");
 						moduleManager.initialize();
 					} catch (MBeanRegistrationException e) {
 						handleInitEx(e);
@@ -189,8 +195,11 @@ public class P6ModuleManager {
 		return instances.get(classLoaderIdentifier);
 	}
 	
-  public Integer getContextIdentifier() {
-	  return System.identityHashCode(Thread.currentThread().getContextClassLoader());
+  private static Integer getContextIdentifier() {
+	  if(Thread.currentThread().getContextClassLoader() != null) {
+		  return System.identityHashCode(Thread.currentThread().getContextClassLoader());
+	  }
+	  return System.identityHashCode(Thread.currentThread().getClass().getClassLoader());
   }
 
   private void initialize() {

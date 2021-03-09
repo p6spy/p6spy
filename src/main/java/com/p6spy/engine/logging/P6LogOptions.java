@@ -83,6 +83,10 @@ public class P6LogOptions extends StandardMBean implements P6LogLoadableOptions 
    * @return active instance of the {@link P6LogLoadableOptions}
    */
   public static P6LogLoadableOptions getActiveInstance() {
+    P6ModuleManager currentManager = P6ModuleManager.getInstance();
+    if(currentManager == null) {
+	  return null;
+    }
     return P6ModuleManager.getInstance().getOptions(P6LogOptions.class);
   }
 
