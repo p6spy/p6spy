@@ -49,6 +49,8 @@ public class P6LogQuery implements P6OptionChangedListener {
 
   protected static P6Logger logger;
 
+  protected static TimeUnitStrategy timeUnitStrategy;
+
   static {
     initialize();
   }
@@ -80,6 +82,7 @@ public class P6LogQuery implements P6OptionChangedListener {
         }
       }
     }
+    timeUnitStrategy = opts.getUseNanoTime() ? new NanosecondsStrategy(): new MillisecondsStrategy();
   }
 
   protected static void doLog(long elapsed, Category category, String prepared, String sql) {
@@ -118,7 +121,8 @@ public class P6LogQuery implements P6OptionChangedListener {
         stringNow = new SimpleDateFormat(format).format(new java.util.Date()).trim();
       }
 
-      logger.logSQL(connectionId, stringNow, TimeUnit.NANOSECONDS.toMillis(elapsedNanos), category, prepared, sql, url);
+      long elapsed = timeUnitStrategy.convert(elapsedNanos);
+      logger.logSQL(connectionId, stringNow, elapsed, category, prepared, sql, url);
 
       final boolean stackTrace = P6SpyOptions.getActiveInstance().getStackTrace();
       if (stackTrace) {

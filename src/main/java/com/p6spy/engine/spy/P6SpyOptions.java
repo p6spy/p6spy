@@ -58,6 +58,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     public static final String DATABASE_DIALECT_BINARY_FORMAT_INSTANCE = "databaseDialectBinaryFormatInstance";
     public static final String JMX = "jmx";
     public static final String JMX_PREFIX = "jmxPrefix";
+    public static final String USE_NANO_TIME = "useNanoTime";
 
     // those set indirectly (via properties visible from outside)
     public static final String DRIVER_NAMES = "driverNames";
@@ -87,6 +88,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
         CustomLineFormat.CURRENT_TIME, CustomLineFormat.EXECUTION_TIME, CustomLineFormat.CATEGORY,
         CustomLineFormat.CONNECTION_ID, CustomLineFormat.SQL_SINGLE_LINE));
       defaults.put(JMX, Boolean.TRUE.toString());
+      defaults.put(USE_NANO_TIME, Boolean.FALSE.toString());
     }
 
     private final P6OptionsRepository optionsRepository;
@@ -123,6 +125,7 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
       setCustomLogMessageFormat(options.get(CUSTOM_LOG_MESSAGE_FORMAT));
       setJmx(options.get(JMX));
       setJmxPrefix(options.get(JMX_PREFIX));
+      setUseNanoTime(options.get(USE_NANO_TIME));
     }
     
     /**
@@ -548,6 +551,21 @@ public class P6SpyOptions extends StandardMBean implements P6SpyLoadableOptions 
     @Override
     public void setJmxPrefix(String jmxPrefix) {
       optionsRepository.set(String.class, JMX_PREFIX, jmxPrefix);
+    }
+
+    @Override
+    public void setUseNanoTime(String useNanoTime) {
+        optionsRepository.set(Boolean.class, USE_NANO_TIME, useNanoTime);
+    }
+
+    @Override
+    public void setUseNanoTime(boolean useNanoTime) {
+        optionsRepository.set(Boolean.class, USE_NANO_TIME, useNanoTime);
+    }
+
+    @Override
+    public boolean getUseNanoTime() {
+        return optionsRepository.get(Boolean.class, USE_NANO_TIME);
     }
 
 }
