@@ -457,7 +457,7 @@ public class PreparedStatementWrapper extends StatementWrapper implements Prepar
       e = sqle;
       throw e;
     } finally {
-      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, x, e);
+      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, x, cal, e);
     }
   }
 
@@ -470,7 +470,7 @@ public class PreparedStatementWrapper extends StatementWrapper implements Prepar
       e = sqle;
       throw e;
     } finally {
-      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, x, e);
+      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, x, cal, e);
     }
   }
 
@@ -483,7 +483,7 @@ public class PreparedStatementWrapper extends StatementWrapper implements Prepar
       e = sqle;
       throw e;
     } finally {
-      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, x, e);
+      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, x, cal, e);
     }
   }
 
