@@ -17,16 +17,18 @@
  */
 package com.p6spy.engine.spy.option;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 
 import javax.management.JMException;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.p6spy.engine.logging.P6LogOptions;
 import com.p6spy.engine.test.BaseTestCase;
@@ -34,7 +36,7 @@ import com.p6spy.engine.test.P6TestFramework;
 
 public class P6TestOptionsSources extends BaseTestCase {
 
-	@Before
+	@BeforeEach
 	public void setUp() throws JMException, SQLException, IOException,
 			InterruptedException {
 		// make sure to reinit properly
@@ -42,7 +44,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 		};
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		// cleanup to make sure other tests work as expected
 		System.getProperties().remove(
@@ -55,7 +57,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 		new P6TestFramework("blank") {
 		};
 
-		Assert.assertTrue(P6LogOptions
+		assertTrue(P6LogOptions
 				.getActiveInstance()
 				.getExcludeCategoriesSet()
 				.containsAll(
@@ -68,7 +70,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 		new P6TestFramework("override_clear") {
 		};
 
-		Assert.assertNull(P6LogOptions.getActiveInstance()
+		assertNull(P6LogOptions.getActiveInstance()
 				.getExcludeCategoriesSet());
 	}
 
@@ -78,7 +80,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 		new P6TestFramework("blank") {
 		};
 
-		Assert.assertTrue(P6LogOptions
+		assertTrue(P6LogOptions
 				.getActiveInstance()
 				.getExcludeCategoriesSet()
 				.containsAll(
@@ -95,7 +97,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 		new P6TestFramework("blank") {
 		};
 
-		Assert.assertNull(P6LogOptions.getActiveInstance()
+		assertNull(P6LogOptions.getActiveInstance()
 				.getExcludeCategoriesSet());
 	}
 	
@@ -105,7 +107,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 
 		P6LogOptions.getActiveInstance().setExcludecategories(null);
 		
-		Assert.assertTrue(P6LogOptions
+		assertTrue(P6LogOptions
 				.getActiveInstance()
 				.getExcludeCategoriesSet()
 				.containsAll(
@@ -118,7 +120,7 @@ public class P6TestOptionsSources extends BaseTestCase {
 		
 		P6LogOptions.getActiveInstance().setExcludecategories("");
 
-		Assert.assertNull(P6LogOptions.getActiveInstance()
+		assertNull(P6LogOptions.getActiveInstance()
 				.getExcludeCategoriesSet());
 	}
 }

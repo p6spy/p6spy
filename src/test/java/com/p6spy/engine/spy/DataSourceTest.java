@@ -17,22 +17,10 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.appender.P6TestLogger;
-import com.p6spy.engine.test.BaseTestCase;
-import com.p6spy.engine.test.P6TestFramework;
-import com.p6spy.engine.wrapper.AbstractWrapper;
-import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverConnectionFactory;
-import org.eclipse.jetty.plus.jndi.Resource;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -41,7 +29,23 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import javax.sql.DataSource;
+
+import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp.ConnectionFactory;
+import org.apache.commons.dbcp.DriverConnectionFactory;
+import org.eclipse.jetty.plus.jndi.Resource;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.appender.P6TestLogger;
+import com.p6spy.engine.test.BaseTestCase;
+import com.p6spy.engine.test.P6TestFramework;
+import com.p6spy.engine.wrapper.AbstractWrapper;
 
 /**
  * @author Quinton McCombs
@@ -65,7 +69,7 @@ public class DataSourceTest extends BaseTestCase {
   private String driverClass;
 
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     // make sure to reinit properly
     new P6TestFramework("ds") {
@@ -90,7 +94,7 @@ public class DataSourceTest extends BaseTestCase {
 
   }
 
-  @After
+  @AfterEach
   public void cleanup() throws SQLException {
     try {
       con.close();
@@ -128,19 +132,19 @@ public class DataSourceTest extends BaseTestCase {
 
     // get the data source from JNDI
     DataSource ds = new JndiDataSourceLookup().getDataSource("jdbc/spyDs");
-    assertNotNull("JNDI data source not found", ds);
+    assertNotNull(ds,"JNDI data source not found");
 
     // get the connection
     con = ds.getConnection();
 
     // verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", AbstractWrapper.isProxy(con));
+    assertTrue(AbstractWrapper.isProxy(con),"Connection is not a proxy");
 
     Statement stmt = con.createStatement();
     stmt.execute("select 1 from customers");
     stmt.close();
     assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select 1") != -1);
-    assertEquals("Incorrect number of spy log messages", 1, ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size());
+    assertEquals(1, ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size(),"Incorrect number of spy log messages");
   }
 
   @Test
@@ -159,13 +163,13 @@ public class DataSourceTest extends BaseTestCase {
 
     // get the data source from JNDI
     DataSource ds = new JndiDataSourceLookup().getDataSource("jdbc/spyDs");
-    assertNotNull("JNDI data source not found", ds);
+    assertNotNull(ds,"JNDI data source not found");
 
     // get the connection
     con = ds.getConnection();
 
     // verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", AbstractWrapper.isProxy(con));
+    assertTrue( AbstractWrapper.isProxy(con),"Connection is not a proxy");
 
   }
 

@@ -17,9 +17,9 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,18 +28,19 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.eclipse.jetty.plus.jndi.Resource;
+import org.h2.jdbcx.JdbcDataSource;
+import org.hsqldb.jdbc.JDBCDataSource;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.spy.appender.P6TestLogger;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.wrapper.AbstractWrapper;
-import org.eclipse.jetty.plus.jndi.Resource;
-import org.h2.jdbcx.JdbcDataSource;
-import org.hsqldb.jdbc.JDBCDataSource;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 
 /**
  * @author Quinton McCombs
@@ -48,7 +49,7 @@ import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 public class MultipleDataSourceTest extends BaseTestCase {
   private List<Resource> jndiResources;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     // make sure to reinit properly
     new P6TestFramework("ds") {
@@ -88,7 +89,7 @@ public class MultipleDataSourceTest extends BaseTestCase {
     ((P6TestLogger) P6LogQuery.getLogger()).clearLogs();
   }
 
-  @After
+  @AfterEach
   public void cleanup() {
     for (Resource resource : jndiResources) {
       try {
@@ -126,13 +127,13 @@ public class MultipleDataSourceTest extends BaseTestCase {
   }
 
   private void validateSpyEnabled(DataSource ds) throws SQLException {
-    assertNotNull("JNDI data source not found", ds);
+    assertNotNull(ds,"JNDI data source not found");
 
     // get the connection
     Connection con = ds.getConnection();
 
     // verify that the connection class is a proxy
-    assertTrue("Connection is not a proxy", AbstractWrapper.isProxy(con.getClass()));
+    assertTrue(AbstractWrapper.isProxy(con.getClass()),"Connection is not a proxy");
 
     if (con.getMetaData().getDatabaseProductName().contains("HSQL")) {
       con.createStatement().execute("set database sql syntax ora true");
@@ -142,7 +143,7 @@ public class MultipleDataSourceTest extends BaseTestCase {
   }
 
   private void validateNotSpyEnabled(DataSource ds) throws SQLException {
-    assertNotNull("JNDI data source not found", ds);
+    assertNotNull(ds,"JNDI data source not found");
 
     // get the connection
     Connection con = ds.getConnection();

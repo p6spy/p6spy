@@ -17,21 +17,25 @@
  */
 package com.p6spy.engine.test;
 
-import com.p6spy.engine.event.JdbcEventListener;
 import org.apache.log4j.Logger;
 import org.junit.Rule;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+
+import com.p6spy.engine.event.JdbcEventListener;
 
 /**
  * @author Quinton McCombs
  * @since 11/2013
  */
+@ExtendWith(TestExecutionLoggerExtension.class)
 public class BaseTestCase {
   private static final Logger log = Logger.getLogger(BaseTestCase.class);
   protected JdbcEventListener noOpEventListener = new JdbcEventListener() {};
 
+  //remove after junit5 migration 
   @Rule
   public TestRule testExecutionLogger = new TestWatcher() {
     /**
@@ -61,5 +65,5 @@ public class BaseTestCase {
     }
   };
 
-
 }
+

@@ -17,8 +17,8 @@
  */
 package com.p6spy.engine.spy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -27,8 +27,8 @@ import java.util.Set;
 import javax.management.JMException;
 import javax.management.ObjectName;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.j256.simplejmx.client.JmxClient;
 import com.p6spy.engine.common.P6Util;
@@ -44,7 +44,7 @@ public class P6TestMBean extends BaseTestCase {
 
   private static JmxClient jmxClient = null;
       
-  @BeforeClass
+  @BeforeAll
   public static void connectToJMX() throws JMException, SQLException, IOException, InterruptedException {
     // make sure to reinit properly
     new P6TestFramework("mbean") {};

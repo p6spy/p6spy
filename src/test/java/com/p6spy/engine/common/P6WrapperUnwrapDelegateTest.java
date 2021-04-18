@@ -17,9 +17,9 @@
  */
 package com.p6spy.engine.common;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -33,7 +33,7 @@ import com.p6spy.engine.test.TestConnectionImpl;
 import com.p6spy.engine.wrapper.AbstractWrapper;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 import org.apache.commons.dbcp.DelegatingConnection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class P6WrapperUnwrapDelegateTest extends BaseTestCase {
 

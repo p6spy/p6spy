@@ -17,6 +17,13 @@
  */
 package com.p6spy.engine.spy.option;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,6 +32,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.Category;
@@ -44,13 +58,6 @@ import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class P6TestOptionDefaults extends BaseTestCase {
 
@@ -63,7 +70,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
   private static final List<Class<? extends P6Factory>> DEFAULT_FACTORIES = Arrays.asList(
       P6SpyFactory.class, P6LogFactory.class);
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpAll() throws SQLException, IOException {
     // cleanup all
     LOG_FILE.delete();
@@ -73,7 +80,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     };
   }
 
-  @Before
+  @BeforeEach
   public void setUp() {
     // make sure to have no modules explicitly loaded by default
     {
@@ -82,12 +89,12 @@ public class P6TestOptionDefaults extends BaseTestCase {
     }
   }
   
-  @After
+  @AfterEach
   public void tearDown() throws SQLException, IOException {
     System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.MODULELIST);
   }
   
-  @AfterClass
+  @AfterAll
   public static void tearDownAll() {
     // post clean up
     LOG_FILE.delete();
@@ -97,9 +104,9 @@ public class P6TestOptionDefaults extends BaseTestCase {
   public void testDefaultOptions() {
     assertP6FactoryClassesEqual(DEFAULT_FACTORIES, P6ModuleManager.getInstance().getFactories());
     
-    Assert.assertNotNull(P6SpyOptions.getActiveInstance());
-    Assert.assertNotNull(P6LogOptions.getActiveInstance());
-    Assert.assertNull(P6OutageOptions.getActiveInstance());
+    assertNotNull(P6SpyOptions.getActiveInstance());
+    assertNotNull(P6LogOptions.getActiveInstance());
+    assertNull(P6OutageOptions.getActiveInstance());
   }
   
   private void assertP6FactoryClassesEqual(List<Class<? extends P6Factory>> expected,
@@ -110,46 +117,46 @@ public class P6TestOptionDefaults extends BaseTestCase {
     for (P6Factory factory : factories) {
       expectedSet.remove(factory.getClass());
     }
-    Assert.assertTrue(expectedSet.isEmpty());
+    assertTrue(expectedSet.isEmpty());
   }
   
   @Test
   public void testP6SpyOptionDefaults() {
     P6SpyLoadableOptions opts = P6SpyOptions.getActiveInstance();
-    Assert.assertNotNull(opts);
+    assertNotNull(opts);
 
-    Assert.assertEquals(SingleLineFormat.class.getName(), opts.getLogMessageFormat());
-    Assert.assertEquals("spy.log", opts.getLogfile());
-    Assert.assertTrue(opts.getAppend());
-    Assert.assertNull(opts.getDateformat());
-    Assert.assertEquals(FileLogger.class.getName(), opts.getAppender());
-    Assert.assertEquals(P6SpyFactory.class.getName() + ","+ P6LogFactory.class.getName(), opts.getModulelist());
-    Assert.assertEquals(2, opts.getModuleFactories().size());
+    assertEquals(SingleLineFormat.class.getName(), opts.getLogMessageFormat());
+    assertEquals("spy.log", opts.getLogfile());
+    assertTrue(opts.getAppend());
+    assertNull(opts.getDateformat());
+    assertEquals(FileLogger.class.getName(), opts.getAppender());
+    assertEquals(P6SpyFactory.class.getName() + ","+ P6LogFactory.class.getName(), opts.getModulelist());
+    assertEquals(2, opts.getModuleFactories().size());
     assertP6FactoryClassesEqual(DEFAULT_FACTORIES, opts.getModuleFactories());
-    Assert.assertEquals(2, opts.getModuleNames().size());
-    Assert.assertTrue(opts.getModuleNames().contains(P6SpyFactory.class.getName()));
-    Assert.assertTrue(opts.getModuleNames().contains(P6LogFactory.class.getName()));
-    Assert.assertEquals("", opts.getDriverlist());
-    Assert.assertNull(opts.getDriverNames());
-    Assert.assertFalse(opts.getStackTrace());
-    Assert.assertNull(opts.getStackTraceClass());
-    Assert.assertFalse(opts.getAutoflush());
-    Assert.assertFalse(opts.getReloadProperties());
-    Assert.assertEquals(60L, opts.getReloadPropertiesInterval());
-    Assert.assertNull(opts.getJNDIContextFactory());
-    Assert.assertNull(opts.getJNDIContextProviderURL());
-    Assert.assertNull(opts.getJNDIContextCustom());
-    Assert.assertNull(opts.getRealDataSource());
-    Assert.assertNull(opts.getRealDataSourceClass());
-    Assert.assertEquals("yyyy-MM-dd'T'HH:mm:ss.SSSZ", opts.getDatabaseDialectDateFormat());
-    Assert.assertEquals("yyyy-MM-dd'T'HH:mm:ss.SSSZ", opts.getDatabaseDialectTimestampFormat());
-    Assert.assertEquals("boolean", opts.getDatabaseDialectBooleanFormat());
-    Assert.assertEquals(String.format("%s|%s|%s|connection%s|%s",
+    assertEquals(2, opts.getModuleNames().size());
+    assertTrue(opts.getModuleNames().contains(P6SpyFactory.class.getName()));
+    assertTrue(opts.getModuleNames().contains(P6LogFactory.class.getName()));
+    assertEquals("", opts.getDriverlist());
+    assertNull(opts.getDriverNames());
+    assertFalse(opts.getStackTrace());
+    assertNull(opts.getStackTraceClass());
+    assertFalse(opts.getAutoflush());
+    assertFalse(opts.getReloadProperties());
+    assertEquals(60L, opts.getReloadPropertiesInterval());
+    assertNull(opts.getJNDIContextFactory());
+    assertNull(opts.getJNDIContextProviderURL());
+    assertNull(opts.getJNDIContextCustom());
+    assertNull(opts.getRealDataSource());
+    assertNull(opts.getRealDataSourceClass());
+    assertEquals("yyyy-MM-dd'T'HH:mm:ss.SSSZ", opts.getDatabaseDialectDateFormat());
+    assertEquals("yyyy-MM-dd'T'HH:mm:ss.SSSZ", opts.getDatabaseDialectTimestampFormat());
+    assertEquals("boolean", opts.getDatabaseDialectBooleanFormat());
+    assertEquals(String.format("%s|%s|%s|connection%s|%s",
       CustomLineFormat.CURRENT_TIME, CustomLineFormat.EXECUTION_TIME, CustomLineFormat.CATEGORY,
       CustomLineFormat.CONNECTION_ID, CustomLineFormat.SQL_SINGLE_LINE),
       opts.getCustomLogMessageFormat());
-    Assert.assertTrue(opts.getJmx());
-    Assert.assertNull(opts.getJmxPrefix());
+    assertTrue(opts.getJmx());
+    assertNull(opts.getJmxPrefix());
   }
 
   @Test
@@ -162,21 +169,21 @@ public class P6TestOptionDefaults extends BaseTestCase {
     }
 
     final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
-    Assert.assertNotNull(opts);
+    assertNotNull(opts);
 
-    Assert.assertNull(opts.getSQLExpression());
-    Assert.assertEquals(0L, opts.getExecutionThreshold());
-    Assert.assertEquals("info,debug,result,resultset,batch", opts.getExcludecategories());
-    Assert.assertFalse(opts.getExcludebinary());
-    Assert.assertTrue(opts.getExcludeCategoriesSet().containsAll(
+    assertNull(opts.getSQLExpression());
+    assertEquals(0L, opts.getExecutionThreshold());
+    assertEquals("info,debug,result,resultset,batch", opts.getExcludecategories());
+    assertFalse(opts.getExcludebinary());
+    assertTrue(opts.getExcludeCategoriesSet().containsAll(
         Arrays.asList(DEFAULT_CATEGORIES)));
-    Assert.assertFalse(opts.getFilter());
-    Assert.assertNull(opts.getIncludeList());
-    Assert.assertNull(opts.getExcludeList());
-    Assert.assertNull(opts.getIncludeExcludePattern());
-    Assert.assertEquals("", opts.getInclude());
-    Assert.assertEquals("", opts.getExclude());
-    Assert.assertNull(opts.getSQLExpressionPattern());
+    assertFalse(opts.getFilter());
+    assertNull(opts.getIncludeList());
+    assertNull(opts.getExcludeList());
+    assertNull(opts.getIncludeExcludePattern());
+    assertEquals("", opts.getInclude());
+    assertEquals("", opts.getExclude());
+    assertNull(opts.getSQLExpressionPattern());
   }
 
   @Test
@@ -189,11 +196,11 @@ public class P6TestOptionDefaults extends BaseTestCase {
     }
 
     final P6OutageLoadableOptions opts = P6OutageOptions.getActiveInstance();
-    Assert.assertNotNull(opts);
+    assertNotNull(opts);
 
-    Assert.assertFalse(opts.getOutageDetection());
-    Assert.assertEquals(30L, opts.getOutageDetectionInterval());
-    Assert.assertEquals(30000L, opts.getOutageDetectionIntervalMS());
+    assertFalse(opts.getOutageDetection());
+    assertEquals(30L, opts.getOutageDetectionInterval());
+    assertEquals(30000L, opts.getOutageDetectionIntervalMS());
     
     // cleanup - make sure go back to default modules
     {
@@ -214,7 +221,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
       assertDefaultDisabledLogCategories();
     } catch(IOException e) {
       e.printStackTrace();
-      Assert.fail();
+      fail();
     }
     
     // cleanup - make sure go back to default modules
@@ -232,7 +239,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
       assertDefaultDisabledLogCategories();
     } catch(IOException e) {
       e.printStackTrace();
-      Assert.fail();
+      fail();
     }
   }
 
@@ -242,7 +249,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
       P6LogQuery.debug(msg);
       if( LOG_FILE.exists() ) {
         final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
-        Assert.assertFalse(logged.contains(msg));
+        assertFalse(logged.contains(msg));
       }
     }
     
@@ -251,7 +258,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
       P6LogQuery.info(msg);
       if( LOG_FILE.exists() ) {
         final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
-        Assert.assertFalse(logged.contains(msg));
+        assertFalse(logged.contains(msg));
       }
     }
     
@@ -260,9 +267,9 @@ public class P6TestOptionDefaults extends BaseTestCase {
       P6LogQuery.error(msg);
       if( LOG_FILE.exists() ) {
         final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
-        Assert.assertTrue(logged.contains(msg));
+        assertTrue(logged.contains(msg));
       } else {
-        Assert.fail("log file not created");
+        fail("log file not created");
       }
     }
   }

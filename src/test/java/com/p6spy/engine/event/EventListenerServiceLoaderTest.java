@@ -17,12 +17,14 @@
  */
 package com.p6spy.engine.event;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.sql.Connection;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.logging.LoggingEventListener;
@@ -30,7 +32,6 @@ import com.p6spy.engine.spy.DefaultJdbcEventListenerFactory;
 import com.p6spy.engine.test.TestJdbcEventListener;
 import com.p6spy.engine.test.TestLoggingEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
-import org.junit.Test;
 
 public class EventListenerServiceLoaderTest {
 
