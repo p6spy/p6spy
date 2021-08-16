@@ -8,7 +8,7 @@ services:
   - postgresql
 
 git:
-  depth: false
+  depth: 3
 
 addons:
   sonarcloud:
