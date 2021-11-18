@@ -48,9 +48,41 @@ public class PreparedStatementInformation extends StatementInformation implement
     // iterate over the characters in the query replacing the parameter placeholders
     // with the actual values
     int currentParameter = 0;
+
+    // Skip replacing the parameter placeholders
+    // when the parameter placeholder is singleQuoted or commented.
+    boolean isSingleQuoted = false;
+    boolean isSingleCommented = false;
+    boolean isMultiLineCommented = false;
+
     for( int pos = 0; pos < statementQuery.length(); pos ++) {
       char character = statementQuery.charAt(pos);
-      if( statementQuery.charAt(pos) == '?' && currentParameter <= parameterValues.size()) {
+
+      if (character == '\'') {
+        isSingleQuoted = !isSingleQuoted;
+      }
+
+      if (!isSingleCommented) {
+        if (character == '-' && (pos + 1 < statementQuery.length()) && statementQuery.charAt(pos + 1) == '-') {
+          isSingleCommented = true;
+        }
+      } else {
+        if (character == '\n') {
+          isSingleCommented = false;
+        }
+      }
+
+      if (!isMultiLineCommented) {
+        if (character == '/' && (pos + 1 < statementQuery.length()) && statementQuery.charAt(pos + 1) == '*') {
+          isMultiLineCommented = true;
+        }
+      } else {
+        if (character == '*' && (pos + 1 < statementQuery.length()) && statementQuery.charAt(pos + 1) == '/') {
+          isMultiLineCommented = false;
+        }
+      }
+
+      if( statementQuery.charAt(pos) == '?' && currentParameter <= parameterValues.size() && !isSingleQuoted && !isSingleCommented && !isMultiLineCommented) {
         // replace with parameter value
         Value value = parameterValues.get(currentParameter);
         sb.append(value != null ? value.toString() : new Value().toString());
