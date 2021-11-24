@@ -412,16 +412,11 @@ tasks.withType(BintrayUploadTask) {
 
 allprojects {
     tasks.withType(Test).configureEach {
-        maxParallelForks = 4
-    }
-
-    tasks.withType(Test).configureEach {
+        maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+        if (!project.hasProperty("createReports")) {
+            reports.html.required = false
+            reports.junitXml.required = false
+        }
         forkEvery = 100
     }
-
-    tasks.withType(Test).configureEach {
-        reports.html.required = false
-        reports.junitXml.required = false
-    }
-
 }
