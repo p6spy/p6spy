@@ -70,9 +70,9 @@ dependencies {
   testCompile 'org.slf4j:slf4j-log4j12:1.7.25'
   testCompile 'log4j:log4j:1.2.17'
 
-  compileOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.1'
-  compileOnly 'org.apache.logging.log4j:log4j-api:2.11.1'
-  compileOnly 'org.apache.logging.log4j:log4j-core:2.11.1'
+  compileOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.1'
+  compileOnly 'org.apache.logging.log4j:log4j-api:2.17.1'
+  compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
 
   compileOnly 'ch.qos.logback:logback-classic:1.2.3'
   compileOnly 'ch.qos.logback:logback-core:1.2.3'
