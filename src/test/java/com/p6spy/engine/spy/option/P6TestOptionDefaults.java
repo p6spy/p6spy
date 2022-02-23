@@ -150,6 +150,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
       opts.getCustomLogMessageFormat());
     Assert.assertTrue(opts.getJmx());
     Assert.assertNull(opts.getJmxPrefix());
+    Assert.assertFalse(opts.getUseNanoTime());
   }
 
   @Test

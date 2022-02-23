@@ -48,4 +48,7 @@ public interface P6SpyLoadableOptions extends P6LoadableOptions, P6SpyOptionsMBe
   MessageFormattingStrategy getLogMessageFormatInstance();
   
   void setJmx(String jmx);
+
+  void setUseNanoTime(String useNanoTime);
+
 }
