@@ -17,15 +17,6 @@
  */
 package com.p6spy.engine.spy;
 
-import com.p6spy.engine.common.P6LogQuery;
-import com.p6spy.engine.common.P6Util;
-import com.p6spy.engine.spy.option.EnvironmentVariables;
-import com.p6spy.engine.spy.option.P6OptionChangedListener;
-import com.p6spy.engine.spy.option.P6OptionsRepository;
-import com.p6spy.engine.spy.option.P6OptionsSource;
-import com.p6spy.engine.spy.option.SpyDotProperties;
-import com.p6spy.engine.spy.option.SystemProperties;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,6 +31,15 @@ import javax.management.MBeanRegistrationException;
 import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
 
+import com.p6spy.engine.common.P6LogQuery;
+import com.p6spy.engine.common.P6Util;
+import com.p6spy.engine.spy.option.EnvironmentVariables;
+import com.p6spy.engine.spy.option.P6OptionChangedListener;
+import com.p6spy.engine.spy.option.P6OptionsRepository;
+import com.p6spy.engine.spy.option.P6OptionsSource;
+import com.p6spy.engine.spy.option.SpyDotProperties;
+import com.p6spy.engine.spy.option.SystemProperties;
+
 public class P6ModuleManager {
 
   // recreated on each reload
@@ -48,38 +48,17 @@ public class P6ModuleManager {
   private final Map<Class<? extends P6LoadableOptions>, P6LoadableOptions> allOptions = new HashMap<Class<? extends P6LoadableOptions>, P6LoadableOptions>();
   private final List<P6Factory> factories = new CopyOnWriteArrayList<P6Factory>();
   private final P6MBeansRegistry mBeansRegistry = new P6MBeansRegistry();
+  private final P6LogQuery p6LogQuery = new P6LogQuery();
 
   private final P6OptionsRepository optionsRepository = new P6OptionsRepository();
 
   // current instance (not a singleton, hence no final modifier)
-  private static P6ModuleManager instance;
+  private static Map<Integer, P6ModuleManager> instances = new HashMap<Integer, P6ModuleManager>();
 
-  static {
-    initMe();
-  }
-
-  private static synchronized void initMe() {
-    try {
-      cleanUp();
-      
-      instance = new P6ModuleManager();
-      P6LogQuery.initialize();
-
-    } catch (IOException e) {
-      handleInitEx(e);
-    } catch (MBeanRegistrationException e) {
-      handleInitEx(e);
-    } catch (InstanceNotFoundException e) {
-      handleInitEx(e);
-    } catch (MalformedObjectNameException e) {
-      handleInitEx(e);
-    } catch (NotCompliantMBeanException e) {
-      handleInitEx(e);
-    }
-  }
-
-  private static void cleanUp() throws MBeanRegistrationException, InstanceNotFoundException,
-      MalformedObjectNameException {
+  private void cleanUp() throws MBeanRegistrationException, InstanceNotFoundException,
+    MalformedObjectNameException {
+    Integer classLoaderIdentifier = getContextIdentifier();
+    P6ModuleManager instance = instances.get(classLoaderIdentifier);
     if (instance == null) {
       return;
     }
@@ -88,14 +67,14 @@ public class P6ModuleManager {
       optionsSource.preDestroy(instance);
     }
 
-    if (P6SpyOptions.getActiveInstance().getJmx() //
+    if (instance.getOptions(P6SpyOptions.class).getJmx() //
       // unregister mbeans (to prevent naming conflicts)
       && instance.mBeansRegistry != null) {
-        instance.mBeansRegistry.unregisterAllMBeans(P6SpyOptions.getActiveInstance().getJmxPrefix());
+    	instance.mBeansRegistry.unregisterAllMBeans(instance.getOptions(P6SpyOptions.class).getJmxPrefix());
     }
-    
     // clean table plz (we need to make sure that all the configured factories will be re-loaded)
     new DefaultJdbcEventListenerFactory().clearCache();
+    instances.remove(classLoaderIdentifier);
   }
 
   /**
@@ -111,9 +90,6 @@ public class P6ModuleManager {
                            MalformedObjectNameException, InstanceNotFoundException {
     debug(this.getClass().getName() + " re/initiating modules started");
 
-    // make sure the proper listener registration happens
-    registerOptionChangedListener(new P6LogQuery());
-    
     // hard coded - core module init - as it holds initial config
     final P6SpyLoadableOptions spyOptions = (P6SpyLoadableOptions) registerModule(new P6SpyFactory());
     loadDriversExplicitly(spyOptions);
@@ -133,7 +109,7 @@ public class P6ModuleManager {
     for (P6OptionsSource optionsSource : optionsSources) {
       optionsSource.postInit(this);
     }
-
+    
     debug(this.getClass().getName() + " re/initiating modules done");
   }
   
@@ -185,8 +161,55 @@ public class P6ModuleManager {
 		allOptions.put(options.getClass(), options);
 	}
 
-  public static P6ModuleManager getInstance() {
-    return instance;
+	public static P6ModuleManager getInstance() {
+		Integer classLoaderIdentifier = getContextIdentifier();
+		System.out.println("P6MODULE: Loading " + classLoaderIdentifier);
+		
+		if (!instances.containsKey(classLoaderIdentifier)) {
+			System.out.println("P6MODULE: Creating " + classLoaderIdentifier);
+			synchronized (P6ModuleManager.class) {
+				if (!instances.containsKey(classLoaderIdentifier)) {
+					try {
+						// Null value set because P6ModuleManager.getInstance is called by logging actions during P6ModuleManager construction
+						instances.put(classLoaderIdentifier, null); 
+						P6ModuleManager moduleManager = new P6ModuleManager();
+						instances.put(classLoaderIdentifier, moduleManager);
+						if(instances.size() > 1) 
+							throw new RuntimeException("FINALY");
+						moduleManager.initialize();
+					} catch (MBeanRegistrationException e) {
+						handleInitEx(e);
+					} catch (NotCompliantMBeanException e) {
+						handleInitEx(e);
+					} catch (MalformedObjectNameException e) {
+						handleInitEx(e);
+					} catch (InstanceNotFoundException e) {
+						handleInitEx(e);
+					} catch (IOException e) {
+						handleInitEx(e);
+					}
+					
+				}
+			}
+		}
+		return instances.get(classLoaderIdentifier);
+	}
+	
+  private static Integer getContextIdentifier() {
+	  if(Thread.currentThread().getContextClassLoader() != null) {
+		  return System.identityHashCode(Thread.currentThread().getContextClassLoader());
+	  }
+	  return System.identityHashCode(Thread.currentThread().getClass().getClassLoader());
+  }
+
+  private void initialize() {
+	this.p6LogQuery.initialize();
+	// make sure the proper listener registration happens
+    registerOptionChangedListener(this.p6LogQuery);
+  }
+  
+  public P6LogQuery getLogger() {
+	  return this.p6LogQuery;
   }
 
   private static void handleInitEx(Exception e) {
@@ -204,7 +227,7 @@ public class P6ModuleManager {
 				} catch (Exception e) {
 					String err = "Error registering driver names: "
 							+ driverNames + " \nCaused By: " + e.toString();
-					P6LogQuery.error(err);
+					getLogger().error(err);
 					throw new P6DriverNotFoundError(err);
 				}
 			}
@@ -213,11 +236,11 @@ public class P6ModuleManager {
 
   private void debug(String msg) {
     // not initialized yet => nowhere to log yet
-    if (instance == null || factories.isEmpty()) {
+    if (instances.isEmpty() || factories.isEmpty()) {
       return;
     }
 
-    P6LogQuery.debug(msg);
+    getLogger().debug(msg);
   }
   
   //
@@ -241,7 +264,16 @@ public class P6ModuleManager {
    * previously set values are kept (even those set manually - via jmx will be forgotten).
    */
   public void reload() {
-    initMe();
+		try {
+			cleanUp();
+			getInstance();
+		} catch (MBeanRegistrationException e) {
+			handleInitEx(e);
+		} catch (InstanceNotFoundException e) {
+			handleInitEx(e);
+		} catch (MalformedObjectNameException e) {
+			handleInitEx(e);
+		}
   }
 
   public List<P6Factory> getFactories() {

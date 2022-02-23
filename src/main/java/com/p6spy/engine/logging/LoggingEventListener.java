@@ -23,6 +23,7 @@ import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.event.SimpleJdbcEventListener;
+import com.p6spy.engine.spy.P6ModuleManager;
 
 import java.sql.SQLException;
 
@@ -104,6 +105,6 @@ public class LoggingEventListener extends SimpleJdbcEventListener {
   }
 
   protected void logElapsed(Loggable loggable, long timeElapsedNanos, Category category, SQLException e) {
-    P6LogQuery.logElapsed(loggable.getConnectionInformation().getConnectionId(), timeElapsedNanos, category, loggable);
+	 P6ModuleManager.getInstance().getLogger().logElapsed(loggable.getConnectionInformation().getConnectionId(), timeElapsedNanos, category, loggable);
   }
 }

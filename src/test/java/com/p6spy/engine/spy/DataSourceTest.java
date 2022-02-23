@@ -86,7 +86,7 @@ public class DataSourceTest extends BaseTestCase {
     spyDs.setRealDataSource("jdbc/realDs");
     spyDsResource = new Resource("jdbc/spyDs", spyDs);
 
-    ((P6TestLogger) P6LogQuery.getLogger()).clearLogs();
+    ((P6TestLogger) P6ModuleManager.getInstance().getLogger().getLogger()).clearLogs();
 
   }
 
@@ -139,8 +139,8 @@ public class DataSourceTest extends BaseTestCase {
     Statement stmt = con.createStatement();
     stmt.execute("select 1 from customers");
     stmt.close();
-    assertTrue(((P6TestLogger) P6LogQuery.getLogger()).getLastEntry().indexOf("select 1") != -1);
-    assertEquals("Incorrect number of spy log messages", 1, ((P6TestLogger) P6LogQuery.getLogger()).getLogs().size());
+    assertTrue(((P6TestLogger) P6ModuleManager.getInstance().getLogger().getLogger()).getLastEntry().indexOf("select 1") != -1);
+    assertEquals("Incorrect number of spy log messages", 1, ((P6TestLogger) P6ModuleManager.getInstance().getLogger().getLogger()).getLogs().size());
   }
 
   @Test

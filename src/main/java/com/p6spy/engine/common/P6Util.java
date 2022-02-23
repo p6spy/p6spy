@@ -30,6 +30,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import com.p6spy.engine.spy.P6ModuleManager;
+
 public class P6Util {
     static Pattern lineBreakPattern = Pattern.compile("(\\r?\\n)+");
     public static String singleLine(String str) {
@@ -48,7 +50,7 @@ public class P6Util {
             return (Integer.parseInt(i));
         }
         catch(NumberFormatException nfe) {
-            P6LogQuery.error("NumberFormatException occured parsing value "+i);
+            P6ModuleManager.getInstance().getLogger().error("NumberFormatException occured parsing value "+i);
             return defaultValue;
         }
     }

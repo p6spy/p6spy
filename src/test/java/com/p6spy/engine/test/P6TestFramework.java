@@ -135,7 +135,7 @@ public abstract class P6TestFramework extends BaseTestCase {
   //
 
   private void failOnNonP6TestLoggerUsage() {
-    if (!(P6LogQuery.getLogger() instanceof P6TestLogger)) {
+    if (!(P6ModuleManager.getInstance().getLogger().getLogger() instanceof P6TestLogger)) {
       throw new IllegalStateException();
     }
   }
@@ -174,6 +174,6 @@ public abstract class P6TestFramework extends BaseTestCase {
 
   private P6TestLogger getP6TestLogger() {
     failOnNonP6TestLoggerUsage();
-    return (P6TestLogger) P6LogQuery.getLogger();
+    return (P6TestLogger) P6ModuleManager.getInstance().getLogger().getLogger();
   }
 }

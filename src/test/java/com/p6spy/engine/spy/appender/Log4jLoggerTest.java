@@ -37,6 +37,7 @@ import org.junit.Test;
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogOptions;
+import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.P6TestUtil;
 import com.p6spy.engine.spy.option.P6TestOptionDefaults;
 import com.p6spy.engine.test.BaseTestCase;
@@ -146,7 +147,7 @@ public class Log4jLoggerTest extends BaseTestCase {
   @Test
   public void testLogText() throws Exception {
     Log4JTestApppender.clearCapturedMessages();
-    P6LogQuery.log(Category.RESULT, "", "");
+    P6ModuleManager.getInstance().getLogger().log(Category.RESULT, "", "");
     assertEquals(0, Log4JTestApppender.getCapturedMessages().size());
   }
 
@@ -162,7 +163,7 @@ public class Log4jLoggerTest extends BaseTestCase {
   		configure(thresholdLevel.toString(), true);
 
 		Log4JTestApppender.clearCapturedMessages();
-	    P6LogQuery.log(category, "sample msg", "sample msg");
+		P6ModuleManager.getInstance().getLogger().log(category, "sample msg", "sample msg");
 	    
 	    if (expectedLevel == null) {
 	    	assertEquals(0, Log4JTestApppender.getCapturedMessages().size());

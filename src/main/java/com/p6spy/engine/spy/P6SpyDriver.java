@@ -30,7 +30,6 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.p6spy.engine.common.ConnectionInformation;
-import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.event.JdbcEventListener;
 import com.p6spy.engine.wrapper.ConnectionWrapper;
 
@@ -86,7 +85,7 @@ public class P6SpyDriver implements Driver {
     // find the real driver for the URL
     Driver passThru = findPassthru(url);
 
-    P6LogQuery.debug("this is " + this + " and passthru is " + passThru);
+    P6ModuleManager.getInstance().getLogger().debug("this is " + this + " and passthru is " + passThru);
 
     final long start = System.nanoTime();
 

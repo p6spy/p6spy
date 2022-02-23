@@ -26,7 +26,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.p6spy.engine.common.P6LogQuery;
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.logging.P6LogLoadableOptions;
@@ -44,13 +51,6 @@ import com.p6spy.engine.spy.appender.FileLogger;
 import com.p6spy.engine.spy.appender.SingleLineFormat;
 import com.p6spy.engine.test.BaseTestCase;
 import com.p6spy.engine.test.P6TestFramework;
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class P6TestOptionDefaults extends BaseTestCase {
 
@@ -239,7 +239,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
   private void assertDefaultDisabledLogCategories() throws IOException {
     {
       final String msg = "debug logged test msg";
-      P6LogQuery.debug(msg);
+      P6ModuleManager.getInstance().getLogger().debug(msg);
       if( LOG_FILE.exists() ) {
         final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
         Assert.assertFalse(logged.contains(msg));
@@ -248,7 +248,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     
     {
       final String msg = "info logged test msg";
-      P6LogQuery.info(msg);
+      P6ModuleManager.getInstance().getLogger().info(msg);
       if( LOG_FILE.exists() ) {
         final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
         Assert.assertFalse(logged.contains(msg));
@@ -257,7 +257,7 @@ public class P6TestOptionDefaults extends BaseTestCase {
     
     {
       final String msg = "error logged test msg";
-      P6LogQuery.error(msg);
+      P6ModuleManager.getInstance().getLogger().error(msg);
       if( LOG_FILE.exists() ) {
         final String logged = FileUtils.readFileToString(LOG_FILE, "UTF-8");
         Assert.assertTrue(logged.contains(msg));
