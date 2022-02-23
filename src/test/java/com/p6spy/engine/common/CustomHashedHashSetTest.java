@@ -17,14 +17,18 @@
  */
 package com.p6spy.engine.common;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.p6spy.engine.logging.P6LogFactory;
 import com.p6spy.engine.spy.P6Factory;
@@ -40,7 +44,7 @@ public class CustomHashedHashSetTest {
 	private P6SpyFactory fs1 = new P6SpyFactory();
 	private P6SpyFactory fs2 = new P6SpyFactory();
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		hasher = new ClassHasher();
 		set = new CustomHashedHashSet<P6Factory>(hasher);
@@ -48,49 +52,49 @@ public class CustomHashedHashSetTest {
 		fl1 = new P6LogFactory();
 		fl2 = new P6LogFactory();
 		
-		Assert.assertNotEquals(fl1.hashCode(), fl2.hashCode());
-		Assert.assertEquals(hasher.getHashCode(fl1), hasher.getHashCode(fl2));
+		assertNotEquals(fl1.hashCode(), fl2.hashCode());
+		assertEquals(hasher.getHashCode(fl1), hasher.getHashCode(fl2));
 		
 		fs1 = new P6SpyFactory();
 		fs2 = new P6SpyFactory();
 		
-		Assert.assertNotEquals(fs1.hashCode(), fs2.hashCode());
-		Assert.assertEquals(hasher.getHashCode(fs1), hasher.getHashCode(fs2));
+		assertNotEquals(fs1.hashCode(), fs2.hashCode());
+		assertEquals(hasher.getHashCode(fs1), hasher.getHashCode(fs2));
 
-		Assert.assertEquals(0, set.size());
+		assertEquals(0, set.size());
 	}
 	
 	@Test
 	public void testAdd() {
 		set.add(fl1);
-		Assert.assertEquals(1, set.size());
+		assertEquals(1, set.size());
 		set.add(fl2);
-		Assert.assertEquals(1, set.size());
+		assertEquals(1, set.size());
 		
 		set.addAll(Arrays.asList(fs1, fs2));
-		Assert.assertEquals(2, set.size());
+		assertEquals(2, set.size());
 	}
 	
 	@Test
 	public void testRemove() {
 		set.addAll(Arrays.asList(fl1, fl2, fs1, fs2));
-		Assert.assertEquals(2, set.size());
+		assertEquals(2, set.size());
 		
 		set.remove(fl1);
-		Assert.assertEquals(1, set.size());
+		assertEquals(1, set.size());
 		set.removeAll(Arrays.asList(fs1, fs2));
-		Assert.assertEquals(0, set.size());
+		assertEquals(0, set.size());
 	}
 	
 	@Test
 	public void testContains() {
-		Assert.assertFalse(set.contains(fl1));
+		assertFalse(set.contains(fl1));
 		
 		set.addAll(Arrays.asList(fl1, fs1));
-		Assert.assertTrue(set.contains(fl1));
-		Assert.assertTrue(set.contains(fl2));
-		Assert.assertTrue(set.contains(fs1));
-		Assert.assertTrue(set.contains(fs2));
+		assertTrue(set.contains(fl1));
+		assertTrue(set.contains(fl2));
+		assertTrue(set.contains(fs1));
+		assertTrue(set.contains(fs2));
 	}
 	
 	@Test
@@ -101,8 +105,8 @@ public class CustomHashedHashSetTest {
 		
 		for (Iterator<P6Factory> it = set.iterator(); it.hasNext();) {
 			Object elem = it.next();
-			Assert.assertTrue(list.contains(elem));
-			Assert.assertFalse(classHashEqualList.contains(elem));
+			assertTrue(list.contains(elem));
+			assertFalse(classHashEqualList.contains(elem));
 		}
 	}
 }

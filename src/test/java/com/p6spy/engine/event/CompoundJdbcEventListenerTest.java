@@ -17,19 +17,21 @@
  */
 package com.p6spy.engine.event;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,6 +61,15 @@ import java.util.Calendar;
 import javax.sql.DataSource;
 import javax.sql.PooledConnection;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.p6spy.engine.common.CallableStatementInformation;
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.common.PreparedStatementInformation;
@@ -76,17 +87,8 @@ import com.p6spy.engine.wrapper.P6Proxy;
 import com.p6spy.engine.wrapper.PreparedStatementWrapper;
 import com.p6spy.engine.wrapper.ResultSetWrapper;
 import com.p6spy.engine.wrapper.StatementWrapper;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CompoundJdbcEventListenerTest {
 
   @Mock
@@ -113,7 +115,7 @@ public class CompoundJdbcEventListenerTest {
 
   private static final String SQL = "SELECT * FROM DUAL";
 
-  @Before
+  @BeforeEach
   public void before() throws SQLException, IOException {
     P6TestFactory.setJdbcEventListener(mockedJdbcListener);
     new P6TestFramework("H2") {
@@ -138,9 +140,9 @@ public class CompoundJdbcEventListenerTest {
         return mockedJdbcListener;
       }
     });
-    when(mockedDataSource.getConnection()).thenReturn(mockedConnection);
-    when(mockedDataSource.getConnection(anyString(), anyString())).thenReturn(mockedConnection);
-    when(mockedPooledConnection.getConnection()).thenReturn(mockedConnection);
+    lenient().when(mockedDataSource.getConnection()).thenReturn(mockedConnection);
+    lenient().when(mockedDataSource.getConnection(anyString(), anyString())).thenReturn(mockedConnection);
+    lenient().when(mockedPooledConnection.getConnection()).thenReturn(mockedConnection);
 
     connectionInformation = ConnectionInformation.fromTestConnection(mockedConnection);
     statementInformation = new StatementInformation(connectionInformation);
@@ -167,7 +169,7 @@ public class CompoundJdbcEventListenerTest {
     });
   }
 
-  @After
+  @AfterEach
   public void after() throws Exception {
     P6TestFactory.setJdbcEventListener(null);
     P6SpyDriver.setJdbcEventListenerFactory(null);
@@ -189,12 +191,12 @@ public class CompoundJdbcEventListenerTest {
 
     try {
       wrappedDataSource.getConnection();
-      Assert.fail("exception should be thrown");
+      fail("exception should be thrown");
     } catch (SQLException expected) {
     }
     try {
       wrappedDataSource.getConnection("test", "test");
-      Assert.fail("exception should be thrown");
+      fail("exception should be thrown");
     } catch (SQLException expected) {
     }
     verify(mockedJdbcListener, times(2)).onAfterGetConnection(connectionInformationWithoutConnection(), eq(sqle));
@@ -211,7 +213,7 @@ public class CompoundJdbcEventListenerTest {
   public void testConnectionOnAfterGetConnectionAfterGettingFromDriverWithThrowingSQLException() throws SQLException {
     try {
       DriverManager.getConnection("jdbc:p6spy:h2:tcp://dev/null/", "sa", null);
-      Assert.fail("exception should be thrown");
+      fail("exception should be thrown");
     } catch (SQLException expected) {
     }
     verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithoutConnection(), any(SQLException.class));
@@ -231,7 +233,7 @@ public class CompoundJdbcEventListenerTest {
 
     try {
       wrappedPooledConnection.getConnection();
-      Assert.fail("exception should be thrown");
+      fail("exception should be thrown");
     } catch (SQLException expected) {
     }
     verify(mockedJdbcListener).onAfterGetConnection(connectionInformationWithoutConnection(), eq(sqle));
@@ -1106,7 +1108,7 @@ public class CompoundJdbcEventListenerTest {
     boolean currentAutoCommit = connectionWrapper.getAutoCommit();
     try {
       connectionWrapper.setAutoCommit(false);
-      Assert.fail("exception should be thrown");
+      fail("exception should be thrown");
     } catch (SQLException e){
     }
     verify(mockedJdbcListener).onAfterSetAutoCommit(eq(connectionInformation), eq(false), eq(currentAutoCommit),

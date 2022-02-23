@@ -17,6 +17,9 @@
  */
 package com.p6spy.engine.spy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,9 +28,8 @@ import java.util.Arrays;
 import javax.management.InstanceNotFoundException;
 import javax.management.JMException;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.j256.simplejmx.client.JmxClient;
 import com.p6spy.engine.common.P6Util;
@@ -42,7 +44,7 @@ public class P6MBeanRegistryTest {
 
   private static JmxClient jmxClient = null;
 
-  @BeforeClass
+  @BeforeAll
   public static void connectToJMX() throws JMException, SQLException, IOException,
       InterruptedException {
     final String jmxPortProperty = System
@@ -124,7 +126,7 @@ public class P6MBeanRegistryTest {
     final Boolean append = (Boolean) jmxClient.getAttribute(
         P6MBeansRegistry.getPackageName(jmxPrefix), P6SpyOptions.class.getName(),
         JMX_PROPERTY_APPEND);
-    Assert.assertEquals(append, appendProperty);
+    assertEquals(append, appendProperty);
   }
 
   private void destroyMBean(P6MBeansRegistry mBeansRegistry, final String jmxPrefix)
@@ -149,6 +151,6 @@ public class P6MBeanRegistryTest {
       // we should end up here
       return;
     }
-    Assert.fail();
+    fail();
   }
 }

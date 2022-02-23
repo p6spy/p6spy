@@ -17,17 +17,18 @@
  */
 package com.p6spy.engine.wrapper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.sql.Connection;
 
 import javax.sql.DataSource;
 
+import org.junit.jupiter.api.Test;
+
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.event.JdbcEventListener;
-import org.junit.Test;
 
 public class ConnectionWrapperTest {
 

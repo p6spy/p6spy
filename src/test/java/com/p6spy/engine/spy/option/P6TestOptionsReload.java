@@ -17,8 +17,8 @@
  */
 package com.p6spy.engine.spy.option;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,25 +26,24 @@ import java.sql.SQLException;
 
 import javax.management.JMException;
 
-import com.p6spy.engine.test.BaseTestCase;
-
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.j256.simplejmx.client.JmxClient;
 import com.p6spy.engine.common.P6Util;
 import com.p6spy.engine.spy.P6MBeansRegistry;
 import com.p6spy.engine.spy.P6SpyOptions;
-import com.p6spy.engine.test.P6TestFramework;
 import com.p6spy.engine.spy.P6TestMBean;
+import com.p6spy.engine.test.BaseTestCase;
+import com.p6spy.engine.test.P6TestFramework;
 
 public class P6TestOptionsReload extends BaseTestCase {
 
   private JmxClient jmxClient = null;
 
-  @Before
+  @BeforeEach
   public void setUp() throws JMException, SQLException, IOException, InterruptedException {
     // make sure to reinit properly
     new P6TestFramework("reload") {
@@ -55,7 +54,7 @@ public class P6TestOptionsReload extends BaseTestCase {
     jmxClient = new JmxClient(jmxPort);
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     // cleanup to make sure other tests work as expected
     System.getProperties().remove(SystemProperties.P6SPY_PREFIX + P6SpyOptions.STACKTRACE);

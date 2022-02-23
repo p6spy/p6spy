@@ -17,12 +17,15 @@
  */
 package com.p6spy.engine.spy.option;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.p6spy.engine.logging.P6LogLoadableOptions;
 import com.p6spy.engine.logging.P6LogOptions;
@@ -33,7 +36,7 @@ import com.p6spy.engine.test.P6TestFramework;
 
 public class P6TestOptionAPI extends BaseTestCase {
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpAll() throws SQLException, IOException {
     // make sure to reinit properly
     new P6TestFramework("blank") {
@@ -45,34 +48,34 @@ public class P6TestOptionAPI extends BaseTestCase {
     final P6SpyLoadableOptions opts = P6SpyOptions.getActiveInstance();
     
     opts.setJNDIContextCustom("foo");
-    Assert.assertEquals("foo", opts.getJNDIContextCustom());
+    assertEquals("foo", opts.getJNDIContextCustom());
     opts.unSetJNDIContextCustom();
-    Assert.assertNull(opts.getJNDIContextCustom());
+    assertNull(opts.getJNDIContextCustom());
     
     opts.setJNDIContextFactory("fooFactory");
-    Assert.assertEquals("fooFactory", opts.getJNDIContextFactory());
+    assertEquals("fooFactory", opts.getJNDIContextFactory());
     opts.unSetJNDIContextFactory();
-    Assert.assertNull(opts.getJNDIContextFactory());
+    assertNull(opts.getJNDIContextFactory());
     
     opts.setJNDIContextProviderURL("http://fooUrl");
-    Assert.assertEquals("http://fooUrl", opts.getJNDIContextProviderURL());
+    assertEquals("http://fooUrl", opts.getJNDIContextProviderURL());
     opts.unSetJNDIContextProviderURL();
-    Assert.assertNull(opts.getJNDIContextProviderURL());
+    assertNull(opts.getJNDIContextProviderURL());
     
     opts.setRealDataSource("fooDS");
-    Assert.assertEquals("fooDS", opts.getRealDataSource());
+    assertEquals("fooDS", opts.getRealDataSource());
     opts.unSetRealDataSource();
-    Assert.assertNull(opts.getRealDataSource());
+    assertNull(opts.getRealDataSource());
     
     opts.setRealDataSourceClass("fooDSClass");
-    Assert.assertEquals("fooDSClass", opts.getRealDataSourceClass());
+    assertEquals("fooDSClass", opts.getRealDataSourceClass());
     opts.unSetRealDataSourceClass();
-    Assert.assertNull(opts.getRealDataSourceClass());
+    assertNull(opts.getRealDataSourceClass());
     
     opts.setRealDataSourceProperties("fooDSProps");
-    Assert.assertEquals("fooDSProps", opts.getRealDataSourceProperties());
+    assertEquals("fooDSProps", opts.getRealDataSourceProperties());
     opts.unSetRealDataSourceProperties();
-    Assert.assertNull(opts.getRealDataSourceProperties());
+    assertNull(opts.getRealDataSourceProperties());
   }
   
   @Test
@@ -80,11 +83,11 @@ public class P6TestOptionAPI extends BaseTestCase {
     final P6LogLoadableOptions opts = P6LogOptions.getActiveInstance();
     
     opts.setSQLExpression("foo");
-    Assert.assertEquals("foo", opts.getSQLExpression());
-    Assert.assertNotNull(opts.getSQLExpressionPattern());
+    assertEquals("foo", opts.getSQLExpression());
+    assertNotNull(opts.getSQLExpressionPattern());
     opts.unSetSQLExpression();
-    Assert.assertNull(opts.getSQLExpression());
-    Assert.assertNull(opts.getSQLExpressionPattern());
+    assertNull(opts.getSQLExpression());
+    assertNull(opts.getSQLExpressionPattern());
   }
   
 }

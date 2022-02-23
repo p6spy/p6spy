@@ -17,16 +17,16 @@
  */
 package com.p6spy.engine.spy.appender;
 
-import org.junit.After;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import com.p6spy.engine.spy.P6SpyOptions;
 
-import org.junit.Assert;
-
 public class CustomLineFormatTest {
 
-	@After
+	@AfterEach
 	public void after() {
 		// reset formatting setting
 		P6SpyOptions.getActiveInstance().setCustomLogMessageFormat(null);
@@ -40,7 +40,7 @@ public class CustomLineFormatTest {
 				"select value from V$parameter where lower(name)=?",
 				"select value from V$parameter where lower(name)='compatible'", "jdbc:h2:mem:p6spyDSTest");
 
-		Assert.assertTrue(logMsg.contains(
+		assertTrue(logMsg.contains(
 				"select value from V$parameter where lower(name)=?\nselect value from V$parameter where lower(name)='compatible';\n"));
 	}
 

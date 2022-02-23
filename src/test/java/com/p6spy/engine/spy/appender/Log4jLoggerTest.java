@@ -17,7 +17,7 @@
  */
 package com.p6spy.engine.spy.appender;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,9 +30,9 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.p6spy.engine.common.P6LogQuery;
 import com.p6spy.engine.logging.Category;
@@ -48,7 +48,7 @@ public class Log4jLoggerTest extends BaseTestCase {
   
   private P6TestFramework framework;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     // reset log4j
     LogManager.resetConfiguration();
@@ -73,7 +73,7 @@ public class Log4jLoggerTest extends BaseTestCase {
     configureLog4JInTest(log4jConfSuffix);
   }
 
-  @After
+  @AfterEach
   public void cleanup() throws Exception {
 	// restore default excluded categories
 	P6LogOptions.getActiveInstance().setExcludecategories(

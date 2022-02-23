@@ -77,7 +77,14 @@ dependencies {
   compileOnly 'ch.qos.logback:logback-classic:1.2.3'
   compileOnly 'ch.qos.logback:logback-core:1.2.3'
 
-  testCompile 'junit:junit:4.12'
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+
+  // junit4 support
+  testImplementation("junit:junit:4.13")
+  testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.1")
+
   testCompile 'org.eclipse.jetty:jetty-plus:9.4.12.v20180830' // datasource testing through JNDI
   testCompile 'commons-dbcp:commons-dbcp:1.4' // datasource testing
   testCompile 'org.codehaus.btm:btm:2.1.4' // xa datasource testing
@@ -92,6 +99,7 @@ dependencies {
   testCompile 'org.apache.commons:commons-lang3:3.8.1'
   testCompile 'commons-beanutils:commons-beanutils:1.9.3'
   testCompile 'org.mockito:mockito-core:2.22.0'
+  testCompile 'org.mockito:mockito-junit-jupiter:2.23.0'
   testCompile 'org.apache.tomcat:tomcat-jdbc:9.0.12' // tomcat pooled datasource testing
 
   // all the JDBC drivers tested
@@ -128,6 +136,9 @@ license {
 }
 
 test {
+
+    useJUnitPlatform()
+
     systemProperty 'user.language', 'en'
     systemProperty 'user.country', 'US'
     systemProperty 'derby.stream.error.file', 'target/derby.log'

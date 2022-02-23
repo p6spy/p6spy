@@ -17,9 +17,9 @@
  */
 package com.p6spy.engine.spy.option;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,9 +29,9 @@ import java.net.URLClassLoader;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.p6spy.engine.test.BaseTestCase;
 
@@ -44,7 +44,7 @@ public class SpyDotPropertiesTest extends BaseTestCase {
   private ClassLoader currentThreadLoader;
   private File testFile;
 
-  @Before
+  @BeforeEach
   public void setup() {
     systemProps = new Properties();
     for( String key : System.getProperties().stringPropertyNames()) {
@@ -53,7 +53,7 @@ public class SpyDotPropertiesTest extends BaseTestCase {
     currentThreadLoader = Thread.currentThread().getContextClassLoader();
   }
   
-  @After
+  @AfterEach
   public void cleanup() throws IOException {
     System.setProperties(systemProps);
     Thread.currentThread().setContextClassLoader(currentThreadLoader);
@@ -71,7 +71,7 @@ public class SpyDotPropertiesTest extends BaseTestCase {
     // configure the file to load
     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, "SpyDotPropertiesTest.properties");
     SpyDotProperties props = new SpyDotProperties();
-    assertNotNull("properties not loaded!", props.getOptions());
+    assertNotNull( props.getOptions(),"properties not loaded!");
   }
 
   @Test
@@ -85,7 +85,7 @@ public class SpyDotPropertiesTest extends BaseTestCase {
     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, testFile.getName());
 
     SpyDotProperties props = new SpyDotProperties();
-    assertNotNull("properties not loaded!", props.getOptions());
+    assertNotNull( props.getOptions(),"properties not loaded!");
     
     if( !testFile.delete() ) {      
       // if the file was not closed properly, the delete will fail!
@@ -99,7 +99,7 @@ public class SpyDotPropertiesTest extends BaseTestCase {
     System.setProperty(SpyDotProperties.OPTIONS_FILE_PROPERTY, UUID.randomUUID().toString());
 
     SpyDotProperties props = new SpyDotProperties();
-    assertNull("properties loaded!", props.getOptions());
+    assertNull( props.getOptions(),"properties loaded!");
   }
 
 }
