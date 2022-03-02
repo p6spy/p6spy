@@ -17,6 +17,7 @@
  */
 package com.p6spy.engine.common;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +71,16 @@ public class PreparedStatementInformation extends StatementInformation implement
    */
   public void setParameterValue(final int position, final Object value) {
     parameterValues.put(position - 1, new Value(value));
+  }
+
+  /**
+   * Records the value of a parameter.
+   * @param position the position of the parameter (starts with 1 not 0)
+   * @param value the value of the parameter
+   * @param timezoneHolder the Calendar holding the timezone information for temporal values (Dates and Timestamps)
+   */
+  public void setParameterValue(final int position, final Object value, final Calendar timezoneHolder) {
+    parameterValues.put(position - 1, new Value(value, timezoneHolder));
   }
 
   protected Map<Integer, Value> getParameterValues() {

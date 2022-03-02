@@ -25,6 +25,7 @@ import com.p6spy.engine.common.StatementInformation;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -220,6 +221,13 @@ public class CompoundJdbcEventListener extends JdbcEventListener {
   public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value, SQLException e) {
     for (JdbcEventListener eventListener : eventListeners) {
       eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, value, e);
+    }
+  }
+
+  @Override
+  public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value, Calendar timezoneHolder, SQLException e) {
+    for (JdbcEventListener eventListener : eventListeners) {
+      eventListener.onAfterPreparedStatementSet(statementInformation, parameterIndex, value, timezoneHolder, e);
     }
   }
 

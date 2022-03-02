@@ -23,6 +23,7 @@ import com.p6spy.engine.common.ResultSetInformation;
 import com.p6spy.engine.common.StatementInformation;
 
 import java.sql.SQLException;
+import java.util.Calendar;
 
 /**
  * This implementation of {@link JdbcEventListener} must always be applied as the first listener.
@@ -98,4 +99,8 @@ public class DefaultEventListener extends JdbcEventListener {
     statementInformation.setParameterValue(parameterIndex, value);
   }
 
+  @Override
+  public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value, Calendar timezoneHolder, SQLException e) {
+    statementInformation.setParameterValue(parameterIndex, value, timezoneHolder);
+  }
 }

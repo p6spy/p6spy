@@ -24,6 +24,7 @@ import com.p6spy.engine.spy.P6SpyOptions;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -43,9 +44,20 @@ public class Value {
    */
   private Object value;
 
+  /**
+   * Calendar used to store the timezone for Date, Time And Timestamp types
+   */
+  private Calendar timezoneHolder = null;
+
   public Value(Object valueToSet) {
     this();
     this.value = valueToSet;
+  }
+
+  public Value(Object valueToSet, Calendar timezoneHolder) {
+    this();
+    this.value = valueToSet;
+    this.timezoneHolder = timezoneHolder;
   }
 
   public Value() {
@@ -108,9 +120,17 @@ public class Value {
 //          result = value.toString();
 //        }
       } else if (value instanceof Timestamp) {
-        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectTimestampFormat()).format(value);
+        SimpleDateFormat sdf = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectTimestampFormat());
+        if (timezoneHolder != null) {
+          sdf.setTimeZone(timezoneHolder.getTimeZone());
+        }
+        result = sdf.format(value);
       } else if (value instanceof Date) {
-        result = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat()).format(value);
+        SimpleDateFormat sdf = new SimpleDateFormat(P6SpyOptions.getActiveInstance().getDatabaseDialectDateFormat());
+        if (timezoneHolder != null) {
+          sdf.setTimeZone(timezoneHolder.getTimeZone());
+        }
+        result = sdf.format(value);
       } else if (value instanceof Boolean) {
         if ("numeric".equals(P6SpyOptions.getActiveInstance().getDatabaseDialectBooleanFormat())) {
           result = Boolean.FALSE.equals(value) ? "0" : "1";

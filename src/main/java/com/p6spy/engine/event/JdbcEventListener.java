@@ -33,6 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.util.Calendar;
 
 /**
  * Implementations of this class receive notifications for interesting JDBC events.
@@ -295,6 +296,20 @@ public abstract class JdbcEventListener {
    *                             there was no exception).
    */
   public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value, SQLException e) {
+  }
+
+
+  /**
+   * This callback method is executed after any of the {@link PreparedStatement}.set* methods are invoked.
+   *
+   * @param statementInformation The meta information about the {@link Statement} being invoked
+   * @param parameterIndex       The first parameter is 1, the second is 2, ...
+   * @param value                the column value; if the value is SQL NULL, the value returned is null
+   * @param timezoneHolder       the Calendar holding the timezone information for temporal values (Dates and Timestamps)
+   * @param e                    The {@link SQLException} which may be triggered by the call (<code>null</code> if
+   *                             there was no exception).
+   */
+  public void onAfterPreparedStatementSet(PreparedStatementInformation statementInformation, int parameterIndex, Object value, Calendar timezoneHolder, SQLException e) {
   }
 
   /**

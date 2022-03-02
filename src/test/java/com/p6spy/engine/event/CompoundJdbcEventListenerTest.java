@@ -471,7 +471,7 @@ public class CompoundJdbcEventListenerTest {
     final Date date = mock(Date.class);
     final Calendar calendar = mock(Calendar.class);
     wrappedPreparedStatement.setDate(0, date, calendar);
-    verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(date),
+    verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(date), eq(calendar),
         ArgumentMatchers.<SQLException>isNull());
   }
 
@@ -488,7 +488,7 @@ public class CompoundJdbcEventListenerTest {
     final Time time = mock(Time.class);
     final Calendar calendar = mock(Calendar.class);
     wrappedPreparedStatement.setTime(0, time, calendar);
-    verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(time),
+    verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(time), eq(calendar),
         ArgumentMatchers.<SQLException>isNull());
   }
 
@@ -505,7 +505,7 @@ public class CompoundJdbcEventListenerTest {
     final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     final Calendar calendar = mock(Calendar.class);
     wrappedPreparedStatement.setTimestamp(0, timestamp, calendar);
-    verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(timestamp),
+    verify(mockedJdbcListener).onAfterPreparedStatementSet(eq(preparedStatementInformation), eq(0), eq(timestamp), eq(calendar),
         ArgumentMatchers.<SQLException>isNull());
   }
 
